@@ -95,4 +95,4 @@ these operations can only be performed by tenant admins via the ``_system`` tena
         collection='students'
     )
 
-See :ref:`StandardDatabase` for API specification.
+See :ref:`Tenant` and :ref:`StandardDatabase` for API specification.

@@ -38,4 +38,4 @@ For information on operations related to administration of tenant users, see :do
 
 
 
-See :ref:`StandardDatabase` for API specification.
+See :ref:`Tenant` and :ref:`StandardDatabase` for API specification.
