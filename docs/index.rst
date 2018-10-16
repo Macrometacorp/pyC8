@@ -1,4 +1,4 @@
-.. image:: /static/logo.png
+.. image:: logo.png
 
 |
 
@@ -21,6 +21,7 @@ Installation
 To install a stable version from PyPi_:
 
 .. code-block:: bash
+
     ~$ pip install pyC8
 
  You may need to use ``sudo`` depending on your environment.
