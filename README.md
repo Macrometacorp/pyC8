@@ -1,4 +1,4 @@
-# PyC8
+# pyC8
 
 Welcome to the GitHub page for **pyC8**, a python driver for Macrometa Digital Edge Fabric.
 
