@@ -53,4 +53,4 @@ databases to which the users have been given read/write access.
 
 
 
-See :ref:`C8Client` and :ref:`StandardDatabase` for API specification.
+See :ref:`C8Client`, :ref:`Tenant` and :ref:`StandardDatabase` for API specification.
