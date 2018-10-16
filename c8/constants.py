@@ -1,0 +1,33 @@
+###############################################################################
+#                                                                             #
+#  constants.py - Global constants used to connect to Macrometa C8            #
+#  @author: Kartikeya IYER (kartikeya@macrometa.co)                           #
+#                                                                             #
+#  Copyright (c) 2018 Macrometa Corp. All rights reserved.                    #
+#                                                                             #
+#                                                                             #
+#  CHANGELOG:                                                                 #
+#      2018-07-23 : Initial cut                                               #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+
+### C8DB Defaults
+TENANT_DEFAULT = "_mm"
+DB_DEFAULT = "_system"
+USER_DEFAULT = "root"
+DB_PORT = "30005"
+
+### TODO : Streams defaults
+STREAM_PORT = "30002"
+STREAM_GLOBAL_NS_PREFIX = "c8global."
+STREAM_LOCAL_NS_PREFIX = "c8local."
+PLUSAR_URL_PREFIX = "c8."
+STREAMNAME_GLOBAL_SYSTEM_DEFAULT = STREAM_GLOBAL_NS_PREFIX+"_system"
+STREAMNAME_LOCAL_SYSTEM_DEFAULT = STREAM_LOCAL_NS_PREFIX+"_system"
+
+### TODO : Functions defaults
+
+if __name__ == "__main__":
+    print('This file is only meant to be used as an import module')
