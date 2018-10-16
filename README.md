@@ -11,19 +11,6 @@ Welcome to the GitHub page for **pyC8**, a python driver for Macrometa Digital E
 
 - Python versions 3.4, 3.5 and 3.6 are supported.
 
-### Build & Install
-
-To build,
-
-```bash
- $ python setup.py build
-```
-To install locally,
-
-```bash
- $ python setup.py build
-```
-
 ### Getting Started
 
 Here is an overview example:
@@ -265,4 +252,17 @@ Example for Stream Collections:
     
     #Delete a given persistent/non-persistent and global/local stream.
     sys_db.delete_stream('test-stream', persistent=True, local=False)
+```
+
+### Driver Build
+
+To build,
+
+```bash
+ $ python setup.py build
+```
+To install locally,
+
+```bash
+ $ python setup.py build
 ```
