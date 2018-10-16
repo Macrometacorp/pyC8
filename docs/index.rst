@@ -1,4 +1,3 @@
-.. image:: /static/logo.png
 
 |
 
