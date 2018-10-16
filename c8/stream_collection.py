@@ -8,15 +8,9 @@ from c8.api import APIWrapper
 from c8.request import Request
 import pulsar
 import random
-from c8.executor import (
-    DefaultExecutor,
-    AsyncExecutor,
-    BatchExecutor,
-    TransactionExecutor,
-)
 
 from c8 import exceptions as ex
-
+import json
 
 class StreamCollection(APIWrapper):
     """Stream Client.
@@ -27,7 +21,12 @@ class StreamCollection(APIWrapper):
     :type executor: c8.executor.Executor
     """
 
-    def __init__(self, connection, executor, url, port,
+    types = {
+        4: 'persistent',
+        5: 'nonpersistent'
+    }
+
+    def __init__(self, db, connection, executor, url, port,
                  operation_timeout_seconds,
                  ):
         """
@@ -66,6 +65,7 @@ class StreamCollection(APIWrapper):
         super(StreamCollection, self).__init__(connection, executor)
         url = urlparse(url)
         hostname = url.hostname
+        self.db = db
         self._server_url = 'pulsar://' + constants.PLUSAR_URL_PREFIX + hostname + ":" + str(port)
         self._client = pulsar.Client(self._server_url, operation_timeout_seconds=operation_timeout_seconds)
 
@@ -75,7 +75,7 @@ class StreamCollection(APIWrapper):
         """
         self._client.close()
 
-    def create_producer(self, collection, persistent=True, local=False, producer_name=None,
+    def create_producer(self, stream, persistent=True, local=False, producer_name=None,
                         initial_sequence_id=None, send_timeout_millis=30000,
                         compression_type=pulsar.CompressionType.NONE,
                         max_pending_messages=1000,
@@ -85,15 +85,15 @@ class StreamCollection(APIWrapper):
                         message_routing_mode=pulsar.PartitionsRoutingMode.RoundRobinDistribution
                         ):
         """
-           Create a new producer on a given collection.
+           Create a new producer on a given stream.
            **Args**
-           * `collection`:
-             The collection name
+           * `stream`:
+             The stream name
            **Options**
            * `persistent`:
-             If the stream_collection is persistent or non-persistent default its persitent
+             If the stream_stream is persistent or non-persistent default its persitent
            * `local`:
-             If the stream_collection is local or global default its global
+             If the stream_stream is local or global default its global
            * `producer_name`:
               Specify a name for the producer. If not assigned,
               the system will generate a globally unique name which can be accessed
@@ -121,28 +121,35 @@ class StreamCollection(APIWrapper):
              Set the message routing mode for the partitioned producer. Default is `PartitionsRoutingMode.RoundRobinDistribution`,
              other option is `PartitionsRoutingMode.UseSinglePartition`
         """
-        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-        if local:
-            type_constant = constants.STREAM_LOCAL_NS_PREFIX
-
-        namespace = type_constant + self.tenant_name + '.' + self.db_name
-        if self.tenant_name == "_mm":
-            namespace = type_constant + self.db_name
         if persistent:
-            topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + collection
+            flag = self.db.has_persistent_stream(stream, local=local)
         else:
-            topic = "non-persistent://" + self.tenant_name + "/" + namespace + "/" + collection
+            flag = self.db.has_nonpersistent_stream(stream, local=local)
 
-        return self._client.create_producer(topic, producer_name,
-                                            initial_sequence_id, send_timeout_millis,
-                                            compression_type,
-                                            max_pending_messages,
-                                            block_if_queue_full, batching_enabled,
-                                            batching_max_messages, batching_max_allowed_size_in_bytes,
-                                            batching_max_publish_delay_ms,
-                                            message_routing_mode)
+        if flag:
+            type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+            if local:
+                type_constant = constants.STREAM_LOCAL_NS_PREFIX
 
-    def create_reader(self, collection, start_message_id,
+            namespace = type_constant + self.tenant_name + '.' + self.db_name
+            if self.tenant_name == "_mm":
+                namespace = type_constant + self.db_name
+            if persistent:
+                topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + stream
+            else:
+                topic = "non-persistent://" + self.tenant_name + "/" + namespace + "/" + stream
+
+            return self._client.create_producer(topic, producer_name,
+                                                initial_sequence_id, send_timeout_millis,
+                                                compression_type,
+                                                max_pending_messages,
+                                                block_if_queue_full, batching_enabled,
+                                                batching_max_messages, batching_max_allowed_size_in_bytes,
+                                                batching_max_publish_delay_ms,
+                                                message_routing_mode)
+        raise ex.StreamProducerError("No stream present with name:" + stream + ". Please create a stream and then stream producer")
+
+    def create_reader(self, stream, start_message_id,
                       persistent=True,
                       local=False,
                       reader_listener=None,
@@ -153,7 +160,7 @@ class StreamCollection(APIWrapper):
         """
         Create a reader on a particular topic
         **Args**
-        * `collection`: The name of the Collection.
+        * `stream`: The name of the stream.
         * `start_message_id`: The initial reader positioning is done by specifying a message id.
            The options are:
             * `MessageId.earliest`: Start reading from the earliest message available in the topic
@@ -169,9 +176,9 @@ class StreamCollection(APIWrapper):
                    msg_id = MessageId.deserialize(s)
         **Options**
         * `persistent`:
-             If the stream_collection is persistent or non-persistent
+             If the stream_stream is persistent or non-persistent
         * `local`:
-            If the stream_collection is local or global default its global
+            If the stream_stream is local or global default its global
         * `reader_listener`:
           Sets a message listener for the reader. When the listener is set,
           the application will receive messages through it. Calls to
@@ -191,24 +198,31 @@ class StreamCollection(APIWrapper):
         * `subscription_role_prefix`:
           Sets the subscription role prefix.
         """
-        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-        if local:
-            type_constant = constants.STREAM_LOCAL_NS_PREFIX
-        
-        namespace = type_constant + self.tenant_name + self.db_name
-        if self.tenant_name == "_mm":
-            namespace = type_constant + self.db_name
-
         if persistent:
-            topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + collection
+            flag = self.db.has_persistent_stream(stream, local=local)
         else:
-            topic = "non-persistent://" + self.tenant_name + namespace + "/" + collection
+            flag = self.db.has_nonpersistent_stream(stream, local=local)
 
-        return self._client.create_reader(topic, start_message_id,
-                                          reader_listener, receiver_queue_size,
-                                          reader_name, subscription_role_prefix)
+        if flag:
+            type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+            if local:
+                type_constant = constants.STREAM_LOCAL_NS_PREFIX
+            
+            namespace = type_constant + self.tenant_name + self.db_name
+            if self.tenant_name == "_mm":
+                namespace = type_constant + self.db_name
 
-    def subscribe(self, collection, persistent=True, local=False, subscription_name=None,
+            if persistent:
+                topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + stream
+            else:
+                topic = "non-persistent://" + self.tenant_name + namespace + "/" + stream
+
+            return self._client.create_reader(topic, start_message_id,
+                                            reader_listener, receiver_queue_size,
+                                            reader_name, subscription_role_prefix)
+        raise ex.StreamSubscriberError("No stream present with name:" + stream + ". Please create a stream and then stream reader.")
+
+    def subscribe(self, stream, persistent=True, local=False, subscription_name=None,
                   consumer_type=pulsar.ConsumerType.Exclusive,
                   message_listener=None,
                   receiver_queue_size=1000,
@@ -220,13 +234,13 @@ class StreamCollection(APIWrapper):
         """
         Subscribe to the given topic and subscription combination.
         **Args**
-        * `collection`: The name of the Collection.
+        * `stream`: The name of the stream.
         * `subscription`: The name of the subscription.
         **Options**
         * `persistent`:
-             If the stream_collection is persistent or non-persistent
+             If the stream_stream is persistent or non-persistent
         * `local`:
-            If the stream_collection is local or global default its global
+            If the stream_stream is local or global default its global
         * `consumer_type`:
           Select the subscription type to be used when subscribing to the topic.
         * `message_listener`:
@@ -264,26 +278,33 @@ class StreamCollection(APIWrapper):
           Sets the time duration for which the broker-side consumer stats will
           be cached in the client.
         """
-        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-        if local:
-            type_constant=constants.STREAM_LOCAL_NS_PREFIX
-
-        namespace = type_constant + self.tenant_name + '.' + self.db_name
-        if self.tenant_name == "_mm":
-            namespace = type_constant + self.db_name
-
         if persistent:
-            topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + collection
+            flag = self.db.has_persistent_stream(stream, local=local)
         else:
-            topic = "non-persistent://" + self.tenant_name + "/" + namespace + "/" + collection
+            flag = self.db.has_nonpersistent_stream(stream, local=local)
 
-        if not subscription_name:
-            subscription_name = self.tenant_name + "-" + self.db_name + "-subscription-" + str(random.randint(1,1000))
-          
-        return self._client.subscribe(topic, subscription_name, consumer_type,
-                                      message_listener, receiver_queue_size, consumer_name,
-                                      unacked_messages_timeout_ms, broker_consumer_stats_cache_time_ms,
-                                      is_read_compacted)
+        if flag:
+            type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+            if local:
+                type_constant=constants.STREAM_LOCAL_NS_PREFIX
+
+            namespace = type_constant + self.tenant_name + '.' + self.db_name
+            if self.tenant_name == "_mm":
+                namespace = type_constant + self.db_name
+
+            if persistent:
+                topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + stream
+            else:
+                topic = "non-persistent://" + self.tenant_name + "/" + namespace + "/" + stream
+
+            if not subscription_name:
+                subscription_name = self.tenant_name + "-" + self.db_name + "-subscription-" + str(random.randint(1,1000))
+            
+            return self._client.subscribe(topic, subscription_name, consumer_type,
+                                        message_listener, receiver_queue_size, consumer_name,
+                                        unacked_messages_timeout_ms, broker_consumer_stats_cache_time_ms,
+                                        is_read_compacted)
+        raise ex.StreamSubscriberError("No stream present with name:" + stream + ". Please create a stream and then stream subscriber.")
                                       
     def unsubscribe(self, subscription):
         """Unsubscribes the given subscription on all streams on a stream db
@@ -299,52 +320,70 @@ class StreamCollection(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return 'OK'
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
 
-    def clear_streams_backlog(self, subscription=None):
+    def clear_streams_backlog(self):
         """Clear backlog for all streams on a stream db
-        :param: name of subscription
         :return: 200, OK if operation successful
         :raise c8.exceptions.StreamPermissionError: If clearing backlogs for all streams fails.
         """
-        if subscription:
-            url_endpoint = '/streams/clearbacklog/{}'.format(subscription)
-        else:
-            url_endpoint = '/streams/clearbacklog'
-
+       
         request = Request(
             method='post',
-            endpoint=url_endpoint
+            endpoint= '/streams/clearbacklog'
         )
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return 'OK'
+            elif code == 403:
+                raise ex.StreamPermissionError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
+
+        return self._execute(request, response_handler)
+    
+    def clear_stream_backlog(self, subscription):
+        """Clear backlog for the given stream on a stream db
+        :param: name of subscription
+        :return: 200, OK if operation successful
+        :raise c8.exceptions.StreamPermissionError: If clearing backlogs for all streams fails.
+        """
+
+        request = Request(
+            method='post',
+            endpoint= '/streams/clearbacklog/{}'.format(subscription)
+        )
+
+        def response_handler(resp):
+            code = resp.status_code
+            if resp.is_success:
+                return 'OK'
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
 
-    def get_stream_subscriptions(self, stream, persistent=True):
+    def get_stream_subscriptions(self, stream, persistent=True, local=False):
         """
         Get the list of persistent/non-persistent subscriptions for a given stream.
         :param stream: name of stream
         :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
         If it is set to False, API deletes non-persistent stream)
-        :return: 200, OK if operation successful
+        :param local: Operate on a local stream instead of a global one. Default value: false
+        :return: List of stream subscription, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError: If getting subscriptions for a stream fails.
         """
         if persistent:
-            url_endpoint = '/streams/persistent/stream/{}/subscriptions'.format(stream)
+            url_endpoint = '/streams/persistent/stream/{}/subscriptions?local={}'.format(stream,local)
         else:
-            url_endpoint = '/streams/non-persistent/stream/{}/subscriptions'.format(stream)
+            url_endpoint = '/streams/non-persistent/stream/{}/subscriptions?local={}'.format(stream,local)
 
         request = Request(
             method='get',
@@ -354,7 +393,37 @@ class StreamCollection(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return json.loads(resp.body['result'])
+            elif code == 403:
+                raise ex.StreamPermissionError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
+
+        return self._execute(request, response_handler)
+
+    def get_stream_backlog(self, stream, persistent=True, local=False):
+        """
+       Get estimated backlog for offline stream.
+       :param stream: name of stream
+       :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
+        If it is set to False, API deletes non-persistent stream)
+       :param local: Operate on a local stream instead of a global one. Default value: false
+       :return: 200, OK if operation successful
+       :raise: c8.exceptions.StreamPermissionError: If getting subscriptions for a stream fails.
+       """
+        if persistent:
+            url_endpoint = '/streams/persistent/streams/{}/backlog?local={}'.format(stream, local)
+        else:
+            url_endpoint = '/streams/non-persistent/streams/{}/backlog?local={}'.format(stream, local)
+
+        request = Request(
+            method='get',
+            endpoint=url_endpoint
+        )
+
+        def response_handler(resp):
+            code = resp.status_code
+            if resp.is_success:
+                return json.loads(resp.body['result'])
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
@@ -384,7 +453,7 @@ class StreamCollection(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return json.loads(resp.body['result'])
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
@@ -421,7 +490,7 @@ class StreamCollection(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return 'OK'
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             elif code == 412:
@@ -473,7 +542,7 @@ class StreamCollection(APIWrapper):
         If it is set to False, API deletes non-persistent stream)
      :param local: Operate on a local stream instead of a global one. Default value: false
      :return: 200, OK if operation successful
-     :raise: c8.exceptions.StreamPermissionError:Don’t have permission
+     :raise: c8.exceptions.StreamPermissionError:Don't have permission
 
      """
         if persistent:
@@ -491,7 +560,7 @@ class StreamCollection(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return 'OK'
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
@@ -508,7 +577,7 @@ class StreamCollection(APIWrapper):
         If it is set to False, API deletes non-persistent stream)
      :param local: Operate on a local stream instead of a global one. Default value: false
      :return: 200, OK if operation successful
-     :raise: c8.exceptions.StreamPermissionError:Don’t have permission
+     :raise: c8.exceptions.StreamPermissionError:Don't have permission
 
      """
         if persistent:
@@ -526,14 +595,14 @@ class StreamCollection(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return 'OK'
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
-            ex.StreamConnectionErrorror(resp, request)
+            raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
 
-    def expire_messages_for_subscription(self, stream, subscription, expire_time, persistent=True, local=False):
+    def expire_messages_for_all_subscription(self, stream, expire_time, persistent=True, local=False):
         """
       Expire messages on a stream subscription
       :param stream:
@@ -543,14 +612,37 @@ class StreamCollection(APIWrapper):
         If it is set to False, API deletes non-persistent stream)
      :param local: Operate on a local stream instead of a global one. Default value: false
      :return: 200, OK if operation successful
-     :raise: c8.exceptions.StreamPermissionError:Don’t have permission
+     :raise: c8.exceptions.StreamPermissionError:Don't have permission
 
      """
         if persistent:
-            url_endpoint = '/streams/persistent/stream/{}/subscription/{}/expireMessages/{}?local={}'\
+            url_endpoint = '/streams/persistent/stream/{}/all_subscription/expireMessages/{}?local={}'\
+                .format(stream, expire_time, local)
+        else:
+            url_endpoint = '/streams/non-persistent/stream/{}/all_subscription/expireMessages/{}?local={}'\
+                .format(stream, expire_time, local)
+
+        request = Request(
+            method='post',
+            endpoint=url_endpoint
+        )
+
+        def response_handler(resp):
+            code = resp.status_code
+            if resp.is_success:
+                return 'OK'
+            elif code == 403:
+                raise ex.StreamPermissionError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
+
+        return self._execute(request, response_handler)
+
+    def expire_messages_for_subscription(self, stream, subscription, expire_time, persistent=True, local=False):
+        if persistent:
+            url_endpoint = '/streams/persistent/stream/{}/subscription/{}/expireMessages/{}?local={}' \
                 .format(stream, subscription, expire_time, local)
         else:
-            url_endpoint = '/streams/non-persistent/stream/{}/subscription/{}/expireMessages/{}?local={}'\
+            url_endpoint = '/streams/non-persistent/stream/{}/subscription/{}/expireMessages/{}?local={}' \
                 .format(stream, subscription, expire_time, local)
 
         request = Request(
@@ -561,10 +653,10 @@ class StreamCollection(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
-            elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            ex.StreamConnectionErrorror(resp, request)
+                return 'OK'
+            elif code == 400:
+                raise ex.StreamBadInputError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
 
@@ -578,7 +670,7 @@ class StreamCollection(APIWrapper):
         If it is set to False, API deletes non-persistent stream)
      :param local: Operate on a local stream instead of a global one. Default value: false
      :return: 200, OK if operation successful
-     :raise: c8.exceptions.StreamPermissionError:Don’t have permission
+     :raise: c8.exceptions.StreamPermissionError:Don't have permission
 
      """
         if persistent:
@@ -599,7 +691,7 @@ class StreamCollection(APIWrapper):
                 return resp.body['result']
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
-            ex.StreamConnectionErrorror(resp, request)
+            raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
 
@@ -612,13 +704,13 @@ class StreamCollection(APIWrapper):
         :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
         If it is set to False, API deletes non-persistent stream)
         :return: 200, OK if operation successful
-        :raise: c8.exceptions.StreamPermissionError:Don’t have permission
+        :raise: c8.exceptions.StreamPermissionError:Don't have permission
 
         """
         if persistent:
-            url_endpoint = '/streams/persistent/stream/{}/subscription/resetcursor/{}'.format(stream, subscription, timestamp)
+            url_endpoint = '/streams/persistent/stream/{}/subscription/{}/resetcursor/{}'.format(stream, subscription, timestamp)
         else:
-            url_endpoint = '/streams/non-persistent/stream/{}/subscription/resetcursor/{}'.format(stream, subscription, timestamp)
+            url_endpoint = '/streams/non-persistent/stream/{}/subscription/{}/resetcursor/{}'.format(stream, subscription, timestamp)
 
         request = Request(
             method='post',
@@ -628,10 +720,10 @@ class StreamCollection(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return 'OK'
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
-            ex.StreamConnectionError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
 
@@ -666,7 +758,7 @@ class StreamCollection(APIWrapper):
                 return resp.body['result']
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
-            ex.StreamConnectionError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
 
@@ -698,7 +790,9 @@ class StreamCollection(APIWrapper):
                 return resp.body['result']
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
-            ex.StreamConnectionError(resp, request)
+            elif code == 400:
+                raise ex.StreamBadInputError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
     
@@ -726,10 +820,10 @@ class StreamCollection(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return json.loads(resp.body['result'])
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
-            ex.StreamConnectionError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
     
@@ -757,9 +851,9 @@ class StreamCollection(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return 'OK'
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
-            ex.StreamConnectionError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)

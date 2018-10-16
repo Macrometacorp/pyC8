@@ -85,6 +85,15 @@ class C8ServerError(C8Error):
 # Stream Exceptions #
 #######################
 
+class StreamProducerError(C8ClientError):
+    """Failed to create Stream Producer"""
+
+class StreamSubscriberError(C8ClientError):
+    """Failed to create Stream Subscriber"""
+
+class StreamConnectionError(C8ServerError):
+    """Failed to connect to C8 stream."""
+
 class StreamListError(C8ServerError):
     """Failed to retrieve streams."""
 
@@ -96,24 +105,35 @@ class StreamPropertiesError(C8ServerError):
 class StreamCreateError(C8ServerError):
     """Failed to create stream."""
 
-
 class StreamDeleteError(C8ServerError):
     """Failed to delete stream."""
+
 
 class StreamUpdateError(C8ServerError):
     """Failed to update stream content."""    
 
+
 class StreamStatisticsError(C8ServerError):
     """Failed to get stream stats."""
 
+
 class StreamPermissionError(C8ServerError):
-    """Don’t have permission"""
+    """Don't have permission"""
+
 
 class CompactionCreateError(C8ServerError):
     """Compaction already exists"""
 
+
 class StreamCommunicationError(C8ServerError):
     """If an error related to C8Streams communication was encountered."""
+
+
+class StreamEventError(C8ClientError):
+    """Failed to process the event from C8 stream."""
+
+class StreamBadInputError(C8ClientError):
+    """If the request doesn’t have the expected format."""
 
 #######################
 # Tenant Exceptions #
@@ -448,16 +468,6 @@ class IndexCreateError(C8ServerError):
 class IndexDeleteError(C8ServerError):
     """Failed to delete collection index."""
 
-
-#####################
-# Stream Exceptions #
-#####################
-
-class StreamConnectionError(C8ClientError):
-    """Failed to connect to C8 stream."""
-
-class StreamEventError(C8ClientError):
-    """Failed to process the event from C8 stream."""
 
 #####################
 # Server Exceptions #

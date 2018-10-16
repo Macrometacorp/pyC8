@@ -1,8 +1,9 @@
-# pyC8
+# PyC8
 
-Welcome to the GitHub page for **pyC8**, a python driver for Macrometa Digital Edge Fabric.
+Welcome to the GitHub page for **pyC8**, a Python driver for the Digital Edge Fabric.
 
 ### Features
+
 
 - Clean Pythonic interface.
 - Lightweight.
@@ -10,6 +11,19 @@ Welcome to the GitHub page for **pyC8**, a python driver for Macrometa Digital E
 ### Compatibility
 
 - Python versions 3.4, 3.5 and 3.6 are supported.
+
+### Build & Install
+
+To build,
+
+```bash
+ $ python setup.py build
+```
+To install locally,
+
+```bash
+ $ python setup.py build
+```
 
 ### Getting Started
 
@@ -79,7 +93,7 @@ Here is an overview example:
 
 ```
 
-Example to query a given database:
+Example to **query** a given database:
 
 ```python
 
@@ -90,8 +104,8 @@ Example to query a given database:
 
   region = "qa1-us-east-1.ops.aws.macrometa.io"
 
+  #--------------------------------------------------------------
   print("query employees collection...")
-
   client = C8Client(protocol='https', host=region, port=443)
   db = client.db(tenant="demotenant", name="demodb", username="demouser", password='poweruser')
   cursor = db.c8ql.execute('FOR employee IN employees RETURN employee') # Execute a C8QL query
@@ -100,7 +114,7 @@ Example to query a given database:
 
 ```
 
-Example for real-time updates from a collection in database:
+Example for **real-time updates** from a collection in database:
 
 ```python
 
@@ -113,15 +127,15 @@ Example for real-time updates from a collection in database:
   def callback_fn(event):
       print(event)
 
+  #--------------------------------------------------------------
   print("Subscribe to employees collection...")
-
   client = C8Client(protocol='https', host=region, port=443)
   db = client.db(tenant="demotenant", name="demodb", username="demouser", password='poweruser')
   db.on_change(collection="employees", callback=callback_fn)
   
 ```
 
-Example to publish documents to a stream:
+Example to **publish** documents to a stream:
 
 ```python
 
@@ -132,18 +146,20 @@ Example to publish documents to a stream:
 
   region = "qa1-us-east-1.ops.aws.macrometa.io"
 
+  #--------------------------------------------------------------
   print("publish messages to stream...")
   client = C8Client(protocol='https', host=region, port=443)
   db = client.db(tenant="demotenant", name="demodb", username="demouser", password='poweruser')
-  producer = db.stream().create_producer(collection="demostream", persistent=True, local=False)
-
+  stream = db.stream()
+  producer = stream.create_producer(collection="demostream", persistent=True, local=False)
   for i in range(10):
-      producer.send(b"Hello from " + region + "("+ i +")")
-      time.sleep(1) #sec
+      msg = "Hello from " + region + "("+ str(i) +")"
+      producer.send(msg.encode('utf-8'))
+      time.sleep(10) #sec
     
 ```
 
-Example to subscribe documents from a stream:
+Example to **subscribe** documents from a stream:
 
 ```python
 
@@ -153,16 +169,63 @@ Example to subscribe documents from a stream:
 
    region = "qa1-us-east-1.ops.aws.macrometa.io"
 
+   #--------------------------------------------------------------
    print("consume messages from stream...")
-
    client = C8Client(protocol='https', host=region, port=443)
    db = client.db(tenant="demotenant", name="demodb", username="demouser", password='poweruser')
-   subscriber = db.stream().subscribe(collection="demostream", persistent=True, local=False, subscription_name="demosub")
-   subscriber.receive()
+   stream = db.stream()
+   subscriber = stream.subscribe(collection="demostream", persistent=True, local=False, subscription_name="demosub")
+   for i in range(10):
+       msg = subscriber.receive()
+       print("Received message '{}' id='{}'".format(msg.data(), msg.message_id()))
+       subscriber.acknowledge(msg)
     
 ```
 
-Here is another example with graphs:
+Example: **stream management**:
+
+```python
+
+    #get_stream_stats
+    stream_collection.get_stream_stats('demostream', persistent=True, local=False) #for global persistent stream
+
+    #Skip all messages on a stream subscription
+    stream_collection.skip_all_messages_for_subscription('demostream', 'demosub')
+
+    #Skip num messages on a topic subscription
+    stream_collection.skip_messages_for_subscription('demostream', 'demosub', 10)
+
+    #Expire messages for a given subscription of a stream.
+    #expire time is in seconds
+    stream_collection.expire_messages_for_subscription('demostream', 'demosub', 2)
+
+    #Expire messages on all subscriptions of stream
+    stream_collection.expire_messages_for_subscriptions('demostream',2)
+
+    #Reset subscription to message position to closest timestamp
+    #time is in milli-seconds
+    stream_collection.reset_message_subscription_by_timestamp('demostream','demosub', 5)
+
+    #Reset subscription to message position closest to given position
+    #stream_collection.reset_message_for_subscription('demostream', 'demosub')
+
+    #stream_collection.reset_message_subscription_by_position('demostream','demosub', 4)
+
+    #trigger compaction status
+    stream_collection.put_stream_compaction_status('demostream')
+
+    #get stream compaction status
+    stream_collection.get_stream_compaction_status('demostream')
+
+    #Unsubscribes the given subscription on all streams on a stream db
+    stream_collection.unsubscribe('demosub')
+
+    #delete subscription of a stream
+    #stream_collection.delete_stream_subscription('demostream', 'demosub' ,persistent=True, local=False)
+
+```
+
+Here is another example with **graphs**:
 
 ```python
 
@@ -212,58 +275,4 @@ Here is another example with graphs:
         direction='outbound',
         strategy='breadthfirst'
     )
-```
-
-Example for Stream Collections:
-
-```python
-    from c8 import C8Client
-
-    # Initialize the client for C8DB.
-    client = C8Client(protocol='http', host='localhost', port=8529)
-
-    sys_tenant = client.tenant(name='_mm', dbname='_system', username='root', password='poweruser')
-
-    # Connect to "_system" database as root user.
-    sys_db = client.db(name='_system', username='root', password='poweruser')
-    
-    #Create a new global persistent stream called test-stream. If persistent flag set to False,
-    # a non-persistent stream gets created. Similarly a local stream gets created if local 
-    # flag is set to True. By default persistent is set to True and local is set to False . 
-    sys_db.create_stream('test-stream', persistent=True, local=False)
-    
-    #List all persistent/non-persistent and global/local streams 
-    streams = sys_db.streams()
-    
-    #Create producer for the given persistent/non-persistent and global/local stream.
-    stream_collection = sys_db.stream()
-    producer = stream_collection.create_producer('test-stream', persistent=True, local=False)
-    
-    #Send: is a plusar method that publish/sends a given message over stream in byte's.
-    producer.send(b"Hello")
-    
-    #Create a subscriber to the given persistent/non-persistent and global/local stream with the given,
-    # subscription name. If no subscription new is provided then a random name is generated. based on
-    # tenant and db information
-    subscriber = stream_collection.subscribe('test-stream', persistent=True, local=False, subscription_name="test-subscription")
-    
-    #receive: is a plusar function to read the published messages over stream.
-    subscriber.receive()
-    
-    #Delete a given persistent/non-persistent and global/local stream.
-    sys_db.delete_stream('test-stream', persistent=True, local=False)
-```
-
-### Driver Build
-
-To build,
-
-```bash
- $ python setup.py build
-```
-
-To install locally,
-
-```bash
- $ python setup.py build
 ```

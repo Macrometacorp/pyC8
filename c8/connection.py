@@ -21,6 +21,8 @@ class Connection(object):
     :type password: str | unicode
     :param http_client: User-defined HTTP client.
     :type http_client: c8.http.HTTPClient
+    :param is_db: Whether this a DB or streams call. Anything other than streams is a DB call.
+    :type is_db: bool
     """
 
     def __init__(self, url, tenantname, db_or_stream_name, username, password, http_client, is_db=True):
@@ -29,7 +31,6 @@ class Connection(object):
         self._db_name = ""
         self._stream_name = ""
         self._username = username
-        self._auth = (username, password)
         self._http_client = http_client or DefaultHTTPClient()
 
         # Multitenancy
@@ -38,6 +39,12 @@ class Connection(object):
             self._tenant_name = constants.TENANT_DEFAULT 
         else:
             self._tenant_name=tenantname
+
+        # Set the auth credentials depending on tenant name
+        if self._tenant_name == '_mm':
+            self._auth = (username, password)
+        else:
+            self._auth = (self._tenant_name+'.'+username, password)
 
         # Construct the URL prefix in the required format.
         # E.g. C8DB Connections: GET /_db/_tenant/{tenant-name}/_database/{db_name}/_admin/user/{user}/database/
@@ -110,6 +117,14 @@ class Connection(object):
         """
         return self._stream_name
 
+    def set_url_prefix(self, new_prefix):
+        """
+        Set the URL prefix to the new prefix,
+        returns (old_prefix,new_prefix) so it can be tracked.
+        """
+        old_prefix = self._url_prefix
+        self._url_prefix = new_prefix
+        return old_prefix,self._url_prefix
 
     def send_request(self, request):
         """Send an HTTP request to C8 server.
@@ -119,6 +134,8 @@ class Connection(object):
         :return: HTTP response.
         :rtype: c8.response.Response
         """
+        # Below line is a debug to show what the full request URL is. Useful in testing multitenancy API calls
+        #print("KARTIK : CONN OBJECT : send_request called with URL: '"+self._url_prefix + request.endpoint+"'")
         return self._http_client.send_request(
             method=request.method,
             url=self._url_prefix + request.endpoint,

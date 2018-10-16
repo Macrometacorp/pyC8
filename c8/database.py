@@ -40,6 +40,7 @@ from c8.exceptions import (
     ServerDetailsError,
     ServerVersionError,
     TransactionExecuteError,
+    TenantDcListError,
 )
 from c8 import exceptions as ex
 
@@ -123,7 +124,7 @@ class Database(APIWrapper):
         if not collection: 
             raise ValueError('You must specify a collection on which to watch for realtime data!')
 
-        namespace = constants.STREAM_LOCAL_NS_PREFIX + self.tenant_name + self.db_name
+        namespace = constants.STREAM_LOCAL_NS_PREFIX + self.tenant_name + '.' + self.db_name
         if self.tenant_name == "_mm":
             namespace = constants.STREAM_LOCAL_NS_PREFIX + self.db_name
 
@@ -318,6 +319,54 @@ class Database(APIWrapper):
             return code
 
         return self._execute(request, response_handler)
+
+    #########################
+    # Datacenter Management #
+    #########################
+
+    def dclist(self):
+        """Return the list of Datacenters
+
+        :return: DC List.
+        :rtype: [str | unicode ]
+        :raise c8.exceptions.TenantListError: If retrieval fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/_api/datacenter/all'
+        )
+
+        def response_handler(resp):
+            #print("dclist() : Response body: " + str(resp.body))
+            if not resp.is_success:
+                raise TenantDcListError(resp, request)
+            dc_list = []
+            for dc in resp.body:
+                dc_list.append(dc['name'])
+            return dc_list
+
+        return self._execute(request, response_handler)
+
+    def dclist_local(self):
+        """Return the list of local Datacenters
+
+        :return: DC List.
+        :rtype: [str | unicode ]
+        :raise c8.exceptions.TenantListError: If retrieval fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/_api/datacenter/local'
+        )
+
+        def response_handler(resp):
+            #print("dclist() : Response body: " + str(resp.body))
+            if not resp.is_success:
+                raise TenantDcListError(resp, request)
+            return resp.body
+
+        return self._execute(request, response_handler)
+
 
     #######################
     # Database Management #
@@ -1131,7 +1180,7 @@ class Database(APIWrapper):
         return self._execute(request, response_handler)
 
     ########################
-    # Stream Management    #
+    # Streams Management   #
     ########################
 
     def stream(self, operation_timeout_seconds=30):
@@ -1140,7 +1189,152 @@ class Database(APIWrapper):
         :return: stream collection API wrapper.
         :rtype: c8.stream_collection.StreamCollection
         """
-        return StreamCollection(self._conn, self._executor, self.url, self.stream_port, operation_timeout_seconds)
+        return StreamCollection(self, self._conn, self._executor, self.url, self.stream_port, operation_timeout_seconds)
+
+    def streams(self):
+        """Get list of all streams under given database
+
+        :return: List of streams under given database.
+        :rtype: json
+        :raise c8.exceptions.StreamListError: If retrieving streams fails.
+        """
+        url_endpoint = '/streams'
+
+        request = Request(
+            method='get',
+            endpoint=url_endpoint
+        )
+        
+        def response_handler(resp):
+            code = resp.status_code
+            if resp.is_success:
+                # NOTE: server API returns stream name as field 'topic' - we provide both here for user convenience
+                return [{
+                    'name': col['topic'],
+                    'topic': col['topic'],
+                    'local': col['local'],
+                    'db': col['db'],
+                    'tenant': col['tenant'],
+                    'type': StreamCollection.types[col['type']],
+                    'status': 'terminated' if 'terminated' in col else 'active',
+                } for col in map(dict, resp.body['result'])]
+            elif code == 403:
+                raise ex.StreamPermissionError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
+        
+        return self._execute(request, response_handler)
+ 
+    def persistent_streams(self, local=False):
+        """Get list of all streams under given database
+
+        :param local: Operate on a local stream instead of a global one. Default value: false
+        :return: List of streams under given database.
+        :rtype: json
+        :raise c8.exceptions.StreamListError: If retrieving streams fails.
+        """
+        url_endpoint = '/streams/persistent?local={}'.format(local)
+
+        request = Request(
+            method='get',
+            endpoint=url_endpoint
+        )
+
+        def response_handler(resp):
+            code = resp.status_code
+            if resp.is_success:
+                # NOTE: server API returns stream name as field 'topic' - we provide both here for user convenience
+                return [{
+                    'name': col['topic'],
+                    'topic': col['topic'],
+                    'local': col['local'],
+                    'db': col['db'],
+                    'tenant': col['tenant'],
+                    'type': StreamCollection.types[col['type']],
+                    'status': 'terminated' if 'terminated' in col else 'active',
+                } for col in map(dict, resp.body['result'])]
+            elif code == 403:
+                raise ex.StreamPermissionError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
+
+        return self._execute(request, response_handler)
+
+
+    def nonpersistent_streams(self, local=False):
+        """Get list of all streams under given database
+
+        :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
+        If it is set to False, API deletes non-persistent stream)
+        :param local: Operate on a local stream instead of a global one. Default value: false
+        :return: List of streams under given database.
+        :rtype: json
+        :raise c8.exceptions.StreamListError: If retrieving streams fails.
+        """
+        url_endpoint = '/streams/non-persistent?local={}'.format(local)
+
+        request = Request(
+            method='get',
+            endpoint=url_endpoint
+        )
+
+        def response_handler(resp):
+            code = resp.status_code
+            if resp.is_success:
+                # NOTE: server API returns stream name as field 'topic' - we provide both here for user convenience
+                return [{
+                    'name': col['topic'],
+                    'topic': col['topic'],
+                    'local': col['local'],
+                    'db': col['db'],
+                    'tenant': col['tenant'],
+                    'type': StreamCollection.types[col['type']],
+                    'status': 'terminated' if 'terminated' in col else 'active',
+                } for col in map(dict, resp.body['result'])]
+                    
+            elif code == 403:
+                raise ex.StreamPermissionError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
+
+        return self._execute(request, response_handler)
+
+
+    def has_stream(self, stream):
+        """ Check if the list of streams has a stream with the given name.
+
+        :param stream: The name of the stream for which to check in the list of all streams. 
+        :type stream: str | unicode
+        :return: True=stream found; False=stream not found.
+        :rtype: bool
+        """
+        return any(mystream['name'] == stream for mystream in self.streams())
+
+
+    def has_persistent_stream(self, stream, local=False):
+        """ Check if the list of persistent streams has a stream with the given name
+        and local setting.
+
+        :param stream: The name of the stream for which to check in the list of persistent streams.
+        :type stream: str | unicode
+        :param local: if True, operate on a local stream instead of a global one. Default value: false
+        :type local: bool
+        :return: True=stream found; False=stream not found.
+        :rtype: bool
+        """
+        return any(mystream['name'] == stream for mystream in self.persistent_streams(local))
+        
+
+    def has_nonpersistent_stream(self, stream, local=False):
+        """ Check if the list of nonpersistent streams has a stream with the given name
+        and local setting.
+
+        :param stream: The name of the stream for which to check in the list of nonpersistent streams 
+        :type stream: str | unicode
+        :param local: if True, operate on a local stream instead of a global one. Default value: false
+        :type local: bool
+        :return: True=stream found; False=stream not found.
+        :rtype: bool
+        """
+        return any(mystream['name'] == stream for mystream in self.nonpersistent_streams(local))
+
 
     def create_stream(self, stream, persistent=True, local=False):
         """
@@ -1183,64 +1377,51 @@ class Database(APIWrapper):
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If deleting streams fails.
         """
+        # KARTIK : 20181002 : Stream delete not supported. 
+        # We still have some issues to work through for stream deletion on the
+        # pulsar side. So for v0.9.0 we only support terminate, and that too 
+        # only for persistent streams.
+        if not persistent:
+            print("WARNING: Delete not yet implemented for nonpersistent streams. Returning 204. Stream will not be deleted.")
+            # 204 = No Content
+            return 204 
 
-        if force and persistent:
-            url_endpoint = '/streams/persistent/stream/{}?force=true&local={}'.format(stream, local)
-        elif force and not persistent:
-            url_endpoint = '/streams/non-persistent/stream/{}?force=true&local={}'.format(stream, local)
-        elif not force and persistent:
-            url_endpoint = '/streams/persistent/stream/{}?local={}'.format(stream, local)
-        elif not force and not persistent:
-            url_endpoint = '/streams/non-persistent/stream/{}?local={}'.format(stream, local)
+        # Persistent stream, let's terminate it instead.
+        print("WARNING: Delete not yet implemented for persistent streams, calling terminate instead.")
+        return self.terminate_stream(stream=stream, persistent=persistent, local=local)
 
-        request = Request(
-            method='delete',
-            endpoint=url_endpoint
-        )
-
-        def response_handler(resp):
-            code = resp.status_code
-            if resp.is_success:
-                return resp.body['result']
-            elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            elif code == 412:
-                raise ex.StreamDeleteError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)
-
-    def streams(self, persistent=True, local=False):
-        """Get list of all streams under given database
-
-        :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
-        If it is set to False, API deletes non-persistent stream)
-        :param local: Operate on a local stream instead of a global one. Default value: false
-        :return: List of streams under given database.
-        :rtype: json
-        :raise c8.exceptions.StreamListError: If retrieving streams fails.
-        """
-        if persistent:
-            url_enpoint = '/streams/persistent?local={}'.format(local)
-        elif not persistent:
-            url_enpoint = '/streams/non-persistent?local={}'.format(local)
-        else:
-            url_enpoint = '/streams'
-
-        request = Request(
-            method='get',
-            endpoint=url_enpoint
-        )
-
-        def response_handler(resp):
-            code = resp.status_code
-            if resp.is_success:
-                return resp.body['result']
-            elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)
+        ######## HEY HEY DO THE ZOMBIE STOMP ########
+        # KARTIK : 20181002 : Stream delete not supported. 
+        # TODO : When stream delete is implemented, enable below code and 
+        # remove the above code.
+        # Below code is dead code for the moment, until delete stream is 
+        # implemented on the server side. Consider it to be "#if 0"-ed out :-)
+        # (why, yes indeed, that was a C reference)
+        #if force and persistent:
+        #    url_endpoint = '/streams/persistent/stream/{}?force=true&local={}'.format(stream, local)
+        #elif force and not persistent:
+        #    url_endpoint = '/streams/non-persistent/stream/{}?force=true&local={}'.format(stream, local)
+        #elif not force and persistent:
+        #    url_endpoint = '/streams/persistent/stream/{}?local={}'.format(stream, local)
+        #elif not force and not persistent:
+        #    url_endpoint = '/streams/non-persistent/stream/{}?local={}'.format(stream, local)
+        #
+        #request = Request(
+        #    method='delete',
+        #    endpoint=url_endpoint
+        #)
+        #
+        #def response_handler(resp):
+        #    code = resp.status_code
+        #    if resp.is_success:
+        #        return resp.body['result']
+        #    elif code == 403:
+        #        raise ex.StreamPermissionError(resp, request)
+        #    elif code == 412:
+        #        raise ex.StreamDeleteError(resp, request)
+        #    raise ex.StreamConnectionError(resp, request)
+        #
+        #return self._execute(request, response_handler)
 
     def terminate_stream(self, stream, persistent=True, local=False):
         """
@@ -1255,7 +1436,11 @@ class Database(APIWrapper):
         if persistent:
             url_endpoint = '/streams/persistent/stream/{}/terminate?local={}'.format(stream, local)
         else:
-            url_endpoint = '/streams/non-persistent/stream/{}/terminate?local={}'.format(stream, local)
+            # url_endpoint = '/streams/non-persistent/stream/{}/terminate?local={}'.format(stream, local)
+            # KARTIK : 20181002 : terminate not supported for nonpersistent
+            # streams. Just return 204 = No Content
+            print("WARNING: Nonpersistent streams cannot be terminated. Returning 204.")
+            return 204
 
         request = Request(
             method='post',
@@ -1271,15 +1456,6 @@ class Database(APIWrapper):
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-
-    # def has_stream(self, stream, persistent=True):
-    #     streams = self.streams(persistent)
-    #     streams = json.loads(streams)
-    #     for st in streams:
-    #         if stream in st:
-    #             return True
-    #     else:
-    #         return False
 
 
 class StandardDatabase(Database):

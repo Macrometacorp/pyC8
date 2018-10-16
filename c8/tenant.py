@@ -45,7 +45,9 @@ class Tenant(APIWrapper):
     """
 
     def __init__(self, connection):
+        self._auth_tok = ""
         super(Tenant, self).__init__(connection, executor=DefaultExecutor(connection))
+
 
     @property
     def name(self):
@@ -55,6 +57,63 @@ class Tenant(APIWrapper):
         :rtype: str | unicode
         """
         return self.tenant_name
+
+
+    def get_auth_token_from_server(self):
+        """
+        Returns the JWT auth token which can be used in subsequent requests
+        The login for the auth token is done using the username and password
+        for the current tenant object.
+        """
+        # Do an auth login. We need to rewrite the connection's standard URL
+        # prefix because the /_open/auth call does not expect anything past
+        # the '_tenant/{tenantname}' part of the URL. So we rewrite it here
+        # temporarily to do the auth call, then set it back
+        oldconnprefix = self._conn.url_prefix
+        proto = oldconnprefix.split('//')[0]
+        rema = oldconnprefix.split('//')[1].split('/')[0]
+
+        # We set the temp URL prefix here for the auth call. It is restored
+        # below
+        self._conn.set_url_prefix(proto+'//'+rema+'/_database/_tenant/'+self.tenant_name)
+        data = {"tenant":self.tenant_name}
+        data['username'] = self._conn.username
+        data['password'] = self._conn._auth[1]
+        request = Request(
+            method='post',
+            endpoint='/_open/auth',
+            data=data
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise TenantListError
+            if 'jwt' not in resp.body:
+                raise TenantListError
+            return resp.body['jwt']
+
+        tok = self._execute(request, response_handler)
+        # NOTE : Set tok as _self.auth_tok so other functions can pass self._auth.tok
+        # to the request object as the Request.auth_tok field. See request.py
+        self._auth_tok = tok
+
+        # Print the auth token
+        #print("TENANT INIT: "+self.tenant_name+" : Token: "+tok)
+
+        # Set the connection object's url prefix back to what it was.
+        self._conn.set_url_prefix(oldconnprefix)
+
+
+    @property
+    def auth_token(self):
+        """Return the stored JWT auth token for this tenant & user, if stored.
+        This will be stored after calling get_auth_token_from_server() above.
+
+        :return: JWT auth token stored for this tenant user
+        :rtype: str | unicode
+        """
+        return self._auth_tok
+
 
     #######################
     # Tenant Management #
@@ -392,7 +451,6 @@ class Tenant(APIWrapper):
         )
 
         def response_handler(resp):
-            #print("TENANT USERS RESP BODY: "+str(resp.body))
             if not resp.is_success:
                 raise UserListError(resp, request)
             return [{

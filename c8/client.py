@@ -28,14 +28,16 @@ class C8Client(object):
     def __init__(self,
                  protocol='http',
                  host='127.0.0.1',
-                 port=8529,
+                 port=80,
                  stream_port=constants.STREAM_PORT,
                  http_client=None):
         self._protocol = protocol.strip('/')
         self._host = host.strip('/')
         self._port = int(port)
+        if self._protocol == 'https':
+            self._port = 443
         self._stream_port=int(stream_port)
-        self._url = '{}://{}:{}'.format(protocol, host, port)
+        self._url = '{}://{}:{}'.format(self._protocol, self.host, self.port)
         self._http_client = http_client
 
     def __repr__(self):
