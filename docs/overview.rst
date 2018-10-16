@@ -12,7 +12,7 @@ Here is an example showing how **pyC8** client can be used:
 
     # Connect to "_system" database as root user.
     # This returns an API wrapper for "_system" database.
-    sys_db = client.db('_system', username='root', password='passwd')
+    sys_db = client.db(name='tenant1', dbname='_system', username='root', password='passwd')
 
     # Create a new database named "test" if it does not exist.
     if not sys_db.has_database('test'):
