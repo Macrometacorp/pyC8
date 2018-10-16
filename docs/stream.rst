@@ -1,68 +1,53 @@
-
+Streams
+---------
 **Example:**
-
 .. testcode::
-
     from c8 import C8Client
-
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
-
     # Connect to the system database of the "mytenant" tenant.
     # This connection is made as the tenant admin using the tenant admin username and password
     tennt = client.tenant(name='mytenant', dbname='_system', username='root', password='root_pass')
-
     # Connect to "_system" database as root user.
     sys_db = client.db(tenant='mytenant', name='_system', username='root', password='root_pass')
     
     ######## Stream enumeration/listing and existence checks ########
-
-	# List all streams present on the server for this DB, regardless of whether or not it is persistent/non-persistent and global/local
-	streams = sys_db.streams()
-	print("\nStream listing of all streams in the db:")
-	print(str(streams))
-
-	# List all persistent local streams.
-	print( sys_db.persistent_streams(local=True) )
-	# List all persistent global streams.
-	print( sys_db.persistent_streams(local=False) )
-
-	# List all nonpersistent local streams.
-	print( sys_db.nonpersistent_streams(local=True) )
-	# List all nonpersistent global streams.
-	print( sys_db.nonpersistent_streams(local=False) )
-
-	# Check if a given stream exists.
-	sys_db.has_stream('testdbPersLocal')
-
-	# Check if a given persistent local stream exists.
-	sys_db.has_persistent_stream('testdbPersLocal', local=True)
-	# Check if a given persistent global stream exists.
-	sys_db.has_persistent_stream('testdbPersGlobal', local=False)
-
-	# Check if a given nonpersistent local stream exists.
-	sys_db.has_nonpersistent_stream('testdbNonpersLocal', local=True)
-	# Check if a given nonpersistent global stream exists.
-	sys_db.has_nonpersistent_stream('testdbNonpersGlobal', local=False)
-		
-
-	######## Stream creation and publish/subscribe messages on stream ########
+    # List all streams present on the server for this DB, regardless of whether or not it is persistent/non-persistent and global/local
+    streams = sys_db.streams()
+    print("\nStream listing of all streams in the db:")
+    print(str(streams))
+    # List all persistent local streams.
+    print( sys_db.persistent_streams(local=True) )
+    # List all persistent global streams.
+    print( sys_db.persistent_streams(local=False) )
+    # List all nonpersistent local streams.
+    print( sys_db.nonpersistent_streams(local=True) )
+    # List all nonpersistent global streams.
+    print( sys_db.nonpersistent_streams(local=False) )
+    # Check if a given stream exists.
+    sys_db.has_stream('testdbPersLocal')
+    # Check if a given persistent local stream exists.
+    sys_db.has_persistent_stream('testdbPersLocal', local=True)
+    # Check if a given persistent global stream exists.
+    sys_db.has_persistent_stream('testdbPersGlobal', local=False)
+    # Check if a given nonpersistent local stream exists.
+    sys_db.has_nonpersistent_stream('testdbNonpersLocal', local=True)
+    # Check if a given nonpersistent global stream exists.
+    sys_db.has_nonpersistent_stream('testdbNonpersGlobal', local=False)
+        
+    ######## Stream creation and publish/subscribe messages on stream ########
     
     #Create a new global persistent stream called test-stream. If persistent flag set to False,
     # a non-persistent stream gets created. Similarly a local stream gets created if local 
     # flag is set to True. By default persistent is set to True and local is set to False . 
     sys_db.create_stream('test-stream', persistent=True, local=False)    
-
     #Create a new local non-persistent stream called test-stream-1
     sys_db.create_stream('test-stream-1', persistent=False, local=True)
-
     #Create a StreamCollection object to invoke stream management functions.
     stream_collection = sys_db.stream()
-
     #Create producer for the given persistent/non-persistent and global/local stream that is created.
     producer1 = stream_collection.create_producer('test-stream', persistent=True, local=False)
     producer2 = stream_collection.create_producer('test-stream-1', persistent=False, local=True)
-
     #send: publish/send a given message over stream in bytes.
     for i in range(10):
       msg1 = "Persistent: Hello from " + region + "("+ str(i) +")"
@@ -87,35 +72,25 @@
        print("Received message '{}' id='{}'".format(msg2.data(), msg2.message_id()))
        subscriber1.acknowledge(msg1) #Acknowledge the received msg.
        subscriber2.acknowledge(msg2)
-
     #Get the list of subscriptions for a given persistent/non-persistent local/global stream.
     stream_collection.get_stream_subscriptions('test-stream-1', persistent=True, local=False) #for global persistent stream
-
     #get_stream_stats
     stream_collection.get_stream_stats('test-stream-1', persistent=True, local=False) #for global persistent stream
-
     #Skip all messages on a stream subscription
     stream_collection.skip_all_messages_for_subscription('test-stream-1', 'test-subscription-1')
-
     #Skip num messages on a topic subscription
     stream_collection.skip_messages_for_subscription('test-stream-1', 'test-subscription-1', 10)
-
     #Expire messages for a given subscription of a stream.
     #expire time is in seconds
     stream_collection.expire_messages_for_subscription('test-stream-1', 'test-subscription-1', 2)
-
     #Expire messages on all subscriptions of stream
     stream_collection.expire_messages_for_subscriptions('test-stream-1',2)
-
     #Reset subscription to message position to closest timestamp
     #time is in milli-seconds
     stream_collection.reset_message_subscription_by_timestamp('test-stream-1','test-subscription-1', 5)
-
     #Reset subscription to message position closest to given position
     #stream_collection.reset_message_for_subscription('test-stream-1', 'test-subscription-1')
-
     #stream_collection.reset_message_subscription_by_position('test-stream-1','test-subscription-1', 4)
-
     #trigger compaction status
     stream_collection.put_stream_compaction_status('test-stream-5')
     
@@ -124,11 +99,8 @@
     
     #Clear backlog for all streams on a stream db
     stream_collection.clear_streams_backlog()
-
     #Unsubscribes the given subscription on all streams on a stream db
     stream_collection.unsubscribe('test-subscription-1')
-
     #delete subscription of a stream
     #stream_collection.delete_stream_subscription('test-stream-1', 'test-subscription-1' ,persistent=True, local=False)
-
 See :ref:`StreamCollection` for API specification.

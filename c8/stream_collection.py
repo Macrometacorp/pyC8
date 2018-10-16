@@ -66,7 +66,8 @@ class StreamCollection(APIWrapper):
         url = urlparse(url)
         hostname = url.hostname
         self.db = db
-        self._server_url = 'pulsar://' + constants.PLUSAR_URL_PREFIX + hostname + ":" + str(port)
+        dcl_local = self.db.dclist_local()
+        self._server_url = 'pulsar://' + constants.PLUSAR_URL_PREFIX + dcl_local['tags']['url'] + ":" + str(port)
         self._client = pulsar.Client(self._server_url, operation_timeout_seconds=operation_timeout_seconds)
 
     def close(self):
