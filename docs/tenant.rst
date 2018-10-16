@@ -1,4 +1,4 @@
-TENANTS
+Tenants
 ---------
 
 The C8 Edge Data Fabric follows a multitenancy model. A tenant is a group of users who share a common
