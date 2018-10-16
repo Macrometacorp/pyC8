@@ -24,7 +24,8 @@ To install a stable version from PyPi_:
 
     ~$ pip install pyC8
 
- You may need to use ``sudo`` depending on your environment.
+You may need to use ``sudo`` depending on your environment.
+
 
 Contents
 ========
