@@ -261,6 +261,7 @@ To build,
 ```bash
  $ python setup.py build
 ```
+
 To install locally,
 
 ```bash
