@@ -33,7 +33,7 @@ Quick overview
 
 Here is an overview example:
 
-```python
+.. testcode::
    from c8 import C8Client
    import time
    import warnings
@@ -95,11 +95,11 @@ Here is an overview example:
    #--------------------------------------------------------------
    #sys_tenant.delete_tenant(demo_tenant)
 
-```
+
 
 Example to query a given database:
 
-```python
+.. testcode::
 
   from c8 import C8Client
   import json
@@ -116,11 +116,11 @@ Example to query a given database:
   docs = [document for document in cursor]
   print(docs)
 
-```
+
 
 Example for real-time updates from a collection in database:
 
-```python
+.. testcode::
 
   from c8 import C8Client
   import warnings
@@ -137,11 +137,11 @@ Example for real-time updates from a collection in database:
   db = client.db(tenant="demotenant", name="demodb", username="demouser", password='poweruser')
   db.on_change(collection="employees", callback=callback_fn)
   
-```
+
 
 Example to publish documents to a stream:
 
-```python
+.. testcode::
 
   from c8 import C8Client
   import time
@@ -159,11 +159,11 @@ Example to publish documents to a stream:
       producer.send(b"Hello from " + region + "("+ i +")")
       time.sleep(1) #sec
     
-```
+
 
 Example to subscribe documents from a stream:
 
-```python
+.. testcode::
 
    from c8 import C8Client
    import warnings
@@ -178,11 +178,11 @@ Example to subscribe documents from a stream:
    subscriber = db.stream().subscribe(collection="demostream", persistent=True, local=False, subscription_name="demosub")
    subscriber.receive()
     
-```
+
 
 Here is another example with graphs:
 
-```python
+.. testcode::
 
     from c8 import C8Client
 
@@ -230,11 +230,11 @@ Here is another example with graphs:
         direction='outbound',
         strategy='breadthfirst'
     )
-```
+
 
 Example for Stream Collections:
 
-```python
+.. testcode::
     from c8 import C8Client
 
     # Initialize the client for C8DB.
@@ -270,7 +270,7 @@ Example for Stream Collections:
     
     #Delete a given persistent/non-persistent and global/local stream.
     sys_db.delete_stream('test-stream', persistent=True, local=False)
-```
+
 
 Contents
 ========
