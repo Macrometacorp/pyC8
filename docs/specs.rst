@@ -12,6 +12,22 @@ C8Client
 .. autoclass:: c8.client.C8Client
     :members:
 
+.. _Tenant:
+
+Tenant
+============
+
+.. autoclass:: c8.tenant.Tenant
+    :members:
+
+.. _StreamCollection:
+
+StreamCollection
+==================
+
+.. autoclass:: c8.stream_collection.StreamCollection
+    :members:
+
 .. _AsyncDatabase:
 
 AsyncDatabase
