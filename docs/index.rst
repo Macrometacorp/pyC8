@@ -1,7 +1,5 @@
 .. image:: logo.png
-    :width: 150px
     :align: center
-    :height: 100px
     :alt: pyC8
 |
 
