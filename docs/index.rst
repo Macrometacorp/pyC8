@@ -1,5 +1,8 @@
 .. image:: logo.png
-
+    :width: 150px
+    :align: center
+    :height: 100px
+    :alt: pyC8
 |
 
 Welcome to the documentation for **pyC8**, a python driver for C8 Edge Data Fabric.
