@@ -1,25 +1,17 @@
 Databases
 ---------
 
-Each :doc:`tenant <tenant>` on the C8 Data Fabric server can have an arbitrary number of **databases**.
-Each database has its own set of :doc:`collections <collection>` and :doc:`graphs <graph>`.
-For each tenant, There is a special database named ``_system``, which cannot be dropped and
-provides operations for managing users, permissions and other databases. Most
-of the operations can only be executed by admin users. See :doc:`user` for more
-information.
+Each :doc:`tenant <tenant>` on the C8 Data Fabric server can have an arbitrary number of **databases**. Each database has its own set of :doc:`collections <collection>`, :doc:`graphs <graph>` and :doc:`streams <stream>`.
 
-Each database in the Macrometa Edge Data Fabric can be replicated to one or more additional
-Edge Locations in the fabric. If a change is made to such a replicated database in one
-Edge Location, that change will be automatically propagated to, and visible in, all other
+For each tenant, there is a special database named ``_system``, which cannot be dropped and provides operations for managing users, permissions and other databases. Most of the operations can only be executed by admin users. See :doc:`user` for more information.
+
+Each database in the C8 Fabric can be replicated to one or more additional edge Locations in the fabric. If a change is made to such a replicated database in one edge Location, that change will be automatically propagated to, and visible in, all other
 Edge Locations to which that database has been replicated.
 
-Each database in the Macrometa Edge Data Fabric can be set to publish changes in realtime
-to any clients which are connected to that database. If the ``Realtime`` option is enabled
-for a database, then any clients with connections to that database will receive changes via
-a push-based mechanism rather than having to continuously poll the database for any changes
-which may have occurred. This python driver can listen in realtime to changes in a
-realtime-enabled database by calling the ``db.on_change()`` function for the database 
-referred to by the ``db`` object.
+Each database in the C8 Fabric can be set to publish changes in realtime
+to any clients which are connected to that database. 
+
+If the ``Realtime`` option is enabled for a database, then any clients with connections to that database will receive changes via a ``push-based`` mechanism rather than having to continuously poll the database for any changes which may have occurred. This python driver can listen in realtime to changes in a realtime-enabled database by calling the ``db.on_change()`` function for the database referred to by the ``db`` object.
 
 **Example:**
 
