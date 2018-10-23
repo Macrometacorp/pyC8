@@ -242,7 +242,7 @@ class Cursor(object):
             raise CursorStateError('cursor ID not set')
         request = Request(
             method='put',
-            endpoint='/_api/{}/{}'.format(self._type, self._id)
+            endpoint='/{}/{}'.format(self._type, self._id)
         )
         resp = self._conn.send_request(request)
 
@@ -267,7 +267,7 @@ class Cursor(object):
             return None
         request = Request(
             method='delete',
-            endpoint='/_api/{}/{}'.format(self._type, self._id)
+            endpoint='/{}/{}'.format(self._type, self._id)
         )
         resp = self._conn.send_request(request)
         if resp.is_success:

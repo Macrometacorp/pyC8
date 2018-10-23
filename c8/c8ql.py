@@ -85,7 +85,7 @@ class C8QL(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/explain',
+            endpoint='/explain',
             data={'query': query, 'options': options}
         )
 
@@ -110,7 +110,7 @@ class C8QL(APIWrapper):
         """
         request = Request(
             method='post',
-            endpoint='/_api/query',
+            endpoint='/query',
             data={'query': query}
         )
 
@@ -260,7 +260,7 @@ class C8QL(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/cursor',
+            endpoint='/cursor',
             data=data,
             command=command,
             read=read_collections,
@@ -285,7 +285,7 @@ class C8QL(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/query/{}'.format(query_id)
+            endpoint='/query/{}'.format(query_id)
         )
 
         def response_handler(resp):
@@ -304,7 +304,7 @@ class C8QL(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/query/current'
+            endpoint='/query/current'
         )
 
         def response_handler(resp):
@@ -323,7 +323,7 @@ class C8QL(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/query/slow'
+            endpoint='/query/slow'
         )
 
         def response_handler(resp):
@@ -342,7 +342,7 @@ class C8QL(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/query/slow'
+            endpoint='/query/slow'
         )
 
         def response_handler(resp):
@@ -361,7 +361,7 @@ class C8QL(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/c8qlfunction'
+            endpoint='/c8qlfunction'
         )
 
         def response_handler(resp):
@@ -385,7 +385,7 @@ class C8QL(APIWrapper):
         """
         request = Request(
             method='post',
-            endpoint='/_api/c8qlfunction',
+            endpoint='/c8qlfunction',
             data={'name': name, 'code': code}
         )
 
@@ -415,7 +415,7 @@ class C8QL(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/c8qlfunction/{}'.format(name),
+            endpoint='/c8qlfunction/{}'.format(name),
             params={'group': group}
         )
 

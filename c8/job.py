@@ -91,7 +91,7 @@ class AsyncJob(Job):
         """
         request = Request(
             method='get',
-            endpoint='/_api/job/{}'.format(self._id)
+            endpoint='/job/{}'.format(self._id)
         )
         resp = self._conn.send_request(request)
         if resp.status_code == 204:
@@ -119,7 +119,7 @@ class AsyncJob(Job):
         """
         request = Request(
             method='put',
-            endpoint='/_api/job/{}'.format(self._id)
+            endpoint='/job/{}'.format(self._id)
         )
         resp = self._conn.send_request(request)
         headers = resp.headers
@@ -148,7 +148,7 @@ class AsyncJob(Job):
         """
         request = Request(
             method='put',
-            endpoint='/_api/job/{}/cancel'.format(self._id)
+            endpoint='/job/{}/cancel'.format(self._id)
         )
         resp = self._conn.send_request(request)
         if resp.status_code == 200:
@@ -173,7 +173,7 @@ class AsyncJob(Job):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/job/{}'.format(self._id)
+            endpoint='/job/{}'.format(self._id)
         )
         resp = self._conn.send_request(request)
         if resp.is_success:

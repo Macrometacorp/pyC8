@@ -211,7 +211,7 @@ class BatchExecutor(Executor):
 
         request = Request(
             method='post',
-            endpoint='/_api/batch',
+            endpoint='/batch',
             headers={
                 'Content-Type':
                     'multipart/form-data; boundary={}'.format(boundary)
@@ -385,7 +385,7 @@ class TransactionExecutor(Executor):
 
         request = Request(
             method='post',
-            endpoint='/_api/transaction',
+            endpoint='/transaction',
             data=data,
         )
         resp = self._conn.send_request(request)

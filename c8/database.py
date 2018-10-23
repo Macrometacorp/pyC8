@@ -161,7 +161,7 @@ class Database(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/database/current',
+            endpoint='/database/current',
         )
 
         def response_handler(resp):
@@ -246,7 +246,7 @@ class Database(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/transaction',
+            endpoint='/transaction',
             data=data
         )
 
@@ -286,7 +286,7 @@ class Database(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/version',
+            endpoint='/version',
             params={'details': True}
         )
 
@@ -306,7 +306,7 @@ class Database(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/collection',
+            endpoint='/collection',
         )
 
         def response_handler(resp):
@@ -333,7 +333,7 @@ class Database(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/datacenter/all'
+            endpoint='/datacenter/all'
         )
 
         def response_handler(resp):
@@ -356,7 +356,7 @@ class Database(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/datacenter/local'
+            endpoint='/datacenter/local'
         )
 
         def response_handler(resp):
@@ -381,7 +381,7 @@ class Database(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/database'
+            endpoint='/database'
         )
 
         def response_handler(resp):
@@ -455,7 +455,7 @@ class Database(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/database',
+            endpoint='/database',
             data=data
         )
 
@@ -480,7 +480,7 @@ class Database(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/database/{}'.format(name)
+            endpoint='/database/{}'.format(name)
         )
 
         def response_handler(resp):
@@ -525,7 +525,7 @@ class Database(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/collection'
+            endpoint='/collection'
         )
 
         def response_handler(resp):
@@ -667,7 +667,7 @@ class Database(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/collection',
+            endpoint='/collection',
             params=params,
             data=data
         )
@@ -699,7 +699,7 @@ class Database(APIWrapper):
 
         request = Request(
             method='delete',
-            endpoint='/_api/collection/{}'.format(name),
+            endpoint='/collection/{}'.format(name),
             params=params
         )
 
@@ -1135,7 +1135,7 @@ class Database(APIWrapper):
 
         request = Request(
             method='get',
-            endpoint='/_api/job/{}'.format(status),
+            endpoint='/job/{}'.format(status),
             params=params
         )
 
@@ -1160,10 +1160,10 @@ class Database(APIWrapper):
         :raise c8.exceptions.AsyncJobClearError: If operation fails.
         """
         if threshold is None:
-            url = '/_api/job/all'
+            url = '/job/all'
             params = None
         else:
-            url = '/_api/job/expired'
+            url = '/job/expired'
             params = {'stamp': threshold}
 
         request = Request(

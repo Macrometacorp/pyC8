@@ -284,7 +284,7 @@ class Collection(APIWrapper):
         """
         request = Request(
             method='put',
-            endpoint='/_api/collection/{}/rename'.format(self.name),
+            endpoint='/collection/{}/rename'.format(self.name),
             data={'name': new_name}
         )
 
@@ -306,7 +306,7 @@ class Collection(APIWrapper):
         """
         request = Request(
             method='put',
-            endpoint='/_api/collection/{}/truncate'.format(self.name),
+            endpoint='/collection/{}/truncate'.format(self.name),
             command='db.{}.truncate()'.format(self.name),
             write=self.name
         )
@@ -327,7 +327,7 @@ class Collection(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/collection/{}/count'.format(self.name),
+            endpoint='/collection/{}/count'.format(self.name),
             command='db.{}.count()'.format(self.name),
             read=self.name
         )
@@ -367,7 +367,7 @@ class Collection(APIWrapper):
 
         request = Request(
             method='get',
-            endpoint='/_api/document/{}'.format(handle),
+            endpoint='/document/{}'.format(handle),
             headers=headers,
             command=command,
             read=self.name
@@ -393,7 +393,7 @@ class Collection(APIWrapper):
         """
         request = Request(
             method='put',
-            endpoint='/_api/simple/all-keys',
+            endpoint='/simple/all-keys',
             data={'collection': self.name, 'type': 'id'},
             command='db.{}.toArray().map(d => d._id)'.format(self.name),
             read=self.name
@@ -415,7 +415,7 @@ class Collection(APIWrapper):
         """
         request = Request(
             method='put',
-            endpoint='/_api/simple/all-keys',
+            endpoint='/simple/all-keys',
             data={'collection': self.name, 'type': 'key'},
             command='db.{}.toArray().map(d => d._key)'.format(self.name),
             read=self.name
@@ -456,7 +456,7 @@ class Collection(APIWrapper):
 
         request = Request(
             method='put',
-            endpoint='/_api/simple/all',
+            endpoint='/simple/all',
             data=data,
             command=command,
             read=self.name
@@ -522,7 +522,7 @@ class Collection(APIWrapper):
             }
         request = Request(
             method='post',
-            endpoint='/_api/export',
+            endpoint='/export',
             params={'collection': self.name},
             data=data
         )
@@ -568,7 +568,7 @@ class Collection(APIWrapper):
 
         request = Request(
             method='put',
-            endpoint='/_api/simple/by-example',
+            endpoint='/simple/by-example',
             data=data,
             command=command,
             read=self.name
@@ -628,7 +628,7 @@ class Collection(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/cursor',
+            endpoint='/cursor',
             data={
                 'query': query,
                 'bindVars': bind_vars,
@@ -699,7 +699,7 @@ class Collection(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/cursor',
+            endpoint='/cursor',
             data={
                 'query': query,
                 'bindVars': bind_vars,
@@ -765,7 +765,7 @@ class Collection(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/cursor',
+            endpoint='/cursor',
             data={
                 'query': query,
                 'bindVars': bind_vars,
@@ -844,7 +844,7 @@ class Collection(APIWrapper):
 
         request = Request(
             method='put',
-            endpoint='/_api/simple/within-rectangle',
+            endpoint='/simple/within-rectangle',
             data=data,
             command=command,
             read=self.name
@@ -894,7 +894,7 @@ class Collection(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/cursor',
+            endpoint='/cursor',
             data={'query': c8ql, 'bindVars': bind_vars, 'count': True},
             command=command,
             read=self.name
@@ -932,7 +932,7 @@ class Collection(APIWrapper):
 
         request = Request(
             method='put',
-            endpoint='/_api/simple/lookup-by-keys',
+            endpoint='/simple/lookup-by-keys',
             data={'collection': self.name, 'keys': handles},
             command=command,
             read=self.name
@@ -958,7 +958,7 @@ class Collection(APIWrapper):
         """
         request = Request(
             method='put',
-            endpoint='/_api/simple/any',
+            endpoint='/simple/any',
             data={'collection': self.name},
             command='db.{}.any()'.format(self.name),
             read=self.name
@@ -986,7 +986,7 @@ class Collection(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/index',
+            endpoint='/index',
             params={'collection': self.name},
             command='db.{}.getIndexes()'.format(self.name),
             read=self.name
@@ -1027,7 +1027,7 @@ class Collection(APIWrapper):
         """
         request = Request(
             method='post',
-            endpoint='/_api/index',
+            endpoint='/index',
             data=data,
             params={'collection': self.name}
         )
@@ -1187,7 +1187,7 @@ class Collection(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/index/{}/{}'.format(self.name, index_id)
+            endpoint='/index/{}/{}'.format(self.name, index_id)
         )
 
         def response_handler(resp):
@@ -1246,7 +1246,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='get',
-            endpoint='/_api/document/{}'.format(handle),
+            endpoint='/document/{}'.format(handle),
             headers=headers,
             command=command,
             read=self.name
@@ -1297,7 +1297,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='post',
-            endpoint='/_api/document/{}'.format(self.name),
+            endpoint='/document/{}'.format(self.name),
             data=document,
             params=params,
             command=command,
@@ -1352,7 +1352,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='post',
-            endpoint='/_api/document/{}'.format(self.name),
+            endpoint='/document/{}'.format(self.name),
             data=documents,
             params=params,
             command=command,
@@ -1442,7 +1442,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='patch',
-            endpoint='/_api/document/{}'.format(
+            endpoint='/document/{}'.format(
                 self._extract_id(document)
             ),
             data=document,
@@ -1524,7 +1524,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='patch',
-            endpoint='/_api/document/{}'.format(self.name),
+            endpoint='/document/{}'.format(self.name),
             data=documents,
             params=params,
             command=command,
@@ -1610,7 +1610,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='put',
-            endpoint='/_api/simple/update-by-example',
+            endpoint='/simple/update-by-example',
             data=data,
             command=command,
             write=self.name
@@ -1674,7 +1674,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='put',
-            endpoint='/_api/document/{}'.format(
+            endpoint='/document/{}'.format(
                 self._extract_id(document)
             ),
             params=params,
@@ -1747,7 +1747,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='put',
-            endpoint='/_api/document/{}'.format(self.name),
+            endpoint='/document/{}'.format(self.name),
             params=params,
             data=documents,
             command=command,
@@ -1818,7 +1818,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='put',
-            endpoint='/_api/simple/replace-by-example',
+            endpoint='/simple/replace-by-example',
             data=data,
             command=command,
             write=self.name
@@ -1890,7 +1890,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='delete',
-            endpoint='/_api/document/{}'.format(handle),
+            endpoint='/document/{}'.format(handle),
             params=params,
             headers=headers,
             command=command,
@@ -1958,7 +1958,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='delete',
-            endpoint='/_api/document/{}'.format(self.name),
+            endpoint='/document/{}'.format(self.name),
             params=params,
             data=documents,
             command=command,
@@ -2020,7 +2020,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='put',
-            endpoint='/_api/simple/remove-by-example',
+            endpoint='/simple/remove-by-example',
             data=data,
             command=command,
             write=self.name
@@ -2112,7 +2112,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='post',
-            endpoint='/_api/import',
+            endpoint='/import',
             data=documents,
             params=params
         )
@@ -2837,7 +2837,7 @@ class EdgeCollection(Collection):
 
         request = Request(
             method='get',
-            endpoint='/_api/edges/{}'.format(self.name),
+            endpoint='/edges/{}'.format(self.name),
             params=params
         )
 

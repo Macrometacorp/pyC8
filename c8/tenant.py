@@ -75,7 +75,7 @@ class Tenant(APIWrapper):
 
         # We set the temp URL prefix here for the auth call. It is restored
         # below
-        self._conn.set_url_prefix(proto+'//'+rema+'/_database/_tenant/'+self.tenant_name)
+        self._conn.set_url_prefix(proto+'//'+rema+'/_tenant/'+self.tenant_name)
         data = {"tenant":self.tenant_name}
         data['username'] = self._conn.username
         data['password'] = self._conn._auth[1]
@@ -128,7 +128,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/tenants'
+            endpoint='/tenants'
         )
 
         def response_handler(resp):
@@ -180,7 +180,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/tenant',
+            endpoint='/tenant',
             data=data
         )
 
@@ -219,7 +219,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='patch',
-            endpoint='/_api/tenant/{tenantname}'.format(tenantname=name),
+            endpoint='/tenant/{tenantname}'.format(tenantname=name),
             data=data
         )
 
@@ -243,7 +243,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/tenant/{tenantname}'.format(tenantname=name)
+            endpoint='/tenant/{tenantname}'.format(tenantname=name)
         )
 
         def response_handler(resp):
@@ -266,7 +266,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/datacenter/all'
+            endpoint='/datacenter/all'
         )
 
         def response_handler(resp):
@@ -289,7 +289,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/datacenter/local'
+            endpoint='/datacenter/local'
         )
 
         def response_handler(resp):
@@ -313,7 +313,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/database'
+            endpoint='/database'
         )
 
         def response_handler(resp):
@@ -387,7 +387,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/database',
+            endpoint='/database',
             data=data
         )
 
@@ -412,7 +412,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/database/{}'.format(name)
+            endpoint='/database/{}'.format(name)
         )
 
         def response_handler(resp):

@@ -58,7 +58,7 @@ class Connection(object):
 
             # self._url_prefix = '{}/_db/{}'.format(url, self._db_name) # ORIG CODE
             #self._url_prefix = '{}/_db/tenant/{}/_database/{}'.format(url, self._tenant_name, self._db_name)
-            self._url_prefix = '{}/_database/_tenant/{}/_db/{}'.format(url, self._tenant_name, self._db_name )
+            self._url_prefix = '{}/_tenant/{}/_fabric/{}'.format(url, self._tenant_name, self._db_name )
 
         else:
             # Handle the streams side of things
