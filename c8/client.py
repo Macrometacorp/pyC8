@@ -2,10 +2,10 @@ from __future__ import absolute_import, unicode_literals
 
 __all__ = ['C8Client']
 
-from c8.connection import DatabaseConnection
+from c8.connection import FabricConnection
 from c8.connection import StreamConnection
 from c8.connection import TenantConnection
-from c8.database import StandardDatabase
+from c8.fabric import StandardFabric
 from c8.tenant import Tenant
 from c8.exceptions import ServerConnectionError
 from c8.version import __version__
@@ -88,12 +88,12 @@ class C8Client(object):
         """
         return self._url
 
-    def tenant(self, name="_mm", dbname='_system', username='root', password='', verify=False):
-        """Connect to a database and return the database API wrapper.
+    def tenant(self, name="_mm", fabricname='_system', username='root', password='', verify=False):
+        """Connect to a fabric and return the fabric API wrapper.
 
         :param name: Tenant name.
         :type name: str | unicode
-        :param dbname: Tenant database name.
+        :param fabricname: Tenant fabric name.
         :type name: str | unicode
         :param username: Username for basic authentication.
         :type username: str | unicode
@@ -101,15 +101,15 @@ class C8Client(object):
         :type password: str | unicode
         :param verify: Verify the connection by sending a test request.
         :type verify: bool
-        :return: Standard database API wrapper.
-        :rtype: c8.database.StandardDatabase
+        :return: Standard fabric API wrapper.
+        :rtype: c8.fabric.StandardFabric
         :raise c8.exceptions.ServerConnectionError: If **verify** was set
             to True and the connection to C8Db fails.
         """
         connection = TenantConnection(
             url=self._url,
             tenant=name,
-            db=dbname,
+            fabric=fabricname,
             username=username,
             password=password,
             http_client=self._http_client
@@ -122,10 +122,10 @@ class C8Client(object):
 
 
 
-    def db(self, tenant="_mm", name='_system', username='root', password='', verify=False):
-        """Connect to a database and return the database API wrapper.
+    def fabric(self, tenant="_mm", name='_system', username='root', password='', verify=False):
+        """Connect to a fabric and return the fabric API wrapper.
 
-        :param name: Database name.
+        :param name: Fabric name.
         :type name: str | unicode
         :param username: Username for basic authentication.
         :type username: str | unicode
@@ -133,28 +133,28 @@ class C8Client(object):
         :type password: str | unicode
         :param verify: Verify the connection by sending a test request.
         :type verify: bool
-        :return: Standard database API wrapper.
-        :rtype: c8.database.StandardDatabase
+        :return: Standard fabric API wrapper.
+        :rtype: c8.fabric.StandardFabric
         :raise c8.exceptions.ServerConnectionError: If **verify** was set
             to True and the connection to C8Db fails.
         """
-        connection = DatabaseConnection(
+        connection = FabricConnection(
             url=self._url,
             stream_port=self._stream_port,
             tenant=tenant,
-            db=name,
+            fabric=name,
             username=username,
             password=password,
             http_client=self._http_client
         )
-        database = StandardDatabase(connection)
+        fabric = StandardFabric(connection)
 
         if verify:  # Check the server connection by making a read API call
             try:
-                database.ping()
+                fabric.ping()
             except ServerConnectionError as err:
                 raise err
             except Exception as err:
                 raise ServerConnectionError('bad connection: {}'.format(err))
 
-        return database
+        return fabric

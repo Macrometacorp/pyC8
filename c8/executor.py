@@ -77,6 +77,7 @@ class DefaultExecutor(Executor):
         :return: API execution result.
         :rtype: str | unicode | bool | int | list | dict
         """
+
         response = self._conn.send_request(request)
         return response_handler(response)
 

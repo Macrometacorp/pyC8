@@ -4,10 +4,10 @@ from c8.utils import get_col_name
 import json
 
 __all__ = [
-    'StandardDatabase',
-    'AsyncDatabase',
-    'BatchDatabase',
-    'TransactionDatabase'
+    'StandardFabric',
+    'AsyncFabric',
+    'BatchFabric',
+    'TransactionFabric'
 ]
 
 from datetime import datetime
@@ -29,10 +29,10 @@ from c8.exceptions import (
     CollectionCreateError,
     CollectionDeleteError,
     CollectionListError,
-    DatabaseDeleteError,
-    DatabaseCreateError,
-    DatabaseListError,
-    DatabasePropertiesError,
+    FabricDeleteError,
+    FabricCreateError,
+    FabricListError,
+    FabricPropertiesError,
     GraphListError,
     GraphCreateError,
     GraphDeleteError,
@@ -59,8 +59,8 @@ def printdata(event):
     """
     print(event)
 
-class Database(APIWrapper):
-    """Base class for Database API wrappers.
+class Fabric(APIWrapper):
+    """Base class for Fabric API wrappers.
 
     :param connection: HTTP connection.
     :type connection: c8.connection.Connection
@@ -72,7 +72,7 @@ class Database(APIWrapper):
         self.url=connection.url
         self.stream_port=connection.stream_port
         self.pulsar_client=None
-        super(Database, self).__init__(connection, executor)
+        super(Fabric, self).__init__(connection, executor)
 
     def __getitem__(self, name):
         """Return the collection API wrapper.
@@ -97,12 +97,12 @@ class Database(APIWrapper):
 
     @property
     def name(self):
-        """Return database name.
+        """Return fabric name.
 
-        :return: Database name.
+        :return: Fabric name.
         :rtype: str | unicode
         """
-        return self.db_name
+        return self.fabric_name
 
     @property
     def c8ql(self):
@@ -124,12 +124,12 @@ class Database(APIWrapper):
         if not collection: 
             raise ValueError('You must specify a collection on which to watch for realtime data!')
 
-        namespace = constants.STREAM_LOCAL_NS_PREFIX + self.tenant_name + '.' + self.db_name
+        namespace = constants.STREAM_LOCAL_NS_PREFIX + self.tenant_name + '.' + self.fabric_name
         if self.tenant_name == "_mm":
-            namespace = constants.STREAM_LOCAL_NS_PREFIX + self.db_name
+            namespace = constants.STREAM_LOCAL_NS_PREFIX + self.fabric_name
 
         topic = "non-persistent://" + self.tenant_name + "/" + namespace + "/" + collection
-        subscription_name = self.tenant_name + "-" + self.db_name + "-subscription-" + str(random.randint(1, 1000))
+        subscription_name = self.tenant_name + "-" + self.fabric_name + "-subscription-" + str(random.randint(1, 1000))
         print("pyC8 Realtime: Subscribing to topic: "+ topic + " on Subscription name: "+subscription_name)
     
         if self.pulsar_client:
@@ -153,20 +153,20 @@ class Database(APIWrapper):
             self.pulsar_client.close()
 
     def properties(self):
-        """Return database properties.
+        """Return fabric properties.
 
-        :return: Database properties.
+        :return: Fabric properties.
         :rtype: dict
-        :raise c8.exceptions.DatabasePropertiesError: If retrieval fails.
+        :raise c8.exceptions.FabricPropertiesError: If retrieval fails.
         """
         request = Request(
             method='get',
-            endpoint='/database/current',
+            endpoint='/fabric/current',
         )
 
         def response_handler(resp):
             if not resp.is_success:
-                raise DatabasePropertiesError(resp, request)
+                raise FabricPropertiesError(resp, request)
             result = resp.body['result']
             result['system'] = result.pop('isSystem')
             return result
@@ -369,44 +369,44 @@ class Database(APIWrapper):
 
 
     #######################
-    # Database Management #
+    # Fabric Management #
     #######################
 
-    def databases(self):
-        """Return the names all databases.
+    def fabrics(self):
+        """Return the names all fabrics.
 
-        :return: Database names.
+        :return: Fabric names.
         :rtype: [str | unicode]
-        :raise c8.exceptions.DatabaseListError: If retrieval fails.
+        :raise c8.exceptions.FabricListError: If retrieval fails.
         """
         request = Request(
             method='get',
-            endpoint='/database'
+            endpoint='/_fabric'
         )
 
         def response_handler(resp):
             if not resp.is_success:
-                raise DatabaseListError(resp, request)
+                raise FabricListError(resp, request)
             return resp.body['result']
 
         return self._execute(request, response_handler)
 
-    def has_database(self, name):
-        """Check if a database exists.
+    def has_fabric(self, name):
+        """Check if a fabric exists.
 
-        :param name: Database name.
+        :param name: Fabric name.
         :type name: str | unicode
-        :return: True if database exists, False otherwise.
+        :return: True if fabric exists, False otherwise.
         :rtype: bool
         """
-        return name in self.databases()
+        return name in self.fabrics()
 
-    def create_database(self, name, users=None, dclist=None, realtime=False):
-        """Create a new database.
+    def create_fabric(self, name, users=None, dclist=None, realtime=False):
+        """Create a new fabric.
 
-        :param name: Database name.
+        :param name: Fabric name.
         :type name: str | unicode
-        :param users: List of users with access to the new database, where each
+        :param users: List of users with access to the new fabric, where each
             user is a dictionary with fields "username", "password", "active"
             and "extra" (see below for example). If not set, only the admin and
             current user are granted access.
@@ -415,9 +415,9 @@ class Database(APIWrapper):
         :type dclist: [str | unicode]
         :param realtime: Whether or not the DB is realtime-enabled.
         :type realtime: bool
-        :return: True if database was created successfully.
+        :return: True if fabric was created successfully.
         :rtype: bool
-        :raise c8.exceptions.DatabaseCreateError: If create fails.
+        :raise c8.exceptions.FabricCreateError: If create fails.
 
         Here is an example entry for parameter **users**:
 
@@ -455,39 +455,39 @@ class Database(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/database',
+            endpoint='/fabric',
             data=data
         )
 
         def response_handler(resp):
             if not resp.is_success:
-                raise DatabaseCreateError(resp, request)
+                raise FabricCreateError(resp, request)
             return True
 
         return self._execute(request, response_handler)
 
-    def delete_database(self, name, ignore_missing=False):
-        """Delete the database.
+    def delete_fabric(self, name, ignore_missing=False):
+        """Delete the fabric.
 
-        :param name: Database name.
+        :param name: Fabric name.
         :type name: str | unicode
-        :param ignore_missing: Do not raise an exception on missing database.
+        :param ignore_missing: Do not raise an exception on missing fabric.
         :type ignore_missing: bool
-        :return: True if database was deleted successfully, False if database
+        :return: True if fabric was deleted successfully, False if fabric
             was not found and **ignore_missing** was set to True.
         :rtype: bool
-        :raise c8.exceptions.DatabaseDeleteError: If delete fails.
+        :raise c8.exceptions.FabricDeleteError: If delete fails.
         """
         request = Request(
             method='delete',
-            endpoint='/database/{}'.format(name)
+            endpoint='/fabric/{}'.format(name)
         )
 
         def response_handler(resp):
             if resp.error_code == 1228 and ignore_missing:
                 return False
             if not resp.is_success:
-                raise DatabaseDeleteError(resp, request)
+                raise FabricDeleteError(resp, request)
             return resp.body['result']
 
         return self._execute(request, response_handler)
@@ -507,7 +507,7 @@ class Database(APIWrapper):
         return StandardCollection(self._conn, self._executor, name)
 
     def has_collection(self, name):
-        """Check if collection exists in the database.
+        """Check if collection exists in the fabric.
 
         :param name: Collection name.
         :type name: str | unicode
@@ -517,9 +517,9 @@ class Database(APIWrapper):
         return any(col['name'] == name for col in self.collections())
 
     def collections(self):
-        """Return the collections in the database.
+        """Return the collections in the fabric.
 
-        :return: Collections in the database and their details.
+        :return: Collections in the fabric and their details.
         :rtype: [dict]
         :raise c8.exceptions.CollectionListError: If retrieval fails.
         """
@@ -727,7 +727,7 @@ class Database(APIWrapper):
         return Graph(self._conn, self._executor, name)
 
     def has_graph(self, name):
-        """Check if a graph exists in the database.
+        """Check if a graph exists in the fabric.
 
         :param name: Graph name.
         :type name: str | unicode
@@ -740,9 +740,9 @@ class Database(APIWrapper):
         return False
 
     def graphs(self):
-        """List all graphs in the database.
+        """List all graphs in the fabric.
 
-        :return: Graphs in the database.
+        :return: Graphs in the fabric.
         :rtype: [dict]
         :raise c8.exceptions.GraphListError: If retrieval fails.
         """
@@ -850,7 +850,7 @@ class Database(APIWrapper):
         return self._execute(request, response_handler)
 
     def delete_graph(self, name, ignore_missing=False, drop_collections=None):
-        """Drop the graph of the given name from the database.
+        """Drop the graph of the given name from the fabric.
 
         :param name: Graph name.
         :type name: str | unicode
@@ -1192,9 +1192,9 @@ class Database(APIWrapper):
         return StreamCollection(self, self._conn, self._executor, self.url, self.stream_port, operation_timeout_seconds)
 
     def streams(self):
-        """Get list of all streams under given database
+        """Get list of all streams under given fabric
 
-        :return: List of streams under given database.
+        :return: List of streams under given fabric.
         :rtype: json
         :raise c8.exceptions.StreamListError: If retrieving streams fails.
         """
@@ -1213,7 +1213,7 @@ class Database(APIWrapper):
                     'name': col['topic'],
                     'topic': col['topic'],
                     'local': col['local'],
-                    'db': col['db'],
+                    'fabric': col['fabric'],
                     'tenant': col['tenant'],
                     'type': StreamCollection.types[col['type']],
                     'status': 'terminated' if 'terminated' in col else 'active',
@@ -1225,10 +1225,10 @@ class Database(APIWrapper):
         return self._execute(request, response_handler)
  
     def persistent_streams(self, local=False):
-        """Get list of all streams under given database
+        """Get list of all streams under given fabric
 
         :param local: Operate on a local stream instead of a global one. Default value: false
-        :return: List of streams under given database.
+        :return: List of streams under given fabric.
         :rtype: json
         :raise c8.exceptions.StreamListError: If retrieving streams fails.
         """
@@ -1247,7 +1247,7 @@ class Database(APIWrapper):
                     'name': col['topic'],
                     'topic': col['topic'],
                     'local': col['local'],
-                    'db': col['db'],
+                    'fabric': col['fabric'],
                     'tenant': col['tenant'],
                     'type': StreamCollection.types[col['type']],
                     'status': 'terminated' if 'terminated' in col else 'active',
@@ -1260,12 +1260,12 @@ class Database(APIWrapper):
 
 
     def nonpersistent_streams(self, local=False):
-        """Get list of all streams under given database
+        """Get list of all streams under given fabric
 
         :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
         If it is set to False, API deletes non-persistent stream)
         :param local: Operate on a local stream instead of a global one. Default value: false
-        :return: List of streams under given database.
+        :return: List of streams under given fabric.
         :rtype: json
         :raise c8.exceptions.StreamListError: If retrieving streams fails.
         """
@@ -1284,7 +1284,7 @@ class Database(APIWrapper):
                     'name': col['topic'],
                     'topic': col['topic'],
                     'local': col['local'],
-                    'db': col['db'],
+                    'fabric': col['fabric'],
                     'tenant': col['tenant'],
                     'type': StreamCollection.types[col['type']],
                     'status': 'terminated' if 'terminated' in col else 'active',
@@ -1338,7 +1338,7 @@ class Database(APIWrapper):
 
     def create_stream(self, stream, persistent=True, local=False):
         """
-        Create the stream under the given database
+        Create the stream under the given fabric
         :param stream: name of stream
         :param persistent: persistent flag (if it is set to True, the API creates persistent stream.
         If it is set to False, API creates non-persistent stream)
@@ -1368,7 +1368,7 @@ class Database(APIWrapper):
 
     def delete_stream(self, stream, persistent=True, force=False, local=False):
         """
-        Delete the streams under the given database
+        Delete the streams under the given fabric
         :param stream: name of stream
         :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
         If it is set to False, API deletes non-persistent stream)
@@ -1458,21 +1458,21 @@ class Database(APIWrapper):
         return self._execute(request, response_handler)
 
 
-class StandardDatabase(Database):
-    """Standard database API wrapper.
+class StandardFabric(Fabric):
+    """Standard fabric API wrapper.
 
     :param connection: HTTP connection.
     :type connection: c8.connection.Connection
     """
 
     def __init__(self, connection):
-        super(StandardDatabase, self).__init__(
+        super(StandardFabric, self).__init__(
             connection=connection,
             executor=DefaultExecutor(connection)
         )
 
     def __repr__(self):
-        return '<StandardDatabase {}>'.format(self.name)
+        return '<StandardFabric {}>'.format(self.name)
 
     def begin_async_execution(self, return_result=True):
         """Begin async execution.
@@ -1482,10 +1482,10 @@ class StandardDatabase(Database):
             results from server once available. If set to False, API executions
             return None and no results are stored on server.
         :type return_result: bool
-        :return: Database API wrapper built specifically for async execution.
-        :rtype: c8.database.AsyncDatabase
+        :return: Fabric API wrapper built specifically for async execution.
+        :rtype: c8.fabric.AsyncFabric
         """
-        return AsyncDatabase(self._conn, return_result)
+        return AsyncFabric(self._conn, return_result)
 
     def begin_batch_execution(self, return_result=True):
         """Begin batch execution.
@@ -1495,10 +1495,10 @@ class StandardDatabase(Database):
             commit. If set to False, API executions return None and no results
             are tracked client-side.
         :type return_result: bool
-        :return: Database API wrapper built specifically for batch execution.
-        :rtype: c8.database.BatchDatabase
+        :return: Fabric API wrapper built specifically for batch execution.
+        :rtype: c8.fabric.BatchFabric
         """
-        return BatchDatabase(self._conn, return_result)
+        return BatchFabric(self._conn, return_result)
 
     def begin_transaction(self,
                           return_result=True,
@@ -1525,10 +1525,10 @@ class StandardDatabase(Database):
         :type timeout: int
         :param sync: Block until the transaction is synchronized to disk.
         :type sync: bool
-        :return: Database API wrapper built specifically for transactions.
-        :rtype: c8.database.TransactionDatabase
+        :return: Fabric API wrapper built specifically for transactions.
+        :rtype: c8.fabric.TransactionFabric
         """
-        return TransactionDatabase(
+        return TransactionFabric(
             connection=self._conn,
             return_result=return_result,
             read=read,
@@ -1538,10 +1538,10 @@ class StandardDatabase(Database):
         )
 
 
-class AsyncDatabase(Database):
-    """Database API wrapper tailored specifically for async execution.
+class AsyncFabric(Fabric):
+    """Fabric API wrapper tailored specifically for async execution.
 
-    See :func:`c8.database.StandardDatabase.begin_async_execution`.
+    See :func:`c8.fabric.StandardFabric.begin_async_execution`.
 
     :param connection: HTTP connection.
     :type connection: c8.connection.Connection
@@ -1553,19 +1553,19 @@ class AsyncDatabase(Database):
     """
 
     def __init__(self, connection, return_result):
-        super(AsyncDatabase, self).__init__(
+        super(AsyncFabric, self).__init__(
             connection=connection,
             executor=AsyncExecutor(connection, return_result)
         )
 
     def __repr__(self):
-        return '<AsyncDatabase {}>'.format(self.name)
+        return '<AsyncFabric {}>'.format(self.name)
 
 
-class BatchDatabase(Database):
-    """Database API wrapper tailored specifically for batch execution.
+class BatchFabric(Fabric):
+    """Fabric API wrapper tailored specifically for batch execution.
 
-    See :func:`c8.database.StandardDatabase.begin_batch_execution`.
+    See :func:`c8.fabric.StandardFabric.begin_batch_execution`.
 
     :param connection: HTTP connection.
     :type connection: c8.connection.Connection
@@ -1577,13 +1577,13 @@ class BatchDatabase(Database):
     """
 
     def __init__(self, connection, return_result):
-        super(BatchDatabase, self).__init__(
+        super(BatchFabric, self).__init__(
             connection=connection,
             executor=BatchExecutor(connection, return_result)
         )
 
     def __repr__(self):
-        return '<BatchDatabase {}>'.format(self.name)
+        return '<BatchFabric {}>'.format(self.name)
 
     def __enter__(self):
         return self
@@ -1618,10 +1618,10 @@ class BatchDatabase(Database):
         return self._executor.commit()
 
 
-class TransactionDatabase(Database):
-    """Database API wrapper tailored specifically for transactions.
+class TransactionFabric(Fabric):
+    """Fabric API wrapper tailored specifically for transactions.
 
-    See :func:`c8.database.StandardDatabase.begin_transaction`.
+    See :func:`c8.fabric.StandardFabric.begin_transaction`.
 
     :param connection: HTTP connection.
     :type connection: c8.connection.Connection
@@ -1643,7 +1643,7 @@ class TransactionDatabase(Database):
     """
 
     def __init__(self, connection, return_result, read, write, timeout, sync):
-        super(TransactionDatabase, self).__init__(
+        super(TransactionFabric, self).__init__(
             connection=connection,
             executor=TransactionExecutor(
                 connection=connection,
@@ -1656,7 +1656,7 @@ class TransactionDatabase(Database):
         )
 
     def __repr__(self):
-        return '<TransactionDatabase {}>'.format(self.name)
+        return '<TransactionFabric {}>'.format(self.name)
 
     def __enter__(self):
         return self

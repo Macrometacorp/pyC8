@@ -178,7 +178,7 @@ class Graph(APIWrapper):
         :param name: Vertex collection name.
         :type name: str | unicode
         :param purge: If set to True, the vertex collection is not just deleted
-            from the graph but also from the database completely.
+            from the graph but also from the fabric completely.
         :type purge: bool
         :return: True if vertex collection was deleted successfully.
         :rtype: bool
@@ -332,7 +332,7 @@ class Graph(APIWrapper):
         :type name: str | unicode
         :param purge: If set to True, the edge definition is not just removed
             from the graph but the edge collection is also deleted completely
-            from the database.
+            from the fabric.
         :type purge: bool
         :return: True if edge definition was deleted successfully.
         :rtype: bool

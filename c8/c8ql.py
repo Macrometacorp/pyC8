@@ -33,7 +33,7 @@ class C8QL(APIWrapper):
         super(C8QL, self).__init__(connection, executor)
 
     def __repr__(self):
-        return '<C8QL in {}>'.format(self._conn.db_name)
+        return '<C8QL in {}>'.format(self._conn.fabric_name)
 
     # noinspection PyMethodMayBeStatic
     def _format_queries(self, body):
@@ -85,7 +85,7 @@ class C8QL(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/explain',
+            endpoint='/explain/',
             data={'query': query, 'options': options}
         )
 
@@ -353,7 +353,7 @@ class C8QL(APIWrapper):
         return self._execute(request, response_handler)
 
     def functions(self):
-        """List the C8QL functions defined in the database.
+        """List the C8QL functions defined in the fabric.
 
         :return: Mapping of C8QL function names to their javascript code.
         :rtype: dict
