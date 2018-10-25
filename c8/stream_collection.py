@@ -412,9 +412,9 @@ class StreamCollection(APIWrapper):
        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions for a stream fails.
        """
         if persistent:
-            url_endpoint = '/streams/persistent/streams/{}/backlog?local={}'.format(stream, local)
+            url_endpoint = '/streams/persistent/stream/{}/backlog?local={}'.format(stream, local)
         else:
-            url_endpoint = '/streams/non-persistent/streams/{}/backlog?local={}'.format(stream, local)
+            url_endpoint = '/streams/non-persistent/stream/{}/backlog?local={}'.format(stream, local)
 
         request = Request(
             method='get',

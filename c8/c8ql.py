@@ -85,7 +85,7 @@ class C8QL(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/explain/',
+            endpoint='/query/explain',
             data={'query': query, 'options': options}
         )
 

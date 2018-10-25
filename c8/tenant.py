@@ -313,7 +313,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/fabric'
+            endpoint='/database'
         )
 
         def response_handler(resp):
@@ -387,7 +387,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/fabric',
+            endpoint='/database',
             data=data
         )
 
@@ -412,7 +412,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/fabric/{}'.format(name)
+            endpoint='/database/{}'.format(name)
         )
 
         def response_handler(resp):
@@ -642,7 +642,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_admin/user/{}/fabric'.format(username),
+            endpoint='/_admin/user/{}/database'.format(username),
             params={'full': True}
         )
 
@@ -666,7 +666,7 @@ class Tenant(APIWrapper):
         :rtype: str | unicode
         :raise: c8.exceptions.PermissionGetError: If retrieval fails.
         """
-        endpoint = '/_admin/user/{}/fabric/{}'.format(username, fabric)
+        endpoint = '/_admin/user/{}/database/{}'.format(username, fabric)
         if collection is not None:
             endpoint += '/' + collection
         request = Request(method='get', endpoint=endpoint)

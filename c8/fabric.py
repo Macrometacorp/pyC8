@@ -381,7 +381,7 @@ class Fabric(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_fabric'
+            endpoint='/database'
         )
 
         def response_handler(resp):
@@ -455,7 +455,7 @@ class Fabric(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/fabric',
+            endpoint='/database',
             data=data
         )
 
@@ -480,7 +480,7 @@ class Fabric(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/fabric/{}'.format(name)
+            endpoint='/database/{}'.format(name)
         )
 
         def response_handler(resp):
