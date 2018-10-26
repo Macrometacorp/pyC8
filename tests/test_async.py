@@ -5,7 +5,7 @@ import time
 import pytest
 from six import string_types
 
-from c8.database import AsyncDatabase
+from c8.fabric import AsyncFabric
 from c8.exceptions import (
     AsyncExecuteError,
     AsyncJobClearError,
@@ -26,31 +26,31 @@ def wait_on_job(job):
     return job
 
 
-def wait_on_jobs(db):
+def wait_on_jobs(fabric):
     """Block until all async jobs are finished."""
-    while len(db.async_jobs('pending')) > 0:
+    while len(fabric.async_jobs('pending')) > 0:
         time.sleep(.05)  # pragma: no cover
 
 
-def test_async_wrapper_attributes(db, col, username):
-    async_db = db.begin_async_execution()
-    assert isinstance(async_db, AsyncDatabase)
-    assert async_db.username == username
-    assert async_db.context == 'async'
-    assert async_db.db_name == db.name
-    assert async_db.name == db.name
-    assert repr(async_db) == '<AsyncDatabase {}>'.format(db.name)
+def test_async_wrapper_attributes(fabric, col, username):
+    async_fabric = fabric.begin_async_execution()
+    assert isinstance(async_fabric, AsyncFabric)
+    assert async_fabric.username == username
+    assert async_fabric.context == 'async'
+    assert async_fabric.fabric_name == fabric.name
+    assert async_fabric.name == fabric.name
+    assert repr(async_fabric) == '<AsyncFabric {}>'.format(fabric.name)
 
-    async_col = async_db.collection(col.name)
+    async_col = async_fabric.collection(col.name)
     assert async_col.username == username
     assert async_col.context == 'async'
-    assert async_col.db_name == db.name
+    assert async_col.fabric_name == fabric.name
     assert async_col.name == col.name
 
-    async_c8ql = async_db.c8ql
+    async_c8ql = async_fabric.c8ql
     assert async_c8ql.username == username
     assert async_c8ql.context == 'async'
-    assert async_c8ql.db_name == db.name
+    assert async_c8ql.fabric_name == fabric.name
 
     job = async_c8ql.execute('INVALID QUERY')
     assert isinstance(job, AsyncJob)
@@ -58,9 +58,9 @@ def test_async_wrapper_attributes(db, col, username):
     assert repr(job) == '<AsyncJob {}>'.format(job.id)
 
 
-def test_async_execute_without_result(db, col, docs):
+def test_async_execute_without_result(fabric, col, docs):
     # Insert test documents asynchronously with return_result set to False
-    async_col = db.begin_async_execution(return_result=False).collection(
+    async_col = fabric.begin_async_execution(return_result=False).collection(
         col.name)
 
     # Ensure that no jobs were returned
@@ -69,26 +69,26 @@ def test_async_execute_without_result(db, col, docs):
     assert async_col.insert(docs[2]) is None
 
     # Ensure that the operations went through
-    wait_on_jobs(db)
+    wait_on_jobs(fabric)
     assert extract('_key', col.all()) == ['1', '2', '3']
 
 
-def test_async_execute_error_in_result(db, col, docs):
-    db.collection(col.name).import_bulk(docs)
-    async_db = db.begin_async_execution(return_result=True)
+def test_async_execute_error_in_result(fabric, col, docs):
+    fabric.collection(col.name).import_bulk(docs)
+    async_fabric = fabric.begin_async_execution(return_result=True)
 
     # Test async execution of a bad C8QL query
-    job = wait_on_job(async_db.c8ql.execute('INVALID QUERY'))
+    job = wait_on_job(async_fabric.c8ql.execute('INVALID QUERY'))
     with pytest.raises(C8QLQueryExecuteError) as err:
         job.result()
     assert err.value.error_code == 1501
 
 
-def test_async_get_job_status(db, bad_db):
-    async_db = db.begin_async_execution(return_result=True)
+def test_async_get_job_status(fabric, bad_fabric):
+    async_fabric = fabric.begin_async_execution(return_result=True)
 
     # Test get status of a pending job
-    job = async_db.c8ql.execute('RETURN SLEEP(0.1)', count=True)
+    job = async_fabric.c8ql.execute('RETURN SLEEP(0.1)', count=True)
     assert job.status() == 'pending'
 
     # Test get status of a finished job
@@ -101,18 +101,18 @@ def test_async_get_job_status(db, bad_db):
     assert err.value.error_code == 404
 
     # Test get status from invalid job
-    bad_job = wait_on_job(async_db.c8ql.execute('INVALID QUERY'))
-    bad_job._conn = bad_db._conn
+    bad_job = wait_on_job(async_fabric.c8ql.execute('INVALID QUERY'))
+    bad_job._conn = bad_fabric._conn
     with pytest.raises(AsyncJobStatusError) as err:
         bad_job.status()
     assert err.value.error_code == 1228
 
 
-def test_async_get_job_result(db, bad_db):
-    async_db = db.begin_async_execution(return_result=True)
+def test_async_get_job_result(fabric, bad_fabric):
+    async_fabric = fabric.begin_async_execution(return_result=True)
 
     # Test get result from a pending job
-    job = async_db.c8ql.execute('RETURN SLEEP(0.1)', count=True)
+    job = async_fabric.c8ql.execute('RETURN SLEEP(0.1)', count=True)
     with pytest.raises(AsyncJobResultError) as err:
         job.result()
     assert err.value.http_code == 204
@@ -127,18 +127,18 @@ def test_async_get_job_result(db, bad_db):
     assert err.value.error_code == 404
 
     # Test get result from an invalid job
-    bad_job = async_db.c8ql.execute('INVALID QUERY')
-    bad_job._conn = bad_db._conn
+    bad_job = async_fabric.c8ql.execute('INVALID QUERY')
+    bad_job._conn = bad_fabric._conn
     with pytest.raises(AsyncJobResultError) as err:
         bad_job.result()
     assert err.value.error_code == 1228
 
 
-def test_async_cancel_job(db, bad_db):
-    async_db = db.begin_async_execution(return_result=True)
+def test_async_cancel_job(fabric, bad_fabric):
+    async_fabric = fabric.begin_async_execution(return_result=True)
 
     # Start a long running request to ensure that job can be cancelled
-    job = async_db.c8ql.execute('RETURN SLEEP(5)')
+    job = async_fabric.c8ql.execute('RETURN SLEEP(5)')
 
     # Test cancel a pending job
     assert job.cancel() is True
@@ -151,17 +151,17 @@ def test_async_cancel_job(db, bad_db):
     assert job.cancel(ignore_missing=True) is False
 
     # Test cancel an invalid job
-    job = async_db.c8ql.execute('RETURN SLEEP(5)')
-    job._conn = bad_db._conn
+    job = async_fabric.c8ql.execute('RETURN SLEEP(5)')
+    job._conn = bad_fabric._conn
     with pytest.raises(AsyncJobCancelError) as err:
         job.cancel()
     assert err.value.error_code == 1228
 
 
-def test_async_clear_job(db, bad_db):
-    async_db = db.begin_async_execution(return_result=True)
+def test_async_clear_job(fabric, bad_fabric):
+    async_fabric = fabric.begin_async_execution(return_result=True)
 
-    job = async_db.c8ql.execute('RETURN 1')
+    job = async_fabric.c8ql.execute('RETURN 1')
 
     # Test clear finished job
     assert job.clear(ignore_missing=True) is True
@@ -173,34 +173,34 @@ def test_async_clear_job(db, bad_db):
     assert job.clear(ignore_missing=True) is False
 
     # Test clear with an invalid job
-    job._conn = bad_db._conn
+    job._conn = bad_fabric._conn
     with pytest.raises(AsyncJobClearError) as err:
         job.clear()
     assert err.value.error_code == 1228
 
 
-def test_async_execute_errors(bad_db):
-    bad_async_db = bad_db.begin_async_execution(return_result=False)
+def test_async_execute_errors(bad_fabric):
+    bad_async_fabric = bad_fabric.begin_async_execution(return_result=False)
     with pytest.raises(AsyncExecuteError) as err:
-        bad_async_db.c8ql.execute('RETURN 1')
+        bad_async_fabric.c8ql.execute('RETURN 1')
     assert err.value.error_code == 1228
 
-    bad_async_db = bad_db.begin_async_execution(return_result=True)
+    bad_async_fabric = bad_fabric.begin_async_execution(return_result=True)
     with pytest.raises(AsyncExecuteError) as err:
-        bad_async_db.c8ql.execute('RETURN 1')
+        bad_async_fabric.c8ql.execute('RETURN 1')
     assert err.value.error_code == 1228
 
 
-def test_async_clear_jobs(db, bad_db, col, docs):
-    async_db = db.begin_async_execution(return_result=True)
-    async_col = async_db.collection(col.name)
+def test_async_clear_jobs(fabric, bad_fabric, col, docs):
+    async_fabric = fabric.begin_async_execution(return_result=True)
+    async_col = async_fabric.collection(col.name)
 
     job1 = wait_on_job(async_col.insert(docs[0]))
     job2 = wait_on_job(async_col.insert(docs[1]))
     job3 = wait_on_job(async_col.insert(docs[2]))
 
     # Test clear all async jobs
-    assert db.clear_async_jobs() is True
+    assert fabric.clear_async_jobs() is True
     for job in [job1, job2, job3]:
         with pytest.raises(AsyncJobStatusError) as err:
             job.status()
@@ -213,49 +213,49 @@ def test_async_clear_jobs(db, bad_db, col, docs):
 
     # Test clear jobs that have expired
     past = int(time.time()) - 1000000
-    assert db.clear_async_jobs(threshold=past) is True
+    assert fabric.clear_async_jobs(threshold=past) is True
     for job in [job1, job2, job3]:
         assert job.status() == 'done'
 
     # Test clear jobs that have not expired yet
     future = int(time.time()) + 1000000
-    assert db.clear_async_jobs(threshold=future) is True
+    assert fabric.clear_async_jobs(threshold=future) is True
     for job in [job1, job2, job3]:
         with pytest.raises(AsyncJobStatusError) as err:
             job.status()
         assert err.value.error_code == 404
 
-    # Test clear job with bad database
+    # Test clear job with bad fabric
     with pytest.raises(AsyncJobClearError) as err:
-        bad_db.clear_async_jobs()
+        bad_fabric.clear_async_jobs()
     assert err.value.error_code == 1228
 
 
-def test_async_list_jobs(db, col, docs):
-    async_db = db.begin_async_execution(return_result=True)
-    async_col = async_db.collection(col.name)
+def test_async_list_jobs(fabric, col, docs):
+    async_fabric = fabric.begin_async_execution(return_result=True)
+    async_col = async_fabric.collection(col.name)
 
     job1 = wait_on_job(async_col.insert(docs[0]))
     job2 = wait_on_job(async_col.insert(docs[1]))
     job3 = wait_on_job(async_col.insert(docs[2]))
 
     # Test list async jobs that are done
-    job_ids = db.async_jobs(status='done')
+    job_ids = fabric.async_jobs(status='done')
     assert job1.id in job_ids
     assert job2.id in job_ids
     assert job3.id in job_ids
 
     # Test list async jobs that are pending
-    job4 = async_db.c8ql.execute('RETURN SLEEP(0.1)')
-    assert db.async_jobs(status='pending') == [job4.id]
+    job4 = async_fabric.c8ql.execute('RETURN SLEEP(0.1)')
+    assert fabric.async_jobs(status='pending') == [job4.id]
     wait_on_job(job4)  # Make sure the job is done
 
     # Test list async jobs with invalid status
     with pytest.raises(AsyncJobListError) as err:
-        db.async_jobs(status='bad_status')
+        fabric.async_jobs(status='bad_status')
     assert err.value.error_code == 400
 
     # Test list jobs with count
-    job_ids = db.async_jobs(status='done', count=1)
+    job_ids = fabric.async_jobs(status='done', count=1)
     assert len(job_ids) == 1
     assert job_ids[0] in [job1.id, job2.id, job3.id, job4.id]

@@ -2,8 +2,8 @@ C8QL
 ----
 
 **C8 Data Fabric Query Language (C8QL)** is used to read and write data. It is similar
-to SQL for relational databases, but without the support for data definition
-operations such as creating or deleting :doc:`databases <database>`,
+to SQL for relational fabrics, but without the support for data definition
+operations such as creating or deleting :doc:`fabrics <fabric>`,
 :doc:`collections <collection>` or :doc:`indexes <indexes>`. For more
 information, refer to `C8 Data Fabric manual`_.
 
@@ -24,21 +24,21 @@ C8QL queries are invoked from C8QL API wrapper. Executing queries returns
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "test" database as tenant admin.
-    # This returns an API wrapper for the "test" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
+    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
 
     # Insert some test documents into "students" collection.
-    db.collection('students').insert_many([
+    fabric.collection('students').insert_many([
         {'_key': 'Abby', 'age': 22},
         {'_key': 'John', 'age': 18},
         {'_key': 'Mary', 'age': 21}
     ])
 
     # Get the C8QL API wrapper.
-    c8ql = db.c8ql
+    c8ql = fabric.c8ql
 
     # Retrieve the execution plan without running the query.
     c8ql.explain('FOR doc IN students RETURN doc')
@@ -47,7 +47,7 @@ C8QL queries are invoked from C8QL API wrapper. Executing queries returns
     c8ql.validate('FOR doc IN students RETURN doc')
 
     # Execute the query
-    cursor = db.c8ql.execute(
+    cursor = fabric.c8ql.execute(
       'FOR doc IN students FILTER doc.age < @value RETURN doc',
       bind_vars={'value': 19}
     )
@@ -89,13 +89,13 @@ C8QL functionality. They are somewhat similar to SQL procedures.
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "test" database as tenant admin.
-    # This returns an API wrapper for the "test" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
+    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Get the C8QL API wrapper.
-    c8ql = db.c8ql
+    c8ql = fabric.c8ql
 
     # Create a new C8QL user function.
     c8ql.create_function(
@@ -128,13 +128,13 @@ are not.
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "test" database as tenant admin.
-    # This returns an API wrapper for the "test" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
+    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Get the C8QL API wrapper.
-    c8ql = db.c8ql
+    c8ql = fabric.c8ql
 
     # Retrieve C8QL query cache properties.
     c8ql.cache.properties()

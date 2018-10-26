@@ -5,104 +5,104 @@ from datetime import datetime
 from six import string_types
 
 from c8.exceptions import (
-    DatabaseCreateError,
-    DatabaseDeleteError,
-    DatabaseListError,
-    DatabasePropertiesError,
+    FabricCreateError,
+    FabricDeleteError,
+    FabricListError,
+    FabricPropertiesError,
     ServerDetailsError,
     ServerEchoError,
     ServerVersionError,
     ServerEngineError
 )
-from tests.helpers import assert_raises, generate_db_name
+from tests.helpers import assert_raises, generate_fabric_name
 
 
-def test_database_attributes(db, username):
-    assert db.context in ['default', 'async', 'batch', 'transaction']
-    assert db.username == username
-    assert db.db_name == db.name
-    assert db.name.startswith('test_database')
-    assert repr(db) == '<StandardDatabase {}>'.format(db.name)
+def test_fabric_attributes(fabric, username):
+    assert fabric.context in ['default', 'async', 'batch', 'transaction']
+    assert fabric.username == username
+    assert fabric.fabric_name == fabric.name
+    assert fabric.name.startswith('test_fabric')
+    assert repr(fabric) == '<StandardFabric {}>'.format(fabric.name)
 
 
-def test_database_misc_methods(db, bad_db):
+def test_fabric_misc_methods(fabric, bad_fabric):
     # Test get properties
-    properties = db.properties()
+    properties = fabric.properties()
     assert 'id' in properties
     assert 'path' in properties
-    assert properties['name'] == db.name
+    assert properties['name'] == fabric.name
     assert properties['system'] is False
 
-    # Test get properties with bad database
-    with assert_raises(DatabasePropertiesError) as err:
-        bad_db.properties()
+    # Test get properties with bad fabric
+    with assert_raises(FabricPropertiesError) as err:
+        bad_fabric.properties()
     assert err.value.error_code == 1228
 
     # Test get server version
-    assert isinstance(db.version(), string_types)
+    assert isinstance(fabric.version(), string_types)
 
-    # Test get server version with bad database
+    # Test get server version with bad fabric
     with assert_raises(ServerVersionError) as err:
-        bad_db.version()
+        bad_fabric.version()
     assert err.value.error_code == 1228
 
     # Test get server details
-    details = db.details()
+    details = fabric.details()
     assert 'architecture' in details
     assert 'server-version' in details
 
-    # Test get server details with bad database
+    # Test get server details with bad fabric
     with assert_raises(ServerDetailsError) as err:
-        bad_db.details()
+        bad_fabric.details()
     assert err.value.error_code == 1228
 
     # Test get storage engine
-    engine = db.engine()
-    assert engine['name'] in ['mmfiles', 'rocksdb']
+    engine = fabric.engine()
+    assert engine['name'] in ['mmfiles', 'rocksfabric']
     assert 'supports' in engine
 
-    # Test get storage engine with bad database
+    # Test get storage engine with bad fabric
     with assert_raises(ServerEngineError) as err:
-        bad_db.engine()
+        bad_fabric.engine()
     assert err.value.error_code == 1228
 
 
-def test_database_management(db, sys_db, bad_db):
-    # Test list databases
-    result = sys_db.databases()
+def test_fabric_management(fabric, sys_fabric, bad_fabric):
+    # Test list fabrics
+    result = sys_fabric.fabrics()
     assert '_system' in result
 
-    # Test list databases with bad database
-    with assert_raises(DatabaseListError):
-        bad_db.databases()
+    # Test list fabrics with bad fabric
+    with assert_raises(FabricListError):
+        bad_fabric.fabrics()
 
-    # Test create database
-    db_name = generate_db_name()
-    assert sys_db.has_database(db_name) is False
-    assert sys_db.create_database(db_name) is True
-    assert sys_db.has_database(db_name) is True
+    # Test create fabric
+    fabric_name = generate_fabric_name()
+    assert sys_fabric.has_fabric(fabric_name) is False
+    assert sys_fabric.create_fabric(fabric_name) is True
+    assert sys_fabric.has_fabric(fabric_name) is True
 
-    # Test create duplicate database
-    with assert_raises(DatabaseCreateError) as err:
-        sys_db.create_database(db_name)
+    # Test create duplicate fabric
+    with assert_raises(FabricCreateError) as err:
+        sys_fabric.create_fabric(fabric_name)
     assert err.value.error_code == 1207
 
-    # Test create database without permissions
-    with assert_raises(DatabaseCreateError) as err:
-        db.create_database(db_name)
+    # Test create fabric without permissions
+    with assert_raises(FabricCreateError) as err:
+        fabric.create_fabric(fabric_name)
     assert err.value.error_code == 1230
 
-    # Test delete database without permissions
-    with assert_raises(DatabaseDeleteError) as err:
-        db.delete_database(db_name)
+    # Test delete fabric without permissions
+    with assert_raises(FabricDeleteError) as err:
+        fabric.delete_fabric(fabric_name)
     assert err.value.error_code == 1230
 
-    # Test delete database
-    assert sys_db.delete_database(db_name) is True
-    assert db_name not in sys_db.databases()
+    # Test delete fabric
+    assert sys_fabric.delete_fabric(fabric_name) is True
+    assert fabric_name not in sys_fabric.fabrics()
 
-    # Test delete missing database
-    with assert_raises(DatabaseDeleteError) as err:
-        sys_db.delete_database(db_name)
+    # Test delete missing fabric
+    with assert_raises(FabricDeleteError) as err:
+        sys_fabric.delete_fabric(fabric_name)
     assert err.value.error_code == 1228
-    assert sys_db.delete_database(db_name, ignore_missing=True) is False
+    assert sys_fabric.delete_fabric(fabric_name, ignore_missing=True) is False

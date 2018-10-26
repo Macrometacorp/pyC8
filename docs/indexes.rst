@@ -18,11 +18,11 @@ on fields ``_from`` and ``_to``. For more information on indexes, refer to
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # Connect to "test" database as tenant admin.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    # Connect to "test" fabric as tenant admin.
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Create a new collection named "cities".
-    cities = db.create_collection('cities')
+    cities = fabric.create_collection('cities')
 
     # List the indexes in the collection.
     cities.indexes()

@@ -4,7 +4,7 @@ import mock
 import pytest
 from six import string_types
 
-from c8.database import BatchDatabase
+from c8.fabric import BatchFabric
 from c8.exceptions import (
     DocumentInsertError,
     BatchExecuteError,
@@ -17,12 +17,12 @@ from tests.helpers import extract, clean_doc
 
 def test_batch_wrapper_attributes(db, col, username):
     batch_db = db.begin_batch_execution()
-    assert isinstance(batch_db, BatchDatabase)
+    assert isinstance(batch_db, BatchFabric)
     assert batch_db.username == username
     assert batch_db.context == 'batch'
     assert batch_db.db_name == db.name
     assert batch_db.name == db.name
-    assert repr(batch_db) == '<BatchDatabase {}>'.format(db.name)
+    assert repr(batch_db) == '<BatchFabric {}>'.format(db.name)
 
     batch_col = batch_db.collection(col.name)
     assert batch_col.username == username
@@ -124,7 +124,7 @@ def test_batch_execute_error(bad_db, col, docs):
     batch_db = bad_db.begin_batch_execution(return_result=True)
     job = batch_db.collection(col.name).insert_many(docs)
 
-    # Test batch execute with bad database
+    # Test batch execute with bad fabric
     with pytest.raises(BatchExecuteError) as err:
         batch_db.commit()
     assert err.value.error_code == 1228

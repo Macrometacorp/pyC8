@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import pytest
 
 from c8.client import C8Client
-from c8.database import StandardDatabase
+from c8.fabric import StandardFabric
 from c8.exceptions import ServerConnectionError
 from c8.http import DefaultHTTPClient
 from c8.version import __version__
@@ -40,7 +40,7 @@ def test_client_good_connection(db, username, password):
     # Test connection with verify flag on and off
     for verify in (True, False):
         db = client.db(db.name, username, password, verify=verify)
-        assert isinstance(db, StandardDatabase)
+        assert isinstance(db, StandardFabric)
         assert db.name == db.name
         assert db.username == username
         assert db.context == 'default'
@@ -58,10 +58,10 @@ def test_client_bad_connection(db, username, password):
         client.db(db.name, bad_username, bad_password, verify=True)
     assert 'bad username and/or password' in str(err.value)
 
-    # Test connection with missing database
+    # Test connection with missing fabric
     with pytest.raises(ServerConnectionError) as err:
         client.db(bad_db_name, bad_username, bad_password, verify=True)
-    assert 'database not found' in str(err.value)
+    assert 'fabric not found' in str(err.value)
 
     # Test connection with invalid host URL
     client._url = 'http://127.0.0.1:8500'

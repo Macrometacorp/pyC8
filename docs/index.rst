@@ -36,7 +36,7 @@ Contents
 
     overview
     tenant
-    database
+    fabric
     collection
     stream
     document

@@ -27,7 +27,7 @@ def test_permission_management(client, sys_db, bad_db):
     col_name_1 = generate_col_name()
     col_name_2 = generate_col_name()
 
-    sys_db.create_database(
+    sys_db.create_fabric(
         name=db_name,
         users=[{
             'username': username,
@@ -38,12 +38,12 @@ def test_permission_management(client, sys_db, bad_db):
     db = client.db(db_name, username, password)
     assert isinstance(sys_db.permissions(username), dict)
 
-    # Test list permissions with bad database
+    # Test list permissions with bad fabric
     with assert_raises(PermissionListError) as err:
         bad_db.permissions(username)
     assert err.value.error_code == 1228
 
-    # Test get permission with bad database
+    # Test get permission with bad fabric
     with assert_raises(PermissionGetError) as err:
         bad_db.permission(username, db_name)
     assert err.value.error_code == 1228
@@ -54,7 +54,7 @@ def test_permission_management(client, sys_db, bad_db):
     assert db.create_collection(col_name_1) is not None
     assert col_name_1 in extract('name', db.collections())
 
-    # Test update permission (database level) to none and verify access
+    # Test update permission (fabric level) to none and verify access
     assert sys_db.update_permission(username, 'none', db_name) is True
     assert sys_db.permission(username, db_name) == 'none'
     with assert_raises(CollectionCreateError) as err:
@@ -64,12 +64,12 @@ def test_permission_management(client, sys_db, bad_db):
         db.collections()
     assert err.value.http_code == 401
 
-    # Test update permission (database level) with bad database
+    # Test update permission (fabric level) with bad fabric
     with assert_raises(PermissionUpdateError):
         bad_db.update_permission(username, 'ro', db_name)
     assert sys_db.permission(username, db_name) == 'none'
 
-    # Test update permission (database level) to read only and verify access
+    # Test update permission (fabric level) to read only and verify access
     assert sys_db.update_permission(username, 'ro', db_name) is True
     assert sys_db.permission(username, db_name) == 'ro'
     with assert_raises(CollectionCreateError) as err:
@@ -78,13 +78,13 @@ def test_permission_management(client, sys_db, bad_db):
     assert col_name_1 in extract('name', db.collections())
     assert col_name_2 not in extract('name', db.collections())
 
-    # Test reset permission (database level) with bad database
+    # Test reset permission (fabric level) with bad fabric
     with assert_raises(PermissionResetError) as err:
         bad_db.reset_permission(username, db_name)
     assert err.value.error_code == 1228
     assert sys_db.permission(username, db_name) == 'ro'
 
-    # Test reset permission (database level) and verify access
+    # Test reset permission (fabric level) and verify access
     assert sys_db.reset_permission(username, db_name) is True
     assert sys_db.permission(username, db_name) == 'none'
     with assert_raises(CollectionCreateError) as err:
@@ -94,7 +94,7 @@ def test_permission_management(client, sys_db, bad_db):
         db.collections()
     assert err.value.http_code == 401
 
-    # Test update permission (database level) and verify access
+    # Test update permission (fabric level) and verify access
     assert sys_db.update_permission(username, 'rw', db_name) is True
     assert sys_db.permission(username, db_name, col_name_2) == 'rw'
     assert db.create_collection(col_name_2) is not None

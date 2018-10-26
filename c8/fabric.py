@@ -51,6 +51,7 @@ import random
 import pulsar
 from urllib.parse import urlparse
 
+
 def printdata(event):
     """Prints the event.
 
@@ -58,6 +59,7 @@ def printdata(event):
     :type event: str | unicode
     """
     print(event)
+
 
 class Fabric(APIWrapper):
     """Base class for Fabric API wrappers.
@@ -441,15 +443,14 @@ class Fabric(APIWrapper):
 
         options = {}
         options['realTime'] = realtime
-
+        dcl = ''
         if dclist:
             # Process dclist param (type list) to build up comma-separated string of DCs
-            dcl = ''
             for dc in dclist:
                 if len(dcl) > 0:
                     dcl += ','
                 dcl += dc
-            options['dcList'] = dcl
+        options['dcList'] = dcl
 
         data['options'] = options
 

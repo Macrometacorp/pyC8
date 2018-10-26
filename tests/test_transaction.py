@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import pytest
 from six import string_types
 
-from c8.database import TransactionDatabase
+from c8.fabric import TransactionFabric
 from c8.exceptions import (
     TransactionStateError,
     TransactionExecuteError,
@@ -18,12 +18,12 @@ def test_transaction_wrapper_attributes(db, col, username):
     txn_db = db.begin_transaction(timeout=100, sync=True)
     assert txn_db._executor._sync is True
     assert txn_db._executor._timeout == 100
-    assert isinstance(txn_db, TransactionDatabase)
+    assert isinstance(txn_db, TransactionFabric)
     assert txn_db.username == username
     assert txn_db.context == 'transaction'
     assert txn_db.db_name == db.name
     assert txn_db.name == db.name
-    assert repr(txn_db) == '<TransactionDatabase {}>'.format(db.name)
+    assert repr(txn_db) == '<TransactionFabric {}>'.format(db.name)
 
     txn_col = txn_db.collection(col.name)
     assert txn_col.username == username
@@ -150,7 +150,7 @@ def test_transaction_execute_error(bad_db, col, docs):
     txn_db = bad_db.begin_transaction(return_result=True)
     job = txn_db.collection(col.name).insert_many(docs)
 
-    # Test transaction execute with bad database
+    # Test transaction execute with bad fabric
     with pytest.raises(TransactionExecuteError):
         txn_db.commit()
     assert len(col) == 0

@@ -13,13 +13,13 @@ from c8.exceptions import (
 )
 
 
-def generate_db_name():
-    """Generate and return a random database name.
+def generate_fabric_name():
+    """Generate and return a random fabric name.
 
-    :return: Random database name.
+    :return: Random fabric name.
     :rtype: str | unicode
     """
-    return 'test_database_{}'.format(uuid4().hex)
+    return 'test_fabric_{}'.format(uuid4().hex)
 
 
 def generate_col_name():

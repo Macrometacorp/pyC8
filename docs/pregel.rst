@@ -15,14 +15,14 @@ graph processing. For more information, refer to `C8 Data Fabric manual`_.
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # Connect to "test" database as tenant admin.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    # Connect to "test" fabric as tenant admin.
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Get the Pregel API wrapper.
-    pregel = db.pregel
+    pregel = fabric.pregel
 
     # Start a new Pregel job in "school" graph.
-    job_id = db.pregel.create_job(
+    job_id = fabric.pregel.create_job(
         graph='school',
         algorithm='pagerank',
         store=False,

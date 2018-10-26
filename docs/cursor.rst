@@ -16,13 +16,13 @@ number of items in the result set may or may not be known in advance.
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "test" database as tenant admin.
-    # This returns an API wrapper for the "test" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
+    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Set up some test data to query against.
-    db.collection('students').insert_many([
+    fabric.collection('students').insert_many([
         {'_key': 'Abby', 'age': 22},
         {'_key': 'John', 'age': 18},
         {'_key': 'Mary', 'age': 21},
@@ -31,7 +31,7 @@ number of items in the result set may or may not be known in advance.
     ])
 
     # Execute a C8QL query which returns a cursor object.
-    cursor = db.c8ql.execute(
+    cursor = fabric.c8ql.execute(
         'FOR doc IN students FILTER doc.age > @val RETURN doc',
         bind_vars={'val': 17},
         batch_size=2,
@@ -94,13 +94,13 @@ instead.
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "test" database as tenant admin.
-    # This returns an API wrapper for the "test" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
+    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Set up some test data to query against.
-    db.collection('students').insert_many([
+    fabric.collection('students').insert_many([
         {'_key': 'Abby', 'age': 22},
         {'_key': 'John', 'age': 18},
         {'_key': 'Mary', 'age': 21}
@@ -108,11 +108,11 @@ instead.
 
     # If you iterate over the cursor or call cursor.next(), batches are
     # fetched automatically from the server just-in-time style.
-    cursor = db.c8ql.execute('FOR doc IN students RETURN doc', batch_size=1)
+    cursor = fabric.c8ql.execute('FOR doc IN students RETURN doc', batch_size=1)
     result = [doc for doc in cursor]
 
     # Alternatively, you can manually fetch and pop for finer control.
-    cursor = db.c8ql.execute('FOR doc IN students RETURN doc', batch_size=1)
+    cursor = fabric.c8ql.execute('FOR doc IN students RETURN doc', batch_size=1)
     while cursor.has_more(): # Fetch until nothing is left on the server.
         cursor.fetch()
     while not cursor.empty(): # Pop until nothing is left on the cursor.
@@ -133,21 +133,21 @@ a large result set.
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "test" database as tenant admin.
-    # This returns an API wrapper for the "test" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
+    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Get the total document count in "students" collection.
-    document_count = db.collection('students').count()
+    document_count = fabric.collection('students').count()
 
     # Execute a C8QL query normally (without using transactions).
-    cursor1 = db.c8ql.execute('FOR doc IN students RETURN doc', batch_size=1)
+    cursor1 = fabric.c8ql.execute('FOR doc IN students RETURN doc', batch_size=1)
 
     # Execute the same C8QL query in a transaction.
-    txn_db = db.begin_transaction()
-    job = txn_db.c8ql.execute('FOR doc IN students RETURN doc', batch_size=1)
-    txn_db.commit()
+    txn_fabric = fabric.begin_transaction()
+    job = txn_fabric.c8ql.execute('FOR doc IN students RETURN doc', batch_size=1)
+    txn_fabric.commit()
     cursor2 = job.result()
 
     # The first cursor acts as expected. Its current batch contains only 1 item

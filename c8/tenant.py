@@ -698,7 +698,7 @@ class Tenant(APIWrapper):
         :rtype: bool
         :raise c8.exceptions.PermissionUpdateError: If update fails.
         """
-        endpoint = '/_admin/user/{}/fabric/{}'.format(username, fabric)
+        endpoint = '/_admin/user/{}/database/{}'.format(username, fabric)
         if collection is not None:
             endpoint += '/' + collection
 
@@ -728,7 +728,7 @@ class Tenant(APIWrapper):
         :rtype: bool
         :raise c8.exceptions.PermissionRestError: If reset fails.
         """
-        endpoint = '/_admin/user/{}/fabric/{}'.format(username, fabric)
+        endpoint = '/_admin/user/{}/database/{}'.format(username, fabric)
         if collection is not None:
             endpoint += '/' + collection
 
