@@ -37,7 +37,7 @@ Here is an overview example:
 
    region = "qa1-us-east-1.ops.aws.macrometa.io"
    demo_tenant = "demotenant"
-   demo_db = "demodb"
+   demo_fabric = "demofabric"
    demo_user = "demouser"
    demo_collection = "employees"
    demo_stream = "demostream"
@@ -45,27 +45,27 @@ Here is an overview example:
    #--------------------------------------------------------------
    print("Create demo tenant...")
    client = C8Client(protocol='https', host=region, port=443)
-   sys_tenant = client.tenant(name='_mm', dbname='_system', username='root', password='poweruser')
+   sys_tenant = client.tenant(name='_mm', fabricname='_system', username='root', password='poweruser')
 
    if not sys_tenant.has_tenant(demo_tenant):
        sys_tenant.create_tenant(demo_tenant, passwd="poweruser")
 
    #--------------------------------------------------------------
-   print("Create under demotenant, demodb, demouser and assign permissions...")
-   demotenant = client.tenant(name=demo_tenant, dbname='_system', username='root', password='poweruser')
+   print("Create under demotenant, demofabric, demouser and assign permissions...")
+   demotenant = client.tenant(name=demo_tenant, fabricname='_system', username='root', password='poweruser')
 
    if not demotenant.has_user(demo_user):
      demotenant.create_user(username=demo_user, password='demouser', active=True)
 
-   if not demotenant.has_database(demo_db):
-     demotenant.create_database(name=demo_db, dclist=demotenant.dclist(), realtime=True)
+   if not demotenant.has_fabric(demo_fabric):
+     demotenant.create_fabric(name=demo_fabric, dclist=demotenant.dclist(), realtime=True)
 
-   demotenant.update_permission(username=demo_user, permission='rw', database=demo_db)
+   demotenant.update_permission(username=demo_user, permission='rw', fabric=demo_fabric)
 
    #--------------------------------------------------------------
-   print("Create and populate employees collection in demodb...")
-   db = client.db(tenant=demo_tenant, name=demo_db, username=demo_user, password='demouser')
-   employees = db.create_collection('employees') # Create a new collection named "employees".
+   print("Create and populate employees collection in demofabric...")
+   fabric = client.fabric(tenant=demo_tenant, name=demo_fabric, username=demo_user, password='demouser')
+   employees = fabric.create_collection('employees') # Create a new collection named "employees".
    employees.add_hash_index(fields=['email'], unique=True) # Add a hash index to the collection.
 
    employees.insert({'firstname': 'Jean', 'lastname':'Picard', 'email':'jean.picard@macrometa.io'})
@@ -75,17 +75,17 @@ Here is an overview example:
 
    #--------------------------------------------------------------
    print("query employees collection...")
-   cursor = db.c8ql.execute('FOR employee IN employees RETURN employee') # Execute a C8QL query
+   cursor = fabric.c8ql.execute('FOR employee IN employees RETURN employee') # Execute a C8QL query
    docs = [document for document in cursor]
    print(docs)
 
    #--------------------------------------------------------------
-   print("Create global & local streams in demodb...")
-   db.create_stream(demo_stream, persistent=True, local=False)
-   db.create_stream(demo_stream, persistent=True, local=True)
-   db.create_stream(demo_stream, persistent=False, local=False)
-   db.create_stream(demo_stream, persistent=False, local=True)
-   streams = db.streams()
+   print("Create global & local streams in demofabric...")
+   fabric.create_stream(demo_stream, persistent=True, local=False)
+   fabric.create_stream(demo_stream, persistent=True, local=True)
+   fabric.create_stream(demo_stream, persistent=False, local=False)
+   fabric.create_stream(demo_stream, persistent=False, local=True)
+   streams = fabric.streams()
    print("streams:", streams)
 
    #--------------------------------------------------------------
@@ -93,7 +93,7 @@ Here is an overview example:
 
 ```
 
-Example to **query** a given database:
+Example to **query** a given fabric:
 
 ```python
 
@@ -107,14 +107,14 @@ Example to **query** a given database:
   #--------------------------------------------------------------
   print("query employees collection...")
   client = C8Client(protocol='https', host=region, port=443)
-  db = client.db(tenant="demotenant", name="demodb", username="demouser", password='poweruser')
-  cursor = db.c8ql.execute('FOR employee IN employees RETURN employee') # Execute a C8QL query
+  fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
+  cursor = fabric.c8ql.execute('FOR employee IN employees RETURN employee') # Execute a C8QL query
   docs = [document for document in cursor]
   print(docs)
 
 ```
 
-Example for **real-time updates** from a collection in database:
+Example for **real-time updates** from a collection in fabric:
 
 ```python
 
@@ -130,8 +130,8 @@ Example for **real-time updates** from a collection in database:
   #--------------------------------------------------------------
   print("Subscribe to employees collection...")
   client = C8Client(protocol='https', host=region, port=443)
-  db = client.db(tenant="demotenant", name="demodb", username="demouser", password='poweruser')
-  db.on_change(collection="employees", callback=callback_fn)
+  fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
+  fabric.on_change(collection="employees", callback=callback_fn)
   
 ```
 
@@ -149,8 +149,8 @@ Example to **publish** documents to a stream:
   #--------------------------------------------------------------
   print("publish messages to stream...")
   client = C8Client(protocol='https', host=region, port=443)
-  db = client.db(tenant="demotenant", name="demodb", username="demouser", password='poweruser')
-  stream = db.stream()
+  fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
+  stream = fabric.stream()
   producer = stream.create_producer(collection="demostream", persistent=True, local=False)
   for i in range(10):
       msg = "Hello from " + region + "("+ str(i) +")"
@@ -172,8 +172,8 @@ Example to **subscribe** documents from a stream:
    #--------------------------------------------------------------
    print("consume messages from stream...")
    client = C8Client(protocol='https', host=region, port=443)
-   db = client.db(tenant="demotenant", name="demodb", username="demouser", password='poweruser')
-   stream = db.stream()
+   fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
+   stream = fabric.stream()
    subscriber = stream.subscribe(collection="demostream", persistent=True, local=False, subscription_name="demosub")
    for i in range(10):
        msg = subscriber.receive()
@@ -217,7 +217,7 @@ Example: **stream management**:
     #get stream compaction status
     stream_collection.get_stream_compaction_status('demostream')
 
-    #Unsubscribes the given subscription on all streams on a stream db
+    #Unsubscribes the given subscription on all streams on a stream fabric
     stream_collection.unsubscribe('demosub')
 
     #delete subscription of a stream
@@ -234,11 +234,11 @@ Here is another example with **graphs**:
     # Initialize the client for C8DB.
     client = C8Client(protocol='http', host='localhost', port=8529)
 
-    # Connect to "test" database as root user.
-    db = client.db('test', username='root', password='passwd')
+    # Connect to "test" fabric as root user.
+    fabric = client.fabric('test', username='root', password='passwd')
 
     # Create a new graph named "school".
-    graph = db.create_graph('school')
+    graph = fabric.create_graph('school')
 
     # Create vertex collections for the graph.
     students = graph.create_vertex_collection('students')

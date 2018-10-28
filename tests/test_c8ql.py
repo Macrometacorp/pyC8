@@ -138,7 +138,7 @@ def test_c8ql_query_management(db, bad_db, col, docs):
         assert 'runtime' in query
     assert len(queries) == 2
 
-    # Test list queries with bad database
+    # Test list queries with bad fabric
     with assert_raises(C8QLQueryListError) as err:
         bad_db.c8ql.queries()
     assert err.value.error_code == 1228
@@ -167,7 +167,7 @@ def test_c8ql_query_management(db, bad_db, col, docs):
     # Test list slow queries
     assert db.c8ql.slow_queries() == []
 
-    # Test list slow queries with bad database
+    # Test list slow queries with bad fabric
     with assert_raises(C8QLQueryListError) as err:
         bad_db.c8ql.slow_queries()
     assert err.value.error_code == 1228
@@ -175,7 +175,7 @@ def test_c8ql_query_management(db, bad_db, col, docs):
     # Test clear slow queries
     assert db.c8ql.clear_slow_queries() is True
 
-    # Test clear slow queries with bad database
+    # Test clear slow queries with bad fabric
     with assert_raises(C8QLQueryClearError) as err:
         bad_db.c8ql.clear_slow_queries()
     assert err.value.error_code == 1228
@@ -190,7 +190,7 @@ def test_c8ql_function_management(db, bad_db):
     bad_fn_name = 'functions::temperature::should_not_exist'
     bad_fn_body = 'function (celsius) { invalid syntax }'
 
-    # Test list C8QL functions with bad database
+    # Test list C8QL functions with bad fabric
     with assert_raises(C8QLFunctionListError) as err:
         bad_db.c8ql.functions()
     assert err.value.error_code == 1228
@@ -234,7 +234,7 @@ def test_c8ql_cache_management(db, bad_db):
     assert 'mode' in properties
     assert 'limit' in properties
 
-    # Test get C8QL cache properties with bad database
+    # Test get C8QL cache properties with bad fabric
     with assert_raises(C8QLCachePropertiesError):
         bad_db.c8ql.cache.properties()
 
@@ -247,7 +247,7 @@ def test_c8ql_cache_management(db, bad_db):
     assert properties['mode'] == 'on'
     assert properties['limit'] == 100
 
-    # Test get C8QL cache configure properties with bad database
+    # Test get C8QL cache configure properties with bad fabric
     with assert_raises(C8QLCacheConfigureError):
         bad_db.c8ql.cache.configure(mode='on')
 
@@ -255,7 +255,7 @@ def test_c8ql_cache_management(db, bad_db):
     result = db.c8ql.cache.clear()
     assert isinstance(result, bool)
 
-    # Test get C8QL cache clear with bad database
+    # Test get C8QL cache clear with bad fabric
     with assert_raises(C8QLCacheClearError) as err:
         bad_db.c8ql.cache.clear()
     assert err.value.error_code == 1228

@@ -26,7 +26,7 @@ class StreamCollection(APIWrapper):
         5: 'nonpersistent'
     }
 
-    def __init__(self, db, connection, executor, url, port,
+    def __init__(self, fabric, connection, executor, url, port,
                  operation_timeout_seconds,
                  ):
         """
@@ -65,8 +65,8 @@ class StreamCollection(APIWrapper):
         super(StreamCollection, self).__init__(connection, executor)
         url = urlparse(url)
         hostname = url.hostname
-        self.db = db
-        dcl_local = self.db.dclist_local()
+        self.fabric = fabric
+        dcl_local = self.fabric.dclist_local()
         self._server_url = 'pulsar://' + constants.PLUSAR_URL_PREFIX + dcl_local['tags']['url'] + ":" + str(port)
         self._client = pulsar.Client(self._server_url, operation_timeout_seconds=operation_timeout_seconds)
 
@@ -123,18 +123,18 @@ class StreamCollection(APIWrapper):
              other option is `PartitionsRoutingMode.UseSinglePartition`
         """
         if persistent:
-            flag = self.db.has_persistent_stream(stream, local=local)
+            flag = self.fabric.has_persistent_stream(stream, local=local)
         else:
-            flag = self.db.has_nonpersistent_stream(stream, local=local)
+            flag = self.fabric.has_nonpersistent_stream(stream, local=local)
 
         if flag:
             type_constant = constants.STREAM_GLOBAL_NS_PREFIX
             if local:
                 type_constant = constants.STREAM_LOCAL_NS_PREFIX
 
-            namespace = type_constant + self.tenant_name + '.' + self.db_name
+            namespace = type_constant + self.tenant_name + '.' + self.fabric_name
             if self.tenant_name == "_mm":
-                namespace = type_constant + self.db_name
+                namespace = type_constant + self.fabric_name
             if persistent:
                 topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + stream
             else:
@@ -200,18 +200,18 @@ class StreamCollection(APIWrapper):
           Sets the subscription role prefix.
         """
         if persistent:
-            flag = self.db.has_persistent_stream(stream, local=local)
+            flag = self.fabric.has_persistent_stream(stream, local=local)
         else:
-            flag = self.db.has_nonpersistent_stream(stream, local=local)
+            flag = self.fabric.has_nonpersistent_stream(stream, local=local)
 
         if flag:
             type_constant = constants.STREAM_GLOBAL_NS_PREFIX
             if local:
                 type_constant = constants.STREAM_LOCAL_NS_PREFIX
             
-            namespace = type_constant + self.tenant_name + self.db_name
+            namespace = type_constant + self.tenant_name + self.fabric_name
             if self.tenant_name == "_mm":
-                namespace = type_constant + self.db_name
+                namespace = type_constant + self.fabric_name
 
             if persistent:
                 topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + stream
@@ -280,18 +280,18 @@ class StreamCollection(APIWrapper):
           be cached in the client.
         """
         if persistent:
-            flag = self.db.has_persistent_stream(stream, local=local)
+            flag = self.fabric.has_persistent_stream(stream, local=local)
         else:
-            flag = self.db.has_nonpersistent_stream(stream, local=local)
+            flag = self.fabric.has_nonpersistent_stream(stream, local=local)
 
         if flag:
             type_constant = constants.STREAM_GLOBAL_NS_PREFIX
             if local:
                 type_constant=constants.STREAM_LOCAL_NS_PREFIX
 
-            namespace = type_constant + self.tenant_name + '.' + self.db_name
+            namespace = type_constant + self.tenant_name + '.' + self.fabric_name
             if self.tenant_name == "_mm":
-                namespace = type_constant + self.db_name
+                namespace = type_constant + self.fabric_name
 
             if persistent:
                 topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + stream
@@ -299,7 +299,7 @@ class StreamCollection(APIWrapper):
                 topic = "non-persistent://" + self.tenant_name + "/" + namespace + "/" + stream
 
             if not subscription_name:
-                subscription_name = self.tenant_name + "-" + self.db_name + "-subscription-" + str(random.randint(1,1000))
+                subscription_name = self.tenant_name + "-" + self.fabric_name + "-subscription-" + str(random.randint(1,1000))
             
             return self._client.subscribe(topic, subscription_name, consumer_type,
                                         message_listener, receiver_queue_size, consumer_name,
@@ -308,7 +308,7 @@ class StreamCollection(APIWrapper):
         raise ex.StreamSubscriberError("No stream present with name:" + stream + ". Please create a stream and then stream subscriber.")
                                       
     def unsubscribe(self, subscription):
-        """Unsubscribes the given subscription on all streams on a stream db
+        """Unsubscribes the given subscription on all streams on a stream fabric
         :param subscription
         :return: 200, OK if operation successful
         raise c8.exceptions.StreamPermissionError: If unsubscribing fails.
@@ -329,7 +329,7 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def clear_streams_backlog(self):
-        """Clear backlog for all streams on a stream db
+        """Clear backlog for all streams on a stream fabric
         :return: 200, OK if operation successful
         :raise c8.exceptions.StreamPermissionError: If clearing backlogs for all streams fails.
         """
@@ -350,7 +350,7 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
     
     def clear_stream_backlog(self, subscription):
-        """Clear backlog for the given stream on a stream db
+        """Clear backlog for the given stream on a stream fabric
         :param: name of subscription
         :return: 200, OK if operation successful
         :raise c8.exceptions.StreamPermissionError: If clearing backlogs for all streams fails.
@@ -412,9 +412,9 @@ class StreamCollection(APIWrapper):
        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions for a stream fails.
        """
         if persistent:
-            url_endpoint = '/streams/persistent/streams/{}/backlog?local={}'.format(stream, local)
+            url_endpoint = '/streams/persistent/stream/{}/backlog?local={}'.format(stream, local)
         else:
-            url_endpoint = '/streams/non-persistent/streams/{}/backlog?local={}'.format(stream, local)
+            url_endpoint = '/streams/non-persistent/stream/{}/backlog?local={}'.format(stream, local)
 
         request = Request(
             method='get',

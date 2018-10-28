@@ -28,12 +28,12 @@ StreamCollection
 .. autoclass:: c8.stream_collection.StreamCollection
     :members:
 
-.. _AsyncDatabase:
+.. _AsyncFabric:
 
-AsyncDatabase
+AsyncFabric
 =============
 
-.. autoclass:: c8.database.AsyncDatabase
+.. autoclass:: c8.fabric.AsyncFabric
     :inherited-members:
     :members:
 
@@ -53,12 +53,12 @@ C8QL
 .. autoclass:: c8.c8ql.C8QL
     :members:
 
-.. _BatchDatabase:
+.. _BatchFabric:
 
-BatchDatabase
+BatchFabric
 =============
 
-.. autoclass:: c8.database.BatchDatabase
+.. autoclass:: c8.fabric.BatchFabric
     :inherited-members:
     :members:
 
@@ -95,12 +95,12 @@ StandardCollection
     :inherited-members:
     :members:
 
-.. _StandardDatabase:
+.. _StandardFabric:
 
-StandardDatabase
+StandardFabric
 ================
 
-.. autoclass:: c8.database.StandardDatabase
+.. autoclass:: c8.fabric.StandardFabric
     :inherited-members:
     :members:
 
@@ -144,12 +144,12 @@ Response
 .. autoclass:: c8.response.Response
     :members:
 
-.. _TransactionDatabase:
+.. _TransactionFabric:
 
-TransactionDatabase
+TransactionFabric
 ===================
 
-.. autoclass:: c8.database.TransactionDatabase
+.. autoclass:: c8.fabric.TransactionFabric
     :inherited-members:
     :members:
 

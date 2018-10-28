@@ -27,13 +27,13 @@ class APIWrapper(object):
         return self._conn.tenant_name
 
     @property
-    def db_name(self):
-        """Return the name of the current database.
+    def fabric_name(self):
+        """Return the name of the current fabric.
 
-        :return: Database name.
+        :return: Fabric name.
         :rtype: str | unicode
         """
-        return self._conn.db_name
+        return self._conn.fabric_name
 
     @property
     def stream_name(self):
@@ -66,7 +66,7 @@ class APIWrapper(object):
     def fn_name(self):
         """Return the name of the current function.
 
-        :return: Database name.
+        :return: Fabric name.
         :rtype: str | unicode
         """
         return self._conn.fn_name

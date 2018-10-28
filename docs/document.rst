@@ -10,7 +10,7 @@ properties:
 * Contains the ``_key`` field, which identifies the document uniquely within a
   specific collection.
 * Contains the ``_id`` field (also called the *handle*), which identifies the
-  document uniquely across all collections within a database. This ID is a
+  document uniquely across all collections within a fabric. This ID is a
   combination of the collection name and the document key using the format
   ``{collection}/{key}`` (see example below).
 * Contains the ``_rev`` field. C8 Data Fabric supports MVCC (Multiple Version
@@ -71,13 +71,13 @@ Standard documents are managed via collection API wrapper:
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "test" database as tenant admin.
-    # This returns an API wrapper for the "test" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
+    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Get the API wrapper for "students" collection.
-    students = db.collection('students')
+    students = fabric.collection('students')
 
     # Create some test documents to play around with.
     lola = {'_key': 'lola', 'GPA': 3.5, 'first': 'Lola', 'last': 'Martin'}
@@ -153,7 +153,7 @@ Standard documents are managed via collection API wrapper:
         student['happy'] = True
         students.update(student)
 
-You can manage documents via database API wrappers also, but only simple
+You can manage documents via fabric API wrappers also, but only simple
 operations (i.e. get, insert, update, replace, delete) are supported and you
 must provide document IDs instead of keys:
 
@@ -164,10 +164,10 @@ must provide document IDs instead of keys:
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "test" database as tenant admin.
-    # This returns an API wrapper for the "test" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
+    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Create some test documents to play around with.
     # The documents must have the "_id" field instead.
@@ -177,30 +177,30 @@ must provide document IDs instead of keys:
     emma = {'_id': 'students/emma', 'GPA': 4.0}
 
     # Insert a new document.
-    metadata = db.insert_document('students', lola)
+    metadata = fabric.insert_document('students', lola)
     assert metadata['_id'] == 'students/lola'
     assert metadata['_key'] == 'lola'
 
     # Check if a document exists.
-    assert db.has_document(lola) is True
+    assert fabric.has_document(lola) is True
 
     # Get a document (by ID or body with "_id" field).
-    db.document('students/lola')
-    db.document(abby)
+    fabric.document('students/lola')
+    fabric.document(abby)
 
     # Update a document.
     lola['GPA'] = 3.6
-    db.update_document(lola)
+    fabric.update_document(lola)
 
     # Replace a document.
     lola['GPA'] = 3.4
-    db.replace_document(lola)
+    fabric.replace_document(lola)
 
     # Delete a document (by ID or body with "_id" field).
-    db.delete_document('students/lola')
+    fabric.delete_document('students/lola')
 
-See :ref:`StandardDatabase` and :ref:`StandardCollection` for API specification.
+See :ref:`StandardFabric` and :ref:`StandardCollection` for API specification.
 
-When managing documents, using collection API wrappers over database API
+When managing documents, using collection API wrappers over fabric API
 wrappers is recommended as more operations are available and less sanity
 checking is performed under the hood.

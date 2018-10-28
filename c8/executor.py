@@ -77,6 +77,7 @@ class DefaultExecutor(Executor):
         :return: API execution result.
         :rtype: str | unicode | bool | int | list | dict
         """
+
         response = self._conn.send_request(request)
         return response_handler(response)
 
@@ -211,7 +212,7 @@ class BatchExecutor(Executor):
 
         request = Request(
             method='post',
-            endpoint='/_api/batch',
+            endpoint='/batch',
             headers={
                 'Content-Type':
                     'multipart/form-data; boundary={}'.format(boundary)
@@ -385,7 +386,7 @@ class TransactionExecutor(Executor):
 
         request = Request(
             method='post',
-            endpoint='/_api/transaction',
+            endpoint='/transaction',
             data=data,
         )
         resp = self._conn.send_request(request)

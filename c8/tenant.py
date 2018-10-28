@@ -18,9 +18,9 @@ from c8.exceptions import (
     TenantListError,
     TenantDcListError,
     TenantUpdateError,
-    DatabaseListError,
-    DatabaseCreateError,
-    DatabaseDeleteError,
+    FabricListError,
+    FabricCreateError,
+    FabricDeleteError,
     PermissionListError,
     PermissionGetError,
     PermissionResetError,
@@ -75,7 +75,7 @@ class Tenant(APIWrapper):
 
         # We set the temp URL prefix here for the auth call. It is restored
         # below
-        self._conn.set_url_prefix(proto+'//'+rema+'/_database/_tenant/'+self.tenant_name)
+        self._conn.set_url_prefix(proto+'//'+rema+'/_tenant/'+self.tenant_name)
         data = {"tenant":self.tenant_name}
         data['username'] = self._conn.username
         data['password'] = self._conn._auth[1]
@@ -128,7 +128,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/tenants'
+            endpoint='/tenants'
         )
 
         def response_handler(resp):
@@ -180,7 +180,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/tenant',
+            endpoint='/tenant',
             data=data
         )
 
@@ -219,7 +219,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='patch',
-            endpoint='/_api/tenant/{tenantname}'.format(tenantname=name),
+            endpoint='/tenant/{tenantname}'.format(tenantname=name),
             data=data
         )
 
@@ -243,7 +243,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/tenant/{tenantname}'.format(tenantname=name)
+            endpoint='/tenant/{tenantname}'.format(tenantname=name)
         )
 
         def response_handler(resp):
@@ -266,7 +266,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/datacenter/all'
+            endpoint='/datacenter/all'
         )
 
         def response_handler(resp):
@@ -289,7 +289,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/datacenter/local'
+            endpoint='/datacenter/local'
         )
 
         def response_handler(resp):
@@ -301,44 +301,44 @@ class Tenant(APIWrapper):
         return self._execute(request, response_handler)
 
     #######################
-    # Database Management #
+    # Fabric Management #
     #######################
 
-    def databases(self):
-        """Return the names all databases.
+    def fabrics(self):
+        """Return the names all fabrics.
 
-        :return: Database names.
+        :return: Fabric names.
         :rtype: [str | unicode]
-        :raise c8.exceptions.DatabaseListError: If retrieval fails.
+        :raise c8.exceptions.FabricListError: If retrieval fails.
         """
         request = Request(
             method='get',
-            endpoint='/_api/database'
+            endpoint='/database'
         )
 
         def response_handler(resp):
             if not resp.is_success:
-                raise DatabaseListError(resp, request)
+                raise FabricListError(resp, request)
             return resp.body['result']
 
         return self._execute(request, response_handler)
 
-    def has_database(self, name):
-        """Check if a database exists.
+    def has_fabric(self, name):
+        """Check if a fabric exists.
 
-        :param name: Database name.
+        :param name: Fabric name.
         :type name: str | unicode
-        :return: True if database exists, False otherwise.
+        :return: True if fabric exists, False otherwise.
         :rtype: bool
         """
-        return name in self.databases()
+        return name in self.fabrics()
 
-    def create_database(self, name, users=None, dclist=None, realtime=False):
-        """Create a new database.
+    def create_fabric(self, name, users=None, dclist=None, realtime=False):
+        """Create a new fabric.
 
-        :param name: Database name.
+        :param name: Fabric name.
         :type name: str | unicode
-        :param users: List of users with access to the new database, where each
+        :param users: List of users with access to the new fabric, where each
             user is a dictionary with fields "username", "password", "active"
             and "extra" (see below for example). If not set, only the admin and
             current user are granted access.
@@ -347,9 +347,9 @@ class Tenant(APIWrapper):
         :type dclist: [str | unicode]
         :param realtime: Whether or not the DB is realtime-enabled.
         :type realtime: bool
-        :return: True if database was created successfully.
+        :return: True if fabric was created successfully.
         :rtype: bool
-        :raise c8.exceptions.DatabaseCreateError: If create fails.
+        :raise c8.exceptions.FabricCreateError: If create fails.
 
         Here is an example entry for parameter **users**:
 
@@ -387,39 +387,39 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/database',
+            endpoint='/database',
             data=data
         )
 
         def response_handler(resp):
             if not resp.is_success:
-                raise DatabaseCreateError(resp, request)
+                raise FabricCreateError(resp, request)
             return True
 
         return self._execute(request, response_handler)
 
-    def delete_database(self, name, ignore_missing=False):
-        """Delete the database.
+    def delete_fabric(self, name, ignore_missing=False):
+        """Delete the fabric.
 
-        :param name: Database name.
+        :param name: Fabric name.
         :type name: str | unicode
-        :param ignore_missing: Do not raise an exception on missing database.
+        :param ignore_missing: Do not raise an exception on missing fabric.
         :type ignore_missing: bool
-        :return: True if database was deleted successfully, False if database
+        :return: True if fabric was deleted successfully, False if fabric
             was not found and **ignore_missing** was set to True.
         :rtype: bool
-        :raise c8.exceptions.DatabaseDeleteError: If delete fails.
+        :raise c8.exceptions.FabricDeleteError: If delete fails.
         """
         request = Request(
             method='delete',
-            endpoint='/_api/database/{}'.format(name)
+            endpoint='/database/{}'.format(name)
         )
 
         def response_handler(resp):
             if resp.error_code == 1228 and ignore_missing:
                 return False
             if not resp.is_success:
-                raise DatabaseDeleteError(resp, request)
+                raise FabricDeleteError(resp, request)
             return resp.body['result']
 
         return self._execute(request, response_handler)
@@ -632,11 +632,11 @@ class Tenant(APIWrapper):
     #########################
 
     def permissions(self, username):
-        """Return user permissions for all databases and collections.
+        """Return user permissions for all fabrics and collections.
 
         :param username: Username.
         :type username: str | unicode
-        :return: User permissions for all databases and collections.
+        :return: User permissions for all fabrics and collections.
         :rtype: dict
         :raise: c8.exceptions.PermissionListError: If retrieval fails.
         """
@@ -653,20 +653,20 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def permission(self, username, database, collection=None):
-        """Return user permission for a specific database or collection.
+    def permission(self, username, fabric, collection=None):
+        """Return user permission for a specific fabric or collection.
 
         :param username: Username.
         :type username: str | unicode
-        :param database: database name.
-        :type database: str | unicode
+        :param fabric: fabric name.
+        :type fabric: str | unicode
         :param collection: Collection name.
         :type collection: str | unicode
-        :return: Permission for given database or collection.
+        :return: Permission for given fabric or collection.
         :rtype: str | unicode
         :raise: c8.exceptions.PermissionGetError: If retrieval fails.
         """
-        endpoint = '/_admin/user/{}/database/{}'.format(username, database)
+        endpoint = '/_admin/user/{}/database/{}'.format(username, fabric)
         if collection is not None:
             endpoint += '/' + collection
         request = Request(method='get', endpoint=endpoint)
@@ -681,14 +681,14 @@ class Tenant(APIWrapper):
     def update_permission(self,
                           username,
                           permission,
-                          database,
+                          fabric,
                           collection=None):
-        """Update user permission for a specific database or collection.
+        """Update user permission for a specific fabric or collection.
 
         :param username: Username.
         :type username: str | unicode
-        :param database: database name.
-        :type database: str | unicode
+        :param fabric: fabric name.
+        :type fabric: str | unicode
         :param collection: Collection name.
         :type collection: str | unicode
         :param permission: Allowed values are "rw" (read and write), "ro"
@@ -698,7 +698,7 @@ class Tenant(APIWrapper):
         :rtype: bool
         :raise c8.exceptions.PermissionUpdateError: If update fails.
         """
-        endpoint = '/_admin/user/{}/database/{}'.format(username, database)
+        endpoint = '/_admin/user/{}/database/{}'.format(username, fabric)
         if collection is not None:
             endpoint += '/' + collection
 
@@ -715,20 +715,20 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def reset_permission(self, username, database, collection=None):
-        """Reset user permission for a specific database or collection.
+    def reset_permission(self, username, fabric, collection=None):
+        """Reset user permission for a specific fabric or collection.
 
         :param username: Username.
         :type username: str | unicode
-        :param database: database name.
-        :type database: str | unicode
+        :param fabric: fabric name.
+        :type fabric: str | unicode
         :param collection: Collection name.
         :type collection: str | unicode
         :return: True if permission was reset successfully.
         :rtype: bool
         :raise c8.exceptions.PermissionRestError: If reset fails.
         """
-        endpoint = '/_admin/user/{}/database/{}'.format(username, database)
+        endpoint = '/_admin/user/{}/database/{}'.format(username, fabric)
         if collection is not None:
             endpoint += '/' + collection
 

@@ -1,17 +1,17 @@
-Databases
+Fabrics
 ---------
 
-Each :doc:`tenant <tenant>` on the C8 Data Fabric server can have an arbitrary number of **databases**. Each database has its own set of :doc:`collections <collection>`, :doc:`graphs <graph>` and :doc:`streams <stream>`.
+Each :doc:`tenant <tenant>` on the C8 Data Fabric server can have an arbitrary number of **fabrics**. Each fabric has its own set of :doc:`collections <collection>`, :doc:`graphs <graph>` and :doc:`streams <stream>`.
 
-For each tenant, there is a special database named ``_system``, which cannot be dropped and provides operations for managing users, permissions and other databases. Most of the operations can only be executed by admin users. See :doc:`user` for more information.
+For each tenant, there is a special fabric named ``_system``, which cannot be dropped and provides operations for managing users, permissions and other fabrics. Most of the operations can only be executed by admin users. See :doc:`user` for more information.
 
-Each database in the C8 Fabric can be replicated to one or more additional edge Locations in the fabric. If a change is made to such a replicated database in one edge Location, that change will be automatically propagated to, and visible in, all other
-Edge Locations to which that database has been replicated.
+Each fabric in the C8 Fabric can be replicated to one or more additional edge Locations in the fabric. If a change is made to such a replicated fabric in one edge Location, that change will be automatically propagated to, and visible in, all other
+Edge Locations to which that fabric has been replicated.
 
-Each database in the C8 Fabric can be set to publish changes in realtime
-to any clients which are connected to that database. 
+Each fabric in the C8 Fabric can be set to publish changes in realtime
+to any clients which are connected to that fabric. 
 
-If the ``Realtime`` option is enabled for a database, then any clients with connections to that database will receive changes via a ``push-based`` mechanism rather than having to continuously poll the database for any changes which may have occurred. This python driver can listen in realtime to changes in a realtime-enabled database by calling the ``db.on_change()`` function for the database referred to by the ``db`` object.
+If the ``Realtime`` option is enabled for a fabric, then any clients with connections to that fabric will receive changes via a ``push-based`` mechanism rather than having to continuously poll the fabric for any changes which may have occurred. This python driver can listen in realtime to changes in a realtime-enabled fabric by calling the ``fabric.on_change()`` function for the fabric referred to by the ``fabric`` object.
 
 **Example:**
 
@@ -22,26 +22,26 @@ If the ``Realtime`` option is enabled for a database, then any clients with conn
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "_system" database as tenant admin.
-    # This returns an API wrapper for the "_system" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "_system" fabric as tenant admin.
+    # This returns an API wrapper for the "_system" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    sys_db = client.db(tenant='mytenant', name='_system', username='root', password='passwd')
+    sys_fabric = client.fabric(tenant='mytenant', name='_system', username='root', password='passwd')
 
-    # List all databases in the 'mytenant' tenant
-    sys_db.databases()
+    # List all fabrics in the 'mytenant' tenant
+    sys_fabric.fabrics()
 
-    # Create a new database named "test" if it does not exist.
+    # Create a new fabric named "test" if it does not exist.
     # Only the tenant admin has access to it at time of its creation.
-    if not sys_db.has_database('test'):
-        sys_db.create_database('test')
+    if not sys_fabric.has_fabric('test'):
+        sys_fabric.create_fabric('test')
 
-    # Delete the database.
-    sys_db.delete_database('test')
+    # Delete the fabric.
+    sys_fabric.delete_fabric('test')
 
-    # Create a new database named "test" along with a new set of users.
+    # Create a new fabric named "test" along with a new set of users.
     # Only "jane", "john", "jake" and the tenant admin have access to it.
-    if not sys_db.has_database('test'):
-        sys_db.create_database(
+    if not sys_fabric.has_fabric('test'):
+        sys_fabric.create_fabric(
             name='test',
             users=[
                 {'username': 'jane', 'password': 'foo', 'active': True},
@@ -50,27 +50,27 @@ If the ``Realtime`` option is enabled for a database, then any clients with conn
             ],
         )
 
-    # Connect to the new "test" database as user "jane".
-    db = client.db(tenant='mytenant', name='test', username='jane', password='foo')
+    # Connect to the new "test" fabric as user "jane".
+    fabric = client.fabric(tenant='mytenant', name='test', username='jane', password='foo')
 
-    # Retrieve various database and server information.
-    db.name
-    db.username
-    db.collections()
-    db.graphs()
+    # Retrieve various fabric and server information.
+    fabric.name
+    fabric.username
+    fabric.collections()
+    fabric.graphs()
 
-    # Delete the database. Note that the new users will remain.
-    sys_db.delete_database('test')
+    # Delete the fabric. Note that the new users will remain.
+    sys_fabric.delete_fabric('test')
 
     # Get the list of edge locations for the 'mytenant' tenant.
     # We do this as the tenant admin.
-    tennt = client.tenant(name=tenant_name, dbname='_system', username='root', password='root_pass')
+    tennt = client.tenant(name=tenant_name, fabricname='_system', username='root', password='root_pass')
     dcl = tennt.dclist()
 
-    # Create a new database which is replicated to all Fabric Edge Locations,
-    # and also enable realtime updates on this database.
+    # Create a new fabric which is replicated to all Fabric Edge Locations,
+    # and also enable realtime updates on this fabric.
     # Only the tenant admin can perform this action.
-    sys_db.create_database('demodb', dclist=dcl, realtime=True)
+    sys_fabric.create_fabric('demofabric', dclist=dcl, realtime=True)
 
 
-See :ref:`C8Client` and :ref:`StandardDatabase` for API specification.
+See :ref:`C8Client` and :ref:`StandardFabric` for API specification.

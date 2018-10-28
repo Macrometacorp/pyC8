@@ -10,57 +10,57 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
     from c8 import C8Client
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
-    # Connect to the system database of the "mytenant" tenant.
+    # Connect to the system fabric of the "mytenant" tenant.
     # This connection is made as the tenant admin using the tenant admin username and password
-    tennt = client.tenant(name='mytenant', dbname='_system', username='root', password='root_pass')
-    # Connect to "_system" database as root user.
-    sys_db = client.db(tenant='mytenant', name='_system', username='root', password='root_pass')
+    tennt = client.tenant(name='mytenant', fabricname='_system', username='root', password='root_pass')
+    # Connect to "_system" fabric as root user.
+    sys_fabric = client.fabric(tenant='mytenant', name='_system', username='root', password='root_pass')
     
     ######## Stream enumeration/listing and existence checks ########
     # List all streams present on the server for this DB, regardless of whether or not it is persistent/non-persistent and global/local
-    streams = sys_db.streams()
-    print("\nStream listing of all streams in the db:")
+    streams = sys_fabric.streams()
+    print("\nStream listing of all streams in the fabric:")
     print(str(streams))
     
     # List all persistent local streams.
-    print( sys_db.persistent_streams(local=True) )
+    print( sys_fabric.persistent_streams(local=True) )
     
     # List all persistent global streams.
-    print( sys_db.persistent_streams(local=False) )
+    print( sys_fabric.persistent_streams(local=False) )
     
     # List all nonpersistent local streams.
-    print( sys_db.nonpersistent_streams(local=True) )
+    print( sys_fabric.nonpersistent_streams(local=True) )
     
     # List all nonpersistent global streams.
-    print( sys_db.nonpersistent_streams(local=False) )
+    print( sys_fabric.nonpersistent_streams(local=False) )
     
     # Check if a given stream exists.
-    sys_db.has_stream('testdbPersLocal')
+    sys_fabric.has_stream('testfabricPersLocal')
     
     # Check if a given persistent local stream exists.
-    sys_db.has_persistent_stream('testdbPersLocal', local=True)
+    sys_fabric.has_persistent_stream('testfabricPersLocal', local=True)
     
     # Check if a given persistent global stream exists.
-    sys_db.has_persistent_stream('testdbPersGlobal', local=False)
+    sys_fabric.has_persistent_stream('testfabricPersGlobal', local=False)
     
     # Check if a given nonpersistent local stream exists.
-    sys_db.has_nonpersistent_stream('testdbNonpersLocal', local=True)
+    sys_fabric.has_nonpersistent_stream('testfabricNonpersLocal', local=True)
     
     # Check if a given nonpersistent global stream exists.
-    sys_db.has_nonpersistent_stream('testdbNonpersGlobal', local=False)
+    sys_fabric.has_nonpersistent_stream('testfabricNonpersGlobal', local=False)
         
     ######## Stream creation and publish/subscribe messages on stream ########
     
     #Create a new global persistent stream called test-stream. If persistent flag set to False,
     # a non-persistent stream gets created. Similarly a local stream gets created if local 
     # flag is set to True. By default persistent is set to True and local is set to False . 
-    sys_db.create_stream('test-stream', persistent=True, local=False)    
+    sys_fabric.create_stream('test-stream', persistent=True, local=False)    
     
     #Create a new local non-persistent stream called test-stream-1
-    sys_db.create_stream('test-stream-1', persistent=False, local=True)
+    sys_fabric.create_stream('test-stream-1', persistent=False, local=True)
     
     #Create a StreamCollection object to invoke stream management functions.
-    stream_collection = sys_db.stream()
+    stream_collection = sys_fabric.stream()
     
     #Create producer for the given persistent/non-persistent and global/local stream that is created.
     producer1 = stream_collection.create_producer('test-stream', persistent=True, local=False)
@@ -75,10 +75,10 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
     
     #Create a subscriber to the given persistent/non-persistent and global/local stream with the given,
     # subscription name. If no subscription new is provided then a random name is generated based on
-    # tenant and db information.
+    # tenant and fabric information.
     # NOTE: If using producers and subscribers in the same source file, the stream object must be different
      between producers and subscribers.
-    substream_collection = sys_db.stream()
+    substream_collection = sys_fabric.stream()
     subscriber1 = substream_collection.subscribe('test-stream', persistent=True, local=False, subscription_name="test-subscription-1")
     subscriber2 = substream_collection.subscribe('test-stream-1', persistent=False, local=True, subscription_name="test-subscription-2")
     
@@ -124,10 +124,10 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
     #get stream compaction status
     stream_collection.get_stream_compaction_status('test-stream-5')
     
-    #Clear backlog for all streams on a stream db
+    #Clear backlog for all streams on a stream fabric
     stream_collection.clear_streams_backlog()
    
-    #Unsubscribes the given subscription on all streams on a stream db
+    #Unsubscribes the given subscription on all streams on a stream fabric
     stream_collection.unsubscribe('test-subscription-1')
     
     #delete subscription of a stream

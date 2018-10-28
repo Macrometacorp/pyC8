@@ -2,7 +2,7 @@ Users and Permissions
 ---------------------
 
 pyC8 provides operations for managing :doc:`tenant <tenant>` users and permissions. Most of
-these operations can only be performed by tenant admins via the ``_system`` tenant database.
+these operations can only be performed by tenant admins via the ``_system`` tenant fabric.
 
 **Example:**
 
@@ -13,10 +13,10 @@ these operations can only be performed by tenant admins via the ``_system`` tena
 	# Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "_system" database as tenant admin.
-    # This returns an API wrapper for the "_system" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "_system" fabric as tenant admin.
+    # This returns an API wrapper for the "_system" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    tennt = client.tenant(name='mytenant', dbname='_system', username='root', password='root_pass')
+    tennt = client.tenant(name='mytenant', fabricname='_system', username='root', password='root_pass')
 
     # List all tenant users.
     tennt.users()
@@ -51,48 +51,48 @@ these operations can only be performed by tenant admins via the ``_system`` tena
         extra={'team': 'frontend', 'title': 'architect'}
     )
 
-    # Retrieve user permissions for all databases and collections.
+    # Retrieve user permissions for all fabrics and collections.
     tennt.permissions('johndoe@gmail.com')
 
-    # Retrieve user permission for "test" database.
+    # Retrieve user permission for "test" fabric.
     tennt.permission(
         username='johndoe@gmail.com',
-        database='test'
+        fabric='test'
     )
 
-    # Retrieve user permission for "students" collection in "test" database.
+    # Retrieve user permission for "students" collection in "test" fabric.
     tennt.permission(
         username='johndoe@gmail.com',
-        database='test',
+        fabric='test',
         collection='students'
     )
 
-    # Update user permission for "test" database.
+    # Update user permission for "test" fabric.
     tennt.update_permission(
         username='johndoe@gmail.com',
         permission='rw',
-        database='test'
+        fabric='test'
     )
 
-    # Update user permission for "students" collection in "test" database.
+    # Update user permission for "students" collection in "test" fabric.
     tennt.update_permission(
         username='johndoe@gmail.com',
         permission='ro',
-        database='test',
+        fabric='test',
         collection='students'
     )
 
-    # Reset user permission for "test" database.
+    # Reset user permission for "test" fabric.
     tennt.reset_permission(
         username='johndoe@gmail.com',
-        database='test'
+        fabric='test'
     )
 
-    # Reset user permission for "students" collection in "test" database.
+    # Reset user permission for "students" collection in "test" fabric.
     tennt.reset_permission(
         username='johndoe@gmail.com',
-        database='test',
+        fabric='test',
         collection='students'
     )
 
-See :ref:`Tenant` and :ref:`StandardDatabase` for API specification.
+See :ref:`Tenant` and :ref:`StandardFabric` for API specification.

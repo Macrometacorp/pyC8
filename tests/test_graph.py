@@ -47,7 +47,7 @@ def test_graph_properties(graph, bad_graph, db):
     assert 'shard_count' in properties
     assert isinstance(properties['revision'], string_types)
 
-    # Test properties with bad database
+    # Test properties with bad fabric
     with assert_raises(GraphPropertiesError):
         bad_graph.properties()
 
@@ -100,7 +100,7 @@ def test_graph_management(db, bad_db):
         assert 'orphan_collections' in entry
     assert graph_name in extract('name', db.graphs())
 
-    # Test get graphs with bad database
+    # Test get graphs with bad fabric
     with assert_raises(GraphListError) as err:
         bad_db.graphs()
     assert err.value.error_code == 1228
@@ -189,7 +189,7 @@ def test_vertex_collection_management(db, graph, bad_graph):
     assert tvcol_name in graph.vertex_collections()
     assert tvcol_name in extract('name', db.collections())
 
-    # Test list vertex collection via bad database
+    # Test list vertex collection via bad fabric
     with assert_raises(VertexCollectionListError) as err:
         bad_graph.vertex_collections()
     assert err.value.error_code == 1228
@@ -282,7 +282,7 @@ def test_edge_definition_management(db, graph, bad_graph):
     assert bad_vcol_name in extract('name', db.collections())
     assert bad_vcol_name in extract('name', db.collections())
 
-    # Test list edge definition with bad database
+    # Test list edge definition with bad fabric
     with assert_raises(EdgeDefinitionListError) as err:
         bad_graph.edge_definitions()
     assert err.value.error_code == 1228
@@ -427,7 +427,7 @@ def test_vertex_management(fvcol, bad_fvcol, fvdocs):
         fvcol.get(key, rev=old_rev + '1', check_rev=True)
     assert err.value.error_code in {1903, 1200}
 
-    # Test get existing vertex with bad database
+    # Test get existing vertex with bad fabric
     with assert_raises(DocumentGetError) as err:
         bad_fvcol.get(key)
     assert err.value.error_code == 1228
@@ -544,7 +544,7 @@ def test_vertex_management(fvcol, bad_fvcol, fvdocs):
         assert fvcol[key]['bar'] == 500
         assert 'foo' not in fvcol[key]
 
-    # Test replace vertex with bad database
+    # Test replace vertex with bad fabric
     with assert_raises(DocumentReplaceError) as err:
         bad_fvcol.replace({'_key': key, 'bar': 600})
     assert err.value.error_code == 1228
@@ -724,7 +724,7 @@ def test_edge_management(ecol, bad_ecol, edocs, fvcol, fvdocs, tvcol, tvdocs):
         ecol.get(key, rev=old_rev + '1')
     assert err.value.error_code in {1903, 1200}
 
-    # Test get existing edge with bad database
+    # Test get existing edge with bad fabric
     with assert_raises(DocumentGetError) as err:
         bad_ecol.get(key)
     assert err.value.error_code == 1228
@@ -843,7 +843,7 @@ def test_edge_management(ecol, bad_ecol, edocs, fvcol, fvdocs, tvcol, tvdocs):
         assert ecol[key]['foo'] == 300
         assert ecol[key]['bar'] == 400
 
-    # Test replace edge with bad database
+    # Test replace edge with bad fabric
     with assert_raises(DocumentReplaceError) as err:
         bad_ecol.replace(edge)
     assert err.value.error_code == 1228

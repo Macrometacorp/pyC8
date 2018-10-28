@@ -183,7 +183,7 @@ def test_document_insert_many(col, bad_col, docs):
     for result, doc in zip(results, docs):
         isinstance(result, DocumentInsertError)
 
-    # Test get with bad database
+    # Test get with bad fabric
     with assert_raises(DocumentInsertError) as err:
         bad_col.insert_many(docs)
     assert err.value.error_code == 1228
@@ -481,7 +481,7 @@ def test_document_update_many(col, bad_col, docs):
         assert col[doc_key]['val'] == 7
         old_revs[doc_key] = result['_rev']
 
-    # Test update_many with bad database
+    # Test update_many with bad fabric
     with assert_raises(DocumentUpdateError) as err:
         bad_col.update_many(docs)
     assert err.value.error_code == 1228
@@ -536,7 +536,7 @@ def test_document_update_match(col, bad_col, docs):
     assert 'val' not in col['1']
     assert 'val' not in col['2']
 
-    # Test update matching documents with bad database
+    # Test update matching documents with bad fabric
     with assert_raises(DocumentUpdateError) as err:
         bad_col.update_match({'val': 1}, {'foo': 1})
     assert err.value.error_code == 1228
@@ -759,7 +759,7 @@ def test_document_replace_many(col, bad_col, docs):
         assert 'foo' not in col[doc_key]
         old_revs[doc_key] = result['_rev']
 
-    # Test replace_many with bad database
+    # Test replace_many with bad fabric
     with assert_raises(DocumentReplaceError) as err:
         bad_col.replace_many(docs)
     assert err.value.error_code == 1228
@@ -798,7 +798,7 @@ def test_document_replace_match(col, bad_col, docs):
     assert col.replace_match({'foo': 1}, {'bar': 2}, limit=1, sync=True) == 1
     assert [doc.get('bar') for doc in col].count(2) == 1
 
-    # Test replace matching documents with bad database
+    # Test replace matching documents with bad fabric
     with assert_raises(DocumentReplaceError) as err:
         bad_col.replace_match({'val': 1}, {'foo': 1})
     assert err.value.error_code == 1228
@@ -956,7 +956,7 @@ def test_document_delete_many(col, bad_col, docs):
         assert isinstance(result, DocumentDeleteError)
     assert len(col) == 0
 
-    # Test delete_many with bad database
+    # Test delete_many with bad fabric
     with assert_raises(DocumentDeleteError) as err:
         bad_col.delete_many(docs)
     assert err.value.error_code == 1228
@@ -982,7 +982,7 @@ def test_document_delete_match(col, bad_col, docs):
     assert col.delete_match({'text': 'bar'}, limit=2) == 2
     assert [d['text'] for d in col].count('bar') == 1
 
-    # Test delete matching documents with bad database
+    # Test delete matching documents with bad fabric
     with assert_raises(DocumentDeleteError) as err:
         bad_col.delete_match(doc)
     assert err.value.error_code == 1228
@@ -1059,7 +1059,7 @@ def test_document_find(col, bad_col, docs):
     assert list(col.find({'val': 3})) == []
     assert list(col.find({'val': 4})) == []
 
-    # Test find with bad database
+    # Test find with bad fabric
     with assert_raises(DocumentGetError) as err:
         bad_col.find({'val': 1})
     assert err.value.error_code == 1228
@@ -1449,12 +1449,12 @@ def test_document_has(col, bad_col, docs):
             col.has(doc_input, rev=rev, check_rev=False)
         assert str(err.value) == expected_error_msg
 
-    # Test get with bad database
+    # Test get with bad fabric
     with assert_raises(DocumentInError) as err:
         bad_col.has(doc_key)
     assert err.value.error_code == 1228
 
-    # Test contains with bad database
+    # Test contains with bad fabric
     with assert_raises(DocumentInError) as err:
         assert doc_key in bad_col
     assert err.value.error_code == 1228
@@ -1504,12 +1504,12 @@ def test_document_get(col, bad_col, docs):
     assert result['_rev'] != bad_rev
     assert result['val'] == doc_val
 
-    # Test get with bad database
+    # Test get with bad fabric
     with assert_raises(DocumentGetError) as err:
         bad_col.get(doc['_key'])
     assert err.value.error_code == 1228
 
-    # Test get with bad database
+    # Test get with bad fabric
     with assert_raises(DocumentGetError) as err:
         assert bad_col[doc['_key']]
     assert err.value.error_code == 1228
@@ -1601,7 +1601,7 @@ def test_document_all(col, bad_col, docs):
     assert cursor.count() == len(result) == 1
     assert all([clean_doc(d) in docs for d in result])
 
-    # Test export with bad database
+    # Test export with bad fabric
     with assert_raises(DocumentGetError) as err:
         bad_col.all()
     assert err.value.error_code == 1228
@@ -1618,7 +1618,7 @@ def test_document_ids(col, bad_col, docs):
     ids = set('{}/{}'.format(col.name, d['_key']) for d in docs)
     assert set(result) == ids
 
-    # Test ids with bad database
+    # Test ids with bad fabric
     with assert_raises(DocumentIDsError) as err:
         bad_col.ids()
     assert err.value.error_code == 1228
@@ -1635,7 +1635,7 @@ def test_document_keys(col, bad_col, docs):
     assert len(result) == len(docs)
     assert sorted(result) == extract('_key', docs)
 
-    # Test keys with bad database
+    # Test keys with bad fabric
     with assert_raises(DocumentKeysError) as err:
         bad_col.keys()
     assert err.value.error_code == 1228
@@ -1692,7 +1692,7 @@ def test_document_keys(col, bad_col, docs):
 #     assert len(list(cursor)) == 3
 #     all([clean_doc(d) in docs for d in cursor])
 #
-#     # Test export with bad database
+#     # Test export with bad fabric
 #     with assert_raises(DocumentGetError):
 #         bad_col.export()
 #
@@ -1726,7 +1726,7 @@ def test_document_random(col, bad_col, docs):
         random_doc = col.random()
         assert random_doc is None
 
-    # Test random with bad database
+    # Test random with bad fabric
     with assert_raises(DocumentGetError) as err:
         bad_col.random()
     assert err.value.error_code == 1228
@@ -1777,7 +1777,7 @@ def test_document_import_bulk(col, bad_col, docs):
     assert result['ignored'] == 0
     col.truncate()
 
-    # Test import bulk with bad database
+    # Test import bulk with bad fabric
     with assert_raises(DocumentInsertError):
         bad_col.import_bulk(docs, halt_on_error=True)
     assert len(col) == 0

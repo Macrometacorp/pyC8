@@ -21,13 +21,13 @@ message, error code and HTTP request response details.
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "test" database as tenant admin.
-    # This returns an API wrapper for the "test" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
+    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Get the API wrapper for "students" collection.
-    students = db.collection('students')
+    students = fabric.collection('students')
 
     try:
         students.insert({'_key': 'John'})
@@ -87,13 +87,13 @@ response details.
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "test" database as tenant admin.
-    # This returns an API wrapper for the "test" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
+    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Get the API wrapper for "students" collection.
-    students = db.collection('students')
+    students = fabric.collection('students')
 
     try:
         students.get({'_id': 'invalid_id'})  # malformed document

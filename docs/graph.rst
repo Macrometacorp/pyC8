@@ -18,29 +18,29 @@ For more information, refer to `C8 Data Fabric manual`_.
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "test" database as tenant admin.
-    # This returns an API wrapper for the "test" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
+    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
-    # List existing graphs in the database.
-    db.graphs()
+    # List existing graphs in the fabric.
+    fabric.graphs()
 
     # Create a new graph named "school" if it does not already exist.
     # This returns an API wrapper for "school" graph.
-    if db.has_graph('school'):
-        school = db.graph('school')
+    if fabric.has_graph('school'):
+        school = fabric.graph('school')
     else:
-        school = db.create_graph('school')
+        school = fabric.create_graph('school')
 
     # Retrieve various graph properties.
     school.name
-    school.db_name
+    school.fabric_name
     school.vertex_collections()
     school.edge_definitions()
 
     # Delete the graph.
-    db.delete_graph('school')
+    fabric.delete_graph('school')
 
 .. _edge-definitions:
 
@@ -74,16 +74,16 @@ Here is an example showing how edge definitions are managed:
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # For the "mytenant" tenant, connect to "test" database as tenant admin.
-    # This returns an API wrapper for the "test" database on tenant 'mytenant'
+    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
+    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Get the API wrapper for graph "school".
-    if db.has_graph('school'):
-        school = db.graph('school')
+    if fabric.has_graph('school'):
+        school = fabric.graph('school')
     else:
-        school = db.create_graph('school')
+        school = fabric.create_graph('school')
 
     # Create an edge definition named "teach". This creates any missing
     # collections and returns an API wrapper for "teach" edge collection.
@@ -131,11 +131,11 @@ additional safeguards:
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # Connect to "test" database as tenant admin.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    # Connect to "test" fabric as tenant admin.
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Get the API wrapper for graph "school".
-    school = db.graph('school')
+    school = fabric.graph('school')
 
     # Create a new vertex collection named "teachers" if it does not exist.
     # This returns an API wrapper for "teachers" vertex collection.
@@ -166,11 +166,11 @@ IDs instead of keys where applicable.
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # Connect to "test" database as tenant admin.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    # Connect to "test" fabric as tenant admin.
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Get the API wrapper for graph "school".
-    school = db.graph('school')
+    school = fabric.graph('school')
 
     # Create a new vertex collection named "lectures" if it does not exist.
     # This returns an API wrapper for "lectures" vertex collection.
@@ -207,8 +207,8 @@ wrappers provides additional safeguards:
 .. testsetup:: edge_collections
 
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
-    school = db.graph('school')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    school = fabric.graph('school')
 
     if school.has_vertex_collection('lectures'):
         school.vertex_collection('lectures')
@@ -229,11 +229,11 @@ wrappers provides additional safeguards:
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # Connect to "test" database as tenant admin.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    # Connect to "test" fabric as tenant admin.
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Get the API wrapper for graph "school".
-    school = db.graph('school')
+    school = fabric.graph('school')
 
     # Get the API wrapper for edge collection "teach".
     if school.has_edge_definition('teach'):
@@ -284,11 +284,11 @@ IDs instead of keys where applicable.
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # Connect to "test" database as tenant admin.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    # Connect to "test" fabric as tenant admin.
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Get the API wrapper for graph "school".
-    school = db.graph('school')
+    school = fabric.graph('school')
 
     # The "_id" field is required instead of "_key" field.
     school.insert_edge(
@@ -331,8 +331,8 @@ over edges and vertices using various algorithms.
 .. testsetup:: traversals
 
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
-    school = db.graph('school')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    school = fabric.graph('school')
 
     if school.has_vertex_collection('lectures'):
         school.vertex_collection('lectures')
@@ -351,11 +351,11 @@ over edges and vertices using various algorithms.
     # Initialize the C8 Data Fabric client.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
-    # Connect to "test" database as tenant admin.
-    db = client.db(tenant='mytenant', name='test', username='root', password='passwd')
+    # Connect to "test" fabric as tenant admin.
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
 
     # Get the API wrapper for graph "school".
-    school = db.graph('school')
+    school = fabric.graph('school')
 
     # Get API wrappers for "from" and "to" vertex collections.
     teachers = school.vertex_collection('teachers')

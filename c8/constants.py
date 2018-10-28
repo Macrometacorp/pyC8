@@ -15,9 +15,9 @@
 
 ### C8DB Defaults
 TENANT_DEFAULT = "_mm"
-DB_DEFAULT = "_system"
+FABRIC_DEFAULT = "_system"
 USER_DEFAULT = "root"
-DB_PORT = "30005"
+FABRIC_PORT = "30005"
 
 ### TODO : Streams defaults
 STREAM_PORT = "30002"

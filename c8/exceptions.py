@@ -327,24 +327,24 @@ class CursorCloseError(C8ServerError):
 
 
 #######################
-# Database Exceptions #
+# Fabric Exceptions #
 #######################
 
 
-class DatabaseListError(C8ServerError):
-    """Failed to retrieve databases."""
+class FabricListError(C8ServerError):
+    """Failed to retrieve fabrics."""
 
 
-class DatabasePropertiesError(C8ServerError):
-    """Failed to retrieve database properties."""
+class FabricPropertiesError(C8ServerError):
+    """Failed to retrieve fabric properties."""
 
 
-class DatabaseCreateError(C8ServerError):
-    """Failed to create database."""
+class FabricCreateError(C8ServerError):
+    """Failed to create fabric."""
 
 
-class DatabaseDeleteError(C8ServerError):
-    """Failed to delete database."""
+class FabricDeleteError(C8ServerError):
+    """Failed to delete fabric."""
 
 #######################
 # Document Exceptions #

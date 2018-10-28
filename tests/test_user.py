@@ -52,7 +52,7 @@ def test_user_management(sys_db, bad_db):
         assert isinstance(user['extra'], dict)
     assert sys_db.user(username) == new_user
 
-    # Test list users with bad database
+    # Test list users with bad fabric
     with assert_raises(UserListError) as err:
         bad_db.users()
     assert err.value.error_code == 1228
@@ -152,7 +152,7 @@ def test_user_change_password(client, sys_db):
     assert err.value.http_code == 401
 
 
-def test_user_create_with_new_database(client, sys_db):
+def test_user_create_with_new_fabric(client, sys_db):
     db_name = generate_db_name()
 
     username1 = generate_username()
@@ -163,7 +163,7 @@ def test_user_create_with_new_database(client, sys_db):
     password2 = generate_string()
     password3 = generate_string()
 
-    result = sys_db.create_database(
+    result = sys_db.create_fabric(
         name=db_name,
         users=[
             {'username': username1, 'password': password1, 'active': True},
@@ -177,15 +177,15 @@ def test_user_create_with_new_database(client, sys_db):
     usernames = extract('username', sys_db.users())
     assert all(u in usernames for u in [username1, username2, username3])
 
-    # Test if the first user has access to the database
+    # Test if the first user has access to the fabric
     db = client.db(db_name, username1, password1)
     db.properties()
 
-    # Test if the second user also has access to the database
+    # Test if the second user also has access to the fabric
     db = client.db(db_name, username2, password2)
     db.properties()
 
-    # Test if the third user has access to the database (should not)
+    # Test if the third user has access to the fabric (should not)
     db = client.db(db_name, username3, password3)
     with assert_raises(DatabasePropertiesError) as err:
         db.properties()

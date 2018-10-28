@@ -3,14 +3,14 @@ from __future__ import absolute_import, unicode_literals, division
 import pytest
 
 from c8 import C8Client
-from c8.database import StandardDatabase
+from c8.fabric import StandardFabric
 from tests.executors import (
     TestAsyncExecutor,
     TestBatchExecutor,
     TestTransactionExecutor
 )
 from tests.helpers import (
-    generate_db_name,
+    generate_fabric_name,
     generate_col_name,
     generate_string,
     generate_username,
@@ -33,45 +33,45 @@ def pytest_configure(config):
         host=config.getoption('host'),
         port=config.getoption('port')
     )
-    sys_db = client.db(
+    sys_fabric = client.fabric(
         name='_system',
         username='root',
         password=config.getoption('passwd')
     )
 
-    # Create a user and non-system database for testing.
+    # Create a user and non-system fabric for testing.
     username = generate_username()
     password = generate_string()
-    tst_db_name = generate_db_name()
-    bad_db_name = generate_db_name()
-    sys_db.create_database(
-        name=tst_db_name,
+    tst_fabric_name = generate_fabric_name()
+    bad_fabric_name = generate_fabric_name()
+    sys_fabric.create_fabric(
+        name=tst_fabric_name,
         users=[{
             'active': True,
             'username': username,
             'password': password,
         }]
     )
-    tst_db = client.db(tst_db_name, username, password)
-    bad_db = client.db(bad_db_name, username, password)
+    tst_fabric = client.fabric(tst_fabric_name, username, password)
+    bad_fabric = client.fabric(bad_fabric_name, username, password)
 
     # Create a standard collection for testing.
     col_name = generate_col_name()
-    tst_col = tst_db.create_collection(col_name, edge=False)
+    tst_col = tst_fabric.create_collection(col_name, edge=False)
     tst_col.add_skiplist_index(['val'])
     tst_col.add_fulltext_index(['text'])
     geo_index = tst_col.add_geo_index(['loc'])
 
     # Create a legacy edge collection for testing.
     lecol_name = generate_col_name()
-    tst_db.create_collection(lecol_name, edge=True)
+    tst_fabric.create_collection(lecol_name, edge=True)
 
     # Create test vertex & edge collections and graph.
     graph_name = generate_graph_name()
     ecol_name = generate_col_name()
     fvcol_name = generate_col_name()
     tvcol_name = generate_col_name()
-    tst_graph = tst_db.create_graph(graph_name)
+    tst_graph = tst_fabric.create_graph(graph_name)
     tst_graph.create_vertex_collection(fvcol_name)
     tst_graph.create_vertex_collection(tvcol_name)
     tst_graph.create_edge_definition(
@@ -84,9 +84,9 @@ def pytest_configure(config):
         'client': client,
         'username': username,
         'password': password,
-        'sys_db': sys_db,
-        'tst_db': tst_db,
-        'bad_db': bad_db,
+        'sys_fabric': sys_fabric,
+        'tst_fabric': tst_fabric,
+        'bad_fabric': bad_fabric,
         'geo_index': geo_index,
         'col_name': col_name,
         'lecol_name': lecol_name,
@@ -99,86 +99,86 @@ def pytest_configure(config):
 
 # noinspection PyShadowingNames
 def pytest_unconfigure(*_):  # pragma: no cover
-    sys_db = global_data['sys_db']
+    sys_fabric = global_data['sys_fabric']
 
     # Remove all test async jobs.
-    sys_db.clear_async_jobs()
+    sys_fabric.clear_async_jobs()
 
     # Remove all test tasks.
-    for task in sys_db.tasks():
+    for task in sys_fabric.tasks():
         task_name = task['name']
         if task_name.startswith('test_task'):
-            sys_db.delete_task(task_name, ignore_missing=True)
+            sys_fabric.delete_task(task_name, ignore_missing=True)
 
     # Remove all test users.
-    for user in sys_db.users():
+    for user in sys_fabric.users():
         username = user['username']
         if username.startswith('test_user'):
-            sys_db.delete_user(username, ignore_missing=True)
+            sys_fabric.delete_user(username, ignore_missing=True)
 
-    # Remove all test databases.
-    for db_name in sys_db.databases():
-        if db_name.startswith('test_database'):
-            sys_db.delete_database(db_name, ignore_missing=True)
+    # Remove all test fabrics.
+    for fabric_name in sys_fabric.fabrics():
+        if fabric_name.startswith('test_fabric'):
+            sys_fabric.delete_fabric(fabric_name, ignore_missing=True)
 
     # Remove all test collections.
-    for collection in sys_db.collections():
+    for collection in sys_fabric.collections():
         col_name = collection['name']
         if col_name.startswith('test_collection'):
-            sys_db.delete_collection(col_name, ignore_missing=True)
+            sys_fabric.delete_collection(col_name, ignore_missing=True)
 
 
 # noinspection PyProtectedMember
 def pytest_generate_tests(metafunc):
-    tst_db = global_data['tst_db']
-    bad_db = global_data['bad_db']
+    tst_fabric = global_data['tst_fabric']
+    bad_fabric = global_data['bad_fabric']
 
-    tst_dbs = [tst_db]
-    bad_dbs = [bad_db]
+    tst_fabrics = [tst_fabric]
+    bad_fabrics = [bad_fabric]
 
     if metafunc.config.getoption('complete'):
         tst = metafunc.module.__name__.split('.test_', 1)[-1]
-        tst_conn = tst_db._conn
-        bad_conn = bad_db._conn
+        tst_conn = tst_fabric._conn
+        bad_conn = bad_fabric._conn
 
         if tst in {'collection', 'document', 'graph', 'c8ql', 'index'}:
-            # Add test transaction databases
-            tst_txn_db = StandardDatabase(tst_conn)
-            tst_txn_db._executor = TestTransactionExecutor(tst_conn)
-            tst_txn_db._is_transaction = True
-            tst_dbs.append(tst_txn_db)
+            # Add test transaction fabrics
+            tst_txn_fabric = StandardFabric(tst_conn)
+            tst_txn_fabric._executor = TestTransactionExecutor(tst_conn)
+            tst_txn_fabric._is_transaction = True
+            tst_fabrics.append(tst_txn_fabric)
 
-            bad_txn_db = StandardDatabase(bad_conn)
-            bad_txn_db._executor = TestTransactionExecutor(bad_conn)
-            bad_dbs.append(bad_txn_db)
+            bad_txn_fabric = StandardFabric(bad_conn)
+            bad_txn_fabric._executor = TestTransactionExecutor(bad_conn)
+            bad_fabrics.append(bad_txn_fabric)
 
         if tst not in {'async', 'batch', 'transaction', 'client', 'exception'}:
-            # Add test async databases
-            tst_async_db = StandardDatabase(tst_conn)
-            tst_async_db._executor = TestAsyncExecutor(tst_conn)
-            tst_dbs.append(tst_async_db)
+            # Add test async fabrics
+            tst_async_fabric = StandardFabric(tst_conn)
+            tst_async_fabric._executor = TestAsyncExecutor(tst_conn)
+            tst_fabrics.append(tst_async_fabric)
 
-            bad_async_db = StandardDatabase(bad_conn)
-            bad_async_db._executor = TestAsyncExecutor(bad_conn)
-            bad_dbs.append(bad_async_db)
+            bad_async_fabric = StandardFabric(bad_conn)
+            bad_async_fabric._executor = TestAsyncExecutor(bad_conn)
+            bad_fabrics.append(bad_async_fabric)
 
-            # Add test batch databases
-            tst_batch_db = StandardDatabase(tst_conn)
-            tst_batch_db._executor = TestBatchExecutor(tst_conn)
-            tst_dbs.append(tst_batch_db)
+            # Add test batch fabrics
+            tst_batch_fabric = StandardFabric(tst_conn)
+            tst_batch_fabric._executor = TestBatchExecutor(tst_conn)
+            tst_fabrics.append(tst_batch_fabric)
 
-            bad_batch_bdb = StandardDatabase(bad_conn)
-            bad_batch_bdb._executor = TestBatchExecutor(bad_conn)
-            bad_dbs.append(bad_batch_bdb)
+            bad_batch_bfabric = StandardFabric(bad_conn)
+            bad_batch_bfabric._executor = TestBatchExecutor(bad_conn)
+            bad_fabrics.append(bad_batch_bfabric)
 
-    if 'db' in metafunc.fixturenames and 'bad_db' in metafunc.fixturenames:
-        metafunc.parametrize('db,bad_db', zip(tst_dbs, bad_dbs))
+    if 'fabric' in metafunc.fixturenames and 'bad_fabric' in metafunc.fixturenames:
+        metafunc.parametrize('fabric,bad_fabric', zip(tst_fabrics, bad_fabrics))
 
-    elif 'db' in metafunc.fixturenames:
-        metafunc.parametrize('db', tst_dbs)
+    elif 'fabric' in metafunc.fixturenames:
+        metafunc.parametrize('fabric', tst_fabrics)
 
-    elif 'bad_db' in metafunc.fixturenames:
-        metafunc.parametrize('bad_db', bad_dbs)
+    elif 'bad_fabric' in metafunc.fixturenames:
+        metafunc.parametrize('bad_fabric', bad_fabrics)
 
 
 @pytest.fixture(autouse=False)
@@ -187,8 +187,8 @@ def client():
 
 
 @pytest.fixture(autouse=False)
-def sys_db():
-    return global_data['sys_db']
+def sys_fabric():
+    return global_data['sys_fabric']
 
 
 @pytest.fixture(autouse=False)
@@ -202,15 +202,15 @@ def password():
 
 
 @pytest.fixture(autouse=False)
-def col(db):
-    collection = db.collection(global_data['col_name'])
+def col(fabric):
+    collection = fabric.collection(global_data['col_name'])
     collection.truncate()
     return collection
 
 
 @pytest.fixture(autouse=False)
-def bad_col(bad_db):
-    return bad_db.collection(global_data['col_name'])
+def bad_col(bad_fabric):
+    return bad_fabric.collection(global_data['col_name'])
 
 
 @pytest.fixture(autouse=False)
@@ -219,20 +219,20 @@ def geo():
 
 
 @pytest.fixture(autouse=False)
-def lecol(db):
-    collection = db.collection(global_data['lecol_name'])
+def lecol(fabric):
+    collection = fabric.collection(global_data['lecol_name'])
     collection.truncate()
     return collection
 
 
 @pytest.fixture(autouse=False)
-def graph(db):
-    return db.graph(global_data['graph_name'])
+def graph(fabric):
+    return fabric.graph(global_data['graph_name'])
 
 
 @pytest.fixture(autouse=False)
-def bad_graph(bad_db):
-    return bad_db.graph(global_data['graph_name'])
+def bad_graph(bad_fabric):
+    return bad_fabric.graph(global_data['graph_name'])
 
 
 # noinspection PyShadowingNames

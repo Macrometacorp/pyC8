@@ -107,7 +107,7 @@ def test_collection_management(db, bad_db):
         for entry in db.collections()
     )
 
-    # Test list collections with bad database
+    # Test list collections with bad fabric
     with assert_raises(CollectionListError) as err:
         bad_db.collections()
     assert err.value.error_code == 1228
