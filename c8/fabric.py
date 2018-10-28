@@ -279,26 +279,6 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def details(self):
-        """Return C8Db server details.
-
-        :return: Server details.
-        :rtype: dict
-        :raise c8.exceptions.ServerDetailsError: If retrieval fails.
-        """
-        request = Request(
-            method='get',
-            endpoint='/version',
-            params={'details': True}
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise ServerDetailsError(resp, request)
-            return resp.body['details']
-
-        return self._execute(request, response_handler)
-
     def ping(self):
         """Ping the C8Db server by sending a test request.
 
@@ -1119,66 +1099,67 @@ class Fabric(APIWrapper):
     # Async Job Management #
     ########################
 
-    def async_jobs(self, status, count=None):
-        """Return IDs of async jobs with given status.
-
-        :param status: Job status (e.g. "pending", "done").
-        :type status: str | unicode
-        :param count: Max number of job IDs to return.
-        :type count: int
-        :return: List of job IDs.
-        :rtype: [str | unicode]
-        :raise c8.exceptions.AsyncJobListError: If retrieval fails.
-        """
-        params = {}
-        if count is not None:
-            params['count'] = count
-
-        request = Request(
-            method='get',
-            endpoint='/job/{}'.format(status),
-            params=params
-        )
-
-        def response_handler(resp):
-            if resp.is_success:
-                return resp.body
-            raise AsyncJobListError(resp, request)
-
-        return self._execute(request, response_handler)
-
-    def clear_async_jobs(self, threshold=None):
-        """Clear async job results from the server.
-
-        Async jobs that are still queued or running are not stopped.
-
-        :param threshold: If specified, only the job results created prior to
-            the threshold (a unix timestamp) are deleted. Otherwise, all job
-            results are deleted.
-        :type threshold: int
-        :return: True if job results were cleared successfully.
-        :rtype: bool
-        :raise c8.exceptions.AsyncJobClearError: If operation fails.
-        """
-        if threshold is None:
-            url = '/job/all'
-            params = None
-        else:
-            url = '/job/expired'
-            params = {'stamp': threshold}
-
-        request = Request(
-            method='delete',
-            endpoint=url,
-            params=params
-        )
-
-        def response_handler(resp):
-            if resp.is_success:
-                return True
-            raise AsyncJobClearError(resp, request)
-
-        return self._execute(request, response_handler)
+    # Pratik: APIs not supported in documentation. Waiting for verification
+    # def async_jobs(self, status, count=None):
+    #     """Return IDs of async jobs with given status.
+    #
+    #     :param status: Job status (e.g. "pending", "done").
+    #     :type status: str | unicode
+    #     :param count: Max number of job IDs to return.
+    #     :type count: int
+    #     :return: List of job IDs.
+    #     :rtype: [str | unicode]
+    #     :raise c8.exceptions.AsyncJobListError: If retrieval fails.
+    #     """
+    #     params = {}
+    #     if count is not None:
+    #         params['count'] = count
+    #
+    #     request = Request(
+    #         method='get',
+    #         endpoint='/job/{}'.format(status),
+    #         params=params
+    #     )
+    #
+    #     def response_handler(resp):
+    #         if resp.is_success:
+    #             return resp.body
+    #         raise AsyncJobListError(resp, request)
+    #
+    #     return self._execute(request, response_handler)
+    #
+    # def clear_async_jobs(self, threshold=None):
+    #     """Clear async job results from the server.
+    #
+    #     Async jobs that are still queued or running are not stopped.
+    #
+    #     :param threshold: If specified, only the job results created prior to
+    #         the threshold (a unix timestamp) are deleted. Otherwise, all job
+    #         results are deleted.
+    #     :type threshold: int
+    #     :return: True if job results were cleared successfully.
+    #     :rtype: bool
+    #     :raise c8.exceptions.AsyncJobClearError: If operation fails.
+    #     """
+    #     if threshold is None:
+    #         url = '/job/all'
+    #         params = None
+    #     else:
+    #         url = '/job/expired'
+    #         params = {'stamp': threshold}
+    #
+    #     request = Request(
+    #         method='delete',
+    #         endpoint=url,
+    #         params=params
+    #     )
+    #
+    #     def response_handler(resp):
+    #         if resp.is_success:
+    #             return True
+    #         raise AsyncJobClearError(resp, request)
+    #
+    #     return self._execute(request, response_handler)
 
     ########################
     # Streams Management   #
