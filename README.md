@@ -43,12 +43,8 @@ Here is an overview example:
    demo_stream = "demostream"
 
    #--------------------------------------------------------------
-   print("Create demo tenant...")
+   print("Create C8Client Connection...")
    client = C8Client(protocol='https', host=region, port=443)
-   sys_tenant = client.tenant(name='_mm', fabricname='_system', username='root', password='poweruser')
-
-   if not sys_tenant.has_tenant(demo_tenant):
-       sys_tenant.create_tenant(demo_tenant, passwd="poweruser")
 
    #--------------------------------------------------------------
    print("Create under demotenant, demofabric, demouser and assign permissions...")
