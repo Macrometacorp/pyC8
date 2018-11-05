@@ -14,7 +14,7 @@
 
 
 ### C8DB Defaults
-TENANT_DEFAULT = "_mm"
+TENANT_DEFAULT = "guest"
 FABRIC_DEFAULT = "_system"
 USER_DEFAULT = "root"
 FABRIC_PORT = "30005"

@@ -88,7 +88,7 @@ class C8Client(object):
         """
         return self._url
 
-    def tenant(self, name="_mm", fabricname='_system', username='root', password='', verify=False):
+    def tenant(self, name="guest", fabricname='_system', username='root', password='', verify=False):
         """Connect to a fabric and return the fabric API wrapper.
 
         :param name: Tenant name.
@@ -122,7 +122,7 @@ class C8Client(object):
 
 
 
-    def fabric(self, tenant="_mm", name='_system', username='root', password='', verify=False):
+    def fabric(self, tenant="guest", name='_system', username='root', password='', verify=False):
         """Connect to a fabric and return the fabric API wrapper.
 
         :param name: Fabric name.
