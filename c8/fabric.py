@@ -1194,7 +1194,7 @@ class Fabric(APIWrapper):
                     'name': col['topic'],
                     'topic': col['topic'],
                     'local': col['local'],
-                    'fabric': col['fabric'],
+                    'db': col['db'],
                     'tenant': col['tenant'],
                     'type': StreamCollection.types[col['type']],
                     'status': 'terminated' if 'terminated' in col else 'active',
