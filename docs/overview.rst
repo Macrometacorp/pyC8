@@ -106,7 +106,7 @@ Example for **real-time updates** from a collection in fabric:
   print("Subscribe to employees collection...")
   client = C8Client(protocol='https', host=region, port=443)
   fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
-  fabric.on_change(collection="employees", callback=callback_fn)
+  fabric.on_change("employees", callback=callback_fn)
   
 
 
@@ -126,7 +126,7 @@ Example to **publish** documents to a stream:
   client = C8Client(protocol='https', host=region, port=443)
   fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
   stream = fabric.stream()
-  producer = stream.create_producer(collection="demostream", persistent=True, local=False)
+  producer = stream.create_producer("demostream", persistent=True, local=False)
   for i in range(10):
       msg = "Hello from " + region + "("+ str(i) +")"
       producer.send(msg.encode('utf-8'))
@@ -149,7 +149,7 @@ Example to **subscribe** documents from a stream:
    client = C8Client(protocol='https', host=region, port=443)
    fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
    stream = fabric.stream()
-   subscriber = stream.subscribe(collection="demostream", persistent=True, local=False, subscription_name="demosub")
+   subscriber = stream.subscribe("demostream", persistent=True, local=False, subscription_name="demosub")
    for i in range(10):
        msg = subscriber.receive()
        print("Received message '{}' id='{}'".format(msg.data(), msg.message_id()))
