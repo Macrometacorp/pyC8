@@ -5,7 +5,7 @@ with open('./README.md') as fp:
 
 setup(
     name='pyC8',
-    version='0.0.0',
+    version='0.0.1',
     description='Python Driver for Macrometa Digital Edge Fabric',
     long_description=description,
     author='Macrometa',
