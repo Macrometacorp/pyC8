@@ -124,16 +124,9 @@ Standard documents are managed via collection API wrapper:
     lola['GPA'] = 2.6
     students.update(lola)
 
-    # Update one or more matching documents.
-    students.update_match({'last': 'Park'}, {'GPA': 3.0})
-
     # Replace a single document.
     emma['GPA'] = 3.1
     students.replace(emma)
-
-    # Replace one or more matching documents.
-    becky = {'first': 'Becky', 'last': 'Solis', 'GPA': '3.3'}
-    students.replace_match({'first': 'Emma'}, becky)
 
     # Delete a document by key.
     students.delete('john')

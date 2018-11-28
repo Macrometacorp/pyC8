@@ -26,6 +26,12 @@ class StreamCollection(APIWrapper):
         5: 'nonpersistent'
     }
 
+    consumer_types = {
+        'exclusive': pulsar.ConsumerType.Exclusive,
+         'shared':  pulsar.ConsumerType.Shared ,
+        'failover': pulsar.ConsumerType.Failover
+    }
+
     def __init__(self, fabric, connection, executor, url, port,
                  operation_timeout_seconds,
                  ):
@@ -224,7 +230,7 @@ class StreamCollection(APIWrapper):
         raise ex.StreamSubscriberError("No stream present with name:" + stream + ". Please create a stream and then stream reader.")
 
     def subscribe(self, stream, persistent=True, local=False, subscription_name=None,
-                  consumer_type=pulsar.ConsumerType.Exclusive,
+                  consumer_type= consumer_types['exclusive'],
                   message_listener=None,
                   receiver_queue_size=1000,
                   consumer_name=None,

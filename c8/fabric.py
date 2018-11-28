@@ -162,7 +162,7 @@ class Fabric(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/fabric/current',
+            endpoint='/database/current',
         )
 
         def response_handler(resp):
@@ -255,6 +255,25 @@ class Fabric(APIWrapper):
             if not resp.is_success:
                 raise TransactionExecuteError(resp, request)
             return resp.body.get('result')
+
+        return self._execute(request, response_handler)
+
+    def fabrics_detail(self):
+        request = Request(
+            method='get',
+            endpoint='/database/user'
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise FabricListError(resp, request)
+            return [{
+                'id': col['id'],
+                'name': col['name'],
+                'system': col['isSystem'],
+                'path': col['path'],
+                'options': col['options']
+        } for col in map(dict, resp.body['result'])]
 
         return self._execute(request, response_handler)
 
