@@ -61,6 +61,8 @@ Here is an overview example:
    #--------------------------------------------------------------
    print("Create and populate employees collection in demofabric...")
    fabric = client.fabric(tenant=demo_tenant, name=demo_fabric, username=demo_user, password='demouser')
+   #get fabric detail
+   fabric.fabrics_detail()
    employees = fabric.create_collection('employees') # Create a new collection named "employees".
    employees.add_hash_index(fields=['email'], unique=True) # Add a hash index to the collection.
 
@@ -170,7 +172,8 @@ Example to **subscribe** documents from a stream:
    client = C8Client(protocol='https', host=region, port=443)
    fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
    stream = fabric.stream()
-   subscriber = stream.subscribe(collection="demostream", persistent=True, local=False, subscription_name="demosub")
+   #you can subscribe using consumer_types option.
+   subscriber = stream.subscribe(collection="demostream", persistent=True, local=False, subscription_name="demosub", consumer_type= stream.CONSUMER_TYPES.EXCLUSIVE)
    for i in range(10):
        msg = subscriber.receive()
        print("Received message '{}' id='{}'".format(msg.data(), msg.message_id()))
@@ -181,7 +184,8 @@ Example to **subscribe** documents from a stream:
 Example: **stream management**:
 
 ```python
-
+    
+    stream_collection = fabric.stream()
     #get_stream_stats
     stream_collection.get_stream_stats('demostream', persistent=True, local=False) #for global persistent stream
 

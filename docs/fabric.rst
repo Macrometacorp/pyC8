@@ -35,6 +35,9 @@ If the ``Realtime`` option is enabled for a fabric, then any clients with connec
     if not sys_fabric.has_fabric('test'):
         sys_fabric.create_fabric('test')
 
+    #get fabric details
+    sys_fabric.fabrics_detail()
+
     # Delete the fabric.
     sys_fabric.delete_fabric('test')
 
