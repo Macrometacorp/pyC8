@@ -80,7 +80,7 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
      between producers and subscribers.
     stream_collection = sys_fabric.stream()
     subscriber1 = substream_collection.subscribe('test-stream', persistent=True, local=False, subscription_name="test-subscription-1",consumer_type= stream_collection.CONSUMER_TYPES.EXCLUSIVE)
-    #you can subscribe using consumer_types option. You will get suggestions as to the types of consumer types available
+    #you can subscribe using consumer_types option.
     subscriber2 = substream_collection.subscribe('test-stream-1', persistent=False, local=True, subscription_name="test-subscription-2")
     
     #receive: read the published messages over stream.

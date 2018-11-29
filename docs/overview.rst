@@ -148,8 +148,9 @@ Example to **subscribe** documents from a stream:
    print("consume messages from stream...")
    client = C8Client(protocol='https', host=region, port=443)
    fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
-   stream = fabric.stream()
-   subscriber = stream.subscribe("demostream", persistent=True, local=False, subscription_name="demosub")
+   stream_collection = fabric.stream()
+   subscriber = stream_collection.subscribe("demostream", persistent=True, local=False, subscription_name="demosub", consumer_type= stream_collection.CONSUMER_TYPES.EXCLUSIVE)
+   #you can subscribe using consumer_types option.
    for i in range(10):
        msg = subscriber.receive()
        print("Received message '{}' id='{}'".format(msg.data(), msg.message_id()))
