@@ -83,6 +83,8 @@ Example to **query** a given fabric:
   print("query employees collection...")
   client = C8Client(protocol='https', host=region, port=443)
   fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
+  #get fabric details
+  fabric.fabrics_detail()
   cursor = fabric.c8ql.execute('FOR employee IN employees RETURN employee') # Execute a C8QL query
   docs = [document for document in cursor]
   print(docs)
