@@ -325,7 +325,7 @@ class Fabric(APIWrapper):
     #########################
 
     def dclist(self):
-        """Return the list of Datacenters
+        """Return the list of names of Datacenters
 
         :return: DC List.
         :rtype: [str | unicode ]
@@ -344,6 +344,26 @@ class Fabric(APIWrapper):
             for dc in resp.body:
                 dc_list.append(dc['name'])
             return dc_list
+
+        return self._execute(request, response_handler)
+
+    def dclist_detail(self):
+        """Return the list of details of Datacenters
+
+        :return: DC List.
+        :rtype: [str | unicode ]
+        :raise c8.exceptions.TenantListError: If retrieval fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/datacenter/all'
+        )
+
+        def response_handler(resp):
+            #print("dclist() : Response body: " + str(resp.body))
+            if not resp.is_success:
+                raise TenantDcListError(resp, request)
+            return resp.body
 
         return self._execute(request, response_handler)
 
