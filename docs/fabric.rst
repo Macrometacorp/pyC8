@@ -30,6 +30,9 @@ If the ``Realtime`` option is enabled for a fabric, then any clients with connec
     # List all fabrics in the 'mytenant' tenant
     sys_fabric.fabrics()
 
+    #Returns the list of details of Datacenters
+    sys_fabric.dclist_detail()
+
     # Create a new fabric named "test" if it does not exist.
     # Only the tenant admin has access to it at time of its creation.
     if not sys_fabric.has_fabric('test'):

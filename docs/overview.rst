@@ -26,6 +26,14 @@ Here is an example showing how **pyC8** client can be used:
        sys_tenant.create_tenant(demo_tenant, passwd="poweruser")
 
    #--------------------------------------------------------------
+
+    print("Connect to fabric and get details")
+    client = C8Client(protocol='https', host=region, port=443)
+    sys_fabric = client.fabric(tenant='_mm', name='_system', username='root', password='passwd')
+    #Returns the list of details of Datacenters
+    sys_fabric.dclist_detail()
+
+   #--------------------------------------------------------------
    print("Create under demotenant, demofabric, demouser and assign permissions...")
    demotenant = client.tenant(name=demo_tenant, fabricname='_system', username='root', password='poweruser')
 
