@@ -64,10 +64,9 @@ Here is an example showing how **pyC8** client can be used:
 
    #--------------------------------------------------------------
    print("Create global & local streams in demofabric...")
-   fabric.create_stream(demo_stream, persistent=True, local=False)
-   fabric.create_stream(demo_stream, persistent=True, local=True)
-   fabric.create_stream(demo_stream, persistent=False, local=False)
-   fabric.create_stream(demo_stream, persistent=False, local=True)
+   fabric.create_stream(demo_stream, local=False)
+   fabric.create_stream(demo_stream, local=True)
+
    streams = fabric.streams()
    print("streams:", streams)
 
@@ -136,7 +135,7 @@ Example to **publish** documents to a stream:
   client = C8Client(protocol='https', host=region, port=443)
   fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
   stream = fabric.stream()
-  producer = stream.create_producer("demostream", persistent=True, local=False)
+  producer = stream.create_producer("demostream", local=False)
   for i in range(10):
       msg = "Hello from " + region + "("+ str(i) +")"
       producer.send(msg.encode('utf-8'))
@@ -159,7 +158,7 @@ Example to **subscribe** documents from a stream:
    client = C8Client(protocol='https', host=region, port=443)
    fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
    stream_collection = fabric.stream()
-   subscriber = stream_collection.subscribe("demostream", persistent=True, local=False, subscription_name="demosub", consumer_type= stream_collection.CONSUMER_TYPES.EXCLUSIVE)
+   subscriber = stream_collection.subscribe("demostream",local=False, subscription_name="demosub", consumer_type= stream_collection.CONSUMER_TYPES.EXCLUSIVE)
    #you can subscribe using consumer_types option.
    for i in range(10):
        msg = subscriber.receive()
@@ -173,7 +172,7 @@ Example: **stream management**:
 .. testcode::
 
     #get_stream_stats
-    stream_collection.get_stream_stats('demostream', persistent=True, local=False) #for global persistent stream
+    stream_collection.get_stream_stats('demostream', local=False) #for global persistent stream
 
     #Skip all messages on a stream subscription
     stream_collection.skip_all_messages_for_subscription('demostream', 'demosub')
@@ -207,7 +206,7 @@ Example: **stream management**:
     stream_collection.unsubscribe('demosub')
 
     #delete subscription of a stream
-    #stream_collection.delete_stream_subscription('demostream', 'demosub' ,persistent=True, local=False)
+    #stream_collection.delete_stream_subscription('demostream', 'demosub' , local=False)
 
 
 
