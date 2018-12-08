@@ -1405,7 +1405,7 @@ class Fabric(APIWrapper):
 
         # Persistent stream, let's terminate it instead.
         print("WARNING: Delete not yet implemented for persistent streams, calling terminate instead.")
-        return self.terminate_stream(stream=stream, persistent=self.persistent, local=local)
+        return self.terminate_stream(stream=stream, local=local)
 
         ######## HEY HEY DO THE ZOMBIE STOMP ########
         # KARTIK : 20181002 : Stream delete not supported. 
