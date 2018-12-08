@@ -1361,16 +1361,14 @@ class Fabric(APIWrapper):
         """
         Create the stream under the given fabric
         :param stream: name of stream
-        :param persistent: persistent flag (if it is set to True, the API creates persistent stream.
-        If it is set to False, API creates non-persistent stream)
         :param local: Operate on a local stream instead of a global one. Default value: false
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
         """
         if self.persistent:
             url_endpoint = '/streams/' + 'persistent/stream/{}?local={}'.format(stream, local)
-        else:
-            url_endpoint = '/streams/' + 'non-persistent/stream/{}?local={}'.format(stream, local)
+        # else:
+        #     url_endpoint = '/streams/' + 'non-persistent/stream/{}?local={}'.format(stream, local)
         request = Request(
             method='post',
             endpoint=url_endpoint
@@ -1391,8 +1389,6 @@ class Fabric(APIWrapper):
         """
         Delete the streams under the given fabric
         :param stream: name of stream
-        :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
-        If it is set to False, API deletes non-persistent stream)
         :param force:
         :param local: Operate on a local stream instead of a global one. Default value: false
         :return: 200, OK if operation successful
@@ -1448,20 +1444,18 @@ class Fabric(APIWrapper):
         """
         Terminate a stream. A stream that is terminated will not accept any more messages to be published and will let consumer to drain existing messages in backlog
         :param stream: name of stream
-        :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
-        If it is set to False, API deletes non-persistent stream)
         :param local: Operate on a local stream instead of a global one. Default value: false
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError: Dont have permission.
         """
         if self.persistent:
             url_endpoint = '/streams/persistent/stream/{}/terminate?local={}'.format(stream, local)
-        else:
-            # url_endpoint = '/streams/non-persistent/stream/{}/terminate?local={}'.format(stream, local)
-            # KARTIK : 20181002 : terminate not supported for nonpersistent
-            # streams. Just return 204 = No Content
-            print("WARNING: Nonpersistent streams cannot be terminated. Returning 204.")
-            return 204
+        # else:
+        #     # url_endpoint = '/streams/non-persistent/stream/{}/terminate?local={}'.format(stream, local)
+        #     # KARTIK : 20181002 : terminate not supported for nonpersistent
+        #     # streams. Just return 204 = No Content
+        #     print("WARNING: Nonpersistent streams cannot be terminated. Returning 204.")
+        #     return 204
 
         request = Request(
             method='post',
