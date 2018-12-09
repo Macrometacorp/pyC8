@@ -171,7 +171,7 @@ Example to **subscribe** documents from a stream:
    fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
    stream = fabric.stream()
    #you can subscribe using consumer_types option.
-   subscriber = stream.subscribe(collection="demostream", local=False, subscription_name="demosub", consumer_type= stream.CONSUMER_TYPES.EXCLUSIVE)
+   subscriber = stream.subscribe("demostream", local=False, subscription_name="demosub", consumer_type= stream.CONSUMER_TYPES.EXCLUSIVE)
    for i in range(10):
        msg = subscriber.receive()
        print("Received message '{}' id='{}'".format(msg.data(), msg.message_id()))
