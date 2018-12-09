@@ -81,13 +81,11 @@ Here is an overview example:
    print("Create global & local streams in demofabric...")
    fabric.create_stream(demo_stream, local=False)
    fabric.create_stream(demo_stream, local=True)
-   fabric.create_stream(demo_stream, local=False)
-   fabric.create_stream(demo_stream, local=True)
+
    streams = fabric.streams()
    print("streams:", streams)
 
    #--------------------------------------------------------------
-   #sys_tenant.delete_tenant(demo_tenant)
 
 ```
 
