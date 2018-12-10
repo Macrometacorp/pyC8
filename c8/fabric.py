@@ -74,6 +74,7 @@ class Fabric(APIWrapper):
         self.url=connection.url
         self.stream_port=connection.stream_port
         self.pulsar_client=None
+        self.persistent = True
         super(Fabric, self).__init__(connection, executor)
 
     def __getitem__(self, name):
@@ -130,7 +131,7 @@ class Fabric(APIWrapper):
         if self.tenant_name == "_mm":
             namespace = constants.STREAM_LOCAL_NS_PREFIX + self.fabric_name
 
-        topic = "non-persistent://" + self.tenant_name + "/" + namespace + "/" + collection
+        topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + collection
         subscription_name = self.tenant_name + "-" + self.fabric_name + "-subscription-" + str(random.randint(1, 1000))
         print("pyC8 Realtime: Subscribing to topic: "+ topic + " on Subscription name: "+subscription_name)
     
@@ -325,7 +326,7 @@ class Fabric(APIWrapper):
     #########################
 
     def dclist(self):
-        """Return the list of Datacenters
+        """Return the list of names of Datacenters
 
         :return: DC List.
         :rtype: [str | unicode ]
@@ -344,6 +345,26 @@ class Fabric(APIWrapper):
             for dc in resp.body:
                 dc_list.append(dc['name'])
             return dc_list
+
+        return self._execute(request, response_handler)
+
+    def dclist_detail(self):
+        """Return the list of details of Datacenters
+
+        :return: DC List.
+        :rtype: [str | unicode ]
+        :raise c8.exceptions.TenantListError: If retrieval fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/datacenter/all'
+        )
+
+        def response_handler(resp):
+            #print("dclist() : Response body: " + str(resp.body))
+            if not resp.is_success:
+                raise TenantDcListError(resp, request)
+            return resp.body
 
         return self._execute(request, response_handler)
 
@@ -1259,42 +1280,42 @@ class Fabric(APIWrapper):
         return self._execute(request, response_handler)
 
 
-    def nonpersistent_streams(self, local=False):
-        """Get list of all streams under given fabric
-
-        :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
-        If it is set to False, API deletes non-persistent stream)
-        :param local: Operate on a local stream instead of a global one. Default value: false
-        :return: List of streams under given fabric.
-        :rtype: json
-        :raise c8.exceptions.StreamListError: If retrieving streams fails.
-        """
-        url_endpoint = '/streams/non-persistent?local={}'.format(local)
-
-        request = Request(
-            method='get',
-            endpoint=url_endpoint
-        )
-
-        def response_handler(resp):
-            code = resp.status_code
-            if resp.is_success:
-                # NOTE: server API returns stream name as field 'topic' - we provide both here for user convenience
-                return [{
-                    'name': col['topic'],
-                    'topic': col['topic'],
-                    'local': col['local'],
-                    'db': col['db'],
-                    'tenant': col['tenant'],
-                    'type': StreamCollection.types[col['type']],
-                    'status': 'terminated' if 'terminated' in col else 'active',
-                } for col in map(dict, resp.body['result'])]
-                    
-            elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)
+    # def nonpersistent_streams(self, local=False):
+    #     """Get list of all streams under given fabric
+    #
+    #     :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
+    #     If it is set to False, API deletes non-persistent stream)
+    #     :param local: Operate on a local stream instead of a global one. Default value: false
+    #     :return: List of streams under given fabric.
+    #     :rtype: json
+    #     :raise c8.exceptions.StreamListError: If retrieving streams fails.
+    #     """
+    #     url_endpoint = '/streams/non-persistent?local={}'.format(local)
+    #
+    #     request = Request(
+    #         method='get',
+    #         endpoint=url_endpoint
+    #     )
+    #
+    #     def response_handler(resp):
+    #         code = resp.status_code
+    #         if resp.is_success:
+    #             # NOTE: server API returns stream name as field 'topic' - we provide both here for user convenience
+    #             return [{
+    #                 'name': col['topic'],
+    #                 'topic': col['topic'],
+    #                 'local': col['local'],
+    #                 'db': col['db'],
+    #                 'tenant': col['tenant'],
+    #                 'type': StreamCollection.types[col['type']],
+    #                 'status': 'terminated' if 'terminated' in col else 'active',
+    #             } for col in map(dict, resp.body['result'])]
+    #
+    #         elif code == 403:
+    #             raise ex.StreamPermissionError(resp, request)
+    #         raise ex.StreamConnectionError(resp, request)
+    #
+    #     return self._execute(request, response_handler)
 
 
     def has_stream(self, stream):
@@ -1322,34 +1343,32 @@ class Fabric(APIWrapper):
         return any(mystream['name'] == stream for mystream in self.persistent_streams(local))
         
 
-    def has_nonpersistent_stream(self, stream, local=False):
-        """ Check if the list of nonpersistent streams has a stream with the given name
-        and local setting.
+    # def has_nonpersistent_stream(self, stream, local=False):
+    #     """ Check if the list of nonpersistent streams has a stream with the given name
+    #     and local setting.
+    #
+    #     :param stream: The name of the stream for which to check in the list of nonpersistent streams
+    #     :type stream: str | unicode
+    #     :param local: if True, operate on a local stream instead of a global one. Default value: false
+    #     :type local: bool
+    #     :return: True=stream found; False=stream not found.
+    #     :rtype: bool
+    #     """
+    #     return any(mystream['name'] == stream for mystream in self.nonpersistent_streams(local))
 
-        :param stream: The name of the stream for which to check in the list of nonpersistent streams 
-        :type stream: str | unicode
-        :param local: if True, operate on a local stream instead of a global one. Default value: false
-        :type local: bool
-        :return: True=stream found; False=stream not found.
-        :rtype: bool
-        """
-        return any(mystream['name'] == stream for mystream in self.nonpersistent_streams(local))
 
-
-    def create_stream(self, stream, persistent=True, local=False):
+    def create_stream(self, stream, local=False):
         """
         Create the stream under the given fabric
         :param stream: name of stream
-        :param persistent: persistent flag (if it is set to True, the API creates persistent stream.
-        If it is set to False, API creates non-persistent stream)
         :param local: Operate on a local stream instead of a global one. Default value: false
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
         """
-        if persistent:
+        if self.persistent:
             url_endpoint = '/streams/' + 'persistent/stream/{}?local={}'.format(stream, local)
-        else:
-            url_endpoint = '/streams/' + 'non-persistent/stream/{}?local={}'.format(stream, local)
+        # else:
+        #     url_endpoint = '/streams/' + 'non-persistent/stream/{}?local={}'.format(stream, local)
         request = Request(
             method='post',
             endpoint=url_endpoint
@@ -1366,12 +1385,10 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def delete_stream(self, stream, persistent=True, force=False, local=False):
+    def delete_stream(self, stream, force=False, local=False):
         """
         Delete the streams under the given fabric
         :param stream: name of stream
-        :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
-        If it is set to False, API deletes non-persistent stream)
         :param force:
         :param local: Operate on a local stream instead of a global one. Default value: false
         :return: 200, OK if operation successful
@@ -1381,14 +1398,14 @@ class Fabric(APIWrapper):
         # We still have some issues to work through for stream deletion on the
         # pulsar side. So for v0.9.0 we only support terminate, and that too 
         # only for persistent streams.
-        if not persistent:
+        if not self.persistent:
             print("WARNING: Delete not yet implemented for nonpersistent streams. Returning 204. Stream will not be deleted.")
             # 204 = No Content
             return 204 
 
         # Persistent stream, let's terminate it instead.
         print("WARNING: Delete not yet implemented for persistent streams, calling terminate instead.")
-        return self.terminate_stream(stream=stream, persistent=persistent, local=local)
+        return self.terminate_stream(stream=stream, local=local)
 
         ######## HEY HEY DO THE ZOMBIE STOMP ########
         # KARTIK : 20181002 : Stream delete not supported. 
@@ -1423,24 +1440,22 @@ class Fabric(APIWrapper):
         #
         #return self._execute(request, response_handler)
 
-    def terminate_stream(self, stream, persistent=True, local=False):
+    def terminate_stream(self, stream,  local=False):
         """
         Terminate a stream. A stream that is terminated will not accept any more messages to be published and will let consumer to drain existing messages in backlog
         :param stream: name of stream
-        :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
-        If it is set to False, API deletes non-persistent stream)
         :param local: Operate on a local stream instead of a global one. Default value: false
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError: Dont have permission.
         """
-        if persistent:
+        if self.persistent:
             url_endpoint = '/streams/persistent/stream/{}/terminate?local={}'.format(stream, local)
-        else:
-            # url_endpoint = '/streams/non-persistent/stream/{}/terminate?local={}'.format(stream, local)
-            # KARTIK : 20181002 : terminate not supported for nonpersistent
-            # streams. Just return 204 = No Content
-            print("WARNING: Nonpersistent streams cannot be terminated. Returning 204.")
-            return 204
+        # else:
+        #     # url_endpoint = '/streams/non-persistent/stream/{}/terminate?local={}'.format(stream, local)
+        #     # KARTIK : 20181002 : terminate not supported for nonpersistent
+        #     # streams. Just return 204 = No Content
+        #     print("WARNING: Nonpersistent streams cannot be terminated. Returning 204.")
+        #     return 204
 
         request = Request(
             method='post',

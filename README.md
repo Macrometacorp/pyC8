@@ -79,15 +79,13 @@ Here is an overview example:
 
    #--------------------------------------------------------------
    print("Create global & local streams in demofabric...")
-   fabric.create_stream(demo_stream, persistent=True, local=False)
-   fabric.create_stream(demo_stream, persistent=True, local=True)
-   fabric.create_stream(demo_stream, persistent=False, local=False)
-   fabric.create_stream(demo_stream, persistent=False, local=True)
+   fabric.create_stream(demo_stream, local=False)
+   fabric.create_stream(demo_stream, local=True)
+
    streams = fabric.streams()
    print("streams:", streams)
 
    #--------------------------------------------------------------
-   #sys_tenant.delete_tenant(demo_tenant)
 
 ```
 
@@ -149,11 +147,11 @@ Example to **publish** documents to a stream:
   client = C8Client(protocol='https', host=region, port=443)
   fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
   stream = fabric.stream()
-  producer = stream.create_producer(collection="demostream", persistent=True, local=False)
+  producer = stream.create_producer(collection="demostream", local=False)
   for i in range(10):
       msg = "Hello from " + region + "("+ str(i) +")"
       producer.send(msg.encode('utf-8'))
-      time.sleep(10) #sec
+      time.sleep(10) # 10 sec
     
 ```
 
@@ -173,7 +171,7 @@ Example to **subscribe** documents from a stream:
    fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
    stream = fabric.stream()
    #you can subscribe using consumer_types option.
-   subscriber = stream.subscribe(collection="demostream", persistent=True, local=False, subscription_name="demosub", consumer_type= stream.CONSUMER_TYPES.EXCLUSIVE)
+   subscriber = stream.subscribe("demostream", local=False, subscription_name="demosub", consumer_type= stream.CONSUMER_TYPES.EXCLUSIVE)
    for i in range(10):
        msg = subscriber.receive()
        print("Received message '{}' id='{}'".format(msg.data(), msg.message_id()))
@@ -187,7 +185,7 @@ Example: **stream management**:
     
     stream_collection = fabric.stream()
     #get_stream_stats
-    stream_collection.get_stream_stats('demostream', persistent=True, local=False) #for global persistent stream
+    stream_collection.get_stream_stats('demostream', local=False) #for global persistent stream
 
     #Skip all messages on a stream subscription
     stream_collection.skip_all_messages_for_subscription('demostream', 'demosub')
@@ -221,7 +219,7 @@ Example: **stream management**:
     stream_collection.unsubscribe('demosub')
 
     #delete subscription of a stream
-    #stream_collection.delete_stream_subscription('demostream', 'demosub' ,persistent=True, local=False)
+    #stream_collection.delete_stream_subscription('demostream', 'demosub' , local=False)
 
 ```
 

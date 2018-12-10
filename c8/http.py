@@ -82,6 +82,7 @@ class DefaultHTTPClient(HTTPClient):
             headers=headers,
             auth=auth,
             verify=False,
+            timeout=60
         )
         return Response(
             method=raw_resp.request.method,
