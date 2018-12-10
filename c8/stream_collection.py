@@ -22,8 +22,7 @@ class StreamCollection(APIWrapper):
     """
 
     types = {
-        4: 'persistent',
-        5: 'nonpersistent'
+        4: 'persistent'
     }
 
     def enum(**enums):
