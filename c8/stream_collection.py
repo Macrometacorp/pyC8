@@ -306,6 +306,18 @@ class StreamCollection(APIWrapper):
             if not subscription_name:
                 subscription_name = self.tenant_name + "-" + self.fabric_name + "-subscription-" + str(random.randint(1,1000))
             
+            # KARTIK : 20181211 : Fix dangling consumer problem as mentioned in streams CPP client test code
+            # First open a dummy subscription with the same name, then close it. This will help recover the
+            # broker state in case a subscription with the same name was left hanging
+            try:
+                consumer =  self._client.subscribe(topic, subscription_name, consumer_type,
+                                            message_listener, receiver_queue_size, consumer_name,
+                                            unacked_messages_timeout_ms, broker_consumer_stats_cache_time_ms,
+                                            is_read_compacted)
+                consumer.close()
+            except Exception:
+                pass
+
             return self._client.subscribe(topic, subscription_name, consumer_type,
                                         message_listener, receiver_queue_size, consumer_name,
                                         unacked_messages_timeout_ms, broker_consumer_stats_cache_time_ms,

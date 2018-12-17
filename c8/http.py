@@ -8,6 +8,9 @@ import requests
 
 from c8.response import Response
 
+# KARTIK : 20181211 : C8Platform#166 : Remote disconnect issue.
+import socket
+from urllib3.connection import HTTPConnection
 
 class HTTPClient(object):  # pragma: no cover
     """Abstract base class for HTTP clients."""
@@ -43,12 +46,27 @@ class HTTPClient(object):  # pragma: no cover
         """
         raise NotImplementedError
 
+# KARTIK : 20181211 : C8Platform#166 : Remote disconnect issue.
+# See: https://github.com/joowani/python-arango/issues/30#issuecomment-333771027
+# Also see: https://github.com/requests/requests/issues/3808
+class KeepaliveAdapter(requests.adapters.HTTPAdapter):
+    def init_poolmanager(self, *args, **kwargs):
+        kwargs['socket_options'] = HTTPConnection.default_socket_options + [
+            (socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1),
+        ]
+        super(KeepaliveAdapter, self).init_poolmanager(*args, **kwargs)
+
 
 class DefaultHTTPClient(HTTPClient):
     """Default HTTP client implementation."""
 
     def __init__(self):
         self._session = requests.Session()
+        # KARTIK : 20181211 : C8Platform#166 : Implement keepalive adapter
+        adapter = KeepaliveAdapter()
+        adapter.max_retries = 5
+        self._session.mount('https://', adapter)
+        self._session.mount('http://', adapter)
 
     def send_request(self,
                      method,
@@ -74,6 +92,14 @@ class DefaultHTTPClient(HTTPClient):
         :returns: HTTP response.
         :rtype: c8.response.Response
         """
+        # KARTIK : C8Platform#166 : explicitly set a keep-alive header
+        if not headers:
+            headers = {"Connection":"keep-alive"}
+        else:
+            if 'Connection' in headers:
+                del headers["Connection"]
+            headers["Connection"] = "keep-alive"
+
         raw_resp = self._session.request(
             method=method,
             url=url,
@@ -82,8 +108,9 @@ class DefaultHTTPClient(HTTPClient):
             headers=headers,
             auth=auth,
             verify=False,
-            timeout=60
+            timeout=260
         )
+
         return Response(
             method=raw_resp.request.method,
             url=raw_resp.url,
