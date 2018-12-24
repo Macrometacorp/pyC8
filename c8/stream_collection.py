@@ -31,6 +31,12 @@ class StreamCollection(APIWrapper):
     CONSUMER_TYPES = enum(EXCLUSIVE=pulsar.ConsumerType.Exclusive, SHARED=pulsar.ConsumerType.Shared,
                           FAILOVER=pulsar.ConsumerType.Failover)
 
+    COMPRESSION_TYPES = enum(LZ4 = pulsar.CompressionType.LZ4, ZLIB = pulsar.CompressionType.ZLib, NONE = pulsar.CompressionType.NONE)
+
+    ROUTING_MODE = enum(SINGLE_PARTITION = pulsar.PartitionsRoutingMode.UseSinglePartition, ROUND_ROBIN_PARTITION = pulsar.PartitionsRoutingMode.RoundRobinDistribution,
+                        CUSTOM_PARTITION = pulsar.PartitionsRoutingMode.CustomPartition
+                        )
+
     def __init__(self, fabric, connection, executor, url, port,
                  operation_timeout_seconds,
                  ):
@@ -84,12 +90,12 @@ class StreamCollection(APIWrapper):
 
     def create_producer(self, stream, local=False, producer_name=None,
                         initial_sequence_id=None, send_timeout_millis=30000,
-                        compression_type=pulsar.CompressionType.NONE,
+                        compression_type=COMPRESSION_TYPES.NONE,
                         max_pending_messages=1000,
                         block_if_queue_full=False, batching_enabled=False,
                         batching_max_messages=1000, batching_max_allowed_size_in_bytes=131072,
                         batching_max_publish_delay_ms=10,
-                        message_routing_mode=pulsar.PartitionsRoutingMode.RoundRobinDistribution
+                        message_routing_mode= ROUTING_MODE.ROUND_ROBIN_PARTITION
                         ):
         """
            Create a new producer on a given stream.
