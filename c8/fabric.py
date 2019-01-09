@@ -127,9 +127,7 @@ class Fabric(APIWrapper):
         if not collection: 
             raise ValueError('You must specify a collection on which to watch for realtime data!')
 
-        namespace = constants.STREAM_LOCAL_NS_PREFIX + self.tenant_name + '.' + self.fabric_name
-        if self.tenant_name == "_mm":
-            namespace = constants.STREAM_LOCAL_NS_PREFIX + self.fabric_name
+        namespace = constants.STREAM_LOCAL_NS_PREFIX + self.fabric_name
 
         topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + collection
         subscription_name = self.tenant_name + "-" + self.fabric_name + "-subscription-" + str(random.randint(1, 1000))

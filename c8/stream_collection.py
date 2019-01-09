@@ -144,9 +144,8 @@ class StreamCollection(APIWrapper):
             if local:
                 type_constant = constants.STREAM_LOCAL_NS_PREFIX
 
-            namespace = type_constant + self.tenant_name + '.' + self.fabric_name
-            if self.tenant_name == "_mm":
-                namespace = type_constant + self.fabric_name
+            namespace = type_constant + self.fabric_name
+
             if self.persistent:
                 topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + stream
             # else:
@@ -220,9 +219,7 @@ class StreamCollection(APIWrapper):
             if local:
                 type_constant = constants.STREAM_LOCAL_NS_PREFIX
             
-            namespace = type_constant + self.tenant_name + self.fabric_name
-            if self.tenant_name == "_mm":
-                namespace = type_constant + self.fabric_name
+            namespace = type_constant + self.fabric_name
 
             if self.persistent:
                 topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + stream
@@ -300,9 +297,7 @@ class StreamCollection(APIWrapper):
             if local:
                 type_constant=constants.STREAM_LOCAL_NS_PREFIX
 
-            namespace = type_constant + self.tenant_name + '.' + self.fabric_name
-            if self.tenant_name == "_mm":
-                namespace = type_constant + self.fabric_name
+            namespace = type_constant + self.fabric_name
 
             if self.persistent:
                 topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + stream
