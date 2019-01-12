@@ -42,9 +42,9 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
     #Create a StreamCollection object to invoke stream management functions.
     stream_collection = sys_fabric.stream()
     
-    #Create producer for the given persistent and global/local stream that is created.
-    producer1 = stream_collection.create_producer('test-stream', local=False)
-    producer2 = stream_collection.create_producer('test-stream-1', local=True)
+    #Create producer for the given persistent and global/local stream that is created. You can override default compression types/routing modes as shown.
+    producer1 = stream_collection.create_producer('test-stream', local=False, compression_type = stream_collection.COMPRESSION_TYPES.LZ4)
+    producer2 = stream_collection.create_producer('test-stream-1', local=True, message_routing_mode= stream_collection.ROUTING_MODE.SINGLE_PARTITION)
     
     #send: publish/send a given message over stream in bytes.
     for i in range(10):
