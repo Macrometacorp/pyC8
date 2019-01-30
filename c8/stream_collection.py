@@ -79,7 +79,7 @@ class StreamCollection(APIWrapper):
         self.fabric = fabric
         dcl_local = self.fabric.dclist_local()
         self.persistent = True
-        self._server_url = 'pulsar://' + constants.PLUSAR_URL_PREFIX + dcl_local['tags']['url'] + ":" + str(port)
+        self._server_url = 'pulsar://' + dcl_local['tags']['url'] + ":" + str(port)
         self._client = pulsar.Client(self._server_url, operation_timeout_seconds=operation_timeout_seconds)
 
     def close(self):
