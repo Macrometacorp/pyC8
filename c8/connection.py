@@ -58,7 +58,7 @@ class Connection(object):
 
             # self._url_prefix = '{}/_fabric/{}'.format(url, self._fabric_name) # ORIG CODE
             #self._url_prefix = '{}/_fabric/tenant/{}/_fabric/{}'.format(url, self._tenant_name, self._fabric_name)
-            self._url_prefix = '{}/_tenant/{}/_fabric/{}'.format(url, self._tenant_name, self._fabric_name )
+            self._url_prefix = '{}/_tenant/{}/_fabric/{}'.format(url, self._tenant_name, self._fabric_name)
 
         else:
             # Handle the streams side of things
@@ -136,9 +136,18 @@ class Connection(object):
         """
         # Below line is a debug to show what the full request URL is. Useful in testing multitenancy API calls
         #print("KARTIK : CONN OBJECT : send_request called with URL: '"+self._url_prefix + request.endpoint+"'")
+        #POORVA: changed url-prefix because only admin has right to update spot-region in geo-fabric present in any non-mm tenant
+        if '_tenant' in request.endpoint and '_fabric' in request.endpoint:
+            find_url = self._url_prefix.find('/_tenant')
+            find_url += 1
+            url = self._url_prefix[0:find_url]
+            final_url = url + request.endpoint
+        else:
+            final_url = self._url_prefix + request.endpoint
+
         return self._http_client.send_request(
             method=request.method,
-            url=self._url_prefix + request.endpoint,
+            url=final_url,
             params=request.params,
             data=request.data,
             headers=request.headers,

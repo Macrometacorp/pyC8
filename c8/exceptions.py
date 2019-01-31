@@ -346,6 +346,9 @@ class FabricCreateError(C8ServerError):
 class FabricDeleteError(C8ServerError):
     """Failed to delete fabric."""
 
+class SpotRegionUpdateError(C8ServerError):
+    """Failed to update Spot Region"""
+
 #######################
 # Document Exceptions #
 #######################

@@ -70,6 +70,13 @@ class Fabric(APIWrapper):
     :type executor: c8.executor.Executor
     """
 
+    def enum(**enums):
+        return type('Enum', (), enums)
+
+    SPOT_CREATION_TYPES = enum(AUTOMATIC='automatic', NONE='none',
+                          SPOT_REGION='spot_region')
+
+
     def __init__(self, connection, executor):
         self.url=connection.url
         self.stream_port=connection.stream_port
@@ -257,6 +264,20 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
+    def update_spot_region(self,tenant, fabric, new_dc):
+        request = Request(
+            method='put',
+            endpoint='_tenant/{}/_fabric/{}/database/{}'.format(tenant,fabric, new_dc),
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise SpotRegionUpdateError(resp, request)
+            return True
+
+        return self._execute(request, response_handler)
+
+
     def fabrics_detail(self):
         request = Request(
             method='get',
@@ -420,11 +441,15 @@ class Fabric(APIWrapper):
         """
         return name in self.fabrics()
 
-    def create_fabric(self, name, users=None, dclist=None, realtime=False):
+    def create_fabric(self, name, spot_creation_types=SPOT_CREATION_TYPES.AUTOMATIC, spot_dc=None,users=None, dclist=None, realtime=False):
         """Create a new fabric.
 
         :param name: Fabric name.
         :type name: str | unicode
+        :param spot_creation_types: Specifying how to create spot collection
+        :type name: Enum contains spot region creation types
+        :param name: Spot Region name.
+        :type name: str
         :param users: List of users with access to the new fabric, where each
             user is a dictionary with fields "username", "password", "active"
             and "extra" (see below for example). If not set, only the admin and
@@ -469,7 +494,13 @@ class Fabric(APIWrapper):
                 dcl += dc
         options['dcList'] = dcl
 
+        if spot_creation_types == 'none':
+            options['spotDc'] = ''
+        elif spot_creation_types == 'spot_region' and spot_dc:
+            options['spotDc'] = spot_dc
+
         data['options'] = options
+
 
         request = Request(
             method='post',
@@ -481,7 +512,6 @@ class Fabric(APIWrapper):
             if not resp.is_success:
                 raise FabricCreateError(resp, request)
             return True
-
         return self._execute(request, response_handler)
 
     def delete_fabric(self, name, ignore_missing=False):
@@ -577,7 +607,9 @@ class Fabric(APIWrapper):
                           replication_factor=None,
                           shard_like=None,
                           sync_replication=None,
-                          enforce_replication_factor=None):
+                          enforce_replication_factor=None,
+                          spot_collection = False
+                          ):
         """Create a new collection.
 
         :param name: Collection name.
@@ -662,7 +694,8 @@ class Fabric(APIWrapper):
             'isSystem': system,
             'isVolatile': volatile,
             'keyOptions': key_options,
-            'type': 3 if edge else 2
+            'type': 3 if edge else 2,
+            'isSpot': spot_collection
         }
         if journal_size is not None:
             data['journalSize'] = journal_size

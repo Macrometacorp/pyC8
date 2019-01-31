@@ -1,5 +1,5 @@
 from __future__ import absolute_import, unicode_literals
-
+import json
 from c8.utils import get_col_name
 
 __all__ = ['Tenant']
@@ -297,6 +297,21 @@ class Tenant(APIWrapper):
             if not resp.is_success:
                 raise TenantDcListError(resp, request)
             return resp.body
+
+        return self._execute(request, response_handler)
+
+    def update_dc_spot(self,dc,spot_region=False):
+
+        data = json.dumps(spot_region)
+        request = Request(
+            method='put',
+            endpoint='/datacenter/{}/{}'.format(dc, data)
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise SpotRegionUpdateError(resp, request)
+            return True
 
         return self._execute(request, response_handler)
 
