@@ -349,6 +349,9 @@ class FabricDeleteError(C8ServerError):
 class SpotRegionUpdateError(C8ServerError):
     """Failed to update Spot Region"""
 
+class SpotRegionAssignError(C8ServerError):
+    """Fails to assign region as Spot Region"""
+
 #######################
 # Document Exceptions #
 #######################

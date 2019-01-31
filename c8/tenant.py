@@ -300,8 +300,16 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def update_dc_spot(self,dc,spot_region=False):
-
+    def assign_dc_spot(self,dc,spot_region=False):
+        """Assigns spot region of a fed
+                    :param: dc: dc name
+                    :type: str
+                    :param: spot_region: If True, makes the region a spot region
+                    :type: bool
+                    :return: True if request successful,false otherwise
+                    :rtype: bool
+                    :raise c8.exceptions.SpotRegionAssignError: If assignment fails.
+        """
         data = json.dumps(spot_region)
         request = Request(
             method='put',
@@ -310,7 +318,7 @@ class Tenant(APIWrapper):
 
         def response_handler(resp):
             if not resp.is_success:
-                raise SpotRegionUpdateError(resp, request)
+                raise SpotRegionAssignError(resp, request)
             return True
 
         return self._execute(request, response_handler)

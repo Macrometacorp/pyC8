@@ -265,6 +265,18 @@ class Fabric(APIWrapper):
         return self._execute(request, response_handler)
 
     def update_spot_region(self,tenant, fabric, new_dc):
+        """Updates spot primary region for the geo-fabric
+            :param: tenant: tenant name
+            :type: str
+            :param: fabric: fabric name
+            :type: str
+            :param: new_dc: New spot region
+            :type: str
+            :return: True if request successful,false otherwise
+            :rtype: bool
+            :raise c8.exceptions.SpotRegionUpdateError: If updation fails.
+        """
+
         request = Request(
             method='put',
             endpoint='_tenant/{}/_fabric/{}/database/{}'.format(tenant,fabric, new_dc),
@@ -448,7 +460,7 @@ class Fabric(APIWrapper):
         :type name: str | unicode
         :param spot_creation_types: Specifying how to create spot collection
         :type name: Enum contains spot region creation types
-        :param name: Spot Region name.
+        :param name: Spot Region name, if spot_creation_type is set to SPOT_REGION
         :type name: str
         :param users: List of users with access to the new fabric, where each
             user is a dictionary with fields "username", "password", "active"
@@ -677,6 +689,8 @@ class Fabric(APIWrapper):
         :param enforce_replication_factor: Check if there are enough replicas
             available at creation time, or halt the operation.
         :type enforce_replication_factor: bool
+        :param spot_collection: If True, it is a spot collection
+        :type bool
         :return: Standard collection API wrapper.
         :rtype: c8.collection.StandardCollection
         :raise c8.exceptions.CollectionCreateError: If create fails.
