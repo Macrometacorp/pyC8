@@ -287,11 +287,14 @@ client = C8Client(protocol='http', host='localhost', port=8529)
 #Step 1: Make one of the regions in the fed as the Spot Region
 # Connect to System admin 
 sys_tenant = client.tenant(name='_mm', fabricname='_system', username='root', password='poweruser')
+#Make REGION-1 as spot-region
 sys_tenant.assign_dc_spot('REGION-1',spot_region=True)
+
+#Make REGION-2 as spot-region
 sys_tenant.assign_dc_spot('REGION-2',spot_region=True)
 
 #Step 2: Create a geo-fabric and pass one of the spot regions. You can use the SPOT_CREATION_TYPES for the same. If you use AUTOMATIC, a random spot region will be assigned by the system.
-# If you specify None, a geo-fabric is created without the spot properties. If you specify spot region,pass the corresponding spot region spot_dc parameter.
+# If you specify None, a geo-fabric is created without the spot properties. If you specify spot region,pass the corresponding spot region in the spot_dc parameter.
 dcl = sys_tenant.dclist()
 fabric = client.fabric(tenant='guest', name='_system', username='root', password='guest')
 fabric.create_fabric('spot-geo-fabric', dclist=dcl,spot_creation_types= fabric.SPOT_CREATION_TYPES.SPOT_REGION, spot_dc='REGION-1')
