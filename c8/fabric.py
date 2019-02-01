@@ -143,9 +143,8 @@ class Fabric(APIWrapper):
             print("pyC8 Realtime: Initialized C8Streams connection to " + self.url + ":" + str(self.stream_port))
         else:
             dcl_local = self.dclist_local()
-            self.pulsar_client = pulsar.Client(
-                'pulsar://' + constants.PLUSAR_URL_PREFIX + dcl_local['tags']['url'] + ":" + str(self.stream_port))
-
+            self.pulsar_client = pulsar.Client('pulsar://' + dcl_local['tags']['url'] + ":" + str(self.stream_port))
+        
         consumer = self.pulsar_client.subscribe(topic, subscription_name)
 
         try:

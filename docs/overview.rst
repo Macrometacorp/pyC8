@@ -20,7 +20,7 @@ Here is an example showing how **pyC8** client can be used:
    #--------------------------------------------------------------
    print("Create demo tenant...")
    client = C8Client(protocol='https', host=region, port=443)
-   sys_tenant = client.tenant(name='_mm', fabricname='_system', username='root', password='poweruser')
+   sys_tenant = client.tenant(name='macrometa-admin', fabricname='_system', username='root', password='macrometa-password')
 
    if not sys_tenant.has_tenant(demo_tenant):
        sys_tenant.create_tenant(demo_tenant, passwd="poweruser")
@@ -29,7 +29,7 @@ Here is an example showing how **pyC8** client can be used:
 
     print("Connect to fabric and get details")
     client = C8Client(protocol='https', host=region, port=443)
-    sys_fabric = client.fabric(tenant='_mm', name='_system', username='root', password='passwd')
+    sys_fabric = client.fabric(tenant='macrometa-admin', name='_system', username='root', password='macrometa-password')
     #Returns the list of details of Datacenters
     sys_fabric.dclist_detail()
 
@@ -273,7 +273,7 @@ Workflow of **Spot Collections**
 
     #Step 1: Make one of the regions in the fed as the Spot Region
     # Connect to System admin
-    sys_tenant = client.tenant(name='_mm', fabricname='_system', username='root', password='poweruser')
+    sys_tenant = client.tenant(name='macrometa-admin', fabricname='_system', username='root', password='macrometa-password')
     #Make REGION-1 as spot-region
     sys_tenant.assign_dc_spot('REGION-1',spot_region=True)
 
@@ -290,6 +290,6 @@ Workflow of **Spot Collections**
     spot_collection = fabric.create_collection('spot-collection', spot_collection=True)
 
     #Step 4: Update Spot primary region of the geo-fabric. To change it, we need system admin credentials
-    sys_fabric = client.fabric(tenant='_mm', name='_system', username='root', password='poweruser')
+    sys_fabric = client.fabric(tenant='macrometa-admin', name='_system', username='root', password='macrometa-password')
     sys_fabric.update_spot_region('guest', 'spot-geo-fabric', 'REGION-2')
 
