@@ -31,6 +31,7 @@ from c8.exceptions import (
     UserListError,
     UserReplaceError,
     UserUpdateError,
+    SpotRegionAssignError
 )
 
 

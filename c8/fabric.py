@@ -41,6 +41,7 @@ from c8.exceptions import (
     ServerVersionError,
     TransactionExecuteError,
     TenantDcListError,
+    SpotRegionUpdateError
 )
 from c8 import exceptions as ex
 
