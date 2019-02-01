@@ -297,7 +297,7 @@ sys_tenant.assign_dc_spot('REGION-2',spot_region=True)
 # If you specify None, a geo-fabric is created without the spot properties. If you specify spot region,pass the corresponding spot region in the spot_dc parameter.
 dcl = sys_tenant.dclist()
 fabric = client.fabric(tenant='guest', name='_system', username='root', password='guest')
-fabric.create_fabric('spot-geo-fabric', dclist=dcl,spot_creation_types= fabric.SPOT_CREATION_TYPES.SPOT_REGION, spot_dc='REGION-1')
+fabric.create_fabric('spot-geo-fabric', dclist=dcl,spot_creation_type= fabric.SPOT_CREATION_TYPES.SPOT_REGION, spot_dc='REGION-1')
 
 #Step 3: Create spot collection in 'spot-geo-fabric'
 spot_collection = fabric.create_collection('spot-collection', spot_collection=True)
