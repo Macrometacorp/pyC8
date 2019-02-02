@@ -274,3 +274,36 @@ Here is another example with **graphs**:
         strategy='breadthfirst'
     )
 ```
+
+Workflow of **Spot Collections**
+
+```python
+
+from c8 import C8Client
+
+# Initialize the client for C8DB.
+client = C8Client(protocol='http', host='localhost', port=8529)
+
+#Step 1: Make one of the regions in the fed as the Spot Region
+# Connect to System admin 
+sys_tenant = client.tenant(name=macrometa-admin, fabricname='_system', username='root', password=macrometa-password)
+#Make REGION-1 as spot-region
+sys_tenant.assign_dc_spot('REGION-1',spot_region=True)
+
+#Make REGION-2 as spot-region
+sys_tenant.assign_dc_spot('REGION-2',spot_region=True)
+
+#Step 2: Create a geo-fabric and pass one of the spot regions. You can use the SPOT_CREATION_TYPES for the same. If you use AUTOMATIC, a random spot region will be assigned by the system.
+# If you specify None, a geo-fabric is created without the spot properties. If you specify spot region,pass the corresponding spot region in the spot_dc parameter.
+dcl = sys_tenant.dclist()
+fabric = client.fabric(tenant='guest', name='_system', username='root', password='guest')
+fabric.create_fabric('spot-geo-fabric', dclist=dcl,spot_creation_type= fabric.SPOT_CREATION_TYPES.SPOT_REGION, spot_dc='REGION-1')
+
+#Step 3: Create spot collection in 'spot-geo-fabric'
+spot_collection = fabric.create_collection('spot-collection', spot_collection=True)
+
+#Step 4: Update Spot primary region of the geo-fabric. To change it, we need system admin credentials
+sys_fabric = client.fabric(tenant=macrometa-admin, name='_system', username='root', password=macrometa-password)
+sys_fabric.update_spot_region('guest', 'spot-geo-fabric', 'REGION-2')
+
+```

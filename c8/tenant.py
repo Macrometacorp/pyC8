@@ -1,5 +1,5 @@
 from __future__ import absolute_import, unicode_literals
-
+import json
 from c8.utils import get_col_name
 
 __all__ = ['Tenant']
@@ -31,6 +31,7 @@ from c8.exceptions import (
     UserListError,
     UserReplaceError,
     UserUpdateError,
+    SpotRegionAssignError
 )
 
 
@@ -297,6 +298,29 @@ class Tenant(APIWrapper):
             if not resp.is_success:
                 raise TenantDcListError(resp, request)
             return resp.body
+
+        return self._execute(request, response_handler)
+
+    def assign_dc_spot(self,dc,spot_region=False):
+        """Assigns spot region of a fed
+                    :param: dc: dc name
+                    :type: str
+                    :param: spot_region: If True, makes the region a spot region
+                    :type: bool
+                    :return: True if request successful,false otherwise
+                    :rtype: bool
+                    :raise c8.exceptions.SpotRegionAssignError: If assignment fails.
+        """
+        data = json.dumps(spot_region)
+        request = Request(
+            method='put',
+            endpoint='/datacenter/{}/{}'.format(dc, data)
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise SpotRegionAssignError(resp, request)
+            return True
 
         return self._execute(request, response_handler)
 

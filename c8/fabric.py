@@ -41,6 +41,7 @@ from c8.exceptions import (
     ServerVersionError,
     TransactionExecuteError,
     TenantDcListError,
+    SpotRegionUpdateError
 )
 from c8 import exceptions as ex
 
@@ -70,10 +71,16 @@ class Fabric(APIWrapper):
     :type executor: c8.executor.Executor
     """
 
+    def enum(**enums):
+        return type('Enum', (), enums)
+
+    SPOT_CREATION_TYPES = enum(AUTOMATIC='automatic', NONE='none',
+                               SPOT_REGION='spot_region')
+
     def __init__(self, connection, executor):
-        self.url=connection.url
-        self.stream_port=connection.stream_port
-        self.pulsar_client=None
+        self.url = connection.url
+        self.stream_port = connection.stream_port
+        self.pulsar_client = None
         self.persistent = True
         super(Fabric, self).__init__(connection, executor)
 
@@ -124,17 +131,17 @@ class Fabric(APIWrapper):
         :param collections: Collection name or Collection names regex to listen for
         :type collections: str
         """
-        if not collection: 
+        if not collection:
             raise ValueError('You must specify a collection on which to watch for realtime data!')
 
         namespace = constants.STREAM_LOCAL_NS_PREFIX + self.fabric_name
 
         topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + collection
         subscription_name = self.tenant_name + "-" + self.fabric_name + "-subscription-" + str(random.randint(1, 1000))
-        print("pyC8 Realtime: Subscribing to topic: "+ topic + " on Subscription name: "+subscription_name)
-    
+        print("pyC8 Realtime: Subscribing to topic: " + topic + " on Subscription name: " + subscription_name)
+
         if self.pulsar_client:
-            print("pyC8 Realtime: Initialized C8Streams connection to "+ self.url + ":" + str(self.stream_port))
+            print("pyC8 Realtime: Initialized C8Streams connection to " + self.url + ":" + str(self.stream_port))
         else:
             dcl_local = self.dclist_local()
             self.pulsar_client = pulsar.Client('pulsar://' + dcl_local['tags']['url'] + ":" + str(self.stream_port))
@@ -142,12 +149,12 @@ class Fabric(APIWrapper):
         consumer = self.pulsar_client.subscribe(topic, subscription_name)
 
         try:
-            print("pyC8 Realtime: Begin monitoring realtime updates for "+topic)
+            print("pyC8 Realtime: Begin monitoring realtime updates for " + topic)
             while True:
                 msg = consumer.receive()
                 data = msg.data().decode('utf-8')
                 jdata = json.loads(data)
-                #self.consumer.acknowledge(msg)
+                # self.consumer.acknowledge(msg)
                 callback(jdata)
         finally:
             self.pulsar_client.close()
@@ -257,6 +264,31 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
+    def update_spot_region(self, tenant, fabric, new_dc):
+        """Updates spot primary region for the geo-fabric
+            :param: tenant: tenant name
+            :type: str
+            :param: fabric: fabric name
+            :type: str
+            :param: new_dc: New spot region
+            :type: str
+            :return: True if request successful,false otherwise
+            :rtype: bool
+            :raise c8.exceptions.SpotRegionUpdateError: If updation fails.
+        """
+
+        request = Request(
+            method='put',
+            endpoint='_tenant/{}/_fabric/{}/database/{}'.format(tenant, fabric, new_dc),
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise SpotRegionUpdateError(resp, request)
+            return True
+
+        return self._execute(request, response_handler)
+
     def fabrics_detail(self):
         request = Request(
             method='get',
@@ -267,12 +299,12 @@ class Fabric(APIWrapper):
             if not resp.is_success:
                 raise FabricListError(resp, request)
             return [{
-                'id': col['id'],
-                'name': col['name'],
-                'system': col['isSystem'],
-                'path': col['path'],
-                'options': col['options']
-        } for col in map(dict, resp.body['result'])]
+                        'id': col['id'],
+                        'name': col['name'],
+                        'system': col['isSystem'],
+                        'path': col['path'],
+                        'options': col['options']
+                    } for col in map(dict, resp.body['result'])]
 
         return self._execute(request, response_handler)
 
@@ -336,7 +368,7 @@ class Fabric(APIWrapper):
         )
 
         def response_handler(resp):
-            #print("dclist() : Response body: " + str(resp.body))
+            # print("dclist() : Response body: " + str(resp.body))
             if not resp.is_success:
                 raise TenantDcListError(resp, request)
             dc_list = []
@@ -359,7 +391,7 @@ class Fabric(APIWrapper):
         )
 
         def response_handler(resp):
-            #print("dclist() : Response body: " + str(resp.body))
+            # print("dclist() : Response body: " + str(resp.body))
             if not resp.is_success:
                 raise TenantDcListError(resp, request)
             return resp.body
@@ -379,13 +411,12 @@ class Fabric(APIWrapper):
         )
 
         def response_handler(resp):
-            #print("dclist() : Response body: " + str(resp.body))
+            # print("dclist() : Response body: " + str(resp.body))
             if not resp.is_success:
                 raise TenantDcListError(resp, request)
             return resp.body
 
         return self._execute(request, response_handler)
-
 
     #######################
     # Fabric Management #
@@ -420,11 +451,19 @@ class Fabric(APIWrapper):
         """
         return name in self.fabrics()
 
-    def create_fabric(self, name, users=None, dclist=None, realtime=False):
+    def create_fabric(self, name, spot_creation_type=SPOT_CREATION_TYPES.AUTOMATIC, spot_dc=None, users=None,
+                      dclist=None, realtime=False):
         """Create a new fabric.
 
         :param name: Fabric name.
         :type name: str | unicode
+        :param spot_creation_type: Specifying the mode of creating geo-fabric.If you use AUTOMATIC, a random spot region
+                                   will be assigned by the system. If you specify NONE, a geo-fabric is created without
+                                   the spot properties. If you specify SPOT_REGION,pass the corresponding spot region in
+                                   the spot_dc parameter.
+        :type name: Enum containing spot region creation types
+        :param name: Spot Region name, if spot_creation_type is set to SPOT_REGION
+        :type name: str
         :param users: List of users with access to the new fabric, where each
             user is a dictionary with fields "username", "password", "active"
             and "extra" (see below for example). If not set, only the admin and
@@ -452,11 +491,11 @@ class Fabric(APIWrapper):
         data = {'name': name}
         if users is not None:
             data['users'] = [{
-                'username': user['username'],
-                'passwd': user['password'],
-                'active': user.get('active', True),
-                'extra': user.get('extra', {})
-            } for user in users]
+                                 'username': user['username'],
+                                 'passwd': user['password'],
+                                 'active': user.get('active', True),
+                                 'extra': user.get('extra', {})
+                             } for user in users]
 
         options = {}
         options['realTime'] = realtime
@@ -468,6 +507,11 @@ class Fabric(APIWrapper):
                     dcl += ','
                 dcl += dc
         options['dcList'] = dcl
+
+        if spot_creation_type == self.SPOT_CREATION_TYPES.NONE:
+            options['spotDc'] = ''
+        elif spot_creation_type == self.SPOT_CREATION_TYPES.SPOT_REGION and spot_dc:
+            options['spotDc'] = spot_dc
 
         data['options'] = options
 
@@ -550,12 +594,12 @@ class Fabric(APIWrapper):
             if not resp.is_success:
                 raise CollectionListError(resp, request)
             return [{
-                'id': col['id'],
-                'name': col['name'],
-                'system': col['isSystem'],
-                'type': StandardCollection.types[col['type']],
-                'status': StandardCollection.statuses[col['status']],
-            } for col in map(dict, resp.body['result'])]
+                        'id': col['id'],
+                        'name': col['name'],
+                        'system': col['isSystem'],
+                        'type': StandardCollection.types[col['type']],
+                        'status': StandardCollection.statuses[col['status']],
+                    } for col in map(dict, resp.body['result'])]
 
         return self._execute(request, response_handler)
 
@@ -577,7 +621,9 @@ class Fabric(APIWrapper):
                           replication_factor=None,
                           shard_like=None,
                           sync_replication=None,
-                          enforce_replication_factor=None):
+                          enforce_replication_factor=None,
+                          spot_collection=False
+                          ):
         """Create a new collection.
 
         :param name: Collection name.
@@ -645,6 +691,8 @@ class Fabric(APIWrapper):
         :param enforce_replication_factor: Check if there are enough replicas
             available at creation time, or halt the operation.
         :type enforce_replication_factor: bool
+        :param spot_collection: If True, it is a spot collection
+        :type bool
         :return: Standard collection API wrapper.
         :rtype: c8.collection.StandardCollection
         :raise c8.exceptions.CollectionCreateError: If create fails.
@@ -662,7 +710,8 @@ class Fabric(APIWrapper):
             'isSystem': system,
             'isVolatile': volatile,
             'keyOptions': key_options,
-            'type': 3 if edge else 2
+            'type': 3 if edge else 2,
+            'isSpot': spot_collection
         }
         if journal_size is not None:
             data['journalSize'] = journal_size
@@ -782,11 +831,11 @@ class Fabric(APIWrapper):
                             'to_vertex_collections': definition['to'],
                         }
                         for definition in body['edgeDefinitions']
-                    ],
+                        ],
                     'shard_count': body.get('numberOfShards'),
                     'replication_factor': body.get('replicationFactor')
                 } for body in resp.body['graphs']
-            ]
+                ]
 
         return self._execute(request, response_handler)
 
@@ -841,10 +890,10 @@ class Fabric(APIWrapper):
         data = {'name': name}
         if edge_definitions is not None:
             data['edgeDefinitions'] = [{
-                'collection': definition['edge_collection'],
-                'from': definition['from_vertex_collections'],
-                'to': definition['to_vertex_collections']
-            } for definition in edge_definitions]
+                                           'collection': definition['edge_collection'],
+                                           'from': definition['from_vertex_collections'],
+                                           'to': definition['to_vertex_collections']
+                                       } for definition in edge_definitions]
         if orphan_collections is not None:
             data['orphanCollections'] = orphan_collections
         if smart is not None:  # pragma: no cover
@@ -1120,7 +1169,6 @@ class Fabric(APIWrapper):
             silent=silent
         )
 
-
     ###################
     # User Management #
     ###################
@@ -1223,26 +1271,26 @@ class Fabric(APIWrapper):
             method='get',
             endpoint=url_endpoint
         )
-        
+
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
                 # NOTE: server API returns stream name as field 'topic' - we provide both here for user convenience
                 return [{
-                    'name': col['topic'],
-                    'topic': col['topic'],
-                    'local': col['local'],
-                    'db': col['db'],
-                    'tenant': col['tenant'],
-                    'type': StreamCollection.types[col['type']],
-                    'status': 'terminated' if 'terminated' in col else 'active',
-                } for col in map(dict, resp.body['result'])]
+                            'name': col['topic'],
+                            'topic': col['topic'],
+                            'local': col['local'],
+                            'db': col['db'],
+                            'tenant': col['tenant'],
+                            'type': StreamCollection.types[col['type']],
+                            'status': 'terminated' if 'terminated' in col else 'active',
+                        } for col in map(dict, resp.body['result'])]
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
-        
+
         return self._execute(request, response_handler)
- 
+
     def persistent_streams(self, local=False):
         """Get list of all streams under given fabric
 
@@ -1263,20 +1311,19 @@ class Fabric(APIWrapper):
             if resp.is_success:
                 # NOTE: server API returns stream name as field 'topic' - we provide both here for user convenience
                 return [{
-                    'name': col['topic'],
-                    'topic': col['topic'],
-                    'local': col['local'],
-                    'db': col['db'],
-                    'tenant': col['tenant'],
-                    'type': StreamCollection.types[col['type']],
-                    'status': 'terminated' if 'terminated' in col else 'active',
-                } for col in map(dict, resp.body['result'])]
+                            'name': col['topic'],
+                            'topic': col['topic'],
+                            'local': col['local'],
+                            'db': col['db'],
+                            'tenant': col['tenant'],
+                            'type': StreamCollection.types[col['type']],
+                            'status': 'terminated' if 'terminated' in col else 'active',
+                        } for col in map(dict, resp.body['result'])]
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-
 
     # def nonpersistent_streams(self, local=False):
     #     """Get list of all streams under given fabric
@@ -1326,7 +1373,6 @@ class Fabric(APIWrapper):
         """
         return any(mystream['name'] == stream for mystream in self.streams())
 
-
     def has_persistent_stream(self, stream, local=False):
         """ Check if the list of persistent streams has a stream with the given name
         and local setting.
@@ -1339,7 +1385,6 @@ class Fabric(APIWrapper):
         :rtype: bool
         """
         return any(mystream['name'] == stream for mystream in self.persistent_streams(local))
-        
 
     # def has_nonpersistent_stream(self, stream, local=False):
     #     """ Check if the list of nonpersistent streams has a stream with the given name
@@ -1397,11 +1442,12 @@ class Fabric(APIWrapper):
         # pulsar side. So for v0.9.0 we only support terminate, and that too 
         # only for persistent streams.
         if not self.persistent:
-            print("WARNING: Delete not yet implemented for nonpersistent streams. Returning 204. Stream will not be deleted.")
+            print(
+                "WARNING: Delete not yet implemented for nonpersistent streams. Returning 204. Stream will not be deleted.")
             # 204 = No Content
-            return 204 
+            return 204
 
-        # Persistent stream, let's terminate it instead.
+            # Persistent stream, let's terminate it instead.
         print("WARNING: Delete not yet implemented for persistent streams, calling terminate instead.")
         return self.terminate_stream(stream=stream, local=local)
 
@@ -1412,21 +1458,21 @@ class Fabric(APIWrapper):
         # Below code is dead code for the moment, until delete stream is 
         # implemented on the server side. Consider it to be "#if 0"-ed out :-)
         # (why, yes indeed, that was a C reference)
-        #if force and persistent:
+        # if force and persistent:
         #    url_endpoint = '/streams/persistent/stream/{}?force=true&local={}'.format(stream, local)
-        #elif force and not persistent:
+        # elif force and not persistent:
         #    url_endpoint = '/streams/non-persistent/stream/{}?force=true&local={}'.format(stream, local)
-        #elif not force and persistent:
+        # elif not force and persistent:
         #    url_endpoint = '/streams/persistent/stream/{}?local={}'.format(stream, local)
-        #elif not force and not persistent:
+        # elif not force and not persistent:
         #    url_endpoint = '/streams/non-persistent/stream/{}?local={}'.format(stream, local)
         #
-        #request = Request(
+        # request = Request(
         #    method='delete',
         #    endpoint=url_endpoint
-        #)
+        # )
         #
-        #def response_handler(resp):
+        # def response_handler(resp):
         #    code = resp.status_code
         #    if resp.is_success:
         #        return resp.body['result']
@@ -1436,9 +1482,9 @@ class Fabric(APIWrapper):
         #        raise ex.StreamDeleteError(resp, request)
         #    raise ex.StreamConnectionError(resp, request)
         #
-        #return self._execute(request, response_handler)
+        # return self._execute(request, response_handler)
 
-    def terminate_stream(self, stream,  local=False):
+    def terminate_stream(self, stream, local=False):
         """
         Terminate a stream. A stream that is terminated will not accept any more messages to be published and will let consumer to drain existing messages in backlog
         :param stream: name of stream
@@ -1702,4 +1748,3 @@ class TransactionFabric(Fabric):
         :raise c8.exceptions.TransactionExecuteError: If commit fails.
         """
         return self._executor.commit()
-
