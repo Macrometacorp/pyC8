@@ -46,7 +46,7 @@ fabrics to which the users have been given read/write access.
     # The fabric will be replicated to all Fabric Edge Locations specified in the 'dclist' param.
     # The 'demouser' tenant user created above will be given read permissions to the fabric.
     if not sys_fabric.has_fabric('demofabric'):
-        sys_fabric.create_fabric('demofabric', dclist=dcl, users=[{'username':'demouser','password':'demo_pass','active':True}],realtime=True)
+        sys_fabric.create_fabric('demofabric', dclist=dcl, users=[{'username':'demouser','password':'demo_pass','active':True}])
 
     # Delete a fabric. This operation can only be performed by the tenant admin.
     sys_fabric.delete_fabric('demofabric')

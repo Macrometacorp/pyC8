@@ -8,10 +8,6 @@ For each tenant, there is a special fabric named ``_system``, which cannot be dr
 Each fabric in the C8 Fabric can be replicated to one or more additional edge Locations in the fabric. If a change is made to such a replicated fabric in one edge Location, that change will be automatically propagated to, and visible in, all other
 Edge Locations to which that fabric has been replicated.
 
-Each fabric in the C8 Fabric can be set to publish changes in realtime
-to any clients which are connected to that fabric. 
-
-If the ``Realtime`` option is enabled for a fabric, then any clients with connections to that fabric will receive changes via a ``push-based`` mechanism rather than having to continuously poll the fabric for any changes which may have occurred. This python driver can listen in realtime to changes in a realtime-enabled fabric by calling the ``fabric.on_change()`` function for the fabric referred to by the ``fabric`` object.
 
 **Example:**
 
@@ -74,9 +70,9 @@ If the ``Realtime`` option is enabled for a fabric, then any clients with connec
     dcl = tennt.dclist()
 
     # Create a new fabric which is replicated to all Fabric Edge Locations,
-    # and also enable realtime updates on this fabric.
+
     # Only the tenant admin can perform this action.
-    sys_fabric.create_fabric('demofabric', dclist=dcl, realtime=True)
+    sys_fabric.create_fabric('demofabric', dclist=dcl)
 
 
 See :ref:`C8Client` and :ref:`StandardFabric` for API specification.
