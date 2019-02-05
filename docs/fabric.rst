@@ -8,6 +8,7 @@ For each tenant, there is a special fabric named ``_system``, which cannot be dr
 Each fabric in the C8 Fabric can be replicated to one or more additional edge Locations in the fabric. If a change is made to such a replicated fabric in one edge Location, that change will be automatically propagated to, and visible in, all other
 Edge Locations to which that fabric has been replicated.
 
+Each fabric in the C8 Fabric can publish changes in realtime to any clients which are connected to that fabric. Any clients with connections to that fabric will receive changes via a push-based mechanism rather than having to continuously poll the fabric for any changes which may have occurred. This python driver can listen in realtime to changes in fabric by calling the ``fabric.on_change()`` method for the fabric referred to by the ``fabric`` object.
 
 **Example:**
 
