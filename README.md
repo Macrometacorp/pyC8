@@ -54,7 +54,7 @@ Here is an overview example:
      demotenant.create_user(username=demo_user, password='demouser', active=True)
 
    if not demotenant.has_fabric(demo_fabric):
-     demotenant.create_fabric(name=demo_fabric, dclist=demotenant.dclist(), realtime=True)
+     demotenant.create_fabric(name=demo_fabric, dclist=demotenant.dclist())
 
    demotenant.update_permission(username=demo_user, permission='rw', fabric=demo_fabric)
 

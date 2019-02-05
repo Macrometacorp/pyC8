@@ -357,7 +357,7 @@ class Tenant(APIWrapper):
         """
         return name in self.fabrics()
 
-    def create_fabric(self, name, users=None, dclist=None, realtime=False):
+    def create_fabric(self, name, users=None, dclist=None):
         """Create a new fabric.
 
         :param name: Fabric name.
@@ -369,8 +369,6 @@ class Tenant(APIWrapper):
         :type users: [dict]
         :param dclist : list of strings of datacenters
         :type dclist: [str | unicode]
-        :param realtime: Whether or not the DB is realtime-enabled.
-        :type realtime: bool
         :return: True if fabric was created successfully.
         :rtype: bool
         :raise c8.exceptions.FabricCreateError: If create fails.
@@ -396,7 +394,6 @@ class Tenant(APIWrapper):
             } for user in users]
 
         options = {}
-        options['realTime'] = realtime
 
         if dclist:
             # Process dclist param (type list) to build up comma-separated string of DCs
