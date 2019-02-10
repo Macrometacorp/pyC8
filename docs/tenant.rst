@@ -1,25 +1,15 @@
 Tenants
 ---------
 
-The C8 Global Edge Fabric follows a multitenancy model. A tenant is a group of users who share a common
-isolated enviroment within the Edge Data Fabric, and one tenant cannot access the information of another.
+The C8 Global Edge Fabric follows a multitenancy model. A tenant is a group of users who share a common isolated enviroment within the Edge Data Fabric, and one tenant cannot access the information of another.
 
-Each tenant has a tenant admin called *root* who has privileges to create fabrics, users, and streams 
-within that tenant.
-The tenant admin can create users and fabrics within that tenant, and can define different privileges 
-for each tenant user for the fabrics, collections and other information contained within the tenant.
+Each tenant has a tenant admin called *root* who has privileges to create fabrics, users, and streams within that tenant. The tenant admin can create users and fabrics within that tenant, and can define different privileges for each tenant user for the fabrics, collections and other information contained within the tenant.
 
-Note that tenants **can only be created and deleted by the Macrometa superadmin.** 
-A tenant admin cannot create, delete or access other tenants.
+Note that tenants **can only be created and deleted by the Macrometa superadmin.** A tenant admin cannot create, delete or access other tenants.
 
-Each tenant on the C8 Data Fabric server can have an arbitrary number of :doc:`fabrics <fabric>`.
-Each tenant fabric has its own set of :doc:`collections <collection>` and :doc:`graphs <graph>`.
-For each tenant, There is a special fabric named ``_system``, which cannot be dropped and which
-provides operations for managing users, permissions and other fabrics. 
+Each tenant on the C8 Data Fabric server can have an arbitrary number of :doc:`fabrics <fabric>`. Each tenant fabric has its own set of :doc:`collections <collection>` and :doc:`graphs <graph>`. For each tenant, There is a special fabric named ``_system``, which cannot be dropped and which provides operations for managing users, permissions and other fabrics. 
 
-These operations can only be executed by the tenant admin. Tenant users who have been given the
-relevant access privileges by the tenant admin may create collections and documents within tenant
-fabrics to which the users have been given read/write access.
+These operations can only be executed by the tenant admin. Tenant users who have been given the relevant access privileges by the tenant admin may create collections and documents within tenant fabrics to which the users have been given read/write access.
 
 **Example:**
 
