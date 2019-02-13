@@ -174,7 +174,7 @@ class Fabric(APIWrapper):
         def response_handler(resp):
             if not resp.is_success:
                 raise FabricPropertiesError(resp, request)
-            result = resp.body['result']
+            result = resp.body['result']['options']
             result['system'] = result.pop('isSystem')
             return result
 
@@ -299,10 +299,7 @@ class Fabric(APIWrapper):
             if not resp.is_success:
                 raise FabricListError(resp, request)
             return [{
-                        'id': col['id'],
                         'name': col['name'],
-                        'system': col['isSystem'],
-                        'path': col['path'],
                         'options': col['options']
                     } for col in map(dict, resp.body['result'])]
 
