@@ -174,7 +174,7 @@ class Fabric(APIWrapper):
         def response_handler(resp):
             if not resp.is_success:
                 raise FabricPropertiesError(resp, request)
-            result = resp.body['result']['options']
+            result = resp.body['result']
             result['system'] = result.pop('isSystem')
             return result
 
