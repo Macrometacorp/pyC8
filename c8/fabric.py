@@ -793,8 +793,6 @@ class Fabric(APIWrapper):
                      name,
                      edge_definitions=None,
                      orphan_collections=None,
-                     smart=None,
-                     smart_field=None,
                      shard_count=None):
         """Create a new graph.
 
@@ -808,15 +806,6 @@ class Fabric(APIWrapper):
         :param orphan_collections: Names of additional vertex collections that
             are not in edge definitions.
         :type orphan_collections: [str | unicode]
-        :param smart: If set to True, sharding is enabled (see parameter
-            **smart_field** below). Applies only to enterprise version of
-            C8Db.
-        :type smart: bool
-        :param smart_field: Document field used to shard the vertices of the
-            graph. To use this, parameter **smart** must be set to True and
-            every vertex in the graph must have the smart field. Applies only
-            to enterprise version of C8Db.
-        :type smart_field: str | unicode
         :param shard_count: Number of shards used for every collection in the
             graph. To use this, parameter **smart** must be set to True and
             every vertex in the graph must have the smart field. This number
@@ -846,10 +835,6 @@ class Fabric(APIWrapper):
                                        } for definition in edge_definitions]
         if orphan_collections is not None:
             data['orphanCollections'] = orphan_collections
-        if smart is not None:  # pragma: no cover
-            data['isSmart'] = smart
-        if smart_field is not None:  # pragma: no cover
-            data['smartGraphAttribute'] = smart_field
         if shard_count is not None:  # pragma: no cover
             data['numberOfShards'] = shard_count
 
