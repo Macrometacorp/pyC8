@@ -35,8 +35,8 @@ Here is an overview example:
    import warnings
    warnings.filterwarnings("ignore")
 
-   region = "qa1-us-east-1.ops.aws.macrometa.io"
-   demo_tenant = "demotenant"
+   region = "qa1-us-east-1.eng2.macrometa.io"
+   demo_tenant = "demo"
    demo_fabric = "demofabric"
    demo_user = "demouser"
    demo_collection = "employees"
@@ -48,7 +48,7 @@ Here is an overview example:
 
    #--------------------------------------------------------------
    print("Create under demotenant, demofabric, demouser and assign permissions...")
-   demotenant = client.tenant(name=demo_tenant, fabricname='_system', username='root', password='poweruser')
+   demotenant = client.tenant(name=demo_tenant, fabricname='_system', username='root', password='demo')
 
    if not demotenant.has_user(demo_user):
      demotenant.create_user(username=demo_user, password='demouser', active=True)
