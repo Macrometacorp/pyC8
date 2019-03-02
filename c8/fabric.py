@@ -666,7 +666,6 @@ class Fabric(APIWrapper):
         data = {
             'name': name,
             'waitForSync': sync,
-            'isSystem': system,
             'keyOptions': key_options,
             'type': 3 if edge else 2,
             'isSpot': spot_collection
