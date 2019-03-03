@@ -129,23 +129,9 @@ class C8QL(APIWrapper):
     def execute(self,
                 query,
                 count=False,
-                batch_size=None,
-                ttl=None,
                 bind_vars=None,
-                full_count=None,
-                max_plans=None,
-                optimizer_rules=None,
                 cache=None,
-                memory_limit=0,
-                fail_on_warning=None,
-                profile=None,
-                max_transaction_size=None,
-                max_warning_count=None,
-                intermediate_commit_count=None,
-                intermediate_commit_size=None,
-                satellite_sync_wait=None,
-                read_collections=None,
-                write_collections=None):
+                profile=None):
         """Execute the query and return the result cursor.
 
         :param query: Query to execute.
@@ -153,101 +139,27 @@ class C8QL(APIWrapper):
         :param count: If set to True, the total document count is included in
             the result cursor.
         :type count: bool
-        :param batch_size: Number of documents fetched by the cursor in one
-            round trip.
-        :type batch_size: int
-        :param ttl: Server side time-to-live for the cursor in seconds.
-        :type ttl: int
         :param bind_vars: Bind variables for the query.
         :type bind_vars: dict
-        :param full_count: This parameter applies only to queries with LIMIT
-            clauses. If set to True, the number of matched documents before
-            the last LIMIT clause executed is included in teh cursor. This is
-            similar to MySQL SQL_CALC_FOUND_ROWS hint. Using this disables a
-            few LIMIT optimizations and may lead to a longer query execution.
-        :type full_count: bool
-        :param max_plans: Max number of plans the optimizer generates.
-        :type max_plans: int
-        :param optimizer_rules: List of optimizer rules.
-        :type optimizer_rules: [str | unicode]
         :param cache: If set to True, the query cache is used. The operation
             mode of the query cache must be set to "on" or "demand".
         :type cache: bool
-        :param memory_limit: Max amount of memory the query is allowed to use
-            in bytes. If the query goes over the limit, it fails with error
-            "resource limit exceeded". Value 0 indicates no limit.
-        :type memory_limit: int
-        :param fail_on_warning: If set to True, the query throws an exception
-            instead of producing a warning. This parameter can be used during
-            development to catch issues early. If set to False, warnings are
-            returned with the query result. There is a server configuration
-            option "--query.fail-on-warning" for setting the default value for
-            this behaviour so it does not need to be set per-query.
-        :type fail_on_warning: bool
         :param profile: Return additional profiling details in the cursor,
             unless the query cache is used.
         :type profile: bool
-        :param max_transaction_size: Transaction size limit in bytes. Applies
-            only to RocksDB storage engine.
-        :type max_transaction_size: int
-        :param max_warning_count: Max number of warnings returned.
-        :type max_warning_count: int
-        :param intermediate_commit_count: Max number of operations after
-            which an intermediate commit is performed automatically. Applies
-            only to RocksDB storage engine.
-        :type intermediate_commit_count: int
-        :param intermediate_commit_size: Max size of operations in bytes after
-            which an intermediate commit is performed automatically. Applies
-            only to RocksDB storage engine.
-        :type intermediate_commit_size: int
-        :param satellite_sync_wait: Number of seconds in which the server must
-            synchronize the satellite collections involved in the query. When
-            the threshold is reached, the query is stopped. Applies only to
-            enterprise version of C8Db.
-        :type satellite_sync_wait: int | float
-        :param read_collections: Names of collections read during query
-            execution. Required for :doc:`transactions <transaction>`.
-        :type read_collections: [str | unicode]
-        :param write_collections: Names of collections written to during query
-            execution. Required for :doc:`transactions <transaction>`.
-        :type write_collections: [str | unicode]
         :return: Result cursor.
         :rtype: c8.cursor.Cursor
         :raise c8.exceptions.C8QLQueryExecuteError: If execute fails.
         """
         data = {'query': query, 'count': count}
-        if batch_size is not None:
-            data['batchSize'] = batch_size
-        if ttl is not None:
-            data['ttl'] = ttl
         if bind_vars is not None:
             data['bindVars'] = bind_vars
         if cache is not None:
             data['cache'] = cache
-        if memory_limit is not None:
-            data['memoryLimit'] = memory_limit
 
         options = {}
-        if full_count is not None:
-            options['fullCount'] = full_count
-        if max_plans is not None:
-            options['maxNumberOfPlans'] = max_plans
-        if optimizer_rules is not None:
-            options['optimizer'] = {'rules': optimizer_rules}
-        if fail_on_warning is not None:
-            options['failOnWarning'] = fail_on_warning
         if profile is not None:
             options['profile'] = profile
-        if max_transaction_size is not None:
-            options['maxTransactionSize'] = max_transaction_size
-        if max_warning_count is not None:
-            options['maxWarningCount'] = max_warning_count
-        if intermediate_commit_count is not None:
-            options['intermediateCommitCount'] = intermediate_commit_count
-        if intermediate_commit_size is not None:
-            options['intermediateCommitSize'] = intermediate_commit_size
-        if satellite_sync_wait is not None:
-            options['satelliteSyncWait'] = satellite_sync_wait
         if options:
             data['options'] = options
         data.update(options)
@@ -262,9 +174,7 @@ class C8QL(APIWrapper):
             method='post',
             endpoint='/cursor',
             data=data,
-            command=command,
-            read=read_collections,
-            write=write_collections
+            command=command
         )
 
         def response_handler(resp):
@@ -352,81 +262,6 @@ class C8QL(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def functions(self):
-        """List the C8QL functions defined in the fabric.
-
-        :return: Mapping of C8QL function names to their javascript code.
-        :rtype: dict
-        :raise c8.exceptions.C8QLFunctionListError: If retrieval fails.
-        """
-        request = Request(
-            method='get',
-            endpoint='/c8qlfunction'
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise C8QLFunctionListError(resp, request)
-            body = resp.body or {}
-            return {func['name']: func['code'] for func in map(dict, body)}
-
-        return self._execute(request, response_handler)
-
-    def create_function(self, name, code):
-        """Create a new C8QL function.
-
-        :param name: C8QL function name.
-        :type name: str | unicode
-        :param code: Function definition in Javascript.
-        :type code: str | unicode
-        :return: True if C8QL function was created successfully.
-        :rtype: bool
-        :raise c8.exceptions.C8QLFunctionCreateError: If create fails.
-        """
-        request = Request(
-            method='post',
-            endpoint='/c8qlfunction',
-            data={'name': name, 'code': code}
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise C8QLFunctionCreateError(resp, request)
-            return True
-
-        return self._execute(request, response_handler)
-
-    def delete_function(self, name, group=False, ignore_missing=False):
-        """Delete a C8QL function.
-
-        :param name: C8QL function name.
-        :type name: str | unicode
-        :param group: If set to True, value of parameter **name** is treated
-            as a namespace prefix, and all functions in the namespace are
-            deleted. If set to False, the value of **name** must be a fully
-            qualified function name including any namespaces.
-        :type group: bool
-        :param ignore_missing: Do not raise an exception on missing function.
-        :type ignore_missing: bool
-        :return: True if C8QL function was deleted successfully, False if
-            function was not found and **ignore_missing** was set to True.
-        :rtype: bool
-        :raise c8.exceptions.C8QLFunctionDeleteError: If delete fails.
-        """
-        request = Request(
-            method='delete',
-            endpoint='/c8qlfunction/{}'.format(name),
-            params={'group': group}
-        )
-
-        def response_handler(resp):
-            if resp.error_code == 1582 and ignore_missing:
-                return False
-            if not resp.is_success:
-                raise C8QLFunctionDeleteError(resp, request)
-            return True
-
-        return self._execute(request, response_handler)
-
+    
 
 

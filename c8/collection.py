@@ -473,15 +473,15 @@ class Collection(APIWrapper):
     #
     #     return self._execute(request, response_handler)
 
-    def export(self,
-               limit=None,
-               count=False,
-               batch_size=None,
-               flush=False,
-               flush_wait=None,
-               ttl=None,
-               filter_fields=None,
-               filter_type='include'):  # pragma: no cover
+    #def export(self,
+    #           limit=None,
+    #           count=False,
+    #           batch_size=None,
+    #           flush=False,
+    #           flush_wait=None,
+    #           ttl=None,
+    #           filter_fields=None,
+    #           filter_type='include'):  # pragma: no cover
         """Export all documents in the collection using a server cursor.
 
         :param flush: If set to True, flush the write-ahead log prior to the
@@ -507,33 +507,33 @@ class Collection(APIWrapper):
         :rtype: c8.cursor.Cursor
         :raise c8.exceptions.DocumentGetError: If export fails.
         """
-        data = {'count': count, 'flush': flush}
-        if flush_wait is not None:
-            data['flushWait'] = flush_wait
-        if batch_size is not None:
-            data['batchSize'] = batch_size
-        if limit is not None:
-            data['limit'] = limit
-        if ttl is not None:
-            data['ttl'] = ttl
-        if filter_fields is not None:
-            data['restrict'] = {
-                'fields': filter_fields,
-                'type': filter_type
-            }
-        request = Request(
-            method='post',
-            endpoint='/bulk/export',
-            params={'collection': self.name},
-            data=data
-        )
+    #    data = {'count': count, 'flush': flush}
+    #    if flush_wait is not None:
+    #        data['flushWait'] = flush_wait
+    #    if batch_size is not None:
+    #        data['batchSize'] = batch_size
+    #    if limit is not None:
+    #        data['limit'] = limit
+    #    if ttl is not None:
+    #        data['ttl'] = ttl
+    #    if filter_fields is not None:
+    #        data['restrict'] = {
+    #            'fields': filter_fields,
+    #            'type': filter_type
+    #        }
+    #    request = Request(
+    #        method='post',
+    #        endpoint='/bulk/export',
+    #        params={'collection': self.name},
+    #        data=data
+    #    )
 
-        def response_handler(resp):
-            if not resp.is_success:
-                raise DocumentGetError(resp, request)
-            return Cursor(self._conn, resp.body, 'export')
+    #    def response_handler(resp):
+    #        if not resp.is_success:
+    #            raise DocumentGetError(resp, request)
+    #        return Cursor(self._conn, resp.body, 'export')
 
-        return self._execute(request, response_handler)
+    #    return self._execute(request, response_handler)
 
     # Pratik: APIs not supported in documentation. Waiting for verification
     # def find(self, filters, skip=None, limit=None):
@@ -2042,15 +2042,15 @@ class StandardCollection(Collection):
     #
     #     return self._execute(request, response_handler)
 
-    def import_bulk(self,
-                    documents,
-                    halt_on_error=True,
-                    details=True,
-                    from_prefix=None,
-                    to_prefix=None,
-                    overwrite=None,
-                    on_duplicate=None,
-                    sync=None):
+    #def import_bulk(self,
+    #                documents,
+    #                halt_on_error=True,
+    #                details=True,
+    #                from_prefix=None,
+    #                to_prefix=None,
+    #                overwrite=None,
+    #                on_duplicate=None,
+    #                sync=None):
         """Insert multiple documents into the collection.
 
         This is faster than :func:`c8.collection.Collection.insert_many`
@@ -2094,42 +2094,42 @@ class StandardCollection(Collection):
         :rtype: dict
         :raise c8.exceptions.DocumentInsertError: If import fails.
         """
-        documents = [self._ensure_key_from_id(doc) for doc in documents]
+    #    documents = [self._ensure_key_from_id(doc) for doc in documents]
 
-        params = {
-            'type': 'array',
-            'collection': self.name,
-            'complete': halt_on_error,
-            'details': details,
-        }
-        if halt_on_error is not None:
-            params['complete'] = halt_on_error
-        if details is not None:
-            params['details'] = details
-        if from_prefix is not None:
-            params['fromPrefix'] = from_prefix
-        if to_prefix is not None:
-            params['toPrefix'] = to_prefix
-        if overwrite is not None:
-            params['overwrite'] = overwrite
-        if on_duplicate is not None:
-            params['onDuplicate'] = on_duplicate
-        if sync is not None:
-            params['waitForSync'] = sync
+    #    params = {
+    #        'type': 'array',
+    #        'collection': self.name,
+    #        'complete': halt_on_error,
+    #        'details': details,
+    #    }
+    #    if halt_on_error is not None:
+    #        params['complete'] = halt_on_error
+    #    if details is not None:
+    #        params['details'] = details
+    #    if from_prefix is not None:
+    #        params['fromPrefix'] = from_prefix
+    #    if to_prefix is not None:
+    #        params['toPrefix'] = to_prefix
+    #    if overwrite is not None:
+    #        params['overwrite'] = overwrite
+    #    if on_duplicate is not None:
+    #        params['onDuplicate'] = on_duplicate
+    #    if sync is not None:
+    #        params['waitForSync'] = sync
 
-        request = Request(
-            method='post',
-            endpoint='/bulk/import',
-            data=documents,
-            params=params
-        )
+    #   request = Request(
+    #        method='post',
+    #        endpoint='/bulk/import',
+    #        data=documents,
+    #        params=params
+    #    )
 
-        def response_handler(resp):
-            if not resp.is_success:
-                raise DocumentInsertError(resp, request)
-            return resp.body
+    #    def response_handler(resp):
+    #        if not resp.is_success:
+    #            raise DocumentInsertError(resp, request)
+    #        return resp.body
 
-        return self._execute(request, response_handler)
+    #    return self._execute(request, response_handler)
 
 
 class VertexCollection(Collection):
