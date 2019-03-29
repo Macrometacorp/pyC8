@@ -11,7 +11,6 @@ from c8.exceptions import (
     EdgeDefinitionDeleteError,
     EdgeDefinitionReplaceError,
     GraphPropertiesError,
-    GraphTraverseError,
     VertexCollectionListError,
     VertexCollectionCreateError,
     VertexCollectionDeleteError,
@@ -348,127 +347,6 @@ class Graph(APIWrapper):
             if not resp.is_success:
                 raise EdgeDefinitionDeleteError(resp, request)
             return True
-
-        return self._execute(request, response_handler)
-
-    ###################
-    # Graph Functions #
-    ###################
-
-    def traverse(self,
-                 start_vertex,
-                 direction='outbound',
-                 item_order='forward',
-                 strategy=None,
-                 order=None,
-                 edge_uniqueness=None,
-                 vertex_uniqueness=None,
-                 max_iter=None,
-                 min_depth=None,
-                 max_depth=None,
-                 init_func=None,
-                 sort_func=None,
-                 filter_func=None,
-                 visitor_func=None,
-                 expander_func=None):
-        """Traverse the graph and return the visited vertices and edges.
-
-        :param start_vertex: Start vertex document ID or body with "_id" field.
-        :type start_vertex: str | unicode | dict
-        :param direction: Traversal direction. Allowed values are "outbound"
-            (default), "inbound" and "any".
-        :type direction: str | unicode
-        :param item_order: Item iteration order. Allowed values are "forward"
-            (default) and "backward".
-        :type item_order: str | unicode
-        :param strategy: Traversal strategy. Allowed values are "depthfirst"
-            and "breadthfirst".
-        :type strategy: str | unicode
-        :param order: Traversal order. Allowed values are "preorder",
-            "postorder", and "preorder-expander".
-        :type order: str | unicode
-        :param vertex_uniqueness: Uniqueness for visited vertices. Allowed
-            values are "global", "path" or "none".
-        :type vertex_uniqueness: str | unicode
-        :param edge_uniqueness: Uniqueness for visited edges. Allowed values
-            are "global", "path" or "none".
-        :type edge_uniqueness: str | unicode
-        :param min_depth: Minimum depth of the nodes to visit.
-        :type min_depth: int
-        :param max_depth: Maximum depth of the nodes to visit.
-        :type max_depth: int
-        :param max_iter: If set, halt the traversal after the given number of
-            iterations. This parameter can be used to prevent endless loops in
-            cyclic graphs.
-        :type max_iter: int
-        :param init_func: Initialization function in Javascript with signature
-            ``(config, result) -> void``. This function is used to initialize
-            values in the result.
-        :type init_func: str | unicode
-        :param sort_func: Sorting function in Javascript with signature
-            ``(left, right) -> integer``, which returns ``-1`` if ``left <
-            right``, ``+1`` if ``left > right`` and ``0`` if ``left == right``.
-        :type sort_func: str | unicode
-        :param filter_func: Filter function in Javascript with signature
-            ``(config, vertex, path) -> mixed``, where ``mixed`` can have one
-            of the following values (or an array with multiple): "exclude" (do
-            not visit the vertex), "prune" (do not follow the edges of the
-            vertex), or "undefined" (visit the vertex and follow its edges).
-        :type filter_func: str | unicode
-        :param visitor_func: Visitor function in Javascript with signature
-            ``(config, result, vertex, path, connected) -> void``. The return
-            value is ignored, ``result`` is modified by reference, and
-            ``connected`` is populated only when parameter **order** is set to
-            "preorder-expander".
-        :type visitor_func: str | unicode
-        :param expander_func: Expander function in Javascript with signature
-            ``(config, vertex, path) -> mixed``. The function must return an
-            array of connections for ``vertex``. Each connection is an object
-            with attributes "edge" and "vertex".
-        :type expander_func: str | unicode
-        :return: Visited edges and vertices.
-        :rtype: dict
-        :raise c8.exceptions.GraphTraverseError: If traversal fails.
-        """
-        if strategy is not None:
-            if strategy.lower() == 'dfs':
-                strategy = 'depthfirst'
-            elif strategy.lower() == 'bfs':
-                strategy = 'breadthfirst'
-
-        uniqueness = {}
-        if vertex_uniqueness is not None:
-            uniqueness['vertices'] = vertex_uniqueness
-        if edge_uniqueness is not None:
-            uniqueness['edges'] = edge_uniqueness
-
-        data = {
-            'startVertex': get_doc_id(start_vertex),
-            'graphName': self._name,
-            'direction': direction,
-            'strategy': strategy,
-            'order': order,
-            'itemOrder': item_order,
-            'uniqueness': uniqueness or None,
-            'maxIterations': max_iter,
-            'minDepth': min_depth,
-            'maxDepth': max_depth,
-            'init': init_func,
-            'filter': filter_func,
-            'visitor': visitor_func,
-            'sort': sort_func,
-            'expander': expander_func
-        }
-        request = Request(
-            method='post',
-            endpoint='/_api/traversal',
-            data={k: v for k, v in data.items() if v is not None}
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise GraphTraverseError(resp, request)
-            return resp.body['result']['visited']
 
         return self._execute(request, response_handler)
 

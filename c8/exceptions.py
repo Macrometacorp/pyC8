@@ -421,11 +421,6 @@ class GraphDeleteError(C8ServerError):
 class GraphPropertiesError(C8ServerError):
     """Failed to retrieve graph properties."""
 
-
-class GraphTraverseError(C8ServerError):
-    """Failed to execute graph traversal."""
-
-
 class VertexCollectionListError(C8ServerError):
     """Failed to retrieve vertex collections."""
 
