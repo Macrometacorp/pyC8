@@ -600,20 +600,13 @@ class Fabric(APIWrapper):
     def create_collection(self,
                           name,
                           sync=False,
-                          compact=True,
-                          system=False,
-                          journal_size=None,
                           edge=False,
-                          volatile=False,
                           user_keys=True,
                           key_increment=None,
                           key_offset=None,
                           key_generator='traditional',
                           shard_fields=None,
-                          shard_count=None,
                           index_bucket_count=None,
-                          replication_factor=None,
-                          shard_like=None,
                           sync_replication=None,
                           enforce_replication_factor=None,
                           spot_collection=False
@@ -625,21 +618,8 @@ class Fabric(APIWrapper):
         :param sync: If set to True, document operations via the collection
             will block until synchronized to disk by default.
         :type sync: bool
-        :param compact: If set to True, the collection is compacted. Applies
-            only to MMFiles storage engine.
-        :type compact: bool
-        :param system: If set to True, a system collection is created. The
-            collection name must have leading underscore "_" character.
-        :type system: bool
-        :param journal_size: Max size of the journal in bytes.
-        :type journal_size: int
         :param edge: If set to True, an edge collection is created.
         :type edge: bool
-        :param volatile: If set to True, collection data is kept in-memory only
-            and not made persistent. Unloading the collection will cause the
-            collection data to be discarded. Stopping or re-starting the server
-            will also cause full loss of data.
-        :type volatile: bool
         :param key_generator: Used for generating document keys. Allowed values
             are "traditional" or "autoincrement".
         :type key_generator: str | unicode
@@ -655,8 +635,6 @@ class Fabric(APIWrapper):
         :type key_offset: int
         :param shard_fields: Field(s) used to determine the target shard.
         :type shard_fields: [str | unicode]
-        :param shard_count: Number of shards to create.
-        :type shard_count: int
         :param index_bucket_count: Number of buckets into which indexes using
             hash tables are split. The default is 16, and this number has to be
             a power of 2 and less than or equal to 1024. For large collections,
@@ -665,18 +643,6 @@ class Fabric(APIWrapper):
             individually and can be initially built in parallel. For instance,
             64 may be a sensible value for 100 million documents.
         :type index_bucket_count: int
-        :param replication_factor: Number of copies of each shard on different
-            servers in a cluster. Allowed values are 1 (only one copy is kept
-            and no synchronous replication), and n (n-1 replicas are kept and
-            any two copies are replicated across servers synchronously, meaning
-            every write to the master is copied to all slaves before operation
-            is reported successful).
-        :type replication_factor: int
-        :param shard_like: Name of prototype collection whose sharding
-            specifics are imitated. Prototype collections cannot be dropped
-            before imitating collections. Applies to enterprise version of
-            C8Db only.
-        :type shard_like: str | unicode
         :param sync_replication: If set to True, server reports success only
             when collection is created in all replicas. You can set this to
             False for faster server response, and if full replication is not a
@@ -700,25 +666,14 @@ class Fabric(APIWrapper):
         data = {
             'name': name,
             'waitForSync': sync,
-            'doCompact': compact,
-            'isSystem': system,
-            'isVolatile': volatile,
             'keyOptions': key_options,
             'type': 3 if edge else 2,
             'isSpot': spot_collection
         }
-        if journal_size is not None:
-            data['journalSize'] = journal_size
-        if shard_count is not None:
-            data['numberOfShards'] = shard_count
         if shard_fields is not None:
             data['shardKeys'] = shard_fields
         if index_bucket_count is not None:
             data['indexBuckets'] = index_bucket_count
-        if replication_factor is not None:
-            data['replicationFactor'] = replication_factor
-        if shard_like is not None:
-            data['distributeShardsLike'] = shard_like
 
         params = {}
         if sync_replication is not None:
@@ -837,8 +792,6 @@ class Fabric(APIWrapper):
                      name,
                      edge_definitions=None,
                      orphan_collections=None,
-                     smart=None,
-                     smart_field=None,
                      shard_count=None):
         """Create a new graph.
 
@@ -852,15 +805,6 @@ class Fabric(APIWrapper):
         :param orphan_collections: Names of additional vertex collections that
             are not in edge definitions.
         :type orphan_collections: [str | unicode]
-        :param smart: If set to True, sharding is enabled (see parameter
-            **smart_field** below). Applies only to enterprise version of
-            C8Db.
-        :type smart: bool
-        :param smart_field: Document field used to shard the vertices of the
-            graph. To use this, parameter **smart** must be set to True and
-            every vertex in the graph must have the smart field. Applies only
-            to enterprise version of C8Db.
-        :type smart_field: str | unicode
         :param shard_count: Number of shards used for every collection in the
             graph. To use this, parameter **smart** must be set to True and
             every vertex in the graph must have the smart field. This number
@@ -890,10 +834,6 @@ class Fabric(APIWrapper):
                                        } for definition in edge_definitions]
         if orphan_collections is not None:
             data['orphanCollections'] = orphan_collections
-        if smart is not None:  # pragma: no cover
-            data['isSmart'] = smart
-        if smart_field is not None:  # pragma: no cover
-            data['smartGraphAttribute'] = smart_field
         if shard_count is not None:  # pragma: no cover
             data['numberOfShards'] = shard_count
 
