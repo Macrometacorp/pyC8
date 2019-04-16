@@ -100,17 +100,29 @@ class DefaultHTTPClient(HTTPClient):
                 del headers["Connection"]
             headers["Connection"] = "keep-alive"
 
-        raw_resp = self._session.request(
-            method=method,
-            url=url,
-            params=params,
-            data=data,
-            headers=headers,
-            auth=auth,
-            verify=False,
-            timeout=260
-        )
-
+         # In case of network connectivity issue retry 5 times by sleeping for 5 seconds
+        retry = 5
+        time_sleep = 5
+        while(True):
+            try:
+                raw_resp = self._session.request(
+                    method=method,
+                    url=url,
+                    params=params,
+                    data=data,
+                    headers=headers,
+                    auth=auth,
+                    verify=False,
+                    timeout=260
+                )
+            except requests.ConnectionError as exc:
+                if retry == 0:
+                    raise Exception("requests.ConnectionError: Not able to connect to url:%s. Please make sure the federation is up and running." % (url))
+                print("Error in connecting the url. Retring...")
+                retry -= 1
+                time.sleep(time_sleep)
+        #Retry loop ends here.
+        
         return Response(
             method=raw_resp.request.method,
             url=raw_resp.url,
