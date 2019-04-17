@@ -115,6 +115,7 @@ class DefaultHTTPClient(HTTPClient):
                     verify=False,
                     timeout=260
                 )
+                break
             except requests.ConnectionError as exc:
                 if retry == 0:
                     raise Exception("requests.ConnectionError: Not able to connect to url:%s. Please make sure the federation is up and running." % (url))
