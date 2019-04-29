@@ -1,15 +1,17 @@
 from __future__ import absolute_import, unicode_literals
 
-__all__ = ['C8Client']
-
 from c8.connection import FabricConnection
 from c8.connection import StreamConnection
 from c8.connection import TenantConnection
+from c8.connection import FunctionConnection
+from c8.function import Function
 from c8.fabric import StandardFabric
 from c8.tenant import Tenant
 from c8.exceptions import ServerConnectionError
 from c8.version import __version__
 from c8 import constants
+
+__all__ = ['C8Client']
 
 
 class C8Client(object):
@@ -158,3 +160,26 @@ class C8Client(object):
                 raise ServerConnectionError('bad connection: {}'.format(err))
 
         return fabric
+
+    def function(self, tenant="guest", fabricname="_system",
+                 username="root", password=""):
+        """Connect to a Function and return the function API wrapper.
+
+        :param tenant: tenant name.
+        :type tenant: str | unicode
+        :param fabricname: tenant name.
+        :type fabricname: str | unicode
+        :param username: Username for basic authentication.
+        :type username: str | unicode
+        :param password: Password for basic authentication.
+        :type password: str | unicode
+        :return: Standard function API wrapper.
+        :rtype: c8.function.StandardFunction
+        :raise c8.exceptions.ServerConnectionError: If **verify** was set
+            to True and the connection to C8Db fails.
+        """
+        connection = FunctionConnection(
+            url=self._url, tenant=tenant, fabric=fabricname, username=username,
+            password=password, http_client=self._http_client)
+        function = Function(connection)
+        return function
