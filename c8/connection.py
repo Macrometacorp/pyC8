@@ -6,7 +6,6 @@ import c8.constants as constants
 
 __all__ = ['Connection']
 
-### TODO : Functions API
 
 class Connection(object):
     """HTTP connection to specific C8 tenant.
@@ -36,7 +35,7 @@ class Connection(object):
         # Multitenancy
         # TODO : Streams permissions?
         if not tenantname or self._tenant_name.isspace():
-            self._tenant_name = constants.TENANT_DEFAULT 
+            self._tenant_name = constants.TENANT_DEFAULT
         else:
             self._tenant_name=tenantname
 
@@ -254,4 +253,17 @@ class RealtimeConnection(Connection):
         return self._realtime_url
 
 
-# TODO : class FunctionConnection(Connection)
+class FunctionConnection(Connection):
+    """Function Connection wrapper.
+
+    :param connection: HTTP connection.
+    :type connection: c8.connection.Connection
+    """
+
+    def __init__(self, url, tenant, fabric, username, password, http_client):
+        super(FunctionConnection, self).__init__(url, tenant, fabric, username,
+                                                 password, http_client,
+                                                 is_fabric=True)
+
+    def __repr__(self):
+        return '<FunctionConnection>'

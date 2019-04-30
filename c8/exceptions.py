@@ -110,7 +110,7 @@ class StreamDeleteError(C8ServerError):
 
 
 class StreamUpdateError(C8ServerError):
-    """Failed to update stream content."""    
+    """Failed to update stream content."""
 
 
 class StreamStatisticsError(C8ServerError):
@@ -556,3 +556,28 @@ class PermissionUpdateError(C8ServerError):
 
 class PermissionResetError(C8ServerError):
     """Failed to reset user permission."""
+
+
+#########################
+# Function Exceptions #
+#########################
+
+
+class FunctionCreateError(C8ServerError):
+    """Failed to create function."""
+
+
+class FunctionDeleteError(C8ServerError):
+    """Failed to delete function."""
+
+
+class FunctionGetError(C8ServerError):
+    """Failed to get function details."""
+
+
+class FunctionListError(C8ServerError):
+    """Failed to list functions."""
+
+
+class FunctionUpdateError(C8ServerError):
+    """Failed to update function."""
