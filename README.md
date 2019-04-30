@@ -128,7 +128,7 @@ Example for **real-time updates** from a collection in fabric:
   client = C8Client(protocol='https', host=region, port=443)
   fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
   fabric.on_change("employees", callback=callback_fn)
-  
+
 ```
 
 Example to **publish** documents to a stream:
@@ -152,7 +152,7 @@ Example to **publish** documents to a stream:
       msg = "Hello from " + region + "("+ str(i) +")"
       producer.send(msg.encode('utf-8'))
       time.sleep(10) # 10 sec
-    
+
 ```
 
 Example to **subscribe** documents from a stream:
@@ -176,13 +176,13 @@ Example to **subscribe** documents from a stream:
        msg = subscriber.receive()
        print("Received message '{}' id='{}'".format(msg.data(), msg.message_id()))
        subscriber.acknowledge(msg)
-    
+
 ```
 
 Example: **stream management**:
 
 ```python
-    
+
     stream_collection = fabric.stream()
     #get_stream_stats
     stream_collection.get_stream_stats('demostream', local=False) #for global persistent stream
@@ -233,7 +233,7 @@ from c8 import C8Client
 client = C8Client(protocol='http', host='localhost', port=8529)
 
 #Step 1: Make one of the regions in the fed as the Spot Region
-# Connect to System admin 
+# Connect to System admin
 sys_tenant = client.tenant(name=macrometa-admin, fabricname='_system', username='root', password=macrometa-password)
 #Make REGION-1 as spot-region
 sys_tenant.assign_dc_spot('REGION-1',spot_region=True)
@@ -254,4 +254,53 @@ spot_collection = fabric.create_collection('spot-collection', spot_collection=Tr
 sys_fabric = client.fabric(tenant=macrometa-admin, name='_system', username='root', password=macrometa-password)
 sys_fabric.update_spot_region('guest', 'spot-geo-fabric', 'REGION-2')
 
+```
+
+Workflow of **invoking functions** using Collections:
+
+```python
+
+  from c8 import C8Client
+  import time
+  import warnings
+  warnings.filterwarnings("ignore")
+
+  region = "qa1-us-east-1.ops.aws.macrometa.io"
+
+  #--------------------------------------------------------------
+  print("invoke function using collections...")
+  client = C8Client(protocol='https', host=region, port=443)
+  fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
+  function = client.function(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
+  collection = fabric.create_collection("collection1")
+  function.create_function(name="localfn", image="Macrometa/hello-world",
+                           triggers=["collection1"], trigger_type='Collection',
+                           is_local=True)
+  collection.insert({"message": "testing functions"})
+```
+
+Workflow of **invoking functions** using Streams:
+
+```python
+
+  from c8 import C8Client
+  import time
+  import warnings
+  warnings.filterwarnings("ignore")
+
+  region = "qa1-us-east-1.ops.aws.macrometa.io"
+
+  #--------------------------------------------------------------
+  print("invoke function using streams...")
+  client = C8Client(protocol='https', host=region, port=443)
+  fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
+  function = client.function(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
+  fabric.create_stream("stream1", local=True)
+  function.create_function(name="localfn", image="Macrometa/hello-world",
+                           triggers=["stream1"], trigger_type='Stream',
+                           is_local=True)
+  stream = fabric.stream()
+  producer = stream.create_producer(stream_name, local=is_local)
+  msg = {"message": "testing functions"}
+  producer.send(bytes(json.dumps(message), 'utf-8'))
 ```
