@@ -304,3 +304,38 @@ Workflow of **invoking functions** using Streams:
   msg = {"message": "testing functions"}
   producer.send(bytes(json.dumps(message), 'utf-8'))
 ```
+
+Example for **user query** operations:
+
+``` python
+  from c8 import C8Client
+  import json
+  import warnings
+  warnings.filterwarnings("ignore")
+
+  client = C8Client(protocol='https', host=region, port=443)
+  demotenant = client.tenant(name="demo_tenant", fabricname='_system',
+                             username='root', password='demo')
+  #--------------------------------------------------------------
+  print("save query...")
+  response = demotenant.save_query(
+    {"query": {"properties": {"name": "demo_query"},
+     "value": "FOR employee IN employees RETURN employee"}})
+  #--------------------------------------------------------------
+  print("execute saved query without bindVars...")
+  response = demotenant.execute_saved_query("demo_query")
+  #--------------------------------------------------------------
+  print("execute saved query with bindVars...")
+  response = demotenant.execute_saved_query(
+    "demo_query", {"bindVars": {"name": "guest.root"}})
+  #--------------------------------------------------------------
+  print("get all saved queries...")
+  response = demotenant.get_saved_queries()
+  #--------------------------------------------------------------
+  print("update saved query...")
+  response = demotenant.update_saved_query(
+    "demo_query", {"FOR employee IN employees RETURN employee"})
+  #--------------------------------------------------------------
+  print("delete saved query...")
+  response = demotenant.delete_saved_query("demo_query")
+```

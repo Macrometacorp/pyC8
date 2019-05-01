@@ -2,8 +2,6 @@ from __future__ import absolute_import, unicode_literals
 import json
 from c8.utils import get_col_name
 
-__all__ = ['Tenant']
-
 from datetime import datetime
 
 from c8.api import APIWrapper
@@ -31,9 +29,15 @@ from c8.exceptions import (
     UserListError,
     UserReplaceError,
     UserUpdateError,
-    SpotRegionAssignError
+    SpotRegionAssignError,
+    SavedQueriesListError,
+    SavedQueriesCreateError,
+    SavedQueriesUpdateError,
+    SavedQueriesDeleteError,
+    SavedQueriesExecuteError
 )
 
+__all__ = ['Tenant']
 
 
 class Tenant(APIWrapper):
@@ -48,7 +52,6 @@ class Tenant(APIWrapper):
     def __init__(self, connection):
         self._auth_tok = ""
         super(Tenant, self).__init__(connection, executor=DefaultExecutor(connection))
-
 
     @property
     def name(self):
@@ -191,7 +194,7 @@ class Tenant(APIWrapper):
             return True
 
         return self._execute(request, response_handler)
-    
+
     def update_tenant(self, name, passwd='', extra={}):
         """Update a existing tenant.
         :param name: Tenant name.
@@ -564,7 +567,7 @@ class Tenant(APIWrapper):
             data['passwd'] = password
         if active is not None:
             data['active'] = active
-        if extra is not None:
+        if extra is not None and "queries" not in data["extra"]:
             data['extra'] = extra
 
         request = Request(
@@ -581,6 +584,109 @@ class Tenant(APIWrapper):
                 'active': resp.body['active'],
                 'extra': resp.body['extra'],
             }
+
+        return self._execute(request, response_handler)
+
+    def save_query(self, query_data):
+        """Save query.
+
+        :param query_data: query data
+        :type query_data: dict
+        :return: Results of saved query
+        :rtype: dict
+        :raise c8.exceptions.SavedQueriesPostError: if query creation failed
+        """
+
+        request = Request(method="post", endpoint="/userqueries",
+                          data=query_data)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise SavedQueriesCreateError(resp, request)
+            return resp.body["result"]
+
+        return self._execute(request, response_handler)
+
+    def execute_saved_query(self, query_name, query_data=None):
+        """Execute saved query.
+
+        :param query_name: query name
+        :type query_name: str | unicode
+        :param query_data: query data (optional)
+        :type query_data: dict
+        :return: Results of execute saved query
+        :rtype: dict
+        :raise c8.exceptions.SavedQueriesPostError: if query creation failed
+        """
+
+        if query_data and "bindVars" in query_data:
+            request = Request(method="post", data=query_data,
+                              endpoint="/userqueries/execute/%s" % query_name)
+        else:
+            request = Request(method="post",
+                              endpoint="/userqueries/execute/%s" % query_name)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise SavedQueriesExecuteError(resp, request)
+            return resp.body
+
+        return self._execute(request, response_handler)
+
+    def get_saved_queries(self):
+        """Get all saved query.
+
+        :return: Details of all saved queries
+        :rtype: list
+        :raise c8.exceptions.SavedQueriesGetError: if getting query failed
+        """
+
+        request = Request(method="get", endpoint="/userqueries/user")
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise SavedQueriesListError(resp, request)
+            return resp.body["result"]
+
+        return self._execute(request, response_handler)
+
+    def update_saved_query(self, query_name, query_data):
+        """Update saved query.
+
+        :param query_name: name of query
+        :type query_name: str | unicode
+        :param query_data: query data
+        :type query_data: dict
+        :return: True if query is deleted
+        :rtype: bool
+        :raise c8.exceptions.SavedQueriesUpdateError: if query update failed
+        """
+        request = Request(method="put", data=query_data,
+                          endpoint="/userqueries/" + query_name)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise SavedQueriesUpdateError(resp, request)
+            return True
+
+        return self._execute(request, response_handler)
+
+    def delete_saved_query(self, query_name):
+        """Delete saved query.
+
+        :param query_name: name of query
+        :type query_name: str | unicode
+        :return: True if query is deleted
+        :rtype: bool
+        :raise c8.exceptions.SavedQueriesDeleteError: if query deletion failed
+        """
+        request = Request(method="delete",
+                          endpoint="/userqueries/" + query_name)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise SavedQueriesDeleteError(resp, request)
+            return True
 
         return self._execute(request, response_handler)
 
