@@ -318,9 +318,14 @@ Example for **user query** operations:
                              username='root', password='demo')
   #--------------------------------------------------------------
   print("save query...")
-  response = demotenant.save_query(
-    {"query": {"properties": {"name": "demo_query"},
-     "value": "FOR employee IN employees RETURN employee"}})
+  data = {
+    "query": {
+      "parameter": {},
+      "name": "demo_query",
+      "value": "FOR employee IN employees RETURN employee"
+    }
+  }
+  response = demotenant.save_query(data)
   #--------------------------------------------------------------
   print("execute saved query without bindVars...")
   response = demotenant.execute_saved_query("demo_query")
@@ -333,8 +338,13 @@ Example for **user query** operations:
   response = demotenant.get_saved_queries()
   #--------------------------------------------------------------
   print("update saved query...")
-  response = demotenant.update_saved_query(
-    "demo_query", {"FOR employee IN employees RETURN employee"})
+  data = {
+    "query": {
+      "parameter": {},
+      "value": "FOR employee IN employees Filter doc.name=@name RETURN employee"
+    }
+  }
+  response = demotenant.update_saved_query("demo_query", data)
   #--------------------------------------------------------------
   print("delete saved query...")
   response = demotenant.delete_saved_query("demo_query")
