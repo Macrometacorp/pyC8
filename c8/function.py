@@ -53,7 +53,7 @@ class Function(APIWrapper):
         :param triggers: trigger names
         :type triggers: list
         :param trigger_type: type of trigger (stream/collection)
-        :type compact: str
+        :type trigger_type: str
         :param is_local: true if trigger is local else false
         :type is_local: bool
         :return: True if function is created successfully.
@@ -86,7 +86,7 @@ class Function(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.FunctionGetError: If getting summary fails.
         """
-        request = Request(method='get', endpoint='_fn/summary/%s' % name)
+        request = Request(method='get', endpoint='/_fn/summary/%s' % name)
 
         def response_handler(resp):
             if not resp.is_success:
@@ -113,26 +113,43 @@ class Function(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def update_function(self, name, **kwargs):
-        """Update a existing function.
+    def update_input_triggers_function(self, name, triggers, trigger_type):
+        """Update input triggers for a existing function.
         :param name: function name.
         :type name: str | unicode
+        :param triggers: trigger names
+        :type triggers: list
+        :param trigger_type: type of trigger (stream/collection)
+        :type trigger_type: str
         :return: True if function was updated successfully.
         :rtype: bool
         :raise c8.exceptions.FunctionUpdateError: If update fails.
         """
-        data = {"service": name}
-        if "fnSize" in kwargs:
-            data["fnSize"] = kwargs["fnSize"]
-        if "image" in kwargs:
-            data["image"] = kwargs["image"]
-        if "triggers" in kwargs:
-            data["inputTrigger"] = kwargs["triggers"]
-        if "trigger_type" in kwargs:
-            data["inputTriggerType"] = kwargs["trigger_type"]
-        if "is_local" in kwargs:
-            data["local"] = kwargs["is_local"]
-        request = Request(method='put', endpoint='/_fn', data=data)
+        data = {"inputTrigger": triggers, "inputTriggerType": trigger_type}
+        request = Request(method='put', data=data,
+                          endpoint='/_fn/%s/inputTriggers' % name)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise FunctionUpdateError(resp, request)
+            return True
+
+        return self._execute(request, response_handler)
+
+    def update_funtion(self, name, function_size, image):
+        """Update function size and image for a existing function.
+        :param name: function name.
+        :type name: str | unicode
+        :param function_size: size of function
+        :type triggers: str | unicode
+        :param image: image name
+        :type image: str | unicode
+        :return: True if function was updated successfully.
+        :rtype: bool
+        :raise c8.exceptions.FunctionUpdateError: If update fails.
+        """
+        data = {"fnSize": function_size, "image": image, "service": name}
+        request = Request(method='put', data=data, endpoint='/_fn')
 
         def response_handler(resp):
             if not resp.is_success:
