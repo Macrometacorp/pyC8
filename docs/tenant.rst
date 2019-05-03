@@ -43,5 +43,37 @@ These operations can only be executed by the tenant admin. Tenant users who have
     sys_fabric.delete_fabric('demofabric')
 
 
+    # save user query
+    data = {
+        "query": {
+            "parameter": {},
+            "name": "demo_query",
+            "value": "FOR employee IN employees RETURN employee"
+        }
+    }
+    response = demotenant.save_query(data)
+
+    # execute saved query without bindVars
+    response = demotenant.execute_saved_query("demo_query")
+
+    # execute saved query with bindVars
+    response = demotenant.execute_saved_query(
+        "demo_query", {"bindVars": {"name": "guest.root"}})
+
+    # get all saved queries
+    response = demotenant.get_saved_queries()
+
+    # update saved query
+    data = {
+        "query": {
+            "parameter": {},
+            "value": "FOR employee IN employees Filter doc.name=@name RETURN employee"
+        }
+    }
+    response = demotenant.update_saved_query("demo_query", data)
+
+    # delete saved query
+    response = demotenant.delete_saved_query("demo_query")
+
 
 See :ref:`C8Client`, :ref:`Tenant` and :ref:`StandardFabric` for API specification.
