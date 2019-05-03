@@ -581,3 +581,23 @@ class FunctionListError(C8ServerError):
 
 class FunctionUpdateError(C8ServerError):
     """Failed to update function."""
+
+
+class SavedQueriesCreateError(C8ServerError):
+    """Failed to create saved query."""
+
+
+class SavedQueriesDeleteError(C8ServerError):
+    """Failed to delete saved query."""
+
+
+class SavedQueriesListError(C8ServerError):
+    """Failed to get saved query details."""
+
+
+class SavedQueriesUpdateError(C8ServerError):
+    """Failed to update saved query."""
+
+
+class SavedQueriesExecuteError(C8ServerError):
+    """Failed to execute saved query."""
