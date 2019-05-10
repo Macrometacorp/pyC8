@@ -583,6 +583,10 @@ class FunctionUpdateError(C8ServerError):
     """Failed to update function."""
 
 
+class FunctionExecuteError(C8ServerError):
+    """Failed to execute function."""
+
+
 class SavedQueriesCreateError(C8ServerError):
     """Failed to create saved query."""
 

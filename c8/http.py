@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 __all__ = ['HTTPClient', 'DefaultHTTPClient']
 
 from abc import ABCMeta, abstractmethod
+import time
 
 import requests
 
@@ -123,7 +124,7 @@ class DefaultHTTPClient(HTTPClient):
                 retry -= 1
                 time.sleep(time_sleep)
         #Retry loop ends here.
-        
+
         return Response(
             method=raw_resp.request.method,
             url=raw_resp.url,
