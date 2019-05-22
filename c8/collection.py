@@ -384,104 +384,103 @@ class Collection(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    #Pratik: APIs not supported in documentation. Waiting for verification
-    # def ids(self):
-    #     """Return the IDs of all documents in the collection.
-    #
-    #     :return: Document ID cursor.
-    #     :rtype: c8.cursor.Cursor
-    #     :raise c8.exceptions.DocumentIDsError: If retrieval fails.
-    #     """
-    #     request = Request(
-    #         method='put',
-    #         endpoint='/simple/all-keys',
-    #         data={'collection': self.name, 'type': 'id'},
-    #         command='db.{}.toArray().map(d => d._id)'.format(self.name),
-    #         read=self.name
-    #     )
-    #
-    #     def response_handler(resp):
-    #         if not resp.is_success:
-    #             raise DocumentIDsError(resp, request)
-    #         return Cursor(self._conn, resp.body)
-    #
-    #     return self._execute(request, response_handler)
-    #
-    # def keys(self):
-    #     """Return the keys of all documents in the collection.
-    #
-    #     :return: Document key cursor.
-    #     :rtype: c8.cursor.Cursor
-    #     :raise c8.exceptions.DocumentKeysError: If retrieval fails.
-    #     """
-    #     request = Request(
-    #         method='put',
-    #         endpoint='/simple/all-keys',
-    #         data={'collection': self.name, 'type': 'key'},
-    #         command='db.{}.toArray().map(d => d._key)'.format(self.name),
-    #         read=self.name
-    #     )
-    #
-    #     def response_handler(resp):
-    #         if not resp.is_success:
-    #             raise DocumentKeysError(resp, request)
-    #         return Cursor(self._conn, resp.body)
-    #
-    #     return self._execute(request, response_handler)
-    #
-    # def all(self, skip=None, limit=None):
-    #     """Return all documents in the collection.
-    #
-    #     :param skip: Number of documents to skip.
-    #     :type skip: int
-    #     :param limit: Max number of documents returned.
-    #     :type limit: int
-    #     :return: Document cursor.
-    #     :rtype: c8.cursor.Cursor
-    #     :raise c8.exceptions.DocumentGetError: If retrieval fails.
-    #     """
-    #     assert is_none_or_int(skip), 'skip must be a non-negative int'
-    #     assert is_none_or_int(limit), 'limit must be a non-negative int'
-    #
-    #     data = {'collection': self.name}
-    #     if skip is not None:
-    #         data['skip'] = skip
-    #     if limit is not None:
-    #         data['limit'] = limit
-    #
-    #     command = 'db.{}.all(){}{}.toArray()'.format(
-    #         self.name,
-    #         '' if skip is None else '.skip({})'.format(skip),
-    #         '' if limit is None else '.limit({})'.format(limit),
-    #     ) if self._is_transaction else None
-    #
-    #     request = Request(
-    #         method='put',
-    #         endpoint='/simple/all',
-    #         data=data,
-    #         command=command,
-    #         read=self.name
-    #     )
-    #
-    #     def response_handler(resp):
-    #         # TODO workaround for a bug in C8Db
-    #         if self._is_transaction and limit == 0:
-    #             return Cursor(self._conn, [])
-    #         if not resp.is_success:
-    #             raise DocumentGetError(resp, request)
-    #         return Cursor(self._conn, resp.body)
-    #
-    #     return self._execute(request, response_handler)
+    def ids(self):
+        """Return the IDs of all documents in the collection.
+    
+        :return: Document ID cursor.
+        :rtype: c8.cursor.Cursor
+        :raise c8.exceptions.DocumentIDsError: If retrieval fails.
+        """
+        request = Request(
+            method='put',
+            endpoint='/simple/all-keys',
+            data={'collection': self.name, 'type': 'id'},
+            command='db.{}.toArray().map(d => d._id)'.format(self.name),
+            read=self.name
+        )
+    
+        def response_handler(resp):
+            if not resp.is_success:
+                raise DocumentIDsError(resp, request)
+            return Cursor(self._conn, resp.body)
+    
+        return self._execute(request, response_handler)
+    
+    def keys(self):
+        """Return the keys of all documents in the collection.
+    
+        :return: Document key cursor.
+        :rtype: c8.cursor.Cursor
+        :raise c8.exceptions.DocumentKeysError: If retrieval fails.
+        """
+        request = Request(
+            method='put',
+            endpoint='/simple/all-keys',
+            data={'collection': self.name, 'type': 'key'},
+            command='db.{}.toArray().map(d => d._key)'.format(self.name),
+            read=self.name
+        )
+    
+        def response_handler(resp):
+            if not resp.is_success:
+                raise DocumentKeysError(resp, request)
+            return Cursor(self._conn, resp.body)
+    
+        return self._execute(request, response_handler)
+    
+    def all(self, skip=None, limit=None):
+        """Return all documents in the collection.
+    
+        :param skip: Number of documents to skip.
+        :type skip: int
+        :param limit: Max number of documents returned.
+        :type limit: int
+        :return: Document cursor.
+        :rtype: c8.cursor.Cursor
+        :raise c8.exceptions.DocumentGetError: If retrieval fails.
+        """
+        assert is_none_or_int(skip), 'skip must be a non-negative int'
+        assert is_none_or_int(limit), 'limit must be a non-negative int'
+    
+        data = {'collection': self.name}
+        if skip is not None:
+            data['skip'] = skip
+        if limit is not None:
+            data['limit'] = limit
+    
+        command = 'db.{}.all(){}{}.toArray()'.format(
+            self.name,
+            '' if skip is None else '.skip({})'.format(skip),
+            '' if limit is None else '.limit({})'.format(limit),
+        ) if self._is_transaction else None
+    
+        request = Request(
+            method='put',
+            endpoint='/simple/all',
+            data=data,
+            command=command,
+            read=self.name
+        )
+    
+        def response_handler(resp):
+            # TODO workaround for a bug in C8Db
+            if self._is_transaction and limit == 0:
+                return Cursor(self._conn, [])
+            if not resp.is_success:
+                raise DocumentGetError(resp, request)
+            return Cursor(self._conn, resp.body)
+    
+        return self._execute(request, response_handler)
 
-    #def export(self,
-    #           limit=None,
-    #           count=False,
-    #           batch_size=None,
-    #           flush=False,
-    #           flush_wait=None,
-    #           ttl=None,
-    #           filter_fields=None,
-    #           filter_type='include'):  # pragma: no cover
+    def export(self,
+              limit=None,
+              count=False,
+              batch_size=None,
+              flush=False,
+              flush_wait=None,
+              ttl=None,
+              filter_fields=None,
+              filter_type='include'):  # pragma: no cover
         """Export all documents in the collection using a server cursor.
 
         :param flush: If set to True, flush the write-ahead log prior to the
@@ -507,81 +506,80 @@ class Collection(APIWrapper):
         :rtype: c8.cursor.Cursor
         :raise c8.exceptions.DocumentGetError: If export fails.
         """
-    #    data = {'count': count, 'flush': flush}
-    #    if flush_wait is not None:
-    #        data['flushWait'] = flush_wait
-    #    if batch_size is not None:
-    #        data['batchSize'] = batch_size
-    #    if limit is not None:
-    #        data['limit'] = limit
-    #    if ttl is not None:
-    #        data['ttl'] = ttl
-    #    if filter_fields is not None:
-    #        data['restrict'] = {
-    #            'fields': filter_fields,
-    #            'type': filter_type
-    #        }
-    #    request = Request(
-    #        method='post',
-    #        endpoint='/bulk/export',
-    #        params={'collection': self.name},
-    #        data=data
-    #    )
+       data = {'count': count, 'flush': flush}
+       if flush_wait is not None:
+           data['flushWait'] = flush_wait
+       if batch_size is not None:
+           data['batchSize'] = batch_size
+       if limit is not None:
+           data['limit'] = limit
+       if ttl is not None:
+           data['ttl'] = ttl
+       if filter_fields is not None:
+           data['restrict'] = {
+               'fields': filter_fields,
+               'type': filter_type
+           }
+       request = Request(
+           method='post',
+           endpoint='/bulk/export',
+           params={'collection': self.name},
+           data=data
+       )
 
-    #    def response_handler(resp):
-    #        if not resp.is_success:
-    #            raise DocumentGetError(resp, request)
-    #        return Cursor(self._conn, resp.body, 'export')
+       def response_handler(resp):
+           if not resp.is_success:
+               raise DocumentGetError(resp, request)
+           return Cursor(self._conn, resp.body, 'export')
 
-    #    return self._execute(request, response_handler)
+       return self._execute(request, response_handler)
 
-    # Pratik: APIs not supported in documentation. Waiting for verification
-    # def find(self, filters, skip=None, limit=None):
-    #     """Return all documents that match the given filters.
-    #
-    #     :param filters: Document filters.
-    #     :type filters: dict
-    #     :param skip: Number of documents to skip.
-    #     :type skip: int
-    #     :param limit: Max number of documents returned.
-    #     :type limit: int
-    #     :return: Document cursor.
-    #     :rtype: c8.cursor.Cursor
-    #     :raise c8.exceptions.DocumentGetError: If retrieval fails.
-    #     """
-    #     assert isinstance(filters, dict), 'filters must be a dict'
-    #     assert is_none_or_int(skip), 'skip must be a non-negative int'
-    #     assert is_none_or_int(limit), 'limit must be a non-negative int'
-    #
-    #     data = {
-    #         'collection': self.name,
-    #         'example': filters,
-    #         'skip': skip,
-    #     }
-    #     if limit is not None:
-    #         data['limit'] = limit
-    #
-    #     command = 'db.{}.byExample({}){}{}.toArray()'.format(
-    #         self.name,
-    #         dumps(filters),
-    #         '' if skip is None else '.skip({})'.format(skip),
-    #         '' if limit is None else '.limit({})'.format(limit),
-    #     ) if self._is_transaction else None
-    #
-    #     request = Request(
-    #         method='put',
-    #         endpoint='/simple/by-example',
-    #         data=data,
-    #         command=command,
-    #         read=self.name
-    #     )
-    #
-    #     def response_handler(resp):
-    #         if not resp.is_success:
-    #             raise DocumentGetError(resp, request)
-    #         return Cursor(self._conn, resp.body)
-    #
-    #     return self._execute(request, response_handler)
+    def find(self, filters, skip=None, limit=None):
+        """Return all documents that match the given filters.
+    
+        :param filters: Document filters.
+        :type filters: dict
+        :param skip: Number of documents to skip.
+        :type skip: int
+        :param limit: Max number of documents returned.
+        :type limit: int
+        :return: Document cursor.
+        :rtype: c8.cursor.Cursor
+        :raise c8.exceptions.DocumentGetError: If retrieval fails.
+        """
+        assert isinstance(filters, dict), 'filters must be a dict'
+        assert is_none_or_int(skip), 'skip must be a non-negative int'
+        assert is_none_or_int(limit), 'limit must be a non-negative int'
+    
+        data = {
+            'collection': self.name,
+            'example': filters,
+            'skip': skip,
+        }
+        if limit is not None:
+            data['limit'] = limit
+    
+        command = 'db.{}.byExample({}){}{}.toArray()'.format(
+            self.name,
+            dumps(filters),
+            '' if skip is None else '.skip({})'.format(skip),
+            '' if limit is None else '.limit({})'.format(limit),
+        ) if self._is_transaction else None
+    
+        request = Request(
+            method='put',
+            endpoint='/simple/by-example',
+            data=data,
+            command=command,
+            read=self.name
+        )
+    
+        def response_handler(resp):
+            if not resp.is_success:
+                raise DocumentGetError(resp, request)
+            return Cursor(self._conn, resp.body)
+    
+        return self._execute(request, response_handler)
 
     def find_near(self, latitude, longitude, limit=None):
         """Return documents near a given coordinate.
@@ -784,81 +782,80 @@ class Collection(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    # Pratik: APIs not supported in documentation. Waiting for verification
-    # def find_in_box(self,
-    #                 latitude1,
-    #                 longitude1,
-    #                 latitude2,
-    #                 longitude2,
-    #                 skip=None,
-    #                 limit=None,
-    #                 index=None):
-    #     """Return all documents in an rectangular area.
-    #
-    #     :param latitude1: First latitude.
-    #     :type latitude1: int | float
-    #     :param longitude1: First longitude.
-    #     :type longitude1: int | float
-    #     :param latitude2: Second latitude.
-    #     :type latitude2: int | float
-    #     :param longitude2: Second longitude
-    #     :type longitude2: int | float
-    #     :param skip: Number of documents to skip.
-    #     :type skip: int
-    #     :param limit: Max number of documents returned.
-    #     :type limit: int
-    #     :param index: ID of the geo index to use (without the collection
-    #         prefix). This parameter is ignored in transactions.
-    #     :type index: str | unicode
-    #     :returns: Document cursor.
-    #     :rtype: c8.cursor.Cursor
-    #     :raises c8.exceptions.DocumentGetError: If retrieval fails.
-    #     """
-    #     assert isinstance(latitude1, Number), 'latitude1 must be a number'
-    #     assert isinstance(longitude1, Number), 'longitude1 must be a number'
-    #     assert isinstance(latitude2, Number), 'latitude2 must be a number'
-    #     assert isinstance(longitude2, Number), 'longitude2 must be a number'
-    #     assert is_none_or_int(skip), 'skip must be a non-negative int'
-    #     assert is_none_or_int(limit), 'limit must be a non-negative int'
-    #
-    #     data = {
-    #         'collection': self._name,
-    #         'latitude1': latitude1,
-    #         'longitude1': longitude1,
-    #         'latitude2': latitude2,
-    #         'longitude2': longitude2,
-    #     }
-    #     if skip is not None:
-    #         data['skip'] = skip
-    #     if limit is not None:
-    #         data['limit'] = limit
-    #     if index is not None:
-    #         data['geo'] = self._name + '/' + index
-    #
-    #     command = 'db.{}.withinRectangle({},{},{},{}){}{}.toArray()'.format(
-    #         self.name,
-    #         latitude1,
-    #         longitude1,
-    #         latitude2,
-    #         longitude2,
-    #         '' if skip is None else '.skip({})'.format(skip),
-    #         '' if limit is None else '.limit({})'.format(limit),
-    #     ) if self._is_transaction else None
-    #
-    #     request = Request(
-    #         method='put',
-    #         endpoint='/simple/within-rectangle',
-    #         data=data,
-    #         command=command,
-    #         read=self.name
-    #     )
-    #
-    #     def response_handler(resp):
-    #         if not resp.is_success:
-    #             raise DocumentGetError(resp, request)
-    #         return Cursor(self._conn, resp.body)
-    #
-    #     return self._execute(request, response_handler)
+    def find_in_box(self,
+                    latitude1,
+                    longitude1,
+                    latitude2,
+                    longitude2,
+                    skip=None,
+                    limit=None,
+                    index=None):
+        """Return all documents in an rectangular area.
+    
+        :param latitude1: First latitude.
+        :type latitude1: int | float
+        :param longitude1: First longitude.
+        :type longitude1: int | float
+        :param latitude2: Second latitude.
+        :type latitude2: int | float
+        :param longitude2: Second longitude
+        :type longitude2: int | float
+        :param skip: Number of documents to skip.
+        :type skip: int
+        :param limit: Max number of documents returned.
+        :type limit: int
+        :param index: ID of the geo index to use (without the collection
+            prefix). This parameter is ignored in transactions.
+        :type index: str | unicode
+        :returns: Document cursor.
+        :rtype: c8.cursor.Cursor
+        :raises c8.exceptions.DocumentGetError: If retrieval fails.
+        """
+        assert isinstance(latitude1, Number), 'latitude1 must be a number'
+        assert isinstance(longitude1, Number), 'longitude1 must be a number'
+        assert isinstance(latitude2, Number), 'latitude2 must be a number'
+        assert isinstance(longitude2, Number), 'longitude2 must be a number'
+        assert is_none_or_int(skip), 'skip must be a non-negative int'
+        assert is_none_or_int(limit), 'limit must be a non-negative int'
+    
+        data = {
+            'collection': self._name,
+            'latitude1': latitude1,
+            'longitude1': longitude1,
+            'latitude2': latitude2,
+            'longitude2': longitude2,
+        }
+        if skip is not None:
+            data['skip'] = skip
+        if limit is not None:
+            data['limit'] = limit
+        if index is not None:
+            data['geo'] = self._name + '/' + index
+    
+        command = 'db.{}.withinRectangle({},{},{},{}){}{}.toArray()'.format(
+            self.name,
+            latitude1,
+            longitude1,
+            latitude2,
+            longitude2,
+            '' if skip is None else '.skip({})'.format(skip),
+            '' if limit is None else '.limit({})'.format(limit),
+        ) if self._is_transaction else None
+    
+        request = Request(
+            method='put',
+            endpoint='/simple/within-rectangle',
+            data=data,
+            command=command,
+            read=self.name
+        )
+    
+        def response_handler(resp):
+            if not resp.is_success:
+                raise DocumentGetError(resp, request)
+            return Cursor(self._conn, resp.body)
+    
+        return self._execute(request, response_handler)
 
     def find_by_text(self, field, query, limit=None):
         """Return documents that match the given fulltext query.
@@ -913,69 +910,68 @@ class Collection(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    # Pratik: APIs not supported in documentation. Waiting for verification
-    # def get_many(self, documents):
-    #     """Return multiple documents ignoring any missing ones.
-    #
-    #     :param documents: List of document keys, IDs or bodies. Document bodies
-    #         must contain the "_id" or "_key" fields.
-    #     :type documents: [str | unicode | dict]
-    #     :return: Documents. Missing ones are not included.
-    #     :rtype: [dict]
-    #     :raise c8.exceptions.DocumentGetError: If retrieval fails.
-    #     """
-    #     handles = [
-    #         self._extract_id(doc) if isinstance(doc, dict) else doc
-    #         for doc in documents
-    #     ]
-    #
-    #     command = 'db.{}.document({})'.format(
-    #         self.name,
-    #         dumps(handles)
-    #     ) if self._is_transaction else None
-    #
-    #     request = Request(
-    #         method='put',
-    #         endpoint='/simple/lookup-by-keys',
-    #         data={'collection': self.name, 'keys': handles},
-    #         command=command,
-    #         read=self.name
-    #     )
-    #
-    #     def response_handler(resp):
-    #         if not resp.is_success:
-    #             raise DocumentGetError(resp, request)
-    #         if self._is_transaction:
-    #             docs = resp.body
-    #         else:
-    #             docs = resp.body['documents']
-    #         return [doc for doc in docs if '_id' in doc]
-    #
-    #     return self._execute(request, response_handler)
-    #
-    # def random(self):
-    #     """Return a random document from the collection.
-    #
-    #     :return: A random document.
-    #     :rtype: dict
-    #     :raise c8.exceptions.DocumentGetError: If retrieval fails.
-    #     """
-    #     request = Request(
-    #         method='put',
-    #         endpoint='/simple/any',
-    #         data={'collection': self.name},
-    #         command='db.{}.any()'.format(self.name),
-    #         read=self.name
-    #     )
-    #
-    #     def response_handler(resp):
-    #         if not resp.is_success:
-    #             raise DocumentGetError(resp, request)
-    #         if self._is_transaction:
-    #             return resp.body
-    #         return resp.body['document']
-    #
-    #     return self._execute(request, response_handler)
+    def get_many(self, documents):
+        """Return multiple documents ignoring any missing ones.
+    
+        :param documents: List of document keys, IDs or bodies. Document bodies
+            must contain the "_id" or "_key" fields.
+        :type documents: [str | unicode | dict]
+        :return: Documents. Missing ones are not included.
+        :rtype: [dict]
+        :raise c8.exceptions.DocumentGetError: If retrieval fails.
+        """
+        handles = [
+            self._extract_id(doc) if isinstance(doc, dict) else doc
+            for doc in documents
+        ]
+    
+        command = 'db.{}.document({})'.format(
+            self.name,
+            dumps(handles)
+        ) if self._is_transaction else None
+    
+        request = Request(
+            method='put',
+            endpoint='/simple/lookup-by-keys',
+            data={'collection': self.name, 'keys': handles},
+            command=command,
+            read=self.name
+        )
+    
+        def response_handler(resp):
+            if not resp.is_success:
+                raise DocumentGetError(resp, request)
+            if self._is_transaction:
+                docs = resp.body
+            else:
+                docs = resp.body['documents']
+            return [doc for doc in docs if '_id' in doc]
+    
+        return self._execute(request, response_handler)
+    
+    def random(self):
+        """Return a random document from the collection.
+    
+        :return: A random document.
+        :rtype: dict
+        :raise c8.exceptions.DocumentGetError: If retrieval fails.
+        """
+        request = Request(
+            method='put',
+            endpoint='/simple/any',
+            data={'collection': self.name},
+            command='db.{}.any()'.format(self.name),
+            read=self.name
+        )
+    
+        def response_handler(resp):
+            if not resp.is_success:
+                raise DocumentGetError(resp, request)
+            if self._is_transaction:
+                return resp.body
+            return resp.body['document']
+    
+        return self._execute(request, response_handler)
 
     ####################
     # Index Management #
@@ -1564,71 +1560,70 @@ class StandardCollection(Collection):
 
         return self._execute(request, response_handler)
 
-    # Pratik: APIs not supported in documentation. Waiting for verification
-    # def update_match(self,
-    #                  filters,
-    #                  body,
-    #                  limit=None,
-    #                  keep_none=True,
-    #                  sync=None,
-    #                  merge=True):
-    #     """Update matching documents.
-    #
-    #     :param filters: Document filters.
-    #     :type filters: dict
-    #     :param body: Full or partial document body with the updates.
-    #     :type body: dict
-    #     :param limit: Max number of documents to update. If the limit is lower
-    #         than the number of matched documents, random documents are
-    #         chosen. This parameter is not supported on sharded collections.
-    #     :type limit: int
-    #     :param keep_none: If set to True, fields with value None are retained
-    #         in the document. Otherwise, they are removed completely.
-    #     :type keep_none: bool
-    #     :param sync: Block until operation is synchronized to disk.
-    #     :type sync: bool
-    #     :param merge: If set to True, sub-dictionaries are merged instead of
-    #         the new ones overwriting the old ones.
-    #     :type merge: bool
-    #     :return: Number of documents updated.
-    #     :rtype: int
-    #     :raise c8.exceptions.DocumentUpdateError: If update fails.
-    #     """
-    #     data = {
-    #         'collection': self.name,
-    #         'example': filters,
-    #         'newValue': body,
-    #         'keepNull': keep_none,
-    #         'mergeObjects': merge
-    #     }
-    #     if limit is not None:
-    #         data['limit'] = limit
-    #     if sync is not None:
-    #         data['waitForSync'] = sync
-    #
-    #     command = 'db.{}.updateByExample({},{},{})'.format(
-    #         self.name,
-    #         dumps(filters),
-    #         dumps(body),
-    #         dumps(data)
-    #     ) if self._is_transaction else None
-    #
-    #     request = Request(
-    #         method='put',
-    #         endpoint='/simple/update-by-example',
-    #         data=data,
-    #         command=command,
-    #         write=self.name
-    #     )
-    #
-    #     def response_handler(resp):
-    #         if not resp.is_success:
-    #             raise DocumentUpdateError(resp, request)
-    #         if self._is_transaction:
-    #             return resp.body
-    #         return resp.body['updated']
-    #
-    #     return self._execute(request, response_handler)
+    def update_match(self,
+                     filters,
+                     body,
+                     limit=None,
+                     keep_none=True,
+                     sync=None,
+                     merge=True):
+        """Update matching documents.
+    
+        :param filters: Document filters.
+        :type filters: dict
+        :param body: Full or partial document body with the updates.
+        :type body: dict
+        :param limit: Max number of documents to update. If the limit is lower
+            than the number of matched documents, random documents are
+            chosen. This parameter is not supported on sharded collections.
+        :type limit: int
+        :param keep_none: If set to True, fields with value None are retained
+            in the document. Otherwise, they are removed completely.
+        :type keep_none: bool
+        :param sync: Block until operation is synchronized to disk.
+        :type sync: bool
+        :param merge: If set to True, sub-dictionaries are merged instead of
+            the new ones overwriting the old ones.
+        :type merge: bool
+        :return: Number of documents updated.
+        :rtype: int
+        :raise c8.exceptions.DocumentUpdateError: If update fails.
+        """
+        data = {
+            'collection': self.name,
+            'example': filters,
+            'newValue': body,
+            'keepNull': keep_none,
+            'mergeObjects': merge
+        }
+        if limit is not None:
+            data['limit'] = limit
+        if sync is not None:
+            data['waitForSync'] = sync
+    
+        command = 'db.{}.updateByExample({},{},{})'.format(
+            self.name,
+            dumps(filters),
+            dumps(body),
+            dumps(data)
+        ) if self._is_transaction else None
+    
+        request = Request(
+            method='put',
+            endpoint='/simple/update-by-example',
+            data=data,
+            command=command,
+            write=self.name
+        )
+    
+        def response_handler(resp):
+            if not resp.is_success:
+                raise DocumentUpdateError(resp, request)
+            if self._is_transaction:
+                return resp.body
+            return resp.body['updated']
+    
+        return self._execute(request, response_handler)
 
     def replace(self,
                 document,
@@ -1788,56 +1783,55 @@ class StandardCollection(Collection):
 
         return self._execute(request, response_handler)
 
-    # Pratik: APIs not supported in documentation. Waiting for verification
-    # def replace_match(self, filters, body, limit=None, sync=None):
-    #     """Replace matching documents.
-    #
-    #     :param filters: Document filters.
-    #     :type filters: dict
-    #     :param body: New document body.
-    #     :type body: dict
-    #     :param limit: Max number of documents to replace. If the limit is lower
-    #         than the number of matched documents, random documents are chosen.
-    #     :type limit: int
-    #     :param sync: Block until operation is synchronized to disk.
-    #     :type sync: bool
-    #     :return: Number of documents replaced.
-    #     :rtype: int
-    #     :raise c8.exceptions.DocumentReplaceError: If replace fails.
-    #     """
-    #     data = {
-    #         'collection': self.name,
-    #         'example': filters,
-    #         'newValue': body
-    #     }
-    #     if limit is not None:
-    #         data['limit'] = limit
-    #     if sync is not None:
-    #         data['waitForSync'] = sync
-    #
-    #     command = 'db.{}.replaceByExample({},{},{})'.format(
-    #         self.name,
-    #         dumps(filters),
-    #         dumps(body),
-    #         dumps(data)
-    #     ) if self._is_transaction else None
-    #
-    #     request = Request(
-    #         method='put',
-    #         endpoint='/simple/replace-by-example',
-    #         data=data,
-    #         command=command,
-    #         write=self.name
-    #     )
-    #
-    #     def response_handler(resp):
-    #         if not resp.is_success:
-    #             raise DocumentReplaceError(resp, request)
-    #         if self._is_transaction:
-    #             return resp.body
-    #         return resp.body['replaced']
-    #
-    #     return self._execute(request, response_handler)
+    def replace_match(self, filters, body, limit=None, sync=None):
+        """Replace matching documents.
+    
+        :param filters: Document filters.
+        :type filters: dict
+        :param body: New document body.
+        :type body: dict
+        :param limit: Max number of documents to replace. If the limit is lower
+            than the number of matched documents, random documents are chosen.
+        :type limit: int
+        :param sync: Block until operation is synchronized to disk.
+        :type sync: bool
+        :return: Number of documents replaced.
+        :rtype: int
+        :raise c8.exceptions.DocumentReplaceError: If replace fails.
+        """
+        data = {
+            'collection': self.name,
+            'example': filters,
+            'newValue': body
+        }
+        if limit is not None:
+            data['limit'] = limit
+        if sync is not None:
+            data['waitForSync'] = sync
+    
+        command = 'db.{}.replaceByExample({},{},{})'.format(
+            self.name,
+            dumps(filters),
+            dumps(body),
+            dumps(data)
+        ) if self._is_transaction else None
+    
+        request = Request(
+            method='put',
+            endpoint='/simple/replace-by-example',
+            data=data,
+            command=command,
+            write=self.name
+        )
+    
+        def response_handler(resp):
+            if not resp.is_success:
+                raise DocumentReplaceError(resp, request)
+            if self._is_transaction:
+                return resp.body
+            return resp.body['replaced']
+    
+        return self._execute(request, response_handler)
 
     def delete(self,
                document,
@@ -1998,59 +1992,58 @@ class StandardCollection(Collection):
 
         return self._execute(request, response_handler)
 
-    # Pratik: APIs not supported in documentation. Waiting for verification
-    # def delete_match(self, filters, limit=None, sync=None):
-    #     """Delete matching documents.
-    #
-    #     :param filters: Document filters.
-    #     :type filters: dict
-    #     :param limit: Max number of documents to delete. If the limit is lower
-    #         than the number of matched documents, random documents are chosen.
-    #     :type limit: int
-    #     :param sync: Block until operation is synchronized to disk.
-    #     :type sync: bool
-    #     :return: Number of documents deleted.
-    #     :rtype: dict
-    #     :raise c8.exceptions.DocumentDeleteError: If delete fails.
-    #     """
-    #     data = {'collection': self.name, 'example': filters}
-    #     if sync is not None:
-    #         data['waitForSync'] = sync
-    #     if limit is not None and limit != 0:
-    #         data['limit'] = limit
-    #
-    #     command = 'db.{}.removeByExample({},{})'.format(
-    #         self.name,
-    #         dumps(filters),
-    #         dumps(data)
-    #     ) if self._is_transaction else None
-    #
-    #     request = Request(
-    #         method='put',
-    #         endpoint='/simple/remove-by-example',
-    #         data=data,
-    #         command=command,
-    #         write=self.name
-    #     )
-    #
-    #     def response_handler(resp):
-    #         if not resp.is_success:
-    #             raise DocumentDeleteError(resp, request)
-    #         if self._is_transaction:
-    #             return resp.body
-    #         return resp.body['deleted']
-    #
-    #     return self._execute(request, response_handler)
+    def delete_match(self, filters, limit=None, sync=None):
+        """Delete matching documents.
+    
+        :param filters: Document filters.
+        :type filters: dict
+        :param limit: Max number of documents to delete. If the limit is lower
+            than the number of matched documents, random documents are chosen.
+        :type limit: int
+        :param sync: Block until operation is synchronized to disk.
+        :type sync: bool
+        :return: Number of documents deleted.
+        :rtype: dict
+        :raise c8.exceptions.DocumentDeleteError: If delete fails.
+        """
+        data = {'collection': self.name, 'example': filters}
+        if sync is not None:
+            data['waitForSync'] = sync
+        if limit is not None and limit != 0:
+            data['limit'] = limit
+    
+        command = 'db.{}.removeByExample({},{})'.format(
+            self.name,
+            dumps(filters),
+            dumps(data)
+        ) if self._is_transaction else None
+    
+        request = Request(
+            method='put',
+            endpoint='/simple/remove-by-example',
+            data=data,
+            command=command,
+            write=self.name
+        )
+    
+        def response_handler(resp):
+            if not resp.is_success:
+                raise DocumentDeleteError(resp, request)
+            if self._is_transaction:
+                return resp.body
+            return resp.body['deleted']
+    
+        return self._execute(request, response_handler)
 
-    #def import_bulk(self,
-    #                documents,
-    #                halt_on_error=True,
-    #                details=True,
-    #                from_prefix=None,
-    #                to_prefix=None,
-    #                overwrite=None,
-    #                on_duplicate=None,
-    #                sync=None):
+    def import_bulk(self,
+                   documents,
+                   halt_on_error=True,
+                   details=True,
+                   from_prefix=None,
+                   to_prefix=None,
+                   overwrite=None,
+                   on_duplicate=None,
+                   sync=None):
         """Insert multiple documents into the collection.
 
         This is faster than :func:`c8.collection.Collection.insert_many`
@@ -2094,42 +2087,42 @@ class StandardCollection(Collection):
         :rtype: dict
         :raise c8.exceptions.DocumentInsertError: If import fails.
         """
-    #    documents = [self._ensure_key_from_id(doc) for doc in documents]
+       documents = [self._ensure_key_from_id(doc) for doc in documents]
 
-    #    params = {
-    #        'type': 'array',
-    #        'collection': self.name,
-    #        'complete': halt_on_error,
-    #        'details': details,
-    #    }
-    #    if halt_on_error is not None:
-    #        params['complete'] = halt_on_error
-    #    if details is not None:
-    #        params['details'] = details
-    #    if from_prefix is not None:
-    #        params['fromPrefix'] = from_prefix
-    #    if to_prefix is not None:
-    #        params['toPrefix'] = to_prefix
-    #    if overwrite is not None:
-    #        params['overwrite'] = overwrite
-    #    if on_duplicate is not None:
-    #        params['onDuplicate'] = on_duplicate
-    #    if sync is not None:
-    #        params['waitForSync'] = sync
+       params = {
+           'type': 'array',
+           'collection': self.name,
+           'complete': halt_on_error,
+           'details': details,
+       }
+       if halt_on_error is not None:
+           params['complete'] = halt_on_error
+       if details is not None:
+           params['details'] = details
+       if from_prefix is not None:
+           params['fromPrefix'] = from_prefix
+       if to_prefix is not None:
+           params['toPrefix'] = to_prefix
+       if overwrite is not None:
+           params['overwrite'] = overwrite
+       if on_duplicate is not None:
+           params['onDuplicate'] = on_duplicate
+       if sync is not None:
+           params['waitForSync'] = sync
 
-    #   request = Request(
-    #        method='post',
-    #        endpoint='/bulk/import',
-    #        data=documents,
-    #        params=params
-    #    )
+      request = Request(
+           method='post',
+           endpoint='/bulk/import',
+           data=documents,
+           params=params
+       )
 
-    #    def response_handler(resp):
-    #        if not resp.is_success:
-    #            raise DocumentInsertError(resp, request)
-    #        return resp.body
+       def response_handler(resp):
+           if not resp.is_success:
+               raise DocumentInsertError(resp, request)
+           return resp.body
 
-    #    return self._execute(request, response_handler)
+       return self._execute(request, response_handler)
 
 
 class VertexCollection(Collection):

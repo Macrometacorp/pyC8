@@ -76,116 +76,115 @@ class AsyncJob(Job):
         """
         return self._id
 
-    # Pratik: APIs not supported in documentation. Waiting for verification
-    # def status(self):
-    #     """Return the async job status from server.
-    #
-    #     Once a job result is retrieved via func:`c8.job.AsyncJob.result`
-    #     method, it is deleted from server and subsequent status queries will
-    #     fail.
-    #
-    #     :return: Async job status. Possible values are "pending" (job is still
-    #         in queue), "done" (job finished or raised an error), or "cancelled"
-    #         (job was cancelled before completion).
-    #     :rtype: str | unicode
-    #     :raise c8.exceptions.AsyncJobStatusError: If retrieval fails.
-    #     """
-    #     request = Request(
-    #         method='get',
-    #         endpoint='/job/{}'.format(self._id)
-    #     )
-    #     resp = self._conn.send_request(request)
-    #     if resp.status_code == 204:
-    #         return 'pending'
-    #     elif resp.is_success:
-    #         return 'done'
-    #     elif resp.error_code == 404:
-    #         error_message = 'job {} not found'.format(self._id)
-    #         raise AsyncJobStatusError(resp, request, error_message)
-    #     else:
-    #         raise AsyncJobStatusError(resp, request)
-    #
-    # def result(self):
-    #     """Return the async job result from server.
-    #
-    #     If the job raised an exception, it is propagated up at this point.
-    #
-    #     Once job result is retrieved, it is deleted from server and subsequent
-    #     queries for result will fail.
-    #
-    #     :return: Async job result.
-    #     :rtype: str | unicode | bool | int | list | dict
-    #     :raise c8.exceptions.C8Error: If the job raised an exception.
-    #     :raise c8.exceptions.AsyncJobResultError: If retrieval fails.
-    #     """
-    #     request = Request(
-    #         method='put',
-    #         endpoint='/job/{}'.format(self._id)
-    #     )
-    #     resp = self._conn.send_request(request)
-    #     headers = resp.headers
-    #     if 'X-C8-Async-Id' in headers or 'x-c8-async-id' in headers:
-    #         return self._response_handler(resp)
-    #     if resp.status_code == 204:
-    #         error_message = 'job {} not done'.format(self._id)
-    #         raise AsyncJobResultError(resp, request, error_message)
-    #     elif resp.error_code == 404:
-    #         error_message = 'job {} not found'.format(self._id)
-    #         raise AsyncJobResultError(resp, request, error_message)
-    #     else:
-    #         raise AsyncJobResultError(resp, request)
-    #
-    # def cancel(self, ignore_missing=False):
-    #     """Cancel the async job.
-    #
-    #     An async job cannot be cancelled once it is taken out of the queue.
-    #
-    #     :param ignore_missing: Do not raise an exception on missing job.
-    #     :type ignore_missing: bool
-    #     :return: True if job was cancelled successfully, False if the job
-    #         was not found but **ignore_missing** was set to True.
-    #     :rtype: bool
-    #     :raise c8.exceptions.AsyncJobCancelError: If cancel fails.
-    #     """
-    #     request = Request(
-    #         method='put',
-    #         endpoint='/job/{}/cancel'.format(self._id)
-    #     )
-    #     resp = self._conn.send_request(request)
-    #     if resp.status_code == 200:
-    #         return True
-    #     elif resp.error_code == 404:
-    #         if ignore_missing:
-    #             return False
-    #         error_message = 'job {} not found'.format(self._id)
-    #         raise AsyncJobCancelError(resp, request, error_message)
-    #     else:
-    #         raise AsyncJobCancelError(resp, request)
-    #
-    # def clear(self, ignore_missing=False):
-    #     """Delete the job result from the server.
-    #
-    #     :param ignore_missing: Do not raise an exception on missing job.
-    #     :type ignore_missing: bool
-    #     :return: True if result was deleted successfully, False if the job
-    #         was not found but **ignore_missing** was set to True.
-    #     :rtype: bool
-    #     :raise c8.exceptions.AsyncJobClearError: If delete fails.
-    #     """
-    #     request = Request(
-    #         method='delete',
-    #         endpoint='/job/{}'.format(self._id)
-    #     )
-    #     resp = self._conn.send_request(request)
-    #     if resp.is_success:
-    #         return True
-    #     elif resp.error_code == 404:
-    #         if ignore_missing:
-    #             return False
-    #         error_message = 'job {} not found'.format(self._id)
-    #         raise AsyncJobClearError(resp, request, error_message)
-    #     else:
-    #         raise AsyncJobClearError(resp, request)
+    def status(self):
+        """Return the async job status from server.
+    
+        Once a job result is retrieved via func:`c8.job.AsyncJob.result`
+        method, it is deleted from server and subsequent status queries will
+        fail.
+    
+        :return: Async job status. Possible values are "pending" (job is still
+            in queue), "done" (job finished or raised an error), or "cancelled"
+            (job was cancelled before completion).
+        :rtype: str | unicode
+        :raise c8.exceptions.AsyncJobStatusError: If retrieval fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/job/{}'.format(self._id)
+        )
+        resp = self._conn.send_request(request)
+        if resp.status_code == 204:
+            return 'pending'
+        elif resp.is_success:
+            return 'done'
+        elif resp.error_code == 404:
+            error_message = 'job {} not found'.format(self._id)
+            raise AsyncJobStatusError(resp, request, error_message)
+        else:
+            raise AsyncJobStatusError(resp, request)
+    
+    def result(self):
+        """Return the async job result from server.
+    
+        If the job raised an exception, it is propagated up at this point.
+    
+        Once job result is retrieved, it is deleted from server and subsequent
+        queries for result will fail.
+    
+        :return: Async job result.
+        :rtype: str | unicode | bool | int | list | dict
+        :raise c8.exceptions.C8Error: If the job raised an exception.
+        :raise c8.exceptions.AsyncJobResultError: If retrieval fails.
+        """
+        request = Request(
+            method='put',
+            endpoint='/job/{}'.format(self._id)
+        )
+        resp = self._conn.send_request(request)
+        headers = resp.headers
+        if 'X-C8-Async-Id' in headers or 'x-c8-async-id' in headers:
+            return self._response_handler(resp)
+        if resp.status_code == 204:
+            error_message = 'job {} not done'.format(self._id)
+            raise AsyncJobResultError(resp, request, error_message)
+        elif resp.error_code == 404:
+            error_message = 'job {} not found'.format(self._id)
+            raise AsyncJobResultError(resp, request, error_message)
+        else:
+            raise AsyncJobResultError(resp, request)
+    
+    def cancel(self, ignore_missing=False):
+        """Cancel the async job.
+    
+        An async job cannot be cancelled once it is taken out of the queue.
+    
+        :param ignore_missing: Do not raise an exception on missing job.
+        :type ignore_missing: bool
+        :return: True if job was cancelled successfully, False if the job
+            was not found but **ignore_missing** was set to True.
+        :rtype: bool
+        :raise c8.exceptions.AsyncJobCancelError: If cancel fails.
+        """
+        request = Request(
+            method='put',
+            endpoint='/job/{}/cancel'.format(self._id)
+        )
+        resp = self._conn.send_request(request)
+        if resp.status_code == 200:
+            return True
+        elif resp.error_code == 404:
+            if ignore_missing:
+                return False
+            error_message = 'job {} not found'.format(self._id)
+            raise AsyncJobCancelError(resp, request, error_message)
+        else:
+            raise AsyncJobCancelError(resp, request)
+    
+    def clear(self, ignore_missing=False):
+        """Delete the job result from the server.
+    
+        :param ignore_missing: Do not raise an exception on missing job.
+        :type ignore_missing: bool
+        :return: True if result was deleted successfully, False if the job
+            was not found but **ignore_missing** was set to True.
+        :rtype: bool
+        :raise c8.exceptions.AsyncJobClearError: If delete fails.
+        """
+        request = Request(
+            method='delete',
+            endpoint='/job/{}'.format(self._id)
+        )
+        resp = self._conn.send_request(request)
+        if resp.is_success:
+            return True
+        elif resp.error_code == 404:
+            if ignore_missing:
+                return False
+            error_message = 'job {} not found'.format(self._id)
+            raise AsyncJobClearError(resp, request, error_message)
+        else:
+            raise AsyncJobClearError(resp, request)
 
 
 class BatchJob(Job):
