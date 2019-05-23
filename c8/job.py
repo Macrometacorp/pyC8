@@ -78,11 +78,11 @@ class AsyncJob(Job):
 
     def status(self):
         """Return the async job status from server.
-    
+
         Once a job result is retrieved via func:`c8.job.AsyncJob.result`
         method, it is deleted from server and subsequent status queries will
         fail.
-    
+
         :return: Async job status. Possible values are "pending" (job is still
             in queue), "done" (job finished or raised an error), or "cancelled"
             (job was cancelled before completion).
@@ -103,15 +103,15 @@ class AsyncJob(Job):
             raise AsyncJobStatusError(resp, request, error_message)
         else:
             raise AsyncJobStatusError(resp, request)
-    
+
     def result(self):
         """Return the async job result from server.
-    
+
         If the job raised an exception, it is propagated up at this point.
-    
+
         Once job result is retrieved, it is deleted from server and subsequent
         queries for result will fail.
-    
+
         :return: Async job result.
         :rtype: str | unicode | bool | int | list | dict
         :raise c8.exceptions.C8Error: If the job raised an exception.
@@ -133,12 +133,12 @@ class AsyncJob(Job):
             raise AsyncJobResultError(resp, request, error_message)
         else:
             raise AsyncJobResultError(resp, request)
-    
+
     def cancel(self, ignore_missing=False):
         """Cancel the async job.
-    
+
         An async job cannot be cancelled once it is taken out of the queue.
-    
+
         :param ignore_missing: Do not raise an exception on missing job.
         :type ignore_missing: bool
         :return: True if job was cancelled successfully, False if the job
@@ -160,10 +160,10 @@ class AsyncJob(Job):
             raise AsyncJobCancelError(resp, request, error_message)
         else:
             raise AsyncJobCancelError(resp, request)
-    
+
     def clear(self, ignore_missing=False):
         """Delete the job result from the server.
-    
+
         :param ignore_missing: Do not raise an exception on missing job.
         :type ignore_missing: bool
         :return: True if result was deleted successfully, False if the job

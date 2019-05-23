@@ -1,7 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-__all__ = ['StandardCollection', 'VertexCollection', 'EdgeCollection']
-
 from numbers import Number
 
 from json import dumps
@@ -34,6 +32,8 @@ from c8.utils import (
     is_none_or_int,
     is_none_or_str,
 )
+
+__all__ = ['StandardCollection', 'VertexCollection', 'EdgeCollection']
 
 
 class Collection(APIWrapper):
@@ -386,7 +386,7 @@ class Collection(APIWrapper):
 
     def ids(self):
         """Return the IDs of all documents in the collection.
-    
+
         :return: Document ID cursor.
         :rtype: c8.cursor.Cursor
         :raise c8.exceptions.DocumentIDsError: If retrieval fails.
@@ -398,17 +398,17 @@ class Collection(APIWrapper):
             command='db.{}.toArray().map(d => d._id)'.format(self.name),
             read=self.name
         )
-    
+
         def response_handler(resp):
             if not resp.is_success:
                 raise DocumentIDsError(resp, request)
             return Cursor(self._conn, resp.body)
-    
+
         return self._execute(request, response_handler)
-    
+
     def keys(self):
         """Return the keys of all documents in the collection.
-    
+
         :return: Document key cursor.
         :rtype: c8.cursor.Cursor
         :raise c8.exceptions.DocumentKeysError: If retrieval fails.
@@ -420,17 +420,17 @@ class Collection(APIWrapper):
             command='db.{}.toArray().map(d => d._key)'.format(self.name),
             read=self.name
         )
-    
+
         def response_handler(resp):
             if not resp.is_success:
                 raise DocumentKeysError(resp, request)
             return Cursor(self._conn, resp.body)
-    
+
         return self._execute(request, response_handler)
-    
+
     def all(self, skip=None, limit=None):
         """Return all documents in the collection.
-    
+
         :param skip: Number of documents to skip.
         :type skip: int
         :param limit: Max number of documents returned.
@@ -441,19 +441,19 @@ class Collection(APIWrapper):
         """
         assert is_none_or_int(skip), 'skip must be a non-negative int'
         assert is_none_or_int(limit), 'limit must be a non-negative int'
-    
+
         data = {'collection': self.name}
         if skip is not None:
             data['skip'] = skip
         if limit is not None:
             data['limit'] = limit
-    
+
         command = 'db.{}.all(){}{}.toArray()'.format(
             self.name,
             '' if skip is None else '.skip({})'.format(skip),
             '' if limit is None else '.limit({})'.format(limit),
         ) if self._is_transaction else None
-    
+
         request = Request(
             method='put',
             endpoint='/simple/all',
@@ -461,7 +461,7 @@ class Collection(APIWrapper):
             command=command,
             read=self.name
         )
-    
+
         def response_handler(resp):
             # TODO workaround for a bug in C8Db
             if self._is_transaction and limit == 0:
@@ -469,18 +469,18 @@ class Collection(APIWrapper):
             if not resp.is_success:
                 raise DocumentGetError(resp, request)
             return Cursor(self._conn, resp.body)
-    
+
         return self._execute(request, response_handler)
 
     def export(self,
-              limit=None,
-              count=False,
-              batch_size=None,
-              flush=False,
-              flush_wait=None,
-              ttl=None,
-              filter_fields=None,
-              filter_type='include'):  # pragma: no cover
+               limit=None,
+               count=False,
+               batch_size=None,
+               flush=False,
+               flush_wait=None,
+               ttl=None,
+               filter_fields=None,
+               filter_type='include'):  # pragma: no cover
         """Export all documents in the collection using a server cursor.
 
         :param flush: If set to True, flush the write-ahead log prior to the
@@ -506,37 +506,37 @@ class Collection(APIWrapper):
         :rtype: c8.cursor.Cursor
         :raise c8.exceptions.DocumentGetError: If export fails.
         """
-       data = {'count': count, 'flush': flush}
-       if flush_wait is not None:
-           data['flushWait'] = flush_wait
-       if batch_size is not None:
-           data['batchSize'] = batch_size
-       if limit is not None:
-           data['limit'] = limit
-       if ttl is not None:
-           data['ttl'] = ttl
-       if filter_fields is not None:
-           data['restrict'] = {
-               'fields': filter_fields,
-               'type': filter_type
-           }
-       request = Request(
-           method='post',
-           endpoint='/bulk/export',
-           params={'collection': self.name},
-           data=data
-       )
+        data = {'count': count, 'flush': flush}
+        if flush_wait is not None:
+            data['flushWait'] = flush_wait
+        if batch_size is not None:
+            data['batchSize'] = batch_size
+        if limit is not None:
+            data['limit'] = limit
+        if ttl is not None:
+            data['ttl'] = ttl
+        if filter_fields is not None:
+            data['restrict'] = {
+                'fields': filter_fields,
+                'type': filter_type
+            }
+        request = Request(
+            method='post',
+            endpoint='/bulk/export',
+            params={'collection': self.name},
+            data=data
+        )
 
-       def response_handler(resp):
-           if not resp.is_success:
-               raise DocumentGetError(resp, request)
-           return Cursor(self._conn, resp.body, 'export')
+        def response_handler(resp):
+            if not resp.is_success:
+                raise DocumentGetError(resp, request)
+            return Cursor(self._conn, resp.body, 'export')
 
-       return self._execute(request, response_handler)
+        return self._execute(request, response_handler)
 
     def find(self, filters, skip=None, limit=None):
         """Return all documents that match the given filters.
-    
+
         :param filters: Document filters.
         :type filters: dict
         :param skip: Number of documents to skip.
@@ -550,7 +550,7 @@ class Collection(APIWrapper):
         assert isinstance(filters, dict), 'filters must be a dict'
         assert is_none_or_int(skip), 'skip must be a non-negative int'
         assert is_none_or_int(limit), 'limit must be a non-negative int'
-    
+
         data = {
             'collection': self.name,
             'example': filters,
@@ -558,14 +558,14 @@ class Collection(APIWrapper):
         }
         if limit is not None:
             data['limit'] = limit
-    
+
         command = 'db.{}.byExample({}){}{}.toArray()'.format(
             self.name,
             dumps(filters),
             '' if skip is None else '.skip({})'.format(skip),
             '' if limit is None else '.limit({})'.format(limit),
         ) if self._is_transaction else None
-    
+
         request = Request(
             method='put',
             endpoint='/simple/by-example',
@@ -573,12 +573,12 @@ class Collection(APIWrapper):
             command=command,
             read=self.name
         )
-    
+
         def response_handler(resp):
             if not resp.is_success:
                 raise DocumentGetError(resp, request)
             return Cursor(self._conn, resp.body)
-    
+
         return self._execute(request, response_handler)
 
     def find_near(self, latitude, longitude, limit=None):
@@ -791,7 +791,7 @@ class Collection(APIWrapper):
                     limit=None,
                     index=None):
         """Return all documents in an rectangular area.
-    
+
         :param latitude1: First latitude.
         :type latitude1: int | float
         :param longitude1: First longitude.
@@ -817,7 +817,7 @@ class Collection(APIWrapper):
         assert isinstance(longitude2, Number), 'longitude2 must be a number'
         assert is_none_or_int(skip), 'skip must be a non-negative int'
         assert is_none_or_int(limit), 'limit must be a non-negative int'
-    
+
         data = {
             'collection': self._name,
             'latitude1': latitude1,
@@ -831,7 +831,7 @@ class Collection(APIWrapper):
             data['limit'] = limit
         if index is not None:
             data['geo'] = self._name + '/' + index
-    
+
         command = 'db.{}.withinRectangle({},{},{},{}){}{}.toArray()'.format(
             self.name,
             latitude1,
@@ -841,7 +841,7 @@ class Collection(APIWrapper):
             '' if skip is None else '.skip({})'.format(skip),
             '' if limit is None else '.limit({})'.format(limit),
         ) if self._is_transaction else None
-    
+
         request = Request(
             method='put',
             endpoint='/simple/within-rectangle',
@@ -849,12 +849,12 @@ class Collection(APIWrapper):
             command=command,
             read=self.name
         )
-    
+
         def response_handler(resp):
             if not resp.is_success:
                 raise DocumentGetError(resp, request)
             return Cursor(self._conn, resp.body)
-    
+
         return self._execute(request, response_handler)
 
     def find_by_text(self, field, query, limit=None):
@@ -912,7 +912,7 @@ class Collection(APIWrapper):
 
     def get_many(self, documents):
         """Return multiple documents ignoring any missing ones.
-    
+
         :param documents: List of document keys, IDs or bodies. Document bodies
             must contain the "_id" or "_key" fields.
         :type documents: [str | unicode | dict]
@@ -924,12 +924,12 @@ class Collection(APIWrapper):
             self._extract_id(doc) if isinstance(doc, dict) else doc
             for doc in documents
         ]
-    
+
         command = 'db.{}.document({})'.format(
             self.name,
             dumps(handles)
         ) if self._is_transaction else None
-    
+
         request = Request(
             method='put',
             endpoint='/simple/lookup-by-keys',
@@ -937,7 +937,7 @@ class Collection(APIWrapper):
             command=command,
             read=self.name
         )
-    
+
         def response_handler(resp):
             if not resp.is_success:
                 raise DocumentGetError(resp, request)
@@ -946,12 +946,12 @@ class Collection(APIWrapper):
             else:
                 docs = resp.body['documents']
             return [doc for doc in docs if '_id' in doc]
-    
+
         return self._execute(request, response_handler)
-    
+
     def random(self):
         """Return a random document from the collection.
-    
+
         :return: A random document.
         :rtype: dict
         :raise c8.exceptions.DocumentGetError: If retrieval fails.
@@ -963,14 +963,14 @@ class Collection(APIWrapper):
             command='db.{}.any()'.format(self.name),
             read=self.name
         )
-    
+
         def response_handler(resp):
             if not resp.is_success:
                 raise DocumentGetError(resp, request)
             if self._is_transaction:
                 return resp.body
             return resp.body['document']
-    
+
         return self._execute(request, response_handler)
 
     ####################
@@ -1568,7 +1568,7 @@ class StandardCollection(Collection):
                      sync=None,
                      merge=True):
         """Update matching documents.
-    
+
         :param filters: Document filters.
         :type filters: dict
         :param body: Full or partial document body with the updates.
@@ -1600,14 +1600,14 @@ class StandardCollection(Collection):
             data['limit'] = limit
         if sync is not None:
             data['waitForSync'] = sync
-    
+
         command = 'db.{}.updateByExample({},{},{})'.format(
             self.name,
             dumps(filters),
             dumps(body),
             dumps(data)
         ) if self._is_transaction else None
-    
+
         request = Request(
             method='put',
             endpoint='/simple/update-by-example',
@@ -1615,14 +1615,14 @@ class StandardCollection(Collection):
             command=command,
             write=self.name
         )
-    
+
         def response_handler(resp):
             if not resp.is_success:
                 raise DocumentUpdateError(resp, request)
             if self._is_transaction:
                 return resp.body
             return resp.body['updated']
-    
+
         return self._execute(request, response_handler)
 
     def replace(self,
@@ -1785,7 +1785,7 @@ class StandardCollection(Collection):
 
     def replace_match(self, filters, body, limit=None, sync=None):
         """Replace matching documents.
-    
+
         :param filters: Document filters.
         :type filters: dict
         :param body: New document body.
@@ -1808,14 +1808,14 @@ class StandardCollection(Collection):
             data['limit'] = limit
         if sync is not None:
             data['waitForSync'] = sync
-    
+
         command = 'db.{}.replaceByExample({},{},{})'.format(
             self.name,
             dumps(filters),
             dumps(body),
             dumps(data)
         ) if self._is_transaction else None
-    
+
         request = Request(
             method='put',
             endpoint='/simple/replace-by-example',
@@ -1823,14 +1823,14 @@ class StandardCollection(Collection):
             command=command,
             write=self.name
         )
-    
+
         def response_handler(resp):
             if not resp.is_success:
                 raise DocumentReplaceError(resp, request)
             if self._is_transaction:
                 return resp.body
             return resp.body['replaced']
-    
+
         return self._execute(request, response_handler)
 
     def delete(self,
@@ -1994,7 +1994,7 @@ class StandardCollection(Collection):
 
     def delete_match(self, filters, limit=None, sync=None):
         """Delete matching documents.
-    
+
         :param filters: Document filters.
         :type filters: dict
         :param limit: Max number of documents to delete. If the limit is lower
@@ -2011,13 +2011,13 @@ class StandardCollection(Collection):
             data['waitForSync'] = sync
         if limit is not None and limit != 0:
             data['limit'] = limit
-    
+
         command = 'db.{}.removeByExample({},{})'.format(
             self.name,
             dumps(filters),
             dumps(data)
         ) if self._is_transaction else None
-    
+
         request = Request(
             method='put',
             endpoint='/simple/remove-by-example',
@@ -2025,25 +2025,25 @@ class StandardCollection(Collection):
             command=command,
             write=self.name
         )
-    
+
         def response_handler(resp):
             if not resp.is_success:
                 raise DocumentDeleteError(resp, request)
             if self._is_transaction:
                 return resp.body
             return resp.body['deleted']
-    
+
         return self._execute(request, response_handler)
 
     def import_bulk(self,
-                   documents,
-                   halt_on_error=True,
-                   details=True,
-                   from_prefix=None,
-                   to_prefix=None,
-                   overwrite=None,
-                   on_duplicate=None,
-                   sync=None):
+                    documents,
+                    halt_on_error=True,
+                    details=True,
+                    from_prefix=None,
+                    to_prefix=None,
+                    overwrite=None,
+                    on_duplicate=None,
+                    sync=None):
         """Insert multiple documents into the collection.
 
         This is faster than :func:`c8.collection.Collection.insert_many`
@@ -2087,42 +2087,42 @@ class StandardCollection(Collection):
         :rtype: dict
         :raise c8.exceptions.DocumentInsertError: If import fails.
         """
-       documents = [self._ensure_key_from_id(doc) for doc in documents]
+        documents = [self._ensure_key_from_id(doc) for doc in documents]
 
-       params = {
-           'type': 'array',
-           'collection': self.name,
-           'complete': halt_on_error,
-           'details': details,
-       }
-       if halt_on_error is not None:
-           params['complete'] = halt_on_error
-       if details is not None:
-           params['details'] = details
-       if from_prefix is not None:
-           params['fromPrefix'] = from_prefix
-       if to_prefix is not None:
-           params['toPrefix'] = to_prefix
-       if overwrite is not None:
-           params['overwrite'] = overwrite
-       if on_duplicate is not None:
-           params['onDuplicate'] = on_duplicate
-       if sync is not None:
-           params['waitForSync'] = sync
+        params = {
+            'type': 'array',
+            'collection': self.name,
+            'complete': halt_on_error,
+            'details': details,
+        }
+        if halt_on_error is not None:
+            params['complete'] = halt_on_error
+        if details is not None:
+            params['details'] = details
+        if from_prefix is not None:
+            params['fromPrefix'] = from_prefix
+        if to_prefix is not None:
+            params['toPrefix'] = to_prefix
+        if overwrite is not None:
+            params['overwrite'] = overwrite
+        if on_duplicate is not None:
+            params['onDuplicate'] = on_duplicate
+        if sync is not None:
+            params['waitForSync'] = sync
 
-      request = Request(
-           method='post',
-           endpoint='/bulk/import',
-           data=documents,
-           params=params
-       )
+        request = Request(
+            method='post',
+            endpoint='/bulk/import',
+            data=documents,
+            params=params
+        )
 
-       def response_handler(resp):
-           if not resp.is_success:
-               raise DocumentInsertError(resp, request)
-           return resp.body
+        def response_handler(resp):
+            if not resp.is_success:
+                raise DocumentInsertError(resp, request)
+            return resp.body
 
-       return self._execute(request, response_handler)
+        return self._execute(request, response_handler)
 
 
 class VertexCollection(Collection):

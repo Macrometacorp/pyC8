@@ -50,6 +50,18 @@ class Function(APIWrapper):
         :return: True if function is created successfully.
         :rtype: bool
         :raise c8.exceptions.FunctionCreateError: If create fails.
+
+        data example:
+        {
+            "envProcess": "string",
+            "envVars": {},
+            "fnSize": "string",
+            "image": "string",
+            "inputTrigger": ["string"],
+            "inputTriggerType": "string",
+            "local": boolean,
+            "service": "string"
+        }
         """
         request = Request(method='post', endpoint='/_fn', data=data)
 
@@ -184,7 +196,6 @@ class Function(APIWrapper):
                           data=data)
 
         def response_handler(resp):
-            print("resp: %s" % resp.body)
             if not resp.is_success:
                 raise FunctionExecuteError(resp, request)
             return True
