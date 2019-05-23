@@ -8,6 +8,7 @@ setup(
     version='0.11.3',
     description='Python Driver for Macrometa Global Edge Fabric',
     long_description=description,
+    long_description_content_type="text/markdown",
     author='Macrometa',
     author_email='info@macrometa.co',
     url='https://www.macrometa.io',
