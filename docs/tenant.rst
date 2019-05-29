@@ -43,37 +43,37 @@ These operations can only be executed by the tenant admin. Tenant users who have
     sys_fabric.delete_fabric('demofabric')
 
 
-    # save user query
+    # save restql
     data = {
         "query": {
             "parameter": {},
-            "name": "demo_query",
+            "name": "demo",
             "value": "FOR employee IN employees RETURN employee"
         }
     }
-    response = demotenant.save_query(data)
+    response = demotenant.save_restql(data)
 
-    # execute saved query without bindVars
-    response = demotenant.execute_saved_query("demo_query")
+    # execute restql without bindVars
+    response = demotenant.execute_restql("demo")
 
-    # execute saved query with bindVars
-    response = demotenant.execute_saved_query(
-        "demo_query", {"bindVars": {"name": "guest.root"}})
+    # execute restql with bindVars
+    response = demotenant.execute_restql("demo",
+                                         {"bindVars": {"name": "guest.root"}})
 
-    # get all saved queries
-    response = demotenant.get_saved_queries()
+    # get all restql
+    response = demotenant.get_all_restql()
 
-    # update saved query
+    # update restql
     data = {
         "query": {
             "parameter": {},
             "value": "FOR employee IN employees Filter doc.name=@name RETURN employee"
         }
     }
-    response = demotenant.update_saved_query("demo_query", data)
+    response = demotenant.update_restql("demo", data)
 
-    # delete saved query
-    response = demotenant.delete_saved_query("demo_query")
+    # delete restql
+    response = demotenant.delete_restql("demo")
 
 
 See :ref:`C8Client`, :ref:`Tenant` and :ref:`StandardFabric` for API specification.

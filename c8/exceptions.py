@@ -88,11 +88,14 @@ class C8ServerError(C8Error):
 class StreamProducerError(C8ClientError):
     """Failed to create Stream Producer"""
 
+
 class StreamSubscriberError(C8ClientError):
     """Failed to create Stream Subscriber"""
 
+
 class StreamConnectionError(C8ServerError):
     """Failed to connect to C8 stream."""
+
 
 class StreamListError(C8ServerError):
     """Failed to retrieve streams."""
@@ -104,6 +107,7 @@ class StreamPropertiesError(C8ServerError):
 
 class StreamCreateError(C8ServerError):
     """Failed to create stream."""
+
 
 class StreamDeleteError(C8ServerError):
     """Failed to delete stream."""
@@ -132,12 +136,14 @@ class StreamCommunicationError(C8ServerError):
 class StreamEventError(C8ClientError):
     """Failed to process the event from C8 stream."""
 
+
 class StreamBadInputError(C8ClientError):
     """If the request doesn’t have the expected format."""
 
 #######################
 # Tenant Exceptions #
 #######################
+
 
 class TenantListError(C8ServerError):
     """Failed to retrieve tenants."""
@@ -154,6 +160,7 @@ class TenantPropertiesError(C8ServerError):
 class TenantCreateError(C8ServerError):
     """Failed to create tenant."""
 
+
 class TenantUpdateError(C8ClientError):
     """Failed to update tenant."""
 
@@ -161,11 +168,10 @@ class TenantUpdateError(C8ClientError):
 class TenantDeleteError(C8ServerError):
     """Failed to delete tenant."""
 
-
-
 #######################
 # Topic Exceptions #
 #######################
+
 
 class TopicListError(C8ServerError):
     """Failed to retrieve topic."""
@@ -186,8 +192,10 @@ class TopicDeleteError(C8ServerError):
 class SubscriptionDeleteError(C8ServerError):
     """Failed to delete subscription."""
 
+
 class SubscriptionUpdateError(C8ServerError):
     """Failed to update subscription."""
+
 
 class TopicStatisticsError(C8ServerError):
     """Failed to get topic stats."""
@@ -346,8 +354,10 @@ class FabricCreateError(C8ServerError):
 class FabricDeleteError(C8ServerError):
     """Failed to delete fabric."""
 
+
 class SpotRegionUpdateError(C8ServerError):
     """Failed to update Spot Region"""
+
 
 class SpotRegionAssignError(C8ServerError):
     """Fails to assign region as Spot Region"""
@@ -420,6 +430,7 @@ class GraphDeleteError(C8ServerError):
 
 class GraphPropertiesError(C8ServerError):
     """Failed to retrieve graph properties."""
+
 
 class VertexCollectionListError(C8ServerError):
     """Failed to retrieve vertex collections."""
@@ -558,50 +569,26 @@ class PermissionResetError(C8ServerError):
     """Failed to reset user permission."""
 
 
-#########################
-# Function Exceptions #
-#########################
+#####################
+# Restql Exceptions #
+#####################
 
 
-class FunctionCreateError(C8ServerError):
-    """Failed to create function."""
+class RestqlCreateError(C8ServerError):
+    """Failed to create restql."""
 
 
-class FunctionDeleteError(C8ServerError):
-    """Failed to delete function."""
+class RestqlDeleteError(C8ServerError):
+    """Failed to delete restql."""
 
 
-class FunctionGetError(C8ServerError):
-    """Failed to get function details."""
+class RestqlListError(C8ServerError):
+    """Failed to get restql details."""
 
 
-class FunctionListError(C8ServerError):
-    """Failed to list functions."""
+class RestqlUpdateError(C8ServerError):
+    """Failed to update restql."""
 
 
-class FunctionUpdateError(C8ServerError):
-    """Failed to update function."""
-
-
-class FunctionExecuteError(C8ServerError):
-    """Failed to execute function."""
-
-
-class SavedQueriesCreateError(C8ServerError):
-    """Failed to create saved query."""
-
-
-class SavedQueriesDeleteError(C8ServerError):
-    """Failed to delete saved query."""
-
-
-class SavedQueriesListError(C8ServerError):
-    """Failed to get saved query details."""
-
-
-class SavedQueriesUpdateError(C8ServerError):
-    """Failed to update saved query."""
-
-
-class SavedQueriesExecuteError(C8ServerError):
-    """Failed to execute saved query."""
+class RestqlExecuteError(C8ServerError):
+    """Failed to execute restql."""

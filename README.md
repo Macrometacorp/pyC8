@@ -256,56 +256,7 @@ sys_fabric.update_spot_region('guest', 'spot-geo-fabric', 'REGION-2')
 
 ```
 
-Workflow of **invoking functions** using Collections:
-
-```python
-
-  from c8 import C8Client
-  import time
-  import warnings
-  warnings.filterwarnings("ignore")
-
-  region = "qa1-us-east-1.ops.aws.macrometa.io"
-
-  #--------------------------------------------------------------
-  print("invoke function using collections...")
-  client = C8Client(protocol='https', host=region, port=443)
-  fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
-  function = client.function(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
-  collection = fabric.create_collection("collection1")
-  function.create_function(name="localfn", image="Macrometa/hello-world",
-                           triggers=["collection1"], trigger_type='Collection',
-                           is_local=True)
-  collection.insert({"message": "testing functions"})
-```
-
-Workflow of **invoking functions** using Streams:
-
-```python
-
-  from c8 import C8Client
-  import time
-  import warnings
-  warnings.filterwarnings("ignore")
-
-  region = "qa1-us-east-1.ops.aws.macrometa.io"
-
-  #--------------------------------------------------------------
-  print("invoke function using streams...")
-  client = C8Client(protocol='https', host=region, port=443)
-  fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
-  function = client.function(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
-  fabric.create_stream("stream1", local=True)
-  function.create_function(name="localfn", image="Macrometa/hello-world",
-                           triggers=["stream1"], trigger_type='Stream',
-                           is_local=True)
-  stream = fabric.stream()
-  producer = stream.create_producer(stream_name, local=is_local)
-  msg = {"message": "testing functions"}
-  producer.send(bytes(json.dumps(message), 'utf-8'))
-```
-
-Example for **user query** operations:
+Example for **restql** operations:
 
 ``` python
   from c8 import C8Client
@@ -317,35 +268,35 @@ Example for **user query** operations:
   demotenant = client.tenant(name="demo_tenant", fabricname='_system',
                              username='root', password='demo')
   #--------------------------------------------------------------
-  print("save query...")
+  print("save restql...")
   data = {
     "query": {
       "parameter": {},
-      "name": "demo_query",
+      "name": "demo",
       "value": "FOR employee IN employees RETURN employee"
     }
   }
-  response = demotenant.save_query(data)
+  response = demotenant.save_restql(data)
   #--------------------------------------------------------------
-  print("execute saved query without bindVars...")
-  response = demotenant.execute_saved_query("demo_query")
+  print("execute restql without bindVars...")
+  response = demotenant.execute_restql("demo")
   #--------------------------------------------------------------
-  print("execute saved query with bindVars...")
-  response = demotenant.execute_saved_query(
-    "demo_query", {"bindVars": {"name": "guest.root"}})
+  print("execute restql with bindVars...")
+  response = demotenant.execute_restql("demo",
+                                       {"bindVars": {"name": "guest.root"}})
   #--------------------------------------------------------------
-  print("get all saved queries...")
-  response = demotenant.get_saved_queries()
+  print("get all restql...")
+  response = demotenant.get_all_restql()
   #--------------------------------------------------------------
-  print("update saved query...")
+  print("update restql...")
   data = {
     "query": {
       "parameter": {},
       "value": "FOR employee IN employees Filter doc.name=@name RETURN employee"
     }
   }
-  response = demotenant.update_saved_query("demo_query", data)
+  response = demotenant.update_restql("demo", data)
   #--------------------------------------------------------------
-  print("delete saved query...")
-  response = demotenant.delete_saved_query("demo_query")
+  print("delete restql...")
+  response = demotenant.delete_restql("demo")
 ```

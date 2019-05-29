@@ -30,11 +30,11 @@ from c8.exceptions import (
     UserReplaceError,
     UserUpdateError,
     SpotRegionAssignError,
-    SavedQueriesListError,
-    SavedQueriesCreateError,
-    SavedQueriesUpdateError,
-    SavedQueriesDeleteError,
-    SavedQueriesExecuteError
+    RestqlListError,
+    RestqlCreateError,
+    RestqlUpdateError,
+    RestqlDeleteError,
+    RestqlExecuteError
 )
 
 __all__ = ['Tenant']
@@ -587,109 +587,6 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def save_query(self, query_data):
-        """Save query.
-
-        :param query_data: query data
-        :type query_data: dict
-        :return: Results of saved query
-        :rtype: dict
-        :raise c8.exceptions.SavedQueriesPostError: if query creation failed
-        """
-
-        request = Request(method="post", endpoint="/userqueries",
-                          data=query_data)
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise SavedQueriesCreateError(resp, request)
-            return resp.body["result"]
-
-        return self._execute(request, response_handler)
-
-    def execute_saved_query(self, query_name, query_data=None):
-        """Execute saved query.
-
-        :param query_name: query name
-        :type query_name: str | unicode
-        :param query_data: query data (optional)
-        :type query_data: dict
-        :return: Results of execute saved query
-        :rtype: dict
-        :raise c8.exceptions.SavedQueriesPostError: if query creation failed
-        """
-
-        if query_data and "bindVars" in query_data:
-            request = Request(method="post", data=query_data,
-                              endpoint="/userqueries/execute/%s" % query_name)
-        else:
-            request = Request(method="post",
-                              endpoint="/userqueries/execute/%s" % query_name)
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise SavedQueriesExecuteError(resp, request)
-            return resp.body
-
-        return self._execute(request, response_handler)
-
-    def get_saved_queries(self):
-        """Get all saved query.
-
-        :return: Details of all saved queries
-        :rtype: list
-        :raise c8.exceptions.SavedQueriesGetError: if getting query failed
-        """
-
-        request = Request(method="get", endpoint="/userqueries/user")
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise SavedQueriesListError(resp, request)
-            return resp.body["result"]
-
-        return self._execute(request, response_handler)
-
-    def update_saved_query(self, query_name, query_data):
-        """Update saved query.
-
-        :param query_name: name of query
-        :type query_name: str | unicode
-        :param query_data: query data
-        :type query_data: dict
-        :return: True if query is deleted
-        :rtype: bool
-        :raise c8.exceptions.SavedQueriesUpdateError: if query update failed
-        """
-        request = Request(method="put", data=query_data,
-                          endpoint="/userqueries/" + query_name)
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise SavedQueriesUpdateError(resp, request)
-            return True
-
-        return self._execute(request, response_handler)
-
-    def delete_saved_query(self, query_name):
-        """Delete saved query.
-
-        :param query_name: name of query
-        :type query_name: str | unicode
-        :return: True if query is deleted
-        :rtype: bool
-        :raise c8.exceptions.SavedQueriesDeleteError: if query deletion failed
-        """
-        request = Request(method="delete",
-                          endpoint="/userqueries/" + query_name)
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise SavedQueriesDeleteError(resp, request)
-            return True
-
-        return self._execute(request, response_handler)
-
     def replace_user(self, username, password, active=None, extra=None):
         """Replace a user.
 
@@ -751,6 +648,110 @@ class Tenant(APIWrapper):
             elif resp.status_code == 404 and ignore_missing:
                 return False
             raise UserDeleteError(resp, request)
+
+        return self._execute(request, response_handler)
+
+    #####################
+    # Restql Management #
+    #####################
+
+    def save_restql(self, data):
+        """Save restql by name.
+
+        :param data: data to be used for restql POST API
+        :type data: dict
+        :return: Results of restql API
+        :rtype: dict
+        :raise c8.exceptions.RestqlCreateError: if restql operation failed
+        """
+
+        request = Request(method="post", endpoint="/restql", data=data)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlCreateError(resp, request)
+            return resp.body["result"]
+
+        return self._execute(request, response_handler)
+
+    def execute_restql(self, name, data=None):
+        """Execute restql by name.
+
+        :param name: restql name
+        :type name: str | unicode
+        :param data: restql data (optional)
+        :type data: dict
+        :return: Results of execute restql
+        :rtype: dict
+        :raise c8.exceptions.RestqlExecuteError: if restql execution failed
+        """
+
+        if data and "bindVars" in data:
+            request = Request(method="post", data=data,
+                              endpoint="/restql/execute/%s" % name)
+        else:
+            request = Request(method="post",
+                              endpoint="/restql/execute/%s" % name)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlExecuteError(resp, request)
+            return resp.body
+
+        return self._execute(request, response_handler)
+
+    def get_all_restql(self):
+        """Get all restql associated for user.
+
+        :return: Details of all restql
+        :rtype: list
+        :raise c8.exceptions.RestqlListError: if getting restql failed
+        """
+
+        request = Request(method="get", endpoint="/restql/user")
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlListError(resp, request)
+            return resp.body["result"]
+
+        return self._execute(request, response_handler)
+
+    def update_restql(self, name, data):
+        """Update restql by name.
+
+        :param name: name of restql
+        :type name: str | unicode
+        :param data: restql data
+        :type data: dict
+        :return: True if restql is updated
+        :rtype: bool
+        :raise c8.exceptions.RestqlUpdateError: if query update failed
+        """
+        request = Request(method="put", data=data, endpoint="/restql/" + name)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlUpdateError(resp, request)
+            return True
+
+        return self._execute(request, response_handler)
+
+    def delete_restql(self, name):
+        """Delete restql by name.
+
+        :param name: restql name
+        :type name: str | unicode
+        :return: True if restql is deleted
+        :rtype: bool
+        :raise c8.exceptions.RestqlDeleteError: if restql deletion failed
+        """
+        request = Request(method="delete", endpoint="/restql/" + name)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlDeleteError(resp, request)
+            return True
 
         return self._execute(request, response_handler)
 
