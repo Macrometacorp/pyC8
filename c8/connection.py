@@ -251,19 +251,3 @@ class RealtimeConnection(Connection):
     @property
     def realtime_url(self):
         return self._realtime_url
-
-
-class FunctionConnection(Connection):
-    """Function Connection wrapper.
-
-    :param connection: HTTP connection.
-    :type connection: c8.connection.Connection
-    """
-
-    def __init__(self, url, tenant, fabric, username, password, http_client):
-        super(FunctionConnection, self).__init__(url, tenant, fabric, username,
-                                                 password, http_client,
-                                                 is_fabric=True)
-
-    def __repr__(self):
-        return '<FunctionConnection>'
