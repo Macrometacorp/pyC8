@@ -30,6 +30,7 @@ from c8.exceptions import (
     UserReplaceError,
     UserUpdateError,
     SpotRegionAssignError,
+    RestqlValidationError,
     RestqlListError,
     RestqlCreateError,
     RestqlUpdateError,
@@ -664,6 +665,10 @@ class Tenant(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.RestqlCreateError: if restql operation failed
         """
+
+        query_name = data["query"]["name"]
+        if " " in query_name:
+            raise RestqlValidationError("White Spaces not allowed in Query Name")
 
         request = Request(method="post", endpoint="/restql", data=data)
 
