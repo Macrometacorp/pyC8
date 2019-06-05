@@ -574,6 +574,9 @@ class PermissionResetError(C8ServerError):
 #####################
 
 
+class RestqlValidationError(C8ClientError):
+    """Failed to validate restql data."""
+
 class RestqlCreateError(C8ServerError):
     """Failed to create restql."""
 
