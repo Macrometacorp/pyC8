@@ -157,11 +157,13 @@ class Tenant(APIWrapper):
         """
         return name in self.tenants()
 
-    def create_tenant(self, name, passwd='', extra={}):
+    def create_tenant(self, name, passwd='', dclist='', extra={}):
         """Create a new tenant.
         :param name: Tenant name.
         :type name: str | unicode
         :param passwd: What I presume is the tenant admin user password.
+        :param dclist: comma separated list of region where tenant will be created.
+                       If no value passed tenant will be created globally.
         :param extra: Extra config info.
         :type extra: [dict]
         :return: True if tenant was created successfully.
@@ -173,15 +175,16 @@ class Tenant(APIWrapper):
         .. code-block:: python
 
             {
-                'username': 'john',
-                'password': 'password',
-                'active': True,
+                'name': 'john',
+                'passwd': 'password',
                 'extra': {'Department': 'IT'}
             }
         """
         data = {'name': name}
         data['passwd'] = passwd
         data['extra'] = extra
+        if dclist != '':
+            data['dclist'] = dclist
 
         request = Request(
             method='post',

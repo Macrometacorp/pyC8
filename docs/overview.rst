@@ -23,7 +23,7 @@ Here is an example showing how **pyC8** client can be used:
    sys_tenant = client.tenant(name=macrometa-admin, fabricname='_system', username='root', password=macrometa-password)
 
    if not sys_tenant.has_tenant(demo_tenant):
-       sys_tenant.create_tenant(demo_tenant, passwd="poweruser")
+      sys_tenant.create_tenant(demo_tenant, passwd="poweruser", dclist="qa1-us-east-1,qa1-us-east-2,qa1-us-east-3") # dclist: list of comma separated region in which tenant has to be created
 
    #--------------------------------------------------------------
 
