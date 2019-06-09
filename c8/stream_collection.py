@@ -93,7 +93,8 @@ class StreamCollection(APIWrapper):
                         compression_type=COMPRESSION_TYPES.NONE,
                         max_pending_messages=1000,
                         block_if_queue_full=False, batching_enabled=False,
-                        batching_max_messages=1000, batching_max_allowed_size_in_bytes=131072,
+                        batching_max_messages=1000,
+                        batching_max_allowed_size_in_bytes=131072,
                         batching_max_publish_delay_ms=10,
                         message_routing_mode= ROUTING_MODE.ROUND_ROBIN_PARTITION
                         ):
@@ -151,14 +152,18 @@ class StreamCollection(APIWrapper):
             # else:
             #     topic = "non-persistent://" + self.tenant_name + "/" + namespace + "/" + stream
 
-            return self._client.create_producer(topic, producer_name,
-                                                initial_sequence_id, send_timeout_millis,
-                                                compression_type,
-                                                max_pending_messages,
-                                                block_if_queue_full, batching_enabled,
-                                                batching_max_messages, batching_max_allowed_size_in_bytes,
-                                                batching_max_publish_delay_ms,
-                                                message_routing_mode)
+            return self._client.create_producer(
+                topic=topic, producer_name=producer_name,
+                initial_sequence_id=initial_sequence_id,
+                send_timeout_millis=send_timeout_millis,
+                compression_type=compression_type,
+                max_pending_messages=max_pending_messages,
+                block_if_queue_full=block_if_queue_full,
+                batching_enabled=batching_enabled,
+                batching_max_messages=batching_max_messages,
+                batching_max_allowed_size_in_bytes=batching_max_allowed_size_in_bytes,  # noqa
+                batching_max_publish_delay_ms=batching_max_publish_delay_ms,
+                message_routing_mode=message_routing_mode)
         raise ex.StreamProducerError("No stream present with name:" + stream + ". Please create a stream and then stream producer")
 
     def create_reader(self, stream, start_message_id,
@@ -218,7 +223,7 @@ class StreamCollection(APIWrapper):
             type_constant = constants.STREAM_GLOBAL_NS_PREFIX
             if local:
                 type_constant = constants.STREAM_LOCAL_NS_PREFIX
-            
+
             namespace = type_constant + self.fabric_name
 
             if self.persistent:
@@ -232,7 +237,7 @@ class StreamCollection(APIWrapper):
         raise ex.StreamSubscriberError("No stream present with name:" + stream + ". Please create a stream and then stream reader.")
 
     def subscribe(self, stream, local=False, subscription_name=None,
-                  consumer_type= CONSUMER_TYPES.EXCLUSIVE,
+                  consumer_type=CONSUMER_TYPES.EXCLUSIVE,
                   message_listener=None,
                   receiver_queue_size=1000,
                   consumer_name=None,
@@ -306,25 +311,35 @@ class StreamCollection(APIWrapper):
 
             if not subscription_name:
                 subscription_name = self.tenant_name + "-" + self.fabric_name + "-subscription-" + str(random.randint(1,1000))
-            
+
             # KARTIK : 20181211 : Fix dangling consumer problem as mentioned in streams CPP client test code
             # First open a dummy subscription with the same name, then close it. This will help recover the
             # broker state in case a subscription with the same name was left hanging
             try:
-                consumer =  self._client.subscribe(topic, subscription_name, consumer_type,
-                                            message_listener, receiver_queue_size, consumer_name,
-                                            unacked_messages_timeout_ms, broker_consumer_stats_cache_time_ms,
-                                            is_read_compacted)
+                consumer = self._client.subscribe(
+                    topic=topic, subscription_name=subscription_name,
+                    consumer_type=consumer_type,
+                    message_listener=message_listener,
+                    receiver_queue_size=receiver_queue_size,
+                    consumer_name=consumer_name,
+                    unacked_messages_timeout_ms=unacked_messages_timeout_ms,
+                    broker_consumer_stats_cache_time_ms=broker_consumer_stats_cache_time_ms,  # noqa
+                    is_read_compacted=is_read_compacted)
                 consumer.close()
             except Exception:
                 pass
 
-            return self._client.subscribe(topic, subscription_name, consumer_type,
-                                        message_listener, receiver_queue_size, consumer_name,
-                                        unacked_messages_timeout_ms, broker_consumer_stats_cache_time_ms,
-                                        is_read_compacted)
+            return self._client.subscribe(
+                topic=topic, subscription_name=subscription_name,
+                consumer_type=consumer_type,
+                message_listener=message_listener,
+                receiver_queue_size=receiver_queue_size,
+                consumer_name=consumer_name,
+                unacked_messages_timeout_ms=unacked_messages_timeout_ms,
+                broker_consumer_stats_cache_time_ms=broker_consumer_stats_cache_time_ms,  # noqa
+                is_read_compacted=is_read_compacted)
         raise ex.StreamSubscriberError("No stream present with name:" + stream + ". Please create a stream and then stream subscriber.")
-                                      
+
     def unsubscribe(self, subscription):
         """Unsubscribes the given subscription on all streams on a stream fabric
         :param subscription
@@ -351,7 +366,7 @@ class StreamCollection(APIWrapper):
         :return: 200, OK if operation successful
         :raise c8.exceptions.StreamPermissionError: If clearing backlogs for all streams fails.
         """
-       
+
         request = Request(
             method='post',
             endpoint= '/streams/clearbacklog'
@@ -366,7 +381,7 @@ class StreamCollection(APIWrapper):
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-    
+
     def clear_stream_backlog(self, subscription):
         """Clear backlog for the given stream on a stream fabric
         :param: name of subscription
@@ -790,7 +805,7 @@ class StreamCollection(APIWrapper):
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-    
+
     def get_stream_compaction_status(self, stream, local=False):
         """
         Get the status of a compaction operation for a stream
@@ -819,7 +834,7 @@ class StreamCollection(APIWrapper):
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-    
+
     def put_stream_compaction_status(self, stream, local=False):
         """
         Trigger a compaction operation on a stream
