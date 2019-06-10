@@ -184,7 +184,7 @@ class Tenant(APIWrapper):
         data['passwd'] = passwd
         data['extra'] = extra
         if dclist != '':
-            data['dclist'] = dclist
+            data['dcList'] = dclist
 
         request = Request(
             method='post',
