@@ -5,7 +5,7 @@ with open('./README.md') as fp:
 
 setup(
     name='pyC8',
-    version='0.12.7',
+    version='0.12.8',
     description='Python Driver for Macrometa Global Edge Fabric',
     long_description=description,
     long_description_content_type="text/markdown",
@@ -14,7 +14,7 @@ setup(
     url='https://www.macrometa.io',
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
-    install_requires=['requests', 'six', 'pulsar-client==2.3.2'],
+    install_requires=['requests', 'six', 'pulsar-client>=2.3.0'],
     tests_require=['pytest', 'mock', 'flake8'],
     classifiers=[
         'Intended Audience :: Developers',
