@@ -71,6 +71,10 @@ Here is an overview example:
    employees.insert({'firstname': 'Han', 'lastname':'Solo', 'email':'han.solo@macrometa.io'})
    employees.insert({'firstname': 'Bruce', 'lastname':'Wayne', 'email':'bruce.wayne@macrometa.io'})
 
+   # insert data from a CSV file
+   # path to csv file should be an absolute path
+   employees.insert_from_file("~/data.csv")
+
    #--------------------------------------------------------------
    print("query employees collection...")
    cursor = fabric.c8ql.execute('FOR employee IN employees RETURN employee') # Execute a C8QL query

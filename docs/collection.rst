@@ -35,6 +35,10 @@ Here is an example showing how you can manage standard collections:
     else:
         students = fabric.create_collection('students')
 
+    # To insert data from a csv file
+    # path to csv file should be an absolute path
+    students.insert_from_file("~/data.csv")
+
     # Retrieve collection properties.
     students.name
     students.fabric_name
