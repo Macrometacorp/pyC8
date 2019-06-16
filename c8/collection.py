@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+import pandas
+
 from numbers import Number
 
 from json import dumps
@@ -1262,6 +1264,49 @@ class StandardCollection(Collection):
             return resp.body
 
         return self._execute(request, response_handler)
+
+    def get_documents_from_file(self, data, index):
+        documents = []
+        for key in data.keys():
+            first_key = key
+            break
+        for counter in range(len(data[first_key])):
+            document = {}
+            for key in data.keys():
+                document[key] = data[key][index]
+            index += 1
+            documents.append(document)
+        return documents, index
+
+    def insert_from_file(self, csv_filepath, return_new=False, sync=None,
+                         silent=False):
+        """Insert a documents from csv file.
+
+        :param csv_filepath: CSV file path which contains documents
+        :type csv_filepath: str
+        :param return_new: Include body of the new document in the returned
+            metadata. Ignored if parameter **silent** is set to True.
+        :type return_new: bool
+        :param sync: Block until operation is synchronized to disk.
+        :type sync: bool
+        :param silent: If set to True, no document metadata is returned. This
+            can be used to save resources.
+        :type silent: bool
+        :return: Document metadata (e.g. document key, revision) or True if
+            parameter **silent** was set to True.
+        :rtype: bool | dict
+        :raise c8.exceptions.DocumentInsertError: If insert fails.
+        """
+        chunksize = 5000
+        index = 0
+        result = []
+        for data in pandas.read_csv(csv_filepath, chunksize=chunksize,
+                                    iterator=True):
+            data = data.to_dict()
+            documents, index = self.get_documents_from_file(data, index)
+            resp = self.insert_many(documents, return_new, sync, silent)
+            result.append(resp)
+        return result
 
     def insert(self, document, return_new=False, sync=None, silent=False):
         """Insert a new document.
