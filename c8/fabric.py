@@ -145,17 +145,19 @@ class Fabric(APIWrapper):
         else:
             dcl_local = self.dclist_local()
             self.pulsar_client = pulsar.Client('pulsar://' + dcl_local['tags']['url'] + ":" + str(self.stream_port))
-        
+
         consumer = self.pulsar_client.subscribe(topic, subscription_name)
 
         try:
             print("pyC8 Realtime: Begin monitoring realtime updates for " + topic)
             while True:
-                msg = consumer.receive()
+                msg = consumer.receive(timeout_millis=30000)
                 data = msg.data().decode('utf-8')
                 jdata = json.loads(data)
                 # self.consumer.acknowledge(msg)
                 callback(jdata)
+        except Exception:
+            pass
         finally:
             self.pulsar_client.close()
 
@@ -1300,7 +1302,7 @@ class Fabric(APIWrapper):
     def has_stream(self, stream):
         """ Check if the list of streams has a stream with the given name.
 
-        :param stream: The name of the stream for which to check in the list of all streams. 
+        :param stream: The name of the stream for which to check in the list of all streams.
         :type stream: str | unicode
         :return: True=stream found; False=stream not found.
         :rtype: bool
@@ -1371,9 +1373,9 @@ class Fabric(APIWrapper):
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If deleting streams fails.
         """
-        # KARTIK : 20181002 : Stream delete not supported. 
+        # KARTIK : 20181002 : Stream delete not supported.
         # We still have some issues to work through for stream deletion on the
-        # pulsar side. So for v0.9.0 we only support terminate, and that too 
+        # pulsar side. So for v0.9.0 we only support terminate, and that too
         # only for persistent streams.
         if not self.persistent:
             print(
@@ -1386,10 +1388,10 @@ class Fabric(APIWrapper):
         return self.terminate_stream(stream=stream, local=local)
 
         ######## HEY HEY DO THE ZOMBIE STOMP ########
-        # KARTIK : 20181002 : Stream delete not supported. 
-        # TODO : When stream delete is implemented, enable below code and 
+        # KARTIK : 20181002 : Stream delete not supported.
+        # TODO : When stream delete is implemented, enable below code and
         # remove the above code.
-        # Below code is dead code for the moment, until delete stream is 
+        # Below code is dead code for the moment, until delete stream is
         # implemented on the server side. Consider it to be "#if 0"-ed out :-)
         # (why, yes indeed, that was a C reference)
         # if force and persistent:
