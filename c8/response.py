@@ -1,8 +1,8 @@
 from __future__ import absolute_import, unicode_literals
 
-__all__ = ['Response']
-
 import json
+
+__all__ = ['Response']
 
 
 class Response(object):

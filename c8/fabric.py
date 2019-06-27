@@ -1,31 +1,15 @@
 from __future__ import absolute_import, unicode_literals
 
-from c8.utils import get_col_name
 import json
+import random
 
-__all__ = [
-    'StandardFabric',
-    'AsyncFabric',
-    'BatchFabric',
-    'TransactionFabric'
-]
-
-from datetime import datetime
+import pulsar
 
 from c8.api import APIWrapper
 from c8.c8ql import C8QL
-from c8 import constants
-from c8.executor import (
-    DefaultExecutor,
-    AsyncExecutor,
-    BatchExecutor,
-    TransactionExecutor,
-)
 from c8.collection import StandardCollection
-from c8.stream_collection import StreamCollection
+from c8 import constants
 from c8.exceptions import (
-    AsyncJobClearError,
-    AsyncJobListError,
     CollectionCreateError,
     CollectionDeleteError,
     CollectionListError,
@@ -37,20 +21,32 @@ from c8.exceptions import (
     GraphCreateError,
     GraphDeleteError,
     ServerConnectionError,
-    ServerDetailsError,
     ServerVersionError,
+    StreamCommunicationError,
+    StreamConnectionError,
+    StreamCreateError,
+    StreamPermissionError,
     TransactionExecuteError,
     TenantDcListError,
     SpotRegionUpdateError
 )
-from c8 import exceptions as ex
-
+from c8.executor import (
+    DefaultExecutor,
+    AsyncExecutor,
+    BatchExecutor,
+    TransactionExecutor,
+)
 from c8.graph import Graph
+from c8.stream_collection import StreamCollection
 from c8.request import Request
-import json
-import random
-import pulsar
-from urllib.parse import urlparse
+
+__all__ = [
+    'StandardFabric',
+    'AsyncFabric',
+    'BatchFabric',
+    'TransactionFabric'
+]
+ENDPOINT = "/streams/persistent/stream"
 
 
 def printdata(event):
@@ -81,7 +77,6 @@ class Fabric(APIWrapper):
         self.url = connection.url
         self.stream_port = connection.stream_port
         self.pulsar_client = None
-        self.persistent = True
         super(Fabric, self).__init__(connection, executor)
 
     def __getitem__(self, name):
@@ -93,17 +88,6 @@ class Fabric(APIWrapper):
         :rtype: c8.collection.StandardCollection
         """
         return self.collection(name)
-
-    def _get_col_by_doc(self, document):
-        """Return the collection of the given document.
-
-        :param document: Document ID or body with "_id" field.
-        :type document: str | unicode | dict
-        :return: Collection API wrapper.
-        :rtype: c8.collection.StandardCollection
-        :raise c8.exceptions.DocumentParseError: On malformed document.
-        """
-        return self.collection(get_col_name(document))
 
     @property
     def name(self):
@@ -128,28 +112,35 @@ class Fabric(APIWrapper):
 
         :param callback: Function to execute on a change
         :type callback: function
-        :param collections: Collection name or Collection names regex to listen for
+        :param collections: Collection name(s) regex to listen for
         :type collections: str
         """
         if not collection:
-            raise ValueError('You must specify a collection on which to watch for realtime data!')
+            raise ValueError('You must specify a collection on which to watch '
+                             'for realtime data!')
 
         namespace = constants.STREAM_LOCAL_NS_PREFIX + self.fabric_name
 
-        topic = "persistent://" + self.tenant_name + "/" + namespace + "/" + collection
-        subscription_name = self.tenant_name + "-" + self.fabric_name + "-subscription-" + str(random.randint(1, 1000))
-        print("pyC8 Realtime: Subscribing to topic: " + topic + " on Subscription name: " + subscription_name)
+        topic = "persistent://%s/%s/%s" % (self.tenant_name, namespace,
+                                           collection)
+        subscription_name = "%s-%s-subscription-%s" % (
+            self.tenant_name, self.fabric_name, str(random.randint(1, 1000)))
+        print("pyC8 Realtime: Subscribing to topic: " + topic +
+              " on Subscription name: " + subscription_name)
 
         if self.pulsar_client:
-            print("pyC8 Realtime: Initialized C8Streams connection to " + self.url + ":" + str(self.stream_port))
+            print("pyC8 Realtime: Initialized C8Streams connection to " +
+                  self.url + ":" + str(self.stream_port))
         else:
-            dcl_local = self.dclist_local()
-            self.pulsar_client = pulsar.Client('pulsar://' + dcl_local['tags']['url'] + ":" + str(self.stream_port))
+            dcl_local = self.localdc(detail=True)
+            self.pulsar_client = pulsar.Client('pulsar://%s:%s' % (
+                dcl_local['tags']['url'], str(self.stream_port)))
 
         consumer = self.pulsar_client.subscribe(topic, subscription_name)
 
         try:
-            print("pyC8 Realtime: Begin monitoring realtime updates for " + topic)
+            print("pyC8 Realtime: Begin monitoring realtime updates for " +
+                  topic)
             while True:
                 msg = consumer.receive(timeout_millis=30000)
                 data = msg.data().decode('utf-8')
@@ -279,10 +270,9 @@ class Fabric(APIWrapper):
             :raise c8.exceptions.SpotRegionUpdateError: If updation fails.
         """
 
-        request = Request(
-            method='put',
-            endpoint='_tenant/{}/_fabric/{}/database/{}'.format(tenant, fabric, new_dc),
-        )
+        request = Request(method='put',
+                          endpoint='_tenant/{}/_fabric/{}/database/{}'.format(
+                              tenant, fabric, new_dc))
 
         def response_handler(resp):
             if not resp.is_success:
@@ -301,9 +291,9 @@ class Fabric(APIWrapper):
             if not resp.is_success:
                 raise FabricListError(resp, request)
             return [{
-                        'name': col['name'],
-                        'options': col['options']
-                    } for col in map(dict, resp.body['result'])]
+                'name': col['name'],
+                'options': col['options']
+            } for col in map(dict, resp.body['result'])]
 
         return self._execute(request, response_handler)
 
@@ -354,9 +344,11 @@ class Fabric(APIWrapper):
     # Datacenter Management #
     #########################
 
-    def dclist(self):
+    def dclist(self, detail=True):
         """Return the list of names of Datacenters
 
+        :param detail: detail list of DCs if set to true else only DC names
+        :type: boolean
         :return: DC List.
         :rtype: [str | unicode ]
         :raise c8.exceptions.TenantListError: If retrieval fails.
@@ -367,9 +359,10 @@ class Fabric(APIWrapper):
         )
 
         def response_handler(resp):
-            # print("dclist() : Response body: " + str(resp.body))
             if not resp.is_success:
                 raise TenantDcListError(resp, request)
+            if detail:
+                return resp.body
             dc_list = []
             for dc in resp.body:
                 dc_list.append(dc['name'])
@@ -377,31 +370,13 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def dclist_detail(self):
-        """Return the list of details of Datacenters
-
-        :return: DC List.
-        :rtype: [str | unicode ]
-        :raise c8.exceptions.TenantListError: If retrieval fails.
-        """
-        request = Request(
-            method='get',
-            endpoint='/datacenter/all'
-        )
-
-        def response_handler(resp):
-            # print("dclist() : Response body: " + str(resp.body))
-            if not resp.is_success:
-                raise TenantDcListError(resp, request)
-            return resp.body
-
-        return self._execute(request, response_handler)
-
-    def dclist_local(self):
+    def localdc(self, detail=True):
         """Return the list of local Datacenters
 
+        :param detail: detail list of DCs if set to true else only DC names
+        :type: boolean
         :return: DC List.
-        :rtype: [str | unicode ]
+        :rtype: [str | dict ]
         :raise c8.exceptions.TenantListError: If retrieval fails.
         """
         request = Request(
@@ -410,10 +385,11 @@ class Fabric(APIWrapper):
         )
 
         def response_handler(resp):
-            # print("dclist() : Response body: " + str(resp.body))
             if not resp.is_success:
                 raise TenantDcListError(resp, request)
-            return resp.body
+            if detail:
+                return resp.body
+            return resp.body["name"]
 
         return self._execute(request, response_handler)
 
@@ -450,18 +426,22 @@ class Fabric(APIWrapper):
         """
         return name in self.fabrics()
 
-    def create_fabric(self, name, spot_creation_type=SPOT_CREATION_TYPES.AUTOMATIC, spot_dc=None, users=None,
-                      dclist=None):
+    def create_fabric(self, name, spot_dc=None, users=None, dclist=None,
+                      spot_creation_type=SPOT_CREATION_TYPES.AUTOMATIC):
         """Create a new fabric.
 
         :param name: Fabric name.
         :type name: str | unicode
-        :param spot_creation_type: Specifying the mode of creating geo-fabric.If you use AUTOMATIC, a random spot region
-                                   will be assigned by the system. If you specify NONE, a geo-fabric is created without
-                                   the spot properties. If you specify SPOT_REGION,pass the corresponding spot region in
-                                   the spot_dc parameter.
+        :param spot_creation_type: Specifying the mode of creating geo-fabric.
+                                   If you use AUTOMATIC, a random spot region
+                                   will be assigned by the system. If you
+                                   specify NONE, a geo-fabric is created
+                                   without the spot properties. If you specify
+                                   SPOT_REGION,pass the corresponding spot
+                                   region in the spot_dc parameter.
         :type name: Enum containing spot region creation types
-        :param name: Spot Region name, if spot_creation_type is set to SPOT_REGION
+        :param name: Spot Region name, if spot_creation_type is set to
+                     SPOT_REGION
         :type name: str
         :param users: List of users with access to the new fabric, where each
             user is a dictionary with fields "username", "password", "active"
@@ -488,16 +468,17 @@ class Fabric(APIWrapper):
         data = {'name': name}
         if users is not None:
             data['users'] = [{
-                                 'username': user['username'],
-                                 'passwd': user['password'],
-                                 'active': user.get('active', True),
-                                 'extra': user.get('extra', {})
-                             } for user in users]
+                'username': user['username'],
+                'passwd': user['password'],
+                'active': user.get('active', True),
+                'extra': user.get('extra', {})
+            } for user in users]
 
         options = {}
         dcl = ''
         if dclist:
-            # Process dclist param (type list) to build up comma-separated string of DCs
+            # Process dclist param (type list) to build up comma-separated
+            # string of DCs
             for dc in dclist:
                 if len(dcl) > 0:
                     dcl += ','
@@ -506,7 +487,8 @@ class Fabric(APIWrapper):
 
         if spot_creation_type == self.SPOT_CREATION_TYPES.NONE:
             options['spotDc'] = ''
-        elif spot_creation_type == self.SPOT_CREATION_TYPES.SPOT_REGION and spot_dc:
+        elif (spot_creation_type == self.SPOT_CREATION_TYPES.SPOT_REGION and
+                spot_dc):
             options['spotDc'] = spot_dc
 
         data['options'] = options
@@ -590,12 +572,12 @@ class Fabric(APIWrapper):
             if not resp.is_success:
                 raise CollectionListError(resp, request)
             return [{
-                        'id': col['id'],
-                        'name': col['name'],
-                        'system': col['isSystem'],
-                        'type': StandardCollection.types[col['type']],
-                        'status': StandardCollection.statuses[col['status']],
-                    } for col in map(dict, resp.body['result'])]
+                'id': col['id'],
+                'name': col['name'],
+                'system': col['isSystem'],
+                'type': StandardCollection.types[col['type']],
+                'status': StandardCollection.statuses[col['status']],
+            } for col in map(dict, resp.body['result'])]
 
         return self._execute(request, response_handler)
 
@@ -780,13 +762,12 @@ class Fabric(APIWrapper):
                             'edge_collection': definition['collection'],
                             'from_vertex_collections': definition['from'],
                             'to_vertex_collections': definition['to'],
-                        }
-                        for definition in body['edgeDefinitions']
-                        ],
+                        } for definition in body['edgeDefinitions']
+                    ],
                     'shard_count': body.get('numberOfShards'),
                     'replication_factor': body.get('replicationFactor')
                 } for body in resp.body['graphs']
-                ]
+            ]
 
         return self._execute(request, response_handler)
 
@@ -830,10 +811,10 @@ class Fabric(APIWrapper):
         data = {'name': name}
         if edge_definitions is not None:
             data['edgeDefinitions'] = [{
-                                           'collection': definition['edge_collection'],
-                                           'from': definition['from_vertex_collections'],
-                                           'to': definition['to_vertex_collections']
-                                       } for definition in edge_definitions]
+                'collection': definition['edge_collection'],
+                'from': definition['from_vertex_collections'],
+                'to': definition['to_vertex_collections']
+            } for definition in edge_definitions]
         if orphan_collections is not None:
             data['orphanCollections'] = orphan_collections
         if shard_count is not None:  # pragma: no cover
@@ -885,236 +866,6 @@ class Fabric(APIWrapper):
             return True
 
         return self._execute(request, response_handler)
-
-    #######################
-    # Document Management #
-    #######################
-
-    def has_document(self, document, rev=None, check_rev=True):
-        """Check if a document exists.
-
-        :param document: Document ID or body with "_id" field.
-        :type document: str | unicode | dict
-        :param rev: Expected document revision. Overrides value of "_rev" field
-            in **document** if present.
-        :type rev: str | unicode
-        :param check_rev: If set to True, revision of **document** (if given)
-            is compared against the revision of target document.
-        :type check_rev: bool
-        :return: True if document exists, False otherwise.
-        :rtype: bool
-        :raise c8.exceptions.DocumentInError: If check fails.
-        :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
-        """
-        return self._get_col_by_doc(document).has(
-            document=document,
-            rev=rev,
-            check_rev=check_rev
-        )
-
-    def document(self, document, rev=None, check_rev=True):
-        """Return a document.
-
-        :param document: Document ID or body with "_id" field.
-        :type document: str | unicode | dict
-        :param rev: Expected document revision. Overrides the value of "_rev"
-            field in **document** if present.
-        :type rev: str | unicode
-        :param check_rev: If set to True, revision of **document** (if given)
-            is compared against the revision of target document.
-        :type check_rev: bool
-        :return: Document, or None if not found.
-        :rtype: dict | None
-        :raise c8.exceptions.DocumentGetError: If retrieval fails.
-        :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
-        """
-        return self._get_col_by_doc(document).get(
-            document=document,
-            rev=rev,
-            check_rev=check_rev
-        )
-
-    def insert_document(self,
-                        collection,
-                        document,
-                        return_new=False,
-                        sync=None,
-                        silent=False):
-        """Insert a new document.
-
-        :param collection: Collection name.
-        :type collection: str | unicode
-        :param document: Document to insert. If it contains the "_key" or "_id"
-            field, the value is used as the key of the new document (otherwise
-            it is auto-generated). Any "_rev" field is ignored.
-        :type document: dict
-        :param return_new: Include body of the new document in the returned
-            metadata. Ignored if parameter **silent** is set to True.
-        :type return_new: bool
-        :param sync: Block until operation is synchronized to disk.
-        :type sync: bool
-        :param silent: If set to True, no document metadata is returned. This
-            can be used to save resources.
-        :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
-            parameter **silent** was set to True.
-        :rtype: bool | dict
-        :raise c8.exceptions.DocumentInsertError: If insert fails.
-        """
-        return self.collection(collection).insert(
-            document=document,
-            return_new=return_new,
-            sync=sync,
-            silent=silent
-        )
-
-    def update_document(self,
-                        document,
-                        check_rev=True,
-                        merge=True,
-                        keep_none=True,
-                        return_new=False,
-                        return_old=False,
-                        sync=None,
-                        silent=False):
-        """Update a document.
-
-        :param document: Partial or full document with the updated values. It
-            must contain the "_id" field.
-        :type document: dict
-        :param check_rev: If set to True, revision of **document** (if given)
-            is compared against the revision of target document.
-        :type check_rev: bool
-        :param merge: If set to True, sub-dictionaries are merged instead of
-            the new one overwriting the old one.
-        :type merge: bool
-        :param keep_none: If set to True, fields with value None are retained
-            in the document. Otherwise, they are removed completely.
-        :type keep_none: bool
-        :param return_new: Include body of the new document in the result.
-        :type return_new: bool
-        :param return_old: Include body of the old document in the result.
-        :type return_old: bool
-        :param sync: Block until operation is synchronized to disk.
-        :type sync: bool
-        :param silent: If set to True, no document metadata is returned. This
-            can be used to save resources.
-        :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
-            parameter **silent** was set to True.
-        :rtype: bool | dict
-        :raise c8.exceptions.DocumentUpdateError: If update fails.
-        :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
-        """
-        return self._get_col_by_doc(document).update(
-            document=document,
-            check_rev=check_rev,
-            merge=merge,
-            keep_none=keep_none,
-            return_new=return_new,
-            return_old=return_old,
-            sync=sync,
-            silent=silent
-        )
-
-    def replace_document(self,
-                         document,
-                         check_rev=True,
-                         return_new=False,
-                         return_old=False,
-                         sync=None,
-                         silent=False):
-        """Replace a document.
-
-        :param document: New document to replace the old one with. It must
-            contain the "_id" field. Edge document must also have "_from" and
-            "_to" fields.
-        :type document: dict
-        :param check_rev: If set to True, revision of **document** (if given)
-            is compared against the revision of target document.
-        :type check_rev: bool
-        :param return_new: Include body of the new document in the result.
-        :type return_new: bool
-        :param return_old: Include body of the old document in the result.
-        :type return_old: bool
-        :param sync: Block until operation is synchronized to disk.
-        :type sync: bool
-        :param silent: If set to True, no document metadata is returned. This
-            can be used to save resources.
-        :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
-            parameter **silent** was set to True.
-        :rtype: bool | dict
-        :raise c8.exceptions.DocumentReplaceError: If replace fails.
-        :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
-        """
-        return self._get_col_by_doc(document).replace(
-            document=document,
-            check_rev=check_rev,
-            return_new=return_new,
-            return_old=return_old,
-            sync=sync,
-            silent=silent
-        )
-
-    def delete_document(self,
-                        document,
-                        rev=None,
-                        check_rev=True,
-                        ignore_missing=False,
-                        return_old=False,
-                        sync=None,
-                        silent=False):
-        """Delete a document.
-
-        :param document: Document ID, key or body. Document body must contain
-            the "_id" field.
-        :type document: str | unicode | dict
-        :param rev: Expected document revision. Overrides the value of "_rev"
-            field in **document** if present.
-        :type rev: str | unicode
-        :param check_rev: If set to True, revision of **document** (if given)
-            is compared against the revision of target document.
-        :type check_rev: bool
-        :param ignore_missing: Do not raise an exception on missing document.
-            This parameter has no effect in transactions where an exception is
-            always raised on failures.
-        :type ignore_missing: bool
-        :param return_old: Include body of the old document in the result.
-        :type return_old: bool
-        :param sync: Block until operation is synchronized to disk.
-        :type sync: bool
-        :param silent: If set to True, no document metadata is returned. This
-            can be used to save resources.
-        :type silent: bool
-        :return: Document metadata (e.g. document key, revision), or True if
-            parameter **silent** was set to True, or False if document was not
-            found and **ignore_missing** was set to True (does not apply in
-            transactions).
-        :rtype: bool | dict
-        :raise c8.exceptions.DocumentDeleteError: If delete fails.
-        :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
-        """
-        return self._get_col_by_doc(document).delete(
-            document=document,
-            rev=rev,
-            check_rev=check_rev,
-            ignore_missing=ignore_missing,
-            return_old=return_old,
-            sync=sync,
-            silent=silent
-        )
-
-    ###################
-    # User Management #
-    ###################
-    # See tenant.py
-
-    #########################
-    # Permission Management #
-    #########################
-    # See tenant.py
-
 
     ########################
     # Async Job Management #
@@ -1192,7 +943,8 @@ class Fabric(APIWrapper):
         :return: stream collection API wrapper.
         :rtype: c8.stream_collection.StreamCollection
         """
-        return StreamCollection(self, self._conn, self._executor, self.url, self.stream_port, operation_timeout_seconds)
+        return StreamCollection(self, self._conn, self._executor, self.url,
+                                self.stream_port, operation_timeout_seconds)
 
     def streams(self):
         """Get list of all streams under given fabric
@@ -1211,26 +963,25 @@ class Fabric(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                # NOTE: server API returns stream name as field 'topic' - we provide both here for user convenience
                 return [{
-                            'name': col['topic'],
-                            'topic': col['topic'],
-                            'local': col['local'],
-                            'db': col['db'],
-                            'tenant': col['tenant'],
-                            'type': StreamCollection.types[col['type']],
-                            'status': 'terminated' if 'terminated' in col else 'active',
-                        } for col in map(dict, resp.body['result'])]
+                    'name': col['topic'],
+                    'topic': col['topic'],
+                    'local': col['local'],
+                    'db': col['db'],
+                    'tenant': col['tenant'],
+                    'type': StreamCollection.types[col['type']],
+                    'status': 'terminated' if 'terminated' in col else 'active',  # noqa
+                } for col in map(dict, resp.body['result'])]
             elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
+                raise StreamPermissionError(resp, request)
+            raise StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
 
     def persistent_streams(self, local=False):
         """Get list of all streams under given fabric
 
-        :param local: Operate on a local stream instead of a global one. Default value: false
+        :param local: Operate on a local stream instead of a global one.
         :return: List of streams under given fabric.
         :rtype: json
         :raise c8.exceptions.StreamListError: If retrieving streams fails.
@@ -1245,64 +996,26 @@ class Fabric(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                # NOTE: server API returns stream name as field 'topic' - we provide both here for user convenience
                 return [{
-                            'name': col['topic'],
-                            'topic': col['topic'],
-                            'local': col['local'],
-                            'db': col['db'],
-                            'tenant': col['tenant'],
-                            'type': StreamCollection.types[col['type']],
-                            'status': 'terminated' if 'terminated' in col else 'active',
-                        } for col in map(dict, resp.body['result'])]
+                    'name': col['topic'],
+                    'topic': col['topic'],
+                    'local': col['local'],
+                    'db': col['db'],
+                    'tenant': col['tenant'],
+                    'type': StreamCollection.types[col['type']],
+                    'status': 'terminated' if 'terminated' in col else 'active',  # noqa
+                } for col in map(dict, resp.body['result'])]
             elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
+                raise StreamPermissionError(resp, request)
+            raise StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-
-    # def nonpersistent_streams(self, local=False):
-    #     """Get list of all streams under given fabric
-    #
-    #     :param persistent: persistent flag (if it is set to True, the API deletes persistent stream.
-    #     If it is set to False, API deletes non-persistent stream)
-    #     :param local: Operate on a local stream instead of a global one. Default value: false
-    #     :return: List of streams under given fabric.
-    #     :rtype: json
-    #     :raise c8.exceptions.StreamListError: If retrieving streams fails.
-    #     """
-    #     url_endpoint = '/streams/non-persistent?local={}'.format(local)
-    #
-    #     request = Request(
-    #         method='get',
-    #         endpoint=url_endpoint
-    #     )
-    #
-    #     def response_handler(resp):
-    #         code = resp.status_code
-    #         if resp.is_success:
-    #             # NOTE: server API returns stream name as field 'topic' - we provide both here for user convenience
-    #             return [{
-    #                 'name': col['topic'],
-    #                 'topic': col['topic'],
-    #                 'local': col['local'],
-    #                 'db': col['db'],
-    #                 'tenant': col['tenant'],
-    #                 'type': StreamCollection.types[col['type']],
-    #                 'status': 'terminated' if 'terminated' in col else 'active',
-    #             } for col in map(dict, resp.body['result'])]
-    #
-    #         elif code == 403:
-    #             raise ex.StreamPermissionError(resp, request)
-    #         raise ex.StreamConnectionError(resp, request)
-    #
-    #     return self._execute(request, response_handler)
-
 
     def has_stream(self, stream):
         """ Check if the list of streams has a stream with the given name.
 
-        :param stream: The name of the stream for which to check in the list of all streams.
+        :param stream: The name of the stream for which to check in the list
+                       of all streams.
         :type stream: str | unicode
         :return: True=stream found; False=stream not found.
         :rtype: bool
@@ -1313,54 +1026,35 @@ class Fabric(APIWrapper):
         """ Check if the list of persistent streams has a stream with the given name
         and local setting.
 
-        :param stream: The name of the stream for which to check in the list of persistent streams.
+        :param stream: The name of the stream for which to check in the list
+                       of persistent streams.
         :type stream: str | unicode
-        :param local: if True, operate on a local stream instead of a global one. Default value: false
+        :param local: if True, operate on local stream instead of a global one.
         :type local: bool
         :return: True=stream found; False=stream not found.
         :rtype: bool
         """
-        return any(mystream['name'] == stream for mystream in self.persistent_streams(local))
-
-    # def has_nonpersistent_stream(self, stream, local=False):
-    #     """ Check if the list of nonpersistent streams has a stream with the given name
-    #     and local setting.
-    #
-    #     :param stream: The name of the stream for which to check in the list of nonpersistent streams
-    #     :type stream: str | unicode
-    #     :param local: if True, operate on a local stream instead of a global one. Default value: false
-    #     :type local: bool
-    #     :return: True=stream found; False=stream not found.
-    #     :rtype: bool
-    #     """
-    #     return any(mystream['name'] == stream for mystream in self.nonpersistent_streams(local))
-
+        return any(mystream['name'] == stream
+                   for mystream in self.persistent_streams(local))
 
     def create_stream(self, stream, local=False):
         """
         Create the stream under the given fabric
         :param stream: name of stream
-        :param local: Operate on a local stream instead of a global one. Default value: false
+        :param local: Operate on a local stream instead of a global one.
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
         """
-        if self.persistent:
-            url_endpoint = '/streams/' + 'persistent/stream/{}?local={}'.format(stream, local)
-        # else:
-        #     url_endpoint = '/streams/' + 'non-persistent/stream/{}?local={}'.format(stream, local)
-        request = Request(
-            method='post',
-            endpoint=url_endpoint
-        )
+        endpoint = '{}/{}?local={}'.format(ENDPOINT, stream, local)
+        request = Request(method='post', endpoint=endpoint)
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
                 return resp.body['result']
             elif code == 502:
-                raise ex.StreamCommunicationError(resp, request)
-
-            raise ex.StreamCreateError(resp, request)
+                raise StreamCommunicationError(resp, request)
+            raise StreamCreateError(resp, request)
 
         return self._execute(request, response_handler)
 
@@ -1369,7 +1063,7 @@ class Fabric(APIWrapper):
         Delete the streams under the given fabric
         :param stream: name of stream
         :param force:
-        :param local: Operate on a local stream instead of a global one. Default value: false
+        :param local: Operate on a local stream instead of a global one.
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If deleting streams fails.
         """
@@ -1377,78 +1071,50 @@ class Fabric(APIWrapper):
         # We still have some issues to work through for stream deletion on the
         # pulsar side. So for v0.9.0 we only support terminate, and that too
         # only for persistent streams.
-        if not self.persistent:
-            print(
-                "WARNING: Delete not yet implemented for nonpersistent streams. Returning 204. Stream will not be deleted.")
-            # 204 = No Content
-            return 204
-
-            # Persistent stream, let's terminate it instead.
-        print("WARNING: Delete not yet implemented for persistent streams, calling terminate instead.")
+        print("WARNING: Delete not yet implemented for persistent streams, "
+              "calling terminate instead.")
         return self.terminate_stream(stream=stream, local=local)
 
-        ######## HEY HEY DO THE ZOMBIE STOMP ########
-        # KARTIK : 20181002 : Stream delete not supported.
         # TODO : When stream delete is implemented, enable below code and
         # remove the above code.
-        # Below code is dead code for the moment, until delete stream is
-        # implemented on the server side. Consider it to be "#if 0"-ed out :-)
-        # (why, yes indeed, that was a C reference)
-        # if force and persistent:
-        #    url_endpoint = '/streams/persistent/stream/{}?force=true&local={}'.format(stream, local)
-        # elif force and not persistent:
-        #    url_endpoint = '/streams/non-persistent/stream/{}?force=true&local={}'.format(stream, local)
-        # elif not force and persistent:
-        #    url_endpoint = '/streams/persistent/stream/{}?local={}'.format(stream, local)
-        # elif not force and not persistent:
-        #    url_endpoint = '/streams/non-persistent/stream/{}?local={}'.format(stream, local)
+        # endpoint = '{}/{}?local={}'.format(ENDPOINT, stream, local)
+        # if force:
+        #    endpoint = endpoint + "&force=true"
         #
-        # request = Request(
-        #    method='delete',
-        #    endpoint=url_endpoint
-        # )
+        # request = Request(method='delete', endpoint=endpoint)
         #
         # def response_handler(resp):
         #    code = resp.status_code
         #    if resp.is_success:
         #        return resp.body['result']
         #    elif code == 403:
-        #        raise ex.StreamPermissionError(resp, request)
+        #        raise StreamPermissionError(resp, request)
         #    elif code == 412:
-        #        raise ex.StreamDeleteError(resp, request)
-        #    raise ex.StreamConnectionError(resp, request)
+        #        raise StreamDeleteError(resp, request)
+        #    raise StreamConnectionError(resp, request)
         #
         # return self._execute(request, response_handler)
 
     def terminate_stream(self, stream, local=False):
-        """
-        Terminate a stream. A stream that is terminated will not accept any more messages to be published and will let consumer to drain existing messages in backlog
+        """Terminate a stream. A stream that is terminated will not accept any
+        more messages to be published and will let consumer to drain existing
+        messages in backlog
+
         :param stream: name of stream
-        :param local: Operate on a local stream instead of a global one. Default value: false
+        :param local: Operate on a local stream instead of a global one.
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError: Dont have permission.
         """
-        if self.persistent:
-            url_endpoint = '/streams/persistent/stream/{}/terminate?local={}'.format(stream, local)
-        # else:
-        #     # url_endpoint = '/streams/non-persistent/stream/{}/terminate?local={}'.format(stream, local)
-        #     # KARTIK : 20181002 : terminate not supported for nonpersistent
-        #     # streams. Just return 204 = No Content
-        #     print("WARNING: Nonpersistent streams cannot be terminated. Returning 204.")
-        #     return 204
-
-        request = Request(
-            method='post',
-            endpoint=url_endpoint
-        )
+        endpoint = '{}/{}/terminate?local={}'.format(ENDPOINT, stream, local)
+        request = Request(method='post', endpoint=endpoint)
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
                 return resp.body['result']
             elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
+                raise StreamPermissionError(resp, request)
+            raise StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
 

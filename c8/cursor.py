@@ -1,7 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-__all__ = ['Cursor']
-
 from collections import deque
 
 from c8.exceptions import (
@@ -11,6 +9,8 @@ from c8.exceptions import (
     CursorEmptyError
 )
 from c8.request import Request
+
+__all__ = ['Cursor']
 
 
 class Cursor(object):

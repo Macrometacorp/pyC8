@@ -1,17 +1,17 @@
 from __future__ import absolute_import, unicode_literals
 
-__all__ = ['HTTPClient', 'DefaultHTTPClient']
+import socket
+import time
 
 from abc import ABCMeta, abstractmethod
-import time
+from urllib3.connection import HTTPConnection
 
 import requests
 
 from c8.response import Response
 
-# KARTIK : 20181211 : C8Platform#166 : Remote disconnect issue.
-import socket
-from urllib3.connection import HTTPConnection
+__all__ = ['HTTPClient', 'DefaultHTTPClient']
+
 
 class HTTPClient(object):  # pragma: no cover
     """Abstract base class for HTTP clients."""
@@ -48,8 +48,10 @@ class HTTPClient(object):  # pragma: no cover
         raise NotImplementedError
 
 # KARTIK : 20181211 : C8Platform#166 : Remote disconnect issue.
-# See: https://github.com/joowani/python-arango/issues/30#issuecomment-333771027
+# https://github.com/joowani/python-arango/issues/30#issuecomment-333771027
 # Also see: https://github.com/requests/requests/issues/3808
+
+
 class KeepaliveAdapter(requests.adapters.HTTPAdapter):
     def init_poolmanager(self, *args, **kwargs):
         kwargs['socket_options'] = HTTPConnection.default_socket_options + [
@@ -95,13 +97,12 @@ class DefaultHTTPClient(HTTPClient):
         """
         # KARTIK : C8Platform#166 : explicitly set a keep-alive header
         if not headers:
-            headers = {"Connection":"keep-alive"}
+            headers = {"Connection": "keep-alive"}
         else:
             if 'Connection' in headers:
                 del headers["Connection"]
             headers["Connection"] = "keep-alive"
 
-         # In case of network connectivity issue retry 5 times by sleeping for 5 seconds
         retry = 5
         time_sleep = 5
         while(True):
@@ -117,13 +118,15 @@ class DefaultHTTPClient(HTTPClient):
                     timeout=260
                 )
                 break
-            except requests.ConnectionError as exc:
+            except requests.ConnectionError:
                 if retry == 0:
-                    raise Exception("requests.ConnectionError: Not able to connect to url:%s. Please make sure the federation is up and running." % (url))
+                    raise Exception(
+                        "requests.ConnectionError: Not able to connect to "
+                        "url: %s. Please make sure the federation is up and "
+                        "running." % url)
                 print("Error in connecting the url. Retring...")
                 retry -= 1
                 time.sleep(time_sleep)
-        #Retry loop ends here.
 
         return Response(
             method=raw_resp.request.method,

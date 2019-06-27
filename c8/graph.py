@@ -1,7 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-__all__ = ['Graph']
-
 from c8.api import APIWrapper
 from c8.collection import EdgeCollection
 from c8.collection import VertexCollection
@@ -16,7 +14,9 @@ from c8.exceptions import (
     VertexCollectionDeleteError,
 )
 from c8.request import Request
-from c8.utils import get_col_name, get_doc_id
+from c8.utils import get_col_name
+
+__all__ = ['Graph']
 
 
 class Graph(APIWrapper):

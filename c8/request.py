@@ -1,15 +1,13 @@
 from __future__ import absolute_import, unicode_literals
 
-__all__ = ['Request']
-
 import json
 
 from six import moves, string_types
 
-# KARTIK : Disable the insecure HTTPS cert warnings 
-# WARNING : POTENTIAL SECURITY HAZARD! We should remove this after we get a
-# properly signed certificate for C8.
 import warnings
+
+__all__ = ['Request']
+
 warnings.filterwarnings("ignore")
 
 
@@ -80,8 +78,7 @@ class Request(object):
         self.headers['content-type'] = 'application/json'
         self.headers['charset'] = 'utf-8'
         if auth_tok:
-            self.headers['Authorization'] = 'bearer '+auth_tok
-
+            self.headers['Authorization'] = 'bearer ' + auth_tok
 
         # Sanitize URL params.
         if params is not None:
@@ -103,16 +100,14 @@ class Request(object):
         self.read = read
         self.write = write
 
-
-    def set_auth_token_in_header(auth_tok):
+    def set_auth_token_in_header(self, auth_tok):
         """ Set the Authorization header with the specified JWT auth token.
 
         :param auth_tok: JWT Autentication to use in this request
         :type auth_tok: str | unicode
         """
         if auth_tok:
-            self.headers['Authorization'] = 'bearer '+auth_tok
-
+            self.headers['Authorization'] = 'bearer ' + auth_tok
 
     def __str__(self):
         """Return the request details in string form."""

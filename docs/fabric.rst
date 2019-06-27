@@ -28,7 +28,7 @@ Each fabric in the C8 Fabric can publish changes in realtime to any clients whic
     sys_fabric.fabrics()
 
     #Returns the list of details of Datacenters
-    sys_fabric.dclist_detail()
+    sys_fabric.dclist(detail=True)
 
     # Create a new fabric named "test" if it does not exist.
     # Only the tenant admin has access to it at time of its creation.
@@ -68,7 +68,7 @@ Each fabric in the C8 Fabric can publish changes in realtime to any clients whic
     # Get the list of edge locations for the 'mytenant' tenant.
     # We do this as the tenant admin.
     tennt = client.tenant(name=tenant_name, fabricname='_system', username='root', password='root_pass')
-    dcl = tennt.dclist()
+    dcl = tennt.dclist(detail=False)
 
     # Create a new fabric which is replicated to all Fabric Edge Locations,
 

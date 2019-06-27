@@ -169,28 +169,29 @@ must provide document IDs instead of keys:
     john = {'_id': 'students/john', 'GPA': 3.6}
     emma = {'_id': 'students/emma', 'GPA': 4.0}
 
+    collection = fabric.create_collection("students")
     # Insert a new document.
-    metadata = fabric.insert_document('students', lola)
+    metadata = collection.insert(lola)
     assert metadata['_id'] == 'students/lola'
     assert metadata['_key'] == 'lola'
 
     # Check if a document exists.
-    assert fabric.has_document(lola) is True
+    assert collection.has(lola) is True
 
     # Get a document (by ID or body with "_id" field).
-    fabric.document('students/lola')
-    fabric.document(abby)
+    collection.get('students/lola')
+    collection.get(abby)
 
     # Update a document.
     lola['GPA'] = 3.6
-    fabric.update_document(lola)
+    collection.update(lola)
 
     # Replace a document.
     lola['GPA'] = 3.4
-    fabric.replace_document(lola)
+    collection.replace(lola)
 
     # Delete a document (by ID or body with "_id" field).
-    fabric.delete_document('students/lola')
+    collection.delete('students/lola')
 
 See :ref:`StandardFabric` and :ref:`StandardCollection` for API specification.
 

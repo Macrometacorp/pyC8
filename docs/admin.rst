@@ -2,7 +2,7 @@ Server Administration
 ---------------------
 
 pyC8 provides operations for server administration and monitoring.
-Most of these operations can only be performed by :doc:`tenant <tenant>` admin users 
+Most of these operations can only be performed by :doc:`tenant <tenant>` admin users
 via the ``_system`` fabric which is available inside each tenant.
 
 For information on operations related to administration of tenant users, see :doc:`user`.
@@ -30,12 +30,17 @@ For information on operations related to administration of tenant users, see :do
     sys_fabric.details()
 
     # Get the list of Fabric Edge Locations for this tenant
+    # to get only DC names
+    dcl = tennt.dclist(detail=False)
+
+    # to get DC details
     dcl = tennt.dclist()
 
     # Find out which Edge Location this tenant connection refers to
-    local_dc = tennt.dclist_local()
+    # to get only name for local DC
+    local_dc = tennt.localdc(detail=False)
 
-
-
+    # to get all details for local DC
+    local_dc = tennt.localdc()
 
 See :ref:`Tenant` and :ref:`StandardFabric` for API specification.
