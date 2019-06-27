@@ -28,7 +28,7 @@ These operations can only be executed by the tenant admin. Tenant users who have
     tennt.create_user(username='demouser', password='demo_pass', active=True)
 
     # Get the list of Fabric Edge Locations for this tenant
-    dcl = tennt.dclist()
+    dcl = tennt.dclist(detail=False)
 
     # Connect to the tenant's system fabric as the tenant admin
     sys_fabric = client.fabric(tenant='mytenant', name='_system', username='root', password='root_pass')

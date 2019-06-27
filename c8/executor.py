@@ -2,13 +2,6 @@ from __future__ import absolute_import, unicode_literals
 
 from six import string_types
 
-__all__ = [
-    'DefaultExecutor',
-    'AsyncExecutor',
-    'BatchExecutor',
-    'TransactionExecutor'
-]
-
 from collections import OrderedDict
 from uuid import uuid4
 
@@ -27,6 +20,13 @@ from c8.job import (
 from c8.request import Request
 from c8.response import Response
 from c8.utils import suppress_warning
+
+__all__ = [
+    'DefaultExecutor',
+    'AsyncExecutor',
+    'BatchExecutor',
+    'TransactionExecutor'
+]
 
 
 class Executor(object):  # pragma: no cover
@@ -231,8 +231,8 @@ class BatchExecutor(Executor):
         raw_resps = resp.raw_body.split('--{}'.format(boundary))[1:-1]
         if len(self._queue) != len(raw_resps):
             raise BatchStateError(
-                'expecting {} parts in batch response but got {}'
-                    .format(len(self._queue), len(raw_resps))
+                'expecting {} parts in batch response but got {}'.format(
+                    len(self._queue), len(raw_resps))
             )
         for raw_resp in raw_resps:
             # Parse and breakdown the batch response body

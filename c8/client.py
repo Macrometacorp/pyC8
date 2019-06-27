@@ -24,12 +24,8 @@ class C8Client(object):
     :type http_client: c8.http.HTTPClient
     """
 
-    def __init__(self,
-                 protocol='http',
-                 host='127.0.0.1',
-                 port=80,
-                 stream_port=constants.STREAM_PORT,
-                 http_client=None):
+    def __init__(self, protocol='http', host='127.0.0.1', port=80,
+                 stream_port=constants.STREAM_PORT, http_client=None):
         self._protocol = protocol.strip('/')
         self._host = host.strip('/')
         self._port = int(port)
@@ -87,8 +83,7 @@ class C8Client(object):
         """
         return self._url
 
-    def tenant(self, name="guest", fabricname='_system', username='root',
-               password='', verify=False):
+    def tenant(self, name, fabricname, username, password, verify=False):
         """Connect to a fabric and return the fabric API wrapper.
 
         :param name: Tenant name.
@@ -106,22 +101,17 @@ class C8Client(object):
         :raise c8.exceptions.ServerConnectionError: If **verify** was set
             to True and the connection to C8Db fails.
         """
-        connection = TenantConnection(
-            url=self._url,
-            tenant=name,
-            fabric=fabricname,
-            username=username,
-            password=password,
-            http_client=self._http_client
-        )
+        connection = TenantConnection(url=self._url, tenant=name,
+                                      fabric=fabricname, username=username,
+                                      password=password,
+                                      http_client=self._http_client)
         tenant = Tenant(connection)
 
         # TODO : handle verify
 
         return tenant
 
-    def fabric(self, tenant="guest", name='_system', username='root',
-               password='', verify=False):
+    def fabric(self, tenant, name, username, password, verify=False):
         """Connect to a fabric and return the fabric API wrapper.
 
         :param name: Fabric name.
@@ -138,12 +128,8 @@ class C8Client(object):
             to True and the connection to C8Db fails.
         """
         connection = FabricConnection(
-            url=self._url,
-            stream_port=self._stream_port,
-            tenant=tenant,
-            fabric=name,
-            username=username,
-            password=password,
+            url=self._url, stream_port=self._stream_port, tenant=tenant,
+            fabric=name, username=username, password=password,
             http_client=self._http_client
         )
         fabric = StandardFabric(connection)

@@ -49,12 +49,13 @@ Here is an overview example:
    #--------------------------------------------------------------
    print("Create under demotenant, demofabric, demouser and assign permissions...")
    demotenant = client.tenant(name=demo_tenant, fabricname='_system', username='root', password='demo')
+   fabric = client.tenant(name=demo_tenant, fabricname='_system', username='root', password='demo')
 
    if not demotenant.has_user(demo_user):
      demotenant.create_user(username=demo_user, password='demouser', active=True)
 
-   if not demotenant.has_fabric(demo_fabric):
-     demotenant.create_fabric(name=demo_fabric, dclist=demotenant.dclist())
+   if not fabric.has_fabric(demo_fabric):
+     fabric.create_fabric(name=demo_fabric, dclist=demotenant.dclist(detail=False))
 
    demotenant.update_permission(username=demo_user, permission='rw', fabric=demo_fabric)
 
@@ -247,7 +248,7 @@ sys_tenant.assign_dc_spot('REGION-2',spot_region=True)
 
 #Step 2: Create a geo-fabric and pass one of the spot regions. You can use the SPOT_CREATION_TYPES for the same. If you use AUTOMATIC, a random spot region will be assigned by the system.
 # If you specify None, a geo-fabric is created without the spot properties. If you specify spot region,pass the corresponding spot region in the spot_dc parameter.
-dcl = sys_tenant.dclist()
+dcl = sys_tenant.dclist(detail=False)
 fabric = client.fabric(tenant='guest', name='_system', username='root', password='guest')
 fabric.create_fabric('spot-geo-fabric', dclist=dcl,spot_creation_type= fabric.SPOT_CREATION_TYPES.SPOT_REGION, spot_dc='REGION-1')
 

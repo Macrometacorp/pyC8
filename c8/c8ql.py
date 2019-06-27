@@ -2,8 +2,6 @@ from __future__ import absolute_import, unicode_literals
 
 from json import dumps
 
-__all__ = ['C8QL', 'C8QLQueryCache']
-
 from c8.api import APIWrapper
 from c8.cursor import Cursor
 from c8.exceptions import (
@@ -12,12 +10,11 @@ from c8.exceptions import (
     C8QLQueryExecuteError,
     C8QLQueryListError,
     C8QLQueryClearError,
-    C8QLQueryKillError,
-    C8QLFunctionCreateError,
-    C8QLFunctionDeleteError,
-    C8QLFunctionListError,
+    C8QLQueryKillError
 )
 from c8.request import Request
+
+__all__ = ['C8QL']
 
 
 class C8QL(APIWrapper):
@@ -58,7 +55,9 @@ class C8QL(APIWrapper):
         :return: Query cache API wrapper.
         :rtype: c8.c8ql.C8QLQueryCache
         """
-        return C8QLQueryCache(self._conn, self._executor)
+        # TODO: Implement C8QLQueryCache
+        # return C8QLQueryCache(self._conn, self._executor)
+        pass
 
     def explain(self, query, all_plans=False, max_plans=None, opt_rules=None):
         """Inspect the query and return its metadata without executing it.
@@ -261,7 +260,3 @@ class C8QL(APIWrapper):
             return True
 
         return self._execute(request, response_handler)
-
-    
-
-

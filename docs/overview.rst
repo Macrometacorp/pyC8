@@ -31,17 +31,18 @@ Here is an example showing how **pyC8** client can be used:
     client = C8Client(protocol='https', host=region, port=443)
     sys_fabric = client.fabric(tenant=macrometa-admin, name='_system', username='root', password=macrometa-password)
     #Returns the list of details of Datacenters
-    sys_fabric.dclist_detail()
+    sys_fabric.dclist(detail=True)
 
    #--------------------------------------------------------------
    print("Create under demotenant, demofabric, demouser and assign permissions...")
    demotenant = client.tenant(name=demo_tenant, fabricname='_system', username='root', password='poweruser')
+   fabric = client.fabric(tenant=demo_tenant, name='_system', username='root', password='poweruser')
 
    if not demotenant.has_user(demo_user):
      demotenant.create_user(username=demo_user, password='demouser', active=True)
 
-   if not demotenant.has_fabric(demo_fabric):
-     demotenant.create_fabric(name=demo_fabric, dclist=demotenant.dclist())
+   if not fabric.has_fabric(demo_fabric):
+     fabric.create_fabric(name=demo_fabric, dclist=demotenant.dclist(detail=False))
 
    demotenant.update_permission(username=demo_user, permission='rw', fabric=demo_fabric)
 
@@ -116,7 +117,7 @@ Example for **real-time updates** from a collection in fabric:
   client = C8Client(protocol='https', host=region, port=443)
   fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
   fabric.on_change("employees", callback=callback_fn)
-  
+
 
 
 Example to **publish** documents to a stream:
@@ -140,7 +141,7 @@ Example to **publish** documents to a stream:
       msg = "Hello from " + region + "("+ str(i) +")"
       producer.send(msg.encode('utf-8'))
       time.sleep(10) #sec
-    
+
 
 
 Example to **subscribe** documents from a stream:
@@ -164,7 +165,7 @@ Example to **subscribe** documents from a stream:
        msg = subscriber.receive()
        print("Received message '{}' id='{}'".format(msg.data(), msg.message_id()))
        subscriber.acknowledge(msg)
-    
+
 
 
 Example: **stream management**:
@@ -228,7 +229,7 @@ Workflow of **Spot Collections**
 
     #Step 2: Create a geo-fabric and pass one of the spot regions. You can use the SPOT_CREATION_TYPES for the same. If you use AUTOMATIC, a random spot region will be assigned by the system.
     # If you specify None, a geo-fabric is created without the spot properties. If you specify spot region,pass the corresponding spot region in the spot_dc parameter.
-    dcl = sys_tenant.dclist()
+    dcl = sys_tenant.dclist(detail=False)
     fabric = client.fabric(tenant='guest', name='_system', username='root', password='guest')
     fabric.create_fabric('spot-geo-fabric', dclist=dcl,spot_creation_type= fabric.SPOT_CREATION_TYPES.SPOT_REGION, spot_dc='REGION-1')
 

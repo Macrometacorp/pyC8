@@ -1,8 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 import json
-from c8.utils import get_col_name
-
-from datetime import datetime
 
 from c8.api import APIWrapper
 from c8.request import Request
@@ -16,9 +13,6 @@ from c8.exceptions import (
     TenantListError,
     TenantDcListError,
     TenantUpdateError,
-    FabricListError,
-    FabricCreateError,
-    FabricDeleteError,
     PermissionListError,
     PermissionGetError,
     PermissionResetError,
@@ -52,7 +46,8 @@ class Tenant(APIWrapper):
 
     def __init__(self, connection):
         self._auth_tok = ""
-        super(Tenant, self).__init__(connection, executor=DefaultExecutor(connection))
+        super(Tenant, self).__init__(connection,
+                                     executor=DefaultExecutor(connection))
 
     @property
     def name(self):
@@ -62,7 +57,6 @@ class Tenant(APIWrapper):
         :rtype: str | unicode
         """
         return self.tenant_name
-
 
     def get_auth_token_from_server(self):
         """
@@ -80,8 +74,9 @@ class Tenant(APIWrapper):
 
         # We set the temp URL prefix here for the auth call. It is restored
         # below
-        self._conn.set_url_prefix(proto+'//'+rema+'/_tenant/'+self.tenant_name)
-        data = {"tenant":self.tenant_name}
+        self._conn.set_url_prefix(proto + '//' + rema + '/_tenant/' +
+                                  self.tenant_name)
+        data = {"tenant": self.tenant_name}
         data['username'] = self._conn.username
         data['password'] = self._conn._auth[1]
         request = Request(
@@ -98,16 +93,12 @@ class Tenant(APIWrapper):
             return resp.body['jwt']
 
         tok = self._execute(request, response_handler)
-        # NOTE : Set tok as _self.auth_tok so other functions can pass self._auth.tok
-        # to the request object as the Request.auth_tok field. See request.py
+        # NOTE : Set tok as _self.auth_tok so other functions can pass
+        # self._auth.tok to the request object as the Request.auth_tok field.
         self._auth_tok = tok
-
-        # Print the auth token
-        #print("TENANT INIT: "+self.tenant_name+" : Token: "+tok)
 
         # Set the connection object's url prefix back to what it was.
         self._conn.set_url_prefix(oldconnprefix)
-
 
     @property
     def auth_token(self):
@@ -118,7 +109,6 @@ class Tenant(APIWrapper):
         :rtype: str | unicode
         """
         return self._auth_tok
-
 
     #######################
     # Tenant Management #
@@ -139,7 +129,6 @@ class Tenant(APIWrapper):
         def response_handler(resp):
             if not resp.is_success:
                 raise TenantListError(resp, request)
-            #print("tenants() : Response body: " + str(resp.body))
             retval = []
             for item in resp.body['result']:
                 retval.append(item['tenant'])
@@ -157,21 +146,23 @@ class Tenant(APIWrapper):
         """
         return name in self.tenants()
 
-    def create_tenant(self, name, passwd='', dclist='', extra={}):
+    def create_tenant(self, name, passwd='', dclist=[], extra={}):
         """Create a new tenant.
         :param name: Tenant name.
         :type name: str | unicode
         :param passwd: What I presume is the tenant admin user password.
-        :param dclist: comma separated list of region where tenant will be created.
-                       If no value passed tenant will be created globally.
+        :type passwd: str
+        :param dclist: comma separated list of region where tenant will be
+                       created. If no value passed tenant will be created
+                       globally.
+        :type dclist: list
         :param extra: Extra config info.
-        :type extra: [dict]
+        :type extra: dict
         :return: True if tenant was created successfully.
         :rtype: bool
         :raise c8.exceptions.TenantCreateError: If create fails.
 
         Here is an example entry for parameter **users**:
-
         .. code-block:: python
 
             {
@@ -255,7 +246,6 @@ class Tenant(APIWrapper):
         )
 
         def response_handler(resp):
-            #print("DELETE TENANT: RESP BODY IS: "+str(resp.body)) # TODO REMOVE FROM PRODUCTION
             if resp.error_code == 1228 and ignore_missing:
                 return False
             if not resp.is_success:
@@ -264,10 +254,11 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler)
 
+    def dclist(self, detail=True):
+        """Return the list of names of Datacenters
 
-    def dclist(self):
-        """Return the list of Datacenters
-
+        :param detail: detail list of DCs if set to true else only DC names
+        :type: boolean
         :return: DC List.
         :rtype: [str | unicode ]
         :raise c8.exceptions.TenantListError: If retrieval fails.
@@ -278,9 +269,10 @@ class Tenant(APIWrapper):
         )
 
         def response_handler(resp):
-            #print("dclist() : Response body: " + str(resp.body))
             if not resp.is_success:
                 raise TenantDcListError(resp, request)
+            if detail:
+                return resp.body
             dc_list = []
             for dc in resp.body:
                 dc_list.append(dc['name'])
@@ -288,11 +280,13 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def dclist_local(self):
+    def localdc(self, detail=True):
         """Return the list of local Datacenters
 
+        :param detail: detail list of DCs if set to true else only DC names
+        :type: boolean
         :return: DC List.
-        :rtype: [str | unicode ]
+        :rtype: [str | dict ]
         :raise c8.exceptions.TenantListError: If retrieval fails.
         """
         request = Request(
@@ -301,22 +295,24 @@ class Tenant(APIWrapper):
         )
 
         def response_handler(resp):
-            #print("dclist() : Response body: " + str(resp.body))
             if not resp.is_success:
                 raise TenantDcListError(resp, request)
-            return resp.body
+            if detail:
+                return resp.body
+            return resp.body["name"]
 
         return self._execute(request, response_handler)
 
-    def assign_dc_spot(self,dc,spot_region=False):
+    def assign_dc_spot(self, dc, spot_region=False):
         """Assigns spot region of a fed
-                    :param: dc: dc name
-                    :type: str
-                    :param: spot_region: If True, makes the region a spot region
-                    :type: bool
-                    :return: True if request successful,false otherwise
-                    :rtype: bool
-                    :raise c8.exceptions.SpotRegionAssignError: If assignment fails.
+
+        :param: dc: dc name
+        :type: str
+        :param: spot_region: If True, makes the region a spot region
+        :type: bool
+        :return: True if request successful,false otherwise
+        :rtype: bool
+        :raise c8.exceptions.SpotRegionAssignError: If assignment fails.
         """
         data = json.dumps(spot_region)
         request = Request(
@@ -328,127 +324,6 @@ class Tenant(APIWrapper):
             if not resp.is_success:
                 raise SpotRegionAssignError(resp, request)
             return True
-
-        return self._execute(request, response_handler)
-
-    #######################
-    # Fabric Management #
-    #######################
-
-    def fabrics(self):
-        """Return the names all fabrics.
-
-        :return: Fabric names.
-        :rtype: [str | unicode]
-        :raise c8.exceptions.FabricListError: If retrieval fails.
-        """
-        request = Request(
-            method='get',
-            endpoint='/database'
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise FabricListError(resp, request)
-            return resp.body['result']
-
-        return self._execute(request, response_handler)
-
-    def has_fabric(self, name):
-        """Check if a fabric exists.
-
-        :param name: Fabric name.
-        :type name: str | unicode
-        :return: True if fabric exists, False otherwise.
-        :rtype: bool
-        """
-        return name in self.fabrics()
-
-    def create_fabric(self, name, users=None, dclist=None):
-        """Create a new fabric.
-
-        :param name: Fabric name.
-        :type name: str | unicode
-        :param users: List of users with access to the new fabric, where each
-            user is a dictionary with fields "username", "password", "active"
-            and "extra" (see below for example). If not set, only the admin and
-            current user are granted access.
-        :type users: [dict]
-        :param dclist : list of strings of datacenters
-        :type dclist: [str | unicode]
-        :return: True if fabric was created successfully.
-        :rtype: bool
-        :raise c8.exceptions.FabricCreateError: If create fails.
-
-        Here is an example entry for parameter **users**:
-
-        .. code-block:: python
-
-            {
-                'username': 'john',
-                'password': 'password',
-                'active': True,
-                'extra': {'Department': 'IT'}
-            }
-        """
-        data = {'name': name}
-        if users is not None:
-            data['users'] = [{
-                'username': user['username'],
-                'passwd': user['password'],
-                'active': user.get('active', True),
-                'extra': user.get('extra', {})
-            } for user in users]
-
-        options = {}
-
-        if dclist:
-            # Process dclist param (type list) to build up comma-separated string of DCs
-            dcl = ''
-            for dc in dclist:
-                if len(dcl) > 0:
-                    dcl += ','
-                dcl += dc
-            options['dcList'] = dcl
-
-        data['options'] = options
-
-        request = Request(
-            method='post',
-            endpoint='/database',
-            data=data
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise FabricCreateError(resp, request)
-            return True
-
-        return self._execute(request, response_handler)
-
-    def delete_fabric(self, name, ignore_missing=False):
-        """Delete the fabric.
-
-        :param name: Fabric name.
-        :type name: str | unicode
-        :param ignore_missing: Do not raise an exception on missing fabric.
-        :type ignore_missing: bool
-        :return: True if fabric was deleted successfully, False if fabric
-            was not found and **ignore_missing** was set to True.
-        :rtype: bool
-        :raise c8.exceptions.FabricDeleteError: If delete fails.
-        """
-        request = Request(
-            method='delete',
-            endpoint='/database/{}'.format(name)
-        )
-
-        def response_handler(resp):
-            if resp.error_code == 1228 and ignore_missing:
-                return False
-            if not resp.is_success:
-                raise FabricDeleteError(resp, request)
-            return resp.body['result']
 
         return self._execute(request, response_handler)
 
@@ -504,7 +379,6 @@ class Tenant(APIWrapper):
         )
 
         def response_handler(resp):
-            #print("TENANT USER DETAILS RESP BODY: "+str(resp.body))
             if not resp.is_success:
                 raise UserGetError(resp, request)
             return {
@@ -671,7 +545,8 @@ class Tenant(APIWrapper):
 
         query_name = data["query"]["name"]
         if " " in query_name:
-            raise RestqlValidationError("White Spaces not allowed in Query Name")
+            raise RestqlValidationError("White Spaces not allowed in Query "
+                                        "Name")
 
         request = Request(method="post", endpoint="/restql", data=data)
 
