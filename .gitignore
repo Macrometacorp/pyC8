@@ -3,6 +3,6 @@ _build/
 pyC8.egg-info/
 venv/
 .DS_Store
-
+dist/
 # Vim temp files
 *~
