@@ -14,7 +14,7 @@ setup(
     url='https://www.macrometa.io',
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
-    install_requires=['requests==2.20.1', 'six', 'pulsar-client>=2.3.0',
+    install_requires=['requests==2.20.0', 'six', 'pulsar-client>=2.3.0',
                       'pandas==0.24.2'],
     tests_require=['pytest', 'mock', 'flake8'],
     classifiers=[
