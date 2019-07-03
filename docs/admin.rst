@@ -34,13 +34,13 @@ For information on operations related to administration of tenant users, see :do
     dcl = tennt.dclist(detail=False)
 
     # to get DC details
-    dcl = tennt.dclist()
+    dcl = tennt.dclist(detail=True)
 
     # Find out which Edge Location this tenant connection refers to
     # to get only name for local DC
     local_dc = tennt.localdc(detail=False)
 
     # to get all details for local DC
-    local_dc = tennt.localdc()
+    local_dc = tennt.localdc(detail=True)
 
 See :ref:`Tenant` and :ref:`StandardFabric` for API specification.

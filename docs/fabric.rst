@@ -75,5 +75,37 @@ Each fabric in the C8 Fabric can publish changes in realtime to any clients whic
     # Only the tenant admin can perform this action.
     sys_fabric.create_fabric('demofabric', dclist=dcl)
 
+    # save restql
+    data = {
+        "query": {
+            "parameter": {},
+            "name": "demo",
+            "value": "FOR employee IN employees RETURN employee"
+        }
+    }
+    response = sys_fabric.save_restql(data)
+
+    # execute restql without bindVars
+    response = sys_fabric.execute_restql("demo")
+
+    # execute restql with bindVars
+    response = sys_fabric.execute_restql("demo",
+                                         {"bindVars": {"name": "guest.root"}})
+
+    # get all restql
+    response = sys_fabric.get_all_restql()
+
+    # update restql
+    data = {
+        "query": {
+            "parameter": {},
+            "value": "FOR employee IN employees Filter doc.name=@name RETURN employee"
+        }
+    }
+    response = sys_fabric.update_restql("demo", data)
+
+    # delete restql
+    response = sys_fabric.delete_restql("demo")
+
 
 See :ref:`C8Client` and :ref:`StandardFabric` for API specification.

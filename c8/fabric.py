@@ -28,7 +28,13 @@ from c8.exceptions import (
     StreamPermissionError,
     TransactionExecuteError,
     TenantDcListError,
-    SpotRegionUpdateError
+    SpotRegionUpdateError,
+    RestqlValidationError,
+    RestqlListError,
+    RestqlCreateError,
+    RestqlUpdateError,
+    RestqlDeleteError,
+    RestqlExecuteError
 )
 from c8.executor import (
     DefaultExecutor,
@@ -344,7 +350,7 @@ class Fabric(APIWrapper):
     # Datacenter Management #
     #########################
 
-    def dclist(self, detail=True):
+    def dclist(self, detail=False):
         """Return the list of names of Datacenters
 
         :param detail: detail list of DCs if set to true else only DC names
@@ -353,19 +359,24 @@ class Fabric(APIWrapper):
         :rtype: [str | unicode ]
         :raise c8.exceptions.TenantListError: If retrieval fails.
         """
+        properties = self.properties()
+        if not detail:
+            return properties["options"]["dcList"].split(",")
+
+        tenant_name = properties["options"]["tenant"]
+
         request = Request(
             method='get',
-            endpoint='/datacenter/all'
+            endpoint='/datacenter/_tenant/%s' % tenant_name
         )
 
         def response_handler(resp):
             if not resp.is_success:
                 raise TenantDcListError(resp, request)
-            if detail:
-                return resp.body
-            dc_list = []
-            for dc in resp.body:
-                dc_list.append(dc['name'])
+            dc_list = resp.body[0]["dcInfo"]
+            for dc in dc_list:
+                if dc["name"] not in properties["options"]["dcList"]:
+                    dc_list.remove(dc)
             return dc_list
 
         return self._execute(request, response_handler)
@@ -1115,6 +1126,115 @@ class Fabric(APIWrapper):
             elif code == 403:
                 raise StreamPermissionError(resp, request)
             raise StreamConnectionError(resp, request)
+
+        return self._execute(request, response_handler)
+
+    #####################
+    # Restql Management #
+    #####################
+
+    def save_restql(self, data):
+        """Save restql by name.
+
+        :param data: data to be used for restql POST API
+        :type data: dict
+        :return: Results of restql API
+        :rtype: dict
+        :raise c8.exceptions.RestqlCreateError: if restql operation failed
+        """
+
+        query_name = data["query"]["name"]
+        if " " in query_name:
+            raise RestqlValidationError("White Spaces not allowed in Query "
+                                        "Name")
+
+        request = Request(method="post", endpoint="/restql", data=data)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlCreateError(resp, request)
+            return resp.body["result"]
+
+        return self._execute(request, response_handler)
+
+    def execute_restql(self, name, data=None):
+        """Execute restql by name.
+
+        :param name: restql name
+        :type name: str | unicode
+        :param data: restql data (optional)
+        :type data: dict
+        :return: Results of execute restql
+        :rtype: dict
+        :raise c8.exceptions.RestqlExecuteError: if restql execution failed
+        """
+
+        if data and "bindVars" in data:
+            request = Request(method="post", data=data,
+                              endpoint="/restql/execute/%s" % name)
+        else:
+            request = Request(method="post",
+                              endpoint="/restql/execute/%s" % name)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlExecuteError(resp, request)
+            return resp.body
+
+        return self._execute(request, response_handler)
+
+    def get_all_restql(self):
+        """Get all restql associated for user.
+
+        :return: Details of all restql
+        :rtype: list
+        :raise c8.exceptions.RestqlListError: if getting restql failed
+        """
+
+        request = Request(method="get", endpoint="/restql/user")
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlListError(resp, request)
+            return resp.body["result"]
+
+        return self._execute(request, response_handler)
+
+    def update_restql(self, name, data):
+        """Update restql by name.
+
+        :param name: name of restql
+        :type name: str | unicode
+        :param data: restql data
+        :type data: dict
+        :return: True if restql is updated
+        :rtype: bool
+        :raise c8.exceptions.RestqlUpdateError: if query update failed
+        """
+        request = Request(method="put", data=data, endpoint="/restql/" + name)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlUpdateError(resp, request)
+            return True
+
+        return self._execute(request, response_handler)
+
+    def delete_restql(self, name):
+        """Delete restql by name.
+
+        :param name: restql name
+        :type name: str | unicode
+        :return: True if restql is deleted
+        :rtype: bool
+        :raise c8.exceptions.RestqlDeleteError: if restql deletion failed
+        """
+        request = Request(method="delete", endpoint="/restql/" + name)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlDeleteError(resp, request)
+            return True
 
         return self._execute(request, response_handler)
 

@@ -270,8 +270,8 @@ Example for **restql** operations:
   warnings.filterwarnings("ignore")
 
   client = C8Client(protocol='https', host=region, port=443)
-  demotenant = client.tenant(name="demo_tenant", fabricname='_system',
-                             username='root', password='demo')
+  fabric = client.fabric(tenant="demo_tenant", name='_system',
+                         username='root', password='demo')
   #--------------------------------------------------------------
   print("save restql...")
   data = {
@@ -281,17 +281,17 @@ Example for **restql** operations:
       "value": "FOR employee IN employees RETURN employee"
     }
   }
-  response = demotenant.save_restql(data)
+  response = fabric.save_restql(data)
   #--------------------------------------------------------------
   print("execute restql without bindVars...")
-  response = demotenant.execute_restql("demo")
+  response = fabric.execute_restql("demo")
   #--------------------------------------------------------------
   print("execute restql with bindVars...")
-  response = demotenant.execute_restql("demo",
-                                       {"bindVars": {"name": "guest.root"}})
+  response = fabric.execute_restql("demo",
+                                   {"bindVars": {"name": "guest.root"}})
   #--------------------------------------------------------------
   print("get all restql...")
-  response = demotenant.get_all_restql()
+  response = fabric.get_all_restql()
   #--------------------------------------------------------------
   print("update restql...")
   data = {
@@ -300,8 +300,8 @@ Example for **restql** operations:
       "value": "FOR employee IN employees Filter doc.name=@name RETURN employee"
     }
   }
-  response = demotenant.update_restql("demo", data)
+  response = fabric.update_restql("demo", data)
   #--------------------------------------------------------------
   print("delete restql...")
-  response = demotenant.delete_restql("demo")
+  response = fabric.delete_restql("demo")
 ```
