@@ -1,7 +1,6 @@
 .. image:: logo.png
     :align: center
     :alt: pyC8
-|
 
 Welcome to the documentation for **pyC8**, a python driver for C8 Edge Data Fabric.
 
@@ -19,7 +18,7 @@ Compatibility
 Installation
 ============
 
-To install a stable version from PyPi_:
+To install a stable version from PyPi:
 
 .. code-block:: bash
 

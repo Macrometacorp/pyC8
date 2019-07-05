@@ -240,3 +240,46 @@ Workflow of **Spot Collections**
     sys_fabric = client.fabric(tenant=macrometa-admin, name='_system', username='root', password=macrometa-password)
     sys_fabric.update_spot_region('guest', 'spot-geo-fabric', 'REGION-2')
 
+Example for **restql** operations:
+
+.. testcode::
+  from c8 import C8Client
+  import json
+  import warnings
+  warnings.filterwarnings("ignore")
+
+  client = C8Client(protocol='https', host=region, port=443)
+  fabric = client.fabric(tenant="demo_tenant", name='_system',
+                         username='root', password='demo')
+  #--------------------------------------------------------------
+  print("save restql...")
+  data = {
+    "query": {
+      "parameter": {},
+      "name": "demo",
+      "value": "FOR employee IN employees RETURN employee"
+    }
+  }
+  response = fabric.save_restql(data)
+  #--------------------------------------------------------------
+  print("execute restql without bindVars...")
+  response = fabric.execute_restql("demo")
+  #--------------------------------------------------------------
+  print("execute restql with bindVars...")
+  response = fabric.execute_restql("demo",
+                                   {"bindVars": {"name": "guest.root"}})
+  #--------------------------------------------------------------
+  print("get all restql...")
+  response = fabric.get_all_restql()
+  #--------------------------------------------------------------
+  print("update restql...")
+  data = {
+    "query": {
+      "parameter": {},
+      "value": "FOR employee IN employees Filter doc.name=@name RETURN employee"
+    }
+  }
+  response = fabric.update_restql("demo", data)
+  #--------------------------------------------------------------
+  print("delete restql...")
+  response = fabric.delete_restql("demo")
