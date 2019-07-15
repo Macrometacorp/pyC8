@@ -125,10 +125,6 @@ class StreamPermissionError(C8ServerError):
     """Don't have permission"""
 
 
-class CompactionCreateError(C8ServerError):
-    """Compaction already exists"""
-
-
 class StreamCommunicationError(C8ServerError):
     """If an error related to C8Streams communication was encountered."""
 
