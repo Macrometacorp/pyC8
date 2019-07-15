@@ -197,12 +197,6 @@ Example: **stream management**:
 
     #stream_collection.reset_message_subscription_by_position('demostream','demosub', 4)
 
-    #trigger compaction status
-    stream_collection.put_stream_compaction_status('demostream')
-
-    #get stream compaction status
-    stream_collection.get_stream_compaction_status('demostream')
-
     #Unsubscribes the given subscription on all streams on a stream fabric
     stream_collection.unsubscribe('demosub')
 
