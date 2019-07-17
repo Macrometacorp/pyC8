@@ -604,7 +604,8 @@ class Fabric(APIWrapper):
                           index_bucket_count=None,
                           sync_replication=None,
                           enforce_replication_factor=None,
-                          spot_collection=False
+                          spot_collection=False,
+                          is_system=False
                           ):
         """Create a new collection.
 
@@ -648,6 +649,8 @@ class Fabric(APIWrapper):
         :type enforce_replication_factor: bool
         :param spot_collection: If True, it is a spot collection
         :type bool
+        :param is_system: If True, able to create system collections
+        :type is_system: bool
         :return: Standard collection API wrapper.
         :rtype: c8.collection.StandardCollection
         :raise c8.exceptions.CollectionCreateError: If create fails.
@@ -663,7 +666,8 @@ class Fabric(APIWrapper):
             'waitForSync': sync,
             'keyOptions': key_options,
             'type': 3 if edge else 2,
-            'isSpot': spot_collection
+            'isSpot': spot_collection,
+            'isSystem': is_system
         }
         if shard_fields is not None:
             data['shardKeys'] = shard_fields
