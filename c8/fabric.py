@@ -586,6 +586,7 @@ class Fabric(APIWrapper):
                 'id': col['id'],
                 'name': col['name'],
                 'system': col['isSystem'],
+                'isSpot': col["isSpot"],
                 'type': StandardCollection.types[col['type']],
                 'status': StandardCollection.statuses[col['status']],
             } for col in map(dict, resp.body['result'])]
