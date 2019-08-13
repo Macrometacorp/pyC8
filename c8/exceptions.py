@@ -592,3 +592,24 @@ class RestqlUpdateError(C8ServerError):
 
 class RestqlExecuteError(C8ServerError):
     """Failed to execute restql."""
+
+
+#######################
+# Pipeline Exceptions #
+#######################
+
+
+class PipelineCreateError(C8ServerError):
+    """Failed to create pipeline."""
+
+
+class PipelineGetError(C8ServerError):
+    """Failed to get or list pipeline."""
+
+
+class PipelineUpdateError(C8ServerError):
+    """Failed to update pipeline."""
+
+
+class PipelineDeleteError(C8ServerError):
+    """Failed to get or list pipeline."""
