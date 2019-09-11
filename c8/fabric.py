@@ -1306,7 +1306,7 @@ class Fabric(APIWrapper):
         :rtype: bool
         """
         return any(pipeline["name"] == name
-                   for pipeline in self.get_all_pipelines())
+                   for pipeline in self.get_all_pipelines()["result"])
 
     def get_pipeline(self, name):
         """Get C8 pipeline details by name.
@@ -1339,6 +1339,7 @@ class Fabric(APIWrapper):
             if not resp.is_success:
                 raise PipelineGetError(resp, request)
             return resp.body
+
 
         return self._execute(request, response_handler)
 
