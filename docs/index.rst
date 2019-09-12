@@ -37,6 +37,7 @@ Contents
     tenant
     fabric
     collection
+    pipeline
     stream
     document
     indexes
