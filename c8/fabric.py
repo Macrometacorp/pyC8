@@ -610,6 +610,7 @@ class Fabric(APIWrapper):
                           sync_replication=None,
                           enforce_replication_factor=None,
                           spot_collection=False,
+                          local_collection=False,
                           is_system=False
                           ):
         """Create a new collection.
@@ -665,15 +666,19 @@ class Fabric(APIWrapper):
             key_options['increment'] = key_increment
         if key_offset is not None:
             key_options['offset'] = key_offset
+        if spot_collection and local_collection:
+            return("Collection can either be spot or local")
+        else:
+            data = {
+                'name': name,
+                'waitForSync': sync,
+                'keyOptions': key_options,
+                'type': 3 if edge else 2,
+                'isSpot': spot_collection,
+                'isLocal': local_collection,
+                'isSystem': is_system
+            }
 
-        data = {
-            'name': name,
-            'waitForSync': sync,
-            'keyOptions': key_options,
-            'type': 3 if edge else 2,
-            'isSpot': spot_collection,
-            'isSystem': is_system
-        }
         if shard_fields is not None:
             data['shardKeys'] = shard_fields
         if index_bucket_count is not None:
@@ -1043,8 +1048,8 @@ class Fabric(APIWrapper):
         return any(mystream['name'] == stream for mystream in self.streams())
 
     def has_persistent_stream(self, stream, local=False):
-        """ Check if the list of persistent streams has a stream with the given name
-        and local setting.
+        """ Check if the list of persistent streams has a stream with the
+        given name and local setting.
 
         :param stream: The name of the stream for which to check in the list
                        of persistent streams.
@@ -1339,7 +1344,6 @@ class Fabric(APIWrapper):
             if not resp.is_success:
                 raise PipelineGetError(resp, request)
             return resp.body
-
 
         return self._execute(request, response_handler)
 
