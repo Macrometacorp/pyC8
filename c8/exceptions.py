@@ -613,3 +613,21 @@ class PipelineUpdateError(C8ServerError):
 
 class PipelineDeleteError(C8ServerError):
     """Failed to get or list pipeline."""
+
+
+#######################
+# Event Exceptions #
+#######################
+
+
+class EventCreateError(C8ServerError):
+    """Failed to create the event."""
+
+
+class EventGetError(C8ServerError):
+    """Failed to get the event."""
+
+
+class EventDeleteError(C8ServerError):
+    """Failed to delete the event."""
+
