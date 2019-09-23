@@ -38,7 +38,10 @@ from c8.exceptions import (
     PipelineCreateError,
     PipelineGetError,
     PipelineUpdateError,
-    PipelineDeleteError
+    PipelineDeleteError,
+    EventCreateError,
+    EventDeleteError,
+    EventGetError
 )
 from c8.executor import (
     DefaultExecutor,
@@ -1413,6 +1416,101 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
+    ########################
+    # Events #
+    ########################
+
+    def create_event(self, payload):
+        """Create an event.
+
+        :param payload: Payload to create pipeline
+        :type payload: dict
+        :return:  Dictionary containing the event id
+        :rtype: dict
+        :raise c8.exceptions.EventCreateError: if event creation failed
+
+        Here is an example entry for parameter **payload**:
+
+        .. code-block:: python
+            {
+            "action": "string",
+            "attributes": {},
+            "description": "string",
+            "details": "string",
+            "entityName": "string",
+            "entityType": "string",
+            "status": "string"
+            }
+        """
+        request = Request(method="post", endpoint="/events", data=payload)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise EventCreateError(resp, request)
+            return resp.body
+
+        return self._execute(request, response_handler)
+
+    def delete_event(self, eventIds):
+        """Delete an event/s.
+
+        :param eventIds: The event id for which you want to fetch the event details
+        :type eventId: list of strings(event Ids)
+        :return: List containig all the information of existing events
+        :rtype: list
+        :raise c8.exceptions.EventDeleteError: if event creation failed
+
+        """
+        data = (json.dumps((eventIds)))
+
+        request = Request(method="delete", endpoint="/events", data = data)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise EventGetError(resp, request)
+            return True
+
+        return self._execute(request, response_handler)
+
+    def get_all_events(self):
+        """Create an event.
+
+        :return: List containig all the information of existing events
+        :rtype: list
+        :raise c8.exceptions.EventGetError: if event creation failed
+
+        """
+        request = Request(method="get", endpoint="/events")
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise EventGetError(resp, request)
+            return resp.body
+
+        return self._execute(request, response_handler)
+    
+    def get_event_by_Id(self, eventId):
+        """Create an event.
+
+        :param eventId: The event id for which you want to fetch the event details
+        :return: List containig all the information of existing events
+        :rtype: list
+        :raise c8.exceptions.EventGetError: if event creation failed
+
+        """
+        request = Request(method="get", endpoint="/events/"+str(eventId))
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise EventGetError(resp, request)
+            return resp.body
+
+        return self._execute(request, response_handler)
+
+        
+
+
+     
 
 class StandardFabric(Fabric):
     """Standard fabric API wrapper.
