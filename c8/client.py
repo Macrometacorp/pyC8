@@ -83,7 +83,7 @@ class C8Client(object):
         """
         return self._url
 
-    def tenant(self, name, fabricname, username, password, verify=False):
+    def tenant(self, fabricname, email, password, verify=False):
         """Connect to a fabric and return the fabric API wrapper.
 
         :param name: Tenant name.
@@ -101,8 +101,8 @@ class C8Client(object):
         :raise c8.exceptions.ServerConnectionError: If **verify** was set
             to True and the connection to C8Db fails.
         """
-        connection = TenantConnection(url=self._url, tenant=name,
-                                      fabric=fabricname, username=username,
+        connection = TenantConnection(url=self._url, 
+                                      fabric=fabricname, email=email,
                                       password=password,
                                       http_client=self._http_client)
         tenant = Tenant(connection)
@@ -111,7 +111,7 @@ class C8Client(object):
 
         return tenant
 
-    def fabric(self, tenant, name, username, password, verify=False):
+    def fabric(self, tenant, name, email, password, verify=False):
         """Connect to a fabric and return the fabric API wrapper.
 
         :param name: Fabric name.
@@ -129,7 +129,7 @@ class C8Client(object):
         """
         connection = FabricConnection(
             url=self._url, stream_port=self._stream_port, tenant=tenant,
-            fabric=name, username=username, password=password,
+            fabric=name, email=email, password=password,
             http_client=self._http_client
         )
         fabric = StandardFabric(connection)

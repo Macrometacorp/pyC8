@@ -1,8 +1,16 @@
 from __future__ import absolute_import, unicode_literals
+import requests
+import json
 
 from c8.http import DefaultHTTPClient
 
 import c8.constants as constants
+from c8.api import APIWrapper
+
+
+from c8.exceptions import (
+    TenantListError
+)
 
 __all__ = ['Connection']
 
@@ -32,6 +40,7 @@ class Connection(object):
         self._fabric_name = ""
         self._stream_name = ""
         self._username = username
+        self._email = ""
         self._http_client = http_client or DefaultHTTPClient()
 
         # Multitenancy
@@ -156,12 +165,22 @@ class TenantConnection(Connection):
 
     :param connection: HTTP connection.
     :type connection: c8.connection.Connection
-    """
+    """    
 
-    def __init__(self, url, tenant, fabric, username, password, http_client):
-        super(TenantConnection, self).__init__(url, tenant, fabric, username,
+    def __init__(self, url, fabric, email, password, http_client):
+        data = {
+            "email" : email,
+            "password" : password
+        }
+        data = json.dumps(data)
+        url1 = url + "/_open/auth"
+        response = requests.post(url1 , data=data) 
+        response = json.loads(response.text)
+        tenant = response["tenant"]
+        super(TenantConnection, self).__init__(url, tenant, fabric, email,
                                                password, http_client, True)
         self._fqfabric_name = tenant + "." + fabric
+        self._email = email
 
     def __repr__(self):
         return '<TenantConnection {}>'.format(self._fqfabric_name)
@@ -183,9 +202,9 @@ class FabricConnection(Connection):
     :type connection: c8.connection.Connection
     """
 
-    def __init__(self, url, stream_port, tenant, fabric, username, password,
+    def __init__(self, url, stream_port, tenant, fabric, email, password,
                  http_client):
-        super(FabricConnection, self).__init__(url, tenant, fabric, username,
+        super(FabricConnection, self).__init__(url, tenant, fabric, email,
                                                password, http_client, True)
         self._fabric_name = fabric
         self.stream_port = stream_port
