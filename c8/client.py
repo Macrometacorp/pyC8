@@ -83,15 +83,11 @@ class C8Client(object):
         """
         return self._url
 
-    def tenant(self, fabricname, email, password, verify=False):
+    def tenant(self, email, password, verify=False):
         """Connect to a fabric and return the fabric API wrapper.
 
-        :param name: Tenant name.
-        :type name: str | unicode
-        :param fabricname: Tenant fabric name.
-        :type name: str | unicode
-        :param username: Username for basic authentication.
-        :type username: str | unicode
+        :param email: Email for basic authentication.
+        :type email: str | unicode
         :param password: Password for basic authentication.
         :type password: str | unicode
         :param verify: Verify the connection by sending a test request.
@@ -102,7 +98,7 @@ class C8Client(object):
             to True and the connection to C8Db fails.
         """
         connection = TenantConnection(url=self._url, 
-                                      fabric=fabricname, email=email,
+                                      email=email,
                                       password=password,
                                       http_client=self._http_client)
         tenant = Tenant(connection)
@@ -111,35 +107,35 @@ class C8Client(object):
 
         return tenant
 
-    def fabric(self, tenant, name, email, password, verify=False):
-        """Connect to a fabric and return the fabric API wrapper.
+    # def fabric(self, tenant, name, email, password, verify=False):
+    #     """Connect to a fabric and return the fabric API wrapper.
 
-        :param name: Fabric name.
-        :type name: str | unicode
-        :param username: Username for basic authentication.
-        :type username: str | unicode
-        :param password: Password for basic authentication.
-        :type password: str | unicode
-        :param verify: Verify the connection by sending a test request.
-        :type verify: bool
-        :return: Standard fabric API wrapper.
-        :rtype: c8.fabric.StandardFabric
-        :raise c8.exceptions.ServerConnectionError: If **verify** was set
-            to True and the connection to C8Db fails.
-        """
-        connection = FabricConnection(
-            url=self._url, stream_port=self._stream_port, tenant=tenant,
-            fabric=name, email=email, password=password,
-            http_client=self._http_client
-        )
-        fabric = StandardFabric(connection)
+    #     :param name: Fabric name.
+    #     :type name: str | unicode
+    #     :param username: Username for basic authentication.
+    #     :type username: str | unicode
+    #     :param password: Password for basic authentication.
+    #     :type password: str | unicode
+    #     :param verify: Verify the connection by sending a test request.
+    #     :type verify: bool
+    #     :return: Standard fabric API wrapper.
+    #     :rtype: c8.fabric.StandardFabric
+    #     :raise c8.exceptions.ServerConnectionError: If **verify** was set
+    #         to True and the connection to C8Db fails.
+    #     """
+    #     connection = FabricConnection(
+    #         url=self._url, stream_port=self._stream_port, tenant=tenant,
+    #         fabric=name, email=email, password=password,
+    #         http_client=self._http_client
+    #     )
+    #     fabric = StandardFabric(connection)
 
-        if verify:  # Check the server connection by making a read API call
-            try:
-                fabric.ping()
-            except ServerConnectionError as err:
-                raise err
-            except Exception as err:
-                raise ServerConnectionError('bad connection: {}'.format(err))
+    #     if verify:  # Check the server connection by making a read API call
+    #         try:
+    #             fabric.ping()
+    #         except ServerConnectionError as err:
+    #             raise err
+    #         except Exception as err:
+    #             raise ServerConnectionError('bad connection: {}'.format(err))
 
-        return fabric
+    #     return fabric

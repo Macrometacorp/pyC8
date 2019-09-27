@@ -39,12 +39,9 @@ class Tenant(APIWrapper):
     """
 
     def __init__(self, connection):
-        self._auth_tok = ""
         super(Tenant, self).__init__(connection,
                                      executor=DefaultExecutor(connection))
-        self.get_auth_token_from_server()
-
-
+        # self.get_auth_token_from_server()
 
     @property
     def name(self):
@@ -108,6 +105,13 @@ class Tenant(APIWrapper):
         """
         return self._auth_tok
 
+    def useFabric(self, fabric_name):
+        conn = self._conn
+        conn.fabric_name = fabric_name
+        url_prefix = '{}/_tenant/{}/_fabric/{}'.format(conn.url, conn.tenant_name, conn.fabric_name)
+        conn.set_url_prefix(url_prefix)
+        return conn
+
     #######################
     # Tenant Management #
     #######################
@@ -123,7 +127,6 @@ class Tenant(APIWrapper):
         request = Request(
             method='get',
             endpoint='/tenants',
-            #auth_tok= self._auth_tok
         )
 
         def response_handler(resp):
