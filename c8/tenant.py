@@ -3,6 +3,7 @@ import json
 
 from c8.api import APIWrapper
 from c8.request import Request
+from c8.fabric import StandardFabric
 from c8.executor import (
     DefaultExecutor,
 )
@@ -39,6 +40,7 @@ class Tenant(APIWrapper):
     """
 
     def __init__(self, connection):
+        
         super(Tenant, self).__init__(connection,
                                      executor=DefaultExecutor(connection))
         # self.get_auth_token_from_server()
@@ -90,7 +92,7 @@ class Tenant(APIWrapper):
         tok = self._execute(request, response_handler)
         # NOTE : Set tok as _self.auth_tok so other functions can pass
         # self._auth.tok to the request object as the Request.auth_tok field.
-        self._auth_tok = tok
+        self._conn._auth_token = tok
 
         # Set the connection object's url prefix back to what it was.
         self._conn.set_url_prefix(oldconnprefix)
@@ -103,14 +105,15 @@ class Tenant(APIWrapper):
         :return: JWT auth token stored for this tenant user
         :rtype: str | unicode
         """
-        return self._auth_tok
+        return self._conn._auth_token
 
     def useFabric(self, fabric_name):
         conn = self._conn
-        conn.fabric_name = fabric_name
+        conn.set_fabric_name(fabric_name)
         url_prefix = '{}/_tenant/{}/_fabric/{}'.format(conn.url, conn.tenant_name, conn.fabric_name)
         conn.set_url_prefix(url_prefix)
-        return conn
+        fabric = StandardFabric(conn)
+        return fabric
 
     #######################
     # Tenant Management #

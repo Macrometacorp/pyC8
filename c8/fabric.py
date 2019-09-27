@@ -88,7 +88,7 @@ class Fabric(APIWrapper):
 
     def __init__(self, connection, executor):
         self.url = connection.url
-        self.stream_port = connection.stream_port
+        self.stream_port = constants.STREAM_PORT
         self.pulsar_client = None
         super(Fabric, self).__init__(connection, executor)
 

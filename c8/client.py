@@ -1,6 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-from c8.connection import FabricConnection
 from c8.connection import TenantConnection
 from c8.fabric import StandardFabric
 from c8.tenant import Tenant

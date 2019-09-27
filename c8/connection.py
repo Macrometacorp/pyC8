@@ -33,12 +33,10 @@ class Connection(object):
     :type is_fabric: bool
     """
 
-    def __init__(self, url, tenant_name, fabric_name, username,
-                 email, password, http_client):
+    def __init__(self, url, email, password, http_client):
         self.url = url
         self._tenant_name = ""
-        self._fabric_name = ""
-        self._username = ""
+        self._fabric_name = constants.FABRIC_DEFAULT
         self._email = email
         self._password = password
         self._http_client = http_client or DefaultHTTPClient()
@@ -50,10 +48,10 @@ class Connection(object):
         #     self._auth = (self._tenant_name + '.' + username, password)
 
         # Construct the URL prefix in the required format.
-        if not fabric_name:
-            self._fabric_name = constants.DB_DEFAULT
-        else:
-            self._fabric_name = fabric_name
+        #if not fabric_name:
+        #    self._fabric_name = constants.DB_DEFAULT
+        #else:
+        #    self._fabric_name = fabric_name
 
         self._auth_token, self._tenant_name = self._get_auth_token()
 
@@ -111,6 +109,9 @@ class Connection(object):
         """
         return self._fabric_name
 
+    def set_fabric_name(self, new_fabric_name):
+        self._fabric_name = new_fabric_name
+
     def set_url_prefix(self, new_prefix):
         """
         Set the URL prefix to the new prefix,
@@ -118,7 +119,7 @@ class Connection(object):
         """
         old_prefix = self._url_prefix
         self._url_prefix = new_prefix
-        return old_prefix, self._url_prefix
+        #return old_prefix, self._url_prefix
 
     def send_request(self, request):
         """Send an HTTP request to C8 server.
@@ -158,8 +159,8 @@ class TenantConnection(Connection):
     """    
 
     def __init__(self, url, email, password, http_client):
-        super(TenantConnection, self).__init__(url = url, email = email, password = password, http_client = http_client)
-        self._fqfabric_name = tenant + "." + fabric
+        super(TenantConnection, self).__init__(url=url, email=email, password=password, http_client=http_client)
+        self._fqfabric_name = self._tenant_name + "." + self._fabric_name
 
     def __repr__(self):
         return '<TenantConnection {}>'.format(self._fqfabric_name)
