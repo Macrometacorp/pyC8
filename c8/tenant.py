@@ -152,7 +152,7 @@ class Tenant(APIWrapper):
         """
         return name in self.tenants()
 
-    def create_tenant(self, name, email, passwd='', dclist=[], extra={}):
+    def create_tenant(self, email, passwd='', dclist=[], extra={}):
         """Create a new tenant.
         :param name: Tenant name.
         :type name: str | unicode
@@ -172,12 +172,14 @@ class Tenant(APIWrapper):
         .. code-block:: python
 
             {
-                'name': 'john',
                 'email': 'email'
                 'passwd': 'password',
                 'extra': {'Department': 'IT'}
             }
         """
+        name = email.replace('@', "")
+        name = name.replace('.', "")
+        print(name)
         data = {'name': name}
         data['email'] = email
         data['passwd'] = passwd
