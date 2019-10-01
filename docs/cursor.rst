@@ -19,8 +19,8 @@ number of items in the result set may or may not be known in advance.
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
-
+    tenant = client.tenant(email='mytenant@example.com', password='tenant-password')
+    fabric = tenant.useFabric('test')
     # Set up some test data to query against.
     fabric.collection('students').insert_many([
         {'_key': 'Abby', 'age': 22},

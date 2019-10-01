@@ -1,8 +1,16 @@
 from __future__ import absolute_import, unicode_literals
+import requests
+import json
 
 from c8.http import DefaultHTTPClient
 
 import c8.constants as constants
+from c8.api import APIWrapper
+
+
+from c8.exceptions import (
+    TenantListError
+)
 
 __all__ = ['Connection']
 
@@ -25,49 +33,45 @@ class Connection(object):
     :type is_fabric: bool
     """
 
-    def __init__(self, url, tenantname, fabric_or_stream_name, username,
-                 password, http_client, is_fabric=True):
+    def __init__(self, url, email, password, http_client):
         self.url = url
         self._tenant_name = ""
-        self._fabric_name = ""
-        self._stream_name = ""
-        self._username = username
+        self._fabric_name = constants.FABRIC_DEFAULT
+        self._email = email
+        self._password = password
         self._http_client = http_client or DefaultHTTPClient()
 
-        # Multitenancy
-        # TODO : Streams permissions?
-        if not tenantname or self._tenant_name.isspace():
-            self._tenant_name = constants.TENANT_DEFAULT
-        else:
-            self._tenant_name = tenantname
-
-        # Set the auth credentials depending on tenant name
-        if self._tenant_name == '_mm':
-            self._auth = (username, password)
-        else:
-            self._auth = (self._tenant_name + '.' + username, password)
+        # # Set the auth credentials depending on tenant name
+        # if self._tenant_name == '_mm':
+        #     self._auth = (username, password)
+        # else:
+        #     self._auth = (self._tenant_name + '.' + username, password)
 
         # Construct the URL prefix in the required format.
-        if is_fabric:
-            # Handle the DB side of things
-            if not fabric_or_stream_name:
-                self._fabric_name = constants.DB_DEFAULT
-            else:
-                self._fabric_name = fabric_or_stream_name
+        #if not fabric_name:
+        #    self._fabric_name = constants.DB_DEFAULT
+        #else:
+        #    self._fabric_name = fabric_name
 
-            self._url_prefix = '{}/_tenant/{}/_fabric/{}'.format(
-                url, self._tenant_name, self._fabric_name)
-        else:
-            # Handle the streams side of things
-            if not fabric_or_stream_name:
-                self._stream_name = constants.STREAMNAME_GLOBAL_SYSTEM_DEFAULT
-            else:
-                self._stream_name = fabric_or_stream_name
+        self._auth_token, self._tenant_name = self._get_auth_token()
 
-            self._url_prefix = '{}/_streams/tenant/{}'.format(
-                url, self._tenant_name, self._stream_name)
+        self._url_prefix = '{}/_tenant/{}/_fabric/{}'.format(
+            url, self._tenant_name, self._fabric_name)
 
         # TODO : Handle the functions side of things
+    
+    def _get_auth_token(self):
+        data = {
+            "email" : self._email,
+            "password" : self._password,
+        }
+        data = json.dumps(data)
+        url = self.url + "/_open/auth"
+        response = requests.post(url , data=data) 
+        body = json.loads(response.text)
+        tenant = body["tenant"]
+        token = body["jwt"]
+        return token, tenant
 
     @property
     def url_prefix(self):
@@ -105,14 +109,8 @@ class Connection(object):
         """
         return self._fabric_name
 
-    @property
-    def stream_name(self):
-        """Return the Stream name if it was called from the Stream class
-
-        :returns: Stream name.
-        :rtype: str | unicode
-        """
-        return self._stream_name
+    def set_fabric_name(self, new_fabric_name):
+        self._fabric_name = new_fabric_name
 
     def set_url_prefix(self, new_prefix):
         """
@@ -121,7 +119,7 @@ class Connection(object):
         """
         old_prefix = self._url_prefix
         self._url_prefix = new_prefix
-        return old_prefix, self._url_prefix
+        #return old_prefix, self._url_prefix
 
     def send_request(self, request):
         """Send an HTTP request to C8 server.
@@ -140,14 +138,16 @@ class Connection(object):
             final_url = url + request.endpoint
         else:
             final_url = self._url_prefix + request.endpoint
+        
+        headers = request.headers
+        headers['Authorization'] = 'bearer ' + self._auth_token
 
         return self._http_client.send_request(
             method=request.method,
             url=final_url,
             params=request.params,
             data=request.data,
-            headers=request.headers,
-            auth=self._auth,
+            headers=headers,
         )
 
 
@@ -156,12 +156,11 @@ class TenantConnection(Connection):
 
     :param connection: HTTP connection.
     :type connection: c8.connection.Connection
-    """
+    """    
 
-    def __init__(self, url, tenant, fabric, username, password, http_client):
-        super(TenantConnection, self).__init__(url, tenant, fabric, username,
-                                               password, http_client, True)
-        self._fqfabric_name = tenant + "." + fabric
+    def __init__(self, url, email, password, http_client):
+        super(TenantConnection, self).__init__(url=url, email=email, password=password, http_client=http_client)
+        self._fqfabric_name = self._tenant_name + "." + self._fabric_name
 
     def __repr__(self):
         return '<TenantConnection {}>'.format(self._fqfabric_name)
@@ -176,28 +175,28 @@ class TenantConnection(Connection):
         return self._fqfabric_name
 
 
-class FabricConnection(Connection):
-    """Fabric Connection wrapper.
+# class FabricConnection(Connection):
+#     """Fabric Connection wrapper.
 
-    :param connection: HTTP connection.
-    :type connection: c8.connection.Connection
-    """
+#     :param connection: HTTP connection.
+#     :type connection: c8.connection.Connection
+#     """
 
-    def __init__(self, url, stream_port, tenant, fabric, username, password,
-                 http_client):
-        super(FabricConnection, self).__init__(url, tenant, fabric, username,
-                                               password, http_client, True)
-        self._fabric_name = fabric
-        self.stream_port = stream_port
+#     def __init__(self, url, stream_port, tenant, fabric, email, password,
+#                  http_client):
+#         super(FabricConnection, self).__init__(url, tenant, fabric, email,
+#                                                password, http_client, True)
+#         self._fabric_name = fabric
+#         self.stream_port = stream_port
 
-    def __repr__(self):
-        return '<FabricConnection {}>'.format(self._fabric_name)
+#     def __repr__(self):
+#         return '<FabricConnection {}>'.format(self._fabric_name)
 
-    @property
-    def fabric_name(self):
-        """Return the fabric name.
+#     @property
+#     def fabric_name(self):
+#         """Return the fabric name.
 
-        :returns: Fabric name.
-        :rtype: str | unicode
-        """
-        return self._fabric_name
+#         :returns: Fabric name.
+#         :rtype: str | unicode
+#         """
+#         return self._fabric_name

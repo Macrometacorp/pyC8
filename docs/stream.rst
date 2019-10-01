@@ -12,9 +12,9 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
     # Connect to the system fabric of the "mytenant" tenant.
     # This connection is made as the tenant admin using the tenant admin username and password
-    tennt = client.tenant(name='mytenant', fabricname='_system', username='root', password='root_pass')
+    tennt = client.tenant(email='mytenant',  password='root_pass')
     # Connect to "_system" fabric as root user.
-    sys_fabric = client.fabric(tenant='mytenant', name='_system', username='root', password='root_pass')
+    sys_fabric = tenant.useFabric('_system')
 
     ######## Stream enumeration/listing and existence checks ########
     # List all streams present on the server for this DB, regardless of whether or not it is persistent and global/local

@@ -3,6 +3,7 @@ import json
 
 from c8.api import APIWrapper
 from c8.request import Request
+from c8.fabric import StandardFabric
 from c8.executor import (
     DefaultExecutor,
 )
@@ -39,9 +40,10 @@ class Tenant(APIWrapper):
     """
 
     def __init__(self, connection):
-        self._auth_tok = ""
+        
         super(Tenant, self).__init__(connection,
                                      executor=DefaultExecutor(connection))
+        # self.get_auth_token_from_server()
 
     @property
     def name(self):
@@ -53,6 +55,7 @@ class Tenant(APIWrapper):
         return self.tenant_name
 
     def get_auth_token_from_server(self):
+
         """
         Returns the JWT auth token which can be used in subsequent requests
         The login for the auth token is done using the username and password
@@ -71,7 +74,7 @@ class Tenant(APIWrapper):
         self._conn.set_url_prefix(proto + '//' + rema + '/_tenant/' +
                                   self.tenant_name)
         data = {"tenant": self.tenant_name}
-        data['username'] = self._conn.username
+        data['email'] = self._conn._email
         data['password'] = self._conn._auth[1]
         request = Request(
             method='post',
@@ -89,7 +92,7 @@ class Tenant(APIWrapper):
         tok = self._execute(request, response_handler)
         # NOTE : Set tok as _self.auth_tok so other functions can pass
         # self._auth.tok to the request object as the Request.auth_tok field.
-        self._auth_tok = tok
+        self._conn._auth_token = tok
 
         # Set the connection object's url prefix back to what it was.
         self._conn.set_url_prefix(oldconnprefix)
@@ -102,7 +105,15 @@ class Tenant(APIWrapper):
         :return: JWT auth token stored for this tenant user
         :rtype: str | unicode
         """
-        return self._auth_tok
+        return self._conn._auth_token
+
+    def useFabric(self, fabric_name):
+        conn = self._conn
+        conn.set_fabric_name(fabric_name)
+        url_prefix = '{}/_tenant/{}/_fabric/{}'.format(conn.url, conn.tenant_name, conn.fabric_name)
+        conn.set_url_prefix(url_prefix)
+        fabric = StandardFabric(conn)
+        return fabric
 
     #######################
     # Tenant Management #
@@ -115,9 +126,10 @@ class Tenant(APIWrapper):
         :rtype: [str | unicode]
         :raise c8.exceptions.TenantListError: If retrieval fails.
         """
+        self.auth_token
         request = Request(
             method='get',
-            endpoint='/tenants'
+            endpoint='/tenants',
         )
 
         def response_handler(resp):
@@ -140,7 +152,7 @@ class Tenant(APIWrapper):
         """
         return name in self.tenants()
 
-    def create_tenant(self, name, passwd='', dclist=[], extra={}):
+    def create_tenant(self, email, passwd='', dclist=[], extra={}):
         """Create a new tenant.
         :param name: Tenant name.
         :type name: str | unicode
@@ -160,12 +172,16 @@ class Tenant(APIWrapper):
         .. code-block:: python
 
             {
-                'name': 'john',
+                'email': 'email'
                 'passwd': 'password',
                 'extra': {'Department': 'IT'}
             }
         """
+        name = email.replace('@', "")
+        name = name.replace('.', "")
+        print(name)
         data = {'name': name}
+        data['email'] = email
         data['passwd'] = passwd
         data['extra'] = extra
         if dclist != '':
@@ -383,7 +399,7 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def create_user(self, username, password, active=True, extra=None):
+    def create_user(self, username, email, password, active=True, extra=None):
         """Create a new user.
 
         :param username: Username.
@@ -398,7 +414,7 @@ class Tenant(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.UserCreateError: If create fails.
         """
-        data = {'user': username, 'passwd': password, 'active': active}
+        data = {'user': username, 'email': email, 'passwd': password, 'active': active}
         if extra is not None:
             data['extra'] = extra
 

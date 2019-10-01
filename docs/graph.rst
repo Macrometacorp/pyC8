@@ -21,8 +21,8 @@ For more information, refer to `C8 Data Fabric manual`_.
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
-
+    tenant = client.tenant(email='mytenant@example.com', password='tenant-password')
+    fabric = tenant.useFabric('test')
     # List existing graphs in the fabric.
     fabric.graphs()
 

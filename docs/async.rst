@@ -23,8 +23,8 @@ retrieved from the server later via :ref:`AsyncJob` objects.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
-
+    tenant = client.tenant(email='tenant-email', password='passwd')
+    fabric = tenant.useFabric('fabric-name')
     # Begin async execution. This returns an instance of AsyncFabric, a
     # fabric-level API wrapper tailored specifically for async execution.
     async_fabric = fabric.begin_async_execution(return_result=True)

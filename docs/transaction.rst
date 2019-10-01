@@ -16,8 +16,8 @@ from :ref:`TransactionJob` objects.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
-
+    tenant = client.tenant(email='my-tenant', password="password")
+    fabric = tenant.useFabric('demo-fabric')
     # Get the API wrapper for "students" collection.
     students = fabric.collection('students')
 
@@ -102,8 +102,8 @@ at "pending" status (they may be discarded).
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
-
+    tenant = client.tenant(email="my-tenant", password="password")
+    fabric = tenant.useFabric('demo-fabric')
     # Get the API wrapper for "students" collection.
     students = fabric.collection('students')
 
@@ -152,8 +152,8 @@ command as its argument.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
-
+    tenant = client.tenant(email="my-tenant", password="password")
+    fabric = tenant.useFabric('_system')
     # Get the API wrapper for "students" collection.
     students = fabric.collection('students')
 
@@ -199,8 +199,8 @@ executing C8QL queries.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
-
+    tenant = client.tenant(email="my-tenant", password="password")
+    fabric = tenant.useFabric('_system')
     # Begin a new transaction via context manager.
     with fabric.begin_transaction() as txn_fabric:
         job = txn_fabric.c8ql.execute(
@@ -300,8 +300,8 @@ a large result set.
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
-
+    tenant = client.tenant(email="my-tenant", password="password")
+    fabric = tenant.useFabric('_system')      
     # Get the total document count in "students" collection.
     document_count = fabric.collection('students').count()
 
