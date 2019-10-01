@@ -19,8 +19,8 @@ on fields ``_from`` and ``_to``. For more information on indexes, refer to
     client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
-
+    tenant = client.tenant(email='mytenant@example.com', password='tenant-password')
+    fabric = tenant.useFabric('test')
     # Create a new collection named "cities".
     cities = fabric.create_collection('cities')
 

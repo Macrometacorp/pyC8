@@ -22,7 +22,7 @@ These operations can only be executed by the tenant admin. Tenant users who have
 
     # Connect to the system fabric of the "mytenant" tenant.
     # This connection is made as the tenant admin using the tenant admin username and password
-    tennt = client.tenant(name=tenant_name, fabricname='_system', username='root', password='root_pass')
+    tennt = client.tenant(email=tenant_name, password='root_pass')
 
     # Create a new tenant user. This operation can only be performed by the tenant admin.
     tennt.create_user(username='demouser', password='demo_pass', active=True)
@@ -31,7 +31,7 @@ These operations can only be executed by the tenant admin. Tenant users who have
     dcl = tennt.dclist(detail=False)
 
     # Connect to the tenant's system fabric as the tenant admin
-    sys_fabric = client.fabric(tenant='mytenant', name='_system', username='root', password='root_pass')
+    sys_fabric = tenant.useFabric('_system')
 
     # Create a new fabric within the tenant. This operation can only be performed by the tenant admin.
     # The fabric will be replicated to all Fabric Edge Locations specified in the 'dclist' param.

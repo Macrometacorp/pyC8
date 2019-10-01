@@ -18,10 +18,10 @@ For information on operations related to administration of tenant users, see :do
 
     # Connect to the system fabric of the "mytenant" tenant.
     # This connection is made as the tenant admin using the tenant admin username and password
-    tennt = client.tenant(name='mytenant', fabricname='_system', username='root', password='root_pass')
+    tennt = client.tenant(email='tenant_email', password='tenant_password')
 
     # Connect to the tenant's system fabric as the tenant admin
-    sys_fabric = client.fabric(tenant='mytenant', name='_system', username='root', password='root_pass')
+    sys_fabric = tennt.useFabric('fabric-name)
 
     # Retrieve the server version.
     sys_fabric.version()

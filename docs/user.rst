@@ -16,8 +16,8 @@ these operations can only be performed by tenant admins via the ``_system`` tena
     # For the "mytenant" tenant, connect to "_system" fabric as tenant admin.
     # This returns an API wrapper for the "_system" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    tennt = client.tenant(name='mytenant', fabricname='_system', username='root', password='root_pass')
-
+    tennt = client.tenant(email="my-tenant", password="password")
+    fabric = tenant.useFabric('_system')
     # List all tenant users.
     tennt.users()
 

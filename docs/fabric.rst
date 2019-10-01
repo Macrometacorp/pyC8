@@ -22,7 +22,8 @@ Each fabric in the C8 Fabric can publish changes in realtime to any clients whic
     # For the "mytenant" tenant, connect to "_system" fabric as tenant admin.
     # This returns an API wrapper for the "_system" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    sys_fabric = client.fabric(tenant='mytenant', name='_system', username='root', password='passwd')
+    tenant = client.tenant(email='mytenant@example.com', password='tenant-password')
+    sys_fabric = tenant.useFabric('_system')
 
     # List all fabrics in the 'mytenant' tenant
     sys_fabric.fabrics()

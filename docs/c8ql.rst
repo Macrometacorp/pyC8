@@ -27,7 +27,8 @@ C8QL queries are invoked from C8QL API wrapper. Executing queries returns
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    tenant = client.tenant(email='mytenant@example.com', password='tenant-password')
+    fabric = tenant.useFabric('test')
 
 
     # Insert some test documents into "students" collection.
