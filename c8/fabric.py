@@ -1480,7 +1480,7 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.EventGetError: if event creation failed
 
         """
-        request = Request(method="get", endpoint="/events")
+        request = Request(method="get", endpoint="/events/tenant")
 
         def response_handler(resp):
             if not resp.is_success:
