@@ -144,14 +144,15 @@ class StreamCollection(APIWrapper):
                                   other option is
                                   `PartitionsRoutingMode.UseSinglePartition`
         """
+        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+        if local:
+            type_constant = constants.STREAM_LOCAL_NS_PREFIX
+        stream = type_constant.replace(".", "")+"s."+stream
         flag = self.fabric.has_persistent_stream(stream, local=local)
         if flag:
-            type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-            if local:
-                type_constant = constants.STREAM_LOCAL_NS_PREFIX
-
             namespace = type_constant + self.fabric_name
-
+            # stream = type_constant+"s."+stream
+            # print(stream)
             topic = "persistent://%s/%s/%s" % (self.tenant_name, namespace,
                                                stream)
             return self._client.create_producer(
@@ -200,16 +201,17 @@ class StreamCollection(APIWrapper):
         * `reader_name`: Sets the reader name.
         * `subscription_role_prefix`: Sets the subscription role prefix.
         """
+        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+        if local:
+            type_constant = constants.STREAM_LOCAL_NS_PREFIX
+        stream = type_constant.replace(".", "")+"s."+stream
         flag = self.fabric.has_persistent_stream(stream, local=local)
         if flag:
-            type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-            if local:
-                type_constant = constants.STREAM_LOCAL_NS_PREFIX
-
             namespace = type_constant + self.fabric_name
 
             topic = "persistent://%s/%s/%s" % (self.tenant_name, namespace,
                                                stream)
+
             return self._client.create_reader(
                 topic, start_message_id, reader_listener, receiver_queue_size,
                 reader_name, subscription_role_prefix
@@ -268,17 +270,19 @@ class StreamCollection(APIWrapper):
             Sets the time duration for which the broker-side consumer stats
             will be cached in the client.
         """
+        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+        if local:
+            type_constant = constants.STREAM_LOCAL_NS_PREFIX
+        stream = type_constant.replace(".", "")+"s."+stream
         flag = self.fabric.has_persistent_stream(stream, local=local)
         if flag:
-            type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-            if local:
-                type_constant = constants.STREAM_LOCAL_NS_PREFIX
 
             namespace = type_constant + self.fabric_name
 
             topic = "persistent://%s/%s/%s" % (self.tenant_name, namespace,
                                                stream)
-
+        
+                                               
             if not subscription_name:
                 subscription_name = "%s-%s-subscription-%s" % (
                     self.tenant_name, self.fabric_name,
