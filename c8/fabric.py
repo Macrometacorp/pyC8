@@ -1039,7 +1039,7 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def has_stream(self, stream):
+    def has_stream(self, stream, isCollectionStream=False, local=False):
         """ Check if the list of streams has a stream with the given name.
 
         :param stream: The name of the stream for which to check in the list
@@ -1048,6 +1048,11 @@ class Fabric(APIWrapper):
         :return: True=stream found; False=stream not found.
         :rtype: bool
         """
+        if isCollectionStream is False:
+            if local is False:
+                stream = "c8globals." + stream
+            else:
+                stream = "c8locals." + stream
         return any(mystream['name'] == stream for mystream in self.streams())
 
     def has_persistent_stream(self, stream, local=False):
@@ -1086,7 +1091,7 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def delete_stream(self, stream, force=False, local=False):
+    def delete_stream(self, stream, force=False, isCollectionStream=False, local=False):
         """
         Delete the streams under the given fabric
         :param stream: name of stream
@@ -1101,6 +1106,11 @@ class Fabric(APIWrapper):
         # only for persistent streams.
         print("WARNING: Delete not yet implemented for persistent streams, "
               "calling terminate instead.")
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
         return self.terminate_stream(stream=stream, local=local)
 
         # TODO : When stream delete is implemented, enable below code and
@@ -1123,7 +1133,7 @@ class Fabric(APIWrapper):
         #
         # return self._execute(request, response_handler)
 
-    def terminate_stream(self, stream, local=False):
+    def terminate_stream(self, stream, isCollectionStream=False, local=False):
         """Terminate a stream. A stream that is terminated will not accept any
         more messages to be published and will let consumer to drain existing
         messages in backlog
@@ -1133,6 +1143,11 @@ class Fabric(APIWrapper):
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError: Dont have permission.
         """
+        if isCollectionStream is False:
+            if local is False:
+                stream = "c8globals." + stream
+            else:
+                stream = "c8locals." + stream
         endpoint = '{}/{}/terminate?local={}'.format(ENDPOINT, stream, local)
         request = Request(method='post', endpoint=endpoint)
 

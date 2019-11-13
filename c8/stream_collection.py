@@ -450,7 +450,7 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def reset_message_subscription(self, stream, subscription, message_id,
-                                   local=False):
+                                   isCollectionStream=False, local=False):
         """Reset subscription to message position closest to given position.
 
         :param stream: name of stream
@@ -462,6 +462,11 @@ class StreamCollection(APIWrapper):
         :raise: c8.exceptions.StreamUpdateError: If Subscription has active
                                                  consumers
         """
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
         endpoint = '{}/{}/subscription/{}?local={}'.format(ENDPOINT, stream,
                                                            subscription, local)
         request = Request(method='put', endpoint=endpoint, data=message_id)
@@ -554,7 +559,7 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def expire_messages_for_all_subscription(self, stream, expire_time,
-                                             local=False):
+                                             isCollectionStream=False, local=False):
         """Expire messages on a stream subscription
 
         :param stream:
@@ -564,6 +569,11 @@ class StreamCollection(APIWrapper):
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError:Don't have permission
         """
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
         endpoint = '{}/{}/all_subscription/expireMessages/{}?local={}'.format(
             ENDPOINT, stream, expire_time, local)
         request = Request(method='post', endpoint=endpoint)
@@ -579,7 +589,14 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def expire_messages_for_subscription(self, stream, subscription,
-                                         expire_time, local=False):
+                                         expire_time, isCollectionStream=False,
+                                         local=False):
+
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
         endpoint = '{}/{}/subscription/{}/expireMessages/{}?local={}'.format(
             ENDPOINT, stream, subscription, expire_time, local)
         request = Request(method='post', endpoint=endpoint)
@@ -595,7 +612,7 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def expire_messages_for_subscriptions(self, stream, expire_time,
-                                          local=False):
+                                          isCollectionStream=False, local=False):
         """Expire messages on all subscriptions of stream
 
         :param stream:
@@ -605,6 +622,11 @@ class StreamCollection(APIWrapper):
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError:Don't have permission
         """
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
         endpoint = '{}/{}/all_subscription/expireMessages/{}?local={}'.format(
             ENDPOINT, stream, expire_time, local)
         request = Request(method='post', endpoint=endpoint)
@@ -644,7 +666,7 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def reset_message_for_subscription(self, stream, subscription,
-                                       local=False):
+                                       isCollectionStream=False, local=False):
         """Reset subscription to message position closest to given position
 
         :param stream: Name of stream
@@ -655,6 +677,11 @@ class StreamCollection(APIWrapper):
         :raise: c8.exceptions.StreamDeleteError: If Subscription has active
                                                  consumers
         """
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
         endpoint = '{}/{}/subscription/{}/resetcursor?local={}'.format(
             ENDPOINT, stream, subscription, local)
         request = Request(method='post', endpoint=endpoint)
