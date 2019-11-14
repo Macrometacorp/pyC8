@@ -70,7 +70,6 @@ class Connection(object):
         }
         data = json.dumps(data)
         url = self.url + "/_open/auth"
-        print(url,"******")
         response = requests.post(url , data=data)
         if response.status_code == 200:
             body = json.loads(response.text)
@@ -82,7 +81,7 @@ class Connection(object):
                 raise C8TokenNotFoundError("Failed to get Authentication Token from Auth API after successfull Authentication.")
         else:
             raise C8AuthenticationError("Failed to Authenticate the C8DB user Error: {}".format(response.text))
-        return tenant, token
+        return token, tenant
 
     @property
     def url_prefix(self):
