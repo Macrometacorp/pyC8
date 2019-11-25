@@ -9,7 +9,10 @@ from c8.api import APIWrapper
 
 
 from c8.exceptions import (
-    TenantListError
+    TenantListError,
+    C8AuthenticationError,
+    C8TenantNotFoundError,
+    C8TokenNotFoundError
 )
 
 __all__ = ['Connection']
@@ -67,10 +70,17 @@ class Connection(object):
         }
         data = json.dumps(data)
         url = self.url + "/_open/auth"
-        response = requests.post(url , data=data) 
-        body = json.loads(response.text)
-        tenant = body["tenant"]
-        token = body["jwt"]
+        response = requests.post(url , data=data)
+        if response.status_code == 200:
+            body = json.loads(response.text)
+            tenant = body.get("tenant")
+            token = body.get("jwt")
+            if (not tenant):
+                raise C8TenantNotFoundError("Failed to get Tenant Name from Auth API.")
+            if (not token):
+                raise C8TokenNotFoundError("Failed to get Authentication Token from Auth API after successfull Authentication.")
+        else:
+            raise C8AuthenticationError("Failed to Authenticate the C8DB user Error: {}".format(response.text))
         return token, tenant
 
     @property

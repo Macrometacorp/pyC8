@@ -81,6 +81,14 @@ class C8ServerError(C8Error):
         self.http_headers = resp.headers
 
 
+class C8AuthenticationError(C8ClientError):
+    """Failed to authenticate C8 User"""
+
+class C8TenantNotFoundError(C8ClientError):
+    """Failed to get Tenant Name"""
+
+class C8TokenNotFoundError(C8ClientError):
+    """Failed to get Token"""
 #######################
 # Stream Exceptions #
 #######################
