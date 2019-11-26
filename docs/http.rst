@@ -145,7 +145,7 @@ Then you would inject your client as follows:
 
     client = C8Client(
         protocol='https',
-        host='MY-C8-EDGE-DATA-FABRIC-URL',
+        host='gdn1.macrometa.io',
         port=443,
         http_client=CustomHTTPClient()
     )

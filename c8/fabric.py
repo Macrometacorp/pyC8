@@ -1106,12 +1106,12 @@ class Fabric(APIWrapper):
         # only for persistent streams.
         print("WARNING: Delete not yet implemented for persistent streams, "
               "calling terminate instead.")
-        if isCollectionStream is False:
-            if local is True:
-                stream = "c8locals." + stream
-            else:
-                stream = "c8globals." + stream
-        return self.terminate_stream(stream=stream, local=local)
+        # if isCollectionStream is False:
+           # if local is True:
+              #  stream = "c8locals." + stream
+            #else:
+             #   stream = "c8globals." + stream
+        return self.terminate_stream(stream=stream, isCollectionStream=isCollectionStream,  local=local)
 
         # TODO : When stream delete is implemented, enable below code and
         # remove the above code.

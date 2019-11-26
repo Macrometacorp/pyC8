@@ -13,7 +13,7 @@ Here is an example showing how you can manage pipelines:
     from c8 import C8Client
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'

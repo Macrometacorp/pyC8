@@ -17,7 +17,7 @@ Each fabric in the C8 Fabric can publish changes in realtime to any clients whic
     from c8 import C8Client
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # For the "mytenant" tenant, connect to "_system" fabric as tenant admin.
     # This returns an API wrapper for the "_system" fabric on tenant 'mytenant'

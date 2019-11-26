@@ -9,7 +9,7 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
 
     from c8 import C8Client
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
     # Connect to the system fabric of the "mytenant" tenant.
     # This connection is made as the tenant admin using the tenant admin username and password
     tennt = client.tenant(email='mytenant',  password='root_pass')
@@ -29,7 +29,10 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
     print( sys_fabric.persistent_streams(local=False) )
 
     # Check if a given stream exists.
-    sys_fabric.has_stream('testfabricPersLocal')
+    sys_fabric.has_stream('testfabricPersLocal', isCollectionStream=False)
+
+    #Check if a given collection stream exists
+    sys_fabric.has_stream('testfabricPersLocal', isCollectionStream=True)
 
     # Check if a given persistent local stream exists.
     sys_fabric.has_persistent_stream('testfabricPersLocal', local=True)

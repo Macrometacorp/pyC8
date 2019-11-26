@@ -16,7 +16,7 @@ For more information, refer to `C8 Data Fabric manual`_.
     from c8 import C8Client
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
@@ -72,7 +72,7 @@ Here is an example showing how edge definitions are managed:
     from c8 import C8Client
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
@@ -129,7 +129,7 @@ additional safeguards:
     from c8 import C8Client
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
     fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
@@ -164,7 +164,7 @@ IDs instead of keys where applicable.
 .. testcode::
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
     fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
@@ -206,7 +206,7 @@ wrappers provides additional safeguards:
 
 .. testsetup:: edge_collections
 
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
     fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
     school = fabric.graph('school')
 
@@ -227,7 +227,7 @@ wrappers provides additional safeguards:
     from c8 import C8Client
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
     fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
@@ -282,7 +282,7 @@ IDs instead of keys where applicable.
     from c8 import C8Client
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
     fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
