@@ -13,7 +13,7 @@ from :ref:`TransactionJob` objects.
     from c8 import C8Client
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
     tenant = client.tenant(email='my-tenant', password="password")
@@ -99,7 +99,7 @@ at "pending" status (they may be discarded).
     from c8 import C8Client, TransactionExecuteError
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
     tenant = client.tenant(email="my-tenant", password="password")
@@ -149,7 +149,7 @@ command as its argument.
     from c8 import C8Client
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
     tenant = client.tenant(email="my-tenant", password="password")
@@ -196,7 +196,7 @@ executing C8QL queries.
     from c8 import C8Client
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
     tenant = client.tenant(email="my-tenant", password="password")
@@ -271,7 +271,7 @@ is raised.
     from c8 import C8Client, TransactionStateError
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
     fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
@@ -297,7 +297,7 @@ a large result set.
 .. testcode::
 
     # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
     tenant = client.tenant(email="my-tenant", password="password")

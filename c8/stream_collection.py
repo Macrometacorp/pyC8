@@ -95,7 +95,7 @@ class StreamCollection(APIWrapper):
         """
         self._client.close()
 
-    def create_producer(self, stream, local=False, producer_name=None,
+    def create_producer(self, stream, isCollectionStream=False, local=False, producer_name=None,
                         initial_sequence_id=None, send_timeout_millis=30000,
                         compression_type=COMPRESSION_TYPES.NONE,
                         max_pending_messages=1000,
@@ -144,15 +144,15 @@ class StreamCollection(APIWrapper):
                                   other option is
                                   `PartitionsRoutingMode.UseSinglePartition`
         """
-        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-        if local:
-            type_constant = constants.STREAM_LOCAL_NS_PREFIX
-        stream = type_constant.replace(".", "")+"s."+stream
+        if isCollectionStream is False:
+            type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+            if local:
+                type_constant = constants.STREAM_LOCAL_NS_PREFIX
+            stream = type_constant.replace(".", "")+"s."+stream
         flag = self.fabric.has_persistent_stream(stream, local=local)
         if flag:
             namespace = type_constant + self.fabric_name
             # stream = type_constant+"s."+stream
-            # print(stream)
             topic = "persistent://%s/%s/%s" % (self.tenant_name, namespace,
                                                stream)
             return self._client.create_producer(
@@ -173,7 +173,7 @@ class StreamCollection(APIWrapper):
         )
 
     def create_reader(self, stream, start_message_id,
-                      local=False,
+                      local=False, isCollectionStream=False,
                       reader_listener=None,
                       receiver_queue_size=1000,
                       reader_name=None,
@@ -201,10 +201,11 @@ class StreamCollection(APIWrapper):
         * `reader_name`: Sets the reader name.
         * `subscription_role_prefix`: Sets the subscription role prefix.
         """
-        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-        if local:
-            type_constant = constants.STREAM_LOCAL_NS_PREFIX
-        stream = type_constant.replace(".", "")+"s."+stream
+        if isCollectionStream is False:
+            type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+            if local:
+                type_constant = constants.STREAM_LOCAL_NS_PREFIX
+            stream = type_constant.replace(".", "")+"s."+stream
         flag = self.fabric.has_persistent_stream(stream, local=local)
         if flag:
             namespace = type_constant + self.fabric_name
@@ -221,7 +222,8 @@ class StreamCollection(APIWrapper):
             ". Please create a stream and then stream reader."
         )
 
-    def subscribe(self, stream, local=False, subscription_name=None,
+    def subscribe(self, stream, isCollectionStream=False, local=False,
+                  subscription_name=None,
                   consumer_type=CONSUMER_TYPES.EXCLUSIVE,
                   message_listener=None,
                   receiver_queue_size=1000,
@@ -273,7 +275,8 @@ class StreamCollection(APIWrapper):
         type_constant = constants.STREAM_GLOBAL_NS_PREFIX
         if local:
             type_constant = constants.STREAM_LOCAL_NS_PREFIX
-        stream = type_constant.replace(".", "")+"s."+stream
+        if isCollectionStream is False:
+            stream = type_constant.replace(".", "")+"s."+stream
         flag = self.fabric.has_persistent_stream(stream, local=local)
         if flag:
 
@@ -427,7 +430,7 @@ class StreamCollection(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def get_stream_stats(self, stream, local=False):
+    def get_stream_stats(self, stream, isCollectionStream=False, local=False):
         """Get the stats for the given stream
 
         :param stream: name of stream
@@ -436,6 +439,11 @@ class StreamCollection(APIWrapper):
         :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
                                                      for a stream fails.
         """
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
         endpoint = '{}/{}/stats?local={}'.format(ENDPOINT, stream, local)
         request = Request(method='get', endpoint=endpoint)
 
@@ -450,7 +458,7 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def reset_message_subscription(self, stream, subscription, message_id,
-                                   local=False):
+                                   isCollectionStream=False, local=False):
         """Reset subscription to message position closest to given position.
 
         :param stream: name of stream
@@ -462,6 +470,11 @@ class StreamCollection(APIWrapper):
         :raise: c8.exceptions.StreamUpdateError: If Subscription has active
                                                  consumers
         """
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
         endpoint = '{}/{}/subscription/{}?local={}'.format(ENDPOINT, stream,
                                                            subscription, local)
         request = Request(method='put', endpoint=endpoint, data=message_id)
@@ -554,7 +567,7 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def expire_messages_for_all_subscription(self, stream, expire_time,
-                                             local=False):
+                                             isCollectionStream=False, local=False):
         """Expire messages on a stream subscription
 
         :param stream:
@@ -564,6 +577,11 @@ class StreamCollection(APIWrapper):
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError:Don't have permission
         """
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
         endpoint = '{}/{}/all_subscription/expireMessages/{}?local={}'.format(
             ENDPOINT, stream, expire_time, local)
         request = Request(method='post', endpoint=endpoint)
@@ -579,7 +597,14 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def expire_messages_for_subscription(self, stream, subscription,
-                                         expire_time, local=False):
+                                         expire_time, isCollectionStream=False,
+                                         local=False):
+
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
         endpoint = '{}/{}/subscription/{}/expireMessages/{}?local={}'.format(
             ENDPOINT, stream, subscription, expire_time, local)
         request = Request(method='post', endpoint=endpoint)
@@ -595,7 +620,7 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def expire_messages_for_subscriptions(self, stream, expire_time,
-                                          local=False):
+                                          isCollectionStream=False, local=False):
         """Expire messages on all subscriptions of stream
 
         :param stream:
@@ -605,6 +630,11 @@ class StreamCollection(APIWrapper):
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError:Don't have permission
         """
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
         endpoint = '{}/{}/all_subscription/expireMessages/{}?local={}'.format(
             ENDPOINT, stream, expire_time, local)
         request = Request(method='post', endpoint=endpoint)
@@ -620,7 +650,8 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def reset_message_subscription_by_timestamp(self, stream, subscription,
-                                                timestamp):
+                                                timestamp, isCollectionStream=False, 
+                                                local=False):
         """Reset subscription to message position closest to absolute timestamp
 
         :param stream:
@@ -629,12 +660,20 @@ class StreamCollection(APIWrapper):
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError:Don't have permission
         """
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
+        
         endpoint = '{}/{}/subscription/{}/resetcursor/{}'.format(
             ENDPOINT, stream, subscription, timestamp)
+        print("----", endpoint)
         request = Request(method='post', endpoint=endpoint)
 
         def response_handler(resp):
             code = resp.status_code
+            print(code)
             if resp.is_success:
                 return 'OK'
             elif code == 403:
@@ -644,7 +683,7 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def reset_message_for_subscription(self, stream, subscription,
-                                       local=False):
+                                       isCollectionStream=False, local=False):
         """Reset subscription to message position closest to given position
 
         :param stream: Name of stream
@@ -655,6 +694,11 @@ class StreamCollection(APIWrapper):
         :raise: c8.exceptions.StreamDeleteError: If Subscription has active
                                                  consumers
         """
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
         endpoint = '{}/{}/subscription/{}/resetcursor?local={}'.format(
             ENDPOINT, stream, subscription, local)
         request = Request(method='post', endpoint=endpoint)
@@ -670,7 +714,8 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def reset_message_subscription_by_position(self, stream, subscription,
-                                               message_position):
+                                               message_position, isCollectionStream=False, 
+                                               local=False):
         """It fence cursor and disconnects all active consumers before reseting
         cursor.
 
@@ -681,6 +726,11 @@ class StreamCollection(APIWrapper):
         :raise: c8.exceptions.StreamDeleteError: If Subscription has active
                                                  consumers
         """
+        if isCollectionStream is False:
+            if local is True:
+                stream = "c8locals." + stream
+            else:
+                stream = "c8globals." + stream
         endpoint = '{}/{}/subscription/{}/position/{}'.format(
             ENDPOINT, stream, subscription, message_position)
         request = Request(method='post', endpoint=endpoint)
