@@ -275,7 +275,8 @@ class StreamCollection(APIWrapper):
         type_constant = constants.STREAM_GLOBAL_NS_PREFIX
         if local:
             type_constant = constants.STREAM_LOCAL_NS_PREFIX
-        stream = type_constant.replace(".", "")+"s."+stream
+        if isCollectionStream is False:
+            stream = type_constant.replace(".", "")+"s."+stream
         flag = self.fabric.has_persistent_stream(stream, local=local)
         if flag:
 
@@ -667,6 +668,7 @@ class StreamCollection(APIWrapper):
         
         endpoint = '{}/{}/subscription/{}/resetcursor/{}'.format(
             ENDPOINT, stream, subscription, timestamp)
+        print("----", endpoint)
         request = Request(method='post', endpoint=endpoint)
 
         def response_handler(resp):
