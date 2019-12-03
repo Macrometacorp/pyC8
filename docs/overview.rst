@@ -10,7 +10,7 @@ Here is an example showing how **pyC8** client can be used:
    import warnings
    warnings.filterwarnings("ignore")
 
-   region = "qa1-us-east-1.ops.aws.macrometa.io"
+   region = "gdn1.macrometa.io"
    demo_tenant = "demotenant@example.com"
    demo_fabric = "demofabric"
    demo_user = "demouser@example.com"
@@ -84,7 +84,7 @@ Example to **query** a given fabric:
   import warnings
   warnings.filterwarnings("ignore")
 
-  region = "qa1-us-east-1.ops.aws.macrometa.io"
+  region = "gdn1.macrometa.io"
 
   #--------------------------------------------------------------
   print("query employees collection...")
@@ -107,7 +107,7 @@ Example for **real-time updates** from a collection in fabric:
   import warnings
   warnings.filterwarnings("ignore")
 
-  region = "qa1-us-east-1.ops.aws.macrometa.io"
+  region = "gdn1.macrometa.io"
 
   def callback_fn(event):
       print(event)
@@ -130,7 +130,7 @@ Example to **publish** documents to a stream:
   import warnings
   warnings.filterwarnings("ignore")
 
-  region = "qa1-us-east-1.ops.aws.macrometa.io"
+  region = "gdn1.macrometa.io"
 
   #--------------------------------------------------------------
   print("publish messages to stream...")
@@ -153,7 +153,7 @@ Example to **subscribe** documents from a stream:
    import warnings
    warnings.filterwarnings("ignore")
 
-   region = "qa1-us-east-1.ops.aws.macrometa.io"
+   region = "gdn1.macrometa.io"
 
    #--------------------------------------------------------------
    print("consume messages from stream...")

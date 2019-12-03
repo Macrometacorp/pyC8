@@ -35,10 +35,11 @@ Here is an overview example:
    import warnings
    warnings.filterwarnings("ignore")
 
-   region = "qa1-us-east-1.eng2.macrometa.io"
-   demo_tenant = "demo"
+   region = "gdn1.macrometa.io"
+   demo_tenant = "demo@macrometa.io"
    demo_fabric = "demofabric"
-   demo_user = "demouser"
+   demo_user = "demouser@macrometa.io"
+   demo_user_name = "demouser"
    demo_collection = "employees"
    demo_stream = "demostream"
 
@@ -48,20 +49,20 @@ Here is an overview example:
 
    #--------------------------------------------------------------
    print("Create under demotenant, demofabric, demouser and assign permissions...")
-   demotenant = client.tenant(name=demo_tenant, fabricname='_system', username='root', password='demo')
-   fabric = client.tenant(name=demo_tenant, fabricname='_system', username='root', password='demo')
+   demotenant = client.tenant(email=demo_tenant, password='demo')
+   fabric = demotenant.useFabric("_system")
 
    if not demotenant.has_user(demo_user):
-     demotenant.create_user(username=demo_user, password='demouser', active=True)
+     demotenant.create_user(username=demo_user_name, email=demo_user, password='demouser', active=True)
 
    if not fabric.has_fabric(demo_fabric):
      fabric.create_fabric(name=demo_fabric, dclist=demotenant.dclist(detail=False))
-
-   demotenant.update_permission(username=demo_user, permission='rw', fabric=demo_fabric)
+  
+   demotenant.update_permission(username=demo_user_name, permission='rw', fabric=demo_fabric)
 
    #--------------------------------------------------------------
    print("Create and populate employees collection in demofabric...")
-   fabric = client.fabric(tenant=demo_tenant, name=demo_fabric, username=demo_user, password='demouser')
+   fabric = demotenant.useFabric(demo_fabric)
    #get fabric detail
    fabric.fabrics_detail()
    employees = fabric.create_collection('employees') # Create a new collection named "employees".
@@ -103,12 +104,16 @@ Example to **query** a given fabric:
   import warnings
   warnings.filterwarnings("ignore")
 
-  region = "qa1-us-east-1.ops.aws.macrometa.io"
-
+   region = "gdn1.macrometa.io"
+   demo_tenant = "demo@macrometa.io"
+   demo_fabric = "demofabric"
+   demo_user = "demouser@macrometa.io"
+   demo_user_name = "demouser"
   #--------------------------------------------------------------
   print("query employees collection...")
   client = C8Client(protocol='https', host=region, port=443)
-  fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
+  demotenant = client.tenant(email=demo_tenant, password='demo')
+  fabric = demotenant.useFabric("demofabric")
   cursor = fabric.c8ql.execute('FOR employee IN employees RETURN employee') # Execute a C8QL query
   docs = [document for document in cursor]
   print(docs)
@@ -123,15 +128,20 @@ Example for **real-time updates** from a collection in fabric:
   import warnings
   warnings.filterwarnings("ignore")
 
-  region = "qa1-us-east-1.ops.aws.macrometa.io"
-
+  region = "gdn1.macrometa.io"
+  demo_tenant = "demo@macrometa.io"
+  demo_fabric = "demofabric"
+  demo_user = "demouser@macrometa.io"
+  demo_user_name = "demouser"
+  
   def callback_fn(event):
       print(event)
 
   #--------------------------------------------------------------
   print("Subscribe to employees collection...")
   client = C8Client(protocol='https', host=region, port=443)
-  fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
+  demotenant = client.tenant(email=demo_tenant, password='demo')
+  fabric = demotenant.useFabric(demo_fabric)
   fabric.on_change("employees", callback=callback_fn)
 
 ```
@@ -145,12 +155,16 @@ Example to **publish** documents to a stream:
   import warnings
   warnings.filterwarnings("ignore")
 
-  region = "qa1-us-east-1.ops.aws.macrometa.io"
-
+  region = "gdn1.macrometa.io"
+  demo_tenant = "demo@macrometa.io"
+  demo_fabric = "demofabric"
+  demo_user = "demouser@macrometa.io"
+  demo_user_name = "demouser"
   #--------------------------------------------------------------
   print("publish messages to stream...")
   client = C8Client(protocol='https', host=region, port=443)
-  fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
+  demotenant = client.tenant(email=demo_tenant, password='demo')
+  fabric = demotenant.useFabric(demo_fabric)
   stream = fabric.stream()
   producer = stream.create_producer("demostream", local=False)
   for i in range(10):
@@ -168,12 +182,16 @@ Example to **subscribe** documents from a stream:
    import warnings
    warnings.filterwarnings("ignore")
 
-   region = "qa1-us-east-1.ops.aws.macrometa.io"
-
+   region = "gdn1.macrometa.io"
+   demo_tenant = "demo@macrometa.io"
+   demo_fabric = "demofabric"
+   demo_user = "demouser@macrometa.io"
+   demo_user_name = "demouser"
    #--------------------------------------------------------------
    print("consume messages from stream...")
    client = C8Client(protocol='https', host=region, port=443)
-   fabric = client.fabric(tenant="demotenant", name="demofabric", username="demouser", password='poweruser')
+   demotenant = client.tenant(email=demo_tenant, password='demo')
+   fabric = demotenant.useFabric(demo_fabric)
    stream = fabric.stream()
    #you can subscribe using consumer_types option.
    subscriber = stream.subscribe("demostream", local=False, subscription_name="demosub", consumer_type= stream.CONSUMER_TYPES.EXCLUSIVE)
@@ -233,7 +251,9 @@ client = C8Client(protocol='http', host='localhost', port=8529)
 
 #Step 1: Make one of the regions in the fed as the Spot Region
 # Connect to System admin
-sys_tenant = client.tenant(name=macrometa-admin, fabricname='_system', username='root', password=macrometa-password)
+sys_tenant = client.tenant(email=macrometa-admin-email, password=macrometa-password)
+sys_fabric = sys_tenant.useFabric("_system")
+
 #Make REGION-1 as spot-region
 sys_tenant.assign_dc_spot('REGION-1',spot_region=True)
 
@@ -243,7 +263,8 @@ sys_tenant.assign_dc_spot('REGION-2',spot_region=True)
 #Step 2: Create a geo-fabric and pass one of the spot regions. You can use the SPOT_CREATION_TYPES for the same. If you use AUTOMATIC, a random spot region will be assigned by the system.
 # If you specify None, a geo-fabric is created without the spot properties. If you specify spot region,pass the corresponding spot region in the spot_dc parameter.
 dcl = sys_tenant.dclist(detail=False)
-fabric = client.fabric(tenant='guest', name='_system', username='root', password='guest')
+demotenant = client.tenant(email="guest@macrometa.io", password="guest")
+fabric = demotenant.useFabric("_system")
 fabric.create_fabric('spot-geo-fabric', dclist=dcl,spot_creation_type= fabric.SPOT_CREATION_TYPES.SPOT_REGION, spot_dc='REGION-1')
 
 #Step 3: Create spot collection in 'spot-geo-fabric'
@@ -264,8 +285,9 @@ Example for **restql** operations:
   warnings.filterwarnings("ignore")
 
   client = C8Client(protocol='https', host=region, port=443)
-  fabric = client.fabric(tenant="demo_tenant", name='_system',
-                         username='root', password='demo')
+  demotenant = client.tenant(email='demo@macrometa.io', password='demo')
+  fabric = demotenant.useFabric('_system')
+
   #--------------------------------------------------------------
   print("save restql...")
   data = {
