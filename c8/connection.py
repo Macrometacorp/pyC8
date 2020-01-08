@@ -76,11 +76,11 @@ class Connection(object):
             tenant = body.get("tenant")
             token = body.get("jwt")
             if (not tenant):
-                raise C8TenantNotFoundError("Failed to get Tenant Name from Auth API.")
+                raise C8TenantNotFoundError("Failed to get Tenant Name for URL: {} and Email: {}".format(self.url, self._email))
             if (not token):
-                raise C8TokenNotFoundError("Failed to get Authentication Token from Auth API after successfull Authentication.")
+                raise C8TokenNotFoundError("Failed to get Authentication Token for URL: {} Tenant: {} and Email: {}".format(self.url, self.tenant_name, self._email))
         else:
-            raise C8AuthenticationError("Failed to Authenticate the C8DB user Error: {}".format(response.text))
+            raise C8AuthenticationError("Failed to Authenticate the C8DB user for URL: {} and Email: {}. Error: {}".format(self.url, self._email, response.text))
         return token, tenant
 
     @property
