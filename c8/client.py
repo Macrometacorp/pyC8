@@ -31,7 +31,10 @@ class C8Client(object):
         if self._protocol == 'https':
             self._port = 443
         self._stream_port = int(stream_port)
-        self._url = '{}://{}:{}'.format(self._protocol, self.host, self.port)
+        if "api-" in self.host:
+            self._url = '{}://{}:{}'.format(self._protocol, self.host, self.port)
+        else:
+            self._url = '{}://api-{}:{}'.format(self._protocol, self.host, self.port)
         self._http_client = http_client
 
     def __repr__(self):
