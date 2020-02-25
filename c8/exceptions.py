@@ -639,3 +639,8 @@ class EventGetError(C8ServerError):
 class EventDeleteError(C8ServerError):
     """Failed to delete the event."""
 
+class StreamAppGetSampleError(C8ServerError):
+    """Error while retriving sample stream apps."""
+
+class StreamAppChangeActiveStateError(C8ServerError):
+    """Error while changing active state of stream app."""
