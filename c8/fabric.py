@@ -8,6 +8,7 @@ import pulsar
 from c8.api import APIWrapper
 from c8.c8ql import C8QL
 from c8.collection import StandardCollection
+from c8.stream_apps import StreamApps
 from c8 import constants
 from c8.exceptions import (
     CollectionCreateError,
@@ -41,7 +42,8 @@ from c8.exceptions import (
     PipelineDeleteError,
     EventCreateError,
     EventDeleteError,
-    EventGetError
+    EventGetError,
+    StreamAppGetSampleError
 )
 from c8.executor import (
     DefaultExecutor,
@@ -1520,12 +1522,77 @@ class Fabric(APIWrapper):
                 raise EventGetError(resp, request)
             return resp.body
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler)     
 
+    # streamApps fabric apis
+    
+    def stream_app(self,name):
+        return StreamApps(self._conn, self._executor, name)
+
+    def validate_stream_app(self,data):
+        """validates a stream app by given data
+        @data: data to be passed as data into the request
+        """
+        req = Request(
+            method = "post",
+            endpoint='/_api/streamapps/validate',
+            data=data
+        )
         
+        def response_handler(resp):
+            if resp.is_success is True:
+                return True
+            return False
+        
+        return self._execute(req,response_handler)
 
+    def retrive_stream_app(self):
+        """retrieves a stream app by given body
+        """
+        req = Request(
+            method = "get",
+            endpoint='/_api/streamapps',
+        )
+        
+        def response_handler(resp):
+            if resp.is_success is True:
+                return True
+            return False
+        
+        return self._execute(req,response_handler)
 
-     
+    def get_samples_stream_app(self):
+        """gets samples for stream apps
+        """
+        req = Request(
+            method = "get",
+            endpoint='/_api/streamapps/samples',
+        )
+        
+        def response_handler(resp):
+            if resp.is_success is not True:
+                raise StreamAppGetSampleError(resp,req)
+            return resp.body["streamAppSample"]    
+            
+        
+        return self._execute(req,response_handler)
+
+    def create_stream_app(self, data):
+        """Creates a stream application by given data
+        @data: data to be passed as data into the request
+        """
+        req = Request(
+            method = "post",
+            endpoint='/_api/streamapps',
+            data=data
+        )
+        
+        def response_handler(resp):
+            if resp.is_success is True:
+                return True
+            return False
+        
+        return self._execute(req,response_handler)     
 
 class StandardFabric(Fabric):
     """Standard fabric API wrapper.
