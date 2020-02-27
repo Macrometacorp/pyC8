@@ -1533,6 +1533,7 @@ class Fabric(APIWrapper):
         """validates a stream app by given data
         @data: data to be passed as data into the request
         """
+        data["definition"] = repr(data["definition"])
         req = Request(
             method = "post",
             endpoint='/_api/streamapps/validate',
@@ -1556,7 +1557,8 @@ class Fabric(APIWrapper):
         
         def response_handler(resp):
             if resp.is_success is True:
-                return True
+                return resp.body
+            print(resp.body)
             return False
         
         return self._execute(req,response_handler)
@@ -1581,6 +1583,7 @@ class Fabric(APIWrapper):
         """Creates a stream application by given data
         @data: data to be passed as data into the request
         """
+        data["definition"] = repr(data["definition"])
         req = Request(
             method = "post",
             endpoint='/_api/streamapps',
@@ -1589,7 +1592,9 @@ class Fabric(APIWrapper):
         
         def response_handler(resp):
             if resp.is_success is True:
+                print(resp.body)
                 return True
+            print(resp.body)
             return False
         
         return self._execute(req,response_handler)     
