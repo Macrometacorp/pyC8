@@ -33,6 +33,7 @@ class StreamApps(APIWrapper):
     def update(self,data):
         """updates the stream app
         """
+        data["definition"] = repr(data["definition"])
         req = Request(
             method = "put",
             endpoint='/_api/streamapps/{}'.format(self.name),
@@ -75,6 +76,7 @@ class StreamApps(APIWrapper):
         def response_handler(resp):
             if resp.is_success is True:
                 return resp.body["streamApps"]
+            print(resp.body)
             return False
         
         return self._execute(req,response_handler)
@@ -89,7 +91,9 @@ class StreamApps(APIWrapper):
 
         def response_handler(resp):
             if resp.is_success is True:
+                print(resp.body)
                 return True
+            print(resp.body)
             return False
 
         return self._execute(req,response_handler)
@@ -97,6 +101,7 @@ class StreamApps(APIWrapper):
     def query(self,data):
         """query the stream app by name
         """
+        data["query"] = repr(data["query"])
         req = Request(
             method = "post",
             endpoint='/_api/streamapps/query/{}'.format(self.name),
@@ -105,7 +110,8 @@ class StreamApps(APIWrapper):
 
         def response_handler(resp):
             if resp.is_success is True:
-                return True
+                return resp.body
+            print(resp.body)
             return False
         
         return self._execute(req,response_handler)
