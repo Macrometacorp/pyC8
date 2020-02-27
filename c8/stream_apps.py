@@ -1,6 +1,7 @@
 from c8.api import APIWrapper
 from c8.request import Request
 from c8.response import Response
+import json
 from c8.exceptions import (
     StreamAppChangeActiveStateError
 )
@@ -30,14 +31,21 @@ class StreamApps(APIWrapper):
         """
         return self._name
   
-    def update(self,data):
+    def update(self, data, dclist=[]):
         """updates the stream app
+        @data: stream app definition
+        @dclist: regions where stream app has to be deployed
+
         """
-        data["definition"] = repr(data["definition"])
+        # create request body 
+        req_body = {
+            "definition":data,
+            "regions":dclist
+        }
         req = Request(
             method = "put",
             endpoint='/_api/streamapps/{}'.format(self.name),
-            data=data
+            data=json.dumps(req_body)
         )
         
         def response_handler(resp):
@@ -49,6 +57,7 @@ class StreamApps(APIWrapper):
 
     def change_state(self,active):
         """enable or disable stream app
+        @active: state of the stream app to be updated
         """
         params = {"active":active}
         
@@ -98,20 +107,25 @@ class StreamApps(APIWrapper):
 
         return self._execute(req,response_handler)
 
-    def query(self,data):
+    def query(self,query):
         """query the stream app by name
+        @query: query to be executed against the stream app
         """
-        data["query"] = repr(data["query"])
+        # create request body
+        req_body = {
+            "query":query
+        }
+        # create request
         req = Request(
             method = "post",
             endpoint='/_api/streamapps/query/{}'.format(self.name),
-            data=data
+            data=json.dumps(req_body)
         )
-
+        # create response handler
         def response_handler(resp):
             if resp.is_success is True:
                 return resp.body
             print(resp.body)
             return False
-        
+        # call the api
         return self._execute(req,response_handler)

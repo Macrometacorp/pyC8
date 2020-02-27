@@ -1529,20 +1529,21 @@ class Fabric(APIWrapper):
     def stream_app(self,name):
         return StreamApps(self._conn, self._executor, name)
 
-    def validate_stream_app(self,data):
+    def validate_stream_app(self, data):
         """validates a stream app by given data
-        @data: data to be passed as data into the request
+        @data: stream app defination string
         """
-        data["definition"] = repr(data["definition"])
+        body = {"definition": data}
         req = Request(
             method = "post",
             endpoint='/_api/streamapps/validate',
-            data=data
+            data=json.dumps(body)
         )
         
         def response_handler(resp):
             if resp.is_success is True:
                 return True
+            print(resp.body)
             return False
         
         return self._execute(req,response_handler)
@@ -1579,24 +1580,30 @@ class Fabric(APIWrapper):
         
         return self._execute(req,response_handler)
 
-    def create_stream_app(self, data):
+    def create_stream_app(self, data, dclist=[]):
         """Creates a stream application by given data
-        @data: data to be passed as data into the request
+        @data: stream app definition
+        @dclist: regions where stream app has to be deployed
         """
-        data["definition"] = repr(data["definition"])
+        # create request body
+        req_body = {
+            "definition":data,
+            "regions":dclist
+        } 
+        # create request
         req = Request(
             method = "post",
             endpoint='/_api/streamapps',
-            data=data
+            data=json.dumps(req_body)
         )
-        
+        # create response handler
         def response_handler(resp):
             if resp.is_success is True:
                 print(resp.body)
                 return True
             print(resp.body)
             return False
-        
+        # call api
         return self._execute(req,response_handler)     
 
 class StandardFabric(Fabric):
