@@ -25,19 +25,14 @@ Here is an example showing how you can manage standard StreamApps:
     result = fabric.get_samples_stream_app()
 
     # To validate a stream application definition use
-    data = {
-        "definition": "@App:name(\'Sample-Cargo-App\')\\n\\n-- Stream\\ndefine stream srcCargoStream (weight int);\\n\\n-- Table\\ndefine table destCargoTable (weight int, totalWeight long);\\n\\n-- Data Processing\\n@info(name=\'Query\')\\nselect weight, sum(weight) as totalWeight\\nfrom srcCargoStream\\ninsert into destCargoTable;",
-        "regions": []
-    }
+    data = "@App:name(\'Sample-Cargo-App\')\\n\\n-- Stream\\ndefine stream srcCargoStream (weight int);\\n\\n-- Table\\ndefine table destCargoTable (weight int, totalWeight long);\\n\\n-- Data Processing\\n@info(name=\'Query\')\\nselect weight, sum(weight) as totalWeight\\nfrom srcCargoStream\\ninsert into destCargoTable;" 
     result = fabric.validate_stream_app(data)
     print(result)
 
     # Create a new stream app named "Sample-Cargo-App" using following definition:.
-    data = {
-        "definition": "@App:name(\'Sample-Cargo-App\')\\n\\n-- Stream\\ndefine stream srcCargoStream (weight int);\\n\\n-- Table\\ndefine table destCargoTable (weight int, totalWeight long);\\n\\n-- Data Processing\\n@info(name=\'Query\')\\nselect weight, sum(weight) as totalWeight\\nfrom srcCargoStream\\ninsert into destCargoTable;",
-        "regions": []
-    }
-    result = fabric.validate_stream_app(data)
+    data = "@App:name(\'Sample-Cargo-App\')\\n\\n-- Stream\\ndefine stream srcCargoStream (weight int);\\n\\n-- Table\\ndefine table destCargoTable (weight int, totalWeight long);\\n\\n-- Data Processing\\n@info(name=\'Query\')\\nselect weight, sum(weight) as totalWeight\\nfrom srcCargoStream\\ninsert into destCargoTable;"
+    regions = []
+    result = fabric.create_stream_app(data)
     print(result)
 
     # To operate on created apps, you need to create an instance of the app
@@ -48,11 +43,9 @@ Here is an example showing how you can manage standard StreamApps:
     print(result)
 
     # Update the app using
-    data = {
-        "definition": "@App:name(\'Sample-Cargo-App\')\\n\\n-- Stream\\ndefine stream srcCargoStream (weight int);\\n\\n-- Table\\ndefine table destCargoTable (weight int, totalWeight long);\\n\\n-- Data Processing\\n@info(name=\'Query\')\\nselect weight, sum(weight) as totalWeight\\nfrom srcCargoStream\\ninsert into destCargoTable;",
-        "regions": ["asia-east1","asia-north1"]
-    }
-    result = fabric.update(data)
+    data = "@App:name(\'Sample-Cargo-App\')\\n\\n-- Stream\\ndefine stream srcCargoStream (weight int);\\n\\n-- Table\\ndefine table destCargoTable (weight int, totalWeight long);\\n\\n-- Data Processing\\n@info(name=\'Query\')\\nselect weight, sum(weight) as totalWeight\\nfrom srcCargoStream\\ninsert into destCargoTable;"
+    regions = []
+    result = fabric.update(data,regions)
     print(result)
 
     # Enable / Disable app using change_state function
