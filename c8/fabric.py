@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import json
 import random
 
-import pulsar
+import websocket
 
 from c8.api import APIWrapper
 from c8.c8ql import C8QL
@@ -91,7 +91,6 @@ class Fabric(APIWrapper):
     def __init__(self, connection, executor):
         self.url = connection.url
         self.stream_port = constants.STREAM_PORT
-        self.pulsar_client = None
         super(Fabric, self).__init__(connection, executor)
 
     def __getitem__(self, name):
@@ -136,36 +135,30 @@ class Fabric(APIWrapper):
 
         namespace = constants.STREAM_GLOBAL_NS_PREFIX + self.fabric_name
 
-        topic = "persistent://%s/%s/%s" % (self.tenant_name, namespace,
-                                           collection)
         subscription_name = "%s-%s-subscription-%s" % (
             self.tenant_name, self.fabric_name, str(random.randint(1, 1000)))
-        print("pyC8 Realtime: Subscribing to topic: " + topic +
-              " on Subscription name: " + subscription_name)
+        
+        topic = "ws://{}/ws/v2/consumer/persistent/{}/{}/{}/{}".format(
+            self.url+":"+str(self.stream_port),self.tenant_name,namespace,
+            collection,subscription_name)
 
-        if self.pulsar_client:
-            print("pyC8 Realtime: Initialized C8Streams connection to " +
-                  self.url + ":" + str(self.stream_port))
-        else:
-            dcl_local = self.localdc(detail=True)
-            self.pulsar_client = pulsar.Client('pulsar://%s:%s' % (
-                dcl_local['tags']['url'], str(self.stream_port)))
+        print(topic)
 
-        consumer = self.pulsar_client.subscribe(topic, subscription_name)
+        ws = websocket.create_connection(topic)
 
         try:
             print("pyC8 Realtime: Begin monitoring realtime updates for " +
                   topic)
             while True:
-                msg = consumer.receive(timeout_millis=30000)
-                data = msg.data().decode('utf-8')
-                jdata = json.loads(data)
-                # self.consumer.acknowledge(msg)
-                callback(jdata)
+                msg = ws.recv()
+                if not msg: break
+                data = json.loads(msg.decode('utf-8'))
+                ws.send(json.dumps({'messageId' : msg['messageId']}))
+                callback(data)
         except Exception:
             pass
         finally:
-            self.pulsar_client.close()
+            ws.close()
 
     def properties(self):
         """Return fabric properties.
