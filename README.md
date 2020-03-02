@@ -152,6 +152,9 @@ Example to **publish** documents to a stream:
 
   from c8 import C8Client
   import time
+  import base64
+  import six
+  import json
   import warnings
   warnings.filterwarnings("ignore")
 
@@ -169,7 +172,12 @@ Example to **publish** documents to a stream:
   producer = stream.create_producer("demostream", local=False)
   for i in range(10):
       msg = "Hello from " + region + "("+ str(i) +")"
-      producer.send(msg.encode('utf-8'))
+      payload = {
+            "payload": base64.b64encode(
+                six.b(msg)
+                ).decode("utf-8")
+        }
+      producer.send(json.dumps(payload))
       time.sleep(10) # 10 sec
 
 ```
@@ -179,6 +187,8 @@ Example to **subscribe** documents from a stream:
 ```python
 
    from c8 import C8Client
+   import json
+   import base64
    import warnings
    warnings.filterwarnings("ignore")
 
@@ -196,9 +206,11 @@ Example to **subscribe** documents from a stream:
    #you can subscribe using consumer_types option.
    subscriber = stream.subscribe("demostream", local=False, subscription_name="demosub", consumer_type= stream.CONSUMER_TYPES.EXCLUSIVE)
    for i in range(10):
-       msg = subscriber.receive()
-       print("Received message '{}' id='{}'".format(msg.data(), msg.message_id()))
-       subscriber.acknowledge(msg)
+       msg = json.dumps(subscriber.recv())
+       string_msg = base64.b64decode(msg['payload'])
+       msgId = msg['messageId']
+       print("Received message '{}' id='{}'".format(string_msg, msgId)
+       subscriber.send(json.dumps({'messageId': msgId}))
 
 ```
 
