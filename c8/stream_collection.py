@@ -1,20 +1,19 @@
 from __future__ import absolute_import, unicode_literals
 
+from urllib.parse import urlparse, urlencode
+
 import json
 import random
 
-from urllib.parse import urlparse
+import websocket
 
-import pulsar
-
-from c8 import constants
 from c8.api import APIWrapper
-from c8.request import Request
 from c8 import exceptions as ex
+from c8 import constants
+from c8.request import Request
 
 __all__ = ['StreamCollection']
 ENDPOINT = "/streams/persistent/stream"
-
 
 class StreamCollection(APIWrapper):
     """Stream Client.
@@ -30,76 +29,41 @@ class StreamCollection(APIWrapper):
     def enum(**enums):
         return type('Enum', (), enums)
 
-    CONSUMER_TYPES = enum(EXCLUSIVE=pulsar.ConsumerType.Exclusive,
-                          SHARED=pulsar.ConsumerType.Shared,
-                          FAILOVER=pulsar.ConsumerType.Failover)
+    def close(self):
+        """
+            Close the client and all the associated producers and consumers
+        """
+    
+    CONSUMER_TYPES = enum(EXCLUSIVE="Exclusive",
+                          SHARED="Shared",
+                          FAILOVER="Failover")
 
-    COMPRESSION_TYPES = enum(LZ4=pulsar.CompressionType.LZ4,
-                             ZLIB=pulsar.CompressionType.ZLib,
-                             NONE=pulsar.CompressionType.NONE)
+    COMPRESSION_TYPES = enum(LZ4="LZ4",
+                             ZLIB="ZLib",
+                             NONE=None)
 
     ROUTING_MODE = enum(
-        SINGLE_PARTITION=pulsar.PartitionsRoutingMode.UseSinglePartition,
-        ROUND_ROBIN_PARTITION=pulsar.PartitionsRoutingMode.RoundRobinDistribution,  # noqa
-        CUSTOM_PARTITION=pulsar.PartitionsRoutingMode.CustomPartition
+        SINGLE_PARTITION="SinglePartition",
+        ROUND_ROBIN_PARTITION="RoundRobinPartition",  # noqa
+        CUSTOM_PARTITION="CustomPartition"
     )
 
     def __init__(self, fabric, connection, executor, url, port,
                  operation_timeout_seconds):
         """Create a new Stream client instance.
-        **Args**
-        * `service_url`: Streams service url eg: pulsar://my-broker.com:6650/
-        **Options**
-        * `authentication`:
-          Set the authentication provider to be used with the broker.
-        * `operation_timeout_seconds`:
-          Set timeout on client operations (subscribe, create producer, close,
-          unsubscribe).
-        * `io_threads`:
-          Set the number of IO threads to be used by the Pulsar client.
-        * `message_listener_threads`:
-          Set the number of threads to be used by the Pulsar client when
-          delivering messages through message listener. The default is 1 thread
-          per Pulsar client. If using more than 1 thread, messages for distinct
-          `message_listener`s will be delivered in different threads, however a
-          single `MessageListener` will always be assigned to the same thread.
-        * `concurrent_lookup_requests`:
-          Number of concurrent lookup-requests allowed on each broker
-          connection to prevent overload on the broker.
-        * `log_conf_file_path`:
-          Initialize log4cxx from a configuration file.
-        * `use_tls`:
-          Configure whether to use TLS encryption on the connection. This
-          setting is deprecated. TLS will be automatically enabled if the
-          `serviceUrl` is set to `pulsar+ssl://` or `https://`
-        * `tls_trust_certs_file_path`:
-          Set the path to the trusted TLS certificate file.
-        * `tls_allow_insecure_connection`:
-          Configure whether the Pulsar client accepts untrusted TLS
-          certificates from the broker.
         """
         super(StreamCollection, self).__init__(connection, executor)
         url = urlparse(url)
         self.fabric = fabric
         dcl_local = self.fabric.localdc(detail=True)
-        self._server_url = 'pulsar://%s:%s' % (dcl_local['tags']['url'],
-                                               str(port))
-        self._client = pulsar.Client(
-            self._server_url,
-            operation_timeout_seconds=operation_timeout_seconds
-        )
-
-    def close(self):
-        """
-            Close the client and all the associated producers and consumers
-        """
-        self._client.close()
-
+        ws_url = "wss://%s/_ws/ws/v2/"
+        self._ws_url = ws_url % (dcl_local["tags"]["url"])
+           
     def create_producer(self, stream, isCollectionStream=False, local=False, producer_name=None,
                         initial_sequence_id=None, send_timeout_millis=30000,
                         compression_type=COMPRESSION_TYPES.NONE,
                         max_pending_messages=1000,
-                        block_if_queue_full=False, batching_enabled=False,
+                        batching_enabled=False,
                         batching_max_messages=1000,
                         batching_max_allowed_size_in_bytes=131072,
                         batching_max_publish_delay_ms=10,
@@ -152,21 +116,26 @@ class StreamCollection(APIWrapper):
         flag = self.fabric.has_persistent_stream(stream, local=local)
         if flag:
             namespace = type_constant + self.fabric_name
-            # stream = type_constant+"s."+stream
-            topic = "persistent://%s/%s/%s" % (self.tenant_name, namespace,
+            topic = "producer/persistent/%s/%s/%s" % (self.tenant_name, namespace,
                                                stream)
-            return self._client.create_producer(
-                topic=topic, producer_name=producer_name,
-                initial_sequence_id=initial_sequence_id,
-                send_timeout_millis=send_timeout_millis,
-                compression_type=compression_type,
-                max_pending_messages=max_pending_messages,
-                block_if_queue_full=block_if_queue_full,
-                batching_enabled=batching_enabled,
-                batching_max_messages=batching_max_messages,
-                batching_max_allowed_size_in_bytes=batching_max_allowed_size_in_bytes,  # noqa
-                batching_max_publish_delay_ms=batching_max_publish_delay_ms,
-                message_routing_mode=message_routing_mode)
+
+            params =  {
+                "producerName":producer_name,
+                "initialSequenceId":initial_sequence_id,
+                "sendTimeoutMillis":send_timeout_millis,
+                "compressionType":compression_type,
+                "maxPendingMessages":max_pending_messages,
+                "batchingEnabled":batching_enabled,
+                "batchingMaxMessages":batching_max_messages,
+                "batchingMaxPublishDelay":batching_max_publish_delay_ms,
+                "messageRoutingMode":message_routing_mode
+            }
+
+            params = {k: v for k, v in params.items() if v is not None}
+            url = self._ws_url + topic + "?" + urlencode(params)
+
+            return websocket.create_connection(url)
+        
         raise ex.StreamProducerError(
             "No stream present with name:" + stream +
             ". Please create a stream and then stream producer"
@@ -210,13 +179,20 @@ class StreamCollection(APIWrapper):
         if flag:
             namespace = type_constant + self.fabric_name
 
-            topic = "persistent://%s/%s/%s" % (self.tenant_name, namespace,
+            topic = "reader/persistent/%s/%s/%s" % (self.tenant_name, namespace,
                                                stream)
 
-            return self._client.create_reader(
-                topic, start_message_id, reader_listener, receiver_queue_size,
-                reader_name, subscription_role_prefix
-            )
+            params = {
+                "readerName": reader_name,
+                "receiverQueueSize": receiver_queue_size,
+                "messageId": start_message_id
+            }
+
+            params = {k: v for k, v in params.items() if v is not None}
+            url = self._ws_url + topic + "?" + urlencode(params)
+            
+            return websocket.create_connection(url)
+
         raise ex.StreamSubscriberError(
             "No stream present with name:" + stream +
             ". Please create a stream and then stream reader."
@@ -282,43 +258,32 @@ class StreamCollection(APIWrapper):
 
             namespace = type_constant + self.fabric_name
 
-            topic = "persistent://%s/%s/%s" % (self.tenant_name, namespace,
-                                               stream)
-        
-                                               
             if not subscription_name:
                 subscription_name = "%s-%s-subscription-%s" % (
                     self.tenant_name, self.fabric_name,
                     str(random.randint(1, 1000)))
 
-            try:
-                consumer = self._client.subscribe(
-                    topic=topic, subscription_name=subscription_name,
-                    consumer_type=consumer_type,
-                    message_listener=message_listener,
-                    receiver_queue_size=receiver_queue_size,
-                    consumer_name=consumer_name,
-                    unacked_messages_timeout_ms=unacked_messages_timeout_ms,
-                    broker_consumer_stats_cache_time_ms=broker_consumer_stats_cache_time_ms,  # noqa
-                    is_read_compacted=is_read_compacted)
-                consumer.close()
-            except Exception:
-                pass
+            topic = "consumer/persistent/%s/%s/%s/%s" % (self.tenant_name,
+                                               namespace,
+                                               stream, 
+                                               subscription_name)
 
-            return self._client.subscribe(
-                topic=topic, subscription_name=subscription_name,
-                consumer_type=consumer_type,
-                message_listener=message_listener,
-                receiver_queue_size=receiver_queue_size,
-                consumer_name=consumer_name,
-                unacked_messages_timeout_ms=unacked_messages_timeout_ms,
-                broker_consumer_stats_cache_time_ms=broker_consumer_stats_cache_time_ms,  # noqa
-                is_read_compacted=is_read_compacted)
+            params = {
+                "subscriptionType": consumer_type,
+                "receiverQueueSize": receiver_queue_size,
+                "consumerName": consumer_name,
+            }
+
+            params = {k: v for k, v in params.items() if v is not None}
+            url = self._ws_url + topic + "?" + urlencode(params)
+            
+            return websocket.create_connection(url)
+
         raise ex.StreamSubscriberError(
             "No stream present with name:" + stream +
             ". Please create a stream and then stream subscriber."
         )
-
+    
     def unsubscribe(self, subscription):
         """Unsubscribes the given subscription on all streams on a stream fabric
         :param subscription
@@ -339,7 +304,7 @@ class StreamCollection(APIWrapper):
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-
+    
     def clear_streams_backlog(self):
         """Clear backlog for all streams on a stream fabric
         :return: 200, OK if operation successful
