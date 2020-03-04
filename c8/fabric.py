@@ -138,7 +138,7 @@ class Fabric(APIWrapper):
         subscription_name = "%s-%s-subscription-%s" % (
             self.tenant_name, self.fabric_name, str(random.randint(1, 1000)))
         
-        topic = "ws://{}/ws/v2/consumer/persistent/{}/{}/{}/{}".format(
+        topic = "wss://{}/_ws/ws/v2/consumer/persistent/{}/{}/{}/{}".format(
             self.url+":"+str(self.stream_port),self.tenant_name,namespace,
             collection,subscription_name)
 
