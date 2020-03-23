@@ -59,12 +59,14 @@ class StreamApps(APIWrapper):
         """enable or disable stream app
         @active: state of the stream app to be updated
         """
-        params = {"active":active}
-        
+        if active is True:
+            status = "true"
+        elif active is False:
+            status = "false"
+
         req = Request(
             method = "patch",
-            endpoint='/_api/streamapps/{}/active'.format(self.name),
-            params=params
+            endpoint='/_api/streamapps/{}/active?active={}'.format(self.name, status)
         )
         
         def response_handler(resp):
