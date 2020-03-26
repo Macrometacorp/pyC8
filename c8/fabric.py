@@ -138,11 +138,11 @@ class Fabric(APIWrapper):
         subscription_name = "%s-%s-subscription-%s" % (
             self.tenant_name, self.fabric_name, str(random.randint(1, 1000)))
         
-        topic = "wss://{}/_ws/ws/v2/consumer/persistent/{}/{}/{}/{}".format(
-            self.url+":"+str(self.stream_port),self.tenant_name,namespace,
-            collection,subscription_name)
+        url = self.url.split("//")[1].split(":")[0]
 
-        print(topic)
+        topic = "wss://{}/_ws/ws/v2/consumer/persistent/{}/{}/{}/{}".format(
+            url,self.tenant_name,namespace,
+            collection,subscription_name)
 
         ws = websocket.create_connection(topic)
 
