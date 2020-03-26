@@ -45,16 +45,19 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
     #Create a StreamCollection object to invoke stream management functions.
     stream_collection = sys_fabric.stream()
 
-    #Create producer for the given persistent and global/local stream that is created. You can override default compression types/routing modes as shown.
+    # Create producer for the given persistent and global/local stream that is created. You can override default compression types/routing modes as shown.
     producer1 = stream_collection.create_producer('test-stream', local=False, compression_type = stream_collection.COMPRESSION_TYPES.LZ4)
     producer2 = stream_collection.create_producer('test-stream-1', local=True, message_routing_mode= stream_collection.ROUTING_MODE.SINGLE_PARTITION)
 
     #send: publish/send a given message over stream in bytes.
     for i in range(10):
       msg1 = "Persistent: Hello from " + region + "("+ str(i) +")"
-      producer1.send(msg1.encode('utf-8'))
+      data = {
+        "payload" : base64.b64encode(six.b(msg1)).decode("utf-8")
+      }
+      producer1.send(json.dumps(data))
 
-    #Create a subscriber to the given persistent and global/local stream with the given,
+    # Create a subscriber to the given persistent and global/local stream with the given,
     # subscription name. If no subscription new is provided then a random name is generated based on
     # tenant and fabric information.
     # NOTE: If using producers and subscribers in the same source file, the stream object must be different
@@ -64,10 +67,14 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
 
     #receive: read the published messages over stream.
     for i in range(10):
-       msg1 = subscriber1.receive()  #Listen on stream for any receiving msg's
-       msg2 = subscriber2.receive()
-       print("Received message '{}' id='{}'".format(msg1.data(), msg1.message_id())) #Print the received msg over stream
-       subscriber1.acknowledge(msg1) #Acknowledge the received msg.
+       m1 = json.loads(subscriber1.recv())  #Listen on stream for any receiving msg's
+       m2 = json.loads(subscriber2.recv())
+       msg1 = base64.b64encode(m1["payload"])
+       msg2 = base64.b64encode(m2["payload"])
+       print("Received message '{}' id='{}'".format(msg1, m1["messageId"]) #Print the received msg over stream
+       print("Received message '{}' id='{}'".format(msg2, m2["messageId"]) #Print the received msg over stream
+       subscriber1.send(json.dumps({'messageId': m1['messageId']}))#Acknowledge the received msg.
+       subscriber2.send(json.dumps({'messageId': m2['messageId']}))#Acknowledge the received msg. 
 
     #Get the list of subscriptions for a given persistent local/global stream.
     stream_collection.get_stream_subscriptions('test-stream-1', local=False) #for global persistent stream
