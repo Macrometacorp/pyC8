@@ -6,7 +6,6 @@ from c8.collection import StandardCollection
 from c8.exceptions import (
     CollectionConfigureError,
     CollectionPropertiesError,
-    CollectionRenameError,
     CollectionTruncateError,
     CollectionCreateError,
     CollectionListError,
@@ -131,19 +130,3 @@ def test_collection_management(db, bad_db):
     assert err.value.error_code == 1203
     assert db.delete_collection(col_name, ignore_missing=True) is False
 
-    # Test rename collection
-    new_name = generate_col_name()
-    col = db.create_collection(new_name)
-    assert col.rename(new_name) is True
-    assert col.name == new_name
-    assert repr(col) == '<StandardCollection {}>'.format(new_name)
-
-    # Try again (the operation should be idempotent)
-    assert col.rename(new_name) is True
-    assert col.name == new_name
-    assert repr(col) == '<StandardCollection {}>'.format(new_name)
-
-    # Test rename with bad collection
-    with assert_raises(CollectionRenameError) as err:
-        bad_db.collection(new_name).rename(new_name)
-    assert err.value.error_code == 1228

@@ -309,10 +309,6 @@ class CollectionDeleteError(C8ServerError):
     """Failed to delete collection."""
 
 
-class CollectionRenameError(C8ServerError):
-    """Failed to rename collection."""
-
-
 class CollectionTruncateError(C8ServerError):
     """Failed to truncate collection."""
 

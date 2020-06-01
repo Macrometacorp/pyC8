@@ -9,7 +9,6 @@ from json import dumps
 from c8.api import APIWrapper
 from c8.cursor import Cursor
 from c8.exceptions import (
-    CollectionRenameError,
     CollectionTruncateError,
     DocumentCountError,
     DocumentInError,
@@ -271,33 +270,6 @@ class Collection(APIWrapper):
         """
         return self._name
 
-    def rename(self, new_name):
-        """Rename the collection.
-
-        Renames may not be reflected immediately in async execution, batch
-        execution or transactions. It is recommended to initialize new API
-        wrappers after a rename.
-
-        :param new_name: New collection name.
-        :type new_name: str | unicode
-        :return: True if collection was renamed successfully.
-        :rtype: bool
-        :raise c8.exceptions.CollectionRenameError: If rename fails.
-        """
-        request = Request(
-            method='put',
-            endpoint='/collection/{}/rename'.format(self.name),
-            data={'name': new_name}
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise CollectionRenameError(resp, request)
-            self._name = new_name
-            self._id_prefix = new_name + '/'
-            return True
-
-        return self._execute(request, response_handler)
 
     def truncate(self):
         """Delete all documents in the collection.
