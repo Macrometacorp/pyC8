@@ -180,54 +180,6 @@ def test_c8ql_query_management(db, bad_db, col, docs):
         bad_db.c8ql.clear_slow_queries()
     assert err.value.error_code == 1228
 
-
-def test_c8ql_function_management(db, bad_db):
-    fn_group = 'functions::temperature'
-    fn_name_1 = 'functions::temperature::celsius_to_fahrenheit'
-    fn_body_1 = 'function (celsius) { return celsius * 1.8 + 32; }'
-    fn_name_2 = 'functions::temperature::fahrenheit_to_celsius'
-    fn_body_2 = 'function (fahrenheit) { return (fahrenheit - 32) / 1.8; }'
-    bad_fn_name = 'functions::temperature::should_not_exist'
-    bad_fn_body = 'function (celsius) { invalid syntax }'
-
-    # Test list C8QL functions with bad fabric
-    with assert_raises(C8QLFunctionListError) as err:
-        bad_db.c8ql.functions()
-    assert err.value.error_code == 1228
-
-    # Test create invalid C8QL function
-    with assert_raises(C8QLFunctionCreateError) as err:
-        db.c8ql.create_function(bad_fn_name, bad_fn_body)
-    assert err.value.error_code == 1581
-
-    # Test create C8QL function one
-    db.c8ql.create_function(fn_name_1, fn_body_1)
-    assert db.c8ql.functions() == {fn_name_1: fn_body_1}
-
-    # Test create C8QL function one again (idempotency)
-    db.c8ql.create_function(fn_name_1, fn_body_1)
-    assert db.c8ql.functions() == {fn_name_1: fn_body_1}
-
-    # Test create C8QL function two
-    db.c8ql.create_function(fn_name_2, fn_body_2)
-    assert db.c8ql.functions() == {fn_name_1: fn_body_1, fn_name_2: fn_body_2}
-
-    # Test delete C8QL function one
-    assert db.c8ql.delete_function(fn_name_1) is True
-    assert db.c8ql.functions() == {fn_name_2: fn_body_2}
-
-    # Test delete missing C8QL function
-    with assert_raises(C8QLFunctionDeleteError) as err:
-        db.c8ql.delete_function(fn_name_1)
-    assert err.value.error_code == 1582
-    assert db.c8ql.delete_function(fn_name_1, ignore_missing=True) is False
-    assert db.c8ql.functions() == {fn_name_2: fn_body_2}
-
-    # Test delete C8QL function group
-    assert db.c8ql.delete_function(fn_group, group=True) is True
-    assert db.c8ql.functions() == {}
-
-
 def test_c8ql_cache_management(db, bad_db):
     # Test get C8QL cache properties
     properties = db.c8ql.cache.properties()
