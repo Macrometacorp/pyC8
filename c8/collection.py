@@ -1300,6 +1300,7 @@ class StandardCollection(Collection):
         :rtype: bool | dict
         :raise c8.exceptions.DocumentInsertError: If insert fails.
         """
+
         document = self._ensure_key_from_id(document)
 
         params = {'returnNew': return_new, 'silent': silent}
@@ -1800,7 +1801,7 @@ class StandardCollection(Collection):
 
         return self._execute(request, response_handler)
 
-    def replace_match(self, filters, body, limit=None, sync=None):
+    def replace_match(self, filters, body, limit=None, sync=None, name=""):
         """Replace matching documents.
 
         :param filters: Document filters.
@@ -1816,8 +1817,12 @@ class StandardCollection(Collection):
         :rtype: int
         :raise c8.exceptions.DocumentReplaceError: If replace fails.
         """
+        if name == "":
+            name = self.name
+        else:
+            name = name
         data = {
-            'collection': self.name,
+            'collection': name,
             'example': filters,
             'newValue': body
         }
@@ -2009,7 +2014,7 @@ class StandardCollection(Collection):
 
         return self._execute(request, response_handler)
 
-    def delete_match(self, filters, limit=None, sync=None):
+    def delete_match(self, filters, limit=None, sync=None, name=""):
         """Delete matching documents.
 
         :param filters: Document filters.
@@ -2023,7 +2028,11 @@ class StandardCollection(Collection):
         :rtype: dict
         :raise c8.exceptions.DocumentDeleteError: If delete fails.
         """
-        data = {'collection': self.name, 'example': filters}
+        if name == "":
+            name = self.name
+        else:
+            name = name
+        data = {'collection': name, 'example': filters}
         if sync is not None:
             data['waitForSync'] = sync
         if limit is not None and limit != 0:
