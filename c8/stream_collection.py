@@ -250,10 +250,14 @@ class StreamCollection(APIWrapper):
         """
         type_constant = constants.STREAM_GLOBAL_NS_PREFIX
         if local:
+
             type_constant = constants.STREAM_LOCAL_NS_PREFIX
+        
         if isCollectionStream is False:
+
             stream = type_constant.replace(".", "")+"s."+stream
         flag = self.fabric.has_persistent_stream(stream, local=local)
+        
         if flag:
 
             namespace = type_constant + self.fabric_name
@@ -262,6 +266,7 @@ class StreamCollection(APIWrapper):
                 subscription_name = "%s-%s-subscription-%s" % (
                     self.tenant_name, self.fabric_name,
                     str(random.randint(1, 1000)))
+
 
             topic = "consumer/persistent/%s/%s/%s/%s" % (self.tenant_name,
                                                namespace,
@@ -291,8 +296,8 @@ class StreamCollection(APIWrapper):
         raise c8.exceptions.StreamPermissionError: If unsubscribing fails.
         """
         request = Request(
-            method='post',
-            endpoint='/streams/unsubscribe/{}'.format(subscription)
+            method='delete',
+            endpoint='/streams/subcription/{}'.format(subscription)
         )
 
         def response_handler(resp):
@@ -314,7 +319,7 @@ class StreamCollection(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/streams/clearbacklog'
+            endpoint='/_api/streams/clearbacklog'
         )
 
         def response_handler(resp):
@@ -337,7 +342,7 @@ class StreamCollection(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/streams/clearbacklog/{}'.format(subscription)
+            endpoint='/_api/streams/clearbacklog/{}'.format(subscription)
         )
 
         def response_handler(resp):
@@ -359,8 +364,12 @@ class StreamCollection(APIWrapper):
         :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
                                                      for a stream fails.
         """
-        endpoint = '{}/{}/subscriptions?local={}'.format(ENDPOINT, stream,
-                                                         local)
+        if local is True:
+            endpoint = '/_api/streams/{}/subscriptions?global=false'.format(stream)
+        
+        elif local is False:
+            endpoint = '/_api/streams/{}/subscriptions?global=true'.format(stream)
+
         request = Request(method='get', endpoint=endpoint)
 
         def response_handler(resp):
@@ -382,9 +391,12 @@ class StreamCollection(APIWrapper):
         :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
                                                      for a stream fails.
         """
-        endpoint = '{}/{}/backlog?local={}'.format(ENDPOINT, stream, local)
+        #endpoint = '{}/{}/backlog?local={}'.format(ENDPOINT, stream, local)
+        if local is False:
+            endpoint = '/_api/streams/{}/backlog?global=true'.format(stream)
+        elif local is True:
+            endpoint = '/_api/streams/{}/backlog?global=false'.format(stream)
         request = Request(method='get', endpoint=endpoint)
-
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
@@ -466,11 +478,18 @@ class StreamCollection(APIWrapper):
         :raise: c8.exceptions.StreamDeleteError: If Subscription has active
                                                  consumers
         """
-        endpoint = '{}/{}/subscription/{}?local={}'.format(ENDPOINT, stream,
-                                                           subscription, local)
-        request = Request(method='delete', endpoint=endpoint)
+        #endpoint = '{}/{}/subscription/{}?local={}'.format(ENDPOINT, stream,
+        #                                                   subscription, local)
+        if local is False:
+            endpoint='/_api/streams/{}/subscriptions/{}?global=true'.format(stream, subscription)
+        elif local is True:
+            endpoint='/_api/streams/{}/subscriptions/{}?global=false'.format(stream, subscription)
 
+        print(endpoint)
+        request = Request(method='delete', endpoint=endpoint)
+        print("***",request)
         def response_handler(resp):
+            print(resp.body)
             code = resp.status_code
             if resp.is_success:
                 return resp.body['result']

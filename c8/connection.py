@@ -148,7 +148,6 @@ class Connection(object):
             final_url = url + request.endpoint
         else:
             final_url = self._url_prefix + request.endpoint
-        
         headers = request.headers
         headers['Authorization'] = 'bearer ' + self._auth_token
 
