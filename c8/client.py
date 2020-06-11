@@ -1250,6 +1250,533 @@ class C8Client(object):
         return _stream.clear_streams_backlog()
 
 
+    # client.create_stream_app
+    def create_stream_app(self, data, dclist=[]):
+        """Creates a stream application by given data
+        @data: stream app definition
+        @dclist: regions where stream app has to be deployed
+        """
+        return self._fabric.create_stream_app(data=data, dclist=dclist)
+
+    
+    # client.delete_stream_app
+    def delete_stream_app(self, streamapp_name):
+        """deletes the stream app by name
+        :param: name of stream app
+        :return: True, OK if operation successful
+        """
+        _streamapp = self._fabric.stream_app(streamapp_name)
+        return _streamapp.delete()
+
+    
+    # client.validate_stream_app
+    def validate_stream_app(self, data):
+        """validates the stream app definition
+        :param: definition of stream app
+        :return: True, OK if app definition is valid.
+        """
+        return self._fabric.validate_stream_app(data=data)
+
+
+    # client.retrieve_stream_app
+    def retrieve_stream_app(self):
+        """retrives stream apps in a fabric
+        :param: name of stream app
+        :return: Object with list of stream Apps
+        """
+        return self._fabric.retrive_stream_app()
+
+    
+    # client.get_stream_app
+    def get_stream_app(self, streamapp_name):
+        """returns info of a stream app 
+        :param: name of stream app
+        :return: Information of a particular stream app
+        """
+        _streamapp = self._fabric.stream_app(streamapp_name)
+        return _streamapp.get()
+
+
+    # client.get_stream_app_samples
+    def get_stream_app_samples(self):
+        """gets samples for stream apps
+        """
+        return self._fabric.get_samples_stream_app()
+
+    
+    # client.activate_stream_app
+    def activate_stream_app(self, streamapp_name, activate=True):
+        """activates r deactivates a stream app
+        :param streamapp_name: name of stream app
+        :param activate:
+        :return: Object with list of properties
+        """
+        _streamapp = self._fabric.stream_app(streamapp_name)
+        return _streamapp.change_state(active=activate)
+
+
+    # client.has_graph
+    def has_graph(self, graph_name):
+        """Check if a graph exists in the fabric.
+
+        :param graph_name: Graph name.
+        :type name: str | unicode
+        :return: True if graph exists, False otherwise.
+        :rtype: bool
+        """
+        return self._fabric.has_graph(name=graph_name)
+
+
+    # client.get_graphs
+    def get_graphs(self):
+        """List all graphs in the fabric.
+
+        :return: Graphs in the fabric.
+        :rtype: [dict]
+        :raise c8.exceptions.GraphListError: If retrieval fails.
+        """
+
+        return self._fabric.graphs()
+
+    # client.create_graph
+    def create_graph(self, graph_name,
+                     edge_definitions=None,
+                     orphan_collections=None,
+                     shard_count=None):
+        """Create a new graph.
+
+        :param name: Graph name.
+        :type name: str | unicode
+        :param edge_definitions: List of edge definitions, where each edge
+            definition entry is a dictionary with fields "edge_collection",
+            "from_vertex_collections" and "to_vertex_collections" (see below
+            for example).
+        :type edge_definitions: [dict]
+        :param orphan_collections: Names of additional vertex collections that
+            are not in edge definitions.
+        :type orphan_collections: [str | unicode]
+        :param shard_count: Number of shards used for every collection in the
+            graph. To use this, parameter **smart** must be set to True and
+            every vertex in the graph must have the smart field. This number
+            cannot be modified later once set. Applies only to enterprise
+            version of C8Db.
+        :type shard_count: int
+        :return: Graph API wrapper.
+        :rtype: c8.graph.Graph
+        :raise c8.exceptions.GraphCreateError: If create fails.
+
+        Here is an example entry for parameter **edge_definitions**:
+
+        .. code-block:: python
+
+            {
+                'edge_collection': 'teach',
+                'from_vertex_collections': ['teachers'],
+                'to_vertex_collections': ['lectures']
+            }
+        """
+
+        return self._fabric.create_graph(name=graph_name,
+                     edge_definitions=edge_definitions,
+                     orphan_collections=orphan_collections,
+                     shard_count=shard_count)
+
+
+    # client.delete_graph
+    def delete_graph(self, graph_name, ignore_missing=False, drop_collections=None):
+        """Drop the graph of the given name from the fabric.
+
+        :param graph_name: Graph name.
+        :type graph_name: str | unicode
+        :param ignore_missing: Do not raise an exception on missing graph.
+        :type ignore_missing: bool
+        :param drop_collections: Drop the collections of the graph also. This
+            is only if they are not in use by other graphs.
+        :type drop_collections: bool
+        :return: True if graph was deleted successfully, False if graph was not
+            found and **ignore_missing** was set to True.
+        :rtype: bool
+        :raise c8.exceptions.GraphDeleteError: If delete fails.
+        """
+        return self._fabric.delete_graph(name=graph_name, 
+                                    ignore_missing=ignore_missing,
+                                    drop_collections=drop_collections)
+    
+    # client.get_graph
+    def get_graph(self, graph_name):
+        """Return the graph API wrapper.
+
+        :param graph_name: Graph name.
+        :type garph_name: str | unicode
+        :return: Graph API wrapper.
+        :rtype: c8.graph.Graph
+        """
+        return self._fabric.graph(graph_name)
+
+    
+    # client.insert_edge
+    def insert_edge(self, graph_name,
+                    edge_collection,
+                    from_vertex_collections,
+                    to_vertex_collections):
+        """Create a new edge definition.
+
+        An edge definition consists of an edge collection, "from" vertex
+        collection(s) and "to" vertex collection(s). Here is an example entry:
+
+        .. code-block:: python
+
+            {
+                'edge_collection': 'edge_collection_name',
+                'from_vertex_collections': ['from_vertex_collection_name'],
+                'to_vertex_collections': ['to_vertex_collection_name']
+            }
+        :param graph_name: Name of the Graph for which you want to create edge.
+        :type graph_name: str | unicode
+        :param edge_collection: Edge collection name.
+        :type edge_collection: str | unicode
+        :param from_vertex_collections: Names of "from" vertex collections.
+        :type from_vertex_collections: [str | unicode]
+        :param to_vertex_collections: Names of "to" vertex collections.
+        :type to_vertex_collections: [str | unicode]
+        :return: Edge collection API wrapper.
+        :rtype: c8.collection.EdgeCollection
+        :raise c8.exceptions.EdgeDefinitionCreateError: If create fails.
+        """
+        _graph = self._fabric.graph(graph_name)
+        return _graph.create_edge_definition(edge_collection=edge_collection,
+                    from_vertex_collections=from_vertex_collections,
+                    to_vertex_collections=to_vertex_collections)
+
+        
+    # client.replace_edge
+    def replace_edge(self, graph_name,
+                    edge_collection,
+                    from_vertex_collections,
+                    to_vertex_collections):
+        """Replaces an edge definition.
+
+        :param graph_name: Name of the Graph for which you want to create edge.
+        :type graph_name: str | unicode
+        :param edge_collection: Edge collection name.
+        :type edge_collection: str | unicode
+        :param from_vertex_collections: Names of "from" vertex collections.
+        :type from_vertex_collections: [str | unicode]
+        :param to_vertex_collections: Names of "to" vertex collections.
+        :type to_vertex_collections: [str | unicode]
+        :return: Edge collection API wrapper.
+        :rtype: c8.collection.EdgeCollection
+        :raise c8.exceptions.EdgeDefinitionCreateError: If create fails.
+        """
+        _graph = self._fabric.graph(graph_name)
+        return _graph.replace_edge_definition(edge_collection=edge_collection,
+                    from_vertex_collections=from_vertex_collections,
+                    to_vertex_collections=to_vertex_collections)
+
+    # client.update_edge
+    def update_edge(self,
+                    graph_name,edge,
+                    check_rev=True,
+                    keep_none=True,
+                    sync=None,
+                    silent=False):
+        """Update an edge document.
+
+        :param graph_name: Name of the Graph for which you want to create edge.
+        :type graph_name: str | unicode
+        :param edge: Partial or full edge document with updated values. It must
+            contain the "_id" field.
+        :type edge: dict
+        :param check_rev: If set to True, revision of **edge** (if given) is
+            compared against the revision of target edge document.
+        :type check_rev: bool
+        :param keep_none: If set to True, fields with value None are retained
+            in the document. If set to False, they are removed completely.
+        :type keep_none: bool
+        :param sync: Block until operation is synchronized to disk.
+        :type sync: bool
+        :param silent: If set to True, no document metadata is returned. This
+            can be used to save resources.
+        :type silent: bool
+        :return: Document metadata (e.g. document key, revision) or True if
+            parameter **silent** was set to True.
+        :rtype: bool | dict
+        :raise c8.exceptions.DocumentUpdateError: If update fails.
+        :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
+        """
+        _graph = self._fabric.graph(graph_name)
+        return _graph.update_edge(edge=edge,
+                    check_rev=check_rev,
+                    keep_none=keep_none,
+                    sync=sync,
+                    silent=silent)
+
+
+    # client.delete_edge
+    def delete_edge(self,graph_name, edge_name, purge=False):
+        """Delete an edge definition from the graph.
+        :param graph_name: Name of the Graph for which you want to delete edge.
+        :type graph_name: str | unicode
+        :param name: Edge collection name.
+        :type name: str | unicode
+        :param purge: If set to True, the edge definition is not just removed
+            from the graph but the edge collection is also deleted completely
+            from the fabric.
+        :type purge: bool
+        :return: True if edge definition was deleted successfully.
+        :rtype: bool
+        :raise c8.exceptions.EdgeDefinitionDeleteError: If delete fails.
+        """
+        _graph = self._fabric.graph(graph_name)
+        return _graph.delete_edge_definition(name=edge_name, purge=purge)
+
+
+    # client.get_edges
+    def get_edges(self, graph_name):
+        """Return the edge definitions of the graph.
+        :param graph_name: Name of the Graph for which you want to get the edge.
+        :type graph_name: str | unicode
+        :return: Edge definitions of the graph.
+        :rtype: [dict]
+        :raise c8.exceptions.EdgeDefinitionListError: If retrieval fails.
+        """
+        _graph = self._fabric.graph(graph_name)
+        return _graph.edge_definitions()
+
+    
+    # client.link_edge
+    def link_edge(self,
+             graph_name,
+             collection,
+             from_vertex,
+             to_vertex,
+             data=None,
+             sync=None,
+             silent=False):
+        """Insert a new edge document linking the given vertices.
+    
+        :param graph_name: Name of the Graph.
+        :type graph_name: str | unicode
+        :param collection: Edge collection name.
+        :type collection: str | unicode
+        :param from_vertex: "From" vertex document ID or body with "_id" field.
+        :type from_vertex: str | unicode | dict
+        :param to_vertex: "To" vertex document ID or body with "_id" field.
+        :type to_vertex: str | unicode | dict
+        :param data: Any extra data for the new edge document. If it has "_key"
+            or "_id" field, its value is used as key of the new edge document
+            (otherwise it is auto-generated).
+        :type data: dict
+        :param sync: Block until operation is synchronized to disk.
+        :type sync: bool
+        :param silent: If set to True, no document metadata is returned. This
+            can be used to save resources.
+        :type silent: bool
+        :return: Document metadata (e.g. document key, revision) or True if
+            parameter **silent** was set to True.
+        :rtype: bool | dict
+        :raise c8.exceptions.DocumentInsertError: If insert fails.
+        """
+        _graph = self._fabric.graph(graph_name)
+        return _graph.link(collection=collection,
+                        from_vertex=from_vertex,
+                        to_vertex=to_vertex,
+                        data=data,
+                        sync=sync,
+                        silent=silent)
+
+    
+    # client.has_user
+    def has_user(self, username):
+        """Check if user exists.
+
+        :param username: Username.
+        :type username: str | unicode
+        :return: True if user exists, False otherwise.
+        :rtype: bool
+        """
+        return self._tenant.has_user(username)
+
+
+    #client.get_users
+    def get_users(self):
+        """Return all user details.
+
+        :return: List of user details.
+        :rtype: [dict]
+        :raise c8.exceptions.UserListError: If retrieval fails.
+        """
+        return self._tenant.users()
+
+    
+    # client.get_user
+    def get_user(self, username):
+        """Return user details.
+
+        :param username: Username.
+        :type username: str | unicode
+        :return: User details.
+        :rtype: dict
+        :raise c8.exceptions.UserGetError: If retrieval fails.
+        """
+        return self._tenant.user(username)
+
+    
+    # client.create_user
+    def create_user(self, username, email, password, active=True, extra=None):
+        """Create a new user.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param password: Password.
+        :type password: str | unicode
+        :param active: True if user is active, False otherwise.
+        :type active: bool
+        :param extra: Additional data for the user.
+        :type extra: dict
+        :return: New user details.
+        :rtype: dict
+        :raise c8.exceptions.UserCreateError: If create fails.
+        """
+        return self._tenant.create_user(username=username,
+                                        email=email, password=password,
+                                        active=active, extra=extra)
+
+    
+    # client.update_user
+    def update_user(self, username, password=None, active=None, extra=None):
+        """Update a user.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param password: New password.
+        :type password: str | unicode
+        :param active: Whether the user is active.
+        :type active: bool
+        :param extra: Additional data for the user.
+        :type extra: dict
+        :return: New user details.
+        :rtype: dict
+        :raise c8.exceptions.UserUpdateError: If update fails.
+        """
+        return self._tenant.update_user(username=username, password=password,
+                                        active=active, extra=extra)
+
+
+
+    # client.replace_user
+    def replace_user(self, username, password, active=None, extra=None):
+        """Replace a user.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param password: New password.
+        :type password: str | unicode
+        :param active: Whether the user is active.
+        :type active: bool
+        :param extra: Additional data for the user.
+        :type extra: dict
+        :return: New user details.
+        :rtype: dict
+        :raise c8.exceptions.UserReplaceError: If replace fails.
+        """
+        return self._tenant.replace_user(username=username, password=password,
+                                         active=active, extra=extra)
+
+    
+    # client.delete_user
+    def delete_user(self, username, ignore_missing=False):
+        """Delete a user.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param ignore_missing: Do not raise an exception on missing user.
+        :type ignore_missing: bool
+        :return: True if user was deleted successfully, False if user was not
+            found and **ignore_missing** was set to True.
+        :rtype: bool
+        :raise c8.exceptions.UserDeleteError: If delete fails.
+        """
+        return self._tenant.delete_user(username=username,
+                                        ignore_missing=ignore_missing)
+
+
+    # client.get_permissions
+    def get_permissions(self, username):
+        """Return user permissions for all fabrics and collections.
+
+        :param username: Username.
+        :type username: str | unicode
+        :return: User permissions for all fabrics and collections.
+        :rtype: dict
+        :raise: c8.exceptions.PermissionListError: If retrieval fails.
+        """
+        return self._tenant.permissions(username)
+
+    
+    # client.get_permission
+    def get_permission(self, username, fabric, collection=None):
+        """Return user permission for a specific fabric or collection.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param fabric: fabric name.
+        :type fabric: str | unicode
+        :param collection: Collection name.
+        :type collection: str | unicode
+        :return: Permission for given fabric or collection.
+        :rtype: str | unicode
+        :raise: c8.exceptions.PermissionGetError: If retrieval fails.
+        """
+        return self._tenant.permission(username=username, fabric=fabric,
+                                       collection=collection)
+
+    
+    # client.update_permission
+    def update_permission(self,
+                          username,
+                          permission,
+                          fabric,
+                          collection=None):
+        """Update user permission for a specific fabric or collection.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param fabric: fabric name.
+        :type fabric: str | unicode
+        :param collection: Collection name.
+        :type collection: str | unicode
+        :param permission: Allowed values are "rw" (read and write), "ro"
+            (read only) or "none" (no access).
+        :type permission: str | unicode
+        :return: True if access was granted successfully.
+        :rtype: bool
+        :raise c8.exceptions.PermissionUpdateError: If update fails.
+        """
+        return self._tenant.update_permission(username=username,
+                                              permission=permission,
+                                              fabric=fabric,
+                                              collection=collection)
+
+    
+    # client.reset_permission()
+    def reset_permission(self, username, fabric, collection=None):
+        """Reset user permission for a specific fabric or collection.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param fabric: fabric name.
+        :type fabric: str | unicode
+        :param collection: Collection name.
+        :type collection: str | unicode
+        :return: True if permission was reset successfully.
+        :rtype: bool
+        :raise c8.exceptions.PermissionRestError: If reset fails.
+        """
+        return self._tenant.reset_permission(username=username, fabric=fabric,
+                                             collection=collection)
+
+
     # def fabric(self, tenant, name, email, password, verify=False):
     #     """Connect to a fabric and return the fabric API wrapper.
 
