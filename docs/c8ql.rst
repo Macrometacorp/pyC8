@@ -20,6 +20,7 @@ C8QL queries are invoked from C8QL API wrapper. Executing queries returns
 The Simple Way
 
 ..testcode::
+
     from c8 import C8Client, C8QLQueryKillError
     # Initialize the C8 client.
     client = C8Client(protocol='https', host='qa3.eng3.macrometa.io', port=443,
