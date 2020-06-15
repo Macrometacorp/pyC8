@@ -23,7 +23,7 @@ The Simple Way
 
     from c8 import C8Client, C8QLQueryKillError
     # Initialize the C8 client.
-    client = C8Client(protocol='https', host='qa3.eng3.macrometa.io', port=443,
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
                       email='guest@macrometa.io', password='guest')
     # define constants
     documents = [
