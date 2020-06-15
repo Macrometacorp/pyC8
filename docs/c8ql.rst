@@ -16,6 +16,7 @@ C8QL queries are invoked from C8QL API wrapper. Executing queries returns
 :doc:`result cursors <cursor>`.
 
 **Example:**
+
 The Simple Way
 
 ..testcode::
