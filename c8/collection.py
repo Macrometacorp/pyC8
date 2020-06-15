@@ -1147,6 +1147,25 @@ class Collection(APIWrapper):
             data['sparse'] = sparse
         return self._add_index(data)
 
+    
+    def add_ttl_index(self, fields, expireAfter=0, inBackground=False):
+            """Create a new ttl index.
+
+            :param fields: Document fields to index.
+            :type fields: [str | unicode]
+            :param expireAfter:  The time (in seconds) after
+            a document's creation after which the documents count as "expired".
+            :type expireAfter: int
+            :param inBackground: Expire Documents in Background.
+            :type inBackground: bool
+            :return: New index details.
+            :rtype: dict
+            :raise c8.exceptions.IndexCreateError: If create fails.
+            """
+            data = {'type': 'ttl', 'fields': fields, 'expireAfter': expireAfter,
+                    'inBackground': inBackground}  
+            return self._add_index(data)
+
     def delete_index(self, index_id, ignore_missing=False):
         """Delete an index.
 

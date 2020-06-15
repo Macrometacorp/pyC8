@@ -199,6 +199,188 @@ class C8Client(object):
                                               is_system=is_system)
         return resp
 
+    # client.list_collection_indexes
+    def list_collection_indexes(self, collection_name):
+        """Delete the collection.
+        :param name: Collection name.
+        :type name: str | unicode
+        :return: List of indexes
+        :rtype: bool
+        """
+        _collection = self.get_collection(collection_name)
+        return _collection.indexes()
+
+
+    # client.add_hash_index
+    def add_hash_index(self,
+                       collection_name,
+                       fields,
+                       unique=None,
+                       sparse=None,
+                       deduplicate=None):
+        """Create a new hash index.
+
+        :param name: Collection name to add index on.
+        :type name: str | unicode
+        :param fields: Document fields to index.
+        :type fields: [str | unicode]
+        :param unique: Whether the index is unique.
+        :type unique: bool
+        :param sparse: If set to True, documents with None in the field
+            are also indexed. If set to False, they are skipped.
+        :type sparse: bool
+        :param deduplicate: If set to True, inserting duplicate index values
+            from the same document triggers unique constraint errors.
+        :type deduplicate: bool
+        :return: New index details.
+        :rtype: dict
+        :raise c8.exceptions.IndexCreateError: If create fails.
+        """
+        _collection = self.get_collection(collection_name)
+        return _collection.add_hash_index(fields=fields,
+                                          unique=unique,
+                                          sparse=sparse,
+                                          deduplicate=deduplicate)
+
+    
+    # client.add_geo_index
+    def add_geo_index(self, collection_name, fields, ordered=None):
+        """Create a new geo-spatial index.
+
+        :param name: Collection name to add index on.
+        :type name: str | unicode
+        :param fields: A single document field or a list of document fields. If
+            a single field is given, the field must have values that are lists
+            with at least two floats. Documents with missing fields or invalid
+            values are excluded.
+        :type fields: str | unicode | list
+        :param ordered: Whether the order is longitude, then latitude.
+        :type ordered: bool
+        :return: New index details.
+        :rtype: dict
+        :raise c8.exceptions.IndexCreateError: If create fails.
+        """
+        _collection = self.get_collection(collection_name)
+        return _collection.add_geo_index(fields=fields,
+                                          ordered=ordered)
+
+
+    # client.add_skiplist_index
+    def add_skiplist_index(self,
+                           collection_name,
+                           fields,
+                           unique=None,
+                           sparse=None,
+                           deduplicate=None):
+        """Create a new skiplist index.
+
+        :param name: Collection name to add index on.
+        :type name: str | unicode
+        :param fields: Document fields to index.
+        :type fields: [str | unicode]
+        :param unique: Whether the index is unique.
+        :type unique: bool
+        :param sparse: If set to True, documents with None in the field
+            are also indexed. If set to False, they are skipped.
+        :type sparse: bool
+        :param deduplicate: If set to True, inserting duplicate index values
+            from the same document triggers unique constraint errors.
+        :type deduplicate: bool
+        :return: New index details.
+        :rtype: dict
+        :raise c8.exceptions.IndexCreateError: If create fails.
+        """
+        _collection = self.get_collection(collection_name)
+        return _collection.add_skiplist_index(fields=fields,
+                                          unique=unique,
+                                          sparse=sparse,
+                                          deduplicate=deduplicate)
+
+    
+    # client.add_persistent_index
+    def add_persistent_index(self, collection_name,
+                             fields, unique=None, sparse=None):
+        """Create a new persistent index.
+
+        Unique persistent indexes on non-sharded keys are not supported in a
+        cluster.
+
+        :param name: Collection name to add index on.
+        :type name: str | unicode
+        :param fields: Document fields to index.
+        :type fields: [str | unicode]
+        :param unique: Whether the index is unique.
+        :type unique: bool
+        :param sparse: Exclude documents that do not contain at least one of
+            the indexed fields, or documents that have a value of None in any
+            of the indexed fields.
+        :type sparse: bool
+        :return: New index details.
+        :rtype: dict
+        :raise c8.exceptions.IndexCreateError: If create fails.
+        """
+        _collection = self.get_collection(collection_name)
+        return _collection.add_persistent_index(fields=fields,
+                                          unique=unique,
+                                          sparse=sparse)
+
+
+    # client.add_fulltext_index
+    def add_fulltext_index(self, collection_name, fields, min_length=None):
+        """Create a new fulltext index.
+        
+        :param name: Collection name to add index on.
+        :type name: str | unicode
+        :param fields: Document fields to index.
+        :type fields: [str | unicode]
+        :param min_length: Minimum number of characters to index.
+        :type min_length: int
+        :return: New index details.
+        :rtype: dict
+        :raise c8.exceptions.IndexCreateError: If create fails.
+        """
+        _collection = self.get_collection(collection_name)
+        return _collection.add_fulltext_index(fields=fields, min_length=min_length)
+
+
+    # client.add_ttl_index
+    def add_ttl_index(self, collection_name, fields, expireAfter=0, inBackground=False):
+        """Create a new ttl index.
+        
+        :param name: Collection name to add index on.
+        :type name: str | unicode
+        :param fields: Document fields to index.
+        :type fields: [str | unicode]
+        :param expireAfter:  The time (in seconds) after
+         a document's creation after which the documents count as "expired".
+        :type expireAfter: int
+        :param inBackground: Expire Documents in Background.
+        :type inBackground: bool
+        :return: New index details.
+        :rtype: dict
+        :raise c8.exceptions.IndexCreateError: If create fails.
+        """
+        _collection = self.get_collection(collection_name)
+        return _collection.add_ttl_index(fields=fields, expireAfter=expireAfter,
+                                         inBackground=inBackground)
+
+
+    # client.delete_index
+    def delete_index(self, collection_name, index_id, ignore_missing=False):
+        """Delete an index.
+
+        :param index_id: Index ID.
+        :type index_id: str | unicode
+        :param ignore_missing: Do not raise an exception on missing index.
+        :type ignore_missing: bool
+        :return: True if index was deleted successfully, False if index was
+            not found and **ignore_missing** was set to True.
+        :rtype: bool
+        :raise c8.exceptions.IndexDeleteError: If delete fails.
+        """
+        _collection = self.get_collection(collection_name)
+        return _collection.delete_index(index_id=index_id, ignore_missing=ignore_missing)
+
 
     # client.delete_collection
     def delete_collection(self, name, ignore_missing=False, system=None):
