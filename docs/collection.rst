@@ -53,6 +53,18 @@ The Simple Way
     print(collection_handle.fabric_name)
     print(collection_handle.count())
 
+    # get collecion ids
+    ids = client.get_collection_ids(collname)
+    print("ids: ", ids)
+
+    #get collection keys
+    keys = client.get_collection_keys(collname)
+    print("keys: ", keys)
+
+    # get indexes
+    index = client.get_collection_indexes(collname)
+    print("indexes: ", index)
+    
     # Truncate Collection
     collection_handle.truncate()
 
