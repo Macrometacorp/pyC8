@@ -64,6 +64,58 @@ document in "friends" edge collection:
 
 Standard documents are managed via collection API wrapper:
 
+The simple Way
+.. testcode::
+
+    from c8 import C8Client
+    # Initialize the C8 client.
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
+                          email='guest@macrometa.io', password='guest')
+    
+    collection_name = 'students'
+    
+
+    # Create a new collection if it does not exist
+    if client.has_collection(collection_name):
+        print("Collection exists)
+    else:
+        client.create_collection(name=collection_name)
+
+    # Insert a single document
+    document = {'_key': 'Abby', 'age': 22}
+    client.insert_document(collection_name=collection_name, document=document)
+
+    # Insert multiple documents
+    documents = [
+        {'_key': 'John', 'age': 18},
+        {'_key': 'Mary', 'age': 21}
+    ]
+    client.insert_document(collection_name=collection_name, document=documents)
+
+    # Insert data from a csv file
+    client.insert_document_from_file(collection_name=collection_name,
+                                     csv_filepath="~/data.csv")
+
+    # update document
+    client.update_document(collection_name=collection_name,
+                 document={'_key': 'John', 'age': 20})
+    
+    # get all documents
+    print(client.get_document_many(collection_name))
+
+    print(client.get_document(collection_name, "John" )_
+        
+    doc = {'_key': 'John', 'age': 20}
+    doc['age'] = 35
+    client.replace_document(collection_name, doc)
+    
+    # delete document
+    client.delete_document(collection_name, {'_key': 'John', 'age': 35})
+
+
+
+The Object Oriented Way
+
 .. testcode::
 
     from c8 import C8Client
