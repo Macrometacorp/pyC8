@@ -2007,7 +2007,94 @@ class C8Client(object):
         :rtype: boolean
         """
         return self._fabric.key_value.has_collection(name)
+
     
+    # client.insert_key_value_pair
+    def insert_key_value_pair(self, name, data=None):
+        """Set a key value pair.
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :param data: objects to be inserted.
+        :type data: list
+        :return: List of inserted objects.
+        :rtype: list
+        :raise c8.exceptions.InsertKVError: If insertion fails.
+        """
+        return self._fabric.key_value.insert_key_value_pair(name=name, data=data)
+
+
+    # client.delete_entry_for_key
+    def delete_entry_for_key(self, name, key):
+        """Delete an entry for a key.
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :param key: The key for which the object is to be deleted.
+        :type data: string
+        :return: True if successfully deleted.
+        :rtype: boolean
+        :raise c8.exceptions.DeleteEntryForKey: If deletion fails.
+        """
+        return self._fabric.key_value.delete_entry_for_key(name=name, key=key)
+
+
+    # client.delete_entry_for_keys
+    def delete_entry_for_keys(self, name, keys=[]):
+        """Deletes entries for multiple keys.
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :param keys: The keys for which the object is to be deleted.
+        :type data: list
+        :return: List of deleted objects
+        :rtype: List
+        :raise c8.exceptions.DeleteEntryForKey: If deletion fails.
+        """
+        return self._fabric.key_value.delete_entry_for_keys(name=name, keys=keys)
+
+    
+    # client.get_value_for_key
+    def get_value_for_key(self, name, key):
+        """Delete an entry for a key.
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :param key: The key for which the object is to be deleted.
+        :type data: string
+        :return: The value object.
+        :rtype: object
+        :raise c8.exceptions.GetValueError: If request fails.
+        """
+        return self._fabric.key_value.get_value_for_key(name=name, key=key)
+
+    
+    # client.get_keys
+    def get_keys(self, name):
+        """gets keys of a collection.
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :return: List of Keys.
+        :rtype: list
+        :raise c8.exceptions.GetKeysError: If request fails.
+        """
+        return self._fabric.key_value.get_keys(name)
+
+
+    # client.get_kv_count
+    def get_kv_count(self, name):
+        """gets the kv count of a collection.
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :return:Number of kv entries.
+        :rtype: int
+        :raise c8.exceptions.GetCountError: If request fails.
+        """
+        return self._fabric.key_value.get_kv_count(name)
+
+
     # def fabric(self, tenant, name, email, password, verify=False):
     #     """Connect to a fabric and return the fabric API wrapper.
 
