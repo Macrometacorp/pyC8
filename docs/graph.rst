@@ -10,6 +10,23 @@ For more information, refer to `C8 Data Fabric manual`_.
 .. _C8 Data Fabric manual: http://www.macrometa.co
 
 **Example:**
+The Simple Way
+
+.. testcode::
+    from c8 import C8Client
+    # Initialize the C8 client.
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
+                          email='guest@macrometa.io', password='guest')
+
+    # Create a new graph named "school" if it does not already exist.
+    if client.has_graph(graph):
+        print("Graph with given name exists")
+
+    else:
+        print("Create: ", client.create_graph(graph_name=graph))
+
+
+The Object Oriented Way
 
 .. testcode::
 
@@ -41,6 +58,26 @@ For more information, refer to `C8 Data Fabric manual`_.
 
     # Delete the graph.
     fabric.delete_graph('school')
+
+    # List the existing graphs
+    print("List Gaphs: ", client.get_graphs())
+
+    # Create an Edge definition(for more info about edge look at the example below)
+    print("Create Edge: ", client.insert_edge(graph, edge_collection='teach',
+            from_vertex_collections=['teachers'],
+            to_vertex_collections=['teachers']))
+
+    # Get all Edges
+    print("Get Edges", client.get_edges(graph_name=graph))
+
+    # Link Edges to from a graph
+    print("Link: ", client.link_edge(graph_name=graph,collection="teach", from_vertex='teachers/jon', to_vertex='lectures/CSC101', data={'online': False}))
+    
+    # Delete Edge
+    print("Delete Edge: ", client.delete_edge(graph_name=graph, edge_name='teach', purge=False))
+
+    # Delete Graph
+    print("delete: ", client.delete_graph(graph_name=graph))
 
 .. _edge-definitions:
 
