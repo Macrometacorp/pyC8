@@ -4,6 +4,60 @@ StreamApps
 A **StreamApps** contains a :`definition`. 
 Here is an example showing how you can manage standard StreamApps:
 
+The Simple Way
+
+.. testcode::
+
+    script_app = '''
+    @App:name('DefaultScriptAppTest')
+    define function concatFn[javascript] return object {
+        var country = data[0];
+        var itemType = data[1];
+        var totalRevenue = data[2];
+        var response = new Object();
+        response[country] = itemType + "-" + totalRevenue;
+        return response;
+    };
+    -- Stream
+    @source(type='c8streams', stream.list='ScriptAppInputStream', \
+        subscription.name="ScriptApp", @map(type="json"))
+    define stream ScriptAppInputStream (Country string, ItemType string,\
+         TotalRevenue string);
+    -- Table
+    define table SampleScriptAppOutputTable (_json object);
+    @info(name='Query')
+    select concatFn(Country,ItemType,TotalRevenue) as _json
+    from ScriptAppInputStream
+    insert into SampleScriptAppOutputTable;
+    '''
+
+    # Create a stream application
+    print(client.create_stream_app(data=script_app))
+
+    # Validate a stream application
+    print(client.validate_stream_app(data=script_app))
+
+    # Retrive a stream application
+    print("Retrive", client.retrieve_stream_app())
+
+    # Get a stream application handle for advanced operations
+    print("Get App", client.get_stream_app('DefaultScriptAppTest'))
+
+    # Deactivate a stream application
+    print("Deactivate", client.activate_stream_app('DefaultScriptAppTest', False))
+    
+    # Activate a stream application
+    print("Activate", client.activate_stream_app('DefaultScriptAppTest', True))
+
+    # Delete a stream application
+    print(client.delete_stream_app('DefaultScriptAppTest'))
+
+    # Get stream application samples
+    print("Samples", client.get_stream_app_samples())
+
+
+The Object Oriented Way
+
 .. testcode::
 
     from c8 import C8Client

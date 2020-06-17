@@ -4,6 +4,69 @@ Streams
 Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrometa Edge Fabric. They allow client programs to send and receive messages to/from the fabric servers and allow for communication between different fabric components.
 
 **Example:**
+ The Simple Way
+
+ .. testcode::
+    from c8 import C8Client
+    # Initialize the C8 client.
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
+                          email='guest@macrometa.io', password='guest')
+    
+    stream = "teststream"
+    
+    # Create stream
+    print(client.create_stream(stream))
+
+    # Check if stream is created
+    print("Has stream: ", client.has_stream(stream))
+
+    # Get all streams
+    print("Get Streams: ", client.get_streams())
+
+    # Get Stream Statistics
+    print("Stream Stats: ", client.get_stream_stats(stream))
+    
+    # create producer
+    producer = client.create_stream_producer(stream)
+
+    for i in range(10):
+      msg1 = "Persistent: Hello from " + "("+ str(i) +")"
+      data = {
+        "payload" : base64.b64encode(six.b(msg1)).decode("utf-8")
+      }
+      producer.send(json.dumps(data))
+
+    # create subscriber
+    subscriber = client.subscribe(stream=stream, local=False, subscription_name="test-subscription-1")
+    for i in range(10):
+        m1 = json.loads(subscriber.recv())  #Listen on stream for any receiving msg's
+        msg1 = base64.b64decode(m1["payload"])
+        print("Received message '{}' id='{}'".format(msg1, m1["messageId"])) #Print the received msg over stream
+        subscriber.send(json.dumps({'messageId': m1['messageId']}))#Acknowledge the received msg.
+
+    # Get all stream subscriptions
+    print(client.get_stream_subscriptions(stream=stream, local=False))
+
+    # Get stream backlog
+    print(client.get_stream_backlog(stream=stream, local=False))
+
+    # Clear Stream Backlog for a subscription
+    print(client.clear_stream_backlog(subscription="test-subscription-1"))
+
+    # Clear Stream Backlog
+    print(client.clear_streams_backlog())
+
+    # Unsubscribe
+    client.unsubscribe("test-subscription-1")
+
+    # Delete Subscription(Will not work after Unsubscribe)
+    #client.delete_stream_subscription(stream, "test-subscription-1", local=False)
+
+    # Terminate Stream
+    print(client.terminate_stream(stream))
+
+
+ The object Oriented Way
 
 .. testcode::
 
