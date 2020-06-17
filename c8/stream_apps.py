@@ -87,7 +87,6 @@ class StreamApps(APIWrapper):
         def response_handler(resp):
             if resp.is_success is True:
                 return resp.body["streamApps"]
-            print(resp.body)
             return False
         
         return self._execute(req,response_handler)

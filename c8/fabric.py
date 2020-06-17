@@ -7,6 +7,7 @@ import websocket
 
 from c8.api import APIWrapper
 from c8.c8ql import C8QL
+from c8.keyvalue import KV
 from c8.collection import StandardCollection
 from c8.stream_apps import StreamApps
 from c8 import constants
@@ -116,6 +117,16 @@ class Fabric(APIWrapper):
         :rtype: c8.c8ql.C8QL
         """
         return C8QL(self._conn, self._executor)
+
+    @property
+    def key_value(self):
+        """Return KV (Key Value) API wrapper.
+
+        :return: KV API wrapper.
+        :rtype: c8.keyvalue.KV
+        """
+        return KV(self._conn, self._executor)
+
 
     def on_change(self, collection, callback=printdata):
         """Execute given input function on receiving a change.
@@ -1352,8 +1363,10 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)     
 
-    # streamApps fabric apis
-    
+    ########################
+    # Stream Apps #
+    ########################
+
     def stream_app(self,name):
         return StreamApps(self._conn, self._executor, name)
 
@@ -1432,7 +1445,9 @@ class Fabric(APIWrapper):
             print(resp.body)
             return False
         # call api
-        return self._execute(req,response_handler)     
+        return self._execute(req,response_handler)   
+
+    
 
 class StandardFabric(Fabric):
     """Standard fabric API wrapper.

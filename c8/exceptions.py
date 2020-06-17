@@ -619,3 +619,33 @@ class StreamAppGetSampleError(C8ServerError):
 
 class StreamAppChangeActiveStateError(C8ServerError):
     """Error while changing active state of stream app."""
+
+
+#######################
+# KV Exceptions #
+#######################
+
+class ListCollections(C8ServerError):
+    """Failed to fetch the list of collections that use KV."""
+
+class CreateCollectionError(C8ServerError):
+    """Failed to Create the given namesace/collection."""
+
+class DeleteCollectionError(C8ServerError):
+    """Failed to Delete the given namespace/collection"""
+
+class InsertKVError(C8ServerError):
+    """Failed to insert kv pair"""
+
+class DeleteEntryForKey(C8ServerError):
+    """Failed to Delete entry for the specified key/keys"""
+
+
+class GetValueError(C8ServerError):
+    """Failed to fetch the value for the specified key/keys"""
+
+class GetKeysError(C8ServerError):
+    """Failed to get keys for the collection """
+
+class GetCountError(C8ServerError):
+    """Failed to get the kv count for the collection"""

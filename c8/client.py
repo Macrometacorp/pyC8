@@ -1959,6 +1959,55 @@ class C8Client(object):
                                              collection=collection)
 
 
+    # client.kv_get_collections
+    def get_collections_kv(self):
+        """Returns the list of collections using kv.
+        :return: Existing Collections.
+        :rtype: list
+        :raise c8.exceptions.ListCollections: If retrieval fails.
+        """
+        return self._fabric.key_value.get_collections()
+
+
+    # client.create_collection_kv
+    def create_collection_kv(self, name, expiration=False):
+        """Creates Collection.
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :param expiration:if True then the namesapce supports TTL.
+        :type expiration: boolean
+        :return: True if the request is successful.
+        :rtype: boolean
+        :raise c8.exceptions.CreateCollectionError: If creation fails.
+        """
+        return self._fabric.key_value.create_collection(name=name, expiration=expiration)
+
+
+    # client.delete_collection_kv
+    def delete_collection_kv(self, name):
+            """Deletes Collection.
+
+            :param name: Collection name.
+            :type name: str | unicode
+            :return: True if the request is successful.
+            :rtype: boolean
+            :raise c8.exceptions.DeleteCollectionError: If creation fails.
+            """
+            return self._fabric.key_value.delete_collection(name=name)
+
+    
+    # client.has_collection_kv
+    def has_collection_kv(self, name):
+        """Checks if a Collection exists.
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :return: True if the collection exists.
+        :rtype: boolean
+        """
+        return self._fabric.key_value.has_collection(name)
+    
     # def fabric(self, tenant, name, email, password, verify=False):
     #     """Connect to a fabric and return the fabric API wrapper.
 
