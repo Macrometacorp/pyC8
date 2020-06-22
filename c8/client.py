@@ -2094,6 +2094,111 @@ class C8Client(object):
         """
         return self._fabric.key_value.get_kv_count(name)
 
+    
+    # client.create_api_key
+    def create_api_key(self, keyid):
+        """Creates an api key.
+        
+        :return: Creates an api key.
+        :rtype: list
+        :raise c8.exceptions.CreateAPIKey: If request fails.
+        """
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.create_api_key()
+
+
+    # client.list_all_api_keys
+    def list_all_api_keys(self):
+        return self._fabric.list_all_api_keys()
+
+
+    # client.remove_api_key
+    def remove_api_key(self, keyid):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.remove_api_key()
+
+
+    # client.list_accessible_databases
+    def list_accessible_databases(self, keyid):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.list_accessible_databases()
+
+
+    # client.get_database_access_level
+    def get_database_access_level(self, keyid, databasename):
+        """Fetch the database access level for a specific database.
+
+
+        :param databasename: Name of the database
+        :type databasename: string
+        :return: AccessLevel of a db.
+        :rtype: string
+        :raise c8.exceptions.DataBaseAccessLevel: If request fails.
+        """
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.get_database_access_level(databasename)
+
+
+    def set_database_access_level(self, keyid, databasename, grant='ro'):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.set_database_access_level(databasename, grant=grant)
+
+    
+    def clear_database_access_level(self, keyid, databasename):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.clear_database_access_level(databasename)
+
+
+    def get_collection_access_level(self, keyid, collection_name, databasename='_system'):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.get_collection_access_level(collection_name, databasename)
+
+
+    def set_collection_access_level(self, keyid, collection_name, databasename='_system',
+                                     grant='ro'):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.set_collection_access_level(collection_name, databasename, grant)
+
+
+    def clear_collection_access_level(self, keyid, collection_name, databasename='_system'):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.clear_collection_access_level(collection_name, databasename)
+
+
+    def list_accessible_streams(self, keyid, databasename='_system', full=False):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.list_accessible_streams(databasename, full)
+
+
+    def get_stream_access_level(self, keyid, streamname, databasename='_system', local=False):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.get_stream_access_level(streamname, databasename, local)
+
+
+    def set_stream_access_level(self, keyid, streamname, databasename='_system', grant='ro', local=False):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.set_stream_access_level(streamname, databasename, grant, local=local)
+
+
+
+    def clear_stream_access_level(self, keyid, streamname, databasename='_system', local=False):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.clear_stream_access_level(streamname, databasename, local)
+
+
+    def get_billing_access_level(self, keyid):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.get_billing_access_level()
+
+
+    def set_billing_access_level(self, keyid, grant='ro'):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.set_billing_access_level(grant)
+
+
+    def clear_billing_access_level(self, keyid):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.clear_billing_access_level()
 
     # def fabric(self, tenant, name, email, password, verify=False):
     #     """Connect to a fabric and return the fabric API wrapper.

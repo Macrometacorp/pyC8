@@ -649,3 +649,59 @@ class GetKeysError(C8ServerError):
 
 class GetCountError(C8ServerError):
     """Failed to get the kv count for the collection"""
+
+
+#######################
+# API Keys #
+#######################
+
+class CreateAPIKey(C8ServerError):
+    """Failed to create API Key"""
+
+class RemoveAPIKey(C8ServerError):
+    """Failed to remove API Key"""
+
+class GetAPIKeys(C8ServerError):
+    """Failed to fetch the API keys"""
+
+class ListDataBases(C8ServerError):
+    """Failed to fetch the databases for the specified key"""
+
+class DataBaseAccessLevel(C8ServerError):
+    """Failed to fetch the database access level for the specified database"""
+
+class SetDataBaseAccessLevel(C8ServerError):
+    """Failed to set the database access level for the specified database"""
+
+class ClearDataBaseAccessLevel(C8ServerError):
+    """Failed to clear the database access level for the specified database"""
+
+class CollectionAccessLevel(C8ServerError):
+    """Failed to fetch the database access level for the specified collection"""
+
+class SetCollectionAccessLevel(C8ServerError):
+    """Failed to set the database access level for the specified collection"""
+
+class ClearCollectionAccessLevel(C8ServerError):
+    """Failed to clear the database access level for the specified collection"""
+
+class StreamAccessLevel(C8ServerError):
+    """Failed to fetch the database access level for the specified collection"""
+
+class SetStreamAccessLevel(C8ServerError):
+    """Failed to set the database access level for the specified collection"""
+
+class ClearStreamAccessLevel(C8ServerError):
+    """Failed to clear the database access level for the specified collection"""
+
+class ListStreams(C8ServerError):
+    """Failed to fetch the streams for the specified key"""
+
+class BillingAcessLevel(C8ServerError):
+    """Failed to fetch the billing access level"""
+
+class SetBillingAccessLevel(C8ServerError):
+    """Failed to set the billing access level"""
+
+class ClearBillingAccessLevel(C8ServerError):
+    """Failed to clear the billing access level"""

@@ -10,6 +10,7 @@ from c8.c8ql import C8QL
 from c8.keyvalue import KV
 from c8.collection import StandardCollection
 from c8.stream_apps import StreamApps
+from c8.apikeys import APIKeys
 from c8 import constants
 from c8.exceptions import (
     CollectionCreateError,
@@ -40,7 +41,8 @@ from c8.exceptions import (
     EventCreateError,
     EventDeleteError,
     EventGetError,
-    StreamAppGetSampleError
+    StreamAppGetSampleError,
+    GetAPIKeys
 )
 from c8.executor import (
     DefaultExecutor,
@@ -1446,6 +1448,39 @@ class Fabric(APIWrapper):
             return False
         # call api
         return self._execute(req,response_handler)   
+
+
+    ########################
+    # APIKeys #
+    ########################
+    def api_keys(self, keyid):
+        """Return the API keys API wrapper.
+        :param keyid: API Key id
+        :type kaeyid: string | unicode
+        :return:API keys API wrapper.
+        :rtype: c8.stream_collection.StreamCollection
+        """
+        return APIKeys(self._conn, self._executor, keyid)
+
+
+    def list_all_api_keys(self):
+        """List the API keys.
+
+        :return:list.
+        :raise c8.exceptions.GetAPIKeys: If request fails
+        """
+        request = Request(
+            method = "get",
+            endpoint='/_api/key',
+        )
+        # create response handler
+        def response_handler(resp):
+            if not resp.is_success:
+                raise GetAPIKeys(resp, request)
+            else:
+                return resp.body['result']
+        return self._execute(request, response_handler)
+
 
     
 
