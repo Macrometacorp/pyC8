@@ -46,7 +46,7 @@ class APIKeys(APIWrapper):
         """
         request = Request(
             method='post',
-            endpoint='/_api/key',
+            endpoint='/key',
             data={
                     "keyid": self._keyid
                 }
@@ -71,7 +71,7 @@ class APIKeys(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/key/{}'.format(self._keyid),
+            endpoint='/key/{}'.format(self._keyid),
         )
 
         def response_handler(resp):
@@ -95,7 +95,7 @@ class APIKeys(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/key/{}/database'.format(self._keyid),
+            endpoint='/key/{}/database'.format(self._keyid),
         )
 
         def response_handler(resp):
@@ -119,7 +119,7 @@ class APIKeys(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/key/{}/database/{}'.format(self._keyid, databasename),
+            endpoint='/key/{}/database/{}'.format(self._keyid, databasename),
         )
 
         def response_handler(resp):
@@ -147,7 +147,7 @@ class APIKeys(APIWrapper):
         """
         request = Request(
             method='put',
-            endpoint='/_api/key/{}/database/{}'.format(self._keyid, databasename),
+            endpoint='/key/{}/database/{}'.format(self._keyid, databasename),
             data={
                 "grant": grant
             }
@@ -174,7 +174,7 @@ class APIKeys(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/key/{}/database/{}'.format(self._keyid, databasename),
+            endpoint='/key/{}/database/{}'.format(self._keyid, databasename),
            
         )
 
@@ -204,7 +204,7 @@ class APIKeys(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/key/{}/database/{}/collection/{}'.format(self._keyid,
+            endpoint='/key/{}/database/{}/collection/{}'.format(self._keyid,
                                                                      databasename,
                                                                      collection_name),
         )
@@ -237,7 +237,7 @@ class APIKeys(APIWrapper):
         """
         request = Request(
             method='put',
-            endpoint='/_api/key/{}/database/{}/collection/{}'.format(self._keyid,
+            endpoint='/key/{}/database/{}/collection/{}'.format(self._keyid,
                                                                      databasename,
                                                                      collection_name),
             data={
@@ -268,7 +268,7 @@ class APIKeys(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/key/{}/database/{}/collection/{}'.format(self._keyid,
+            endpoint='/key/{}/database/{}/collection/{}'.format(self._keyid,
                                                                      databasename,
                                                                      collection_name),
            
@@ -300,7 +300,7 @@ class APIKeys(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/key/{}/database/{}/stream?full={}'.format(self._keyid,
+            endpoint='/key/{}/database/{}/stream?full={}'.format(self._keyid,
                                                                       databasename,
                                                                       full),
         )
@@ -326,11 +326,11 @@ class APIKeys(APIWrapper):
         :raise c8.exceptions.StreamAccessLevel: If request fails.
         """
         if local is False:
-            url = '/_api/key/{}/database/{}/stream/{}?global=True'.format(self._keyid,
+            url = '/key/{}/database/{}/stream/{}?global=True'.format(self._keyid,
                                                                  databasename,
                                                                  streamname)
         elif local is True:
-            url = '/_api/key/{}/database/{}/stream/{}?global=False'.format(self._keyid,
+            url = '/key/{}/database/{}/stream/{}?global=False'.format(self._keyid,
                                                                  databasename,
                                                                  streamname)
         request = Request(
@@ -364,11 +364,11 @@ class APIKeys(APIWrapper):
         :raise c8.exceptions.SetStreamAccessLevel: If request fails.
         """
         if local is False:
-            url = '/_api/key/{}/database/{}/stream/{}?global=True'.format(self._keyid,
+            url = '/key/{}/database/{}/stream/{}?global=True'.format(self._keyid,
                                                                  databasename,
                                                                  streamname)
         elif local is True:
-            url = '/_api/key/{}/database/{}/stream/{}?global=False'.format(self._keyid,
+            url = '/key/{}/database/{}/stream/{}?global=False'.format(self._keyid,
                                                                  databasename,
                                                                  streamname)
 
@@ -403,11 +403,11 @@ class APIKeys(APIWrapper):
         """
 
         if local is False:
-            url = '/_api/key/{}/database/{}/stream/{}?global=True'.format(self._keyid,
+            url = '/key/{}/database/{}/stream/{}?global=True'.format(self._keyid,
                                                                  databasename,
                                                                  streamname)
         elif local is True:
-            url = '/_api/key/{}/database/{}/stream/{}?global=False'.format(self._keyid,
+            url = '/key/{}/database/{}/stream/{}?global=False'.format(self._keyid,
                                                                  databasename,
                                                                  streamname)
 
@@ -439,7 +439,7 @@ class APIKeys(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/key/{}/billing'.format(self._keyid),
+            endpoint='/key/{}/billing'.format(self._keyid),
         )
 
         def response_handler(resp):
@@ -465,7 +465,7 @@ class APIKeys(APIWrapper):
         """
         request = Request(
             method='put',
-            endpoint='/_api/key/{}/billing'.format(self._keyid),
+            endpoint='/key/{}/billing'.format(self._keyid),
             data={
                 "grant": grant
             }
@@ -490,7 +490,7 @@ class APIKeys(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/key/{}/billing'.format(self._keyid),
+            endpoint='/key/{}/billing'.format(self._keyid),
            
         )
 

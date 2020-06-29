@@ -288,8 +288,8 @@ class Fabric(APIWrapper):
         """
 
         request = Request(method='put',
-                          endpoint='_tenant/{}/_fabric/{}/database/{}'.format(
-                              tenant, fabric, new_dc))
+                          endpoint='_fabric/{}/database/{}'.format(
+                          fabric, new_dc))
 
         def response_handler(resp):
             if not resp.is_success:
@@ -323,7 +323,7 @@ class Fabric(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_admin/version',
+            endpoint='/version',
             params={'details': False}
         )
 
@@ -778,7 +778,7 @@ class Fabric(APIWrapper):
         :rtype: [dict]
         :raise c8.exceptions.GraphListError: If retrieval fails.
         """
-        request = Request(method='get', endpoint='/_api/graph')
+        request = Request(method='get', endpoint='/graph')
 
         def response_handler(resp):
             if not resp.is_success:
@@ -854,7 +854,7 @@ class Fabric(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/graph',
+            endpoint='/graph',
             data=data
         )
 
@@ -886,7 +886,7 @@ class Fabric(APIWrapper):
 
         request = Request(
             method='delete',
-            endpoint='/_api/graph/{}'.format(name),
+            endpoint='/graph/{}'.format(name),
             params=params
         )
 
@@ -1379,7 +1379,7 @@ class Fabric(APIWrapper):
         body = {"definition": data}
         req = Request(
             method = "post",
-            endpoint='/_api/streamapps/validate',
+            endpoint='/streamapps/validate',
             data=json.dumps(body)
         )
         
@@ -1396,7 +1396,7 @@ class Fabric(APIWrapper):
         """
         req = Request(
             method = "get",
-            endpoint='/_api/streamapps',
+            endpoint='/streamapps',
         )
         
         def response_handler(resp):
@@ -1412,7 +1412,7 @@ class Fabric(APIWrapper):
         """
         req = Request(
             method = "get",
-            endpoint='/_api/streamapps/samples',
+            endpoint='/streamapps/samples',
         )
         
         def response_handler(resp):
@@ -1436,7 +1436,7 @@ class Fabric(APIWrapper):
         # create request
         req = Request(
             method = "post",
-            endpoint='/_api/streamapps',
+            endpoint='/streamapps',
             data=json.dumps(req_body)
         )
         # create response handler
@@ -1471,7 +1471,7 @@ class Fabric(APIWrapper):
         """
         request = Request(
             method = "get",
-            endpoint='/_api/key',
+            endpoint='/key',
         )
         # create response handler
         def response_handler(resp):

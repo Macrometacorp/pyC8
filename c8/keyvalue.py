@@ -41,7 +41,7 @@ class KV(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/kv'
+            endpoint='/kv'
         )
 
         def response_handler(resp):
@@ -66,7 +66,7 @@ class KV(APIWrapper):
         """
         request = Request(
             method='post',
-            endpoint='/_api/kv/{}?expiration={}'.format(name, expiration)
+            endpoint='/kv/{}?expiration={}'.format(name, expiration)
         )
 
         def response_handler(resp):
@@ -110,7 +110,7 @@ class KV(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/kv/{}'.format(name)
+            endpoint='/kv/{}'.format(name)
         )
         def response_handler(resp):
             if not resp.is_success:
@@ -136,7 +136,7 @@ class KV(APIWrapper):
         """
         request = Request(
             method='put',
-            endpoint='/_api/kv/{}/value'.format(name),
+            endpoint='/kv/{}/value'.format(name),
             data=dumps(data)
 
         )
@@ -161,7 +161,7 @@ class KV(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/kv/{}/value/{}'.format(name, key)
+            endpoint='/kv/{}/value/{}'.format(name, key)
         )
         def response_handler(resp):
             if not resp.is_success:
@@ -187,7 +187,7 @@ class KV(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/kv/{}/values'.format(name),
+            endpoint='/kv/{}/values'.format(name),
             data=dumps(keys)
         )
         def response_handler(resp):
@@ -211,7 +211,7 @@ class KV(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/kv/{}/value/{}'.format(name, key)
+            endpoint='/kv/{}/value/{}'.format(name, key)
         )
 
         def response_handler(resp):
@@ -234,7 +234,7 @@ class KV(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/kv/{}/keys'.format(name)
+            endpoint='/kv/{}/keys'.format(name)
         )
 
         def response_handler(resp):
@@ -257,7 +257,7 @@ class KV(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/kv/{}/count'.format(name)
+            endpoint='/kv/{}/count'.format(name)
         )
 
         def response_handler(resp):

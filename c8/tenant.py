@@ -9,9 +9,6 @@ from c8.executor import (
 )
 
 from c8.exceptions import (
-    TenantDeleteError,
-    TenantCreateError,
-    TenantListError,
     TenantDcListError,
     TenantUpdateError,
     PermissionListError,
@@ -71,8 +68,7 @@ class Tenant(APIWrapper):
 
         # We set the temp URL prefix here for the auth call. It is restored
         # below
-        self._conn.set_url_prefix(proto + '//' + rema + '/_tenant/' +
-                                  self.tenant_name)
+        self._conn.set_url_prefix(proto + '//' + rema )
         data = {"tenant": self.tenant_name}
         data['email'] = self._conn._email
         data['password'] = self._conn._auth[1]
@@ -84,9 +80,9 @@ class Tenant(APIWrapper):
 
         def response_handler(resp):
             if not resp.is_success:
-                raise TenantListError
+                raise "Authentication Error"
             if 'jwt' not in resp.body:
-                raise TenantListError
+                raise "Failed to fetch jwt"
             return resp.body['jwt']
 
         tok = self._execute(request, response_handler)
@@ -110,7 +106,7 @@ class Tenant(APIWrapper):
     def useFabric(self, fabric_name):
         conn = self._conn
         conn.set_fabric_name(fabric_name)
-        url_prefix = '{}/_tenant/{}/_fabric/{}'.format(conn.url, conn.tenant_name, conn.fabric_name)
+        url_prefix = '{}/_fabric/{}/_api'.format(conn.url, conn.fabric_name)
         conn.set_url_prefix(url_prefix)
         fabric = StandardFabric(conn)
         return fabric
@@ -118,87 +114,6 @@ class Tenant(APIWrapper):
     #######################
     # Tenant Management #
     #######################
-
-    def tenants(self):
-        """Return the names all tenants.
-
-        :return: Tenant names.
-        :rtype: [str | unicode]
-        :raise c8.exceptions.TenantListError: If retrieval fails.
-        """
-        self.auth_token
-        request = Request(
-            method='get',
-            endpoint='/tenants',
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise TenantListError(resp, request)
-            retval = []
-            for item in resp.body['result']:
-                retval.append(item['tenant'])
-            return retval
-
-        return self._execute(request, response_handler)
-
-    def has_tenant(self, name):
-        """Check if a tenant exists.
-
-        :param name: Tenant name.
-        :type name: str | unicode
-        :return: True if tenant exists, False otherwise.
-        :rtype: bool
-        """
-        return name in self.tenants()
-
-    def create_tenant(self, email, passwd='', dclist=[], extra={}):
-        """Create a new tenant.
-        :param name: Tenant name.
-        :type name: str | unicode
-        :param passwd: What I presume is the tenant admin user password.
-        :type passwd: str
-        :param dclist: comma separated list of region where tenant will be
-                       created. If no value passed tenant will be created
-                       globally.
-        :type dclist: list
-        :param extra: Extra config info.
-        :type extra: dict
-        :return: True if tenant was created successfully.
-        :rtype: bool
-        :raise c8.exceptions.TenantCreateError: If create fails.
-
-        Here is an example entry for parameter **users**:
-        .. code-block:: python
-
-            {
-                'email': 'email'
-                'passwd': 'password',
-                'extra': {'Department': 'IT'}
-            }
-        """
-        name = email.replace('@', "")
-        name = name.replace('.', "")
-        print(name)
-        data = {'name': name}
-        data['email'] = email
-        data['passwd'] = passwd
-        data['extra'] = extra
-        if dclist != '':
-            data['dcList'] = dclist
-
-        request = Request(
-            method='post',
-            endpoint='/tenant',
-            data=data
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise TenantCreateError(resp, request)
-            return True
-
-        return self._execute(request, response_handler)
 
     def update_tenant(self, name, passwd='', extra={}):
         """Update a existing tenant.
@@ -239,30 +154,6 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def delete_tenant(self, name, ignore_missing=False):
-        """Delete the tenant.
-        :param name: Tenant name.
-        :type name: str | unicode
-        :param ignore_missing: Do not raise an exception on missing tenant.
-        :type ignore_missing: bool
-        :return: True if tenant was deleted successfully, False if tenant
-            was not found and **ignore_missing** was set to True.
-        :rtype: bool
-        :raise c8.exceptions.TenantDeleteError: If delete fails.
-        """
-        request = Request(
-            method='delete',
-            endpoint='/tenant/{tenantname}'.format(tenantname=name)
-        )
-
-        def response_handler(resp):
-            if resp.error_code == 1228 and ignore_missing:
-                return False
-            if not resp.is_success:
-                raise TenantDeleteError(resp, request)
-            return resp.body['result']
-
-        return self._execute(request, response_handler)
 
     def dclist(self, detail=False):
         """Return the list of names of Datacenters
@@ -360,7 +251,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_admin/user'
+            endpoint='/user'
         )
 
         def response_handler(resp):
@@ -385,7 +276,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_admin/user/{}'.format(username)
+            endpoint='/user/{}'.format(username)
         )
 
         def response_handler(resp):
@@ -420,7 +311,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_admin/user',
+            endpoint='/user',
             data=data
         )
 
@@ -460,7 +351,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='patch',
-            endpoint='/_admin/user/{user}'.format(user=username),
+            endpoint='/user/{user}'.format(user=username),
             data=data
         )
 
@@ -498,7 +389,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='put',
-            endpoint='/_admin/user/{user}'.format(user=username),
+            endpoint='/user/{user}'.format(user=username),
             data=data
         )
 
@@ -527,7 +418,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_admin/user/{user}'.format(user=username)
+            endpoint='/user/{user}'.format(user=username)
         )
 
         def response_handler(resp):
@@ -554,7 +445,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_admin/user/{}/database'.format(username),
+            endpoint='/user/{}/database'.format(username),
             params={'full': True}
         )
 
@@ -578,7 +469,7 @@ class Tenant(APIWrapper):
         :rtype: str | unicode
         :raise: c8.exceptions.PermissionGetError: If retrieval fails.
         """
-        endpoint = '/_admin/user/{}/database/{}'.format(username, fabric)
+        endpoint = '/user/{}/database/{}'.format(username, fabric)
         if collection is not None:
             endpoint += '/' + collection
         request = Request(method='get', endpoint=endpoint)
@@ -610,7 +501,7 @@ class Tenant(APIWrapper):
         :rtype: bool
         :raise c8.exceptions.PermissionUpdateError: If update fails.
         """
-        endpoint = '/_admin/user/{}/database/{}'.format(username, fabric)
+        endpoint = '/user/{}/database/{}'.format(username, fabric)
         if collection is not None:
             endpoint += '/' + collection
 
@@ -640,7 +531,7 @@ class Tenant(APIWrapper):
         :rtype: bool
         :raise c8.exceptions.PermissionRestError: If reset fails.
         """
-        endpoint = '/_admin/user/{}/database/{}'.format(username, fabric)
+        endpoint = '/user/{}/database/{}'.format(username, fabric)
         if collection is not None:
             endpoint += '/' + collection
 

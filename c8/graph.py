@@ -73,7 +73,7 @@ class Graph(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/graph/{}'.format(self._name)
+            endpoint='/graph/{}'.format(self._name)
         )
 
         def response_handler(resp):
@@ -129,7 +129,7 @@ class Graph(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_api/graph/{}/vertex'.format(self._name),
+            endpoint='/graph/{}/vertex'.format(self._name),
         )
 
         def response_handler(resp):
@@ -160,7 +160,7 @@ class Graph(APIWrapper):
         """
         request = Request(
             method='post',
-            endpoint='/_api/graph/{}/vertex'.format(self._name),
+            endpoint='/graph/{}/vertex'.format(self._name),
             data={'collection': name}
         )
 
@@ -185,7 +185,7 @@ class Graph(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/graph/{}/vertex/{}'.format(self._name, name),
+            endpoint='/graph/{}/vertex/{}'.format(self._name, name),
             params={'dropCollection': purge}
         )
 
@@ -274,7 +274,7 @@ class Graph(APIWrapper):
         """
         request = Request(
             method='post',
-            endpoint='/_api/graph/{}/edge'.format(self._name),
+            endpoint='/graph/{}/edge'.format(self._name),
             data={
                 'collection': edge_collection,
                 'from': from_vertex_collections,
@@ -307,7 +307,7 @@ class Graph(APIWrapper):
         """
         request = Request(
             method='put',
-            endpoint='/_api/graph/{}/edge/{}'.format(
+            endpoint='/graph/{}/edge/{}'.format(
                 self._name, edge_collection
             ),
             data={
@@ -339,7 +339,7 @@ class Graph(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_api/graph/{}/edge/{}'.format(self._name, name),
+            endpoint='/graph/{}/edge/{}'.format(self._name, name),
             params={'dropCollection': purge}
         )
 

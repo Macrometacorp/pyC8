@@ -24,7 +24,7 @@ class C8Client(object):
 
     def __init__(self, protocol="http", host='127.0.0.1', port=80,
                  geofabric="_system",stream_port=constants.STREAM_PORT,
-                 email=None, password=None,  http_client=None):
+                 email=None, password=None,  http_client=None, token=None, apikey=None):
         
         self._protocol = protocol.strip('/')
         self._host = host.strip('/')
@@ -32,6 +32,8 @@ class C8Client(object):
         self._email = email
         self._password = password
         self._fabricname = geofabric
+        self._token = token
+        self._apikey = apikey
         if self._protocol == 'https':
             self._port = 443
         self._stream_port = int(stream_port)
@@ -42,8 +44,17 @@ class C8Client(object):
         self._http_client = http_client
 
         if self._email and self._password:  
-            self._tenant = self.tenant(self._email, self._password)
+            self._tenant = self.tenant(email=self._email, password=self._password)
             self._fabric = self._tenant.useFabric(self._fabricname)
+        
+        if self._token:
+            self._tenant = self.tenant(token=self._token)
+            self._fabric = self._tenant.useFabric(self._fabricname)
+        
+        if self._apikey:
+            self._tenant = self.tenant(apikey=self._apikey)
+            self._fabric = self._tenant.useFabric(self._fabricname)
+
 
 
     def __repr__(self):
@@ -94,7 +105,7 @@ class C8Client(object):
         """
         return self._url
 
-    def tenant(self, email, password, verify=False):
+    def tenant(self, email='', password='', verify=False, token=None, apikey=None):
         """Connect to a fabric and return the fabric API wrapper.
 
         :param email: Email for basic authentication.
@@ -111,6 +122,8 @@ class C8Client(object):
         connection = TenantConnection(url=self._url, 
                                       email=email,
                                       password=password,
+                                      token=token,
+                                      apikey=apikey,
                                       http_client=self._http_client)
         tenant = Tenant(connection)
 

@@ -36,14 +36,15 @@ class Connection(object):
     :type is_fabric: bool
     """
 
-    def __init__(self, url, email, password, http_client):
+    def __init__(self, url, email, password, token, apikey, http_client):
         self.url = url
         self._tenant_name = ""
         self._fabric_name = constants.FABRIC_DEFAULT
         self._email = email
         self._password = password
         self._http_client = http_client or DefaultHTTPClient()
-
+        self._token = token
+        self._apikey = apikey
         # # Set the auth credentials depending on tenant name
         # if self._tenant_name == '_mm':
         #     self._auth = (username, password)
@@ -55,14 +56,45 @@ class Connection(object):
         #    self._fabric_name = constants.DB_DEFAULT
         #else:
         #    self._fabric_name = fabric_name
+        if self._token != None:
+            self._auth_token = self._token
 
-        self._auth_token, self._tenant_name = self._get_auth_token()
+        if self._apikey != None:
+             self._auth_token = self._apikey
+        
+        if self._email != '' and password != '':
+            self._auth_token, self._tenant_name = self._get_auth_token()
 
-        self._url_prefix = '{}/_tenant/{}/_fabric/{}'.format(
-            url, self._tenant_name, self._fabric_name)
+        if self._tenant_name == '' and self._token is not None :
+            headers = {"Authorization": "Bearer " + self._auth_token}
+
+            tenurl = self.url + "/_fabric/{}/_api/user".format(self._fabric_name)
+            response = requests.get(url=tenurl, headers=headers)
+            if response.status_code == 200:
+                body = json.loads(response.text)
+                self._tenant_name = body['result'][0]['tenant']
+
+
+        if self._tenant_name == '' and self._apikey is not None :
+            headers = {"Authorization": "apikey " + self._auth_token}
+
+            tenurl = self.url + "/_fabric/{}/_api/user".format(self._fabric_name)
+            response = requests.get(url=tenurl, headers=headers)
+            if response.status_code == 200:
+                body = json.loads(response.text)
+                self._tenant_name = body['result'][0]['tenant']
+
+
+
+
+        #self._url_prefix = '{}/_tenant/{}/_fabric/{}'.format(
+        #    url, self._tenant_name, self._fabric_name)
+
+        self._url_prefix = '{}/_fabric/{}/_api'.format(
+          url, self._fabric_name)
+
 
         # TODO : Handle the functions side of things
-    
     def _get_auth_token(self):
         data = {
             "email" : self._email,
@@ -141,16 +173,20 @@ class Connection(object):
         """
         # Below line is a debug to show what the full request URL is.
         # Useful in testing multitenancy API calls
-        if '_tenant' in request.endpoint and '_fabric' in request.endpoint:
-            find_url = self._url_prefix.find('/_tenant')
+        # if '_tenant' in request.endpoint and '_fabric' in request.endpoint:
+        if '_fabric' in request.endpoint:
+            find_url = self._url_prefix.find('/_fabric')
             find_url += 1
             url = self._url_prefix[0:find_url]
             final_url = url + request.endpoint
         else:
             final_url = self._url_prefix + request.endpoint
         headers = request.headers
-        headers['Authorization'] = 'bearer ' + self._auth_token
-
+        if self._token is not None:
+            headers['Authorization'] = 'bearer ' + self._auth_token
+        
+        elif self._apikey is not None:
+            headers['Authorization'] = 'apikey ' + self._auth_token
         return self._http_client.send_request(
             method=request.method,
             url=final_url,
@@ -167,8 +203,9 @@ class TenantConnection(Connection):
     :type connection: c8.connection.Connection
     """    
 
-    def __init__(self, url, email, password, http_client):
-        super(TenantConnection, self).__init__(url=url, email=email, password=password, http_client=http_client)
+    def __init__(self, url, email, password, token, apikey, http_client):
+    
+        super(TenantConnection, self).__init__(url=url, email=email, password=password, token=token, apikey=apikey, http_client=http_client)
         self._fqfabric_name = self._tenant_name + "." + self._fabric_name
 
     def __repr__(self):

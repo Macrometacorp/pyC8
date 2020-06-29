@@ -273,6 +273,7 @@ class StreamCollection(APIWrapper):
                                                stream, 
                                                subscription_name)
 
+
             params = {
                 "subscriptionType": consumer_type,
                 "receiverQueueSize": receiver_queue_size,
@@ -281,7 +282,6 @@ class StreamCollection(APIWrapper):
 
             params = {k: v for k, v in params.items() if v is not None}
             url = self._ws_url + topic + "?" + urlencode(params)
-            
             return websocket.create_connection(url)
 
         raise ex.StreamSubscriberError(
@@ -319,7 +319,7 @@ class StreamCollection(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/streams/clearbacklog'
+            endpoint='/streams/clearbacklog'
         )
 
         def response_handler(resp):
@@ -342,7 +342,7 @@ class StreamCollection(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/streams/clearbacklog/{}'.format(subscription)
+            endpoint='/streams/clearbacklog/{}'.format(subscription)
         )
 
         def response_handler(resp):
@@ -365,10 +365,10 @@ class StreamCollection(APIWrapper):
                                                      for a stream fails.
         """
         if local is True:
-            endpoint = '/_api/streams/{}/subscriptions?global=false'.format(stream)
+            endpoint = '/streams/{}/subscriptions?global=false'.format(stream)
         
         elif local is False:
-            endpoint = '/_api/streams/{}/subscriptions?global=true'.format(stream)
+            endpoint = '/streams/{}/subscriptions?global=true'.format(stream)
 
         request = Request(method='get', endpoint=endpoint)
 
@@ -393,9 +393,9 @@ class StreamCollection(APIWrapper):
         """
         #endpoint = '{}/{}/backlog?local={}'.format(ENDPOINT, stream, local)
         if local is False:
-            endpoint = '/_api/streams/{}/backlog?global=true'.format(stream)
+            endpoint = '/streams/{}/backlog?global=true'.format(stream)
         elif local is True:
-            endpoint = '/_api/streams/{}/backlog?global=false'.format(stream)
+            endpoint = '/streams/{}/backlog?global=false'.format(stream)
         request = Request(method='get', endpoint=endpoint)
         def response_handler(resp):
             code = resp.status_code
@@ -481,13 +481,11 @@ class StreamCollection(APIWrapper):
         #endpoint = '{}/{}/subscription/{}?local={}'.format(ENDPOINT, stream,
         #                                                   subscription, local)
         if local is False:
-            endpoint='/_api/streams/{}/subscriptions/{}?global=true'.format(stream, subscription)
+            endpoint='/streams/{}/subscriptions/{}?global=true'.format(stream, subscription)
         elif local is True:
-            endpoint='/_api/streams/{}/subscriptions/{}?global=false'.format(stream, subscription)
+            endpoint='/streams/{}/subscriptions/{}?global=false'.format(stream, subscription)
 
-        print(endpoint)
         request = Request(method='delete', endpoint=endpoint)
-        print("***",request)
         def response_handler(resp):
             print(resp.body)
             code = resp.status_code

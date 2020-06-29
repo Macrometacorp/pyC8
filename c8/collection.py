@@ -2229,7 +2229,7 @@ class VertexCollection(Collection):
 
         request = Request(
             method='get',
-            endpoint='/_api/graph/{}/vertex/{}'.format(
+            endpoint='/graph/{}/vertex/{}'.format(
                 self._graph, handle
             ),
             headers=headers,
@@ -2282,7 +2282,7 @@ class VertexCollection(Collection):
 
         request = Request(
             method='post',
-            endpoint='/_api/graph/{}/vertex/{}'.format(
+            endpoint='/graph/{}/vertex/{}'.format(
                 self._graph, self.name
             ),
             data=vertex,
@@ -2350,7 +2350,7 @@ class VertexCollection(Collection):
 
         request = Request(
             method='patch',
-            endpoint='/_api/graph/{}/vertex/{}'.format(
+            endpoint='/graph/{}/vertex/{}'.format(
                 self._graph, vertex_id
             ),
             headers=headers,
@@ -2412,7 +2412,7 @@ class VertexCollection(Collection):
 
         request = Request(
             method='put',
-            endpoint='/_api/graph/{}/vertex/{}'.format(
+            endpoint='/graph/{}/vertex/{}'.format(
                 self._graph, vertex_id
             ),
             headers=headers,
@@ -2480,7 +2480,7 @@ class VertexCollection(Collection):
 
         request = Request(
             method='delete',
-            endpoint='/_api/graph/{}/vertex/{}'.format(
+            endpoint='/graph/{}/vertex/{}'.format(
                 self._graph, handle
             ),
             params=params,
@@ -2560,7 +2560,7 @@ class EdgeCollection(Collection):
 
         request = Request(
             method='get',
-            endpoint='/_api/graph/{}/edge/{}'.format(
+            endpoint='/graph/{}/edge/{}'.format(
                 self._graph, handle
             ),
             headers=headers,
@@ -2616,7 +2616,7 @@ class EdgeCollection(Collection):
 
         request = Request(
             method='post',
-            endpoint='/_api/graph/{}/edge/{}'.format(
+            endpoint='/graph/{}/edge/{}'.format(
                 self._graph, self.name
             ),
             data=edge,
@@ -2684,7 +2684,7 @@ class EdgeCollection(Collection):
 
         request = Request(
             method='patch',
-            endpoint='/_api/graph/{}/edge/{}'.format(
+            endpoint='/graph/{}/edge/{}'.format(
                 self._graph, edge_id
             ),
             headers=headers,
@@ -2747,7 +2747,7 @@ class EdgeCollection(Collection):
 
         request = Request(
             method='put',
-            endpoint='/_api/graph/{}/edge/{}'.format(
+            endpoint='/graph/{}/edge/{}'.format(
                 self._graph, edge_id
             ),
             headers=headers,
@@ -2815,7 +2815,7 @@ class EdgeCollection(Collection):
 
         request = Request(
             method='delete',
-            endpoint='/_api/graph/{}/edge/{}'.format(
+            endpoint='/graph/{}/edge/{}'.format(
                 self._graph, handle
             ),
             params=params,
