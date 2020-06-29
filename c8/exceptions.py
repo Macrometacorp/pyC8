@@ -548,6 +548,17 @@ class UserDeleteError(C8ServerError):
     """Failed to delete user."""
 
 
+class DataBaseError(C8ServerError):
+    """Failed to fetch accessible databases for specified user"""
+
+
+class GetDataBaseAccessLevel(C8ServerError):
+    """Failed to fetch database access level for the specified user"""
+
+
+class SetDataBaseAccessLevel(C8ServerError):
+    """Failed to set database access level for the specified user"""
+
 #########################
 # Permission Exceptions #
 #########################

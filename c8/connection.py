@@ -187,6 +187,10 @@ class Connection(object):
         
         elif self._apikey is not None:
             headers['Authorization'] = 'apikey ' + self._auth_token
+
+        elif self._token is None and self._apikey is None:
+            headers['Authorization'] = 'bearer ' + self._auth_token
+
         return self._http_client.send_request(
             method=request.method,
             url=final_url,
