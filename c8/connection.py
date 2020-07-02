@@ -182,6 +182,7 @@ class Connection(object):
         else:
             final_url = self._url_prefix + request.endpoint
         headers = request.headers
+
         if self._token is not None:
             headers['Authorization'] = 'bearer ' + self._auth_token
         
@@ -190,7 +191,6 @@ class Connection(object):
 
         elif self._token is None and self._apikey is None:
             headers['Authorization'] = 'bearer ' + self._auth_token
-
         return self._http_client.send_request(
             method=request.method,
             url=final_url,

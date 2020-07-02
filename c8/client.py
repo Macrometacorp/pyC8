@@ -447,11 +447,19 @@ class C8Client(object):
         """
         resp = self._fabric.collection(name)
         return resp
+    
+    def printdata(self, event):
+        """Prints the event.
+
+        :param event: real-time update.
+        :type event: str | unicode
+        """
+        print(event)
 
 
     # client.on_change
-    def on_change(self, collection):
-        resp = self._fabric.on_change(collection)
+    def on_change(self, collection, callback=printdata):
+        resp = self._fabric.on_change(collection, callback=callback)
         return resp
 
     # client.get_document

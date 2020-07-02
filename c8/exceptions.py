@@ -1,3 +1,5 @@
+# coding=utf-8 
+
 from __future__ import absolute_import, unicode_literals
 
 
@@ -140,9 +142,8 @@ class StreamCommunicationError(C8ServerError):
 class StreamEventError(C8ClientError):
     """Failed to process the event from C8 stream."""
 
-
 class StreamBadInputError(C8ClientError):
-    """If the request doesn’t have the expected format."""
+    """If the request doesn’t have the expected format"""
 
 #######################
 # Tenant Exceptions #
