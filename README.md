@@ -37,6 +37,13 @@ The driver allows you to use three ways for authentication:-
   client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
    email="guest@macrometa.io", password="guest")
 ```
+
+2. Using jwt
+
+
+3. Using apikey
+
+
 Here is an overview example:
 
 ```python

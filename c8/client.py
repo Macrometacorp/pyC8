@@ -132,6 +132,11 @@ class C8Client(object):
         return tenant
 
     # Reducing steps
+
+    # client.collection
+    def collection(self, collection_name):
+        return self._fabric.collection(collection_name)
+
     # client.create_collection
     def create_collection(self,
                           name,
@@ -535,6 +540,7 @@ class C8Client(object):
         elif isinstance(document, list):
             resp = _collection.insert_many(documents=document, return_new=return_new, 
                                             sync=sync, silent=silent)
+        print(resp)
         return resp      
 
     # client.insert_document_from_file()
