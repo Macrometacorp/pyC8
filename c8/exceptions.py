@@ -1,3 +1,5 @@
+# coding=utf-8 
+
 from __future__ import absolute_import, unicode_literals
 
 
@@ -140,9 +142,8 @@ class StreamCommunicationError(C8ServerError):
 class StreamEventError(C8ClientError):
     """Failed to process the event from C8 stream."""
 
-
 class StreamBadInputError(C8ClientError):
-    """If the request doesn’t have the expected format."""
+    """If the request doesn’t have the expected format"""
 
 #######################
 # Tenant Exceptions #
@@ -307,10 +308,6 @@ class CollectionCreateError(C8ServerError):
 
 class CollectionDeleteError(C8ServerError):
     """Failed to delete collection."""
-
-
-class CollectionRenameError(C8ServerError):
-    """Failed to rename collection."""
 
 
 class CollectionTruncateError(C8ServerError):
@@ -552,6 +549,17 @@ class UserDeleteError(C8ServerError):
     """Failed to delete user."""
 
 
+class DataBaseError(C8ServerError):
+    """Failed to fetch accessible databases for specified user"""
+
+
+class GetDataBaseAccessLevel(C8ServerError):
+    """Failed to fetch database access level for the specified user"""
+
+
+class SetDataBaseAccessLevel(C8ServerError):
+    """Failed to set database access level for the specified user"""
+
 #########################
 # Permission Exceptions #
 #########################
@@ -603,27 +611,6 @@ class RestqlExecuteError(C8ServerError):
 
 
 #######################
-# Pipeline Exceptions #
-#######################
-
-
-class PipelineCreateError(C8ServerError):
-    """Failed to create pipeline."""
-
-
-class PipelineGetError(C8ServerError):
-    """Failed to get or list pipeline."""
-
-
-class PipelineUpdateError(C8ServerError):
-    """Failed to update pipeline."""
-
-
-class PipelineDeleteError(C8ServerError):
-    """Failed to get or list pipeline."""
-
-
-#######################
 # Event Exceptions #
 #######################
 
@@ -644,3 +631,89 @@ class StreamAppGetSampleError(C8ServerError):
 
 class StreamAppChangeActiveStateError(C8ServerError):
     """Error while changing active state of stream app."""
+
+
+#######################
+# KV Exceptions #
+#######################
+
+class ListCollections(C8ServerError):
+    """Failed to fetch the list of collections that use KV."""
+
+class CreateCollectionError(C8ServerError):
+    """Failed to Create the given namesace/collection."""
+
+class DeleteCollectionError(C8ServerError):
+    """Failed to Delete the given namespace/collection"""
+
+class InsertKVError(C8ServerError):
+    """Failed to insert kv pair"""
+
+class DeleteEntryForKey(C8ServerError):
+    """Failed to Delete entry for the specified key/keys"""
+
+
+class GetValueError(C8ServerError):
+    """Failed to fetch the value for the specified key/keys"""
+
+class GetKeysError(C8ServerError):
+    """Failed to get keys for the collection """
+
+class GetCountError(C8ServerError):
+    """Failed to get the kv count for the collection"""
+
+
+#######################
+# API Keys #
+#######################
+
+class CreateAPIKey(C8ServerError):
+    """Failed to create API Key"""
+
+class RemoveAPIKey(C8ServerError):
+    """Failed to remove API Key"""
+
+class GetAPIKeys(C8ServerError):
+    """Failed to fetch the API keys"""
+
+class ListDataBases(C8ServerError):
+    """Failed to fetch the databases for the specified key"""
+
+class DataBaseAccessLevel(C8ServerError):
+    """Failed to fetch the database access level for the specified database"""
+
+class SetDataBaseAccessLevel(C8ServerError):
+    """Failed to set the database access level for the specified database"""
+
+class ClearDataBaseAccessLevel(C8ServerError):
+    """Failed to clear the database access level for the specified database"""
+
+class CollectionAccessLevel(C8ServerError):
+    """Failed to fetch the database access level for the specified collection"""
+
+class SetCollectionAccessLevel(C8ServerError):
+    """Failed to set the database access level for the specified collection"""
+
+class ClearCollectionAccessLevel(C8ServerError):
+    """Failed to clear the database access level for the specified collection"""
+
+class StreamAccessLevel(C8ServerError):
+    """Failed to fetch the database access level for the specified collection"""
+
+class SetStreamAccessLevel(C8ServerError):
+    """Failed to set the database access level for the specified collection"""
+
+class ClearStreamAccessLevel(C8ServerError):
+    """Failed to clear the database access level for the specified collection"""
+
+class ListStreams(C8ServerError):
+    """Failed to fetch the streams for the specified key"""
+
+class BillingAcessLevel(C8ServerError):
+    """Failed to fetch the billing access level"""
+
+class SetBillingAccessLevel(C8ServerError):
+    """Failed to set the billing access level"""
+
+class ClearBillingAccessLevel(C8ServerError):
+    """Failed to clear the billing access level"""

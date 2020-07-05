@@ -11,6 +11,50 @@ on fields ``_from`` and ``_to``. For more information on indexes, refer to
 
 **Example:**
 
+The Simple Way
+
+..testcode::
+    from c8 import C8Client, C8QLQueryKillError
+    # Initialize the C8 client.
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
+                      email='guest@macrometa.io', password='guest')
+
+    collection_name = 'students'
+
+    # Create a new collection if it does not exist
+    if client.has_collection(collection_name):
+        print("Collection exists)
+    else:
+        client.create_collection(name=collection_name)
+
+    # get indexes
+
+    print("Indexes", client.list_collection_indexes(collection_name))
+
+    # Add Indexes to a Collection
+    
+    print("Add Hash Index", client.add_hash_index(collection_name,
+             fields=['continent', 'country'], unique=True))
+
+    print("Add geo Index", client.add_geo_index(collection_name, fields=['coordinates']))
+
+    print("Add skiplist index", client.add_skiplist_index(collection_name, fields=['population'], sparse=False))
+
+    print("Add persistent Index", client.add_persistent_index(collection_name, fields=['currency'], sparse=True))
+
+    print("Add full text index", client.add_fulltext_index(collection_name, fields=['country']))
+
+    print("Add  TTL Index", client.add_ttl_index(collection_name, fields=['country'], expireAfter=0))
+
+    # Delete Index - You can fetch IndexId from the details after list Indexes
+    client.delete_index(collection_name, <index_id>, ignore_missing=False
+
+    # Delete Cretaed Collection
+    client.delete_collection(name=collname)
+'''
+
+The Object Oriented Way
+
 .. testcode::
 
     from c8 import C8Client

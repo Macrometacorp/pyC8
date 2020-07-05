@@ -17,6 +17,53 @@ C8QL queries are invoked from C8QL API wrapper. Executing queries returns
 
 **Example:**
 
+The Simple Way
+
+..testcode::
+
+    from c8 import C8Client, C8QLQueryKillError
+    # Initialize the C8 client.
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
+                      email='guest@macrometa.io', password='guest')
+    # define constants
+    documents = [
+        {'_key': 'Abby', 'age': 22},
+        {'_key': 'John', 'age': 18},
+        {'_key': 'Mary', 'age': 21}
+    ]
+    query = 'FOR doc IN students RETURN doc'
+
+    # Create a students Collection and Insert Documents in it.
+    client.create_collection('students')
+    client.insert_document(collection_name='students', document=documents)
+
+    # Explain query and validate query
+    valid = client.validate_query(query)
+    print("Vaildate query: ",valid)
+    explain = client.explain_query(query)
+    print("Explain query: ", explain)
+
+    # Execute Query
+    resp = client.execute_query(query)
+    print(resp)
+
+    # Iterate through the result cursor
+    student_keys = [doc['_key'] for doc in resp]
+
+    # List running queries
+    print(client.get_running_queries())
+
+    # Kill Query(this should fail due to invalid ID).
+    try:
+        client.kill_query('some_query_id')
+    
+    except C8QLQueryKillError as err:
+        print('ERROR: ', err)
+
+
+
+The Object Oriented Way 
+
 .. testcode::
 
     from c8 import C8Client, C8QLQueryKillError
@@ -75,75 +122,3 @@ C8QL queries are invoked from C8QL API wrapper. Executing queries returns
 See :ref:`C8QL` for API specification.
 
 
-C8QL User Functions
-==================
-
-**C8QL User Functions** are custom functions you define in Javascript to extend
-C8QL functionality. They are somewhat similar to SQL procedures.
-
-**Example:**
-
-.. testcode::
-
-    from c8 import C8Client
-
-    # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
-
-    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
-    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
-    # Note that the 'mytenant' tenant should already exist.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
-
-    # Get the C8QL API wrapper.
-    c8ql = fabric.c8ql
-
-    # Create a new C8QL user function.
-    c8ql.create_function(
-        # Grouping by name prefix is supported.
-        name='functions::temperature::converter',
-        code='function (celsius) { return celsius * 1.8 + 32; }'
-    )
-    # List C8QL user functions.
-    c8ql.functions()
-
-    # Delete an existing C8QL user function.
-    c8ql.delete_function('functions::temperature::converter')
-
-See :ref:`C8QL` for API specification.
-
-
-C8QL Query Cache
-===============
-
-**C8QL Query Cache** is used to minimize redundant calculation of the same query
-results. It is useful when read queries are issued frequently and write queries
-are not.
-
-**Example:**
-
-.. testcode::
-
-    from c8 import C8Client
-
-    # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
-
-    # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
-    # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
-    # Note that the 'mytenant' tenant should already exist.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
-
-    # Get the C8QL API wrapper.
-    c8ql = fabric.c8ql
-
-    # Retrieve C8QL query cache properties.
-    c8ql.cache.properties()
-
-    # Configure C8QL query cache properties
-    c8ql.cache.configure(mode='demand', limit=10000)
-
-    # Clear results in C8QL query cache.
-    c8ql.cache.clear()
-
-See :ref:`C8QLQueryCache` for API specification.

@@ -9,7 +9,6 @@ from json import dumps
 from c8.api import APIWrapper
 from c8.cursor import Cursor
 from c8.exceptions import (
-    CollectionRenameError,
     CollectionTruncateError,
     DocumentCountError,
     DocumentInError,
@@ -271,33 +270,6 @@ class Collection(APIWrapper):
         """
         return self._name
 
-    def rename(self, new_name):
-        """Rename the collection.
-
-        Renames may not be reflected immediately in async execution, batch
-        execution or transactions. It is recommended to initialize new API
-        wrappers after a rename.
-
-        :param new_name: New collection name.
-        :type new_name: str | unicode
-        :return: True if collection was renamed successfully.
-        :rtype: bool
-        :raise c8.exceptions.CollectionRenameError: If rename fails.
-        """
-        request = Request(
-            method='put',
-            endpoint='/collection/{}/rename'.format(self.name),
-            data={'name': new_name}
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise CollectionRenameError(resp, request)
-            self._name = new_name
-            self._id_prefix = new_name + '/'
-            return True
-
-        return self._execute(request, response_handler)
 
     def truncate(self):
         """Delete all documents in the collection.
@@ -1175,6 +1147,25 @@ class Collection(APIWrapper):
             data['sparse'] = sparse
         return self._add_index(data)
 
+    
+    def add_ttl_index(self, fields, expireAfter=0, inBackground=False):
+            """Create a new ttl index.
+
+            :param fields: Document fields to index.
+            :type fields: [str | unicode]
+            :param expireAfter:  The time (in seconds) after
+            a document's creation after which the documents count as "expired".
+            :type expireAfter: int
+            :param inBackground: Expire Documents in Background.
+            :type inBackground: bool
+            :return: New index details.
+            :rtype: dict
+            :raise c8.exceptions.IndexCreateError: If create fails.
+            """
+            data = {'type': 'ttl', 'fields': fields, 'expireAfter': expireAfter,
+                    'inBackground': inBackground}  
+            return self._add_index(data)
+
     def delete_index(self, index_id, ignore_missing=False):
         """Delete an index.
 
@@ -1328,6 +1319,7 @@ class StandardCollection(Collection):
         :rtype: bool | dict
         :raise c8.exceptions.DocumentInsertError: If insert fails.
         """
+
         document = self._ensure_key_from_id(document)
 
         params = {'returnNew': return_new, 'silent': silent}
@@ -1828,7 +1820,7 @@ class StandardCollection(Collection):
 
         return self._execute(request, response_handler)
 
-    def replace_match(self, filters, body, limit=None, sync=None):
+    def replace_match(self, filters, body, limit=None, sync=None, name=""):
         """Replace matching documents.
 
         :param filters: Document filters.
@@ -1844,8 +1836,12 @@ class StandardCollection(Collection):
         :rtype: int
         :raise c8.exceptions.DocumentReplaceError: If replace fails.
         """
+        if name == "":
+            name = self.name
+        else:
+            name = name
         data = {
-            'collection': self.name,
+            'collection': name,
             'example': filters,
             'newValue': body
         }
@@ -2037,7 +2033,7 @@ class StandardCollection(Collection):
 
         return self._execute(request, response_handler)
 
-    def delete_match(self, filters, limit=None, sync=None):
+    def delete_match(self, filters, limit=None, sync=None, name=""):
         """Delete matching documents.
 
         :param filters: Document filters.
@@ -2051,7 +2047,11 @@ class StandardCollection(Collection):
         :rtype: dict
         :raise c8.exceptions.DocumentDeleteError: If delete fails.
         """
-        data = {'collection': self.name, 'example': filters}
+        if name == "":
+            name = self.name
+        else:
+            name = name
+        data = {'collection': name, 'example': filters}
         if sync is not None:
             data['waitForSync'] = sync
         if limit is not None and limit != 0:
@@ -2229,7 +2229,7 @@ class VertexCollection(Collection):
 
         request = Request(
             method='get',
-            endpoint='/_api/graph/{}/vertex/{}'.format(
+            endpoint='/graph/{}/vertex/{}'.format(
                 self._graph, handle
             ),
             headers=headers,
@@ -2282,7 +2282,7 @@ class VertexCollection(Collection):
 
         request = Request(
             method='post',
-            endpoint='/_api/graph/{}/vertex/{}'.format(
+            endpoint='/graph/{}/vertex/{}'.format(
                 self._graph, self.name
             ),
             data=vertex,
@@ -2350,7 +2350,7 @@ class VertexCollection(Collection):
 
         request = Request(
             method='patch',
-            endpoint='/_api/graph/{}/vertex/{}'.format(
+            endpoint='/graph/{}/vertex/{}'.format(
                 self._graph, vertex_id
             ),
             headers=headers,
@@ -2412,7 +2412,7 @@ class VertexCollection(Collection):
 
         request = Request(
             method='put',
-            endpoint='/_api/graph/{}/vertex/{}'.format(
+            endpoint='/graph/{}/vertex/{}'.format(
                 self._graph, vertex_id
             ),
             headers=headers,
@@ -2480,7 +2480,7 @@ class VertexCollection(Collection):
 
         request = Request(
             method='delete',
-            endpoint='/_api/graph/{}/vertex/{}'.format(
+            endpoint='/graph/{}/vertex/{}'.format(
                 self._graph, handle
             ),
             params=params,
@@ -2560,7 +2560,7 @@ class EdgeCollection(Collection):
 
         request = Request(
             method='get',
-            endpoint='/_api/graph/{}/edge/{}'.format(
+            endpoint='/graph/{}/edge/{}'.format(
                 self._graph, handle
             ),
             headers=headers,
@@ -2616,7 +2616,7 @@ class EdgeCollection(Collection):
 
         request = Request(
             method='post',
-            endpoint='/_api/graph/{}/edge/{}'.format(
+            endpoint='/graph/{}/edge/{}'.format(
                 self._graph, self.name
             ),
             data=edge,
@@ -2684,7 +2684,7 @@ class EdgeCollection(Collection):
 
         request = Request(
             method='patch',
-            endpoint='/_api/graph/{}/edge/{}'.format(
+            endpoint='/graph/{}/edge/{}'.format(
                 self._graph, edge_id
             ),
             headers=headers,
@@ -2747,7 +2747,7 @@ class EdgeCollection(Collection):
 
         request = Request(
             method='put',
-            endpoint='/_api/graph/{}/edge/{}'.format(
+            endpoint='/graph/{}/edge/{}'.format(
                 self._graph, edge_id
             ),
             headers=headers,
@@ -2815,7 +2815,7 @@ class EdgeCollection(Collection):
 
         request = Request(
             method='delete',
-            endpoint='/_api/graph/{}/edge/{}'.format(
+            endpoint='/graph/{}/edge/{}'.format(
                 self._graph, handle
             ),
             params=params,

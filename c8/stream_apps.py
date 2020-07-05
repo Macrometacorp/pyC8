@@ -44,7 +44,7 @@ class StreamApps(APIWrapper):
         }
         req = Request(
             method = "put",
-            endpoint='/_api/streamapps/{}'.format(self.name),
+            endpoint='/streamapps/{}'.format(self.name),
             data=json.dumps(req_body)
         )
         
@@ -66,7 +66,7 @@ class StreamApps(APIWrapper):
 
         req = Request(
             method = "patch",
-            endpoint='/_api/streamapps/{}/active?active={}'.format(self.name, status)
+            endpoint='/streamapps/{}/active?active={}'.format(self.name, status)
         )
         
         def response_handler(resp):
@@ -81,13 +81,12 @@ class StreamApps(APIWrapper):
         """
         req = Request(
             method = "get",
-            endpoint='/_api/streamapps/{}'.format(self.name),
+            endpoint='/streamapps/{}'.format(self.name),
         )
         
         def response_handler(resp):
             if resp.is_success is True:
                 return resp.body["streamApps"]
-            print(resp.body)
             return False
         
         return self._execute(req,response_handler)
@@ -97,7 +96,7 @@ class StreamApps(APIWrapper):
         """
         req = Request(
             method = "delete",
-            endpoint='/_api/streamapps/{}'.format(self.name),
+            endpoint='/streamapps/{}'.format(self.name),
         )
 
         def response_handler(resp):
@@ -120,7 +119,7 @@ class StreamApps(APIWrapper):
         # create request
         req = Request(
             method = "post",
-            endpoint='/_api/streamapps/query/{}'.format(self.name),
+            endpoint='/streamapps/query/{}'.format(self.name),
             data=json.dumps(req_body)
         )
         # create response handler

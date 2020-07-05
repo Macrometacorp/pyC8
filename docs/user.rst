@@ -5,6 +5,35 @@ pyC8 provides operations for managing :doc:`tenant <tenant>` users and permissio
 these operations can only be performed by tenant admins via the ``_system`` tenant fabric.
 
 **Example:**
+The Simple Way
+
+.. testcode::
+
+    from c8 import C8Client
+
+    # Initialize the C8 Data Fabric client.
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
+    print("Has User: ", client.has_user('root'))
+
+    # Get all Users
+    print("Users: ", client.get_users())
+    # Get information about a user
+    print("User: ", client.get_user("root"))
+    # Get User Permissions
+    print("Permissions: ", client.get_permissions("root"))
+    print("Permission: ", client.get_permission("root", "_system"))
+    # Create a User
+    client.create_user(username='testuser', email='test@test.com', password='test',
+                        active=True)
+    print("TestUser: ", client.get_user("testuser"))
+
+    # Update User 
+    client.update_user(username='testuser', password='test',
+                    active=False)
+    # Delete User
+    client.delete_user(username='testuser')
+    
+The Object Oriented Way
 
 .. testcode::
 

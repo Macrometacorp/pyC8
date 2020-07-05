@@ -9,9 +9,6 @@ from c8.executor import (
 )
 
 from c8.exceptions import (
-    TenantDeleteError,
-    TenantCreateError,
-    TenantListError,
     TenantDcListError,
     TenantUpdateError,
     PermissionListError,
@@ -24,7 +21,20 @@ from c8.exceptions import (
     UserListError,
     UserReplaceError,
     UserUpdateError,
-    SpotRegionAssignError
+    SpotRegionAssignError,
+    DataBaseError,
+    GetDataBaseAccessLevel,
+    SetDataBaseAccessLevel,
+    SetCollectionAccessLevel,
+    CollectionAccessLevel,
+    ClearCollectionAccessLevel,
+    ListStreams,
+    StreamAccessLevel,
+    SetStreamAccessLevel,
+    ClearStreamAccessLevel,
+    SetBillingAccessLevel,
+    BillingAcessLevel,
+    ClearBillingAccessLevel
 )
 
 __all__ = ['Tenant']
@@ -71,8 +81,7 @@ class Tenant(APIWrapper):
 
         # We set the temp URL prefix here for the auth call. It is restored
         # below
-        self._conn.set_url_prefix(proto + '//' + rema + '/_tenant/' +
-                                  self.tenant_name)
+        self._conn.set_url_prefix(proto + '//' + rema )
         data = {"tenant": self.tenant_name}
         data['email'] = self._conn._email
         data['password'] = self._conn._auth[1]
@@ -84,9 +93,9 @@ class Tenant(APIWrapper):
 
         def response_handler(resp):
             if not resp.is_success:
-                raise TenantListError
+                raise "Authentication Error"
             if 'jwt' not in resp.body:
-                raise TenantListError
+                raise "Failed to fetch jwt"
             return resp.body['jwt']
 
         tok = self._execute(request, response_handler)
@@ -110,7 +119,7 @@ class Tenant(APIWrapper):
     def useFabric(self, fabric_name):
         conn = self._conn
         conn.set_fabric_name(fabric_name)
-        url_prefix = '{}/_tenant/{}/_fabric/{}'.format(conn.url, conn.tenant_name, conn.fabric_name)
+        url_prefix = '{}/_fabric/{}/_api'.format(conn.url, conn.fabric_name)
         conn.set_url_prefix(url_prefix)
         fabric = StandardFabric(conn)
         return fabric
@@ -118,87 +127,6 @@ class Tenant(APIWrapper):
     #######################
     # Tenant Management #
     #######################
-
-    def tenants(self):
-        """Return the names all tenants.
-
-        :return: Tenant names.
-        :rtype: [str | unicode]
-        :raise c8.exceptions.TenantListError: If retrieval fails.
-        """
-        self.auth_token
-        request = Request(
-            method='get',
-            endpoint='/tenants',
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise TenantListError(resp, request)
-            retval = []
-            for item in resp.body['result']:
-                retval.append(item['tenant'])
-            return retval
-
-        return self._execute(request, response_handler)
-
-    def has_tenant(self, name):
-        """Check if a tenant exists.
-
-        :param name: Tenant name.
-        :type name: str | unicode
-        :return: True if tenant exists, False otherwise.
-        :rtype: bool
-        """
-        return name in self.tenants()
-
-    def create_tenant(self, email, passwd='', dclist=[], extra={}):
-        """Create a new tenant.
-        :param name: Tenant name.
-        :type name: str | unicode
-        :param passwd: What I presume is the tenant admin user password.
-        :type passwd: str
-        :param dclist: comma separated list of region where tenant will be
-                       created. If no value passed tenant will be created
-                       globally.
-        :type dclist: list
-        :param extra: Extra config info.
-        :type extra: dict
-        :return: True if tenant was created successfully.
-        :rtype: bool
-        :raise c8.exceptions.TenantCreateError: If create fails.
-
-        Here is an example entry for parameter **users**:
-        .. code-block:: python
-
-            {
-                'email': 'email'
-                'passwd': 'password',
-                'extra': {'Department': 'IT'}
-            }
-        """
-        name = email.replace('@', "")
-        name = name.replace('.', "")
-        print(name)
-        data = {'name': name}
-        data['email'] = email
-        data['passwd'] = passwd
-        data['extra'] = extra
-        if dclist != '':
-            data['dcList'] = dclist
-
-        request = Request(
-            method='post',
-            endpoint='/tenant',
-            data=data
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise TenantCreateError(resp, request)
-            return True
-
-        return self._execute(request, response_handler)
 
     def update_tenant(self, name, passwd='', extra={}):
         """Update a existing tenant.
@@ -239,30 +167,6 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def delete_tenant(self, name, ignore_missing=False):
-        """Delete the tenant.
-        :param name: Tenant name.
-        :type name: str | unicode
-        :param ignore_missing: Do not raise an exception on missing tenant.
-        :type ignore_missing: bool
-        :return: True if tenant was deleted successfully, False if tenant
-            was not found and **ignore_missing** was set to True.
-        :rtype: bool
-        :raise c8.exceptions.TenantDeleteError: If delete fails.
-        """
-        request = Request(
-            method='delete',
-            endpoint='/tenant/{tenantname}'.format(tenantname=name)
-        )
-
-        def response_handler(resp):
-            if resp.error_code == 1228 and ignore_missing:
-                return False
-            if not resp.is_success:
-                raise TenantDeleteError(resp, request)
-            return resp.body['result']
-
-        return self._execute(request, response_handler)
 
     def dclist(self, detail=False):
         """Return the list of names of Datacenters
@@ -360,7 +264,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_admin/user'
+            endpoint='/user'
         )
 
         def response_handler(resp):
@@ -385,7 +289,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_admin/user/{}'.format(username)
+            endpoint='/user/{}'.format(username)
         )
 
         def response_handler(resp):
@@ -420,7 +324,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_admin/user',
+            endpoint='/user',
             data=data
         )
 
@@ -460,7 +364,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='patch',
-            endpoint='/_admin/user/{user}'.format(user=username),
+            endpoint='/user/{user}'.format(user=username),
             data=data
         )
 
@@ -498,7 +402,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='put',
-            endpoint='/_admin/user/{user}'.format(user=username),
+            endpoint='/user/{user}'.format(user=username),
             data=data
         )
 
@@ -527,7 +431,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/_admin/user/{user}'.format(user=username)
+            endpoint='/user/{user}'.format(user=username)
         )
 
         def response_handler(resp):
@@ -538,6 +442,422 @@ class Tenant(APIWrapper):
             raise UserDeleteError(resp, request)
 
         return self._execute(request, response_handler)
+
+
+    def list_accessible_databases_user(self, username, full=False):
+        """Lists accessible databases for a user.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param full: Return the full set of access levels for all databases 
+                and all collections if set to true.
+        :type full: bool
+        :return:Object containing database details
+        :rtype: list | object
+        :raise c8.exceptions.DataBaseError: If request fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/user/{}/database?full={}'.format(username, full)
+        )
+
+        def response_handler(resp):
+            if resp.is_success:
+               return resp.body['result']
+            raise DataBaseError(resp, request)
+
+        return self._execute(request, response_handler)
+
+
+    def get_database_access_level_user(self, username, databasename=""):
+        """Lists accessible databases for a user.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param databasename: Database name.
+        :type databasename: str | unicode
+        :return: Access Details
+        :rtype:string
+        :raise c8.exceptions.DataBaseError: If request fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/user/{}/database/{}'.format(username, databasename)
+        )
+
+        def response_handler(resp):
+            if resp.is_success:
+               return resp.body['result']
+            raise DataBaseError(resp, request)
+
+        return self._execute(request, response_handler)
+
+
+    def remove_database_access_level_user(self, username, databasename=""):
+        """Lists accessible databases for a user.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param databasename: Database name.
+        :type databasename: str | unicode
+        :return:Object containing database details
+        :rtype: object
+        :raise c8.exceptions.DataBaseError: If request fails.
+        """
+        request = Request(
+            method='delete',
+            endpoint='/user/{}/database/{}'.format(username, databasename),
+        )
+
+        def response_handler(resp):
+            if resp.is_success:
+               return resp.body
+            raise DataBaseError(resp, request)
+
+        return self._execute(request, response_handler)
+
+    def set_database_access_level_user(self, username, databasename="", grant='ro'):
+        """Lists accessible databases for a user.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param databasename: Database name.
+        :type databasename: str | unicode
+        :param grant: Grant accesslevel.
+                    Use "rw" to set the database access level to Administrate .
+                    Use "ro" to set the database access level to Access.
+                    Use "none" to set the database access level to No access.
+        :type grant: string
+        :return:Object containing database details
+        :rtype: object
+        :raise c8.exceptions.DataBaseError: If request fails.
+        """
+        request = Request(
+            method='put',
+            endpoint='/user/{}/database/{}'.format(username, databasename),
+            data={
+                "grant": grant
+            }
+        )
+
+        def response_handler(resp):
+            if resp.is_success:
+               return resp.body
+            raise DataBaseError(resp, request)
+
+        return self._execute(request, response_handler)
+
+
+    def get_collection_access_level_user(self, username, collection_name, databasename='_system'):
+        """Fetch the collection access level for a specific collection in a database.
+
+        :param collection_name: Name of the collection
+        :type collection_name: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :return: AccessLevel of a db.
+        :rtype: string
+        :raise c8.exceptions.CollectionAccessLevel: If request fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/user/{}/database/{}/collection/{}'.format(username,
+                                                                     databasename,
+                                                                     collection_name),
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise CollectionAccessLevel(resp, request)
+            else:
+                return resp.body['result']
+                
+        return self._execute(request, response_handler)
+
+    
+    def set_collection_access_level_user(self, username, collection_name, databasename='_system',
+                                     grant='ro'):
+       
+        """Set the collection access level for a specific collection in a database.
+
+        :param collection_name: Name of the collection
+        :type collection_name: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :param grant   : Use "rw" to set the database access level to Administrate .
+                         Use "ro" to set the database access level to Access.
+                         Use "none" to set the database access level to No access.
+        :type grant: string
+        :return: Accesslevel of a particular db.
+        :rtype: Object
+        :raise c8.exceptions.SetCollectionAccessLevel: If request fails.
+        """
+        request = Request(
+            method='put',
+            endpoint='/user/{}/database/{}/collection/{}'.format(username,
+                                                                     databasename,
+                                                                     collection_name),
+            data={
+                "grant": grant
+            }
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise SetCollectionAccessLevel(resp, request)
+            else:
+                return resp.body
+                
+        return self._execute(request, response_handler)
+
+    
+    def clear_collection_access_level_user(self, username, collection_name, databasename='_system'):
+       
+        """Clear the collection access level for a specific collection in a database.
+
+        :param collection_name: Name of the collection
+        :type collection_name: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :return: True if operation successful.
+        :rtype: booleaan
+        :raise c8.exceptions.ClearCollectionAccessLevel: If request fails.
+        """
+        request = Request(
+            method='delete',
+            endpoint='/user/{}/database/{}/collection/{}'.format(username,
+                                                                 databasename,
+                                                                 collection_name),
+           
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise ClearCollectionAccessLevel(resp, request)
+            else:
+                if resp.body['error'] is False:
+                    return True
+                elif resp.body['error'] is True:
+                    return False
+                
+        return self._execute(request, response_handler)
+
+
+
+    def list_accessible_streams_user(self, username, databasename='_system', full=False):
+        """Fetch the list of streams available to the specified keyid.
+ 
+        :param databasename: Name of the database
+        :type databasename: string
+        :param full: Return the full set of access levels for all streams.
+        :type full: boolean
+        :return: List of available databases.
+        :rtype: list
+        :raise c8.exceptions.ListStreams: If request fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/user/{}/database/{}/stream?full={}'.format(username,
+                                                                      databasename,
+                                                                      full),
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise ListStreams(resp, request)
+            else:
+                return resp.body['result']
+                
+        return self._execute(request, response_handler)
+
+    
+    def get_stream_access_level_user(self, username, streamname, databasename='_system', local=False):
+        """Fetch the database access level for a specific stream.
+
+        :param streamname: Name of the stream
+        :type streamname: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :return: AccessLevel of a db.
+        :rtype: string
+        :raise c8.exceptions.StreamAccessLevel: If request fails.
+        """
+        if local is False:
+            url = '/user/{}/database/{}/stream/{}?global=True'.format(username,
+                                                                 databasename,
+                                                                 streamname)
+        elif local is True:
+            url = '/user/{}/database/{}/stream/{}?global=False'.format(username,
+                                                                 databasename,
+                                                                 streamname)
+        request = Request(
+            method='get',
+            endpoint=url
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise StreamAccessLevel(resp, request)
+            else:
+                return resp.body['result']
+                
+        return self._execute(request, response_handler)
+
+    
+    def set_stream_access_level_user(self, username, streamname, databasename='_system', grant='ro', local=False):
+       
+        """Set the database access level for a specific stream.
+
+        :param streamname: Name of the stream
+        :type streamname: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :param grant   : Use "rw" to set the database access level to Administrate .
+                         Use "ro" to set the database access level to Access.
+                         Use "none" to set the database access level to No access.
+        :type grant: string
+        :return: Accesslevel of a particular db.
+        :rtype: Object
+        :raise c8.exceptions.SetStreamAccessLevel: If request fails.
+        """
+        if local is False:
+            url = '/user/{}/database/{}/stream/{}?global=True'.format(username,
+                                                                 databasename,
+                                                                 streamname)
+        elif local is True:
+            url = '/user/{}/database/{}/stream/{}?global=False'.format(username,
+                                                                 databasename,
+                                                                 streamname)
+
+        request = Request(
+            method='put',
+            endpoint=url,
+            data={
+                "grant": grant
+            }
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise SetStreamAccessLevel(resp, request)
+            else:
+                return resp.body
+                
+        return self._execute(request, response_handler)
+
+    
+    def clear_stream_access_level_user(self, username, streamname, databasename='_system', local=False):
+       
+        """Clear the database access level for a specific stream.
+
+        :param streamname: Name of the stream
+        :type streamname: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :return: True if operation successful.
+        :rtype: booleaan
+        :raise c8.exceptions.ClearStreamAccessLevel: If request fails.
+        """
+
+        if local is False:
+            url = '/user/{}/database/{}/stream/{}?global=True'.format(username,
+                                                                 databasename,
+                                                                 streamname)
+        elif local is True:
+            url = '/user/{}/database/{}/stream/{}?global=False'.format(username,
+                                                                 databasename,
+                                                                 streamname)
+
+        request = Request(
+            method='delete',
+            endpoint=url
+           
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise ClearStreamAccessLevel(resp, request)
+            else:
+                if resp.body['error'] is False:
+                    return True
+                elif resp.body['error'] is True:
+                    return False
+                
+        return self._execute(request, response_handler)
+
+
+    def get_billing_access_level_user(self, username):
+        """Fetch the billing access level.
+
+        :return: AccessLevel of billing.
+        :rtype: string
+        :raise c8.exceptions.BillingAccessLevel: If request fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/user/{}/billing'.format(username),
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise BillingAcessLevel(resp, request)
+            else:
+                return resp.body['result']
+                
+        return self._execute(request, response_handler)
+
+    
+    def set_billing_access_level(self, username, grant='ro'):
+       
+        """Set the collection access level for billing.
+
+        :param grant   : Use "rw" to set the database access level to Administrate .
+                         Use "ro" to set the database access level to Access.
+                         Use "none" to set the database access level to No access.
+        :type grant: string
+        :return: Accesslevel of a particular db.
+        :rtype: Object
+        :raise c8.exceptions.SetBillingAccessLevel: If request fails.
+        """
+        request = Request(
+            method='put',
+            endpoint='/user/{}/billing'.format(username),
+            data={
+                "grant": grant
+            }
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise SetBillingAccessLevel(resp, request)
+            else:
+                return resp.body
+                
+        return self._execute(request, response_handler)
+
+    
+    def clear_billing_access_level(self, username):
+       
+        """Clear the billing access level.
+
+        :return: True if operation successful.
+        :rtype: booleaan
+        :raise c8.exceptions.ClearBillingAccessLevel: If request fails.
+        """
+        request = Request(
+            method='delete',
+            endpoint='/user/{}/billing'.format(username),
+           
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise ClearBillingAccessLevel(resp, request)
+            else:
+                return resp.body
+                
+        return self._execute(request, response_handler)
+
 
     #########################
     # Permission Management #
@@ -554,7 +874,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_admin/user/{}/database'.format(username),
+            endpoint='/user/{}/database'.format(username),
             params={'full': True}
         )
 
@@ -578,7 +898,7 @@ class Tenant(APIWrapper):
         :rtype: str | unicode
         :raise: c8.exceptions.PermissionGetError: If retrieval fails.
         """
-        endpoint = '/_admin/user/{}/database/{}'.format(username, fabric)
+        endpoint = '/user/{}/database/{}'.format(username, fabric)
         if collection is not None:
             endpoint += '/' + collection
         request = Request(method='get', endpoint=endpoint)
@@ -610,7 +930,7 @@ class Tenant(APIWrapper):
         :rtype: bool
         :raise c8.exceptions.PermissionUpdateError: If update fails.
         """
-        endpoint = '/_admin/user/{}/database/{}'.format(username, fabric)
+        endpoint = '/user/{}/database/{}'.format(username, fabric)
         if collection is not None:
             endpoint += '/' + collection
 
@@ -640,7 +960,7 @@ class Tenant(APIWrapper):
         :rtype: bool
         :raise c8.exceptions.PermissionRestError: If reset fails.
         """
-        endpoint = '/_admin/user/{}/database/{}'.format(username, fabric)
+        endpoint = '/user/{}/database/{}'.format(username, fabric)
         if collection is not None:
             endpoint += '/' + collection
 

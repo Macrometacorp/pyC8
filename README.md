@@ -27,96 +27,94 @@ To install locally,
 
 ### Getting Started
 
+The driver allows you to use three ways for authentication:-
+
+1. Using the email id and password
+
+```python
+  
+  # Auth email password
+  client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
+   email="guest@macrometa.io", password="guest")
+```
+
+2. Using jwt
+
+
+3. Using apikey
+
+
 Here is an overview example:
 
 ```python
-   from c8 import C8Client
-   import time
-   import warnings
-   warnings.filterwarnings("ignore")
 
-   region = "gdn1.macrometa.io"
-   demo_tenant = "demo@macrometa.io"
-   demo_fabric = "demofabric"
-   demo_user = "demouser@macrometa.io"
-   demo_user_name = "demouser"
-   demo_collection = "employees"
-   demo_stream = "demostream"
+    from c8 import C8Client
+    import time
+    import warnings
+    warnings.filterwarnings("ignore")
+    region = "gdn1.macrometa.io"
+    demo_tenant = "guest@macrometa.io"
+    demo_fabric = "_system"
+    demo_user = "guest@macrometa.io"
+    demo_user_name = "root"
+    demo_collection = "employees"
+    demo_stream = "demostream"
+    collname = "employees"
+    #--------------------------------------------------------------
+    print("Create C8Client Connection...")
+    client = C8Client(protocol='https', host=region, port=443,
+                         email=demo_tenant, password='guest',
+                         geofabric=demo_fabric)
 
-   #--------------------------------------------------------------
-   print("Create C8Client Connection...")
-   client = C8Client(protocol='https', host=region, port=443)
+    #--------------------------------------------------------------
+    print("Create Collection and insert documents")
 
-   #--------------------------------------------------------------
-   print("Create under demotenant, demofabric, demouser and assign permissions...")
-   demotenant = client.tenant(email=demo_tenant, password='demo')
-   fabric = demotenant.useFabric("_system")
+    if client.has_collection(collname):
+      print("Collection exists")
+    else:
+      client.create_collection(name=collname)
 
-   if not demotenant.has_user(demo_user):
-     demotenant.create_user(username=demo_user_name, email=demo_user, password='demouser', active=True)
+    # List all Collections
+    coll_list = client.get_collections()
+    print(coll_list)
 
-   if not fabric.has_fabric(demo_fabric):
-     fabric.create_fabric(name=demo_fabric, dclist=demotenant.dclist(detail=False))
-  
-   demotenant.update_permission(username=demo_user_name, permission='rw', fabric=demo_fabric)
+    # Get Collecion Handle and Insert
+    coll = client.get_collection(collname)
+    coll.insert({'firstname': 'John', 'lastname':'Berley', 'email':'john.berley@macrometa.io'})
 
-   #--------------------------------------------------------------
-   print("Create and populate employees collection in demofabric...")
-   fabric = demotenant.useFabric(demo_fabric)
-   #get fabric detail
-   fabric.fabrics_detail()
-   employees = fabric.create_collection('employees') # Create a new collection named "employees".
-   employees.add_hash_index(fields=['email'], unique=True) # Add a hash index to the collection.
+    # insert document
+    client.insert_document(collection_name=collname, document={'firstname': 'Jean', 'lastname':'Picard',    'email':'jean.picard@macrometa.io'})
+    doc = client.get_document(collname, "John" )
+    print(doc)
 
-   employees.insert({'firstname': 'Jean', 'lastname':'Picard', 'email':'jean.picard@macrometa.io'})
-   employees.insert({'firstname': 'James', 'lastname':'Kirk', 'email':'james.kirk@macrometa.io'})
-   employees.insert({'firstname': 'Han', 'lastname':'Solo', 'email':'han.solo@macrometa.io'})
-   employees.insert({'firstname': 'Bruce', 'lastname':'Wayne', 'email':'bruce.wayne@macrometa.io'})
+    # insert multiple documents
+    docs = [
+        {'firstname': 'James', 'lastname':'Kirk', 'email':'james.kirk@macrometa.io'},
+        {'firstname': 'Han', 'lastname':'Solo', 'email':'han.solo@macrometa.io'},
+        {'firstname': 'Bruce', 'lastname':'Wayne', 'email':'bruce.wayne@macrometa.io'}
+    ]
 
-   # insert data from a CSV file
-   # path to csv file should be an absolute path
-   employees.insert_from_file("~/data.csv")
+    client.insert_document(collection_name=collname, document=docs)
 
-   #--------------------------------------------------------------
-   print("query employees collection...")
-   cursor = fabric.c8ql.execute('FOR employee IN employees RETURN employee') # Execute a C8QL query
-   docs = [document for document in cursor]
-   print(docs)
+    # insert documents from file
+    client.insert_document_from_file(collection_name=collname, csv_filepath="/home/guest/test.csv")
 
-   #--------------------------------------------------------------
-   print("Create global & local streams in demofabric...")
-   fabric.create_stream(demo_stream, local=False)
-   fabric.create_stream(demo_stream, local=True)
+    # Add a hash Index
+    client.add_hash_index(collname, fields=['email'], unique=True)
 
-   streams = fabric.streams()
-   print("streams:", streams)
+    #--------------------------------------------------------------
 
-   #--------------------------------------------------------------
+    # Query a collection
+    print("query employees collection...")
+    query = 'FOR employee IN employees RETURN employee'
+    cursor = client.execute_query(query)
+    docs = [document for document in cursor]
+    print(docs)
 
-```
-
-Example to **query** a given fabric:
-
-```python
-
-  from c8 import C8Client
-  import json
-  import warnings
-  warnings.filterwarnings("ignore")
-
-   region = "gdn1.macrometa.io"
-   demo_tenant = "demo@macrometa.io"
-   demo_fabric = "demofabric"
-   demo_user = "demouser@macrometa.io"
-   demo_user_name = "demouser"
-  #--------------------------------------------------------------
-  print("query employees collection...")
-  client = C8Client(protocol='https', host=region, port=443)
-  demotenant = client.tenant(email=demo_tenant, password='demo')
-  fabric = demotenant.useFabric("demofabric")
-  cursor = fabric.c8ql.execute('FOR employee IN employees RETURN employee') # Execute a C8QL query
-  docs = [document for document in cursor]
-  print(docs)
+    #--------------------------------------------------------------
+    print("Delete Collection...")
+    # Delete Collection
+    client.delete_collection(name=collname)
 
 ```
 
@@ -125,24 +123,29 @@ Example for **real-time updates** from a collection in fabric:
 ```python
 
   from c8 import C8Client
+  import time
   import warnings
   warnings.filterwarnings("ignore")
-
   region = "gdn1.macrometa.io"
-  demo_tenant = "demo@macrometa.io"
-  demo_fabric = "demofabric"
-  demo_user = "demouser@macrometa.io"
-  demo_user_name = "demouser"
-  
-  def callback_fn(event):
-      print(event)
+  demo_tenant = "guest@macrometa.io"
+  demo_fabric = "_system"
+  demo_user = "guest@macrometa.io"
+  demo_user_name = "root"
+  demo_collection = "employees"
+  demo_stream = "demostream"
+  collname = "democollection"
+  #--------------------------------------------------------------
+  print("Create C8Client Connection...")
+  client = C8Client(protocol='https', host=region, port=443,
+                       email=demo_tenant, password='guest',
+                       geofabric=demo_fabric)
 
   #--------------------------------------------------------------
-  print("Subscribe to employees collection...")
-  client = C8Client(protocol='https', host=region, port=443)
-  demotenant = client.tenant(email=demo_tenant, password='demo')
-  fabric = demotenant.useFabric(demo_fabric)
-  fabric.on_change("employees", callback=callback_fn)
+  def callback_fn(event):
+       print(event)
+   #--------------------------------------------------------------
+  client.on_change("employees", callback=callback_fn)
+
 
 ```
 
@@ -159,25 +162,23 @@ Example to **publish** documents to a stream:
   warnings.filterwarnings("ignore")
 
   region = "gdn1.macrometa.io"
-  demo_tenant = "demo@macrometa.io"
-  demo_fabric = "demofabric"
-  demo_user = "demouser@macrometa.io"
-  demo_user_name = "demouser"
+  demo_tenant = "guest@macrometa.io"
+  demo_fabric = "_system"
+  stream = "demostream
   #--------------------------------------------------------------
   print("publish messages to stream...")
-  client = C8Client(protocol='https', host=region, port=443)
-  demotenant = client.tenant(email=demo_tenant, password='demo')
-  fabric = demotenant.useFabric(demo_fabric)
-  stream = fabric.stream()
-  producer = stream.create_producer("demostream", local=False)
+  client = C8Client(protocol='https', host=region, port=443,
+                       email=demo_tenant, password='guest',
+                       geofabric=demo_fabric)
+
+  producer = client.create_stream_producer(stream)
+
   for i in range(10):
-      msg = "Hello from " + region + "("+ str(i) +")"
-      payload = {
-            "payload": base64.b64encode(
-                six.b(msg)
-                ).decode("utf-8")
-        }
-      producer.send(json.dumps(payload))
+      msg1 = "Persistent: Hello from " + "("+ str(i) +")"
+      data = {
+        "payload" : base64.b64encode(six.b(msg1)).decode("utf-8")
+      }
+      producer.send(json.dumps(data))
       time.sleep(10) # 10 sec
 
 ```
@@ -186,73 +187,167 @@ Example to **subscribe** documents from a stream:
 
 ```python
 
-   from c8 import C8Client
-   import json
-   import base64
-   import warnings
-   warnings.filterwarnings("ignore")
+  from c8 import C8Client
+  import time
+  import base64
+  import six
+  import json
+  import warnings
+  warnings.filterwarnings("ignore")
 
-   region = "gdn1.macrometa.io"
-   demo_tenant = "demo@macrometa.io"
-   demo_fabric = "demofabric"
-   demo_user = "demouser@macrometa.io"
-   demo_user_name = "demouser"
-   #--------------------------------------------------------------
-   print("consume messages from stream...")
-   client = C8Client(protocol='https', host=region, port=443)
-   demotenant = client.tenant(email=demo_tenant, password='demo')
-   fabric = demotenant.useFabric(demo_fabric)
-   stream = fabric.stream()
-   #you can subscribe using consumer_types option.
-   subscriber = stream.subscribe("demostream", local=False, subscription_name="demosub", consumer_type= stream.CONSUMER_TYPES.EXCLUSIVE)
-   for i in range(10):
-       msg = json.dumps(subscriber.recv())
-       string_msg = base64.b64decode(msg['payload'])
-       msgId = msg['messageId']
-       print("Received message '{}' id='{}'".format(string_msg, msgId)
-       subscriber.send(json.dumps({'messageId': msgId}))
+  region = "gdn1.macrometa.io"
+  demo_tenant = "guest@macrometa.io"
+  demo_fabric = "_system"
+  stream = "demostream"
+  #--------------------------------------------------------------
+  print("publish messages to stream...")
+  client = C8Client(protocol='https', host=region, port=443,
+                       email=demo_tenant, password='guest',
+                       geofabric=demo_fabric)
+
+
+  subscriber = client.subscribe(stream=stream, local=False, subscription_name="test-subscription-1")
+  for i in range(10):
+      print("In ",i)
+      m1 = json.loads(subscriber.recv())  #Listen on stream for any receiving msg's
+      msg1 = base64.b64decode(m1["payload"])
+      print("Received message '{}' id='{}'".format(msg1, m1["messageId"])) #Print the received msg over   stream
+      subscriber.send(json.dumps({'messageId': m1['messageId']}))#Acknowledge the received msg.
+
+  print(client.get_stream_subscriptions(stream=stream, local=False))
+
+  print(client.get_stream_backlog(stream=stream, local=False))
 
 ```
 
 Example: **stream management**:
 
 ```python
+  from c8 import C8Client
+  import time
+  import warnings
+  warnings.filterwarnings("ignore")
 
-    stream_collection = fabric.stream()
-    #get_stream_stats
-    stream_collection.get_stream_stats('demostream', local=False) #for global persistent stream
+  region = "gdn1.macrometa.io"
+  demo_tenant = "guest@macrometa.io"
+  demo_fabric = "_system"
+  stream = "demostream"
+  #--------------------------------------------------------------
+  print("publish messages to stream...")
+  client = C8Client(protocol='https', host=region, port=443,
+                       email=demo_tenant, password='guest',
+                       geofabric=demo_fabric)
+  
+  #get_stream_stats
+  print("Stream Stats: ", client.get_stream_stats(stream))
 
-    #Skip all messages on a stream subscription
-    stream_collection.skip_all_messages_for_subscription('demostream', 'demosub')
+  print(client.get_stream_subscriptions(stream=stream, local=False))
 
-    #Skip num messages on a topic subscription
-    stream_collection.skip_messages_for_subscription('demostream', 'demosub', 10)
+  print(client.get_stream_backlog(stream=stream, local=False))
 
-    #Expire messages for a given subscription of a stream.
-    #expire time is in seconds
-    stream_collection.expire_messages_for_subscription('demostream', 'demosub', 2)
+  #print(client.clear_stream_backlog(subscription="test-subscription-1"))
+  print(client.clear_streams_backlog())
+    
+```
+    
+Advanced operations can be done using the `sream_colleciton` class.
 
-    #Expire messages on all subscriptions of stream
-    stream_collection.expire_messages_for_subscriptions('demostream',2)
+```python
+   
+   from c8 import C8Client
+   import warnings
+   warnings.filterwarnings("ignore")
 
-    #Reset subscription to message position to closest timestamp
-    #time is in milli-seconds
-    stream_collection.reset_message_subscription_by_timestamp('demostream','demosub', 5)
+   region = "gdn1.macrometa.io"
+   demo_tenant = "guest@macrometa.io"
+   demo_fabric = "_system"
 
-    #Reset subscription to message position closest to given position
-    #stream_collection.reset_message_for_subscription('demostream', 'demosub')
+   #--------------------------------------------------------------
+   print("consume messages from stream...")
+   client = C8Client(protocol='https', host=region, port=443)
+   demotenant = client.tenant(email=demo_tenant, password='guest')
+   fabric = demotenant.useFabric(demo_fabric)
+   stream = fabric.stream()
+    
+   #Skip all messages on a stream subscription
+   stream_collection.skip_all_messages_for_subscription('demostream', 'demosub')
 
-    #stream_collection.reset_message_subscription_by_position('demostream','demosub', 4)
+   #Skip num messages on a topic subscription
+   stream_collection.skip_messages_for_subscription('demostream', 'demosub', 10) 
+   #Expire messages for a given subscription of a stream.
+   #expire time is in seconds
+   stream_collection.expire_messages_for_subscription('demostream', 'demosub', 2) 
+   #Expire messages on all subscriptions of stream
+   stream_collection.expire_messages_for_subscriptions('demostream',2) 
+   #Reset subscription to message position to closest timestamp
+   #time is in milli-seconds
+   stream_collection.reset_message_subscription_by_timestamp('demostream','demosub', 5) 
+   #Reset subscription to message position closest to given position
+   #stream_collection.reset_message_for_subscription('demostream', 'demosub') 
+   #stream_collection.reset_message_subscription_by_position('demostream','demosub', 4) 
+   #Unsubscribes the given subscription on all streams on a stream fabric
+   stream_collection.unsubscribe('demosub') 
+   #delete subscription of a stream
+   #stream_collection.delete_stream_subscription('demostream', 'demosub' , local=False) 
+```
 
-    #Unsubscribes the given subscription on all streams on a stream fabric
-    stream_collection.unsubscribe('demosub')
+Example for **restql** operations:
 
-    #delete subscription of a stream
-    #stream_collection.delete_stream_subscription('demostream', 'demosub' , local=False)
+``` python
+  from c8 import C8Client
+  import json
+  import warnings
+  warnings.filterwarnings("ignore")
+  region = "gdn1.macrometa.io"
+  demo_tenant = "guest@macrometa.io"
+  demo_fabric = "_system"
 
+  #--------------------------------------------------------------
+  client = C8Client(protocol='https', host=region, port=443,
+                       email=demo_tenant, password='guest',
+                       geofabric=demo_fabric)
+
+  #--------------------------------------------------------------
+  print("save restql...")
+  data = {
+    "query": {
+      "parameter": {},
+      "name": "demo",
+      "value": "FOR employee IN employees RETURN employee"
+    }
+  }
+  response = client.create_restql(data)
+  #--------------------------------------------------------------
+  print("execute restql without bindVars...")
+  response = client.execute_restql("demo")
+  print("Execute: ", response)  
+  #--------------------------------------------------------------
+  # Update restql
+  data = {
+        "query": {
+            "parameter": {},
+            "value": "FOR employee IN employees Filter doc.firstname=@name RETURN employee"
+        }
+    }
+  response = client.update_restql("demo", data)
+  
+  #--------------------------------------------------------------
+
+  print("execute restql with bindVars...")
+  response = fabric.execute_restql("demo",
+                                   {"bindVars": {"name": "Bruce"}})
+  #--------------------------------------------------------------
+  print("get all restql...")
+  response = fabric.get_all_restql()
+  #--------------------------------------------------------------
+  
+  print("delete restql...")
+  response = fabric.delete_restql("demo")
 ```
 
 Workflow of **Spot Collections**
+
+spot collections can be assigned or updated using the `tenant` class.
 
 ```python
 
@@ -286,50 +381,4 @@ spot_collection = fabric.create_collection('spot-collection', spot_collection=Tr
 sys_fabric = client.fabric(tenant=macrometa-admin, name='_system', username='root', password=macrometa-password)
 sys_fabric.update_spot_region('guest', 'spot-geo-fabric', 'REGION-2')
 
-```
-
-Example for **restql** operations:
-
-``` python
-  from c8 import C8Client
-  import json
-  import warnings
-  warnings.filterwarnings("ignore")
-
-  client = C8Client(protocol='https', host=region, port=443)
-  demotenant = client.tenant(email='demo@macrometa.io', password='demo')
-  fabric = demotenant.useFabric('_system')
-
-  #--------------------------------------------------------------
-  print("save restql...")
-  data = {
-    "query": {
-      "parameter": {},
-      "name": "demo",
-      "value": "FOR employee IN employees RETURN employee"
-    }
-  }
-  response = fabric.save_restql(data)
-  #--------------------------------------------------------------
-  print("execute restql without bindVars...")
-  response = fabric.execute_restql("demo")
-  #--------------------------------------------------------------
-  print("execute restql with bindVars...")
-  response = fabric.execute_restql("demo",
-                                   {"bindVars": {"name": "guest.root"}})
-  #--------------------------------------------------------------
-  print("get all restql...")
-  response = fabric.get_all_restql()
-  #--------------------------------------------------------------
-  print("update restql...")
-  data = {
-    "query": {
-      "parameter": {},
-      "value": "FOR employee IN employees Filter doc.name=@name RETURN employee"
-    }
-  }
-  response = fabric.update_restql("demo", data)
-  #--------------------------------------------------------------
-  print("delete restql...")
-  response = fabric.delete_restql("demo")
 ```

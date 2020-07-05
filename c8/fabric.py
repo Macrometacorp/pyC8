@@ -7,8 +7,10 @@ import websocket
 
 from c8.api import APIWrapper
 from c8.c8ql import C8QL
+from c8.keyvalue import KV
 from c8.collection import StandardCollection
 from c8.stream_apps import StreamApps
+from c8.apikeys import APIKeys
 from c8 import constants
 from c8.exceptions import (
     CollectionCreateError,
@@ -36,14 +38,11 @@ from c8.exceptions import (
     RestqlUpdateError,
     RestqlDeleteError,
     RestqlExecuteError,
-    PipelineCreateError,
-    PipelineGetError,
-    PipelineUpdateError,
-    PipelineDeleteError,
     EventCreateError,
     EventDeleteError,
     EventGetError,
-    StreamAppGetSampleError
+    StreamAppGetSampleError,
+    GetAPIKeys
 )
 from c8.executor import (
     DefaultExecutor,
@@ -120,6 +119,16 @@ class Fabric(APIWrapper):
         :rtype: c8.c8ql.C8QL
         """
         return C8QL(self._conn, self._executor)
+
+    @property
+    def key_value(self):
+        """Return KV (Key Value) API wrapper.
+
+        :return: KV API wrapper.
+        :rtype: c8.keyvalue.KV
+        """
+        return KV(self._conn, self._executor)
+
 
     def on_change(self, collection, callback=printdata):
         """Execute given input function on receiving a change.
@@ -279,8 +288,8 @@ class Fabric(APIWrapper):
         """
 
         request = Request(method='put',
-                          endpoint='_tenant/{}/_fabric/{}/database/{}'.format(
-                              tenant, fabric, new_dc))
+                          endpoint='_fabric/{}/database/{}'.format(
+                          fabric, new_dc))
 
         def response_handler(resp):
             if not resp.is_success:
@@ -314,7 +323,7 @@ class Fabric(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/_admin/version',
+            endpoint='/version',
             params={'details': False}
         )
 
@@ -769,7 +778,7 @@ class Fabric(APIWrapper):
         :rtype: [dict]
         :raise c8.exceptions.GraphListError: If retrieval fails.
         """
-        request = Request(method='get', endpoint='/_api/graph')
+        request = Request(method='get', endpoint='/graph')
 
         def response_handler(resp):
             if not resp.is_success:
@@ -845,7 +854,7 @@ class Fabric(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/_api/graph',
+            endpoint='/graph',
             data=data
         )
 
@@ -877,7 +886,7 @@ class Fabric(APIWrapper):
 
         request = Request(
             method='delete',
-            endpoint='/_api/graph/{}'.format(name),
+            endpoint='/graph/{}'.format(name),
             params=params
         )
 
@@ -1265,167 +1274,6 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    #######################
-    # Pipeline Management #
-    #######################
-
-    def create_pipeline(self, payload):
-        """Create single C8 pipeline.
-
-        :param payload: Payload to create pipeline
-        :type payload: dict
-        :return: True if pipeline is created successfully
-        :rtype: bool
-        :raise c8.exceptions.PipelineCreateError: if pipeline creation failed
-
-        Here is an example entry for parameter **payload**:
-
-        .. code-block:: python
-            {
-                "name": "pipeline1",
-                "regions": [
-                    "asia-south1",
-                    "europe-west4",
-                    "us-west1"
-                ],
-                "enabled": true,
-                "config": {
-                    "input": {
-                        "type": "c8db",
-                        "c8db": {
-                            "name": "collection_name"
-                        }
-                    },
-                    "output": {
-                        "type": "c8streams",
-                        "c8streams": {
-                            "name": "stream_name",
-                            "local": true
-                        }
-                    }
-                }
-            }
-        """
-        request = Request(method="post", endpoint="/pipeline", data=payload)
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise PipelineCreateError(resp, request)
-            return True
-
-        return self._execute(request, response_handler)
-
-    def has_pipeline(self, name):
-        """Check if pipeline with given name is created or not.
-
-        :param name: Name of pipeline
-        :type name: str
-        :return: True if pipeline is present
-        :rtype: bool
-        """
-        return any(pipeline["name"] == name
-                   for pipeline in self.get_all_pipelines()["result"])
-
-    def get_pipeline(self, name):
-        """Get C8 pipeline details by name.
-
-        :param name: pipeline name
-        :type name: str | unicode
-        :return: Details of pipeline
-        :rtype: dict
-        :raise c8.exceptions.PipelineGetError: if getting pipeline failed
-        """
-        request = Request(method="get", endpoint="/pipeline/" + name)
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise PipelineGetError(resp, request)
-            return resp.body
-
-        return self._execute(request, response_handler)
-
-    def get_all_pipelines(self):
-        """Get all pipeline details.
-
-        :return: Details of pipelines
-        :rtype: list
-        :raise c8.exceptions.PipelineGetError: if getting pipeline failed
-        """
-        request = Request(method="get", endpoint="/pipelines")
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise PipelineGetError(resp, request)
-            return resp.body
-
-        return self._execute(request, response_handler)
-
-    def update_pipeline(self, name, payload):
-        """Update C8 pipeline.
-
-        :param name: Name of the pipeline
-        :type name: str
-        :param payload: Payload to update pipeline
-        :type payload: dict
-        :return: True if pipeline is created successfully
-        :rtype: bool
-        :raise c8.exceptions.PipelineCreateError: if pipeline creation failed
-
-        Here is an example entry for parameter **payload**:
-
-        .. code-block:: python
-            {
-                "regions": [
-                    "asia-south1",
-                    "europe-west4",
-                    "us-west1"
-                ],
-                "enabled": true,
-                "config": {
-                    "input": {
-                        "type": "c8db",
-                        "c8db": {
-                            "name": "collection_name"
-                        }
-                    },
-                    "output": {
-                        "type": "c8streams",
-                        "c8streams": {
-                            "name": "stream_name",
-                            "local": true
-                        }
-                    }
-                }
-            }
-        """
-        request = Request(method="put", endpoint="/pipeline/" + name,
-                          data=payload)
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise PipelineUpdateError(resp, request)
-            return True
-
-        return self._execute(request, response_handler)
-
-    def delete_pipeline(self, name):
-        """Delete C8 pipeline.
-
-        :param name: pipeline name
-        :type name: str | unicode
-        :return: True if pipeline deletion is successful else False
-        :rtype: bool
-        :raise c8.exceptions.PipelineDeleteError: if deleting pipeline failed
-        """
-        request = Request(method="delete", endpoint="/pipeline/" + name)
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise PipelineDeleteError(resp, request)
-            return True
-
-        return self._execute(request, response_handler)
-
     ########################
     # Events #
     ########################
@@ -1433,7 +1281,7 @@ class Fabric(APIWrapper):
     def create_event(self, payload):
         """Create an event.
 
-        :param payload: Payload to create pipeline
+        :param payload: Payload to create event
         :type payload: dict
         :return:  Dictionary containing the event id
         :rtype: dict
@@ -1517,8 +1365,10 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)     
 
-    # streamApps fabric apis
-    
+    ########################
+    # Stream Apps #
+    ########################
+
     def stream_app(self,name):
         return StreamApps(self._conn, self._executor, name)
 
@@ -1529,7 +1379,7 @@ class Fabric(APIWrapper):
         body = {"definition": data}
         req = Request(
             method = "post",
-            endpoint='/_api/streamapps/validate',
+            endpoint='/streamapps/validate',
             data=json.dumps(body)
         )
         
@@ -1546,7 +1396,7 @@ class Fabric(APIWrapper):
         """
         req = Request(
             method = "get",
-            endpoint='/_api/streamapps',
+            endpoint='/streamapps',
         )
         
         def response_handler(resp):
@@ -1562,7 +1412,7 @@ class Fabric(APIWrapper):
         """
         req = Request(
             method = "get",
-            endpoint='/_api/streamapps/samples',
+            endpoint='/streamapps/samples',
         )
         
         def response_handler(resp):
@@ -1586,7 +1436,7 @@ class Fabric(APIWrapper):
         # create request
         req = Request(
             method = "post",
-            endpoint='/_api/streamapps',
+            endpoint='/streamapps',
             data=json.dumps(req_body)
         )
         # create response handler
@@ -1597,7 +1447,42 @@ class Fabric(APIWrapper):
             print(resp.body)
             return False
         # call api
-        return self._execute(req,response_handler)     
+        return self._execute(req,response_handler)   
+
+
+    ########################
+    # APIKeys #
+    ########################
+    def api_keys(self, keyid):
+        """Return the API keys API wrapper.
+        :param keyid: API Key id
+        :type kaeyid: string | unicode
+        :return:API keys API wrapper.
+        :rtype: c8.stream_collection.StreamCollection
+        """
+        return APIKeys(self._conn, self._executor, keyid)
+
+
+    def list_all_api_keys(self):
+        """List the API keys.
+
+        :return:list.
+        :raise c8.exceptions.GetAPIKeys: If request fails
+        """
+        request = Request(
+            method = "get",
+            endpoint='/key',
+        )
+        # create response handler
+        def response_handler(resp):
+            if not resp.is_success:
+                raise GetAPIKeys(resp, request)
+            else:
+                return resp.body['result']
+        return self._execute(request, response_handler)
+
+
+    
 
 class StandardFabric(Fabric):
     """Standard fabric API wrapper.

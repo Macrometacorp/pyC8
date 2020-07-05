@@ -13,6 +13,69 @@ characters. There are three types of collections in pyC8:
 
 Here is an example showing how you can manage standard collections:
 
+The Simple Way
+
+..testcode::
+
+    from c8 import C8Client, C8QLQueryKillError
+    # Initialize the C8 client.
+    client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
+                      email='guest@macrometa.io', password='guest')
+
+    collection_name = 'students'
+    # List All Collections
+    print(client.get_collections())
+
+    # Create a new collection if it does not exist
+    if client.has_collection(collection_name):
+        print("Collection exists)
+    else:
+        client.create_collection(name=collection_name)
+
+    # Insert a single document
+    document = {'_key': 'Abby', 'age': 22}
+    client.insert_document(collection_name=collection_name, document=document)
+
+    # Insert multiple documents
+    documents = [
+        {'_key': 'John', 'age': 18},
+        {'_key': 'Mary', 'age': 21}
+    ]
+    client.insert_document(collection_name=collection_name, document=documents)
+
+    # Insert data from a csv file
+    client.insert_document_from_file(collection_name=collection_name,
+                                     csv_filepath="~/data.csv")
+
+    # Get Collection properties
+    collection_handle = client.get_collection(collection_name)
+    print(collection_handle.name)
+    print(collection_handle.fabric_name)
+    print(collection_handle.count())
+
+    # get collecion ids
+    ids = client.get_collection_ids(collname)
+    print("ids: ", ids)
+
+    #get collection keys
+    keys = client.get_collection_keys(collname)
+    print("keys: ", keys)
+
+    # get indexes
+    index = client.get_collection_indexes(collname)
+    print("indexes: ", index)
+    
+    # Truncate Collection
+    collection_handle.truncate()
+
+    # Delete Collection
+    client.delete_collection(name=collection_name)
+
+
+print(state)
+
+The Object Oriented Way
+
 .. testcode::
 
     from c8 import C8Client

@@ -62,14 +62,6 @@ class APIWrapper(object):
         """
         return self._conn.topic_persistence
 
-    @property
-    def fn_name(self):
-        """Return the name of the current function.
-
-        :return: Fabric name.
-        :rtype: str | unicode
-        """
-        return self._conn.fn_name
 
     @property
     def username(self):
