@@ -133,6 +133,11 @@ class C8Client(object):
 
     # Reducing steps
 
+    # client.get_fabric_details
+    def get_fabric_details(self):
+        return self._fabric.fabrics_detail()
+        
+
     # client.collection
     def collection(self, collection_name):
         return self._fabric.collection(collection_name)
