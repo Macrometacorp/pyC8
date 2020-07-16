@@ -481,7 +481,9 @@ class IndexCreateError(C8ServerError):
 class IndexDeleteError(C8ServerError):
     """Failed to delete collection index."""
 
-
+class GetIndexError(C8ServerError):
+    """Failed to return the specified Index"""
+    
 #####################
 # Server Exceptions #
 #####################

@@ -36,8 +36,9 @@ The Simple Way
     print("Add Hash Index", client.add_hash_index(collection_name,
              fields=['continent', 'country'], unique=True))
 
-    print("Add geo Index", client.add_geo_index(collection_name, fields=['coordinates']))
+    geo = client.add_geo_index(collname, fields=['coordinates'])
 
+    print("Add geo Index", geo)
     print("Add skiplist index", client.add_skiplist_index(collection_name, fields=['population'], sparse=False))
 
     print("Add persistent Index", client.add_persistent_index(collection_name, fields=['currency'], sparse=True))
@@ -46,8 +47,14 @@ The Simple Way
 
     print("Add  TTL Index", client.add_ttl_index(collection_name, fields=['country'], expireAfter=0))
 
-    # Delete Index - You can fetch IndexId from the details after list Indexes
-    client.delete_index(collection_name, <index_id>, ignore_missing=False
+    geo_name = geo['name']
+
+    # Get Index
+    print("Get Index ", client.get_index(collname, geo_name))
+
+    # Delete Index - You can fetch IndexName from the details after list Indexes
+    #client.delete_index(collection_name, <index_name>, ignore_missing=False)
+    print("Delete Geo Index ", client.delete_index(collname, geo_name))
 
     # Delete Cretaed Collection
     client.delete_collection(name=collname)
