@@ -25,6 +25,7 @@ from c8.exceptions import (
     IndexCreateError,
     IndexDeleteError,
     IndexListError,
+    GetIndexError
 )
 from c8.request import Request
 from c8.response import Response
@@ -990,6 +991,20 @@ class Collection(APIWrapper):
 
         return self._execute(request, response_handler)
 
+    def get_index(self, index_name):
+        request = Request(
+            method='get',
+            endpoint='/index/{}/{}'.format(self.name, index_name)
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise GetIndexError
+            else:
+                return resp.body
+
+        return self._execute(request, response_handler)
+
     def _add_index(self, data):
         """Helper method for creating a new index.
 
@@ -1055,7 +1070,35 @@ class Collection(APIWrapper):
             data['sparse'] = sparse
         if deduplicate is not None:
             data['deduplicate'] = deduplicate
-        return self._add_index(data)
+            
+        request = Request(
+            method='post',
+            endpoint='/index#hash',
+            data=data,
+            params={'collection': self.name}
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise IndexCreateError(resp, request)
+            details = resp.body
+            details['id'] = details['id'].split('/', 1)[1]
+            details.pop('error', None)
+            details.pop('code', None)
+            if 'minLength' in details:
+                details['min_length'] = details.pop('minLength')
+            if 'geoJson' in details:
+                details['geo_json'] = details.pop('geoJson')
+            if 'ignoreNull' in details:
+                details['ignore_none'] = details.pop('ignoreNull')
+            if 'selectivityEstimate' in details:
+                details['selectivity'] = details.pop('selectivityEstimate')
+            if 'isNewlyCreated' in details:
+                details['new'] = details.pop('isNewlyCreated')
+            return details
+
+        return self._execute(request, response_handler)
+        #return self._add_index(data)
 
     def add_skiplist_index(self,
                            fields,
