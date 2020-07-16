@@ -15,7 +15,7 @@ setup(
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
     install_requires=['requests==2.20.1', 'six', 'websocket-client==0.57.0',
-                      'pandas==0.24.2'],
+                      'pandas>=0.24.2'],
     tests_require=['pytest', 'mock', 'flake8'],
     classifiers=[
         'Intended Audience :: Developers',
