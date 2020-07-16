@@ -405,6 +405,12 @@ class C8Client(object):
         return _collection.delete_index(index_id=index_id, ignore_missing=ignore_missing)
 
 
+    # client.get_index
+    def get_index(self, collection_name, index_name):
+        _collection = self.get_collection(collection_name)
+        return _collection.get_index(index_name)
+
+
     # client.delete_collection
     def delete_collection(self, name, ignore_missing=False, system=None):
         """Delete the collection.
