@@ -502,25 +502,6 @@ class C8Client(object):
         resp = _collection.get(document=document, rev=rev, check_rev=check_rev)
         return resp
 
-    
-    # client.get_document_many
-    def get_document_many(self, collection_name, skip=None, limit=None):
-        """Return all documents in the collection.
-
-        :param collection_name: Collection Name.
-        :type skip: string
-        :param skip: Number of documents to skip.
-        :type skip: int
-        :param limit: Max number of documents returned.
-        :type limit: int
-        :return: Document cursor.
-        :rtype: c8.cursor.Cursor
-        :raise c8.exceptions.DocumentGetError: If retrieval fails.
-        """
-        _collection = self.get_collection(collection_name)
-        resp = _collection.all(skip=skip, limit=limit)
-        return resp
-
 
     # client.insert_document
     def insert_document(self, collection_name="", return_new=False,
@@ -772,30 +753,7 @@ class C8Client(object):
                                    sync=sync,
                                    silent=silent)
         return resp
-
     
-    # client.replace_document_match
-    def replace_document_match(self, filters, body, limit=None, sync=None, collection_name=""):
-        """Replace matching documents.
-
-        :param filters: Document filters.
-        :type filters: dict
-        :param body: New document body.
-        :type body: dict
-        :param limit: Max number of documents to replace. If the limit is lower
-            than the number of matched documents, random documents are chosen.
-        :type limit: int
-        :param sync: Block until operation is synchronized to disk.
-        :type sync: bool
-        :return: Number of documents replaced.
-        :rtype: int
-        :raise c8.exceptions.DocumentReplaceError: If replace fails.
-        """
-        _collection = self.get_collection(collection_name)
-        resp = _collection.replace_match(filters=filters, body=body,
-                                         limit=limit, sync=sync, name=collection_name)
-        return resp
-
     
     # client.delete_document
     def delete_document(self,
@@ -885,51 +843,6 @@ class C8Client(object):
                                    return_old=return_old,
                                    sync=sync,
                                    silent=silent)
-        return resp
-
-
-    # client.delete_document_match
-    def delete_document_match(self, filters, limit=None, sync=None, collection_name=""):
-        """Delete matching documents.
-
-        :param filters: Document filters.
-        :type filters: dict
-        :param limit: Max number of documents to delete. If the limit is lower
-            than the number of matched documents, random documents are chosen.
-        :type limit: int
-        :param sync: Block until operation is synchronized to disk.
-        :type sync: bool
-        :return: Number of documents deleted.
-        :rtype: dict
-        :raise c8.exceptions.DocumentDeleteError: If delete fails.
-        """
-        _collection = self.get_collection(collection_name)
-        resp = _collection.delete_match(filters=filters, limit=limit, sync=sync, name=collection_name)
-        return resp
-
-    # client.get_collection_ids
-    def get_collection_ids(self, collection_name):
-        """Return the IDs of all documents in the collection.
-
-        :return: Document ID cursor.
-        :rtype: c8.cursor.Cursor
-        :raise c8.exceptions.DocumentIDsError: If retrieval fails.
-        """
-        _collection = self.get_collection(collection_name)
-        resp = _collection.ids()
-        return resp
-
-
-    # client.get_collection_keys
-    def get_collection_keys(self, collection_name):
-        """Return the keys of all documents in the collection.
-
-        :return: Document key cursor.
-        :rtype: c8.cursor.Cursor
-        :raise c8.exceptions.DocumentKeysError: If retrieval fails.
-        """
-        _collection = self.get_collection(collection_name)
-        resp = _collection.keys()
         return resp
 
     
