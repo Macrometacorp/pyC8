@@ -54,9 +54,10 @@ class StreamCollection(APIWrapper):
         """
         super(StreamCollection, self).__init__(connection, executor)
         url = urlparse(url)
+        self.header = connection.headers
         self.fabric = fabric
         dcl_local = self.fabric.localdc(detail=True)
-        ws_url = "wss://%s/_ws/ws/v2/"
+        ws_url = "wss://api-%s/_ws/ws/v2/"
         self._ws_url = ws_url % (dcl_local["tags"]["url"])
            
     def create_producer(self, stream, isCollectionStream=False, local=False, producer_name=None,
@@ -132,9 +133,9 @@ class StreamCollection(APIWrapper):
             }
 
             params = {k: v for k, v in params.items() if v is not None}
-            url = self._ws_url + topic + "?" + urlencode(params)
-
-            return websocket.create_connection(url)
+            url = self._ws_url + topic 
+            print(url)
+            return websocket.create_connection(url, header={'Authorization' : self.header['Authorization']})
         
         raise ex.StreamProducerError(
             "No stream present with name:" + stream +
@@ -191,7 +192,7 @@ class StreamCollection(APIWrapper):
             params = {k: v for k, v in params.items() if v is not None}
             url = self._ws_url + topic + "?" + urlencode(params)
             
-            return websocket.create_connection(url)
+            return websocket.create_connection(url, header={'Authorization' : self.header['Authorization']})
 
         raise ex.StreamSubscriberError(
             "No stream present with name:" + stream +
@@ -282,7 +283,7 @@ class StreamCollection(APIWrapper):
 
             params = {k: v for k, v in params.items() if v is not None}
             url = self._ws_url + topic + "?" + urlencode(params)
-            return websocket.create_connection(url)
+            return websocket.create_connection(url, header={'Authorization' : self.header['Authorization']})
 
         raise ex.StreamSubscriberError(
             "No stream present with name:" + stream +
@@ -355,7 +356,7 @@ class StreamCollection(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def get_stream_subscriptions(self, stream, local=False):
+    def get_stream_subscriptions(self, stream, local=False, isCollectionStream=False):
         """Get the list of persistent subscriptions for a given stream.
 
         :param stream: name of stream
@@ -364,6 +365,15 @@ class StreamCollection(APIWrapper):
         :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
                                                      for a stream fails.
         """
+        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+        if local:
+
+            type_constant = constants.STREAM_LOCAL_NS_PREFIX
+        
+        if isCollectionStream is False:
+
+            stream = type_constant.replace(".", "")+"s."+stream
+
         if local is True:
             endpoint = '/streams/{}/subscriptions?global=false'.format(stream)
         
@@ -382,7 +392,8 @@ class StreamCollection(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def get_stream_backlog(self, stream, local=False):
+
+    def get_stream_backlog(self, stream, local=False, isCollectionStream=False):
         """Get estimated backlog for offline stream.
 
         :param stream: name of stream
@@ -392,6 +403,15 @@ class StreamCollection(APIWrapper):
                                                      for a stream fails.
         """
         #endpoint = '{}/{}/backlog?local={}'.format(ENDPOINT, stream, local)
+        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+        if local:
+
+            type_constant = constants.STREAM_LOCAL_NS_PREFIX
+        
+        if isCollectionStream is False:
+
+            stream = type_constant.replace(".", "")+"s."+stream
+        
         if local is False:
             endpoint = '/streams/{}/backlog?global=true'.format(stream)
         elif local is True:
@@ -500,7 +520,7 @@ class StreamCollection(APIWrapper):
         return self._execute(request, response_handler)
 
     def skip_all_messages_for_subscription(self, stream, subscription,
-                                           local=False):
+                                           local=False, isCollectionStream=False):
         """Skip all messages on a stream subscription
 
         :param stream: name of stream
@@ -509,8 +529,19 @@ class StreamCollection(APIWrapper):
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError:Don't have permission
         """
+
+        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+        if local:
+
+            type_constant = constants.STREAM_LOCAL_NS_PREFIX
+        
+        if isCollectionStream is False:
+
+            stream = type_constant.replace(".", "")+"s."+stream
+
         endpoint = '{}/{}/subscription/{}/skip_all?local={}'.format(
             ENDPOINT, stream, subscription, local)
+        
         request = Request(method='post', endpoint=endpoint)
 
         def response_handler(resp):
@@ -523,8 +554,9 @@ class StreamCollection(APIWrapper):
 
         return self._execute(request, response_handler)
 
+
     def skip_messages_for_subscription(self, stream, subscription,
-                                       num_of_messages, local=False):
+                                       num_of_messages, local=False, isCollectionStream=False):
         """Skip num messages on a topic subscription
 
         :param stream: Name of stream
@@ -534,8 +566,18 @@ class StreamCollection(APIWrapper):
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError:Don't have permission
         """
+        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+        if local:
+
+            type_constant = constants.STREAM_LOCAL_NS_PREFIX
+        
+        if isCollectionStream is False:
+
+            stream = type_constant.replace(".", "")+"s."+stream
+
         endpoint = '{}/{}/subscription/{}/skip/{}?local={}'.format(
             ENDPOINT, stream, subscription, num_of_messages, local)
+        
         request = Request(method='post', endpoint=endpoint)
 
         def response_handler(resp):
@@ -664,6 +706,7 @@ class StreamCollection(APIWrapper):
 
         return self._execute(request, response_handler)
 
+
     def reset_message_for_subscription(self, stream, subscription,
                                        isCollectionStream=False, local=False):
         """Reset subscription to message position closest to given position
@@ -694,6 +737,7 @@ class StreamCollection(APIWrapper):
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
+
 
     def reset_message_subscription_by_position(self, stream, subscription,
                                                message_position, isCollectionStream=False, 

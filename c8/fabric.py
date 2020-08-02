@@ -89,6 +89,7 @@ class Fabric(APIWrapper):
 
     def __init__(self, connection, executor):
         self.url = connection.url
+        self.header = connection.headers
         self.stream_port = constants.STREAM_PORT
         super(Fabric, self).__init__(connection, executor)
 
@@ -153,7 +154,8 @@ class Fabric(APIWrapper):
             url,self.tenant_name,namespace,
             collection,subscription_name)
 
-        ws = websocket.create_connection(topic)
+   
+        ws = websocket.create_connection(topic, header=self.header)
 
         try:
             print("pyC8 Realtime: Begin monitoring realtime updates for " +
@@ -978,14 +980,18 @@ class Fabric(APIWrapper):
         return StreamCollection(self, self._conn, self._executor, self.url,
                                 self.stream_port, operation_timeout_seconds)
 
-    def streams(self):
+    def streams(self, local=False):
         """Get list of all streams under given fabric
 
         :return: List of streams under given fabric.
         :rtype: json
         :raise c8.exceptions.StreamListError: If retrieving streams fails.
         """
-        url_endpoint = '/streams'
+        if local is False:
+            url_endpoint = '/streams?global=true'
+
+        elif local is True:
+            url_endpoint = '/streams?global=false'
 
         request = Request(
             method='get',
@@ -1082,6 +1088,7 @@ class Fabric(APIWrapper):
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
         """
+
         endpoint = '{}/{}?local={}'.format(ENDPOINT, stream, local)
         request = Request(method='post', endpoint=endpoint)
 
