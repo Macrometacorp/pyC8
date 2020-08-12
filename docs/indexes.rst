@@ -58,7 +58,7 @@ The Simple Way
 
     # Delete Cretaed Collection
     client.delete_collection(name=collname)
-'''
+
 
 The Object Oriented Way
 
