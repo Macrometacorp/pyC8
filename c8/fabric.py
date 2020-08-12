@@ -60,7 +60,7 @@ __all__ = [
     'BatchFabric',
     'TransactionFabric'
 ]
-ENDPOINT = "/streams/persistent/stream"
+ENDPOINT = "/streams"
 
 
 def printdata(event):
@@ -1016,39 +1016,7 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def persistent_streams(self, local=False):
-        """Get list of all streams under given fabric
-
-        :param local: Operate on a local stream instead of a global one.
-        :return: List of streams under given fabric.
-        :rtype: json
-        :raise c8.exceptions.StreamListError: If retrieving streams fails.
-        """
-        url_endpoint = '/streams/persistent?local={}'.format(local)
-
-        request = Request(
-            method='get',
-            endpoint=url_endpoint
-        )
-
-        def response_handler(resp):
-            code = resp.status_code
-            if resp.is_success:
-                return [{
-                    'name': col['topic'],
-                    'topic': col['topic'],
-                    'local': col['local'],
-                    'db': col['db'],
-                    'tenant': col['tenant'],
-                    'type': StreamCollection.types[col['type']],
-                    'status': 'terminated' if 'terminated' in col else 'active',  # noqa
-                } for col in map(dict, resp.body['result'])]
-            elif code == 403:
-                raise StreamPermissionError(resp, request)
-            raise StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)
-
+ 
     def has_stream(self, stream, isCollectionStream=False, local=False):
         """ Check if the list of streams has a stream with the given name.
 
@@ -1065,20 +1033,6 @@ class Fabric(APIWrapper):
                 stream = "c8locals." + stream
         return any(mystream['name'] == stream for mystream in self.streams())
 
-    def has_persistent_stream(self, stream, local=False):
-        """ Check if the list of persistent streams has a stream with the
-        given name and local setting.
-
-        :param stream: The name of the stream for which to check in the list
-                       of persistent streams.
-        :type stream: str | unicode
-        :param local: if True, operate on local stream instead of a global one.
-        :type local: bool
-        :return: True=stream found; False=stream not found.
-        :rtype: bool
-        """
-        return any(mystream['name'] == stream
-                   for mystream in self.persistent_streams(local))
 
     def create_stream(self, stream, local=False):
         """
@@ -1088,8 +1042,11 @@ class Fabric(APIWrapper):
         :return: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
         """
+        if local is True:
+            endpoint = '{}/{}?global=False'.format(ENDPOINT, stream)
+        elif local is False:
+            endpoint = '{}/{}?global=True'.format(ENDPOINT, stream)
 
-        endpoint = '{}/{}?local={}'.format(ENDPOINT, stream, local)
         request = Request(method='post', endpoint=endpoint)
 
         def response_handler(resp):
