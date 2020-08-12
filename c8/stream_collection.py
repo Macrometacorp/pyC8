@@ -13,7 +13,7 @@ from c8 import constants
 from c8.request import Request
 
 __all__ = ['StreamCollection']
-ENDPOINT = "/streams/persistent/stream"
+ENDPOINT = "/streams/"
 
 class StreamCollection(APIWrapper):
     """Stream Client.
@@ -441,7 +441,11 @@ class StreamCollection(APIWrapper):
                 stream = "c8locals." + stream
             else:
                 stream = "c8globals." + stream
-        endpoint = '{}/{}/stats?local={}'.format(ENDPOINT, stream, local)
+        if local is True:
+            endpoint = '{}/{}/stats?global=False'.format(ENDPOINT, stream)
+        elif local is False:
+            endpoint = '{}/{}/stats?global=True'.format(ENDPOINT, stream)
+
         request = Request(method='get', endpoint=endpoint)
 
         def response_handler(resp):
@@ -453,7 +457,9 @@ class StreamCollection(APIWrapper):
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-
+    
+    # api not in latest swagger
+    '''
     def reset_message_subscription(self, stream, subscription, message_id,
                                    isCollectionStream=False, local=False):
         """Reset subscription to message position closest to given position.
@@ -487,6 +493,7 @@ class StreamCollection(APIWrapper):
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
+    '''
 
     def delete_stream_subscription(self, stream, subscription, local=False):
         """Delete a subscription.
@@ -519,6 +526,8 @@ class StreamCollection(APIWrapper):
 
         return self._execute(request, response_handler)
 
+    # api not in latest swagger
+    '''
     def skip_all_messages_for_subscription(self, stream, subscription,
                                            local=False, isCollectionStream=False):
         """Skip all messages on a stream subscription
@@ -589,7 +598,10 @@ class StreamCollection(APIWrapper):
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
+    '''
 
+    # api not in latest swagger
+    '''
     def expire_messages_for_all_subscription(self, stream, expire_time,
                                              isCollectionStream=False, local=False):
         """Expire messages on a stream subscription
@@ -672,7 +684,8 @@ class StreamCollection(APIWrapper):
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-
+    '''
+    
     def reset_message_subscription_by_timestamp(self, stream, subscription,
                                                 timestamp, isCollectionStream=False, 
                                                 local=False):
