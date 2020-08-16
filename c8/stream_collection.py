@@ -110,16 +110,20 @@ class StreamCollection(APIWrapper):
                                   `PartitionsRoutingMode.UseSinglePartition`
         """
         if isCollectionStream is False:
-            type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-            if local:
+            if local is True:
                 type_constant = constants.STREAM_LOCAL_NS_PREFIX
+            elif local is False:
+                type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+
             stream = type_constant.replace(".", "")+"s."+stream
-        flag = self.fabric.has_persistent_stream(stream, local=local)
+        elif isCollectionStream is False:
+            stream = stream
+        print("Calling has steram from create_producer: ", stream, local)
+        flag = self.fabric.has_stream(stream, local=local, isCollectionStream=isCollectionStream)
         if flag:
             namespace = type_constant + self.fabric_name
             topic = "producer/persistent/%s/%s/%s" % (self.tenant_name, namespace,
                                                stream)
-
             params =  {
                 "producerName":producer_name,
                 "initialSequenceId":initial_sequence_id,
@@ -172,11 +176,13 @@ class StreamCollection(APIWrapper):
         * `subscription_role_prefix`: Sets the subscription role prefix.
         """
         if isCollectionStream is False:
-            type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-            if local:
+            if local is True:
                 type_constant = constants.STREAM_LOCAL_NS_PREFIX
+            elif local is False:
+                type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+
             stream = type_constant.replace(".", "")+"s."+stream
-        flag = self.fabric.has_persistent_stream(stream, local=local)
+        flag = self.fabric.has_stream(stream, local=local, isCollectionStream=isCollectionStream)
         if flag:
             namespace = type_constant + self.fabric_name
 
@@ -249,16 +255,17 @@ class StreamCollection(APIWrapper):
             Sets the time duration for which the broker-side consumer stats
             will be cached in the client.
         """
-        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-        if local:
-
+        if local is True:
             type_constant = constants.STREAM_LOCAL_NS_PREFIX
-        
+        elif local is False:
+            type_constant = constants.STREAM_GLOBAL_NS_PREFIX
+  
         if isCollectionStream is False:
-
             stream = type_constant.replace(".", "")+"s."+stream
-        flag = self.fabric.has_persistent_stream(stream, local=local)
-        
+
+        if isCollectionStream is True:
+            stream = stream
+        flag = self.fabric.has_stream(stream, local=local, isCollectionStream=isCollectionStream)
         if flag:
 
             namespace = type_constant + self.fabric_name

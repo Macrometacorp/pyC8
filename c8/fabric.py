@@ -1018,6 +1018,7 @@ class Fabric(APIWrapper):
 
  
     def has_stream(self, stream, isCollectionStream=False, local=False):
+     
         """ Check if the list of streams has a stream with the given name.
 
         :param stream: The name of the stream for which to check in the list
@@ -1027,11 +1028,11 @@ class Fabric(APIWrapper):
         :rtype: bool
         """
         if isCollectionStream is False:
-            if local is False:
+            if local is False and "c8globals" not in stream:
                 stream = "c8globals." + stream
-            else:
-                stream = "c8locals." + stream
-        return any(mystream['name'] == stream for mystream in self.streams())
+            elif local is True and "c8locals" not in stream:
+                stream = "c8locals." + stream     
+        return any(mystream['name'] == stream for mystream in self.streams(local=local))
 
 
     def create_stream(self, stream, local=False):
