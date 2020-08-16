@@ -11,6 +11,10 @@ from c8.executor import (
 from c8.exceptions import (
     TenantDcListError,
     TenantUpdateError,
+    TenantListError,
+    TenantCreateError,
+    TenantDeleteError,
+    TenantUpdateError,
     PermissionListError,
     PermissionGetError,
     PermissionResetError,
@@ -128,6 +132,83 @@ class Tenant(APIWrapper):
     # Tenant Management #
     #######################
 
+    def tenants(self):
+        """Return the names all tenants.
+        :return: Tenant names.
+        :rtype: [str | unicode]
+        :raise c8.exceptions.TenantListError: If retrieval fails.
+        """
+        self.auth_token
+        request = Request(
+            method='get',
+            endpoint='/tenants',
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise TenantListError(resp, request)
+            retval = []
+            for item in resp.body['result']:
+                retval.append(item['tenant'])
+            return retval
+
+        return self._execute(request, response_handler)
+
+    def has_tenant(self, name):
+        """Check if a tenant exists.
+        :param name: Tenant name.
+        :type name: str | unicode
+        :return: True if tenant exists, False otherwise.
+        :rtype: bool
+        """
+        return name in self.tenants()
+
+    def create_tenant(self, email, passwd='', dclist=[], extra={}):
+        """Create a new tenant.
+        :param name: Tenant name.
+        :type name: str | unicode
+        :param passwd: What I presume is the tenant admin user password.
+        :type passwd: str
+        :param dclist: comma separated list of region where tenant will be
+                       created. If no value passed tenant will be created
+                       globally.
+        :type dclist: list
+        :param extra: Extra config info.
+        :type extra: dict
+        :return: True if tenant was created successfully.
+        :rtype: bool
+        :raise c8.exceptions.TenantCreateError: If create fails.
+        Here is an example entry for parameter **users**:
+        .. code-block:: python
+            {
+                'email': 'email'
+                'passwd': 'password',
+                'extra': {'Department': 'IT'}
+            }
+        """
+        name = email.replace('@', "")
+        name = name.replace('.', "")
+        print(name)
+        data = {'name': name}
+        data['email'] = email
+        data['passwd'] = passwd
+        data['extra'] = extra
+        if dclist != '':
+            data['dcList'] = dclist
+
+        request = Request(
+            method='post',
+            endpoint='/tenant',
+            data=data
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise TenantCreateError(resp, request)
+            return True
+
+        return self._execute(request, response_handler)
+
     def update_tenant(self, name, passwd='', extra={}):
         """Update a existing tenant.
         :param name: Tenant name.
@@ -138,11 +219,8 @@ class Tenant(APIWrapper):
         :return: True if tenant was created successfully.
         :rtype: bool
         :raise c8.exceptions.TenantCreateError: If create fails.
-
         Here is an example entry for parameter **users**:
-
         .. code-block:: python
-
             {
                 'username': 'john',
                 'password': 'password',
@@ -162,15 +240,38 @@ class Tenant(APIWrapper):
 
         def response_handler(resp):
             if not resp.is_success:
-                raise TenantUpdateError(resp, request)
+                raise TenantUpdateError
             return True
 
         return self._execute(request, response_handler)
 
+    def delete_tenant(self, name, ignore_missing=False):
+        """Delete the tenant.
+        :param name: Tenant name.
+        :type name: str | unicode
+        :param ignore_missing: Do not raise an exception on missing tenant.
+        :type ignore_missing: bool
+        :return: True if tenant was deleted successfully, False if tenant
+            was not found and **ignore_missing** was set to True.
+        :rtype: bool
+        :raise c8.exceptions.TenantDeleteError: If delete fails.
+        """
+        request = Request(
+            method='delete',
+            endpoint='/tenant/{tenantname}'.format(tenantname=name)
+        )
+
+        def response_handler(resp):
+            if resp.error_code == 1228 and ignore_missing:
+                return False
+            if not resp.is_success:
+                raise TenantDeleteError(resp, request)
+            return resp.body['result']
+
+        return self._execute(request, response_handler)
 
     def dclist(self, detail=False):
         """Return the list of names of Datacenters
-
         :param detail: detail list of DCs if set to true else only DC names
         :type: boolean
         :return: DC List.
@@ -196,7 +297,6 @@ class Tenant(APIWrapper):
 
     def localdc(self, detail=True):
         """Return the list of local Datacenters
-
         :param detail: detail list of DCs if set to true else only DC names
         :type: boolean
         :return: DC List.
@@ -219,7 +319,6 @@ class Tenant(APIWrapper):
 
     def assign_dc_spot(self, dc, spot_region=False):
         """Assigns spot region of a fed
-
         :param: dc: dc name
         :type: str
         :param: spot_region: If True, makes the region a spot region
@@ -240,7 +339,7 @@ class Tenant(APIWrapper):
             return True
 
         return self._execute(request, response_handler)
-
+        
     ###################
     # User Management #
     ###################

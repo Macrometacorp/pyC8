@@ -45,6 +45,7 @@ class Connection(object):
         self._http_client = http_client or DefaultHTTPClient()
         self._token = token
         self._apikey = apikey
+        self._header = ''
         # # Set the auth credentials depending on tenant name
         # if self._tenant_name == '_mm':
         #     self._auth = (username, password)
@@ -67,6 +68,7 @@ class Connection(object):
 
         if self._tenant_name == '' and self._token is not None :
             headers = {"Authorization": "Bearer " + self._auth_token}
+            self._header = headers
 
             tenurl = self.url + "/_fabric/{}/_api/user".format(self._fabric_name)
             response = requests.get(url=tenurl, headers=headers)
@@ -77,7 +79,7 @@ class Connection(object):
 
         if self._tenant_name == '' and self._apikey is not None :
             headers = {"Authorization": "apikey " + self._auth_token}
-
+            self._header = headers
             tenurl = self.url + "/_fabric/{}/_api/user".format(self._fabric_name)
             response = requests.get(url=tenurl, headers=headers)
             if response.status_code == 200:
@@ -114,6 +116,12 @@ class Connection(object):
         else:
             raise C8AuthenticationError("Failed to Authenticate the C8DB user for URL: {} and Email: {}. Error: {}".format(self.url, self._email, response.text))
         return token, tenant
+
+
+    @property
+    def headers(self):
+        return self._header
+
 
     @property
     def url_prefix(self):
@@ -191,6 +199,8 @@ class Connection(object):
 
         elif self._token is None and self._apikey is None:
             headers['Authorization'] = 'bearer ' + self._auth_token
+
+        self._header = headers
         return self._http_client.send_request(
             method=request.method,
             url=final_url,

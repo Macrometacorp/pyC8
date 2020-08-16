@@ -40,10 +40,24 @@ The driver allows you to use three ways for authentication:-
 
 2. Using jwt
 
+```python
+
+# Auth with token
+client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
+ token=<your tokeb>)
+
+```
+
 
 3. Using apikey
 
+```python
 
+# AUh with api key
+
+client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
+ apikey=<your api key>)
+```
 Here is an overview example:
 
 ```python
