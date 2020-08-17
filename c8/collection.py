@@ -359,7 +359,7 @@ class Collection(APIWrapper):
 
         return self._execute(request, response_handler)
 
-       def export(self,
+    def export(self,
                limit=None,
                count=False,
                batch_size=None,
