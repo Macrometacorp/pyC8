@@ -65,6 +65,7 @@ class Connection(object):
         
         if self._email != '' and password != '':
             self._auth_token, self._tenant_name = self._get_auth_token()
+            self._header = {"Authorization": "Bearer " + self._auth_token}
 
         if self._tenant_name == '' and self._token is not None :
             headers = {"Authorization": "Bearer " + self._auth_token}
@@ -85,7 +86,6 @@ class Connection(object):
             if response.status_code == 200:
                 body = json.loads(response.text)
                 self._tenant_name = body['result'][0]['tenant']
-
 
 
 

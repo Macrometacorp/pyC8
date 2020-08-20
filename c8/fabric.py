@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 import json
 import random
+import base64
 
 import websocket
 
@@ -131,7 +132,7 @@ class Fabric(APIWrapper):
         return KV(self._conn, self._executor)
 
 
-    def on_change(self, collection, callback=printdata):
+    def on_change(self, collection, callback):
         """Execute given input function on receiving a change.
 
         :param callback: Function to execute on a change
@@ -139,11 +140,14 @@ class Fabric(APIWrapper):
         :param collections: Collection name(s) regex to listen for
         :type collections: str
         """
+        if not callback:
+            raise ValueError('You must specify a callback function')
+        
         if not collection:
-            raise ValueError('You must specify a collection on which to watch '
-                             'for realtime data!')
+            raise ValueError('You must specify a collection on which realtime '
+                             'data is to be watched!')
 
-        namespace = constants.STREAM_GLOBAL_NS_PREFIX + self.fabric_name
+        namespace = constants.STREAM_LOCAL_NS_PREFIX + self.fabric_name
 
         subscription_name = "%s-%s-subscription-%s" % (
             self.tenant_name, self.fabric_name, str(random.randint(1, 1000)))
@@ -154,20 +158,19 @@ class Fabric(APIWrapper):
             url,self.tenant_name,namespace,
             collection,subscription_name)
 
-   
         ws = websocket.create_connection(topic, header=self.header)
 
         try:
             print("pyC8 Realtime: Begin monitoring realtime updates for " +
                   topic)
             while True:
-                msg = ws.recv()
-                if not msg: break
-                data = json.loads(msg.decode('utf-8'))
+                msg = json.loads(ws.recv())
+                data =  base64.b64decode(msg['payload'])
                 ws.send(json.dumps({'messageId' : msg['messageId']}))
                 callback(data)
-        except Exception:
-            pass
+              
+        except Exception as e:
+            print(e)
         finally:
             ws.close()
 
