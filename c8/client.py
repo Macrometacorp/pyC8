@@ -474,8 +474,8 @@ class C8Client(object):
 
 
     # client.on_change
-    def on_change(self, collection, callback=printdata):
-        resp = self._fabric.on_change(collection, callback=callback)
+    def on_change(self, collection, callback):
+        resp = self._fabric.on_change(collection, callback)
         return resp
 
     # client.get_document
