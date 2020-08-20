@@ -201,7 +201,6 @@ class Connection(object):
             headers['Authorization'] = 'bearer ' + self._auth_token
 
         self._header = headers
-        print("Final Url ", final_url)
         return self._http_client.send_request(
             method=request.method,
             url=final_url,
