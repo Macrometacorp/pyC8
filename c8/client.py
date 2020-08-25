@@ -474,8 +474,8 @@ class C8Client(object):
 
 
     # client.on_change
-    def on_change(self, collection, callback):
-        resp = self._fabric.on_change(collection, callback)
+    def on_change(self, collection, timeout, callback):
+        resp = self._fabric.on_change(collection, timeout, callback)
         return resp
 
     # client.get_document
@@ -532,7 +532,6 @@ class C8Client(object):
         elif isinstance(document, list):
             resp = _collection.insert_many(documents=document, return_new=return_new, 
                                             sync=sync, silent=silent)
-        print(resp)
         return resp      
 
     # client.insert_document_from_file()

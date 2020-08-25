@@ -158,7 +158,7 @@ Example for **real-time updates** from a collection in fabric:
   def callback_fn(event):
        print(event)
    #--------------------------------------------------------------
-  client.on_change("employees", callback=callback_fn)
+  client.on_change("employees", timeout=10, callback=callback_fn)
 
 
 ```
