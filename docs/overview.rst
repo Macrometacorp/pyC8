@@ -117,7 +117,7 @@ Example for **real-time updates** from a collection in fabric:
   client = C8Client(protocol='https', host=region, port=443)
   tenant = client.tenant(email="demomail", password="poweruser")
   fabric = tenant.useFabric('demo-fabric')
-  fabric.on_change("employees", callback=callback_fn)
+  fabric.on_change("employees", timeout=10, callback=callback_fn)
 
 
 
