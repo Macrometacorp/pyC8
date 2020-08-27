@@ -26,6 +26,10 @@ The Simple Way
     # List All Collections
     print(client.get_collections())
 
+    # Filter collection based on collection models DOC/KV/DYNAMO
+    colls = client.get_collections(collectionModel='KV')
+    print(colls)
+
     # Create a new collection if it does not exist
     if client.has_collection(collection_name):
         print("Collection exists)
@@ -90,6 +94,8 @@ The Object Oriented Way
     fabric = tenant.useFabric('test')
     # List all collections in the fabric.
     fabric.collections()
+    # Filter collections based on collection model DOC/KV/DYNAMO
+    fabric.collections(collectionModel='DOC')
 
     # Create a new collection named "students" if it does not exist.
     # This returns an API wrapper for "students" collection.

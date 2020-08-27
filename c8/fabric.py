@@ -591,7 +591,7 @@ class Fabric(APIWrapper):
         """
         return any(col['name'] == name for col in self.collections())
 
-    def collections(self):
+    def collections(self, collectionModel):
         """Return the collections in the fabric.
 
         :return: Collections in the fabric and their details.
@@ -606,6 +606,10 @@ class Fabric(APIWrapper):
         def response_handler(resp):
             if not resp.is_success:
                 raise CollectionListError(resp, request)
+            if collectionModel is not None:
+                docs =  [col for col in map(dict, resp.body['result']) if col['collectionModel'] == collectionModel]
+            else:
+                docs = [col for col in map(dict, resp.body['result'])]
             return [{
                 'id': col['id'],
                 'name': col['name'],
@@ -613,7 +617,8 @@ class Fabric(APIWrapper):
                 'isSpot': col["isSpot"],
                 'type': StandardCollection.types[col['type']],
                 'status': StandardCollection.statuses[col['status']],
-            } for col in map(dict, resp.body['result'])]
+                'collectionModel': col['collectionModel']
+            } for col in docs]
 
         return self._execute(request, response_handler)
 
