@@ -442,14 +442,15 @@ class C8Client(object):
 
     
     # client.get_collections
-    def get_collections(self):
+    def get_collections(self,collectionModel=None):
         """Return the collections in the fabric.
 
+        :param collectionModel: Collection Model to get filter collections
         :return: Collections in the fabric and their details.
         :rtype: [dict]
         :raise c8.exceptions.CollectionListError: If retrieval fails.
         """
-        resp = self._fabric.collections()
+        resp = self._fabric.collections(collectionModel)
         return resp
     
 
@@ -474,8 +475,8 @@ class C8Client(object):
 
 
     # client.on_change
-    def on_change(self, collection, callback):
-        resp = self._fabric.on_change(collection, callback)
+    def on_change(self, collection, timeout, callback):
+        resp = self._fabric.on_change(collection, timeout, callback)
         return resp
 
     # client.get_document
@@ -532,7 +533,6 @@ class C8Client(object):
         elif isinstance(document, list):
             resp = _collection.insert_many(documents=document, return_new=return_new, 
                                             sync=sync, silent=silent)
-        print(resp)
         return resp      
 
     # client.insert_document_from_file()

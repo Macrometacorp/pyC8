@@ -92,6 +92,10 @@ Here is an overview example:
     coll_list = client.get_collections()
     print(coll_list)
 
+    # Filter collection based on collection models DOC/KV/DYNAMO
+    colls = client.get_collections(collectionModel='DOC')
+    print(colls)
+
     # Get Collecion Handle and Insert
     coll = client.get_collection(collname)
     coll.insert({'firstname': 'John', 'lastname':'Berley', 'email':'john.berley@macrometa.io'})
@@ -158,7 +162,7 @@ Example for **real-time updates** from a collection in fabric:
   def callback_fn(event):
        print(event)
    #--------------------------------------------------------------
-  client.on_change("employees", callback=callback_fn)
+  client.on_change("employees", timeout=10, callback=callback_fn)
 
 
 ```

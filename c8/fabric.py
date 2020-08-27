@@ -63,6 +63,8 @@ __all__ = [
 ]
 ENDPOINT = "/streams"
 
+def raise_timeout(signum, frame):
+        raise TimeoutError
 
 def printdata(event):
     """Prints the event.
@@ -132,13 +134,15 @@ class Fabric(APIWrapper):
         return KV(self._conn, self._executor)
 
 
-    def on_change(self, collection, callback):
+    def on_change(self, collection, timeout, callback):
         """Execute given input function on receiving a change.
 
-        :param callback: Function to execute on a change
-        :type callback: function
         :param collections: Collection name(s) regex to listen for
         :type collections: str
+        :param timeout: timeout value
+        :type timeout: int
+        :param callback: Function to execute on a change
+        :type callback: function
         """
         if not callback:
             raise ValueError('You must specify a callback function')
@@ -146,6 +150,9 @@ class Fabric(APIWrapper):
         if not collection:
             raise ValueError('You must specify a collection on which realtime '
                              'data is to be watched!')
+
+        if not timeout:
+            timeout = 60
 
         namespace = constants.STREAM_LOCAL_NS_PREFIX + self.fabric_name
 
@@ -158,8 +165,8 @@ class Fabric(APIWrapper):
             url,self.tenant_name,namespace,
             collection,subscription_name)
 
-        ws = websocket.create_connection(topic, header=self.header)
-
+        ws = websocket.create_connection(topic, header=self.header, timeout=timeout)
+        
         try:
             print("pyC8 Realtime: Begin monitoring realtime updates for " +
                   topic)
@@ -168,7 +175,8 @@ class Fabric(APIWrapper):
                 data =  base64.b64decode(msg['payload'])
                 ws.send(json.dumps({'messageId' : msg['messageId']}))
                 callback(data)
-              
+        except TimeoutError:
+            pass
         except Exception as e:
             print(e)
         finally:
@@ -583,7 +591,7 @@ class Fabric(APIWrapper):
         """
         return any(col['name'] == name for col in self.collections())
 
-    def collections(self):
+    def collections(self, collectionModel):
         """Return the collections in the fabric.
 
         :return: Collections in the fabric and their details.
@@ -598,6 +606,10 @@ class Fabric(APIWrapper):
         def response_handler(resp):
             if not resp.is_success:
                 raise CollectionListError(resp, request)
+            if collectionModel is not None:
+                docs =  [col for col in map(dict, resp.body['result']) if col['collectionModel'] == collectionModel]
+            else:
+                docs = [col for col in map(dict, resp.body['result'])]
             return [{
                 'id': col['id'],
                 'name': col['name'],
@@ -605,7 +617,8 @@ class Fabric(APIWrapper):
                 'isSpot': col["isSpot"],
                 'type': StandardCollection.types[col['type']],
                 'status': StandardCollection.statuses[col['status']],
-            } for col in map(dict, resp.body['result'])]
+                'collectionModel': col['collectionModel']
+            } for col in docs]
 
         return self._execute(request, response_handler)
 
