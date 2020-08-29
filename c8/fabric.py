@@ -591,7 +591,7 @@ class Fabric(APIWrapper):
         """
         return any(col['name'] == name for col in self.collections())
 
-    def collections(self, collectionModel):
+    def collections(self, collectionModel=None):
         """Return the collections in the fabric.
 
         :return: Collections in the fabric and their details.
