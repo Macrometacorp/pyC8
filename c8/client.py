@@ -475,8 +475,8 @@ class C8Client(object):
 
 
     # client.on_change
-    def on_change(self, collection, timeout, callback):
-        resp = self._fabric.on_change(collection, timeout, callback)
+    def on_change(self, collection, callback, timeout=60):
+        resp = self._fabric.on_change(collection, callback, timeout)
         return resp
 
     # client.get_document

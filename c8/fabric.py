@@ -134,7 +134,7 @@ class Fabric(APIWrapper):
         return KV(self._conn, self._executor)
 
 
-    def on_change(self, collection, timeout, callback):
+    def on_change(self, collection, callback, timeout=60):
         """Execute given input function on receiving a change.
 
         :param collections: Collection name(s) regex to listen for
@@ -150,9 +150,6 @@ class Fabric(APIWrapper):
         if not collection:
             raise ValueError('You must specify a collection on which realtime '
                              'data is to be watched!')
-
-        if not timeout:
-            timeout = 60
 
         namespace = constants.STREAM_LOCAL_NS_PREFIX + self.fabric_name
 
