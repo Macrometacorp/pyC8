@@ -48,8 +48,8 @@ class Search(APIWrapper):
 
     def __init__(self, connection, executor):
         super(Search, self).__init__(connection, executor)
-        self._view_prefix = '/_api/search/view'
-        self._analyzer_prefix = '/_api/search/analyzer'
+        self._view_prefix = '/search/view'
+        self._analyzer_prefix = '/search/analyzer'
 
     def set_search(self, collection, enable, field):
         """Set search capability of a collection (enabling or disabling it). 
@@ -66,8 +66,8 @@ class Search(APIWrapper):
         """
         request = Request(
             method='POST',
-            endpoint='/_api/search/collection/${}'.format(collection),
-            data={
+            endpoint='/search/collection/{}'.format(collection),
+            params={
                 'enable': enable,
                 'field': field
             }
@@ -77,9 +77,9 @@ class Search(APIWrapper):
             if not resp.is_success:
                 raise SearchCollectionSetError(resp, request)
             if resp.status_code == 400:
-                raise SearchCollectionInvalidArgument
+                raise SearchCollectionInvalidArgument(resp, request)
             if resp.status_code == 403:
-                raise SearchCollectionForbiddenError
+                raise SearchCollectionForbiddenError(resp, request)
             return True
         return self._execute(request, response_handler)
 
@@ -104,7 +104,7 @@ class Search(APIWrapper):
         # create request object
         request = Request(
             method="POST",
-            endpoint="/_api/search",
+            endpoint="/search",
             data={
                 "collection": collection,
                 "search": search,
@@ -116,13 +116,13 @@ class Search(APIWrapper):
 
         def response_handler(resp):
             if not resp.is_success:
-                raise SearchError
+                raise SearchError(resp, request)
             if resp.status_code == 400:
-                raise SearchInvalidArgumentError
+                raise SearchInvalidArgumentError(resp, request)
             if resp.status_code == 403:
-                raise SearchForbiddenError
+                raise SearchForbiddenError(resp, request)
             if resp.status_code == 404:
-                raise SearchNotExistError
+                raise SearchNotExistError(resp, request)
             return resp.body
         # execute request
         return self._execute(request, response_handler)
@@ -177,11 +177,11 @@ class Search(APIWrapper):
         # response handler
         def response_handler(resp):
             if not resp.is_success:
-                raise ViewCreateError
+                raise ViewCreateError(resp, request)
             if resp.status_code == 400:
-                raise ViewCreateViewNameMissingError
+                raise ViewCreateViewNameMissingError(resp, request)
             if resp.status_code == 404:
-                raise ViewCreateViewNameUnknownError
+                raise ViewCreateViewNameUnknownError(resp, request)
             return resp.body
         # execute request
         return self._execute(request, response_handler)
@@ -202,9 +202,9 @@ class Search(APIWrapper):
         # create response handler
         def response_handler(resp):
             if not resp.is_success:
-                raise ViewGetError
+                raise ViewGetError(resp, request)
             if resp.status_code == 404:
-                raise ViewNotFoundError
+                raise ViewNotFoundError(resp, request)
             return resp.body
         # execute request
         return self._execute(request, response_handler)
@@ -230,11 +230,11 @@ class Search(APIWrapper):
         # create response handler
         def response_handler(resp):
             if not resp.is_success:
-                raise ViewRenameError
+                raise ViewRenameError(resp, request)
             if resp.status_code == 404:
-                raise ViewCreateViewNameMissingError
+                raise ViewCreateViewNameMissingError(resp, request)
             if resp.status_code == 400:
-                raise ViewCreateViewNameUnknownError
+                raise ViewCreateViewNameUnknownError(resp, request)
             return True
         # execute request
         return self._execute(request, response_handler)
@@ -255,11 +255,11 @@ class Search(APIWrapper):
         # create response handler
         def response_handler(resp):
             if not resp.is_success:
-                raise ViewDeleteError
+                raise ViewDeleteError(resp, request)
             if resp.status_code == 404:
-                raise ViewCreateViewNameMissingError
+                raise ViewCreateViewNameMissingError(resp, request)
             if resp.status_code == 400:
-                raise ViewCreateViewNameUnknownError
+                raise ViewCreateViewNameUnknownError(resp, request)
             return True
         # execute request
         return self._execute(request, response_handler)
@@ -280,11 +280,11 @@ class Search(APIWrapper):
         # create response handler
         def response_handler(resp):
             if not resp.is_success:
-                raise ViewGetPropertiesError
+                raise ViewGetPropertiesError(resp, request)
             if resp.status_code == 404:
-                raise ViewCreateViewNameMissingError
+                raise ViewCreateViewNameMissingError(resp, request)
             if resp.status_code == 400:
-                raise ViewCreateViewNameUnknownError
+                raise ViewCreateViewNameUnknownError(resp, request)
             return resp.body
         return self._execute(request, response_handler)
 
@@ -306,11 +306,11 @@ class Search(APIWrapper):
         # create response handler
         def response_handler(resp):
             if not resp.is_success:
-                raise ViewUpdatePropertiesError
+                raise ViewUpdatePropertiesError(resp, request)
             if resp.status_code == 404:
-                raise ViewCreateViewNameMissingError
+                raise ViewCreateViewNameMissingError(resp, request)
             if resp.status_code == 400:
-                raise ViewCreateViewNameUnknownError
+                raise ViewCreateViewNameUnknownError(resp, request)
             return True
         return self._execute(request, response_handler)
 
@@ -328,7 +328,7 @@ class Search(APIWrapper):
         # create response handler
         def response_handler(resp):
             if not resp.is_success:
-                raise AnalyzerListError
+                raise AnalyzerListError(resp, request)
             return resp.body["result"]
         return self._execute(request, response_handler)
 
@@ -362,11 +362,11 @@ class Search(APIWrapper):
         # create response handler
         def response_handler(resp):
             if not resp.is_success:
-                raise AnalyzerCreateError
+                raise AnalyzerCreateError(resp, request)
             if resp.status_code == 400:
-                raise AnalyzerInvalidParametersError
+                raise AnalyzerInvalidParametersError(resp, request)
             if resp.status_code == 403:
-                raise AnanlyzerForbiddenError
+                raise AnanlyzerForbiddenError(resp, request)
             return resp.body
         return self._execute(request, response_handler)
 
@@ -386,15 +386,15 @@ class Search(APIWrapper):
         # create response handler
         def response_handler(resp):
             if not resp.is_success:
-                raise AnalyzerDeleteError
+                raise AnalyzerDeleteError(resp, request)
             if resp.status_code == 400:
-                raise AnalyzerInvalidParametersError
+                raise AnalyzerInvalidParametersError(resp, request)
             if resp.status_code == 403:
-                raise AnanlyzerForbiddenError
+                raise AnanlyzerForbiddenError(resp, request)
             if resp.status_code == 404:
-                raise AnalyzerNotFoundError
+                raise AnalyzerNotFoundError(resp, request)
             if resp.status_code == 409:
-                raise AnalyzerConflictError
+                raise AnalyzerConflictError(resp, request)
             return True
         # execute request
         return self._execute(request, response_handler)
@@ -415,9 +415,9 @@ class Search(APIWrapper):
         # create response handler
         def response_handler(resp):
             if not resp.is_success:
-                raise AnalyzerDeleteError
+                raise AnalyzerDeleteError(resp, request)
             if resp.status_code == 404:
-                raise AnalyzerNotFoundError
+                raise AnalyzerNotFoundError(resp, request)
             return resp.body
         # execute request
         return self._execute(request, response_handler)
