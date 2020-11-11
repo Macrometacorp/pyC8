@@ -148,7 +148,7 @@ class Search(APIWrapper):
     def create_view(self, 
         name,
         propeties={},
-        view_type="c8search",
+        view_type="search",
         ):
         """Creates a new view with a given name and properties if it does not
         already exist.
@@ -349,16 +349,19 @@ class Search(APIWrapper):
         :rtype: dict
         """
           # create request
-        request = Request(
-            method="POST",
-            endpoint=self._analyzer_prefix,
-            data={
+        data = {
                 "name": name,
                 "type": analyzer_type,
                 "properties": properties,
                 "features": features
             }
+        print("****", data)
+        request = Request(
+            method="POST",
+            endpoint=self._analyzer_prefix,
+            data=data
         )
+       
         # create response handler
         def response_handler(resp):
             if not resp.is_success:

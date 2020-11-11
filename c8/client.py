@@ -54,6 +54,9 @@ class C8Client(object):
         if self._apikey:
             self._tenant = self.tenant(apikey=self._apikey)
             self._fabric = self._tenant.useFabric(self._fabricname)
+        
+        self._search = self._fabric.search()
+
 
 
 
@@ -2150,6 +2153,171 @@ class C8Client(object):
     def clear_billing_access_level(self, keyid):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.clear_billing_access_level()
+
+    
+    def set_search(self, collection, enable, field):
+        """Set search capability of a collection (enabling or disabling it). 
+        If the collection does not exist, it will be created.
+        :param collection: Collection name on which search capabilities has
+        to be enabled/disabled
+        :type collection: str | unicode
+        :param enable: Whether to enable / disable search capabilities
+        type enable: bool
+        :param field: For which field to enable search capability.
+        :type field: str | unicode
+        :return: True if set operation is successfull
+        :rtype: bool
+        """
+        return self._search.set_search(collection, enable, field)
+
+    def create_view(self, 
+        name,
+        propeties={},
+        view_type="search",
+        ):
+        """Creates a new view with a given name and properties if it does not
+        already exist.
+        Note: view can't be created with the links. Please use PUT/PATCH for links
+        management.
+        
+        :param name: The name of the view
+        :type name: str | unicode
+        :param properties: Properties related with given view
+        :type properties: dict
+        :param view_type: The type of the view. must be equal to "c8search"
+        :type view_type: str | unicode
+        :return: object of new view
+        :rtype: dict
+        """
+        return self._search.create_view(name=name, propeties={},view_type="search")
+
+    def list_all_views(self):
+        """ List all views
+
+        :return: Returns an object containing an array of all view descriptions. 
+        :rtype: [dict]
+        """
+        return self._search.list_all_views()
+
+    def get_view_info(self, view):
+        """Returns information about view
+
+        :param view: name of the view
+        :type view: str | unicode
+        :return returns information about view
+        :rtype: dict
+        """
+        return self._search.get_view_info(view)
+
+    def rename_view(self, old_name, new_name):
+        """Rename given view to new name
+
+        :param old_name: Old view name
+        :type old_name: str | unicode
+        :param new_name: New view name
+        :type new_name: str | unicode
+        :return: True if view name renamed
+        :rtype: bool
+        """
+        return self._search.rename_view(old_name, new_name)
+
+    def delete_view(self, view):
+        """Deletes given view
+
+        :param view: Name of the view to be deleted
+        :type view: str | unicode
+        :return: True if view deleted successfully
+        :rtype: bool
+        """
+        return self._search.delete_view(view)
+
+    def get_view_properties(self,view):
+        """Get view properties
+
+        :param view: View name whos properties we need to get.
+        :type view: str | unicode
+        :return: returns properties of given view
+        :rtype: dict
+        """
+        return self._search.get_view_properties(view)
+
+    def update_view_properties(self, view, properties):
+        """Updates properties of given view
+
+        :param view: Name of the view
+        :type view: str | unicode
+        :param properties: Properties to be updated in given view
+        :type properties: dict
+        :return: True if properties updated successfully
+        :rtype: bool
+        """
+        return self._search.update_view_properties(view, properties)
+
+    def search_in_collection(self, collection, search, bindVars=None, ttl=60):
+        """Search a collection for string matches.
+
+        :param collection: Collection name on which search has to be performed 
+        :type collection: str | unicode
+        :param search: search string needs to be search in given collection
+        :type search: str | unicode
+        :param bindVars: if there is c8ql in search text, we can pass bindVars for
+        c8ql query using bindVars param
+        :type bindVars: dict | None
+        :param ttl: default ttl will be 60 seconds
+        :type ttl: int
+        :return: The specified search query will be executed for the collection.
+        The results of the search will be in the response. If there are too 
+        many results, an "id" will be specified for the cursor that can be 
+        used to obtain the remaining results.
+        :rtype: [dict]
+        """
+        return self._search.search_in_collection(collection, search, bindVars=None, ttl=60)
+
+    def get_list_of_analyzer(self):
+        """Get list of all available analyzers
+
+        :returns: Returns list of all available analyzers
+        :rtype: [dict]
+        """
+        return self._search.get_list_of_analyzer()
+
+    def create_analyzer(self, name,  analyzer_type, features=[], properties=None):
+        """Creates an analyzer with supplied definitions
+
+        :param name: The analyzer name.
+        :type name: str | unicode
+        :param properties: The properties used to configure the specified type.
+        Value may be a string, an object or null. The default value is null.
+        :type properties: str | dict | unicode
+        :param analyzer_type: The analyzer type.
+        :type analyzer_type: str | unicode
+        :param features: The set of features to set on the analyzer generated fields.
+        The default value is an empty array.
+        :type features: list
+        :return: Returns analyzer object if analyzer created successfully
+        :rtype: dict
+        """
+        return self._search.create_analyzer(name,  analyzer_type, features=features, properties=properties)
+
+    def delete_analyzer(self, name):
+        """Deletes given analyzer
+
+        :param name: Name of the analyzer to be deleted
+        :type name: str | unicode
+        :return: True if analyzer deleted successfully
+        :rtype: bool
+        """
+        return self._search.delete_analyzer(name)
+    
+    def get_analyzer_definition(self,name):
+        """Gets given analyzer definition
+
+        :param name: Name of the view to be deleted
+        :type name: str | unicode
+        :return: Definition of the given analyzer
+        :rtype: dict
+        """
+        return self._search.get_analyzer_definition(name)
 
     # def fabric(self, tenant, name, email, password, verify=False):
     #     """Connect to a fabric and return the fabric API wrapper.
