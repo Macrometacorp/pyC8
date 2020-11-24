@@ -576,7 +576,10 @@ class Fabric(APIWrapper):
         :return: Standard collection API wrapper.
         :rtype: c8.collection.StandardCollection
         """
-        return StandardCollection(self._conn, self._executor, name)
+        if self.has_collection(name):
+            return StandardCollection(self._conn, self._executor, name)
+        else:
+            raise Exception("Collection not found")
 
     def has_collection(self, name):
         """Check if collection exists in the fabric.
@@ -586,7 +589,11 @@ class Fabric(APIWrapper):
         :return: True if collection exists, False otherwise.
         :rtype: bool
         """
-        return any(col['name'] == name for col in self.collections())
+        col = any(col['name'] == name for col in self.collections())
+        if not col:
+            raise Exception("Collection not found")
+        else:
+            return col
 
     def collections(self, collectionModel=None):
         """Return the collections in the fabric.
