@@ -4,39 +4,42 @@
     from c8 import C8Client
 
     client = C8Client(protocol='https', host='smoke1.eng.macrometa.io', port=443,
-     email="guest@macrometa.io", password="guest")
+    email="guest@macrometa.io", password="guest")
 
     # Set Search
     is_success = client.set_search("test",False,"name")
     print("Is Success:", is_success)
-
+    
     # Create a new View
-    client.create_view("xyz")
-
+    client.create_view("testView")
+    
     # List all Views
     print(client.list_all_views())
-
+    
     # Get View Info
-    print(client.get_view_info("xyz"))
-
+    print(client.get_view_info("testView"))
+    
     # Get View Properties
-    print(client.get_view_properties("xyz"))
-
+    print(client.get_view_properties("testView"))
+    
     # Rename View
-    print(client.rename_view("xyz", "xyznew"))
-
-
+    print(client.rename_view("testView", "testViewNew"))
+    
+    
     # Delete View
-    print(client.delete_view("xyznew"))
-
+    print(client.delete_view("testViewNew"))
+    
     # Create Analyzer
-    print(client.create_analyzer(name="xyz", analyzer_type="identity", properties="abc"))
-
+    print(client.create_analyzer(name="testAnalyzer", analyzer_type="identity", properties={"locale":"nl.utf-8","case":"lower"}))
+    
     # Analyzer list
     print(client.get_list_of_analyzer())
-
+    
     # Get Analyzer Definition
-    print(client.get_analyzer_definition("xyz"))
-
+    print(client.get_analyzer_definition("testAnalyzer"))
+    
     # Delete Analyzer
-    print(client.delete_analyzer("xyz"))
+    print(client.delete_analyzer("testAnalyzer"))
+    
+
+

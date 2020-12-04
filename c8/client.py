@@ -2281,7 +2281,7 @@ class C8Client(object):
         """
         return self._search.get_list_of_analyzer()
 
-    def create_analyzer(self, name,  analyzer_type, features=[], properties=None):
+    def create_analyzer(self, name,  analyzer_type, features=[], properties={}):
         """Creates an analyzer with supplied definitions
 
         :param name: The analyzer name.

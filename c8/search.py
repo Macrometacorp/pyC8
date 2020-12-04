@@ -332,7 +332,7 @@ class Search(APIWrapper):
             return resp.body["result"]
         return self._execute(request, response_handler)
 
-    def create_analyzer(self, name,  analyzer_type, features=[], properties=None):
+    def create_analyzer(self, name,  analyzer_type, features=[], properties={}):
         """Creates an analyzer with supplied definitions
 
         :param name: The analyzer name.
@@ -349,6 +349,7 @@ class Search(APIWrapper):
         :rtype: dict
         """
           # create request
+        
         data = {
                 "name": name,
                 "type": analyzer_type,
