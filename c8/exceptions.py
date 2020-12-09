@@ -313,7 +313,6 @@ class CollectionDeleteError(C8ServerError):
 class CollectionTruncateError(C8ServerError):
     """Failed to truncate collection."""
 
-
 #####################
 # Cursor Exceptions #
 #####################
@@ -557,10 +556,6 @@ class DataBaseError(C8ServerError):
 
 class GetDataBaseAccessLevel(C8ServerError):
     """Failed to fetch database access level for the specified user"""
-
-
-class SetDataBaseAccessLevel(C8ServerError):
-    """Failed to set database access level for the specified user"""
 
 #########################
 # Permission Exceptions #
