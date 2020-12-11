@@ -12,6 +12,7 @@ from c8.keyvalue import KV
 from c8.collection import StandardCollection
 from c8.stream_apps import StreamApps
 from c8.apikeys import APIKeys
+from c8.search import Search
 from c8 import constants
 from c8.exceptions import (
     CollectionCreateError,
@@ -1466,8 +1467,15 @@ class Fabric(APIWrapper):
                 return resp.body['result']
         return self._execute(request, response_handler)
 
-
-    
+    ##############################
+    # Search, View and Analyzers #
+    ##############################
+    def search(self):
+        """Returns the Search APIWrapper
+        :return: Search API Wrapper
+        :rtype: c8.search.Search
+        """ 
+        return Search(self._conn, self._executor)
 
 class StandardFabric(Fabric):
     """Standard fabric API wrapper.

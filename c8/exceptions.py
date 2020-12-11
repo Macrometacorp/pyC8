@@ -714,3 +714,79 @@ class SetBillingAccessLevel(C8ServerError):
 
 class ClearBillingAccessLevel(C8ServerError):
     """Failed to clear the billing access level"""
+
+#######################
+# Search #
+#######################
+
+class SearchCollectionSetError(C8ServerError):
+    """Failed to set search capabilities for given collection"""
+
+class SearchCollectionInvalidArgument(C8ServerError):
+    """Invalid arguments supplied"""
+
+class SearchCollectionForbiddenError(C8ServerError):
+    """Permission denied for the specified collection"""
+
+class SearchError(C8ServerError):
+    """Failed to search given search string"""
+
+class SearchInvalidArgumentError(C8ServerError):
+    """Invalid arguments supplied"""
+
+class SearchForbiddenError(C8ServerError):
+    """Permission denied for the specified collection"""
+
+class SearchNotExistError(C8ServerError):
+    """Collection does not exist or search is disabled for this collection"""
+
+class ViewCreateError(C8ServerError):
+    """Failed to create view"""
+
+class ViewCreateViewNameMissingError(C8ServerError):
+    """The view-name is missing, then a HTTP 400 is returned."""
+
+class ViewCreateViewNameUnknownError(C8ServerError):
+    """The view-name is unknown, then a HTTP 404 is returned."""
+
+class ViewGetError(C8ServerError):
+    """Failed to get view information"""
+
+class ViewNotFoundError(C8ServerError):
+    """View does not exist"""
+
+class ViewRenameError(C8ServerError):
+    """Failed to rename view"""
+
+class ViewDeleteError(C8ServerError):
+    """Failed to delete view"""
+
+class ViewGetPropertiesError(C8ServerError):
+    """Failed to get properties of given view"""
+
+class ViewUpdatePropertiesError(C8ServerError):
+    """Failed to update properties of given view"""
+
+class AnalyzerListError(C8ServerError):
+    """Failed to get list of all available analyzers"""
+
+class AnalyzerCreateError(C8ServerError):
+    """Failed to create analyzer"""
+
+class AnalyzerInvalidParametersError(C8ServerError):
+    """Invalid parameters provided"""
+
+class AnanlyzerForbiddenError(C8ServerError):
+    """User does not have permission to create analyzers"""
+
+class AnalyzerDeleteError(C8ServerError):
+    """Failed to delete analyzer"""
+
+class AnalyzerGetDefinitionError(C8ServerError):
+    """Failed to get analyzer definition"""
+
+class AnalyzerNotFoundError(C8ServerError):
+    """Analyzer configuration not found"""
+
+class AnalyzerConflictError(C8ServerError):
+    """The analyzer is still in use"""
