@@ -88,7 +88,7 @@ class Tenant(APIWrapper):
         self._conn.set_url_prefix(proto + '//' + rema )
         data = {"tenant": self.tenant_name}
         data['email'] = self._conn._email
-        data['password'] = self._conn._auth[1]
+        data['password'] = self._conn._password
         request = Request(
             method='post',
             endpoint='/_open/auth',
