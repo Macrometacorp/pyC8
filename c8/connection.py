@@ -46,11 +46,6 @@ class Connection(object):
         self._token = token
         self._apikey = apikey
         self._header = ''
-        # # Set the auth credentials depending on tenant name
-        # if self._tenant_name == '_mm':
-        #     self._auth = (username, password)
-        # else:
-        #     self._auth = (self._tenant_name + '.' + username, password)
 
         # Construct the URL prefix in the required format.
         #if not fabric_name:
