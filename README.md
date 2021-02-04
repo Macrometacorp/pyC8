@@ -193,10 +193,7 @@ Example to **publish** documents to a stream:
 
   for i in range(10):
       msg1 = "Persistent: Hello from " + "("+ str(i) +")"
-      data = {
-        "payload" : base64.b64encode(six.b(msg1)).decode("utf-8")
-      }
-      producer.send(json.dumps(data))
+      producer.send(json.dumps(msg1))
       time.sleep(10) # 10 sec
 
 ```
