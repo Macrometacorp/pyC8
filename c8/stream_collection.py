@@ -2,8 +2,10 @@ from __future__ import absolute_import, unicode_literals
 
 from urllib.parse import urlparse, urlencode
 
+import base64
 import json
 import random
+import six
 
 import websocket
 
@@ -14,6 +16,13 @@ from c8.request import Request
 
 __all__ = ['StreamCollection']
 ENDPOINT = "/streams/"
+
+
+class Base64Socket(websocket.WebSocket):
+    def send(self, payload, **kwargs):
+        b64payload = {"payload": base64.b64encode(six.b(payload)).decode("utf-8")}
+        return super().send(json.dumps(b64payload), **kwargs)
+
 
 class StreamCollection(APIWrapper):
     """Stream Client.
@@ -139,8 +148,8 @@ class StreamCollection(APIWrapper):
             params = {k: v for k, v in params.items() if v is not None}
             url = self._ws_url + topic 
             print(url)
-            return websocket.create_connection(url, header={'Authorization' : self.header['Authorization']})
-        
+            return websocket.create_connection(url, header={'Authorization' : self.header['Authorization']}, class_=Base64Socket)
+
         raise ex.StreamProducerError(
             "No stream present with name:" + stream +
             ". Please create a stream and then stream producer"
