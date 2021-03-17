@@ -17,7 +17,7 @@ The Simple Way
     from c8 import C8Client, C8QLQueryKillError
     # Initialize the C8 client.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
-                      email='guest@macrometa.io', password='guest')
+                      email='user@example.com', password='hidden')
 
     collection_name = 'students'
 
@@ -70,7 +70,7 @@ The Object Oriented Way
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    tenant = client.tenant(email='mytenant@example.com', password='tenant-password')
+    tenant = client.tenant(email='mytenant@example.com', password='hidden')
     fabric = tenant.useFabric('test')
     # Create a new collection named "cities".
     cities = fabric.create_collection('cities')

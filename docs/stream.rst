@@ -10,7 +10,7 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
     from c8 import C8Client
     # Initialize the C8 client.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
-                          email='guest@macrometa.io', password='guest')
+                          email='user@example.com', password='hidden')
     
     stream = "teststream"
     
@@ -75,7 +75,7 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
     # Connect to the system fabric of the "mytenant" tenant.
     # This connection is made as the tenant admin using the tenant admin username and password
-    tennt = client.tenant(email='mytenant',  password='root_pass')
+    tennt = client.tenant(email='mytenant',  password='hidden')
     # Connect to "_system" fabric as root user.
     sys_fabric = tenant.useFabric('_system')
 

@@ -18,7 +18,7 @@ For information on operations related to administration of tenant users, see :do
 
     # Connect to the system fabric of the "mytenant" tenant.
     # This connection is made as the tenant admin using the tenant admin username and password
-    tennt = client.tenant(email='tenant_email', password='tenant_password')
+    tennt = client.tenant(email='mytenant@example.com', password='hidden')
 
     # Connect to the tenant's system fabric as the tenant admin
     sys_fabric = tennt.useFabric('fabric-name)

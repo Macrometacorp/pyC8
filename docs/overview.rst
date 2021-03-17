@@ -20,10 +20,10 @@ Here is an example showing how **pyC8** client can be used:
    #--------------------------------------------------------------
    print("Create demo tenant...")
    client = C8Client(protocol='https', host=region, port=443)
-   sys_tenant = client.tenant(email='macrometa_admin_email', password='macrometa_password')
+   sys_tenant = client.tenant(email='macrometa_admin_email', password='hidden')
 
    if not sys_tenant.has_tenant(demo_tenant):
-      sys_tenant.create_tenant(demo_tenant, passwd="poweruser", dclist="qa1-us-east-1,qa1-us-east-2,qa1-us-east-3") # dclist: list of comma separated region in which tenant has to be created
+      sys_tenant.create_tenant(demo_tenant, passwd="hidden", dclist="qa1-us-east-1,qa1-us-east-2,qa1-us-east-3") # dclist: list of comma separated region in which tenant has to be created
 
    #--------------------------------------------------------------
 
@@ -35,10 +35,10 @@ Here is an example showing how **pyC8** client can be used:
 
    #--------------------------------------------------------------
    print("Create under demotenant, demofabric, demouser and assign permissions...")
-   demotenant = client.tenant(email=demo_tenant, password='poweruser')
+   demotenant = client.tenant(email=demo_tenant, password='hidden')
    fabric = demotenant.useFabric('_system')
    if not demotenant.has_user(demo_user):
-     demotenant.create_user(email=demo_user, password='demouser', active=True)
+     demotenant.create_user(email=demo_user, password='hidden', active=True)
 
    if not fabric.has_fabric(demo_fabric):
      fabric.create_fabric(name=demo_fabric, dclist=demotenant.dclist(detail=False))
@@ -89,7 +89,7 @@ Example to **query** a given fabric:
   #--------------------------------------------------------------
   print("query employees collection...")
   client = C8Client(protocol='https', host=region, port=443)
-  tenant = client.tenant(email = 'demoemail', password='poweruser')
+  tenant = client.tenant(email = 'user@example.com', password='hidden')
   fabric = tenant.useFabric('demo-fabric')
   #get fabric details
   fabric.fabrics_detail()
@@ -115,7 +115,7 @@ Example for **real-time updates** from a collection in fabric:
   #--------------------------------------------------------------
   print("Subscribe to employees collection...")
   client = C8Client(protocol='https', host=region, port=443)
-  tenant = client.tenant(email="demomail", password="poweruser")
+  tenant = client.tenant(email="user@example.com", password="hidden")
   fabric = tenant.useFabric('demo-fabric')
   fabric.on_change("employees", timeout=10, callback=callback_fn)
 
@@ -135,7 +135,7 @@ Example to **publish** documents to a stream:
   #--------------------------------------------------------------
   print("publish messages to stream...")
   client = C8Client(protocol='https', host=region, port=443)
-  tenant = client.tenant(email="demomail", password="poweruser")
+  tenant = client.tenant(email="user@example.com", password="hidden")
   fabric = tenant.useFabric('demo-fabric')  stream = fabric.stream()
   producer = stream.create_producer("demostream", local=False)
   for i in range(10):
@@ -158,7 +158,7 @@ Example to **subscribe** documents from a stream:
    #--------------------------------------------------------------
    print("consume messages from stream...")
    client = C8Client(protocol='https', host=region, port=443)
-  tenant = client.tenant(email="demomail", password="poweruser")
+  tenant = client.tenant(email="user@example.com", password="hidden")
   fabric = tenant.useFabric('demo-fabric')   stream_collection = fabric.stream()
    subscriber = stream_collection.subscribe("demostream",local=False, subscription_name="demosub", consumer_type= stream_collection.CONSUMER_TYPES.EXCLUSIVE)
    #you can subscribe using consumer_types option.
@@ -215,7 +215,7 @@ Workflow of **Spot Collections**
 
     #Step 1: Make one of the regions in the fed as the Spot Region
     # Connect to System admin
-    sys_tenant = client.tenant(eamil=macrometa-admin,  password=macrometa-password)
+    sys_tenant = client.tenant(email=macrometa-admin,  password='hidden')
     #Make REGION-1 as spot-region
     sys_tenant.assign_dc_spot('REGION-1',spot_region=True)
 
@@ -225,7 +225,7 @@ Workflow of **Spot Collections**
     #Step 2: Create a geo-fabric and pass one of the spot regions. You can use the SPOT_CREATION_TYPES for the same. If you use AUTOMATIC, a random spot region will be assigned by the system.
     # If you specify None, a geo-fabric is created without the spot properties. If you specify spot region,pass the corresponding spot region in the spot_dc parameter.
     dcl = sys_tenant.dclist(detail=False)
-    tenant = client.tenant(email="demomail", password="poweruser")
+    tenant = client.tenant(email="user@example.com", password="hidden")
     fabric = tenant.useFabric('demo-fabric')    fabric.create_fabric('spot-geo-fabric', dclist=dcl,spot_creation_type= fabric.SPOT_CREATION_TYPES.SPOT_REGION, spot_dc='REGION-1')
 
     #Step 3: Create spot collection in 'spot-geo-fabric'
@@ -244,7 +244,7 @@ Example for **restql** operations:
   warnings.filterwarnings("ignore")
 
   client = C8Client(protocol='https', host=region, port=443)
-  tenant = client.tenant(email="demomail", password="poweruser")
+  tenant = client.tenant(email="user@example.com", password="hidden")
   fabric = tenant.useFabric('demo-fabric')                   
   #--------------------------------------------------------------
   print("save restql...")

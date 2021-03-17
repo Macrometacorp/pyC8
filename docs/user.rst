@@ -23,12 +23,12 @@ The Simple Way
     print("Permissions: ", client.get_permissions("root"))
     print("Permission: ", client.get_permission("root", "_system"))
     # Create a User
-    client.create_user(username='testuser', email='test@test.com', password='test',
+    client.create_user(username='testuser', email='test@test.com', password='hidden',
                         active=True)
     print("TestUser: ", client.get_user("testuser"))
 
     # Update User 
-    client.update_user(username='testuser', password='test',
+    client.update_user(username='testuser', password='hidden',
                     active=False)
     # Delete User
     client.delete_user(username='testuser')
@@ -45,7 +45,7 @@ The Object Oriented Way
     # For the "mytenant" tenant, connect to "_system" fabric as tenant admin.
     # This returns an API wrapper for the "_system" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    tennt = client.tenant(email="my-tenant", password="password")
+    tennt = client.tenant(email="my-tenant", password="hidden")
     fabric = tenant.useFabric('_system')
     # List all tenant users.
     tennt.users()

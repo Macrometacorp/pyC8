@@ -16,7 +16,7 @@ from :ref:`TransactionJob` objects.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    tenant = client.tenant(email='my-tenant', password="password")
+    tenant = client.tenant(email='my-tenant', password="hidden")
     fabric = tenant.useFabric('demo-fabric')
     # Get the API wrapper for "students" collection.
     students = fabric.collection('students')
@@ -102,7 +102,7 @@ at "pending" status (they may be discarded).
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    tenant = client.tenant(email="my-tenant", password="password")
+    tenant = client.tenant(email="my-tenant", password="hidden")
     fabric = tenant.useFabric('demo-fabric')
     # Get the API wrapper for "students" collection.
     students = fabric.collection('students')
@@ -152,7 +152,7 @@ command as its argument.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    tenant = client.tenant(email="my-tenant", password="password")
+    tenant = client.tenant(email="my-tenant", password="hidden")
     fabric = tenant.useFabric('_system')
     # Get the API wrapper for "students" collection.
     students = fabric.collection('students')
@@ -199,7 +199,7 @@ executing C8QL queries.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    tenant = client.tenant(email="my-tenant", password="password")
+    tenant = client.tenant(email="my-tenant", password="hidden")
     fabric = tenant.useFabric('_system')
     # Begin a new transaction via context manager.
     with fabric.begin_transaction() as txn_fabric:
@@ -274,7 +274,7 @@ is raised.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='hidden')
 
     # Begin a new transaction.
     txn_fabric = fabric.begin_transaction()
@@ -300,7 +300,7 @@ a large result set.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    tenant = client.tenant(email="my-tenant", password="password")
+    tenant = client.tenant(email="my-tenant", password="hidden")
     fabric = tenant.useFabric('_system')      
     # Get the total document count in "students" collection.
     document_count = fabric.collection('students').count()

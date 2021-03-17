@@ -17,7 +17,7 @@ call. After the commit, results can be retrieved from :ref:`BatchJob` objects.
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    tenant = client.tenant(email='mytenant@example.com', password='tenant-password')
+    tenant = client.tenant(email='mytenant@example.com', password='hidden')
     fabric = tenant.useFabric('test')
 
     # Get the API wrapper for "students" collection.

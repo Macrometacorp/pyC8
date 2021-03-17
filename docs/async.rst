@@ -23,7 +23,7 @@ retrieved from the server later via :ref:`AsyncJob` objects.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    tenant = client.tenant(email='tenant-email', password='passwd')
+    tenant = client.tenant(email='mytenant@example.com', password='hidden')
     fabric = tenant.useFabric('fabric-name')
     # Begin async execution. This returns an instance of AsyncFabric, a
     # fabric-level API wrapper tailored specifically for async execution.

@@ -22,7 +22,7 @@ Each fabric in the C8 Fabric can publish changes in realtime to any clients whic
     # For the "mytenant" tenant, connect to "_system" fabric as tenant admin.
     # This returns an API wrapper for the "_system" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    tenant = client.tenant(email='mytenant@example.com', password='tenant-password')
+    tenant = client.tenant(email='mytenant@example.com', password='hidden')
     sys_fabric = tenant.useFabric('_system')
 
     # List all fabrics in the 'mytenant' tenant
@@ -68,7 +68,7 @@ Each fabric in the C8 Fabric can publish changes in realtime to any clients whic
 
     # Get the list of edge locations for the 'mytenant' tenant.
     # We do this as the tenant admin.
-    tennt = client.tenant(name=tenant_name, fabricname='_system', username='root', password='root_pass')
+    tennt = client.tenant(name=tenant_name, fabricname='_system', username='root', password='hidden')
     dcl = tennt.dclist(detail=False)
 
     # Create a new fabric which is replicated to all Fabric Edge Locations,
