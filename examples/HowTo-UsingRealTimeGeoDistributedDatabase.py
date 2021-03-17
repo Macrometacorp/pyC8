@@ -5,8 +5,8 @@ import time
 
 # Variables
 service_url = "gdn1.macrometa.io" # The request will be automatically routed to closest location.
-guest_mail = "guest1@macrometa.io"
-guest_password = "guest1"
+user_mail = "user@example.com"
+user_password = "hidden"
 geo_fabric = "testfabric"
 collection_name = "employees" + str(random.randint(1, 10000))
 
@@ -19,9 +19,9 @@ def create_callback():
 if __name__ == '__main__':
 
     print("\n ------- CONNECTION SETUP  ------")
-    print("user: {}, geofabric:{}".format(guest_mail, geo_fabric))
+    print("user: {}, geofabric:{}".format(user_mail, geo_fabric))
     client = C8Client(protocol='https', host=service_url, port=443) # Automatically routed to nearest region.
-    tenant = client.tenant(guest_mail, guest_password)
+    tenant = client.tenant(user_mail, user_password)
     fabric = tenant.useFabric(geo_fabric)
 
     print("Availabile regions....")
