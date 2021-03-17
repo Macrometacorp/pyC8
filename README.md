@@ -397,6 +397,6 @@ spot_collection = fabric.create_collection('spot-collection', spot_collection=Tr
 
 #Step 4: Update Spot primary region of the geo-fabric. To change it, we need system admin credentials
 sys_fabric = client.fabric(tenant=macrometa-admin, name='_system', username='root', password=macrometa-password)
-sys_fabric.update_spot_region('guest', 'spot-geo-fabric', 'REGION-2')
+sys_fabric.update_spot_region('mytenant', 'spot-geo-fabric', 'REGION-2')
 
 ```

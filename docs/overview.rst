@@ -233,7 +233,7 @@ Workflow of **Spot Collections**
 
     #Step 4: Update Spot primary region of the geo-fabric. To change it, we need system admin credentials
     sys_fabric = sys_tenant.useFabric('_system')
-    sys_fabric.update_spot_region('guest', 'spot-geo-fabric', 'REGION-2')
+    sys_fabric.update_spot_region('mytenant', 'spot-geo-fabric', 'REGION-2')
 
 Example for **restql** operations:
 
@@ -262,7 +262,7 @@ Example for **restql** operations:
   #--------------------------------------------------------------
   print("execute restql with bindVars...")
   response = fabric.execute_restql("demo",
-                                   {"bindVars": {"name": "guest.root"}})
+                                   {"bindVars": {"name": "mytenant.root"}})
   #--------------------------------------------------------------
   print("get all restql...")
   response = fabric.get_all_restql()

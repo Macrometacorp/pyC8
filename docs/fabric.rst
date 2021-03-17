@@ -91,7 +91,7 @@ Each fabric in the C8 Fabric can publish changes in realtime to any clients whic
 
     # execute restql with bindVars
     response = sys_fabric.execute_restql("demo",
-                                         {"bindVars": {"name": "guest.root"}})
+                                         {"bindVars": {"name": "mytenant.root"}})
 
     # get all restql
     response = sys_fabric.get_all_restql()
