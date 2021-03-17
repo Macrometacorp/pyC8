@@ -590,11 +590,7 @@ class Fabric(APIWrapper):
         :return: True if collection exists, False otherwise.
         :rtype: bool
         """
-        col = any(col['name'] == name for col in self.collections())
-        if not col:
-            raise Exception("Collection not found")
-        else:
-            return col
+        return any(col['name'] == name for col in self.collections())
 
     def collections(self, collectionModel=None):
         """Return the collections in the fabric.
