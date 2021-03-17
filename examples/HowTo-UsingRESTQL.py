@@ -3,8 +3,8 @@ import random
 
 # Variables
 fed_url = "gdn1.macrometa.io"
-guest_password = "guest1"
-guest_mail = "guest1@macrometa.io"
+user_password = "hidden"
+user_mail = "user@example.com"
 geo_fabric = "testfabric"
 collection_name = "addresses" + str(random.randint(1, 10000))
 
@@ -21,9 +21,9 @@ get_count = {"query": {"name": "countRecords", "value": "RETURN COUNT(FOR doc IN
 if __name__ == '__main__':
 
     print("\n ------- CONNECTION SETUP  ------")
-    print("tenant: {}, geofabric:{}".format(guest_mail, geo_fabric))
+    print("tenant: {}, geofabric:{}".format(user_mail, geo_fabric))
     client = C8Client(protocol='https', host=fed_url, port=443)
-    tenant = client.tenant(guest_mail, guest_password)
+    tenant = client.tenant(user_mail, user_password)
     fabric = tenant.useFabric(geo_fabric)
 
     print("Availabile regions....")

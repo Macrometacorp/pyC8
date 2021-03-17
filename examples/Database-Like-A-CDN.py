@@ -7,15 +7,15 @@ from c8 import C8Client
 # Variables
 
 fed_url = "gdn1.macrometa.io"
-guest_password = "guest1"
-guest_mail = "guest1@macrometa.io"
+user_password = "hidden"
+user_mail = "user@example.com"
 geo_fabric = "testfabric"
 collection_name = "person" + str(random.randint(1, 10000))
 
 # Insert data into geofabric collection from the given region.
 def insert_document(region, data):
     client = C8Client(protocol='https', host=region, port=443)
-    tenant = client.tenant(guest_mail, guest_password)
+    tenant = client.tenant(user_mail, user_password)
     fabric = tenant.useFabric(geo_fabric)
     collection = fabric.collection(collection_name)
     collection.insert(data)
@@ -24,9 +24,9 @@ def insert_document(region, data):
 if __name__ == '__main__':
 
     print("\n ------- CONNECTION SETUP  ------")
-    print("user: {}, geofabric:{}".format(guest_mail,  geo_fabric))
+    print("user: {}, geofabric:{}".format(user_mail,  geo_fabric))
     client = C8Client(protocol='https', host=fed_url, port=443)
-    tenant = client.tenant(guest_mail, guest_password)
+    tenant = client.tenant(user_mail, user_password)
     fabric = tenant.useFabric(geo_fabric)
 
     # create geo-replicated collection

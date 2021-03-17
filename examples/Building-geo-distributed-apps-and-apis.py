@@ -7,8 +7,8 @@ import threading
 
 # Variables
 service_url = "gdn1.macrometa.io" # The request will be automatically routed to closest location.
-user_mail = "guest1@macrometa.io"
-user_pwd = "guest1"
+user_mail = "user@example.com"
+user_password = "hidden"
 collection_name = "employees" + str(random.randint(1, 10000))
 stream_name = "stream"+ str(random.randint(1, 10000))
 
@@ -18,7 +18,7 @@ print(service_url)
 client = C8Client(protocol='https', host=service_url, port=443) # Automatically routed to nearest region.
 
 print("Get access to geo fabric...")
-tenant = client.tenant(user_mail, user_pwd)
+tenant = client.tenant(user_mail, user_password)
 fabric = tenant.useFabric("testfabric")
 pprint.pprint("Connected to region: {}".format(fabric.localdc(detail=False)))
 print("List of regions geo fabric is replicated currently: {}".format(fabric.dclist(detail=False)))

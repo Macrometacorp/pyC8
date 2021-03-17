@@ -42,14 +42,14 @@ def write_to_origin_db(document):
 if __name__ == '__main__':
     # variables
     fed_url = "gdn1.macrometa.io"
-    guest_mail = "guest1@macrometa.io"
-    guest_password = "guest1"
-    geo_fabric = "guest1"
+    user_mail = "user@example.com"
+    user_password = "hidden"
+    geo_fabric = "testfabric"
     keys = ["dogs", "cats", "birds", "books", "business"]
 
-    print("\nConnection: federation:{},  user: {}".format(fed_url, guest_mail))
+    print("\nConnection: federation:{},  user: {}".format(fed_url, user_mail))
     client = C8Client(protocol='https', host=fed_url, port=443)
-    tenant = client.tenant(guest_mail, guest_password)
+    tenant = client.tenant(user_mail, user_password)
     fabric = tenant.useFabric(geo_fabric)
     cache = Cache(fabric)
     cache.purge(keys) # Clean up cache data from any prior runs.
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     print("------------------------------\n3. Access from different region:\n------------------------------")
     fed_url_asia = "gdn1-fra1.prod.macrometa.io"
     client2 = C8Client(protocol='https', host=fed_url_asia, port=443)
-    tenant2 = client.tenant(guest_mail, guest_password)
+    tenant2 = client.tenant(user_mail, user_password)
     fabric2 = tenant.useFabric(geo_fabric)
     cache2 = Cache(fabric)
 
