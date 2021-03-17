@@ -16,7 +16,7 @@ The Simple Way
     from c8 import C8Client
     # Initialize the C8 client.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
-                          email='guest@macrometa.io', password='guest')
+                          email='user@example.com', password='hidden')
 
     # Create a new graph named "school" if it does not already exist.
     if client.has_graph(graph):
@@ -38,7 +38,7 @@ The Object Oriented Way
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    tenant = client.tenant(email='mytenant@example.com', password='tenant-password')
+    tenant = client.tenant(email='mytenant@example.com', password='hidden')
     fabric = tenant.useFabric('test')
     # List existing graphs in the fabric.
     fabric.graphs()
@@ -114,7 +114,7 @@ Here is an example showing how edge definitions are managed:
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='hidden')
 
     # Get the API wrapper for graph "school".
     if fabric.has_graph('school'):
@@ -169,7 +169,7 @@ additional safeguards:
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='hidden')
 
     # Get the API wrapper for graph "school".
     school = fabric.graph('school')
@@ -204,7 +204,7 @@ IDs instead of keys where applicable.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='hidden')
 
     # Get the API wrapper for graph "school".
     school = fabric.graph('school')
@@ -244,7 +244,7 @@ wrappers provides additional safeguards:
 .. testsetup:: edge_collections
 
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='hidden')
     school = fabric.graph('school')
 
     if school.has_vertex_collection('lectures'):
@@ -267,7 +267,7 @@ wrappers provides additional safeguards:
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='hidden')
 
     # Get the API wrapper for graph "school".
     school = fabric.graph('school')
@@ -322,7 +322,7 @@ IDs instead of keys where applicable.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443)
 
     # Connect to "test" fabric as tenant admin.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='hidden')
 
     # Get the API wrapper for graph "school".
     school = fabric.graph('school')

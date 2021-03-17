@@ -43,7 +43,7 @@ The format used to set a  value is as follows
     from c8 import C8Client, C8QLQueryKillError
     # Initialize the C8 client.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
-                      email='guest@macrometa.io', password='guest')
+                      email='user@example.com', password='hidden')
 
     collection_name = 'testcollectionkv'
     
@@ -112,7 +112,7 @@ The format used to set a  value is as follows
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    tenant = client.tenant(email='guest@macrometa.io', password='guest')
+    tenant = client.tenant(email='user@example.com', password='hidden')
     fabric = tenant.useFabric('_system')
 
     collection_name = 'testcollectionkv'

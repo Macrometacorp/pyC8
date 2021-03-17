@@ -35,7 +35,7 @@ The driver allows you to use three ways for authentication:-
   
   # Auth email password
   client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
-   email="guest@macrometa.io", password="guest")
+   email="user@example.com", password="hidden")
 ```
 
 2. Using jwt
@@ -67,9 +67,9 @@ Here is an overview example:
     import warnings
     warnings.filterwarnings("ignore")
     region = "gdn1.macrometa.io"
-    demo_tenant = "guest@macrometa.io"
+    demo_tenant = "mytenant@example.com"
     demo_fabric = "_system"
-    demo_user = "guest@macrometa.io"
+    demo_user = "user@example.com"
     demo_user_name = "root"
     demo_collection = "employees"
     demo_stream = "demostream"
@@ -77,7 +77,7 @@ Here is an overview example:
     #--------------------------------------------------------------
     print("Create C8Client Connection...")
     client = C8Client(protocol='https', host=region, port=443,
-                         email=demo_tenant, password='guest',
+                         email=demo_tenant, password='hidden',
                          geofabric=demo_fabric)
 
     #--------------------------------------------------------------
@@ -115,7 +115,7 @@ Here is an overview example:
     client.insert_document(collection_name=collname, document=docs)
 
     # insert documents from file
-    client.insert_document_from_file(collection_name=collname, csv_filepath="/home/guest/test.csv")
+    client.insert_document_from_file(collection_name=collname, csv_filepath="/home/user/test.csv")
 
     # Add a hash Index
     client.add_hash_index(collname, fields=['email'], unique=True)
@@ -145,9 +145,9 @@ Example for **real-time updates** from a collection in fabric:
   import warnings
   warnings.filterwarnings("ignore")
   region = "gdn1.macrometa.io"
-  demo_tenant = "guest@macrometa.io"
+  demo_tenant = "mytenant@example.com"
   demo_fabric = "_system"
-  demo_user = "guest@macrometa.io"
+  demo_user = "user@example.com"
   demo_user_name = "root"
   demo_collection = "employees"
   demo_stream = "demostream"
@@ -155,7 +155,7 @@ Example for **real-time updates** from a collection in fabric:
   #--------------------------------------------------------------
   print("Create C8Client Connection...")
   client = C8Client(protocol='https', host=region, port=443,
-                       email=demo_tenant, password='guest',
+                       email=demo_tenant, password='hidden',
                        geofabric=demo_fabric)
 
   #--------------------------------------------------------------
@@ -180,13 +180,13 @@ Example to **publish** documents to a stream:
   warnings.filterwarnings("ignore")
 
   region = "gdn1.macrometa.io"
-  demo_tenant = "guest@macrometa.io"
+  demo_tenant = "mytenant@example.com"
   demo_fabric = "_system"
-  stream = "demostream
+  stream = "demostream"
   #--------------------------------------------------------------
   print("publish messages to stream...")
   client = C8Client(protocol='https', host=region, port=443,
-                       email=demo_tenant, password='guest',
+                       email=demo_tenant, password='hidden',
                        geofabric=demo_fabric)
 
   producer = client.create_stream_producer(stream)
@@ -214,13 +214,13 @@ Example to **subscribe** documents from a stream:
   warnings.filterwarnings("ignore")
 
   region = "gdn1.macrometa.io"
-  demo_tenant = "guest@macrometa.io"
+  demo_tenant = "mytenant@example.com"
   demo_fabric = "_system"
   stream = "demostream"
   #--------------------------------------------------------------
   print("publish messages to stream...")
   client = C8Client(protocol='https', host=region, port=443,
-                       email=demo_tenant, password='guest',
+                       email=demo_tenant, password='hidden',
                        geofabric=demo_fabric)
 
 
@@ -247,13 +247,13 @@ Example: **stream management**:
   warnings.filterwarnings("ignore")
 
   region = "gdn1.macrometa.io"
-  demo_tenant = "guest@macrometa.io"
+  demo_tenant = "mytenant@example.com"
   demo_fabric = "_system"
   stream = "demostream"
   #--------------------------------------------------------------
   print("publish messages to stream...")
   client = C8Client(protocol='https', host=region, port=443,
-                       email=demo_tenant, password='guest',
+                       email=demo_tenant, password='hidden',
                        geofabric=demo_fabric)
   
   #get_stream_stats
@@ -277,13 +277,13 @@ Advanced operations can be done using the `sream_colleciton` class.
    warnings.filterwarnings("ignore")
 
    region = "gdn1.macrometa.io"
-   demo_tenant = "guest@macrometa.io"
+   demo_tenant = "mytenant@example.com"
    demo_fabric = "_system"
 
    #--------------------------------------------------------------
    print("consume messages from stream...")
    client = C8Client(protocol='https', host=region, port=443)
-   demotenant = client.tenant(email=demo_tenant, password='guest')
+   demotenant = client.tenant(email=demo_tenant, password='hidden')
    fabric = demotenant.useFabric(demo_fabric)
    stream = fabric.stream()
     
@@ -317,12 +317,12 @@ Example for **restql** operations:
   import warnings
   warnings.filterwarnings("ignore")
   region = "gdn1.macrometa.io"
-  demo_tenant = "guest@macrometa.io"
+  demo_tenant = "mytenant@example.com"
   demo_fabric = "_system"
 
   #--------------------------------------------------------------
   client = C8Client(protocol='https', host=region, port=443,
-                       email=demo_tenant, password='guest',
+                       email=demo_tenant, password='hidden',
                        geofabric=demo_fabric)
 
   #--------------------------------------------------------------
@@ -388,7 +388,7 @@ sys_tenant.assign_dc_spot('REGION-2',spot_region=True)
 #Step 2: Create a geo-fabric and pass one of the spot regions. You can use the SPOT_CREATION_TYPES for the same. If you use AUTOMATIC, a random spot region will be assigned by the system.
 # If you specify None, a geo-fabric is created without the spot properties. If you specify spot region,pass the corresponding spot region in the spot_dc parameter.
 dcl = sys_tenant.dclist(detail=False)
-demotenant = client.tenant(email="guest@macrometa.io", password="guest")
+demotenant = client.tenant(email="mytenant@example.com", password="hidden")
 fabric = demotenant.useFabric("_system")
 fabric.create_fabric('spot-geo-fabric', dclist=dcl,spot_creation_type= fabric.SPOT_CREATION_TYPES.SPOT_REGION, spot_dc='REGION-1')
 

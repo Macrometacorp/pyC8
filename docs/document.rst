@@ -70,7 +70,7 @@ The simple Way
     from c8 import C8Client
     # Initialize the C8 client.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
-                          email='guest@macrometa.io', password='guest')
+                          email='user@example.com', password='hidden')
     
     collection_name = 'students'
     
@@ -126,7 +126,7 @@ The Object Oriented Way
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    tenant = client.tenant(email='mytenant@example.com', password='tenant-password')
+    tenant = client.tenant(email='mytenant@example.com', password='hidden')
     fabric = tenant.useFabric('test')
     # Get the API wrapper for "students" collection.
     students = fabric.collection('students')
@@ -212,7 +212,7 @@ must provide document IDs instead of keys:
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='hidden')
 
     # Create some test documents to play around with.
     # The documents must have the "_id" field instead.

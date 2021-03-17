@@ -24,7 +24,7 @@ message, error code and HTTP request response details.
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    tenant = client.tenant(email='mytenant@example.com', password='tenant-password')
+    tenant = client.tenant(email='mytenant@example.com', password='hidden')
     fabric = tenant.useFabric('test')
     # Get the API wrapper for "students" collection.
     students = fabric.collection('students')
@@ -90,7 +90,7 @@ response details.
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='hidden')
 
     # Get the API wrapper for "students" collection.
     students = fabric.collection('students')

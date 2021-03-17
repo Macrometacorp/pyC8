@@ -19,7 +19,7 @@ number of items in the result set may or may not be known in advance.
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    tenant = client.tenant(email='mytenant@example.com', password='tenant-password')
+    tenant = client.tenant(email='mytenant@example.com', password='hidden')
     fabric = tenant.useFabric('test')
     # Set up some test data to query against.
     fabric.collection('students').insert_many([
@@ -97,7 +97,7 @@ instead.
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='hidden')
 
     # Set up some test data to query against.
     fabric.collection('students').insert_many([
@@ -136,7 +136,7 @@ a large result set.
     # For the "mytenant" tenant, connect to "test" fabric as tenant admin.
     # This returns an API wrapper for the "test" fabric on tenant 'mytenant'
     # Note that the 'mytenant' tenant should already exist.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='hidden')
 
     # Get the total document count in "students" collection.
     document_count = fabric.collection('students').count()

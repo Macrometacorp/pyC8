@@ -4,7 +4,7 @@
     from c8 import C8Client
 
     client = C8Client(protocol='https', host='smoke1.eng.macrometa.io', port=443,
-    email="guest@macrometa.io", password="guest")
+    email="user@example.com", password="hidden")
 
     # Set Search
     is_success = client.set_search("test",False,"name")
