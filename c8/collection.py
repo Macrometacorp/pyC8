@@ -256,6 +256,8 @@ class Collection(APIWrapper):
         :return: Document body with "_key" field if it has "_id" field.
         :rtype: dict
         """
+        if not isinstance(body, dict):
+            raise DocumentParseError("Document is not a dict")
         if '_id' in body and '_key' not in body:
             doc_id = self._validate_id(body['_id'])
             body = body.copy()
