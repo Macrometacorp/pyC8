@@ -54,7 +54,7 @@ class Tenant(APIWrapper):
     """
 
     def __init__(self, connection):
-        
+
         super(Tenant, self).__init__(connection,
                                      executor=DefaultExecutor(connection))
         # self.get_auth_token_from_server()
@@ -69,7 +69,6 @@ class Tenant(APIWrapper):
         return self.tenant_name
 
     def get_auth_token_from_server(self):
-
         """
         Returns the JWT auth token which can be used in subsequent requests
         The login for the auth token is done using the username and password
@@ -85,7 +84,7 @@ class Tenant(APIWrapper):
 
         # We set the temp URL prefix here for the auth call. It is restored
         # below
-        self._conn.set_url_prefix(proto + '//' + rema )
+        self._conn.set_url_prefix(proto + '//' + rema)
         data = {"tenant": self.tenant_name}
         data['email'] = self._conn._email
         data['password'] = self._conn._password
@@ -339,7 +338,7 @@ class Tenant(APIWrapper):
             return True
 
         return self._execute(request, response_handler)
-        
+
     ###################
     # User Management #
     ###################
@@ -417,7 +416,8 @@ class Tenant(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.UserCreateError: If create fails.
         """
-        data = {'user': username, 'email': email, 'passwd': password, 'active': active}
+        data = {'user': username, 'email': email,
+                'passwd': password, 'active': active}
         if extra is not None:
             data['extra'] = extra
 
@@ -542,7 +542,6 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler)
 
-
     def list_accessible_databases_user(self, username, full=False):
         """Lists accessible databases for a user.
 
@@ -562,11 +561,10 @@ class Tenant(APIWrapper):
 
         def response_handler(resp):
             if resp.is_success:
-               return resp.body['result']
+                return resp.body['result']
             raise DataBaseError(resp, request)
 
         return self._execute(request, response_handler)
-
 
     def get_database_access_level_user(self, username, databasename=""):
         """Lists accessible databases for a user.
@@ -586,11 +584,10 @@ class Tenant(APIWrapper):
 
         def response_handler(resp):
             if resp.is_success:
-               return resp.body['result']
+                return resp.body['result']
             raise DataBaseError(resp, request)
 
         return self._execute(request, response_handler)
-
 
     def remove_database_access_level_user(self, username, databasename=""):
         """Lists accessible databases for a user.
@@ -610,7 +607,7 @@ class Tenant(APIWrapper):
 
         def response_handler(resp):
             if resp.is_success:
-               return resp.body
+                return resp.body
             raise DataBaseError(resp, request)
 
         return self._execute(request, response_handler)
@@ -641,11 +638,10 @@ class Tenant(APIWrapper):
 
         def response_handler(resp):
             if resp.is_success:
-               return resp.body
+                return resp.body
             raise DataBaseError(resp, request)
 
         return self._execute(request, response_handler)
-
 
     def get_collection_access_level_user(self, username, collection_name, databasename='_system'):
         """Fetch the collection access level for a specific collection in a database.
@@ -661,8 +657,8 @@ class Tenant(APIWrapper):
         request = Request(
             method='get',
             endpoint='/user/{}/database/{}/collection/{}'.format(username,
-                                                                     databasename,
-                                                                     collection_name),
+                                                                 databasename,
+                                                                 collection_name),
         )
 
         def response_handler(resp):
@@ -670,13 +666,11 @@ class Tenant(APIWrapper):
                 raise CollectionAccessLevel(resp, request)
             else:
                 return resp.body['result']
-                
+
         return self._execute(request, response_handler)
 
-    
     def set_collection_access_level_user(self, username, collection_name, databasename='_system',
-                                     grant='ro'):
-       
+                                         grant='ro'):
         """Set the collection access level for a specific collection in a database.
 
         :param collection_name: Name of the collection
@@ -694,8 +688,8 @@ class Tenant(APIWrapper):
         request = Request(
             method='put',
             endpoint='/user/{}/database/{}/collection/{}'.format(username,
-                                                                     databasename,
-                                                                     collection_name),
+                                                                 databasename,
+                                                                 collection_name),
             data={
                 "grant": grant
             }
@@ -706,12 +700,10 @@ class Tenant(APIWrapper):
                 raise SetCollectionAccessLevel(resp, request)
             else:
                 return resp.body
-                
+
         return self._execute(request, response_handler)
 
-    
     def clear_collection_access_level_user(self, username, collection_name, databasename='_system'):
-       
         """Clear the collection access level for a specific collection in a database.
 
         :param collection_name: Name of the collection
@@ -727,7 +719,7 @@ class Tenant(APIWrapper):
             endpoint='/user/{}/database/{}/collection/{}'.format(username,
                                                                  databasename,
                                                                  collection_name),
-           
+
         )
 
         def response_handler(resp):
@@ -738,14 +730,12 @@ class Tenant(APIWrapper):
                     return True
                 elif resp.body['error'] is True:
                     return False
-                
+
         return self._execute(request, response_handler)
-
-
 
     def list_accessible_streams_user(self, username, databasename='_system', full=False):
         """Fetch the list of streams available to the specified keyid.
- 
+
         :param databasename: Name of the database
         :type databasename: string
         :param full: Return the full set of access levels for all streams.
@@ -757,8 +747,8 @@ class Tenant(APIWrapper):
         request = Request(
             method='get',
             endpoint='/user/{}/database/{}/stream?full={}'.format(username,
-                                                                      databasename,
-                                                                      full),
+                                                                  databasename,
+                                                                  full),
         )
 
         def response_handler(resp):
@@ -766,10 +756,9 @@ class Tenant(APIWrapper):
                 raise ListStreams(resp, request)
             else:
                 return resp.body['result']
-                
+
         return self._execute(request, response_handler)
 
-    
     def get_stream_access_level_user(self, username, streamname, databasename='_system', local=False):
         """Fetch the database access level for a specific stream.
 
@@ -783,12 +772,12 @@ class Tenant(APIWrapper):
         """
         if local is False:
             url = '/user/{}/database/{}/stream/{}?global=True'.format(username,
-                                                                 databasename,
-                                                                 streamname)
+                                                                      databasename,
+                                                                      streamname)
         elif local is True:
             url = '/user/{}/database/{}/stream/{}?global=False'.format(username,
-                                                                 databasename,
-                                                                 streamname)
+                                                                       databasename,
+                                                                       streamname)
         request = Request(
             method='get',
             endpoint=url
@@ -799,12 +788,10 @@ class Tenant(APIWrapper):
                 raise StreamAccessLevel(resp, request)
             else:
                 return resp.body['result']
-                
+
         return self._execute(request, response_handler)
 
-    
     def set_stream_access_level_user(self, username, streamname, databasename='_system', grant='ro', local=False):
-       
         """Set the database access level for a specific stream.
 
         :param streamname: Name of the stream
@@ -821,12 +808,12 @@ class Tenant(APIWrapper):
         """
         if local is False:
             url = '/user/{}/database/{}/stream/{}?global=True'.format(username,
-                                                                 databasename,
-                                                                 streamname)
+                                                                      databasename,
+                                                                      streamname)
         elif local is True:
             url = '/user/{}/database/{}/stream/{}?global=False'.format(username,
-                                                                 databasename,
-                                                                 streamname)
+                                                                       databasename,
+                                                                       streamname)
 
         request = Request(
             method='put',
@@ -841,12 +828,10 @@ class Tenant(APIWrapper):
                 raise SetStreamAccessLevel(resp, request)
             else:
                 return resp.body
-                
+
         return self._execute(request, response_handler)
 
-    
     def clear_stream_access_level_user(self, username, streamname, databasename='_system', local=False):
-       
         """Clear the database access level for a specific stream.
 
         :param streamname: Name of the stream
@@ -860,17 +845,17 @@ class Tenant(APIWrapper):
 
         if local is False:
             url = '/user/{}/database/{}/stream/{}?global=True'.format(username,
-                                                                 databasename,
-                                                                 streamname)
+                                                                      databasename,
+                                                                      streamname)
         elif local is True:
             url = '/user/{}/database/{}/stream/{}?global=False'.format(username,
-                                                                 databasename,
-                                                                 streamname)
+                                                                       databasename,
+                                                                       streamname)
 
         request = Request(
             method='delete',
             endpoint=url
-           
+
         )
 
         def response_handler(resp):
@@ -881,9 +866,8 @@ class Tenant(APIWrapper):
                     return True
                 elif resp.body['error'] is True:
                     return False
-                
-        return self._execute(request, response_handler)
 
+        return self._execute(request, response_handler)
 
     def get_billing_access_level_user(self, username):
         """Fetch the billing access level.
@@ -902,12 +886,10 @@ class Tenant(APIWrapper):
                 raise BillingAcessLevel(resp, request)
             else:
                 return resp.body['result']
-                
+
         return self._execute(request, response_handler)
 
-    
     def set_billing_access_level(self, username, grant='ro'):
-       
         """Set the collection access level for billing.
 
         :param grant   : Use "rw" to set the database access level to Administrate .
@@ -931,12 +913,10 @@ class Tenant(APIWrapper):
                 raise SetBillingAccessLevel(resp, request)
             else:
                 return resp.body
-                
+
         return self._execute(request, response_handler)
 
-    
     def clear_billing_access_level(self, username):
-       
         """Clear the billing access level.
 
         :return: True if operation successful.
@@ -946,7 +926,7 @@ class Tenant(APIWrapper):
         request = Request(
             method='delete',
             endpoint='/user/{}/billing'.format(username),
-           
+
         )
 
         def response_handler(resp):
@@ -954,9 +934,8 @@ class Tenant(APIWrapper):
                 raise ClearBillingAccessLevel(resp, request)
             else:
                 return resp.body
-                
-        return self._execute(request, response_handler)
 
+        return self._execute(request, response_handler)
 
     #########################
     # Permission Management #
