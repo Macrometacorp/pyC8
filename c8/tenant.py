@@ -162,7 +162,7 @@ class Tenant(APIWrapper):
         """
         return name in self.tenants()
 
-    def create_tenant(self, email, passwd='', dclist=[], extra={}):
+    def create_tenant(self, email, passwd='', dclist=[], plan=None, contact=None, metadata=None, attribution=None):
         """Create a new tenant.
         :param name: Tenant name.
         :type name: str | unicode
@@ -191,9 +191,13 @@ class Tenant(APIWrapper):
         data = {'name': name}
         data['email'] = email
         data['passwd'] = passwd
-        data['extra'] = extra
         if dclist != '':
             data['dcList'] = dclist
+        if plan:
+            data['plan'] = plan
+            data['contact'] = contact
+            data['metadata'] = metadata
+            data['attribution'] = attribution
 
         request = Request(
             method='post',
