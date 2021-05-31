@@ -23,9 +23,9 @@ class C8Client(object):
     """
 
     def __init__(self, protocol="http", host='127.0.0.1', port=80,
-                 geofabric="_system",stream_port=constants.STREAM_PORT,
+                 geofabric="_system", stream_port=constants.STREAM_PORT,
                  email=None, password=None,  http_client=None, token=None, apikey=None):
-        
+
         self._protocol = protocol.strip('/')
         self._host = host.strip('/')
         self._port = int(port)
@@ -38,27 +38,27 @@ class C8Client(object):
             self._port = 443
         self._stream_port = int(stream_port)
         if "api-" in self.host:
-            self._url = '{}://{}:{}'.format(self._protocol, self.host, self.port)
+            self._url = '{}://{}:{}'.format(self._protocol,
+                                            self.host, self.port)
         else:
-            self._url = '{}://api-{}:{}'.format(self._protocol, self.host, self.port)
+            self._url = '{}://api-{}:{}'.format(
+                self._protocol, self.host, self.port)
         self._http_client = http_client
 
-        if self._email and self._password:  
-            self._tenant = self.tenant(email=self._email, password=self._password)
+        if self._email and self._password:
+            self._tenant = self.tenant(
+                email=self._email, password=self._password)
             self._fabric = self._tenant.useFabric(self._fabricname)
-        
+
         if self._token:
             self._tenant = self.tenant(token=self._token)
             self._fabric = self._tenant.useFabric(self._fabricname)
-        
+
         if self._apikey:
             self._tenant = self.tenant(apikey=self._apikey)
             self._fabric = self._tenant.useFabric(self._fabricname)
-        
+
         self._search = self._fabric.search()
-
-
-
 
     def __repr__(self):
         return '<C8Client {}>'.format(self._url)
@@ -122,7 +122,7 @@ class C8Client(object):
         :raise c8.exceptions.ServerConnectionError: If **verify** was set
             to True and the connection to C8Db fails.
         """
-        connection = TenantConnection(url=self._url, 
+        connection = TenantConnection(url=self._url,
                                       email=email,
                                       password=password,
                                       token=token,
@@ -139,9 +139,9 @@ class C8Client(object):
     # client.get_fabric_details
     def get_fabric_details(self):
         return self._fabric.fabrics_detail()
-        
 
     # client.collection
+
     def collection(self, collection_name):
         return self._fabric.collection(collection_name)
 
@@ -236,8 +236,8 @@ class C8Client(object):
         _collection = self.get_collection(collection_name)
         return _collection.indexes()
 
-
     # client.add_hash_index
+
     def add_hash_index(self,
                        collection_name,
                        fields,
@@ -268,8 +268,8 @@ class C8Client(object):
                                           sparse=sparse,
                                           deduplicate=deduplicate)
 
-    
     # client.add_geo_index
+
     def add_geo_index(self, collection_name, fields, ordered=None):
         """Create a new geo-spatial index.
 
@@ -288,10 +288,10 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         return _collection.add_geo_index(fields=fields,
-                                          ordered=ordered)
-
+                                         ordered=ordered)
 
     # client.add_skiplist_index
+
     def add_skiplist_index(self,
                            collection_name,
                            fields,
@@ -318,12 +318,12 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         return _collection.add_skiplist_index(fields=fields,
-                                          unique=unique,
-                                          sparse=sparse,
-                                          deduplicate=deduplicate)
+                                              unique=unique,
+                                              sparse=sparse,
+                                              deduplicate=deduplicate)
 
-    
     # client.add_persistent_index
+
     def add_persistent_index(self, collection_name,
                              fields, unique=None, sparse=None):
         """Create a new persistent index.
@@ -347,14 +347,14 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         return _collection.add_persistent_index(fields=fields,
-                                          unique=unique,
-                                          sparse=sparse)
-
+                                                unique=unique,
+                                                sparse=sparse)
 
     # client.add_fulltext_index
+
     def add_fulltext_index(self, collection_name, fields, min_length=None):
         """Create a new fulltext index.
-        
+
         :param name: Collection name to add index on.
         :type name: str | unicode
         :param fields: Document fields to index.
@@ -368,11 +368,11 @@ class C8Client(object):
         _collection = self.get_collection(collection_name)
         return _collection.add_fulltext_index(fields=fields, min_length=min_length)
 
-
     # client.add_ttl_index
+
     def add_ttl_index(self, collection_name, fields, expireAfter=0, inBackground=False):
         """Create a new ttl index.
-        
+
         :param name: Collection name to add index on.
         :type name: str | unicode
         :param fields: Document fields to index.
@@ -390,8 +390,8 @@ class C8Client(object):
         return _collection.add_ttl_index(fields=fields, expireAfter=expireAfter,
                                          inBackground=inBackground)
 
-
     # client.delete_index
+
     def delete_index(self, collection_name, index_id, ignore_missing=False):
         """Delete an index.
 
@@ -407,14 +407,14 @@ class C8Client(object):
         _collection = self.get_collection(collection_name)
         return _collection.delete_index(index_id=index_id, ignore_missing=ignore_missing)
 
-
     # client.get_index
+
     def get_index(self, collection_name, index_name):
         _collection = self.get_collection(collection_name)
         return _collection.get_index(index_name)
 
-
     # client.delete_collection
+
     def delete_collection(self, name, ignore_missing=False, system=None):
         """Delete the collection.
         :param name: Collection name.
@@ -430,9 +430,9 @@ class C8Client(object):
         resp = self._fabric.delete_collection(name=name, ignore_missing=ignore_missing,
                                               system=system)
         return resp
-    
 
     # client.has_collection
+
     def has_collection(self, name):
         """Delete the collection.
         :param name: Collection name.
@@ -443,9 +443,8 @@ class C8Client(object):
         resp = self._fabric.has_collection(name)
         return resp
 
-    
     # client.get_collections
-    def get_collections(self,collectionModel=None):
+    def get_collections(self, collectionModel=None):
         """Return the collections in the fabric.
 
         :param collectionModel: Collection Model to get filter collections
@@ -455,9 +454,9 @@ class C8Client(object):
         """
         resp = self._fabric.collections(collectionModel)
         return resp
-    
 
     # client.get_collection
+
     def get_collection(self, name):
         """Return the standard collection API wrapper.
         :param name: Collection name.
@@ -467,7 +466,7 @@ class C8Client(object):
         """
         resp = self._fabric.collection(name)
         return resp
-    
+
     def printdata(self, event):
         """Prints the event.
 
@@ -476,8 +475,8 @@ class C8Client(object):
         """
         print(event)
 
-
     # client.on_change
+
     def on_change(self, collection, callback, timeout=60):
         resp = self._fabric.on_change(collection, callback, timeout)
         return resp
@@ -506,10 +505,10 @@ class C8Client(object):
         resp = _collection.get(document=document, rev=rev, check_rev=check_rev)
         return resp
 
-
     # client.insert_document
+
     def insert_document(self, collection_name="", return_new=False,
-                silent=False, sync=None, document=None):
+                        silent=False, sync=None, document=None):
         """Insert a new document.
 
         :param document: Document to insert. If it contains the "_key" or "_id"
@@ -531,16 +530,16 @@ class C8Client(object):
         _collection = self.get_collection(collection_name)
 
         if isinstance(document, dict):
-           resp =  _collection.insert(document=document ,return_new=return_new, 
+            resp = _collection.insert(document=document, return_new=return_new,
                                       sync=sync, silent=silent)
         elif isinstance(document, list):
-            resp = _collection.insert_many(documents=document, return_new=return_new, 
-                                            sync=sync, silent=silent)
-        return resp      
+            resp = _collection.insert_many(documents=document, return_new=return_new,
+                                           sync=sync, silent=silent)
+        return resp
 
     # client.insert_document_from_file()
     def insert_document_from_file(self, collection_name, csv_filepath, return_new=False, sync=None,
-                         silent=False):
+                                  silent=False):
         """Insert a documents from csv file.
 
         :param csv_filepath: CSV file path which contains documents
@@ -558,21 +557,21 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         resp = _collection.insert_from_file(csv_filepath=csv_filepath, return_new=return_new,
-                                             sync=sync, silent=silent)
+                                            sync=sync, silent=silent)
         return resp
-    
 
     # client.update_document
+
     def update_document(self,
-               collection_name,
-               document,
-               check_rev=True,
-               merge=True,
-               keep_none=True,
-               return_new=False,
-               return_old=False,
-               sync=None,
-               silent=False):
+                        collection_name,
+                        document,
+                        check_rev=True,
+                        merge=True,
+                        keep_none=True,
+                        return_new=False,
+                        return_old=False,
+                        sync=None,
+                        silent=False):
         """Update a document.
 
         :param document: Partial or full document with the updated values. It
@@ -613,18 +612,18 @@ class C8Client(object):
                                   silent=silent)
         return resp
 
-
     # client.update_document_many
+
     def update_document_many(self,
-                    collection_name,
-                    documents,
-                    check_rev=True,
-                    merge=True,
-                    keep_none=True,
-                    return_new=False,
-                    return_old=False,
-                    sync=None,
-                    silent=False):
+                             collection_name,
+                             documents,
+                             check_rev=True,
+                             merge=True,
+                             keep_none=True,
+                             return_new=False,
+                             return_old=False,
+                             sync=None,
+                             silent=False):
         """Update multiple documents.
 
         If updating a document fails, the exception object is placed in the
@@ -658,25 +657,25 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         resp = _collection.update_document_many(documents=documents,
-                                  check_rev=check_rev,
-                                  merge=merge,
-                                  keep_none=keep_none,
-                                  return_new=return_new,
-                                  return_old=return_old,
-                                  sync=sync,
-                                  silent=silent)
+                                                check_rev=check_rev,
+                                                merge=merge,
+                                                keep_none=keep_none,
+                                                return_new=return_new,
+                                                return_old=return_old,
+                                                sync=sync,
+                                                silent=silent)
         return resp
 
-
     # client.replace_document
+
     def replace_document(self,
-                     collection_name,
-                     document,
-                     check_rev=True,
-                     return_new=False,
-                     return_old=False,
-                     sync=None,
-                     silent=False):
+                         collection_name,
+                         document,
+                         check_rev=True,
+                         return_new=False,
+                         return_old=False,
+                         sync=None,
+                         silent=False):
         """Replace multiple documents.
 
         If replacing a document fails, the exception object is placed in the
@@ -712,16 +711,16 @@ class C8Client(object):
                                    silent=silent)
         return resp
 
-    
-    #client.replace_document_many
+    # client.replace_document_many
+
     def replace_document_many(self,
-                     collection_name,
-                     documents,
-                     check_rev=True,
-                     return_new=False,
-                     return_old=False,
-                     sync=None,
-                     silent=False):
+                              collection_name,
+                              documents,
+                              check_rev=True,
+                              return_new=False,
+                              return_old=False,
+                              sync=None,
+                              silent=False):
         """Replace multiple documents.
 
         If replacing a document fails, the exception object is placed in the
@@ -750,24 +749,24 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         resp = _collection.replace_many(documents=documents,
-                                   check_rev=check_rev,
-                                   return_new=return_new,
-                                   return_old=return_old,
-                                   sync=sync,
-                                   silent=silent)
+                                        check_rev=check_rev,
+                                        return_new=return_new,
+                                        return_old=return_old,
+                                        sync=sync,
+                                        silent=silent)
         return resp
-    
-    
+
     # client.delete_document
+
     def delete_document(self,
-               collection_name,
-               document,
-               rev=None,
-               check_rev=True,
-               ignore_missing=False,
-               return_old=False,
-               sync=None,
-               silent=False):
+                        collection_name,
+                        document,
+                        rev=None,
+                        check_rev=True,
+                        ignore_missing=False,
+                        return_old=False,
+                        sync=None,
+                        silent=False):
         """Delete a document.
 
         :param document: Document ID, key or body. Document body must contain
@@ -799,24 +798,24 @@ class C8Client(object):
         :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
         """
         _collection = self.get_collection(collection_name)
-        resp = _collection.delete( document=document,
-                                   rev=rev,
-                                   check_rev=check_rev,
-                                   ignore_missing=ignore_missing,
-                                   return_old=return_old,
-                                   sync=sync,
-                                   silent=silent)
+        resp = _collection.delete(document=document,
+                                  rev=rev,
+                                  check_rev=check_rev,
+                                  ignore_missing=ignore_missing,
+                                  return_old=return_old,
+                                  sync=sync,
+                                  silent=silent)
         return resp
 
-
     # client.delete_document_many
+
     def delete_document_many(self,
-                    collection_name,
-                    documents,
-                    return_old=False,
-                    check_rev=True,
-                    sync=None,
-                    silent=False):
+                             collection_name,
+                             documents,
+                             return_old=False,
+                             check_rev=True,
+                             sync=None,
+                             silent=False):
         """Delete multiple documents.
 
         If deleting a document fails, the exception object is placed in the
@@ -841,15 +840,15 @@ class C8Client(object):
         :raise c8.exceptions.DocumentDeleteError: If delete fails.
         """
         _collection = self.get_collection(collection_name)
-        resp = _collection.delete( documents=documents,
-                                   check_rev=check_rev,
-                                   return_old=return_old,
-                                   sync=sync,
-                                   silent=silent)
+        resp = _collection.delete(documents=documents,
+                                  check_rev=check_rev,
+                                  return_old=return_old,
+                                  sync=sync,
+                                  silent=silent)
         return resp
 
-    
     # client.get_collection_indexes
+
     def get_collection_indexes(self, collection_name):
         """Return the collection indexes.
 
@@ -858,9 +857,9 @@ class C8Client(object):
         :raise c8.exceptions.IndexListError: If retrieval fails.
         """
         _collection = self._fabric.collection(collection_name)
-        resp = _collection.indexes() 
+        resp = _collection.indexes()
         return resp
-        
+
     # client.get_dc_list
     def get_dc_list(self, detail=False):
         """Return the list of names of Datacenters
@@ -874,8 +873,8 @@ class C8Client(object):
         resp = self._fabric.dclist(detail=detail)
         return resp
 
-    
     # client.get_local_dc
+
     def get_local_dc(self, detail=True):
         """Return the list of local Datacenters
 
@@ -888,8 +887,8 @@ class C8Client(object):
         resp = self._fabric.localdc(detail=detail)
         return resp
 
-
     # client.validate_query
+
     def validate_query(self, query):
         """Parse and validate the query without executing it.
 
@@ -902,9 +901,8 @@ class C8Client(object):
         resp = self._fabric.c8ql.validate(query)
         return resp
 
-    
     # client.explain_query
-    def explain_query(self,query, all_plans=False, max_plans=None, opt_rules=None):
+    def explain_query(self, query, all_plans=False, max_plans=None, opt_rules=None):
         """Inspect the query and return its metadata without executing it.
 
         :param query: Query to inspect.
@@ -921,16 +919,17 @@ class C8Client(object):
         :rtype: dict | list
         :raise c8.exceptions.C8QLQueryExplainError: If explain fails.
         """
-        resp = self._fabric.c8ql.explain(query, all_plans=all_plans, max_plans=max_plans, opt_rules=opt_rules)
+        resp = self._fabric.c8ql.explain(
+            query, all_plans=all_plans, max_plans=max_plans, opt_rules=opt_rules)
         return resp
 
     # client.execute_query
     def execute_query(self,
-                query,
-                count=False,
-                bind_vars=None,
-                cache=None,
-                profile=None):
+                      query,
+                      count=False,
+                      bind_vars=None,
+                      cache=None,
+                      profile=None):
         """Execute the query and return the result cursor.
 
         :param query: Query to execute.
@@ -951,14 +950,14 @@ class C8Client(object):
         :raise c8.exceptions.C8QLQueryExecuteError: If execute fails.
         """
         resp = self._fabric.c8ql.execute(query,
-                                    count=count,
-                                    bind_vars=bind_vars,
-                                    cache=cache,
-                                    profile=profile)
+                                         count=count,
+                                         bind_vars=bind_vars,
+                                         cache=cache,
+                                         profile=profile)
         return resp
 
-    
     # client.get_running_queries
+
     def get_running_queries(self):
         """Return the currently running C8QL queries.
 
@@ -968,8 +967,8 @@ class C8Client(object):
         """
         return self._fabric.c8ql.queries()
 
-    
     # client.kill_query
+
     def kill_query(self, query_id):
         """Kill a running query.
 
@@ -981,8 +980,8 @@ class C8Client(object):
         """
         return self._fabric.c8ql.kill(query_id)
 
-    
     # client.create_restql
+
     def create_restql(self, data):
         """Save restql by name.
 
@@ -994,8 +993,8 @@ class C8Client(object):
         """
         return self._fabric.save_restql(data)
 
-    
     # client.execute_restql
+
     def execute_restql(self, name, data=None):
         """Execute restql by name.
 
@@ -1009,8 +1008,8 @@ class C8Client(object):
         """
         return self._fabric.execute_restql(name, data=data)
 
-    
     # client.delete_restql
+
     def delete_restql(self, name):
         """Delete restql by name.
 
@@ -1022,8 +1021,8 @@ class C8Client(object):
         """
         return self._fabric.delete_restql(name)
 
-    
     # client.update_restql
+
     def update_restql(self, name, data):
         """Update restql by name.
 
@@ -1037,8 +1036,8 @@ class C8Client(object):
         """
         return self._fabric.update_restql(name, data)
 
-
     # client.get_restqls
+
     def get_restqls(self):
         """Get all restql associated for user.
 
@@ -1048,8 +1047,8 @@ class C8Client(object):
         """
         return self._fabric.get_all_restql()
 
-    
     # client.create_stream
+
     def create_stream(self, stream, local=False):
         """
         Create the stream under the given fabric
@@ -1059,9 +1058,9 @@ class C8Client(object):
         :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
         """
         return self._fabric.create_stream(stream, local=local)
-    
 
     # client.terminate_stream
+
     def terminate_stream(self, stream, isCollectionStream=False, local=False):
         """
         Delete the streams under the given fabric
@@ -1072,10 +1071,10 @@ class C8Client(object):
         :raise: c8.exceptions.StreamDeleteError: If deleting streams fails.
         """
         return self._fabric.terminate_stream(stream=stream, isCollectionStream=isCollectionStream,
-                                              local=local)
-                                        
+                                             local=local)
 
     # client.has_stream
+
     def has_stream(self, stream, isCollectionStream=False, local=False):
         """ Check if the list of streams has a stream with the given name.
 
@@ -1088,8 +1087,8 @@ class C8Client(object):
         return self._fabric.has_stream(stream=stream, isCollectionStream=isCollectionStream,
                                        local=local)
 
-    
     # client.get_stream
+
     def get_stream(self, operation_timeout_seconds=30):
         """Return the stream collection API wrapper.
 
@@ -1098,8 +1097,8 @@ class C8Client(object):
         """
         return self._fabric.stream(operation_timeout_seconds=operation_timeout_seconds)
 
-
     # client.get_streams
+
     def get_streams(self):
         """Get list of all streams under given fabric
 
@@ -1109,8 +1108,8 @@ class C8Client(object):
         """
         return self._fabric.streams()
 
-    
-    #client.get_stream_stats
+    # client.get_stream_stats
+
     def get_stream_stats(self, stream, isCollectionStream=False, local=False):
         """Get the stats for the given stream
 
@@ -1121,11 +1120,11 @@ class C8Client(object):
                                                      for a stream fails.
         """
         _stream = self._fabric.stream()
-        return _stream.get_stream_stats(stream, 
-                            isCollectionStream=isCollectionStream, local=local)
-
+        return _stream.get_stream_stats(stream,
+                                        isCollectionStream=isCollectionStream, local=local)
 
     # client.create_stream_producer
+
     def enum(**enums):
         return type('Enum', (), enums)
 
@@ -1140,15 +1139,15 @@ class C8Client(object):
     )
 
     def create_stream_producer(self, stream, isCollectionStream=False, local=False, producer_name=None,
-                        initial_sequence_id=None, send_timeout_millis=30000,
-                        compression_type=COMPRESSION_TYPES.NONE,
-                        max_pending_messages=1000,
-                        batching_enabled=False,
-                        batching_max_messages=1000,
-                        batching_max_allowed_size_in_bytes=131072,
-                        batching_max_publish_delay_ms=10,
-                        message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION
-                        ):
+                               initial_sequence_id=None, send_timeout_millis=30000,
+                               compression_type=COMPRESSION_TYPES.NONE,
+                               max_pending_messages=1000,
+                               batching_enabled=False,
+                               batching_max_messages=1000,
+                               batching_max_allowed_size_in_bytes=131072,
+                               batching_max_publish_delay_ms=10,
+                               message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION
+                               ):
         """Create a new producer on a given stream.
         **Args**
         * `stream`: The stream name
@@ -1190,16 +1189,16 @@ class C8Client(object):
         """
         _stream = self._fabric.stream()
         return _stream.create_producer(stream, isCollectionStream=isCollectionStream,
-                        local=local, producer_name=producer_name,
-                        initial_sequence_id=initial_sequence_id,
-                        send_timeout_millis=send_timeout_millis,
-                        compression_type=compression_type,
-                        max_pending_messages=max_pending_messages,
-                        batching_enabled=batching_enabled,
-                        batching_max_messages=batching_max_messages,
-                        batching_max_allowed_size_in_bytes=batching_max_allowed_size_in_bytes,
-                        batching_max_publish_delay_ms=batching_max_publish_delay_ms,
-                        message_routing_mode=message_routing_mode)
+                                       local=local, producer_name=producer_name,
+                                       initial_sequence_id=initial_sequence_id,
+                                       send_timeout_millis=send_timeout_millis,
+                                       compression_type=compression_type,
+                                       max_pending_messages=max_pending_messages,
+                                       batching_enabled=batching_enabled,
+                                       batching_max_messages=batching_max_messages,
+                                       batching_max_allowed_size_in_bytes=batching_max_allowed_size_in_bytes,
+                                       batching_max_publish_delay_ms=batching_max_publish_delay_ms,
+                                       message_routing_mode=message_routing_mode)
 
     # client.subscribe
     CONSUMER_TYPES = enum(EXCLUSIVE="Exclusive",
@@ -1257,26 +1256,26 @@ class C8Client(object):
             will be cached in the client.
         """
         _stream = self._fabric.stream()
-        return _stream.subscribe(stream=stream, 
-                  local=local, isCollectionStream=isCollectionStream,
-                  subscription_name=subscription_name,
-                  consumer_type=consumer_type,
-                  message_listener=message_listener,
-                  receiver_queue_size=receiver_queue_size,
-                  consumer_name=consumer_name,
-                  unacked_messages_timeout_ms=unacked_messages_timeout_ms,
-                  broker_consumer_stats_cache_time_ms=broker_consumer_stats_cache_time_ms,
-                  is_read_compacted=is_read_compacted)
-
+        return _stream.subscribe(stream=stream,
+                                 local=local, isCollectionStream=isCollectionStream,
+                                 subscription_name=subscription_name,
+                                 consumer_type=consumer_type,
+                                 message_listener=message_listener,
+                                 receiver_queue_size=receiver_queue_size,
+                                 consumer_name=consumer_name,
+                                 unacked_messages_timeout_ms=unacked_messages_timeout_ms,
+                                 broker_consumer_stats_cache_time_ms=broker_consumer_stats_cache_time_ms,
+                                 is_read_compacted=is_read_compacted)
 
     # client.create_stream_reader
+
     def create_stream_reader(self, stream, start_message_id,
-                      local=False, isCollectionStream=False,
-                      reader_listener=None,
-                      receiver_queue_size=1000,
-                      reader_name=None,
-                      subscription_role_prefix=None,
-                      ):
+                             local=False, isCollectionStream=False,
+                             reader_listener=None,
+                             receiver_queue_size=1000,
+                             reader_name=None,
+                             subscription_role_prefix=None,
+                             ):
         """
         Create a reader on a particular topic
         **Args**
@@ -1301,15 +1300,14 @@ class C8Client(object):
         """
         _stream = self._fabric.stream()
         return _stream.create_reader(stream=stream, start_message_id=start_message_id,
-                      local=local, isCollectionStream=isCollectionStream,
-                      reader_listener=reader_listener,
-                      receiver_queue_size=receiver_queue_size,
-                      reader_name=reader_name,
-                      subscription_role_prefix=subscription_role_prefix)
-
+                                     local=local, isCollectionStream=isCollectionStream,
+                                     reader_listener=reader_listener,
+                                     receiver_queue_size=receiver_queue_size,
+                                     reader_name=reader_name,
+                                     subscription_role_prefix=subscription_role_prefix)
 
     # client.unsubscribe
-    def unsubscribe(self,subscription):
+    def unsubscribe(self, subscription):
         """Unsubscribes the given subscription on all streams on a stream fabric
         :param subscription
         :return: 200, OK if operation successful
@@ -1318,8 +1316,8 @@ class C8Client(object):
         _stream = self._fabric.stream()
         return _stream.unsubscribe(subscription=subscription)
 
-
     # client.delete_stream_subscription
+
     def delete_stream_subscription(self, stream, subscription, local=False):
         """Delete a subscription.
 
@@ -1331,10 +1329,10 @@ class C8Client(object):
                                                  consumers
         """
         _stream = self._fabric.stream()
-        return  _stream.delete_stream_subscription(stream, subscription, local=False)
-
+        return _stream.delete_stream_subscription(stream, subscription, local=False)
 
     # client.get_stream_subscriptions
+
     def get_stream_subscriptions(self, stream, local=False):
         """Get the list of persistent subscriptions for a given stream.
 
@@ -1347,8 +1345,8 @@ class C8Client(object):
         _stream = self._fabric.stream()
         return _stream.get_stream_subscriptions(stream=stream, local=local)
 
-
     # client.get_stream_backlog
+
     def get_stream_backlog(self, stream, local=False):
         """Get estimated backlog for offline stream.
 
@@ -1361,10 +1359,9 @@ class C8Client(object):
         _stream = self._fabric.stream()
         return _stream.get_stream_backlog(stream=stream, local=local)
 
-
-
     # client. clear_stream_backlog
-    def  clear_stream_backlog(self, subscription):
+
+    def clear_stream_backlog(self, subscription):
         """Clear backlog for the given stream on a stream fabric
         :param: name of subscription
         :return: 200, OK if operation successful
@@ -1374,8 +1371,8 @@ class C8Client(object):
         _stream = self._fabric.stream()
         return _stream.clear_stream_backlog(subscription=subscription)
 
-
     # client.clear_streams_backlog
+
     def clear_streams_backlog(self):
         """Clear backlog for all streams on a stream fabric
         :return: 200, OK if operation successful
@@ -1385,8 +1382,8 @@ class C8Client(object):
         _stream = self._fabric.stream()
         return _stream.clear_streams_backlog()
 
-
     # client.create_stream_app
+
     def create_stream_app(self, data, dclist=[]):
         """Creates a stream application by given data
         @data: stream app definition
@@ -1394,8 +1391,8 @@ class C8Client(object):
         """
         return self._fabric.create_stream_app(data=data, dclist=dclist)
 
-    
     # client.delete_stream_app
+
     def delete_stream_app(self, streamapp_name):
         """deletes the stream app by name
         :param: name of stream app
@@ -1404,8 +1401,8 @@ class C8Client(object):
         _streamapp = self._fabric.stream_app(streamapp_name)
         return _streamapp.delete()
 
-    
     # client.validate_stream_app
+
     def validate_stream_app(self, data):
         """validates the stream app definition
         :param: definition of stream app
@@ -1413,8 +1410,8 @@ class C8Client(object):
         """
         return self._fabric.validate_stream_app(data=data)
 
-
     # client.retrieve_stream_app
+
     def retrieve_stream_app(self):
         """retrives stream apps in a fabric
         :param: name of stream app
@@ -1422,8 +1419,8 @@ class C8Client(object):
         """
         return self._fabric.retrive_stream_app()
 
-    
     # client.get_stream_app
+
     def get_stream_app(self, streamapp_name):
         """returns info of a stream app 
         :param: name of stream app
@@ -1432,15 +1429,15 @@ class C8Client(object):
         _streamapp = self._fabric.stream_app(streamapp_name)
         return _streamapp.get()
 
-
     # client.get_stream_app_samples
+
     def get_stream_app_samples(self):
         """gets samples for stream apps
         """
         return self._fabric.get_samples_stream_app()
 
-    
     # client.activate_stream_app
+
     def activate_stream_app(self, streamapp_name, activate=True):
         """activates r deactivates a stream app
         :param streamapp_name: name of stream app
@@ -1450,8 +1447,8 @@ class C8Client(object):
         _streamapp = self._fabric.stream_app(streamapp_name)
         return _streamapp.change_state(active=activate)
 
-
     # client.has_graph
+
     def has_graph(self, graph_name):
         """Check if a graph exists in the fabric.
 
@@ -1462,8 +1459,8 @@ class C8Client(object):
         """
         return self._fabric.has_graph(name=graph_name)
 
-
     # client.get_graphs
+
     def get_graphs(self):
         """List all graphs in the fabric.
 
@@ -1513,12 +1510,12 @@ class C8Client(object):
         """
 
         return self._fabric.create_graph(name=graph_name,
-                     edge_definitions=edge_definitions,
-                     orphan_collections=orphan_collections,
-                     shard_count=shard_count)
-
+                                         edge_definitions=edge_definitions,
+                                         orphan_collections=orphan_collections,
+                                         shard_count=shard_count)
 
     # client.delete_graph
+
     def delete_graph(self, graph_name, ignore_missing=False, drop_collections=None):
         """Drop the graph of the given name from the fabric.
 
@@ -1534,10 +1531,10 @@ class C8Client(object):
         :rtype: bool
         :raise c8.exceptions.GraphDeleteError: If delete fails.
         """
-        return self._fabric.delete_graph(name=graph_name, 
-                                    ignore_missing=ignore_missing,
-                                    drop_collections=drop_collections)
-    
+        return self._fabric.delete_graph(name=graph_name,
+                                         ignore_missing=ignore_missing,
+                                         drop_collections=drop_collections)
+
     # client.get_graph
     def get_graph(self, graph_name):
         """Return the graph API wrapper.
@@ -1549,8 +1546,8 @@ class C8Client(object):
         """
         return self._fabric.graph(graph_name)
 
-    
     # client.insert_edge
+
     def insert_edge(self, graph_name,
                     edge_collection,
                     from_vertex_collections,
@@ -1581,15 +1578,15 @@ class C8Client(object):
         """
         _graph = self._fabric.graph(graph_name)
         return _graph.create_edge_definition(edge_collection=edge_collection,
-                    from_vertex_collections=from_vertex_collections,
-                    to_vertex_collections=to_vertex_collections)
+                                             from_vertex_collections=from_vertex_collections,
+                                             to_vertex_collections=to_vertex_collections)
 
-        
     # client.replace_edge
+
     def replace_edge(self, graph_name,
-                    edge_collection,
-                    from_vertex_collections,
-                    to_vertex_collections):
+                     edge_collection,
+                     from_vertex_collections,
+                     to_vertex_collections):
         """Replaces an edge definition.
 
         :param graph_name: Name of the Graph for which you want to create edge.
@@ -1606,12 +1603,12 @@ class C8Client(object):
         """
         _graph = self._fabric.graph(graph_name)
         return _graph.replace_edge_definition(edge_collection=edge_collection,
-                    from_vertex_collections=from_vertex_collections,
-                    to_vertex_collections=to_vertex_collections)
+                                              from_vertex_collections=from_vertex_collections,
+                                              to_vertex_collections=to_vertex_collections)
 
     # client.update_edge
     def update_edge(self,
-                    graph_name,edge,
+                    graph_name, edge,
                     check_rev=True,
                     keep_none=True,
                     sync=None,
@@ -1642,14 +1639,13 @@ class C8Client(object):
         """
         _graph = self._fabric.graph(graph_name)
         return _graph.update_edge(edge=edge,
-                    check_rev=check_rev,
-                    keep_none=keep_none,
-                    sync=sync,
-                    silent=silent)
-
+                                  check_rev=check_rev,
+                                  keep_none=keep_none,
+                                  sync=sync,
+                                  silent=silent)
 
     # client.delete_edge
-    def delete_edge(self,graph_name, edge_name, purge=False):
+    def delete_edge(self, graph_name, edge_name, purge=False):
         """Delete an edge definition from the graph.
         :param graph_name: Name of the Graph for which you want to delete edge.
         :type graph_name: str | unicode
@@ -1666,8 +1662,8 @@ class C8Client(object):
         _graph = self._fabric.graph(graph_name)
         return _graph.delete_edge_definition(name=edge_name, purge=purge)
 
-
     # client.get_edges
+
     def get_edges(self, graph_name):
         """Return the edge definitions of the graph.
         :param graph_name: Name of the Graph for which you want to get the edge.
@@ -1679,18 +1675,18 @@ class C8Client(object):
         _graph = self._fabric.graph(graph_name)
         return _graph.edge_definitions()
 
-    
     # client.link_edge
+
     def link_edge(self,
-             graph_name,
-             collection,
-             from_vertex,
-             to_vertex,
-             data=None,
-             sync=None,
-             silent=False):
+                  graph_name,
+                  collection,
+                  from_vertex,
+                  to_vertex,
+                  data=None,
+                  sync=None,
+                  silent=False):
         """Insert a new edge document linking the given vertices.
-    
+
         :param graph_name: Name of the Graph.
         :type graph_name: str | unicode
         :param collection: Edge collection name.
@@ -1715,14 +1711,14 @@ class C8Client(object):
         """
         _graph = self._fabric.graph(graph_name)
         return _graph.link(collection=collection,
-                        from_vertex=from_vertex,
-                        to_vertex=to_vertex,
-                        data=data,
-                        sync=sync,
-                        silent=silent)
+                           from_vertex=from_vertex,
+                           to_vertex=to_vertex,
+                           data=data,
+                           sync=sync,
+                           silent=silent)
 
-    
     # client.has_user
+
     def has_user(self, username):
         """Check if user exists.
 
@@ -1733,8 +1729,8 @@ class C8Client(object):
         """
         return self._tenant.has_user(username)
 
+    # client.get_users
 
-    #client.get_users
     def get_users(self):
         """Return all user details.
 
@@ -1744,8 +1740,8 @@ class C8Client(object):
         """
         return self._tenant.users()
 
-    
     # client.get_user
+
     def get_user(self, username):
         """Return user details.
 
@@ -1757,8 +1753,8 @@ class C8Client(object):
         """
         return self._tenant.user(username)
 
-    
     # client.create_user
+
     def create_user(self, username, email, password, active=True, extra=None):
         """Create a new user.
 
@@ -1778,8 +1774,8 @@ class C8Client(object):
                                         email=email, password=password,
                                         active=active, extra=extra)
 
-    
     # client.update_user
+
     def update_user(self, username, password=None, active=None, extra=None):
         """Update a user.
 
@@ -1798,9 +1794,8 @@ class C8Client(object):
         return self._tenant.update_user(username=username, password=password,
                                         active=active, extra=extra)
 
-
-
     # client.replace_user
+
     def replace_user(self, username, password, active=None, extra=None):
         """Replace a user.
 
@@ -1819,8 +1814,8 @@ class C8Client(object):
         return self._tenant.replace_user(username=username, password=password,
                                          active=active, extra=extra)
 
-    
     # client.delete_user
+
     def delete_user(self, username, ignore_missing=False):
         """Delete a user.
 
@@ -1836,8 +1831,8 @@ class C8Client(object):
         return self._tenant.delete_user(username=username,
                                         ignore_missing=ignore_missing)
 
-
     # client.get_permissions
+
     def get_permissions(self, username):
         """Return user permissions for all fabrics and collections.
 
@@ -1849,8 +1844,8 @@ class C8Client(object):
         """
         return self._tenant.permissions(username)
 
-    
     # client.get_permission
+
     def get_permission(self, username, fabric, collection=None):
         """Return user permission for a specific fabric or collection.
 
@@ -1867,8 +1862,8 @@ class C8Client(object):
         return self._tenant.permission(username=username, fabric=fabric,
                                        collection=collection)
 
-    
     # client.update_permission
+
     def update_permission(self,
                           username,
                           permission,
@@ -1894,8 +1889,8 @@ class C8Client(object):
                                               fabric=fabric,
                                               collection=collection)
 
-    
     # client.reset_permission()
+
     def reset_permission(self, username, fabric, collection=None):
         """Reset user permission for a specific fabric or collection.
 
@@ -1912,8 +1907,8 @@ class C8Client(object):
         return self._tenant.reset_permission(username=username, fabric=fabric,
                                              collection=collection)
 
-
     # client.kv_get_collections
+
     def get_collections_kv(self):
         """Returns the list of collections using kv.
         :return: Existing Collections.
@@ -1922,8 +1917,8 @@ class C8Client(object):
         """
         return self._fabric.key_value.get_collections()
 
-
     # client.create_collection_kv
+
     def create_collection_kv(self, name, expiration=False):
         """Creates Collection.
 
@@ -1937,21 +1932,21 @@ class C8Client(object):
         """
         return self._fabric.key_value.create_collection(name=name, expiration=expiration)
 
-
     # client.delete_collection_kv
+
     def delete_collection_kv(self, name):
-            """Deletes Collection.
+        """Deletes Collection.
 
-            :param name: Collection name.
-            :type name: str | unicode
-            :return: True if the request is successful.
-            :rtype: boolean
-            :raise c8.exceptions.DeleteCollectionError: If creation fails.
-            """
-            return self._fabric.key_value.delete_collection(name=name)
+        :param name: Collection name.
+        :type name: str | unicode
+        :return: True if the request is successful.
+        :rtype: boolean
+        :raise c8.exceptions.DeleteCollectionError: If creation fails.
+        """
+        return self._fabric.key_value.delete_collection(name=name)
 
-    
     # client.has_collection_kv
+
     def has_collection_kv(self, name):
         """Checks if a Collection exists.
 
@@ -1962,8 +1957,8 @@ class C8Client(object):
         """
         return self._fabric.key_value.has_collection(name)
 
-    
     # client.insert_key_value_pair
+
     def insert_key_value_pair(self, name, data=None):
         """Set a key value pair.
 
@@ -1977,8 +1972,8 @@ class C8Client(object):
         """
         return self._fabric.key_value.insert_key_value_pair(name=name, data=data)
 
-
     # client.delete_entry_for_key
+
     def delete_entry_for_key(self, name, key):
         """Delete an entry for a key.
 
@@ -1992,8 +1987,8 @@ class C8Client(object):
         """
         return self._fabric.key_value.delete_entry_for_key(name=name, key=key)
 
-
     # client.delete_entry_for_keys
+
     def delete_entry_for_keys(self, name, keys=[]):
         """Deletes entries for multiple keys.
 
@@ -2007,8 +2002,8 @@ class C8Client(object):
         """
         return self._fabric.key_value.delete_entry_for_keys(name=name, keys=keys)
 
-    
     # client.get_value_for_key
+
     def get_value_for_key(self, name, key):
         """Delete an entry for a key.
 
@@ -2022,8 +2017,8 @@ class C8Client(object):
         """
         return self._fabric.key_value.get_value_for_key(name=name, key=key)
 
-    
     # client.get_keys
+
     def get_keys(self, name):
         """gets keys of a collection.
 
@@ -2035,8 +2030,8 @@ class C8Client(object):
         """
         return self._fabric.key_value.get_keys(name)
 
-
     # client.get_kv_count
+
     def get_kv_count(self, name):
         """gets the kv count of a collection.
 
@@ -2048,11 +2043,11 @@ class C8Client(object):
         """
         return self._fabric.key_value.get_kv_count(name)
 
-    
     # client.create_api_key
+
     def create_api_key(self, keyid):
         """Creates an api key.
-        
+
         :return: Creates an api key.
         :rtype: list
         :raise c8.exceptions.CreateAPIKey: If request fails.
@@ -2060,25 +2055,25 @@ class C8Client(object):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.create_api_key()
 
-
     # client.list_all_api_keys
+
     def list_all_api_keys(self):
         return self._fabric.list_all_api_keys()
 
-
     # client.remove_api_key
+
     def remove_api_key(self, keyid):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.remove_api_key()
 
-
     # client.list_accessible_databases
+
     def list_accessible_databases(self, keyid):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.list_accessible_databases()
 
-
     # client.get_database_access_level
+
     def get_database_access_level(self, keyid, databasename):
         """Fetch the database access level for a specific database.
 
@@ -2092,69 +2087,55 @@ class C8Client(object):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.get_database_access_level(databasename)
 
-
     def set_database_access_level(self, keyid, databasename, grant='ro'):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.set_database_access_level(databasename, grant=grant)
 
-    
     def clear_database_access_level(self, keyid, databasename):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.clear_database_access_level(databasename)
-
 
     def get_collection_access_level(self, keyid, collection_name, databasename='_system'):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.get_collection_access_level(collection_name, databasename)
 
-
     def set_collection_access_level(self, keyid, collection_name, databasename='_system',
-                                     grant='ro'):
+                                    grant='ro'):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.set_collection_access_level(collection_name, databasename, grant)
-
 
     def clear_collection_access_level(self, keyid, collection_name, databasename='_system'):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.clear_collection_access_level(collection_name, databasename)
 
-
     def list_accessible_streams(self, keyid, databasename='_system', full=False):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.list_accessible_streams(databasename, full)
-
 
     def get_stream_access_level(self, keyid, streamname, databasename='_system', local=False):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.get_stream_access_level(streamname, databasename, local)
 
-
     def set_stream_access_level(self, keyid, streamname, databasename='_system', grant='ro', local=False):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.set_stream_access_level(streamname, databasename, grant, local=local)
-
-
 
     def clear_stream_access_level(self, keyid, streamname, databasename='_system', local=False):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.clear_stream_access_level(streamname, databasename, local)
 
-
     def get_billing_access_level(self, keyid):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.get_billing_access_level()
-
 
     def set_billing_access_level(self, keyid, grant='ro'):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.set_billing_access_level(grant)
 
-
     def clear_billing_access_level(self, keyid):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.clear_billing_access_level()
 
-    
     def set_search(self, collection, enable, field):
         """Set search capability of a collection (enabling or disabling it). 
         If the collection does not exist, it will be created.
@@ -2170,16 +2151,16 @@ class C8Client(object):
         """
         return self._search.set_search(collection, enable, field)
 
-    def create_view(self, 
-        name,
-        propeties={},
-        view_type="search",
-        ):
+    def create_view(self,
+                    name,
+                    propeties={},
+                    view_type="search",
+                    ):
         """Creates a new view with a given name and properties if it does not
         already exist.
         Note: view can't be created with the links. Please use PUT/PATCH for links
         management.
-        
+
         :param name: The name of the view
         :type name: str | unicode
         :param properties: Properties related with given view
@@ -2189,7 +2170,7 @@ class C8Client(object):
         :return: object of new view
         :rtype: dict
         """
-        return self._search.create_view(name=name, propeties={},view_type="search")
+        return self._search.create_view(name=name, propeties={}, view_type="search")
 
     def list_all_views(self):
         """ List all views
@@ -2231,7 +2212,7 @@ class C8Client(object):
         """
         return self._search.delete_view(view)
 
-    def get_view_properties(self,view):
+    def get_view_properties(self, view):
         """Get view properties
 
         :param view: View name whos properties we need to get.
@@ -2308,8 +2289,8 @@ class C8Client(object):
         :rtype: bool
         """
         return self._search.delete_analyzer(name)
-    
-    def get_analyzer_definition(self,name):
+
+    def get_analyzer_definition(self, name):
         """Gets given analyzer definition
 
         :param name: Name of the view to be deleted
