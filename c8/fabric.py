@@ -64,8 +64,10 @@ __all__ = [
 ]
 ENDPOINT = "/streams"
 
+
 def raise_timeout(signum, frame):
-        raise TimeoutError
+    raise TimeoutError
+
 
 def printdata(event):
     """Prints the event.
@@ -134,7 +136,6 @@ class Fabric(APIWrapper):
         """
         return KV(self._conn, self._executor)
 
-
     def on_change(self, collection, callback, timeout=60):
         """Execute given input function on receiving a change.
 
@@ -147,7 +148,7 @@ class Fabric(APIWrapper):
         """
         if not callback:
             raise ValueError('You must specify a callback function')
-        
+
         if not collection:
             raise ValueError('You must specify a collection on which realtime '
                              'data is to be watched!')
@@ -156,22 +157,23 @@ class Fabric(APIWrapper):
 
         subscription_name = "%s-%s-subscription-%s" % (
             self.tenant_name, self.fabric_name, str(random.randint(1, 1000)))
-        
+
         url = self.url.split("//")[1].split(":")[0]
 
         topic = "wss://{}/_ws/ws/v2/consumer/persistent/{}/{}/{}/{}".format(
-            url,self.tenant_name,namespace,
-            collection,subscription_name)
+            url, self.tenant_name, namespace,
+            collection, subscription_name)
 
-        ws = websocket.create_connection(topic, header=self.header, timeout=timeout)
-        
+        ws = websocket.create_connection(
+            topic, header=self.header, timeout=timeout)
+
         try:
             print("pyC8 Realtime: Begin monitoring realtime updates for " +
                   topic)
             while True:
                 msg = json.loads(ws.recv())
-                data =  base64.b64decode(msg['payload'])
-                ws.send(json.dumps({'messageId' : msg['messageId']}))
+                data = base64.b64decode(msg['payload'])
+                ws.send(json.dumps({'messageId': msg['messageId']}))
                 callback(data)
         except TimeoutError:
             pass
@@ -300,7 +302,7 @@ class Fabric(APIWrapper):
 
         request = Request(method='put',
                           endpoint='_fabric/{}/database/{}'.format(
-                          fabric, new_dc))
+                              fabric, new_dc))
 
         def response_handler(resp):
             if not resp.is_success:
@@ -608,7 +610,8 @@ class Fabric(APIWrapper):
             if not resp.is_success:
                 raise CollectionListError(resp, request)
             if collectionModel is not None:
-                docs =  [col for col in map(dict, resp.body['result']) if col['collectionModel'] == collectionModel]
+                docs = [col for col in map(
+                    dict, resp.body['result']) if col['collectionModel'] == collectionModel]
             else:
                 docs = [col for col in map(dict, resp.body['result'])]
             return [{
@@ -1033,9 +1036,7 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
- 
     def has_stream(self, stream, isCollectionStream=False, local=False):
-     
         """ Check if the list of streams has a stream with the given name.
 
         :param stream: The name of the stream for which to check in the list
@@ -1048,9 +1049,8 @@ class Fabric(APIWrapper):
             if local is False and "c8globals" not in stream:
                 stream = "c8globals." + stream
             elif local is True and "c8locals" not in stream:
-                stream = "c8locals." + stream     
+                stream = "c8locals." + stream
         return any(mystream['name'] == stream for mystream in self.streams(local=local))
-
 
     def create_stream(self, stream, local=False):
         """
@@ -1093,10 +1093,10 @@ class Fabric(APIWrapper):
         print("WARNING: Delete not yet implemented for persistent streams, "
               "calling terminate instead.")
         # if isCollectionStream is False:
-           # if local is True:
-              #  stream = "c8locals." + stream
-            #else:
-             #   stream = "c8globals." + stream
+        # if local is True:
+        #  stream = "c8locals." + stream
+        # else:
+        #   stream = "c8globals." + stream
         return self.terminate_stream(stream=stream, isCollectionStream=isCollectionStream,  local=local)
 
         # TODO : When stream delete is implemented, enable below code and
@@ -1303,7 +1303,7 @@ class Fabric(APIWrapper):
         """
         data = (json.dumps((eventIds)))
 
-        request = Request(method="delete", endpoint="/events", data = data)
+        request = Request(method="delete", endpoint="/events", data=data)
 
         def response_handler(resp):
             if not resp.is_success:
@@ -1328,7 +1328,7 @@ class Fabric(APIWrapper):
             return resp.body
 
         return self._execute(request, response_handler)
-    
+
     def get_event_by_Id(self, eventId):
         """Create an event.
 
@@ -1345,13 +1345,13 @@ class Fabric(APIWrapper):
                 raise EventGetError(resp, request)
             return resp.body
 
-        return self._execute(request, response_handler)     
+        return self._execute(request, response_handler)
 
     ########################
     # Stream Apps #
     ########################
 
-    def stream_app(self,name):
+    def stream_app(self, name):
         return StreamApps(self._conn, self._executor, name)
 
     def validate_stream_app(self, data):
@@ -1360,50 +1360,49 @@ class Fabric(APIWrapper):
         """
         body = {"definition": data}
         req = Request(
-            method = "post",
+            method="post",
             endpoint='/streamapps/validate',
             data=json.dumps(body)
         )
-        
+
         def response_handler(resp):
             if resp.is_success is True:
                 return True
             print(resp.body)
             return False
-        
-        return self._execute(req,response_handler)
+
+        return self._execute(req, response_handler)
 
     def retrive_stream_app(self):
         """retrieves a stream app by given body
         """
         req = Request(
-            method = "get",
+            method="get",
             endpoint='/streamapps',
         )
-        
+
         def response_handler(resp):
             if resp.is_success is True:
                 return resp.body
             print(resp.body)
             return False
-        
-        return self._execute(req,response_handler)
+
+        return self._execute(req, response_handler)
 
     def get_samples_stream_app(self):
         """gets samples for stream apps
         """
         req = Request(
-            method = "get",
+            method="get",
             endpoint='/streamapps/samples',
         )
-        
+
         def response_handler(resp):
             if resp.is_success is not True:
-                raise StreamAppGetSampleError(resp,req)
-            return resp.body["streamAppSample"]    
-            
-        
-        return self._execute(req,response_handler)
+                raise StreamAppGetSampleError(resp, req)
+            return resp.body["streamAppSample"]
+
+        return self._execute(req, response_handler)
 
     def create_stream_app(self, data, dclist=[]):
         """Creates a stream application by given data
@@ -1412,16 +1411,17 @@ class Fabric(APIWrapper):
         """
         # create request body
         req_body = {
-            "definition":data,
-            "regions":dclist
-        } 
+            "definition": data,
+            "regions": dclist
+        }
         # create request
         req = Request(
-            method = "post",
+            method="post",
             endpoint='/streamapps',
             data=json.dumps(req_body)
         )
         # create response handler
+
         def response_handler(resp):
             if resp.is_success is True:
                 print(resp.body)
@@ -1429,12 +1429,12 @@ class Fabric(APIWrapper):
             print(resp.body)
             return False
         # call api
-        return self._execute(req,response_handler)   
-
+        return self._execute(req, response_handler)
 
     ########################
     # APIKeys #
     ########################
+
     def api_keys(self, keyid):
         """Return the API keys API wrapper.
         :param keyid: API Key id
@@ -1444,7 +1444,6 @@ class Fabric(APIWrapper):
         """
         return APIKeys(self._conn, self._executor, keyid)
 
-
     def list_all_api_keys(self):
         """List the API keys.
 
@@ -1452,10 +1451,11 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.GetAPIKeys: If request fails
         """
         request = Request(
-            method = "get",
+            method="get",
             endpoint='/key',
         )
         # create response handler
+
         def response_handler(resp):
             if not resp.is_success:
                 raise GetAPIKeys(resp, request)
@@ -1470,8 +1470,9 @@ class Fabric(APIWrapper):
         """Returns the Search APIWrapper
         :return: Search API Wrapper
         :rtype: c8.search.Search
-        """ 
+        """
         return Search(self._conn, self._executor)
+
 
 class StandardFabric(Fabric):
     """Standard fabric API wrapper.
