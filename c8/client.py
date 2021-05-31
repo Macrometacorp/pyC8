@@ -160,7 +160,8 @@ class C8Client(object):
                           enforce_replication_factor=None,
                           spot_collection=False,
                           local_collection=False,
-                          is_system=False
+                          is_system=False,
+                          stream=False
                           ):
         """Create a new collection.
 
@@ -206,6 +207,8 @@ class C8Client(object):
         :type bool
         :param is_system: If True, able to create system collections
         :type is_system: bool
+        :param stream: If True, create a local stream for collection.
+        :type stream: bool
         :return: Standard collection API wrapper.
         :rtype: c8.collection.StandardCollection
         """
@@ -222,7 +225,8 @@ class C8Client(object):
                                               enforce_replication_factor=enforce_replication_factor,
                                               spot_collection=spot_collection,
                                               local_collection=local_collection,
-                                              is_system=is_system)
+                                              is_system=is_system,
+                                              stream=stream)
         return resp
 
     # client.list_collection_indexes
