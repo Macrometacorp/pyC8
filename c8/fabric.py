@@ -640,7 +640,8 @@ class Fabric(APIWrapper):
                           enforce_replication_factor=None,
                           spot_collection=False,
                           local_collection=False,
-                          is_system=False
+                          is_system=False,
+                          stream=False
                           ):
         """Create a new collection.
 
@@ -686,6 +687,8 @@ class Fabric(APIWrapper):
         :type bool
         :param is_system: If True, able to create system collections
         :type is_system: bool
+        :param stream: If True, create a local stream for collection.
+        :type stream: bool
         :return: Standard collection API wrapper.
         :rtype: c8.collection.StandardCollection
         :raise c8.exceptions.CollectionCreateError: If create fails.
@@ -705,7 +708,8 @@ class Fabric(APIWrapper):
                 'type': 3 if edge else 2,
                 'isSpot': spot_collection,
                 'isLocal': local_collection,
-                'isSystem': is_system
+                'isSystem': is_system,
+                'stream': stream,
             }
 
         if shard_fields is not None:
