@@ -54,11 +54,9 @@ class C8Client(object):
         if self._apikey:
             self._tenant = self.tenant(apikey=self._apikey)
             self._fabric = self._tenant.useFabric(self._fabricname)
-        
-        self._search = self._fabric.search()
 
-
-
+        if self._fabric:
+            self._search = self._fabric.search()
 
     def __repr__(self):
         return '<C8Client {}>'.format(self._url)
