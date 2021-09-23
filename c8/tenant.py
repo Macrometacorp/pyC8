@@ -141,7 +141,7 @@ class Tenant(APIWrapper):
         self.auth_token
         request = Request(
             method='get',
-            endpoint='/tenants',
+            endpoint='/_api/tenants',
         )
 
         def response_handler(resp):
@@ -198,7 +198,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='post',
-            endpoint='/tenant',
+            endpoint='/_api/tenant',
             data=data
         )
 
@@ -234,7 +234,7 @@ class Tenant(APIWrapper):
 
         request = Request(
             method='patch',
-            endpoint='/tenant/{tenantname}'.format(tenantname=name),
+            endpoint='/_api/tenant/{tenantname}'.format(tenantname=name),
             data=data
         )
 
@@ -258,7 +258,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/tenant/{tenantname}'.format(tenantname=name)
+            endpoint='/_api/tenant/{tenantname}'.format(tenantname=name)
         )
 
         def response_handler(resp):
