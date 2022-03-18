@@ -896,7 +896,7 @@ class Collection(APIWrapper):
             data['minLength'] = min_length
         return self._add_index(data)
 
-    def add_persistent_index(self, fields, unique=None, sparse=None):
+    def add_persistent_index(self, fields, unique=None, sparse=None, deduplicate=None):
         """Create a new persistent index.
 
         Unique persistent indexes on non-sharded keys are not supported in a
@@ -910,6 +910,9 @@ class Collection(APIWrapper):
             the indexed fields, or documents that have a value of None in any
             of the indexed fields.
         :type sparse: bool
+        :param deduplicate: If set to True, inserting duplicate index values
+            from the same document triggers unique constraint errors.
+        :type deduplicate: bool
         :return: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
@@ -919,6 +922,8 @@ class Collection(APIWrapper):
             data['unique'] = unique
         if sparse is not None:
             data['sparse'] = sparse
+        if deduplicate is not None:
+            data['deduplicate'] = deduplicate
         return self._add_index(data)
 
     
