@@ -330,7 +330,7 @@ class C8Client(object):
     # client.add_persistent_index
 
     def add_persistent_index(self, collection_name,
-                             fields, unique=None, sparse=None):
+                             fields, unique=None, sparse=None, deduplicate=False):
         """Create a new persistent index.
 
         Unique persistent indexes on non-sharded keys are not supported in a
@@ -346,6 +346,9 @@ class C8Client(object):
             the indexed fields, or documents that have a value of None in any
             of the indexed fields.
         :type sparse: bool
+        :param deduplicate: If set to True, inserting duplicate index values
+            from the same document triggers unique constraint errors.
+        :type deduplicate: bool
         :return: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
@@ -353,7 +356,8 @@ class C8Client(object):
         _collection = self.get_collection(collection_name)
         return _collection.add_persistent_index(fields=fields,
                                                 unique=unique,
-                                                sparse=sparse)
+                                                sparse=sparse,
+                                                deduplicate=deduplicate)
 
     # client.add_fulltext_index
 
