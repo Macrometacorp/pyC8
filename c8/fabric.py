@@ -44,7 +44,8 @@ from c8.exceptions import (
     EventDeleteError,
     EventGetError,
     StreamAppGetSampleError,
-    GetAPIKeys
+    GetAPIKeys,
+    C8ClientError
 )
 from c8.executor import (
     DefaultExecutor,
@@ -136,8 +137,10 @@ class Fabric(APIWrapper):
         """
         return KV(self._conn, self._executor)
 
-    def on_change(self, collection, callback, timeout=60):
+    def on_change(self, collection, callback, timeout=None, ping_timeout=10, ping_interval=60, **kwargs):
         """Execute given input function on receiving a change.
+
+        If timeout is None, listen forever.
 
         :param collections: Collection name(s) regex to listen for
         :type collections: str
@@ -145,6 +148,10 @@ class Fabric(APIWrapper):
         :type timeout: int
         :param callback: Function to execute on a change
         :type callback: function
+        :param ping_timeout: When running forever, timeout if ping isn't acknowledged in this time (seconds)
+        :type ping_timeout: int
+        :param ping_interval: When running forever, ping the server every X seconds to keep the connection alive
+        :type ping_interval: int
         """
         if not callback:
             raise ValueError('You must specify a callback function')
@@ -164,23 +171,47 @@ class Fabric(APIWrapper):
             url, self.tenant_name, namespace,
             collection, subscription_name)
 
-        ws = websocket.create_connection(
-            topic, header=self.header, timeout=timeout)
+        def _message_handler(wsapp, raw_msg):
+            msg = json.loads(raw_msg)
+            data = base64.b64decode(msg['payload'])
+            ws.send(json.dumps({'messageId': msg['messageId']}))
+            callback(data)
 
-        try:
-            print("pyC8 Realtime: Begin monitoring realtime updates for " +
-                  topic)
-            while True:
-                msg = json.loads(ws.recv())
-                data = base64.b64decode(msg['payload'])
-                ws.send(json.dumps({'messageId': msg['messageId']}))
-                callback(data)
-        except TimeoutError:
-            pass
-        except Exception as e:
-            print(e)
-        finally:
-            ws.close()
+        if timeout is not None:
+            # Run
+            ws = websocket.create_connection(
+                topic, header=self.header, timeout=timeout)
+
+            try:
+                print(f"pyC8 Realtime: Begin monitoring realtime updates for {topic}")
+                while True:
+                    raw_msg = ws.recv()
+                    _message_handler(None, raw_msg)
+            except TimeoutError:
+                print(e)
+                raise C8ClientError("Timeout during on_change operation") from e
+            except Exception as e:
+                print(e)
+                raise C8ClientError("Error ocurred during on_change operation") from e
+            finally:
+                ws.close()
+        else:
+            # This runs forever or until otherwise stopped
+            print(f"pyC8 Realtime: Begin monitoring realtime updates for {topic}, forever.")
+            ws = websocket.WebSocketApp(topic, header=self.header, on_message=_message_handler)
+            try:
+                # Use pings to keep the connection alive
+                ws.run_forever(ping_interval=ping_interval, ping_timeout=ping_timeout)
+            except websocket.WebSocketTimeout as e:
+                # In this case, the timeout ocurred while waiting for the connection to the server
+                print(e)
+                raise C8ClientError("Timeout during on_change operation") from e
+            except Exception as e:
+                # Should be a log statement instead
+                print(e)
+                raise C8ClientError("Error ocurred during on_change operation") from e
+            finally:
+                ws.close()
 
     def properties(self):
         """Return fabric properties.
