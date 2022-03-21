@@ -1068,6 +1068,19 @@ class C8Client(object):
         """
         return self._fabric.create_stream(stream, local=local)
 
+
+    # client.delete_stream
+
+    def delete_stream(self, stream, force=False):
+        """
+        Delete the stream under the given fabric
+        :param stream: name of stream
+        :param force: whether to force the operation
+        :return: 200, OK if operation successful
+        :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
+        """
+        return self._fabric.delete_stream(stream, force=force)
+
     # client.terminate_stream
 
     def terminate_stream(self, stream, isCollectionStream=False, local=False):
