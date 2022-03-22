@@ -7,7 +7,6 @@ from c8.fabric import StandardFabric
 from tests.executors import (
     TestAsyncExecutor,
     TestBatchExecutor,
-    TestTransactionExecutor
 )
 from tests.helpers import (
     generate_fabric_name,
@@ -140,17 +139,6 @@ def pytest_generate_tests(metafunc):
         tst = metafunc.module.__name__.split('.test_', 1)[-1]
         tst_conn = tst_fabric._conn
         bad_conn = bad_fabric._conn
-
-        if tst in {'collection', 'document', 'graph', 'c8ql', 'index'}:
-            # Add test transaction fabrics
-            tst_txn_fabric = StandardFabric(tst_conn)
-            tst_txn_fabric._executor = TestTransactionExecutor(tst_conn)
-            tst_txn_fabric._is_transaction = True
-            tst_fabrics.append(tst_txn_fabric)
-
-            bad_txn_fabric = StandardFabric(bad_conn)
-            bad_txn_fabric._executor = TestTransactionExecutor(bad_conn)
-            bad_fabrics.append(bad_txn_fabric)
 
         if tst not in {'async', 'batch', 'transaction', 'client', 'exception'}:
             # Add test async fabrics

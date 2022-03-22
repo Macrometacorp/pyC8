@@ -504,23 +504,6 @@ class ServerTimeError(C8ServerError):
     """Failed to retrieve server system time."""
 
 
-##########################
-# Transaction Exceptions #
-##########################
-
-
-class TransactionStateError(C8ClientError):
-    """The transaction object was in bad state."""
-
-
-class TransactionJobResultError(C8ClientError):
-    """Failed to retrieve transaction job result."""
-
-
-class TransactionExecuteError(C8ServerError):
-    """Failed to execute transaction API request"""
-
-
 ###################
 # User Exceptions #
 ###################

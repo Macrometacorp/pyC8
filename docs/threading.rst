@@ -7,7 +7,5 @@ shared across multiple threads without locks in place:
 * :ref:`BatchFabric` (see :doc:`batch`)
 * :ref:`BatchJob` (see :doc:`batch`)
 * :ref:`Cursor` (see :doc:`cursor`)
-* :ref:`TransactionFabric` (see :doc:`transaction`)
-* :ref:`TransactionJob` (see :doc:`transaction`)
 
 The rest of pyC8 is safe to use in multi-threaded environments.
