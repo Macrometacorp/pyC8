@@ -3,9 +3,8 @@ import time
 from c8.executor import (
     AsyncExecutor,
     BatchExecutor,
-    TransactionExecutor
 )
-from c8.job import BatchJob, TransactionJob
+from c8.job import BatchJob
 
 
 class TestAsyncExecutor(AsyncExecutor):
@@ -36,32 +35,6 @@ class TestBatchExecutor(BatchExecutor):
         self._queue.clear()
 
         job = BatchJob(response_handler)
-        self._queue[job.id] = (request, job)
-        self.commit()
-        return job.result()
-
-
-class TestTransactionExecutor(TransactionExecutor):
-
-    def __init__(self, connection):
-        super(TestTransactionExecutor, self).__init__(
-            connection=connection,
-            timeout=0,
-            sync=True,
-            return_result=True,
-            read=None,
-            write=None
-        )
-
-    def execute(self, request, response_handler):
-        if request.command is None:
-            response = self._conn.send_request(request)
-            return response_handler(response)
-
-        self._committed = False
-        self._queue.clear()
-
-        job = TransactionJob(response_handler)
         self._queue[job.id] = (request, job)
         self.commit()
         return job.result()

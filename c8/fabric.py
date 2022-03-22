@@ -31,7 +31,6 @@ from c8.exceptions import (
     StreamConnectionError,
     StreamCreateError,
     StreamPermissionError,
-    TransactionExecuteError,
     TenantDcListError,
     SpotRegionUpdateError,
     RestqlValidationError,
@@ -50,7 +49,6 @@ from c8.executor import (
     DefaultExecutor,
     AsyncExecutor,
     BatchExecutor,
-    TransactionExecutor,
 )
 from c8.graph import Graph
 from c8.stream_collection import StreamCollection
@@ -60,7 +58,6 @@ __all__ = [
     'StandardFabric',
     'AsyncFabric',
     'BatchFabric',
-    'TransactionFabric'
 ]
 ENDPOINT = "/streams"
 
@@ -200,90 +197,6 @@ class Fabric(APIWrapper):
             result = resp.body['result']
             result['system'] = result.pop('isSystem')
             return result
-
-        return self._execute(request, response_handler)
-
-    def execute_transaction(self,
-                            command,
-                            params=None,
-                            read=None,
-                            write=None,
-                            sync=None,
-                            timeout=None,
-                            max_size=None,
-                            allow_implicit=None,
-                            intermediate_commit_count=None,
-                            intermediate_commit_size=None):
-        """Execute raw Javascript command in transaction.
-
-        :param command: Javascript command to execute.
-        :type command: str | unicode
-        :param read: Names of collections read during transaction. If parameter
-            **allow_implicit** is set to True, any undeclared read collections
-            are loaded lazily.
-        :type read: [str | unicode]
-        :param write: Names of collections written to during transaction.
-            Transaction fails on undeclared write collections.
-        :type write: [str | unicode]
-        :param params: Optional parameters passed into the Javascript command.
-        :type params: dict
-        :param sync: Block until operation is synchronized to disk.
-        :type sync: bool
-        :param timeout: Timeout for waiting on collection locks. If set to 0,
-            C8Db server waits indefinitely. If not set, system default
-            value is used.
-        :type timeout: int
-        :param max_size: Max transaction size limit in bytes. Applies only
-            to RocksDB storage engine.
-        :type max_size: int
-        :param allow_implicit: If set to True, undeclared read collections are
-            loaded lazily. If set to False, transaction fails on any undeclared
-            collections.
-        :type allow_implicit: bool
-        :param intermediate_commit_count: Max number of operations after which
-            an intermediate commit is performed automatically. Applies only to
-            RocksDB storage engine.
-        :type intermediate_commit_count: int
-        :param intermediate_commit_size: Max size of operations in bytes after
-            which an intermediate commit is performed automatically. Applies
-            only to RocksDB storage engine.
-        :type intermediate_commit_size: int
-        :returns: Return value of **command**.
-        :rtype: str | unicode
-        :raise c8.exceptions.TransactionExecuteError: If execution fails.
-        """
-        collections = {'allowImplicit': allow_implicit}
-        if read is not None:
-            collections['read'] = read
-        if write is not None:
-            collections['write'] = write
-
-        data = {'action': command}
-        if collections:
-            data['collections'] = collections
-        if params is not None:
-            data['params'] = params
-        if timeout is not None:
-            data['lockTimeout'] = timeout
-        if sync is not None:
-            data['waitForSync'] = sync
-        if max_size is not None:
-            data['maxTransactionSize'] = max_size
-        if intermediate_commit_count is not None:
-            data['intermediateCommitCount'] = intermediate_commit_count
-        if intermediate_commit_size is not None:
-            data['intermediateCommitSize'] = intermediate_commit_size
-
-        request = Request(
-            method='post',
-            endpoint='/transaction',
-            data=data
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise TransactionExecuteError(resp, request)
-            return resp.body.get('result')
 
         return self._execute(request, response_handler)
 
@@ -1528,43 +1441,6 @@ class StandardFabric(Fabric):
         """
         return BatchFabric(self._conn, return_result)
 
-    def begin_transaction(self,
-                          return_result=True,
-                          timeout=None,
-                          sync=None,
-                          read=None,
-                          write=None):
-        """Begin transaction.
-
-        :param return_result: If set to True, API executions return instances
-            of :class:`c8.job.TransactionJob` that are populated with
-            results on commit. If set to False, API executions return None and
-            no results are tracked client-side.
-        :type return_result: bool
-        :param read: Names of collections read during transaction. If not
-            specified, they are added automatically as jobs are queued.
-        :type read: [str | unicode]
-        :param write: Names of collections written to during transaction.
-            If not specified, they are added automatically as jobs are queued.
-        :type write: [str | unicode]
-        :param timeout: Timeout for waiting on collection locks. If set to 0,
-            C8Db server waits indefinitely. If not set, system default
-            value is used.
-        :type timeout: int
-        :param sync: Block until the transaction is synchronized to disk.
-        :type sync: bool
-        :returns: Fabric API wrapper built specifically for transactions.
-        :rtype: c8.fabric.TransactionFabric
-        """
-        return TransactionFabric(
-            connection=self._conn,
-            return_result=return_result,
-            read=read,
-            write=write,
-            timeout=timeout,
-            sync=sync
-        )
-
 
 class AsyncFabric(Fabric):
     """Fabric API wrapper tailored specifically for async execution.
@@ -1642,78 +1518,5 @@ class BatchFabric(Fabric):
             (e.g. batch was already committed or the response size did not
             match expected).
         :raise c8.exceptions.BatchExecuteError: If commit fails.
-        """
-        return self._executor.commit()
-
-
-class TransactionFabric(Fabric):
-    """Fabric API wrapper tailored specifically for transactions.
-
-    See :func:`c8.fabric.StandardFabric.begin_transaction`.
-
-    :param connection: HTTP connection.
-    :type connection: c8.connection.Connection
-    :param return_result: If set to True, API executions return instances of
-        :class:`c8.job.TransactionJob` that are populated with results on
-        commit. If set to False, API executions return None and no results are
-        tracked client-side.
-    :type return_result: bool
-    :param read: Names of collections read during transaction.
-    :type read: [str | unicode]
-    :param write: Names of collections written to during transaction.
-    :type write: [str | unicode]
-    :param timeout: Timeout for waiting on collection locks. If set to 0, the
-        C8Db server waits indefinitely. If not set, system default value
-        is used.
-    :type timeout: int
-    :param sync: Block until operation is synchronized to disk.
-    :type sync: bool
-    """
-
-    def __init__(self, connection, return_result, read, write, timeout, sync):
-        super(TransactionFabric, self).__init__(
-            connection=connection,
-            executor=TransactionExecutor(
-                connection=connection,
-                return_result=return_result,
-                read=read,
-                write=write,
-                timeout=timeout,
-                sync=sync
-            )
-        )
-
-    def __repr__(self):
-        return '<TransactionFabric {}>'.format(self.name)
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exception, *_):
-        if exception is None:
-            self._executor.commit()
-
-    def queued_jobs(self):
-        """Return the queued transaction jobs.
-
-        :returns: Queued transaction jobs, or None if **return_result** was set
-            to False during initialization.
-        :rtype: [c8.job.TransactionJob] | None
-        """
-        return self._executor.jobs
-
-    def commit(self):
-        """Execute the queued requests in a single transaction API request.
-
-        If **return_result** parameter was set to True during initialization,
-        :class:`c8.job.TransactionJob` instances are populated with
-        results.
-
-        :returns: Transaction jobs, or None if **return_result** parameter was
-            set to False during initialization.
-        :rtype: [c8.job.TransactionJob] | None
-        :raise c8.exceptions.TransactionStateError: If the transaction was
-            already committed.
-        :raise c8.exceptions.TransactionExecuteError: If commit fails.
         """
         return self._executor.commit()

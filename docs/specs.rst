@@ -144,23 +144,6 @@ Response
 .. autoclass:: c8.response.Response
     :members:
 
-.. _TransactionFabric:
-
-TransactionFabric
-===================
-
-.. autoclass:: c8.fabric.TransactionFabric
-    :inherited-members:
-    :members:
-
-.. _TransactionJob:
-
-TransactionJob
-==============
-
-.. autoclass:: c8.job.TransactionJob
-    :members:
-
 .. _VertexCollection:
 
 VertexCollection

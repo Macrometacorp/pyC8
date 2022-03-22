@@ -9,7 +9,6 @@ from c8.cursor import Cursor
 from c8.exceptions import (
     AsyncExecuteError,
     BatchExecuteError,
-    TransactionExecuteError
 )
 
 
@@ -136,5 +135,4 @@ def assert_raises(exception):
         exception,
         AsyncExecuteError,
         BatchExecuteError,
-        TransactionExecuteError
     ))
