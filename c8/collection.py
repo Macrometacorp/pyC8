@@ -82,7 +82,7 @@ class Collection(APIWrapper):
 
         :param code: Collection status code.
         :type code: int
-        :return: Collection status text or None if code is None.
+        :returns: Collection status text or None if code is None.
         :rtype: str | unicode
         """
         return None if code is None else self.statuses[code]
@@ -92,7 +92,7 @@ class Collection(APIWrapper):
 
         :param body: Response body.
         :type body: dict
-        :return: Formatted body.
+        :returns: Formatted body.
         :rtype: dict
         """
         body.pop('code', None)
@@ -151,7 +151,7 @@ class Collection(APIWrapper):
 
         :param doc_id: Document ID.
         :type doc_id: str | unicode
-        :return: Verified document ID.
+        :returns: Verified document ID.
         :rtype: str | unicode
         :raise c8.exceptions.DocumentParseError: On bad collection name.
         """
@@ -165,7 +165,7 @@ class Collection(APIWrapper):
 
         :param body: Document body.
         :type body: dict
-        :return: Document ID.
+        :returns: Document ID.
         :rtype: str | unicode
         :raise c8.exceptions.DocumentParseError: On missing ID and key.
         """
@@ -184,7 +184,7 @@ class Collection(APIWrapper):
         :type document: dict
         :param check_rev: Whether to check the revision.
         :type check_rev: bool
-        :return: Document ID and request headers.
+        :returns: Document ID and request headers.
         :rtype: (str | unicode, dict)
         """
         doc_id = self._extract_id(document)
@@ -201,7 +201,7 @@ class Collection(APIWrapper):
         :type rev: str | unicode | None
         :param check_rev: Whether to check the revision.
         :type check_rev: bool
-        :return: Document ID, body and request headers.
+        :returns: Document ID, body and request headers.
         :rtype: (str | unicode, str | unicode | body, dict)
         """
         if isinstance(document, dict):
@@ -235,7 +235,7 @@ class Collection(APIWrapper):
 
         :param body: Document body.
         :type body: dict
-        :return: Document body with "_key" field.
+        :returns: Document body with "_key" field.
         :rtype: dict
         :raise c8.exceptions.DocumentParseError: On missing ID and key.
         """
@@ -253,7 +253,7 @@ class Collection(APIWrapper):
 
         :param body: Document body.
         :type body: dict
-        :return: Document body with "_key" field if it has "_id" field.
+        :returns: Document body with "_key" field if it has "_id" field.
         :rtype: dict
         """
         if not isinstance(body, dict):
@@ -268,7 +268,7 @@ class Collection(APIWrapper):
     def name(self):
         """Return collection name.
 
-        :return: Collection name.
+        :returns: Collection name.
         :rtype: str | unicode
         """
         return self._name
@@ -277,7 +277,7 @@ class Collection(APIWrapper):
     def truncate(self):
         """Delete all documents in the collection.
 
-        :return: True if collection was truncated successfully.
+        :returns: True if collection was truncated successfully.
         :rtype: dict
         :raise c8.exceptions.CollectionTruncateError: If operation fails.
         """
@@ -298,7 +298,7 @@ class Collection(APIWrapper):
     def count(self):
         """Return the total document count.
 
-        :return: Total document count.
+        :returns: Total document count.
         :rtype: int
         :raise c8.exceptions.DocumentCountError: If retrieval fails.
         """
@@ -330,7 +330,7 @@ class Collection(APIWrapper):
         :param check_rev: If set to True, revision of **document** (if given)
             is compared against the revision of target document.
         :type check_rev: bool
-        :return: True if document exists, False otherwise.
+        :returns: True if document exists, False otherwise.
         :rtype: bool
         :raise c8.exceptions.DocumentInError: If check fails.
         :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
@@ -391,7 +391,7 @@ class Collection(APIWrapper):
         :type filter_fields: [str | unicode]
         :param filter_type: Allowed values are "include" or "exclude".
         :type filter_type: str | unicode
-        :return: Document cursor.
+        :returns: Document cursor.
         :rtype: c8.cursor.Cursor
         :raise c8.exceptions.DocumentGetError: If export fails.
         """
@@ -686,7 +686,7 @@ class Collection(APIWrapper):
     def indexes(self):
         """Return the collection indexes.
 
-        :return: Collection indexes.
+        :returns: Collection indexes.
         :rtype: [dict]
         :raise c8.exceptions.IndexListError: If retrieval fails.
         """
@@ -741,7 +741,7 @@ class Collection(APIWrapper):
 
         :param data: Index data.
         :type data: dict
-        :return: New index details.
+        :returns: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
@@ -790,7 +790,7 @@ class Collection(APIWrapper):
         :param deduplicate: If set to True, inserting duplicate index values
             from the same document triggers unique constraint errors.
         :type deduplicate: bool
-        :return: New index details.
+        :returns: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
@@ -848,7 +848,7 @@ class Collection(APIWrapper):
         :param deduplicate: If set to True, inserting duplicate index values
             from the same document triggers unique constraint errors.
         :type deduplicate: bool
-        :return: New index details.
+        :returns: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
@@ -871,7 +871,7 @@ class Collection(APIWrapper):
         :type fields: str | unicode | list
         :param ordered: Whether the order is longitude, then latitude.
         :type ordered: bool
-        :return: New index details.
+        :returns: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
@@ -887,7 +887,7 @@ class Collection(APIWrapper):
         :type fields: [str | unicode]
         :param min_length: Minimum number of characters to index.
         :type min_length: int
-        :return: New index details.
+        :returns: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
@@ -913,7 +913,7 @@ class Collection(APIWrapper):
         :param deduplicate: If set to True, inserting duplicate index values
             from the same document triggers unique constraint errors.
         :type deduplicate: bool
-        :return: New index details.
+        :returns: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
@@ -933,11 +933,11 @@ class Collection(APIWrapper):
             :param fields: Document fields to index.
             :type fields: [str | unicode]
             :param expireAfter:  The time (in seconds) after
-            a document's creation after which the documents count as "expired".
+                a document's creation after which the documents count as "expired".
             :type expireAfter: int
             :param inBackground: Expire Documents in Background.
             :type inBackground: bool
-            :return: New index details.
+            :returns: New index details.
             :rtype: dict
             :raise c8.exceptions.IndexCreateError: If create fails.
             """
@@ -952,7 +952,7 @@ class Collection(APIWrapper):
         :type index_id: str | unicode
         :param ignore_missing: Do not raise an exception on missing index.
         :type ignore_missing: bool
-        :return: True if index was deleted successfully, False if index was
+        :returns: True if index was deleted successfully, False if index was
             not found and **ignore_missing** was set to True.
         :rtype: bool
         :raise c8.exceptions.IndexDeleteError: If delete fails.
@@ -1004,7 +1004,7 @@ class StandardCollection(Collection):
         :param check_rev: If set to True, revision of **document** (if given)
             is compared against the revision of target document.
         :type check_rev: bool
-        :return: Document, or None if not found.
+        :returns: Document, or None if not found.
         :rtype: dict | None
         :raise c8.exceptions.DocumentGetError: If retrieval fails.
         :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
@@ -1062,7 +1062,7 @@ class StandardCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentInsertError: If insert fails.
@@ -1093,7 +1093,7 @@ class StandardCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentInsertError: If insert fails.
@@ -1149,7 +1149,7 @@ class StandardCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: List of document metadata (e.g. document keys, revisions) and
+        :returns: List of document metadata (e.g. document keys, revisions) and
             any exception, or True if parameter **silent** was set to True.
         :rtype: [dict | C8Error] | bool
         :raise c8.exceptions.DocumentInsertError: If insert fails.
@@ -1232,7 +1232,7 @@ class StandardCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentUpdateError: If update fails.
@@ -1314,7 +1314,7 @@ class StandardCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: List of document metadata (e.g. document keys, revisions) and
+        :returns: List of document metadata (e.g. document keys, revisions) and
             any exceptions, or True if parameter **silent** was set to True.
         :rtype: [dict | C8Error] | bool
         :raise c8.exceptions.DocumentUpdateError: If update fails.
@@ -1402,7 +1402,7 @@ class StandardCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentReplaceError: If replace fails.
@@ -1475,7 +1475,7 @@ class StandardCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: List of document metadata (e.g. document keys, revisions) and
+        :returns: List of document metadata (e.g. document keys, revisions) and
             any exceptions, or True if parameter **silent** was set to True.
         :rtype: [dict | C8Error] | bool
         :raise c8.exceptions.DocumentReplaceError: If replace fails.
@@ -1566,7 +1566,7 @@ class StandardCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision), or True if
+        :returns: Document metadata (e.g. document key, revision), or True if
             parameter **silent** was set to True, or False if document was not
             found and **ignore_missing** was set to True (does not apply in
             transactions).
@@ -1635,7 +1635,7 @@ class StandardCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: List of document metadata (e.g. document keys, revisions) and
+        :returns: List of document metadata (e.g. document keys, revisions) and
             any exceptions, or True if parameter **silent** was set to True.
         :rtype: [dict | C8Error] | bool
         :raise c8.exceptions.DocumentDeleteError: If delete fails.
@@ -1744,7 +1744,7 @@ class StandardCollection(Collection):
         :type on_duplicate: str | unicode
         :param sync: Block until operation is synchronized to disk.
         :type sync: bool
-        :return: Result of the bulk import.
+        :returns: Result of the bulk import.
         :rtype: dict
         :raise c8.exceptions.DocumentInsertError: If import fails.
         """
@@ -1813,7 +1813,7 @@ class VertexCollection(Collection):
     def graph(self):
         """Return the graph name.
 
-        :return: Graph name.
+        :returns: Graph name.
         :rtype: str | unicode
         """
         return self._graph
@@ -1830,7 +1830,7 @@ class VertexCollection(Collection):
         :param check_rev: If set to True, revision of **vertex** (if given) is
             compared against the revision of target vertex document.
         :type check_rev: bool
-        :return: Vertex document or None if not found.
+        :returns: Vertex document or None if not found.
         :rtype: dict | None
         :raise c8.exceptions.DocumentGetError: If retrieval fails.
         :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
@@ -1878,7 +1878,7 @@ class VertexCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentInsertError: If insert fails.
@@ -1940,7 +1940,7 @@ class VertexCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentUpdateError: If update fails.
@@ -2006,7 +2006,7 @@ class VertexCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentReplaceError: If replace fails.
@@ -2077,7 +2077,7 @@ class VertexCollection(Collection):
         :type ignore_missing: bool
         :param sync: Block until operation is synchronized to disk.
         :type sync: bool
-        :return: True if vertex was deleted successfully, False if vertex was
+        :returns: True if vertex was deleted successfully, False if vertex was
             not found and **ignore_missing** was set to True (does not apply in
             transactions).
         :rtype: bool
@@ -2144,7 +2144,7 @@ class EdgeCollection(Collection):
     def graph(self):
         """Return the graph name.
 
-        :return: Graph name.
+        :returns: Graph name.
         :rtype: str | unicode
         """
         return self._graph
@@ -2161,7 +2161,7 @@ class EdgeCollection(Collection):
         :param check_rev: If set to True, revision of **edge** (if given) is
             compared against the revision of target edge document.
         :type check_rev: bool
-        :return: Edge document or None if not found.
+        :returns: Edge document or None if not found.
         :rtype: dict | None
         :raise c8.exceptions.DocumentGetError: If retrieval fails.
         :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
@@ -2210,7 +2210,7 @@ class EdgeCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentInsertError: If insert fails.
@@ -2274,7 +2274,7 @@ class EdgeCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentUpdateError: If update fails.
@@ -2341,7 +2341,7 @@ class EdgeCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentReplaceError: If replace fails.
@@ -2412,7 +2412,7 @@ class EdgeCollection(Collection):
         :type ignore_missing: bool
         :param sync: Block until operation is synchronized to disk.
         :type sync: bool
-        :return: True if edge was deleted successfully, False if edge was not
+        :returns: True if edge was deleted successfully, False if edge was not
             found and **ignore_missing** was set to True (does not  apply in
             transactions).
         :rtype: bool
@@ -2467,7 +2467,7 @@ class EdgeCollection(Collection):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentInsertError: If insert fails.
@@ -2488,7 +2488,7 @@ class EdgeCollection(Collection):
         :param direction: The direction of the edges. Allowed values are "in"
             and "out". If not set, edges in both directions are returned.
         :type direction: str | unicode
-        :return: List of edges
+        :returns: List of edges
         :rtype: dict
         :raise c8.exceptions.EdgeListError: If retrieval fails.
         """

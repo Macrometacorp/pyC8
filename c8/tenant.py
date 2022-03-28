@@ -63,7 +63,7 @@ class Tenant(APIWrapper):
     def name(self):
         """Return tenant name.
 
-        :return: tenant name.
+        :returns: tenant name.
         :rtype: str | unicode
         """
         return self.tenant_name
@@ -115,7 +115,7 @@ class Tenant(APIWrapper):
         """Return the stored JWT auth token for this tenant & user, if stored.
         This will be stored after calling get_auth_token_from_server() above.
 
-        :return: JWT auth token stored for this tenant user
+        :returns: JWT auth token stored for this tenant user
         :rtype: str | unicode
         """
         return self._conn._auth_token
@@ -134,7 +134,8 @@ class Tenant(APIWrapper):
 
     def tenants(self):
         """Return the names all tenants.
-        :return: Tenant names.
+
+        :returns: Tenant names.
         :rtype: [str | unicode]
         :raise c8.exceptions.TenantListError: If retrieval fails.
         """
@@ -156,15 +157,17 @@ class Tenant(APIWrapper):
 
     def has_tenant(self, name):
         """Check if a tenant exists.
+
         :param name: Tenant name.
         :type name: str | unicode
-        :return: True if tenant exists, False otherwise.
+        :returns: True if tenant exists, False otherwise.
         :rtype: bool
         """
         return name in self.tenants()
 
     def create_tenant(self, email, passwd='', dclist=[], extra={}):
         """Create a new tenant.
+
         :param name: Tenant name.
         :type name: str | unicode
         :param passwd: What I presume is the tenant admin user password.
@@ -175,11 +178,14 @@ class Tenant(APIWrapper):
         :type dclist: list
         :param extra: Extra config info.
         :type extra: dict
-        :return: True if tenant was created successfully.
+        :returns: True if tenant was created successfully.
         :rtype: bool
         :raise c8.exceptions.TenantCreateError: If create fails.
+
         Here is an example entry for parameter **users**:
+
         .. code-block:: python
+
             {
                 'email': 'email'
                 'passwd': 'password',
@@ -211,16 +217,20 @@ class Tenant(APIWrapper):
 
     def update_tenant(self, name, passwd='', extra={}):
         """Update a existing tenant.
+
         :param name: Tenant name.
         :type name: str | unicode
         :param passwd: What I presume is the tenant admin user password.
         :param extra: Extra config info.
         :type extra: [dict]
-        :return: True if tenant was created successfully.
+        :returns: True if tenant was created successfully.
         :rtype: bool
         :raise c8.exceptions.TenantCreateError: If create fails.
+
         Here is an example entry for parameter **users**:
+
         .. code-block:: python
+
             {
                 'username': 'john',
                 'password': 'password',
@@ -247,11 +257,12 @@ class Tenant(APIWrapper):
 
     def delete_tenant(self, name, ignore_missing=False):
         """Delete the tenant.
+
         :param name: Tenant name.
         :type name: str | unicode
         :param ignore_missing: Do not raise an exception on missing tenant.
         :type ignore_missing: bool
-        :return: True if tenant was deleted successfully, False if tenant
+        :returns: True if tenant was deleted successfully, False if tenant
             was not found and **ignore_missing** was set to True.
         :rtype: bool
         :raise c8.exceptions.TenantDeleteError: If delete fails.
@@ -272,9 +283,10 @@ class Tenant(APIWrapper):
 
     def dclist(self, detail=False):
         """Return the list of names of Datacenters
+
         :param detail: detail list of DCs if set to true else only DC names
         :type: boolean
-        :return: DC List.
+        :returns: DC List.
         :rtype: [str | unicode ]
         :raise c8.exceptions.TenantListError: If retrieval fails.
         """
@@ -297,9 +309,10 @@ class Tenant(APIWrapper):
 
     def localdc(self, detail=True):
         """Return the list of local Datacenters
+
         :param detail: detail list of DCs if set to true else only DC names
-        :type: boolean
-        :return: DC List.
+        :type detail: boolean
+        :returns: DC List.
         :rtype: [str | dict ]
         :raise c8.exceptions.TenantListError: If retrieval fails.
         """
@@ -319,11 +332,12 @@ class Tenant(APIWrapper):
 
     def assign_dc_spot(self, dc, spot_region=False):
         """Assigns spot region of a fed
-        :param: dc: dc name
-        :type: str
-        :param: spot_region: If True, makes the region a spot region
-        :type: bool
-        :return: True if request successful,false otherwise
+
+        :param dc: dc name
+        :type dc: str
+        :param spot_region: If True, makes the region a spot region
+        :type spot_region: bool
+        :returns: True if request successful, False otherwise
         :rtype: bool
         :raise c8.exceptions.SpotRegionAssignError: If assignment fails.
         """
@@ -349,7 +363,7 @@ class Tenant(APIWrapper):
 
         :param username: Username.
         :type username: str | unicode
-        :return: True if user exists, False otherwise.
+        :returns: True if user exists, False otherwise.
         :rtype: bool
         """
         return any(user['username'] == username for user in self.users())
@@ -357,7 +371,7 @@ class Tenant(APIWrapper):
     def users(self):
         """Return all user details.
 
-        :return: List of user details.
+        :returns: List of user details.
         :rtype: [dict]
         :raise c8.exceptions.UserListError: If retrieval fails.
         """
@@ -382,7 +396,7 @@ class Tenant(APIWrapper):
 
         :param username: Username.
         :type username: str | unicode
-        :return: User details.
+        :returns: User details.
         :rtype: dict
         :raise c8.exceptions.UserGetError: If retrieval fails.
         """
@@ -413,7 +427,7 @@ class Tenant(APIWrapper):
         :type active: bool
         :param extra: Additional data for the user.
         :type extra: dict
-        :return: New user details.
+        :returns: New user details.
         :rtype: dict
         :raise c8.exceptions.UserCreateError: If create fails.
         """
@@ -449,7 +463,7 @@ class Tenant(APIWrapper):
         :type active: bool
         :param extra: Additional data for the user.
         :type extra: dict
-        :return: New user details.
+        :returns: New user details.
         :rtype: dict
         :raise c8.exceptions.UserUpdateError: If update fails.
         """
@@ -489,7 +503,7 @@ class Tenant(APIWrapper):
         :type active: bool
         :param extra: Additional data for the user.
         :type extra: dict
-        :return: New user details.
+        :returns: New user details.
         :rtype: dict
         :raise c8.exceptions.UserReplaceError: If replace fails.
         """
@@ -523,7 +537,7 @@ class Tenant(APIWrapper):
         :type username: str | unicode
         :param ignore_missing: Do not raise an exception on missing user.
         :type ignore_missing: bool
-        :return: True if user was deleted successfully, False if user was not
+        :returns: True if user was deleted successfully, False if user was not
             found and **ignore_missing** was set to True.
         :rtype: bool
         :raise c8.exceptions.UserDeleteError: If delete fails.
@@ -551,7 +565,7 @@ class Tenant(APIWrapper):
         :param full: Return the full set of access levels for all databases 
                 and all collections if set to true.
         :type full: bool
-        :return:Object containing database details
+        :returns: Object containing database details
         :rtype: list | object
         :raise c8.exceptions.DataBaseError: If request fails.
         """
@@ -575,8 +589,8 @@ class Tenant(APIWrapper):
         :type username: str | unicode
         :param databasename: Database name.
         :type databasename: str | unicode
-        :return: Access Details
-        :rtype:string
+        :returns: Access Details
+        :rtype: string
         :raise c8.exceptions.DataBaseError: If request fails.
         """
         request = Request(
@@ -599,7 +613,7 @@ class Tenant(APIWrapper):
         :type username: str | unicode
         :param databasename: Database name.
         :type databasename: str | unicode
-        :return:Object containing database details
+        :returns: Object containing database details
         :rtype: object
         :raise c8.exceptions.DataBaseError: If request fails.
         """
@@ -627,7 +641,7 @@ class Tenant(APIWrapper):
                     Use "ro" to set the database access level to Access.
                     Use "none" to set the database access level to No access.
         :type grant: string
-        :return:Object containing database details
+        :returns: Object containing database details
         :rtype: object
         :raise c8.exceptions.DataBaseError: If request fails.
         """
@@ -654,7 +668,7 @@ class Tenant(APIWrapper):
         :type collection_name: string
         :param databasename: Name of the database
         :type databasename: string
-        :return: AccessLevel of a db.
+        :returns: AccessLevel of a db.
         :rtype: string
         :raise c8.exceptions.CollectionAccessLevel: If request fails.
         """
@@ -683,11 +697,11 @@ class Tenant(APIWrapper):
         :type collection_name: string
         :param databasename: Name of the database
         :type databasename: string
-        :param grant   : Use "rw" to set the database access level to Administrate .
-                         Use "ro" to set the database access level to Access.
-                         Use "none" to set the database access level to No access.
+        :param grant: Use "rw" to set the database access level to Administrate .
+                      Use "ro" to set the database access level to Access.
+                      Use "none" to set the database access level to No access.
         :type grant: string
-        :return: Accesslevel of a particular db.
+        :returns: Accesslevel of a particular db.
         :rtype: Object
         :raise c8.exceptions.SetCollectionAccessLevel: If request fails.
         """
@@ -718,7 +732,7 @@ class Tenant(APIWrapper):
         :type collection_name: string
         :param databasename: Name of the database
         :type databasename: string
-        :return: True if operation successful.
+        :returns: True if operation successful.
         :rtype: booleaan
         :raise c8.exceptions.ClearCollectionAccessLevel: If request fails.
         """
@@ -750,7 +764,7 @@ class Tenant(APIWrapper):
         :type databasename: string
         :param full: Return the full set of access levels for all streams.
         :type full: boolean
-        :return: List of available databases.
+        :returns: List of available databases.
         :rtype: list
         :raise c8.exceptions.ListStreams: If request fails.
         """
@@ -777,7 +791,7 @@ class Tenant(APIWrapper):
         :type streamname: string
         :param databasename: Name of the database
         :type databasename: string
-        :return: AccessLevel of a db.
+        :returns: AccessLevel of a db.
         :rtype: string
         :raise c8.exceptions.StreamAccessLevel: If request fails.
         """
@@ -811,11 +825,11 @@ class Tenant(APIWrapper):
         :type streamname: string
         :param databasename: Name of the database
         :type databasename: string
-        :param grant   : Use "rw" to set the database access level to Administrate .
-                         Use "ro" to set the database access level to Access.
-                         Use "none" to set the database access level to No access.
+        :param grant: Use "rw" to set the database access level to Administrate .
+                      Use "ro" to set the database access level to Access.
+                      Use "none" to set the database access level to No access.
         :type grant: string
-        :return: Accesslevel of a particular db.
+        :returns: Accesslevel of a particular db.
         :rtype: Object
         :raise c8.exceptions.SetStreamAccessLevel: If request fails.
         """
@@ -853,7 +867,7 @@ class Tenant(APIWrapper):
         :type streamname: string
         :param databasename: Name of the database
         :type databasename: string
-        :return: True if operation successful.
+        :returns: True if operation successful.
         :rtype: booleaan
         :raise c8.exceptions.ClearStreamAccessLevel: If request fails.
         """
@@ -888,7 +902,7 @@ class Tenant(APIWrapper):
     def get_billing_access_level_user(self, username):
         """Fetch the billing access level.
 
-        :return: AccessLevel of billing.
+        :returns: AccessLevel of billing.
         :rtype: string
         :raise c8.exceptions.BillingAccessLevel: If request fails.
         """
@@ -910,11 +924,11 @@ class Tenant(APIWrapper):
        
         """Set the collection access level for billing.
 
-        :param grant   : Use "rw" to set the database access level to Administrate .
-                         Use "ro" to set the database access level to Access.
-                         Use "none" to set the database access level to No access.
+        :param grant: Use "rw" to set the database access level to Administrate .
+                      Use "ro" to set the database access level to Access.
+                      Use "none" to set the database access level to No access.
         :type grant: string
-        :return: Accesslevel of a particular db.
+        :returns: Accesslevel of a particular db.
         :rtype: Object
         :raise c8.exceptions.SetBillingAccessLevel: If request fails.
         """
@@ -939,7 +953,7 @@ class Tenant(APIWrapper):
        
         """Clear the billing access level.
 
-        :return: True if operation successful.
+        :returns: True if operation successful.
         :rtype: booleaan
         :raise c8.exceptions.ClearBillingAccessLevel: If request fails.
         """
@@ -967,7 +981,7 @@ class Tenant(APIWrapper):
 
         :param username: Username.
         :type username: str | unicode
-        :return: User permissions for all fabrics and collections.
+        :returns: User permissions for all fabrics and collections.
         :rtype: dict
         :raise: c8.exceptions.PermissionListError: If retrieval fails.
         """
@@ -993,7 +1007,7 @@ class Tenant(APIWrapper):
         :type fabric: str | unicode
         :param collection: Collection name.
         :type collection: str | unicode
-        :return: Permission for given fabric or collection.
+        :returns: Permission for given fabric or collection.
         :rtype: str | unicode
         :raise: c8.exceptions.PermissionGetError: If retrieval fails.
         """
@@ -1025,7 +1039,7 @@ class Tenant(APIWrapper):
         :param permission: Allowed values are "rw" (read and write), "ro"
             (read only) or "none" (no access).
         :type permission: str | unicode
-        :return: True if access was granted successfully.
+        :returns: True if access was granted successfully.
         :rtype: bool
         :raise c8.exceptions.PermissionUpdateError: If update fails.
         """
@@ -1055,7 +1069,7 @@ class Tenant(APIWrapper):
         :type fabric: str | unicode
         :param collection: Collection name.
         :type collection: str | unicode
-        :return: True if permission was reset successfully.
+        :returns: True if permission was reset successfully.
         :rtype: bool
         :raise c8.exceptions.PermissionRestError: If reset fails.
         """
