@@ -104,7 +104,7 @@ class Fabric(APIWrapper):
 
         :param name: Collection name.
         :type name: str | unicode
-        :return: Collection API wrapper.
+        :returns: Collection API wrapper.
         :rtype: c8.collection.StandardCollection
         """
         return self.collection(name)
@@ -113,7 +113,7 @@ class Fabric(APIWrapper):
     def name(self):
         """Return fabric name.
 
-        :return: Fabric name.
+        :returns: Fabric name.
         :rtype: str | unicode
         """
         return self.fabric_name
@@ -122,7 +122,7 @@ class Fabric(APIWrapper):
     def c8ql(self):
         """Return C8QL (C8Db Query Language) API wrapper.
 
-        :return: C8QL API wrapper.
+        :returns: C8QL API wrapper.
         :rtype: c8.c8ql.C8QL
         """
         return C8QL(self._conn, self._executor)
@@ -131,7 +131,7 @@ class Fabric(APIWrapper):
     def key_value(self):
         """Return KV (Key Value) API wrapper.
 
-        :return: KV API wrapper.
+        :returns: KV API wrapper.
         :rtype: c8.keyvalue.KV
         """
         return KV(self._conn, self._executor)
@@ -185,7 +185,7 @@ class Fabric(APIWrapper):
     def properties(self):
         """Return fabric properties.
 
-        :return: Fabric properties.
+        :returns: Fabric properties.
         :rtype: dict
         :raise c8.exceptions.FabricPropertiesError: If retrieval fails.
         """
@@ -248,7 +248,7 @@ class Fabric(APIWrapper):
             which an intermediate commit is performed automatically. Applies
             only to RocksDB storage engine.
         :type intermediate_commit_size: int
-        :return: Return value of **command**.
+        :returns: Return value of **command**.
         :rtype: str | unicode
         :raise c8.exceptions.TransactionExecuteError: If execution fails.
         """
@@ -289,15 +289,16 @@ class Fabric(APIWrapper):
 
     def update_spot_region(self, tenant, fabric, new_dc):
         """Updates spot primary region for the geo-fabric
-            :param: tenant: tenant name
-            :type: str
-            :param: fabric: fabric name
-            :type: str
-            :param: new_dc: New spot region
-            :type: str
-            :return: True if request successful,false otherwise
-            :rtype: bool
-            :raise c8.exceptions.SpotRegionUpdateError: If updation fails.
+
+        :param tenant: tenant name
+        :type tenant: str
+        :param fabric: fabric name
+        :type fabric: str
+        :param new_dc: New spot region
+        :type new_dc: str
+        :returns: True if request successful,false otherwise
+        :rtype: bool
+        :raise c8.exceptions.SpotRegionUpdateError: If updation fails.
         """
 
         request = Request(method='put',
@@ -330,7 +331,7 @@ class Fabric(APIWrapper):
     def version(self):
         """Return C8Db server version.
 
-        :return: Server version.
+        :returns: Server version.
         :rtype: str | unicode
         :raise c8.exceptions.ServerVersionError: If retrieval fails.
         """
@@ -350,7 +351,7 @@ class Fabric(APIWrapper):
     def ping(self):
         """Ping the C8Db server by sending a test request.
 
-        :return: Response code from server.
+        :returns: Response code from server.
         :rtype: int
         :raise c8.exceptions.ServerConnectionError: If ping fails.
         """
@@ -379,7 +380,7 @@ class Fabric(APIWrapper):
 
         :param detail: detail list of DCs if set to true else only DC names
         :type: boolean
-        :return: DC List.
+        :returns: DC List.
         :rtype: [str | unicode ]
         :raise c8.exceptions.TenantListError: If retrieval fails.
         """
@@ -410,7 +411,7 @@ class Fabric(APIWrapper):
 
         :param detail: detail list of DCs if set to true else only DC names
         :type: boolean
-        :return: DC List.
+        :returns: DC List.
         :rtype: [str | dict ]
         :raise c8.exceptions.TenantListError: If retrieval fails.
         """
@@ -435,7 +436,7 @@ class Fabric(APIWrapper):
     def fabrics(self):
         """Return the names all fabrics.
 
-        :return: Fabric names.
+        :returns: Fabric names.
         :rtype: [str | unicode]
         :raise c8.exceptions.FabricListError: If retrieval fails.
         """
@@ -456,7 +457,7 @@ class Fabric(APIWrapper):
 
         :param name: Fabric name.
         :type name: str | unicode
-        :return: True if fabric exists, False otherwise.
+        :returns: True if fabric exists, False otherwise.
         :rtype: bool
         """
         return name in self.fabrics()
@@ -483,9 +484,9 @@ class Fabric(APIWrapper):
             and "extra" (see below for example). If not set, only the admin and
             current user are granted access.
         :type users: [dict]
-        :param dclist : list of strings of datacenters
+        :param dclist: list of strings of datacenters
         :type dclist: [str | unicode]
-        :return: True if fabric was created successfully.
+        :returns: True if fabric was created successfully.
         :rtype: bool
         :raise c8.exceptions.FabricCreateError: If create fails.
 
@@ -499,6 +500,7 @@ class Fabric(APIWrapper):
                 'active': True,
                 'extra': {'Department': 'IT'}
             }
+
         """
         data = {'name': name}
         if users is not None:
@@ -548,7 +550,7 @@ class Fabric(APIWrapper):
         :type name: str | unicode
         :param ignore_missing: Do not raise an exception on missing fabric.
         :type ignore_missing: bool
-        :return: True if fabric was deleted successfully, False if fabric
+        :returns: True if fabric was deleted successfully, False if fabric
             was not found and **ignore_missing** was set to True.
         :rtype: bool
         :raise c8.exceptions.FabricDeleteError: If delete fails.
@@ -576,7 +578,7 @@ class Fabric(APIWrapper):
 
         :param name: Collection name.
         :type name: str | unicode
-        :return: Standard collection API wrapper.
+        :returns: Standard collection API wrapper.
         :rtype: c8.collection.StandardCollection
         """
         if self.has_collection(name):
@@ -589,7 +591,7 @@ class Fabric(APIWrapper):
 
         :param name: Collection name.
         :type name: str | unicode
-        :return: True if collection exists, False otherwise.
+        :returns: True if collection exists, False otherwise.
         :rtype: bool
         """
         return any(col['name'] == name for col in self.collections())
@@ -597,7 +599,7 @@ class Fabric(APIWrapper):
     def collections(self, collectionModel=None):
         """Return the collections in the fabric.
 
-        :return: Collections in the fabric and their details.
+        :returns: Collections in the fabric and their details.
         :rtype: [dict]
         :raise c8.exceptions.CollectionListError: If retrieval fails.
         """
@@ -684,12 +686,12 @@ class Fabric(APIWrapper):
             available at creation time, or halt the operation.
         :type enforce_replication_factor: bool
         :param spot_collection: If True, it is a spot collection
-        :type bool
+        :type spot_collection: bool
         :param is_system: If True, able to create system collections
         :type is_system: bool
         :param stream: If True, create a local stream for collection.
         :type stream: bool
-        :return: Standard collection API wrapper.
+        :returns: Standard collection API wrapper.
         :rtype: c8.collection.StandardCollection
         :raise c8.exceptions.CollectionCreateError: If create fails.
         """
@@ -746,7 +748,7 @@ class Fabric(APIWrapper):
         :type ignore_missing: bool
         :param system: Whether the collection is a system collection.
         :type system: bool
-        :return: True if collection was deleted successfully, False if
+        :returns: True if collection was deleted successfully, False if
             collection was not found and **ignore_missing** was set to True.
         :rtype: bool
         :raise c8.exceptions.CollectionDeleteError: If delete fails.
@@ -779,7 +781,7 @@ class Fabric(APIWrapper):
 
         :param name: Graph name.
         :type name: str | unicode
-        :return: Graph API wrapper.
+        :returns: Graph API wrapper.
         :rtype: c8.graph.Graph
         """
         return Graph(self._conn, self._executor, name)
@@ -789,7 +791,7 @@ class Fabric(APIWrapper):
 
         :param name: Graph name.
         :type name: str | unicode
-        :return: True if graph exists, False otherwise.
+        :returns: True if graph exists, False otherwise.
         :rtype: bool
         """
         for graph in self.graphs():
@@ -800,7 +802,7 @@ class Fabric(APIWrapper):
     def graphs(self):
         """List all graphs in the fabric.
 
-        :return: Graphs in the fabric.
+        :returns: Graphs in the fabric.
         :rtype: [dict]
         :raise c8.exceptions.GraphListError: If retrieval fails.
         """
@@ -852,7 +854,7 @@ class Fabric(APIWrapper):
             cannot be modified later once set. Applies only to enterprise
             version of C8Db.
         :type shard_count: int
-        :return: Graph API wrapper.
+        :returns: Graph API wrapper.
         :rtype: c8.graph.Graph
         :raise c8.exceptions.GraphCreateError: If create fails.
 
@@ -901,7 +903,7 @@ class Fabric(APIWrapper):
         :param drop_collections: Drop the collections of the graph also. This
             is only if they are not in use by other graphs.
         :type drop_collections: bool
-        :return: True if graph was deleted successfully, False if graph was not
+        :returns: True if graph was deleted successfully, False if graph was not
             found and **ignore_missing** was set to True.
         :rtype: bool
         :raise c8.exceptions.GraphDeleteError: If delete fails.
@@ -937,7 +939,7 @@ class Fabric(APIWrapper):
     #     :type status: str | unicode
     #     :param count: Max number of job IDs to return.
     #     :type count: int
-    #     :return: List of job IDs.
+    #     :returns: List of job IDs.
     #     :rtype: [str | unicode]
     #     :raise c8.exceptions.AsyncJobListError: If retrieval fails.
     #     """
@@ -967,7 +969,7 @@ class Fabric(APIWrapper):
     #         the threshold (a unix timestamp) are deleted. Otherwise, all job
     #         results are deleted.
     #     :type threshold: int
-    #     :return: True if job results were cleared successfully.
+    #     :returns: True if job results were cleared successfully.
     #     :rtype: bool
     #     :raise c8.exceptions.AsyncJobClearError: If operation fails.
     #     """
@@ -998,7 +1000,7 @@ class Fabric(APIWrapper):
     def stream(self, operation_timeout_seconds=30):
         """Return the stream collection API wrapper.
 
-        :return: stream collection API wrapper.
+        :returns: stream collection API wrapper.
         :rtype: c8.stream_collection.StreamCollection
         """
         return StreamCollection(self, self._conn, self._executor, self.url,
@@ -1007,7 +1009,7 @@ class Fabric(APIWrapper):
     def streams(self, local=False):
         """Get list of all streams under given fabric
 
-        :return: List of streams under given fabric.
+        :returns: List of streams under given fabric.
         :rtype: json
         :raise c8.exceptions.StreamListError: If retrieving streams fails.
         """
@@ -1046,7 +1048,7 @@ class Fabric(APIWrapper):
         :param stream: The name of the stream for which to check in the list
                        of all streams.
         :type stream: str | unicode
-        :return: True=stream found; False=stream not found.
+        :returns: True=stream found; False=stream not found.
         :rtype: bool
         """
         if isCollectionStream is False:
@@ -1059,9 +1061,10 @@ class Fabric(APIWrapper):
     def create_stream(self, stream, local=False):
         """
         Create the stream under the given fabric
+
         :param stream: name of stream
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
         """
         if local is True:
@@ -1084,10 +1087,11 @@ class Fabric(APIWrapper):
     def delete_stream(self, stream, force=False, isCollectionStream=False, local=False):
         """
         Delete the streams under the given fabric
+
         :param stream: name of stream
         :param force:
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If deleting streams fails.
         """
         # KARTIK : 20181002 : Stream delete not supported.
@@ -1130,7 +1134,7 @@ class Fabric(APIWrapper):
 
         :param stream: name of stream
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError: Dont have permission.
         """
         if isCollectionStream is False:
@@ -1160,7 +1164,7 @@ class Fabric(APIWrapper):
 
         :param data: data to be used for restql POST API
         :type data: dict
-        :return: Results of restql API
+        :returns: Results of restql API
         :rtype: dict
         :raise c8.exceptions.RestqlCreateError: if restql operation failed
         """
@@ -1186,7 +1190,7 @@ class Fabric(APIWrapper):
         :type name: str | unicode
         :param data: restql data (optional)
         :type data: dict
-        :return: Results of execute restql
+        :returns: Results of execute restql
         :rtype: dict
         :raise c8.exceptions.RestqlExecuteError: if restql execution failed
         """
@@ -1208,7 +1212,7 @@ class Fabric(APIWrapper):
     def get_all_restql(self):
         """Get all restql associated for user.
 
-        :return: Details of all restql
+        :returns: Details of all restql
         :rtype: list
         :raise c8.exceptions.RestqlListError: if getting restql failed
         """
@@ -1229,7 +1233,7 @@ class Fabric(APIWrapper):
         :type name: str | unicode
         :param data: restql data
         :type data: dict
-        :return: True if restql is updated
+        :returns: True if restql is updated
         :rtype: bool
         :raise c8.exceptions.RestqlUpdateError: if query update failed
         """
@@ -1247,7 +1251,7 @@ class Fabric(APIWrapper):
 
         :param name: restql name
         :type name: str | unicode
-        :return: True if restql is deleted
+        :returns: True if restql is deleted
         :rtype: bool
         :raise c8.exceptions.RestqlDeleteError: if restql deletion failed
         """
@@ -1269,13 +1273,14 @@ class Fabric(APIWrapper):
 
         :param payload: Payload to create event
         :type payload: dict
-        :return:  Dictionary containing the event id
+        :returns:  Dictionary containing the event id
         :rtype: dict
         :raise c8.exceptions.EventCreateError: if event creation failed
 
         Here is an example entry for parameter **payload**:
 
         .. code-block:: python
+
             {
             "action": "string",
             "attributes": {},
@@ -1300,7 +1305,7 @@ class Fabric(APIWrapper):
 
         :param eventIds: The event id for which you want to fetch the event details
         :type eventId: list of strings(event Ids)
-        :return: List containig all the information of existing events
+        :returns: List containig all the information of existing events
         :rtype: list
         :raise c8.exceptions.EventDeleteError: if event creation failed
 
@@ -1319,7 +1324,7 @@ class Fabric(APIWrapper):
     def get_all_events(self):
         """Create an event.
 
-        :return: List containig all the information of existing events
+        :returns: List containig all the information of existing events
         :rtype: list
         :raise c8.exceptions.EventGetError: if event creation failed
 
@@ -1337,7 +1342,7 @@ class Fabric(APIWrapper):
         """Create an event.
 
         :param eventId: The event id for which you want to fetch the event details
-        :return: List containig all the information of existing events
+        :returns: List containig all the information of existing events
         :rtype: list
         :raise c8.exceptions.EventGetError: if event creation failed
 
@@ -1360,7 +1365,8 @@ class Fabric(APIWrapper):
 
     def validate_stream_app(self, data):
         """validates a stream app by given data
-        @data: stream app defination string
+
+        :param data: stream app defination string
         """
         body = {"definition": data}
         req = Request(
@@ -1410,8 +1416,9 @@ class Fabric(APIWrapper):
 
     def create_stream_app(self, data, dclist=[]):
         """Creates a stream application by given data
-        @data: stream app definition
-        @dclist: regions where stream app has to be deployed
+
+        :param data: stream app definition
+        :param dclist: regions where stream app has to be deployed
         """
         # create request body
         req_body = {
@@ -1441,9 +1448,10 @@ class Fabric(APIWrapper):
 
     def api_keys(self, keyid):
         """Return the API keys API wrapper.
+
         :param keyid: API Key id
         :type kaeyid: string | unicode
-        :return:API keys API wrapper.
+        :returns: API keys API wrapper.
         :rtype: c8.stream_collection.StreamCollection
         """
         return APIKeys(self._conn, self._executor, keyid)
@@ -1451,7 +1459,7 @@ class Fabric(APIWrapper):
     def list_all_api_keys(self):
         """List the API keys.
 
-        :return:list.
+        :returns:list.
         :raise c8.exceptions.GetAPIKeys: If request fails
         """
         request = Request(
@@ -1472,7 +1480,7 @@ class Fabric(APIWrapper):
     ##############################
     def search(self):
         """Returns the Search APIWrapper
-        :return: Search API Wrapper
+        :returns: Search API Wrapper
         :rtype: c8.search.Search
         """
         return Search(self._conn, self._executor)
@@ -1502,7 +1510,7 @@ class StandardFabric(Fabric):
             results from server once available. If set to False, API executions
             return None and no results are stored on server.
         :type return_result: bool
-        :return: Fabric API wrapper built specifically for async execution.
+        :returns: Fabric API wrapper built specifically for async execution.
         :rtype: c8.fabric.AsyncFabric
         """
         return AsyncFabric(self._conn, return_result)
@@ -1515,7 +1523,7 @@ class StandardFabric(Fabric):
             commit. If set to False, API executions return None and no results
             are tracked client-side.
         :type return_result: bool
-        :return: Fabric API wrapper built specifically for batch execution.
+        :returns: Fabric API wrapper built specifically for batch execution.
         :rtype: c8.fabric.BatchFabric
         """
         return BatchFabric(self._conn, return_result)
@@ -1545,7 +1553,7 @@ class StandardFabric(Fabric):
         :type timeout: int
         :param sync: Block until the transaction is synchronized to disk.
         :type sync: bool
-        :return: Fabric API wrapper built specifically for transactions.
+        :returns: Fabric API wrapper built specifically for transactions.
         :rtype: c8.fabric.TransactionFabric
         """
         return TransactionFabric(
@@ -1615,7 +1623,7 @@ class BatchFabric(Fabric):
     def queued_jobs(self):
         """Return the queued batch jobs.
 
-        :return: Queued batch jobs or None if **return_result** parameter was
+        :returns: Queued batch jobs or None if **return_result** parameter was
             set to False during initialization.
         :rtype: [c8.job.BatchJob] | None
         """
@@ -1627,7 +1635,7 @@ class BatchFabric(Fabric):
         If **return_result** parameter was set to True during initialization,
         :class:`c8.job.BatchJob` instances are populated with results.
 
-        :return: Batch jobs, or None if **return_result** parameter was set to
+        :returns: Batch jobs, or None if **return_result** parameter was set to
             False during initialization.
         :rtype: [c8.job.BatchJob] | None
         :raise c8.exceptions.BatchStateError: If batch state is invalid
@@ -1688,7 +1696,7 @@ class TransactionFabric(Fabric):
     def queued_jobs(self):
         """Return the queued transaction jobs.
 
-        :return: Queued transaction jobs, or None if **return_result** was set
+        :returns: Queued transaction jobs, or None if **return_result** was set
             to False during initialization.
         :rtype: [c8.job.TransactionJob] | None
         """
@@ -1701,7 +1709,7 @@ class TransactionFabric(Fabric):
         :class:`c8.job.TransactionJob` instances are populated with
         results.
 
-        :return: Transaction jobs, or None if **return_result** parameter was
+        :returns: Transaction jobs, or None if **return_result** parameter was
             set to False during initialization.
         :rtype: [c8.job.TransactionJob] | None
         :raise c8.exceptions.TransactionStateError: If the transaction was

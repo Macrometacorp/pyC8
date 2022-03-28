@@ -80,9 +80,13 @@ class StreamCollection(APIWrapper):
                         message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION
                         ):
         """Create a new producer on a given stream.
+
         **Args**
+
         * `stream`: The stream name
+
         **Options**
+
         * `persistent`: If the stream_stream is persistent or non-persistent
                         default its persitent
         * `local`: If the stream_stream is local or global default its global
@@ -164,11 +168,15 @@ class StreamCollection(APIWrapper):
                       ):
         """
         Create a reader on a particular topic
+
         **Args**
+
         * `stream`: The name of the stream.
         * `start_message_id`: The initial reader positioning is done by
                               specifying a message id.
+
         **Options**
+
         * `local`: If the stream_stream is local or global default its global
         * `reader_listener`:
             Sets a message listener for the reader. When the listener is set,
@@ -226,10 +234,14 @@ class StreamCollection(APIWrapper):
                   ):
         """
         Subscribe to the given topic and subscription combination.
+
         **Args**
+
         * `stream`: The name of the stream.
         * `subscription`: The name of the subscription.
+
         **Options**
+
         * `local`: If the stream_stream is local or global default its global
         * `consumer_type`: Select the subscription type to be used when
                            subscribing to the topic.
@@ -309,7 +321,7 @@ class StreamCollection(APIWrapper):
     def unsubscribe(self, subscription):
         """Unsubscribes the given subscription on all streams on a stream fabric
         :param subscription
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         raise c8.exceptions.StreamPermissionError: If unsubscribing fails.
         """
         request = Request(
@@ -329,7 +341,8 @@ class StreamCollection(APIWrapper):
     
     def clear_streams_backlog(self):
         """Clear backlog for all streams on a stream fabric
-        :return: 200, OK if operation successful
+
+        :returns: 200, OK if operation successful
         :raise c8.exceptions.StreamPermissionError: If clearing backlogs for
                                                     all streams fails.
         """
@@ -351,8 +364,9 @@ class StreamCollection(APIWrapper):
 
     def clear_stream_backlog(self, subscription):
         """Clear backlog for the given stream on a stream fabric
+
         :param: name of subscription
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise c8.exceptions.StreamPermissionError: If clearing backlogs for
                                                     all streams fails.
         """
@@ -377,7 +391,7 @@ class StreamCollection(APIWrapper):
 
         :param stream: name of stream
         :param local: Operate on a local stream instead of a global one.
-        :return: List of stream subscription, OK if operation successful
+        :returns: List of stream subscription, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
                                                      for a stream fails.
         """
@@ -414,7 +428,7 @@ class StreamCollection(APIWrapper):
 
         :param stream: name of stream
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
                                                      for a stream fails.
         """
@@ -448,7 +462,7 @@ class StreamCollection(APIWrapper):
 
         :param stream: name of stream
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
                                                      for a stream fails.
         """
@@ -485,7 +499,7 @@ class StreamCollection(APIWrapper):
         :param message_id: message object consisting of
             { ledgerId	integer, entryId	integer, partitionIndex	integer }
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamUpdateError: If Subscription has active
                                                  consumers
         """
@@ -517,7 +531,7 @@ class StreamCollection(APIWrapper):
         :param stream: name of stream
         :param subscription: name of subscription
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If Subscription has active
                                                  consumers
         """
@@ -551,7 +565,7 @@ class StreamCollection(APIWrapper):
         :param stream: name of stream
         :param subscription: name of subscription
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError:Don't have permission
         """
 
@@ -588,7 +602,7 @@ class StreamCollection(APIWrapper):
         :param subscription: Name of subscription
         :param num_of_messages: Number of messages
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError:Don't have permission
         """
         type_constant = constants.STREAM_GLOBAL_NS_PREFIX
@@ -626,7 +640,7 @@ class StreamCollection(APIWrapper):
         :param subscription:
         :param expire_time:
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError:Don't have permission
         """
         if isCollectionStream is False:
@@ -679,7 +693,7 @@ class StreamCollection(APIWrapper):
         :param subscription:
         :param expire_time:
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError:Don't have permission
         """
         if isCollectionStream is False:
@@ -710,7 +724,7 @@ class StreamCollection(APIWrapper):
         :param stream:
         :param subscription:
         :param timestamp:
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError:Don't have permission
         """
         if isCollectionStream is False:
@@ -744,7 +758,7 @@ class StreamCollection(APIWrapper):
         :param subscription: Name of subscription
         :param timestamp: Timestamp
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If Subscription has active
                                                  consumers
         """
@@ -777,7 +791,7 @@ class StreamCollection(APIWrapper):
         :param stream: Name of stream
         :param subscription: Name of subscription
         :param message_position: Integer
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If Subscription has active
                                                  consumers
         """

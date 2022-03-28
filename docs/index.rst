@@ -53,4 +53,7 @@ Contents
     logging
     http
     specs
-
+    apikeys
+    keyvalue
+    pipeline
+    streamapps

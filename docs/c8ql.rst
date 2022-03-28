@@ -10,7 +10,7 @@ information, refer to `C8 Data Fabric manual`_.
 .. _C8 Data Fabric manual: http://www.macrometa.co
 
 C8QL Queries
-===========
+============
 
 C8QL queries are invoked from C8QL API wrapper. Executing queries returns
 :doc:`result cursors <cursor>`.

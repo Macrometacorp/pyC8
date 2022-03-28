@@ -12,6 +12,7 @@ __all__ = ['C8Client']
 
 class C8Client(object):
     """C8Db client.
+
     :param protocol: Internet transfer protocol (default: "http").
     :type protocol: str | unicode
     :param host: C8Db host (default: "127.0.0.1").
@@ -68,7 +69,7 @@ class C8Client(object):
     def version(self):
         """Return the client version.
 
-        :return: Client version.
+        :returns: Client version.
         :rtype: str | unicode
         """
         return __version__
@@ -77,7 +78,7 @@ class C8Client(object):
     def protocol(self):
         """Return the internet transfer protocol (e.g. "http").
 
-        :return: Internet transfer protocol.
+        :returns: Internet transfer protocol.
         :rtype: str | unicode
         """
         return self._protocol
@@ -86,7 +87,7 @@ class C8Client(object):
     def host(self):
         """Return the C8Db host.
 
-        :return: C8Db host.
+        :returns: C8Db host.
         :rtype: str | unicode
         """
         return self._host
@@ -95,7 +96,7 @@ class C8Client(object):
     def port(self):
         """Return the C8Db port.
 
-        :return: C8Db port.
+        :returns: C8Db port.
         :rtype: int
         """
         return self._port
@@ -104,7 +105,7 @@ class C8Client(object):
     def base_url(self):
         """Return the C8Db base URL.
 
-        :return: C8Db base URL.
+        :returns: C8Db base URL.
         :rtype: str | unicode
         """
         return self._url
@@ -118,7 +119,7 @@ class C8Client(object):
         :type password: str | unicode
         :param verify: Verify the connection by sending a test request.
         :type verify: bool
-        :return: Standard fabric API wrapper.
+        :returns: Standard fabric API wrapper.
         :rtype: c8.fabric.StandardFabric
         :raise c8.exceptions.ServerConnectionError: If **verify** was set
             to True and the connection to C8Db fails.
@@ -205,12 +206,12 @@ class C8Client(object):
             available at creation time, or halt the operation.
         :type enforce_replication_factor: bool
         :param spot_collection: If True, it is a spot collection
-        :type bool
+        :type spot_collection: bool
         :param is_system: If True, able to create system collections
         :type is_system: bool
         :param stream: If True, create a local stream for collection.
         :type stream: bool
-        :return: Standard collection API wrapper.
+        :returns: Standard collection API wrapper.
         :rtype: c8.collection.StandardCollection
         """
         resp = self._fabric.create_collection(name=name,
@@ -233,9 +234,10 @@ class C8Client(object):
     # client.list_collection_indexes
     def list_collection_indexes(self, collection_name):
         """Delete the collection.
+
         :param name: Collection name.
         :type name: str | unicode
-        :return: List of indexes
+        :returns: List of indexes
         :rtype: bool
         """
         _collection = self.get_collection(collection_name)
@@ -263,7 +265,7 @@ class C8Client(object):
         :param deduplicate: If set to True, inserting duplicate index values
             from the same document triggers unique constraint errors.
         :type deduplicate: bool
-        :return: New index details.
+        :returns: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
@@ -287,7 +289,7 @@ class C8Client(object):
         :type fields: str | unicode | list
         :param ordered: Whether the order is longitude, then latitude.
         :type ordered: bool
-        :return: New index details.
+        :returns: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
@@ -317,7 +319,7 @@ class C8Client(object):
         :param deduplicate: If set to True, inserting duplicate index values
             from the same document triggers unique constraint errors.
         :type deduplicate: bool
-        :return: New index details.
+        :returns: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
@@ -349,7 +351,7 @@ class C8Client(object):
         :param deduplicate: If set to True, inserting duplicate index values
             from the same document triggers unique constraint errors.
         :type deduplicate: bool
-        :return: New index details.
+        :returns: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
@@ -370,7 +372,7 @@ class C8Client(object):
         :type fields: [str | unicode]
         :param min_length: Minimum number of characters to index.
         :type min_length: int
-        :return: New index details.
+        :returns: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
@@ -391,7 +393,7 @@ class C8Client(object):
         :type expireAfter: int
         :param inBackground: Expire Documents in Background.
         :type inBackground: bool
-        :return: New index details.
+        :returns: New index details.
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
@@ -408,7 +410,7 @@ class C8Client(object):
         :type index_id: str | unicode
         :param ignore_missing: Do not raise an exception on missing index.
         :type ignore_missing: bool
-        :return: True if index was deleted successfully, False if index was
+        :returns: True if index was deleted successfully, False if index was
             not found and **ignore_missing** was set to True.
         :rtype: bool
         :raise c8.exceptions.IndexDeleteError: If delete fails.
@@ -426,13 +428,14 @@ class C8Client(object):
 
     def delete_collection(self, name, ignore_missing=False, system=None):
         """Delete the collection.
+
         :param name: Collection name.
         :type name: str | unicode
         :param ignore_missing: Do not raise an exception on missing collection.
         :type ignore_missing: bool
         :param system: Whether the collection is a system collection.
         :type system: bool
-        :return: True if collection was deleted successfully, False if
+        :returns: True if collection was deleted successfully, False if
             collection was not found and **ignore_missing** was set to True.
         :rtype: bool
         """
@@ -444,9 +447,10 @@ class C8Client(object):
 
     def has_collection(self, name):
         """Delete the collection.
+
         :param name: Collection name.
         :type name: str | unicode
-        :return: True if collection exists, False otherwise.
+        :returns: True if collection exists, False otherwise.
         :rtype: bool
         """
         resp = self._fabric.has_collection(name)
@@ -457,7 +461,7 @@ class C8Client(object):
         """Return the collections in the fabric.
 
         :param collectionModel: Collection Model to get filter collections
-        :return: Collections in the fabric and their details.
+        :returns: Collections in the fabric and their details.
         :rtype: [dict]
         :raise c8.exceptions.CollectionListError: If retrieval fails.
         """
@@ -468,9 +472,10 @@ class C8Client(object):
 
     def get_collection(self, name):
         """Return the standard collection API wrapper.
+
         :param name: Collection name.
         :type name: str | unicode
-        :return: Standard collection API wrapper.
+        :returns: Standard collection API wrapper.
         :rtype: c8.collection.StandardCollection
         """
         resp = self._fabric.collection(name)
@@ -505,7 +510,7 @@ class C8Client(object):
         :param check_rev: If set to True, revision of **document** (if given)
             is compared against the revision of target document.
         :type check_rev: bool
-        :return: Document, or None if not found.
+        :returns: Document, or None if not found.
         :rtype: dict | None
         :raise c8.exceptions.DocumentGetError: If retrieval fails.
         :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
@@ -532,7 +537,7 @@ class C8Client(object):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         """
@@ -561,7 +566,7 @@ class C8Client(object):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         """
         _collection = self.get_collection(collection_name)
@@ -604,7 +609,7 @@ class C8Client(object):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentUpdateError: If update fails.
@@ -659,7 +664,7 @@ class C8Client(object):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: List of document metadata (e.g. document keys, revisions) and
+        :returns: List of document metadata (e.g. document keys, revisions) and
             any exceptions, or True if parameter **silent** was set to True.
         :rtype: [dict | C8Error] | bool
         :raise c8.exceptions.DocumentUpdateError: If update fails.
@@ -706,7 +711,7 @@ class C8Client(object):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: List of document metadata (e.g. document keys, revisions) and
+        :returns: List of document metadata (e.g. document keys, revisions) and
             any exceptions, or True if parameter **silent** was set to True.
         :rtype: [dict | C8Error] | bool
         :raise c8.exceptions.DocumentReplaceError: If replace fails.
@@ -751,7 +756,7 @@ class C8Client(object):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: List of document metadata (e.g. document keys, revisions) and
+        :returns: List of document metadata (e.g. document keys, revisions) and
             any exceptions, or True if parameter **silent** was set to True.
         :rtype: [dict | C8Error] | bool
         :raise c8.exceptions.DocumentReplaceError: If replace fails.
@@ -798,7 +803,7 @@ class C8Client(object):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision), or True if
+        :returns: Document metadata (e.g. document key, revision), or True if
             parameter **silent** was set to True, or False if document was not
             found and **ignore_missing** was set to True (does not apply in
             transactions).
@@ -843,7 +848,7 @@ class C8Client(object):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: List of document metadata (e.g. document keys, revisions) and
+        :returns: List of document metadata (e.g. document keys, revisions) and
             any exceptions, or True if parameter **silent** was set to True.
         :rtype: [dict | C8Error] | bool
         :raise c8.exceptions.DocumentDeleteError: If delete fails.
@@ -861,7 +866,7 @@ class C8Client(object):
     def get_collection_indexes(self, collection_name):
         """Return the collection indexes.
 
-        :return: Collection indexes.
+        :returns: Collection indexes.
         :rtype: [dict]
         :raise c8.exceptions.IndexListError: If retrieval fails.
         """
@@ -875,7 +880,7 @@ class C8Client(object):
 
         :param detail: detail list of DCs if set to true else only DC names
         :type: boolean
-        :return: DC List.
+        :returns: DC List.
         :rtype: [str | unicode ]
         :raise c8.exceptions.TenantListError: If retrieval fails.
         """
@@ -889,7 +894,7 @@ class C8Client(object):
 
         :param detail: detail list of DCs if set to true else only DC names
         :type: boolean
-        :return: DC List.
+        :returns: DC List.
         :rtype: [str | dict ]
         :raise c8.exceptions.TenantListError: If retrieval fails.
         """
@@ -903,7 +908,7 @@ class C8Client(object):
 
         :param query: Query to validate.
         :type query: str | unicode
-        :return: Query details.
+        :returns: Query details.
         :rtype: dict
         :raise c8.exceptions.C8QLQueryValidateError: If validation fails.
         """
@@ -924,7 +929,7 @@ class C8Client(object):
         :type max_plans: int
         :param opt_rules: List of optimizer rules.
         :type opt_rules: list
-        :return: Execution plan, or plans if **all_plans** was set to True.
+        :returns: Execution plan, or plans if **all_plans** was set to True.
         :rtype: dict | list
         :raise c8.exceptions.C8QLQueryExplainError: If explain fails.
         """
@@ -954,7 +959,7 @@ class C8Client(object):
         :param profile: Return additional profiling details in the cursor,
             unless the query cache is used.
         :type profile: bool
-        :return: Result cursor.
+        :returns: Result cursor.
         :rtype: c8.cursor.Cursor
         :raise c8.exceptions.C8QLQueryExecuteError: If execute fails.
         """
@@ -970,7 +975,7 @@ class C8Client(object):
     def get_running_queries(self):
         """Return the currently running C8QL queries.
 
-        :return: Running C8QL queries.
+        :returns: Running C8QL queries.
         :rtype: [dict]
         :raise c8.exceptions.C8QLQueryListError: If retrieval fails.
         """
@@ -983,7 +988,7 @@ class C8Client(object):
 
         :param query_id: Query ID.
         :type query_id: str | unicode
-        :return: True if kill request was sent successfully.
+        :returns: True if kill request was sent successfully.
         :rtype: bool
         :raise c8.exceptions.C8QLQueryKillError: If the send fails.
         """
@@ -996,7 +1001,7 @@ class C8Client(object):
 
         :param data: data to be used for restql POST API
         :type data: dict
-        :return: Results of restql API
+        :returns: Results of restql API
         :rtype: dict
         :raise c8.exceptions.RestqlCreateError: if restql operation failed
         """
@@ -1011,7 +1016,7 @@ class C8Client(object):
         :type name: str | unicode
         :param data: restql data (optional)
         :type data: dict
-        :return: Results of execute restql
+        :returns: Results of execute restql
         :rtype: dict
         :raise c8.exceptions.RestqlExecuteError: if restql execution failed
         """
@@ -1024,7 +1029,7 @@ class C8Client(object):
 
         :param name: restql name
         :type name: str | unicode
-        :return: True if restql is deleted
+        :returns: True if restql is deleted
         :rtype: bool
         :raise c8.exceptions.RestqlDeleteError: if restql deletion failed
         """
@@ -1039,7 +1044,7 @@ class C8Client(object):
         :type name: str | unicode
         :param data: restql data
         :type data: dict
-        :return: True if restql is updated
+        :returns: True if restql is updated
         :rtype: bool
         :raise c8.exceptions.RestqlUpdateError: if query update failed
         """
@@ -1050,7 +1055,7 @@ class C8Client(object):
     def get_restqls(self):
         """Get all restql associated for user.
 
-        :return: Details of all restql
+        :returns: Details of all restql
         :rtype: list
         :raise c8.exceptions.RestqlListError: if getting restql failed
         """
@@ -1059,11 +1064,11 @@ class C8Client(object):
     # client.create_stream
 
     def create_stream(self, stream, local=False):
-        """
-        Create the stream under the given fabric
+        """Create the stream under the given fabric
+
         :param stream: name of stream
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
         """
         return self._fabric.create_stream(stream, local=local)
@@ -1071,12 +1076,12 @@ class C8Client(object):
     # client.terminate_stream
 
     def terminate_stream(self, stream, isCollectionStream=False, local=False):
-        """
-        Delete the streams under the given fabric
+        """Delete the streams under the given fabric
+
         :param stream: name of stream
         :param force:
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If deleting streams fails.
         """
         return self._fabric.terminate_stream(stream=stream, isCollectionStream=isCollectionStream,
@@ -1090,7 +1095,7 @@ class C8Client(object):
         :param stream: The name of the stream for which to check in the list
                        of all streams.
         :type stream: str | unicode
-        :return: True=stream found; False=stream not found.
+        :returns: True=stream found; False=stream not found.
         :rtype: bool
         """
         return self._fabric.has_stream(stream=stream, isCollectionStream=isCollectionStream,
@@ -1101,7 +1106,7 @@ class C8Client(object):
     def get_stream(self, operation_timeout_seconds=30):
         """Return the stream collection API wrapper.
 
-        :return: stream collection API wrapper.
+        :returns: stream collection API wrapper.
         :rtype: c8.stream_collection.StreamCollection
         """
         return self._fabric.stream(operation_timeout_seconds=operation_timeout_seconds)
@@ -1111,7 +1116,7 @@ class C8Client(object):
     def get_streams(self):
         """Get list of all streams under given fabric
 
-        :return: List of streams under given fabric.
+        :returns: List of streams under given fabric.
         :rtype: json
         :raise c8.exceptions.StreamListError: If retrieving streams fails.
         """
@@ -1124,7 +1129,7 @@ class C8Client(object):
 
         :param stream: name of stream
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
                                                      for a stream fails.
         """
@@ -1158,9 +1163,13 @@ class C8Client(object):
                                message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION
                                ):
         """Create a new producer on a given stream.
+
         **Args**
+
         * `stream`: The stream name
+
         **Options**
+
         * `persistent`: If the stream_stream is persistent or non-persistent
                         default its persitent
         * `local`: If the stream_stream is local or global default its global
@@ -1195,6 +1204,7 @@ class C8Client(object):
                                   `PartitionsRoutingMode.RoundRobinDistribution`,  # noqa
                                   other option is
                                   `PartitionsRoutingMode.UseSinglePartition`
+
         """
         _stream = self._fabric.stream()
         return _stream.create_producer(stream, isCollectionStream=isCollectionStream,
@@ -1226,10 +1236,14 @@ class C8Client(object):
                   ):
         """
         Subscribe to the given topic and subscription combination.
+
         **Args**
+
         * `stream`: The name of the stream.
         * `subscription`: The name of the subscription.
+
         **Options**
+
         * `local`: If the stream_stream is local or global default its global
         * `consumer_type`: Select the subscription type to be used when
                            subscribing to the topic.
@@ -1287,11 +1301,15 @@ class C8Client(object):
                              ):
         """
         Create a reader on a particular topic
+
         **Args**
+
         * `stream`: The name of the stream.
         * `start_message_id`: The initial reader positioning is done by
                               specifying a message id.
+
         **Options**
+
         * `local`: If the stream_stream is local or global default its global
         * `reader_listener`:
             Sets a message listener for the reader. When the listener is set,
@@ -1306,6 +1324,7 @@ class C8Client(object):
             higher memory utilization.
         * `reader_name`: Sets the reader name.
         * `subscription_role_prefix`: Sets the subscription role prefix.
+
         """
         _stream = self._fabric.stream()
         return _stream.create_reader(stream=stream, start_message_id=start_message_id,
@@ -1318,8 +1337,9 @@ class C8Client(object):
     # client.unsubscribe
     def unsubscribe(self, subscription):
         """Unsubscribes the given subscription on all streams on a stream fabric
+
         :param subscription
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         raise c8.exceptions.StreamPermissionError: If unsubscribing fails.
         """
         _stream = self._fabric.stream()
@@ -1333,7 +1353,7 @@ class C8Client(object):
         :param stream: name of stream
         :param subscription: name of subscription
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If Subscription has active
                                                  consumers
         """
@@ -1347,7 +1367,7 @@ class C8Client(object):
 
         :param stream: name of stream
         :param local: Operate on a local stream instead of a global one.
-        :return: List of stream subscription, OK if operation successful
+        :returns: List of stream subscription, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
                                                      for a stream fails.
         """
@@ -1361,7 +1381,7 @@ class C8Client(object):
 
         :param stream: name of stream
         :param local: Operate on a local stream instead of a global one.
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
                                                      for a stream fails.
         """
@@ -1372,8 +1392,9 @@ class C8Client(object):
 
     def clear_stream_backlog(self, subscription):
         """Clear backlog for the given stream on a stream fabric
+
         :param: name of subscription
-        :return: 200, OK if operation successful
+        :returns: 200, OK if operation successful
         :raise c8.exceptions.StreamPermissionError: If clearing backlogs for
                                                     all streams fails.
         """
@@ -1384,7 +1405,8 @@ class C8Client(object):
 
     def clear_streams_backlog(self):
         """Clear backlog for all streams on a stream fabric
-        :return: 200, OK if operation successful
+
+        :returns: 200, OK if operation successful
         :raise c8.exceptions.StreamPermissionError: If clearing backlogs for
                                                     all streams fails.
         """
@@ -1395,8 +1417,8 @@ class C8Client(object):
 
     def create_stream_app(self, data, dclist=[]):
         """Creates a stream application by given data
-        @data: stream app definition
-        @dclist: regions where stream app has to be deployed
+        :param data: stream app definition
+        :param dclist: regions where stream app has to be deployed
         """
         return self._fabric.create_stream_app(data=data, dclist=dclist)
 
@@ -1404,8 +1426,9 @@ class C8Client(object):
 
     def delete_stream_app(self, streamapp_name):
         """deletes the stream app by name
-        :param: name of stream app
-        :return: True, OK if operation successful
+
+        :param streamapp_name: name of stream app
+        :returns: True, OK if operation successful
         """
         _streamapp = self._fabric.stream_app(streamapp_name)
         return _streamapp.delete()
@@ -1414,8 +1437,9 @@ class C8Client(object):
 
     def validate_stream_app(self, data):
         """validates the stream app definition
-        :param: definition of stream app
-        :return: True, OK if app definition is valid.
+
+        :param data: definition of stream app
+        :returns: True, OK if app definition is valid.
         """
         return self._fabric.validate_stream_app(data=data)
 
@@ -1423,8 +1447,9 @@ class C8Client(object):
 
     def retrieve_stream_app(self):
         """retrives stream apps in a fabric
+
         :param: name of stream app
-        :return: Object with list of stream Apps
+        :returns: Object with list of stream Apps
         """
         return self._fabric.retrive_stream_app()
 
@@ -1432,8 +1457,9 @@ class C8Client(object):
 
     def get_stream_app(self, streamapp_name):
         """returns info of a stream app 
-        :param: name of stream app
-        :return: Information of a particular stream app
+
+        :param streamapp_name: name of stream app
+        :returns: Information of a particular stream app
         """
         _streamapp = self._fabric.stream_app(streamapp_name)
         return _streamapp.get()
@@ -1449,9 +1475,10 @@ class C8Client(object):
 
     def activate_stream_app(self, streamapp_name, activate=True):
         """activates r deactivates a stream app
+
         :param streamapp_name: name of stream app
         :param activate:
-        :return: Object with list of properties
+        :returns: Object with list of properties
         """
         _streamapp = self._fabric.stream_app(streamapp_name)
         return _streamapp.change_state(active=activate)
@@ -1463,7 +1490,7 @@ class C8Client(object):
 
         :param graph_name: Graph name.
         :type name: str | unicode
-        :return: True if graph exists, False otherwise.
+        :returns: True if graph exists, False otherwise.
         :rtype: bool
         """
         return self._fabric.has_graph(name=graph_name)
@@ -1473,7 +1500,7 @@ class C8Client(object):
     def get_graphs(self):
         """List all graphs in the fabric.
 
-        :return: Graphs in the fabric.
+        :returns: Graphs in the fabric.
         :rtype: [dict]
         :raise c8.exceptions.GraphListError: If retrieval fails.
         """
@@ -1503,7 +1530,7 @@ class C8Client(object):
             cannot be modified later once set. Applies only to enterprise
             version of C8Db.
         :type shard_count: int
-        :return: Graph API wrapper.
+        :returns: Graph API wrapper.
         :rtype: c8.graph.Graph
         :raise c8.exceptions.GraphCreateError: If create fails.
 
@@ -1535,7 +1562,7 @@ class C8Client(object):
         :param drop_collections: Drop the collections of the graph also. This
             is only if they are not in use by other graphs.
         :type drop_collections: bool
-        :return: True if graph was deleted successfully, False if graph was not
+        :returns: True if graph was deleted successfully, False if graph was not
             found and **ignore_missing** was set to True.
         :rtype: bool
         :raise c8.exceptions.GraphDeleteError: If delete fails.
@@ -1550,7 +1577,7 @@ class C8Client(object):
 
         :param graph_name: Graph name.
         :type garph_name: str | unicode
-        :return: Graph API wrapper.
+        :returns: Graph API wrapper.
         :rtype: c8.graph.Graph
         """
         return self._fabric.graph(graph_name)
@@ -1573,6 +1600,7 @@ class C8Client(object):
                 'from_vertex_collections': ['from_vertex_collection_name'],
                 'to_vertex_collections': ['to_vertex_collection_name']
             }
+
         :param graph_name: Name of the Graph for which you want to create edge.
         :type graph_name: str | unicode
         :param edge_collection: Edge collection name.
@@ -1581,7 +1609,7 @@ class C8Client(object):
         :type from_vertex_collections: [str | unicode]
         :param to_vertex_collections: Names of "to" vertex collections.
         :type to_vertex_collections: [str | unicode]
-        :return: Edge collection API wrapper.
+        :returns: Edge collection API wrapper.
         :rtype: c8.collection.EdgeCollection
         :raise c8.exceptions.EdgeDefinitionCreateError: If create fails.
         """
@@ -1606,7 +1634,7 @@ class C8Client(object):
         :type from_vertex_collections: [str | unicode]
         :param to_vertex_collections: Names of "to" vertex collections.
         :type to_vertex_collections: [str | unicode]
-        :return: Edge collection API wrapper.
+        :returns: Edge collection API wrapper.
         :rtype: c8.collection.EdgeCollection
         :raise c8.exceptions.EdgeDefinitionCreateError: If create fails.
         """
@@ -1640,7 +1668,7 @@ class C8Client(object):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentUpdateError: If update fails.
@@ -1656,6 +1684,7 @@ class C8Client(object):
     # client.delete_edge
     def delete_edge(self, graph_name, edge_name, purge=False):
         """Delete an edge definition from the graph.
+
         :param graph_name: Name of the Graph for which you want to delete edge.
         :type graph_name: str | unicode
         :param name: Edge collection name.
@@ -1664,7 +1693,7 @@ class C8Client(object):
             from the graph but the edge collection is also deleted completely
             from the fabric.
         :type purge: bool
-        :return: True if edge definition was deleted successfully.
+        :returns: True if edge definition was deleted successfully.
         :rtype: bool
         :raise c8.exceptions.EdgeDefinitionDeleteError: If delete fails.
         """
@@ -1675,9 +1704,10 @@ class C8Client(object):
 
     def get_edges(self, graph_name):
         """Return the edge definitions of the graph.
+
         :param graph_name: Name of the Graph for which you want to get the edge.
         :type graph_name: str | unicode
-        :return: Edge definitions of the graph.
+        :returns: Edge definitions of the graph.
         :rtype: [dict]
         :raise c8.exceptions.EdgeDefinitionListError: If retrieval fails.
         """
@@ -1713,7 +1743,7 @@ class C8Client(object):
         :param silent: If set to True, no document metadata is returned. This
             can be used to save resources.
         :type silent: bool
-        :return: Document metadata (e.g. document key, revision) or True if
+        :returns: Document metadata (e.g. document key, revision) or True if
             parameter **silent** was set to True.
         :rtype: bool | dict
         :raise c8.exceptions.DocumentInsertError: If insert fails.
@@ -1733,7 +1763,7 @@ class C8Client(object):
 
         :param username: Username.
         :type username: str | unicode
-        :return: True if user exists, False otherwise.
+        :returns: True if user exists, False otherwise.
         :rtype: bool
         """
         return self._tenant.has_user(username)
@@ -1743,7 +1773,7 @@ class C8Client(object):
     def get_users(self):
         """Return all user details.
 
-        :return: List of user details.
+        :returns: List of user details.
         :rtype: [dict]
         :raise c8.exceptions.UserListError: If retrieval fails.
         """
@@ -1756,7 +1786,7 @@ class C8Client(object):
 
         :param username: Username.
         :type username: str | unicode
-        :return: User details.
+        :returns: User details.
         :rtype: dict
         :raise c8.exceptions.UserGetError: If retrieval fails.
         """
@@ -1775,7 +1805,7 @@ class C8Client(object):
         :type active: bool
         :param extra: Additional data for the user.
         :type extra: dict
-        :return: New user details.
+        :returns: New user details.
         :rtype: dict
         :raise c8.exceptions.UserCreateError: If create fails.
         """
@@ -1796,7 +1826,7 @@ class C8Client(object):
         :type active: bool
         :param extra: Additional data for the user.
         :type extra: dict
-        :return: New user details.
+        :returns: New user details.
         :rtype: dict
         :raise c8.exceptions.UserUpdateError: If update fails.
         """
@@ -1816,7 +1846,7 @@ class C8Client(object):
         :type active: bool
         :param extra: Additional data for the user.
         :type extra: dict
-        :return: New user details.
+        :returns: New user details.
         :rtype: dict
         :raise c8.exceptions.UserReplaceError: If replace fails.
         """
@@ -1832,7 +1862,7 @@ class C8Client(object):
         :type username: str | unicode
         :param ignore_missing: Do not raise an exception on missing user.
         :type ignore_missing: bool
-        :return: True if user was deleted successfully, False if user was not
+        :returns: True if user was deleted successfully, False if user was not
             found and **ignore_missing** was set to True.
         :rtype: bool
         :raise c8.exceptions.UserDeleteError: If delete fails.
@@ -1847,7 +1877,7 @@ class C8Client(object):
 
         :param username: Username.
         :type username: str | unicode
-        :return: User permissions for all fabrics and collections.
+        :returns: User permissions for all fabrics and collections.
         :rtype: dict
         :raise: c8.exceptions.PermissionListError: If retrieval fails.
         """
@@ -1864,7 +1894,7 @@ class C8Client(object):
         :type fabric: str | unicode
         :param collection: Collection name.
         :type collection: str | unicode
-        :return: Permission for given fabric or collection.
+        :returns: Permission for given fabric or collection.
         :rtype: str | unicode
         :raise: c8.exceptions.PermissionGetError: If retrieval fails.
         """
@@ -1889,7 +1919,7 @@ class C8Client(object):
         :param permission: Allowed values are "rw" (read and write), "ro"
             (read only) or "none" (no access).
         :type permission: str | unicode
-        :return: True if access was granted successfully.
+        :returns: True if access was granted successfully.
         :rtype: bool
         :raise c8.exceptions.PermissionUpdateError: If update fails.
         """
@@ -1909,7 +1939,7 @@ class C8Client(object):
         :type fabric: str | unicode
         :param collection: Collection name.
         :type collection: str | unicode
-        :return: True if permission was reset successfully.
+        :returns: True if permission was reset successfully.
         :rtype: bool
         :raise c8.exceptions.PermissionRestError: If reset fails.
         """
@@ -1920,7 +1950,7 @@ class C8Client(object):
 
     def get_collections_kv(self):
         """Returns the list of collections using kv.
-        :return: Existing Collections.
+        :returns: Existing Collections.
         :rtype: list
         :raise c8.exceptions.ListCollections: If retrieval fails.
         """
@@ -1933,9 +1963,9 @@ class C8Client(object):
 
         :param name: Collection name.
         :type name: str | unicode
-        :param expiration:if True then the namesapce supports TTL.
+        :param expiration: if True then the namesapce supports TTL.
         :type expiration: boolean
-        :return: True if the request is successful.
+        :returns: True if the request is successful.
         :rtype: boolean
         :raise c8.exceptions.CreateCollectionError: If creation fails.
         """
@@ -1948,7 +1978,7 @@ class C8Client(object):
 
         :param name: Collection name.
         :type name: str | unicode
-        :return: True if the request is successful.
+        :returns: True if the request is successful.
         :rtype: boolean
         :raise c8.exceptions.DeleteCollectionError: If creation fails.
         """
@@ -1961,7 +1991,7 @@ class C8Client(object):
 
         :param name: Collection name.
         :type name: str | unicode
-        :return: True if the collection exists.
+        :returns: True if the collection exists.
         :rtype: boolean
         """
         return self._fabric.key_value.has_collection(name)
@@ -1975,7 +2005,7 @@ class C8Client(object):
         :type name: str | unicode
         :param data: objects to be inserted.
         :type data: list
-        :return: List of inserted objects.
+        :returns: List of inserted objects.
         :rtype: list
         :raise c8.exceptions.InsertKVError: If insertion fails.
         """
@@ -1990,7 +2020,7 @@ class C8Client(object):
         :type name: str | unicode
         :param key: The key for which the object is to be deleted.
         :type data: string
-        :return: True if successfully deleted.
+        :returns: True if successfully deleted.
         :rtype: boolean
         :raise c8.exceptions.DeleteEntryForKey: If deletion fails.
         """
@@ -2005,7 +2035,7 @@ class C8Client(object):
         :type name: str | unicode
         :param keys: The keys for which the object is to be deleted.
         :type data: list
-        :return: List of deleted objects
+        :returns: List of deleted objects
         :rtype: List
         :raise c8.exceptions.DeleteEntryForKey: If deletion fails.
         """
@@ -2020,7 +2050,7 @@ class C8Client(object):
         :type name: str | unicode
         :param key: The key for which the object is to be deleted.
         :type data: string
-        :return: The value object.
+        :returns: The value object.
         :rtype: object
         :raise c8.exceptions.GetValueError: If request fails.
         """
@@ -2033,7 +2063,7 @@ class C8Client(object):
 
         :param name: Collection name.
         :type name: str | unicode
-        :return: List of Keys.
+        :returns: List of Keys.
         :rtype: list
         :raise c8.exceptions.GetKeysError: If request fails.
         """
@@ -2046,7 +2076,7 @@ class C8Client(object):
 
         :param name: Collection name.
         :type name: str | unicode
-        :return:Number of kv entries.
+        :returns: Number of kv entries.
         :rtype: int
         :raise c8.exceptions.GetCountError: If request fails.
         """
@@ -2057,7 +2087,7 @@ class C8Client(object):
     def create_api_key(self, keyid):
         """Creates an api key.
 
-        :return: Creates an api key.
+        :returns: Creates an api key.
         :rtype: list
         :raise c8.exceptions.CreateAPIKey: If request fails.
         """
@@ -2089,7 +2119,7 @@ class C8Client(object):
 
         :param databasename: Name of the database
         :type databasename: string
-        :return: AccessLevel of a db.
+        :returns: AccessLevel of a db.
         :rtype: string
         :raise c8.exceptions.DataBaseAccessLevel: If request fails.
         """
@@ -2148,14 +2178,14 @@ class C8Client(object):
     def set_search(self, collection, enable, field):
         """Set search capability of a collection (enabling or disabling it). 
         If the collection does not exist, it will be created.
-        :param collection: Collection name on which search capabilities has
-        to be enabled/disabled
+
+        :param collection: Collection name on which search capabilities has to be enabled/disabled
         :type collection: str | unicode
         :param enable: Whether to enable / disable search capabilities
-        type enable: bool
+        :type enable: bool
         :param field: For which field to enable search capability.
         :type field: str | unicode
-        :return: True if set operation is successfull
+        :returns: True if set operation is successfull
         :rtype: bool
         """
         return self._search.set_search(collection, enable, field)
@@ -2176,7 +2206,7 @@ class C8Client(object):
         :type properties: dict
         :param view_type: The type of the view. must be equal to "c8search"
         :type view_type: str | unicode
-        :return: object of new view
+        :returns: object of new view
         :rtype: dict
         """
         return self._search.create_view(name=name, propeties={}, view_type="search")
@@ -2184,7 +2214,7 @@ class C8Client(object):
     def list_all_views(self):
         """ List all views
 
-        :return: Returns an object containing an array of all view descriptions. 
+        :returns: Returns an object containing an array of all view descriptions. 
         :rtype: [dict]
         """
         return self._search.list_all_views()
@@ -2194,7 +2224,7 @@ class C8Client(object):
 
         :param view: name of the view
         :type view: str | unicode
-        :return returns information about view
+        :returns: returns information about view
         :rtype: dict
         """
         return self._search.get_view_info(view)
@@ -2206,7 +2236,7 @@ class C8Client(object):
         :type old_name: str | unicode
         :param new_name: New view name
         :type new_name: str | unicode
-        :return: True if view name renamed
+        :returns: True if view name renamed
         :rtype: bool
         """
         return self._search.rename_view(old_name, new_name)
@@ -2216,7 +2246,7 @@ class C8Client(object):
 
         :param view: Name of the view to be deleted
         :type view: str | unicode
-        :return: True if view deleted successfully
+        :returns: True if view deleted successfully
         :rtype: bool
         """
         return self._search.delete_view(view)
@@ -2226,7 +2256,7 @@ class C8Client(object):
 
         :param view: View name whos properties we need to get.
         :type view: str | unicode
-        :return: returns properties of given view
+        :returns: returns properties of given view
         :rtype: dict
         """
         return self._search.get_view_properties(view)
@@ -2238,7 +2268,7 @@ class C8Client(object):
         :type view: str | unicode
         :param properties: Properties to be updated in given view
         :type properties: dict
-        :return: True if properties updated successfully
+        :returns: True if properties updated successfully
         :rtype: bool
         """
         return self._search.update_view_properties(view, properties)
@@ -2251,14 +2281,14 @@ class C8Client(object):
         :param search: search string needs to be search in given collection
         :type search: str | unicode
         :param bindVars: if there is c8ql in search text, we can pass bindVars for
-        c8ql query using bindVars param
+                         c8ql query using bindVars param
         :type bindVars: dict | None
         :param ttl: default ttl will be 60 seconds
         :type ttl: int
-        :return: The specified search query will be executed for the collection.
-        The results of the search will be in the response. If there are too 
-        many results, an "id" will be specified for the cursor that can be 
-        used to obtain the remaining results.
+        :returns: The specified search query will be executed for the collection.
+                  The results of the search will be in the response. If there are too 
+                  many results, an "id" will be specified for the cursor that can be 
+                  used to obtain the remaining results.
         :rtype: [dict]
         """
         return self._search.search_in_collection(collection, search, bindVars=None, ttl=60)
@@ -2277,14 +2307,14 @@ class C8Client(object):
         :param name: The analyzer name.
         :type name: str | unicode
         :param properties: The properties used to configure the specified type.
-        Value may be a string, an object or null. The default value is null.
+                           Value may be a string, an object or null. The default value is null.
         :type properties: str | dict | unicode
         :param analyzer_type: The analyzer type.
         :type analyzer_type: str | unicode
         :param features: The set of features to set on the analyzer generated fields.
-        The default value is an empty array.
+                         The default value is an empty array.
         :type features: list
-        :return: Returns analyzer object if analyzer created successfully
+        :returns: Returns analyzer object if analyzer created successfully
         :rtype: dict
         """
         return self._search.create_analyzer(name,  analyzer_type, features=features, properties=properties)
@@ -2294,7 +2324,7 @@ class C8Client(object):
 
         :param name: Name of the analyzer to be deleted
         :type name: str | unicode
-        :return: True if analyzer deleted successfully
+        :returns: True if analyzer deleted successfully
         :rtype: bool
         """
         return self._search.delete_analyzer(name)
@@ -2304,7 +2334,7 @@ class C8Client(object):
 
         :param name: Name of the view to be deleted
         :type name: str | unicode
-        :return: Definition of the given analyzer
+        :returns: Definition of the given analyzer
         :rtype: dict
         """
         return self._search.get_analyzer_definition(name)
@@ -2320,7 +2350,7 @@ class C8Client(object):
     #     :type password: str | unicode
     #     :param verify: Verify the connection by sending a test request.
     #     :type verify: bool
-    #     :return: Standard fabric API wrapper.
+    #     :returns: Standard fabric API wrapper.
     #     :rtype: c8.fabric.StandardFabric
     #     :raise c8.exceptions.ServerConnectionError: If **verify** was set
     #         to True and the connection to C8Db fails.

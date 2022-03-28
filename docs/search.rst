@@ -1,5 +1,7 @@
+Search Examples
+---------------
 
-..testcode::
+.. code-block:: python
 
     from c8 import C8Client
 

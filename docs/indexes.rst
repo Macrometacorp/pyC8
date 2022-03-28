@@ -13,7 +13,8 @@ on fields ``_from`` and ``_to``. For more information on indexes, refer to
 
 The Simple Way
 
-..testcode::
+.. code-block:: python 
+
     from c8 import C8Client, C8QLQueryKillError
     # Initialize the C8 client.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
