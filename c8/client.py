@@ -1079,6 +1079,7 @@ class C8Client(object):
     def delete_stream(self, stream, force=False):
         """
         Delete the stream under the given fabric
+
         :param stream: name of stream
         :param force: whether to force the operation
         :return: 200, OK if operation successful
