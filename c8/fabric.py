@@ -30,6 +30,7 @@ from c8.exceptions import (
     StreamCommunicationError,
     StreamConnectionError,
     StreamCreateError,
+    StreamDeleteError,
     StreamPermissionError,
     TransactionExecuteError,
     TenantDcListError,
@@ -1084,48 +1085,32 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def delete_stream(self, stream, force=False, isCollectionStream=False, local=False):
+    def delete_stream(self, stream, force=False):
         """
         Delete the streams under the given fabric
 
         :param stream: name of stream
         :param force:
-        :param local: Operate on a local stream instead of a global one.
         :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If deleting streams fails.
         """
-        # KARTIK : 20181002 : Stream delete not supported.
-        # We still have some issues to work through for stream deletion on the
-        # pulsar side. So for v0.9.0 we only support terminate, and that too
-        # only for persistent streams.
-        print("WARNING: Delete not yet implemented for persistent streams, "
-              "calling terminate instead.")
-        # if isCollectionStream is False:
-        # if local is True:
-        #  stream = "c8locals." + stream
-        # else:
-        #   stream = "c8globals." + stream
-        return self.terminate_stream(stream=stream, isCollectionStream=isCollectionStream,  local=local)
+        endpoint = f'{ENDPOINT}/{stream}'
+        if force:
+           endpoint = endpoint + "?force=true"
 
-        # TODO : When stream delete is implemented, enable below code and
-        # remove the above code.
-        # endpoint = '{}/{}?local={}'.format(ENDPOINT, stream, local)
-        # if force:
-        #    endpoint = endpoint + "&force=true"
-        #
-        # request = Request(method='delete', endpoint=endpoint)
-        #
-        # def response_handler(resp):
-        #    code = resp.status_code
-        #    if resp.is_success:
-        #        return resp.body['result']
-        #    elif code == 403:
-        #        raise StreamPermissionError(resp, request)
-        #    elif code == 412:
-        #        raise StreamDeleteError(resp, request)
-        #    raise StreamConnectionError(resp, request)
-        #
-        # return self._execute(request, response_handler)
+        request = Request(method='delete', endpoint=endpoint)
+
+        def response_handler(resp):
+           code = resp.status_code
+           if resp.is_success:
+               return resp.body['result']
+           elif code == 403:
+               raise StreamPermissionError(resp, request)
+           elif code == 412:
+               raise StreamDeleteError(resp, request)
+           raise StreamConnectionError(resp, request)
+
+        return self._execute(request, response_handler)
 
     def terminate_stream(self, stream, isCollectionStream=False, local=False):
         """Terminate a stream. A stream that is terminated will not accept any
