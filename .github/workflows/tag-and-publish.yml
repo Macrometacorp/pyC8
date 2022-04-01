@@ -5,6 +5,9 @@ on:
       part:
         description: 'Part to bump (0-based, right to left)'
         default: 0
+      label:
+        description: 'Optional label (beta, rc1, etc.)'
+        required: false
 jobs:
   tag-and-publish:
     runs-on: ubuntu-latest
@@ -15,14 +18,16 @@ jobs:
           fetch-depth: 0
       - name: push-git-tag
         run: |
-          set ${{ github.event.inputs.part }}
+          set ${{ github.event.inputs.part }} ${{ github.event.inputs.label }}
           latest_tag () { git describe --abbrev=0; }
-          bump_semver () { awk -F. -v OFS=. -v p="${1:-0}" \
+          bump_semver () { awk -F. -v OFS=. -v p="${1:-0}" -v l="$2" \
             '{if (p>=NF || p<0) exit 64
-              v=sub(/^v/,""); f=NF-p; $f=$f+1
+              v=sub(/^v/,""); f=NF-p; n=match($f, /[^0-9]/)
+              if (!n) $f=$f+1
               for (i=f+1; i<=NF; ++i) $i=0
+              if (l && !n) $NF=$NF "-" l
               if (v) sub(/^/,"v")} 1'; }
-          TAG=$(latest_tag | bump_semver "${1:-0}")
+          TAG=$(latest_tag | bump_semver "${1:-0}" "$2")
           VER=${TAG#v}
           sed -i "s/__version__.*/__version__ = '${VER}'/" c8/version.py
           sed -i "s/version=.*/version='${VER}',/" setup.py
