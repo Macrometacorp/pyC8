@@ -411,7 +411,7 @@ class Collection(APIWrapper):
             }
         request = Request(
             method='post',
-            endpoint='/bulk/export',
+            endpoint='/export',
             params={'collection': self.name},
             data=data
         )
@@ -1773,7 +1773,7 @@ class StandardCollection(Collection):
 
         request = Request(
             method='post',
-            endpoint='/bulk/import',
+            endpoint='/import',
             data=documents,
             params=params
         )
