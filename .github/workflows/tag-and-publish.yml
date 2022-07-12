@@ -29,6 +29,10 @@ jobs:
               if (v) sub(/^/,"v")} 1'; }
           TAG=$(latest_tag | bump_semver "${1:-0}" "$2")
           VER=${TAG#v}
+          # work around branch protection rules:
+          # don't use the exact same name as the tag, as some git commands will require disambiguating the ref.
+          TMP=ver${VER}
+          git checkout -b ${TMP}
           sed -i "s/__version__.*/__version__ = '${VER}'/" c8/version.py
           sed -i "s/version=.*/version='${VER}',/" setup.py
           git add -u
@@ -36,7 +40,7 @@ jobs:
           git config user.name "GitHub Action"
           git commit -m ${VER}
           git tag -a ${TAG} -m "Tag ${TAG} from $(git branch --show-current) branch"
-          git push --follow-tags
+          git push --follow-tags origin ${TMP}
       - uses: actions/setup-python@v2
         with:
           python-version: '3.x'
