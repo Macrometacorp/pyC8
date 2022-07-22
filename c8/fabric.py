@@ -6,7 +6,6 @@ import base64
 
 import websocket
 
-from websocket import _exceptions
 from c8.api import APIWrapper
 from c8.c8ql import C8QL
 from c8.keyvalue import KV
@@ -174,7 +173,7 @@ class Fabric(APIWrapper):
                 data = base64.b64decode(msg['payload'])
                 ws.send(json.dumps({'messageId': msg['messageId']}))
                 callback(data)
-        except _exceptions.WebSocketTimeoutException:
+        except websocket.WebSocketTimeoutException:
             pass
         except Exception as e:
             print(e)
