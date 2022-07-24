@@ -173,7 +173,7 @@ class Fabric(APIWrapper):
                 data = base64.b64decode(msg['payload'])
                 ws.send(json.dumps({'messageId': msg['messageId']}))
                 callback(data)
-        except TimeoutError:
+        except websocket.WebSocketTimeoutException:
             pass
         except Exception as e:
             print(e)
