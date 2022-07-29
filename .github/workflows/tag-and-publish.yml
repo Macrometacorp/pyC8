@@ -16,6 +16,7 @@ jobs:
         with:
           # so git-describe can get the latest tag:
           fetch-depth: 0
+          token: {{ secrets.GH_PAT }}
       - name: push-git-tag
         run: |
           set ${{ github.event.inputs.part }} ${{ github.event.inputs.label }}
