@@ -128,9 +128,19 @@ class C8QL(APIWrapper):
     def execute(self,
                 query,
                 count=False,
+                batch_size=None,
+                ttl=None,
                 bind_vars=None,
-                cache=None,
-                profile=None):
+                full_count=None,
+                optimizer_rules=None,
+                fail_on_warning=None,
+                profile=None,
+                max_transaction_size=None,
+                max_warning_count=None,
+                intermediate_commit_count=None,
+                intermediate_commit_size=None,
+                skip_inaccessible_collections=None,
+                stream=None):
         """Execute the query and return the result cursor.
 
         :param query: Query to execute.
@@ -138,27 +148,85 @@ class C8QL(APIWrapper):
         :param count: If set to True, the total document count is included in
             the result cursor.
         :type count: bool
+        :param batch_size: Number of documents fetched by the cursor in one
+            round trip.
+        :type batch_size: int
+        :param ttl: Server side time-to-live for the cursor in seconds.
+        :type ttl: int
         :param bind_vars: Bind variables for the query.
         :type bind_vars: dict
-        :param cache: If set to True, the query cache is used. The operation
-            mode of the query cache must be set to "on" or "demand".
-        :type cache: bool
+        :param full_count: This parameter applies only to queries with LIMIT
+            clauses. If set to True, the number of matched documents before
+            the last LIMIT clause executed is included in teh cursor. This is
+            similar to MySQL SQL_CALC_FOUND_ROWS hint. Using this disables a
+            few LIMIT optimizations and may lead to a longer query execution.
+        :type full_count: bool
+        :param optimizer_rules: List of optimizer rules.
+        :type optimizer_rules: [str | unicode]
+        :param fail_on_warning: If set to True, the query throws an exception
+            instead of producing a warning. This parameter can be used during
+            development to catch issues early. If set to False, warnings are
+            returned with the query result. There is a server configuration
+            option "--query.fail-on-warning" for setting the default value for
+            this behaviour so it does not need to be set per-query.
+        :type fail_on_warning: bool
         :param profile: Return additional profiling details in the cursor,
             unless the query cache is used.
         :type profile: bool
+        :param max_transaction_size: Transaction size limit in bytes. Applies
+            only to RocksDB storage engine.
+        :type max_transaction_size: int
+        :param max_warning_count: Max number of warnings returned.
+        :type max_warning_count: int
+        :param intermediate_commit_count: Max number of operations after
+            which an intermediate commit is performed automatically. Applies
+            only to RocksDB storage engine.
+        :type intermediate_commit_count: int
+        :param intermediate_commit_size: Max size of operations in bytes after
+            which an intermediate commit is performed automatically. Applies
+            only to RocksDB storage engine.
+        :type intermediate_commit_size: int
+        :param skip_inaccessible_collections: C8QL queries (especially graph
+            traversals) treat collections to which a user has no access rights
+            as if these collections were empty. Instead of returning a forbidden
+            access error, your query runs normally.
+        :type skip_inaccessible_collections: bool
+        :param stream: Specify *true* and the query runs as a **stream**.
+            The query result is not stored on server, but calculated on the fly.
+        :type stream: bool
         :return: Result cursor.
         :rtype: c8.cursor.Cursor
         :raise c8.exceptions.C8QLQueryExecuteError: If execute fails.
         """
         data = {'query': query, 'count': count}
+        if batch_size is not None:
+            data['batchSize'] = batch_size
+        if ttl is not None:
+            data['ttl'] = ttl
         if bind_vars is not None:
             data['bindVars'] = bind_vars
-        if cache is not None:
-            data['cache'] = cache
 
         options = {}
+        if full_count is not None:
+            options['fullCount'] = full_count
+        if optimizer_rules is not None:
+            options['optimizer'] = {'rules': optimizer_rules}
+        if fail_on_warning is not None:
+            options['failOnWarning'] = fail_on_warning
         if profile is not None:
             options['profile'] = profile
+        if max_transaction_size is not None:
+            options['maxTransactionSize'] = max_transaction_size
+        if max_warning_count is not None:
+            options['maxWarningCount'] = max_warning_count
+        if intermediate_commit_count is not None:
+            options['intermediateCommitCount'] = intermediate_commit_count
+        if intermediate_commit_size is not None:
+            options['intermediateCommitSize'] = intermediate_commit_size
+        if skip_inaccessible_collections is not None:
+            options['skipInaccessibleCollections'] = skip_inaccessible_collections
+        if stream is not None:
+            options['stream'] = stream
         if options:
             data['options'] = options
         data.update(options)
