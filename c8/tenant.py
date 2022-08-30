@@ -358,6 +358,26 @@ class Tenant(APIWrapper):
     # User Management #
     ###################
 
+    def set_user_api_url(self, request, response_handler):
+        """
+        Sets the user management api endpoints to /_api/ instead of 
+        /_fabric/{fabric}/_api/ since in user management is done at a tenant
+        level not fabric level.
+        """
+        # We need to rewrite the connection's standard URL prefix
+        # because the user management api call does not expect
+        # the '_fabric/{fabric}' part of the URL. So we rewrite it here
+        # temporarily to do the user management call, then set it back
+        oldconnprefix = self._conn.url_prefix
+        url = self._conn.url
+
+        self._conn.set_url_prefix(url + "/_api")
+        resp = self._execute(request, response_handler)
+
+        # Set the connection object's url prefix back to what it was.
+        self._conn.set_url_prefix(oldconnprefix)
+        return resp
+
     def has_user(self, username):
         """Check if user exists.
 
@@ -389,7 +409,7 @@ class Tenant(APIWrapper):
                 'extra': record['extra'],
             } for record in resp.body['result']]
 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     def user(self, username):
         """Return user details.
@@ -414,7 +434,7 @@ class Tenant(APIWrapper):
                 'extra': resp.body['extra']
             }
 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     def create_user(self, username, email, password, active=True, extra=None):
         """Create a new user.
@@ -450,7 +470,7 @@ class Tenant(APIWrapper):
                 'extra': resp.body['extra'],
             }
 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     def update_user(self, username, password=None, active=None, extra=None):
         """Update a user.
@@ -490,7 +510,7 @@ class Tenant(APIWrapper):
                 'extra': resp.body['extra'],
             }
 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     def replace_user(self, username, password, active=None, extra=None):
         """Replace a user.
@@ -528,7 +548,7 @@ class Tenant(APIWrapper):
                 }
             raise UserReplaceError(resp, request)
 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     def delete_user(self, username, ignore_missing=False):
         """Delete a user.
@@ -554,7 +574,7 @@ class Tenant(APIWrapper):
                 return False
             raise UserDeleteError(resp, request)
 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
 
     def list_accessible_databases_user(self, username, full=False):
@@ -579,7 +599,7 @@ class Tenant(APIWrapper):
                return resp.body['result']
             raise DataBaseError(resp, request)
 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
 
     def get_database_access_level_user(self, username, databasename=""):
@@ -603,7 +623,7 @@ class Tenant(APIWrapper):
                return resp.body['result']
             raise DataBaseError(resp, request)
 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
 
     def remove_database_access_level_user(self, username, databasename=""):
@@ -627,7 +647,7 @@ class Tenant(APIWrapper):
                return resp.body
             raise DataBaseError(resp, request)
 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     def set_database_access_level_user(self, username, databasename="", grant='ro'):
         """Lists accessible databases for a user.
@@ -658,7 +678,7 @@ class Tenant(APIWrapper):
                return resp.body
             raise DataBaseError(resp, request)
 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
 
     def get_collection_access_level_user(self, username, collection_name, databasename='_system'):
@@ -685,7 +705,7 @@ class Tenant(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     
     def set_collection_access_level_user(self, username, collection_name, databasename='_system',
@@ -721,7 +741,7 @@ class Tenant(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     
     def clear_collection_access_level_user(self, username, collection_name, databasename='_system'):
@@ -753,7 +773,7 @@ class Tenant(APIWrapper):
                 elif resp.body['error'] is True:
                     return False
                 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
 
 
@@ -781,7 +801,7 @@ class Tenant(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     
     def get_stream_access_level_user(self, username, streamname, databasename='_system', local=False):
@@ -814,7 +834,7 @@ class Tenant(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     
     def set_stream_access_level_user(self, username, streamname, databasename='_system', grant='ro', local=False):
@@ -856,7 +876,7 @@ class Tenant(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     
     def clear_stream_access_level_user(self, username, streamname, databasename='_system', local=False):
@@ -896,7 +916,7 @@ class Tenant(APIWrapper):
                 elif resp.body['error'] is True:
                     return False
                 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
 
     def get_billing_access_level_user(self, username):
@@ -917,7 +937,7 @@ class Tenant(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     
     def set_billing_access_level(self, username, grant='ro'):
@@ -946,7 +966,7 @@ class Tenant(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     
     def clear_billing_access_level(self, username):
@@ -969,7 +989,7 @@ class Tenant(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
 
     #########################
@@ -996,7 +1016,7 @@ class Tenant(APIWrapper):
                 return resp.body['result']
             raise PermissionListError(resp, request)
 
-        return self._execute(request, response_handler)
+        return self.set_user_api_url(request, response_handler)
 
     def permission(self, username, fabric, collection=None):
         """Return user permission for a specific fabric or collection.
