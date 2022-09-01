@@ -1884,6 +1884,298 @@ class C8Client(object):
         return self._tenant.delete_user(username=username,
                                         ignore_missing=ignore_missing)
 
+    # client.list_accessible_databases_user
+
+    def list_accessible_databases_user(self, username, full=False):
+        """Lists accessible databases for a user.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param full: Return the full set of access levels for all databases 
+                and all collections if set to true.
+        :type full: bool
+        :returns: Object containing database details
+        :rtype: list | object
+        :raise c8.exceptions.DataBaseError: If request fails.
+        """
+        return self._tenant.list_accessible_databases_user(username=username,
+                                                           full=full)
+
+    # client.get_database_access_level_user
+
+    def get_database_access_level_user(self, username, databasename=""):
+        """Fetch the access level for a specific database.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param databasename: Database name.
+        :type databasename: str | unicode
+        :returns: Access Details
+        :rtype: string
+        :raise c8.exceptions.DataBaseError: If request fails.
+        """
+        return self._tenant.get_database_access_level_user(username=username,
+                                                           databasename=databasename)
+
+    # client.remove_database_access_level_user
+
+    def remove_database_access_level_user(self, username, databasename=""):
+        """Clear the access level for the specific database of user. 
+        As consequence the default database access level is used.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param databasename: Database name.
+        :type databasename: str | unicode
+        :returns: Object containing database details
+        :rtype: object
+        :raise c8.exceptions.DataBaseError: If request fails.
+        """
+        return self._tenant.remove_database_access_level_user(username=username,
+                                                 databasename=databasename)
+
+    # client.set_database_access_level_user
+
+    def set_database_access_level_user(self, username, databasename="", grant='ro'):
+        """Set the access levels for the specific database of user.
+
+        :param username: Username.
+        :type username: str | unicode
+        :param databasename: Database name.
+        :type databasename: str | unicode
+        :param grant: Grant accesslevel.
+                    Use "rw" to set the database access level to Administrate .
+                    Use "ro" to set the database access level to Access.
+                    Use "none" to set the database access level to No access.
+        :type grant: string
+        :returns: Object containing database details
+        :rtype: object
+        :raise c8.exceptions.DataBaseError: If request fails.
+        """
+        return self._tenant.set_database_access_level_user(username=username,
+                                                           databasename=databasename,
+                                                           grant=grant)
+
+    # client.get_collection_access_level_user
+
+    def get_collection_access_level_user(self, username, collection_name, databasename='_system'):
+        """Fetch the collection access level for a specific collection in a database.
+
+        :param collection_name: Name of the collection
+        :type collection_name: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :returns: AccessLevel of a db.
+        :rtype: string
+        :raise c8.exceptions.CollectionAccessLevel: If request fails.
+        """
+        return self._tenant.get_collection_access_level_user(username=username,
+                                                             collection_name=collection_name,
+                                                             databasename=databasename)
+
+    # client.set_collection_access_level_user
+
+    def set_collection_access_level_user(self, username, collection_name, databasename='_system',
+                                     grant='ro'):
+       
+        """Set the collection access level for a specific collection in a database.
+
+        :param collection_name: Name of the collection
+        :type collection_name: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :param grant: Use "rw" to set the database access level to Administrate .
+                      Use "ro" to set the database access level to Access.
+                      Use "none" to set the database access level to No access.
+        :type grant: string
+        :returns: Accesslevel of a particular db.
+        :rtype: Object
+        :raise c8.exceptions.SetCollectionAccessLevel: If request fails.
+        """
+        return self._tenant.set_collection_access_level_user(username=username,
+                                                             collection_name=collection_name,
+                                                             databasename=databasename,
+                                                             grant=grant)
+
+    # client.clear_collection_access_level_user
+
+    def clear_collection_access_level_user(self, username, collection_name, databasename='_system'):
+       
+        """Clear the collection access level for a specific collection in a database.
+
+        :param collection_name: Name of the collection
+        :type collection_name: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :returns: True if operation successful.
+        :rtype: booleaan
+        :raise c8.exceptions.ClearCollectionAccessLevel: If request fails.
+        """
+        return self._tenant.clear_collection_access_level_user(username=username,
+                                                               collection_name=collection_name,
+                                                               databasename=databasename)
+
+    # client.list_accessible_streams_user
+
+    def list_accessible_streams_user(self, username, databasename='_system', full=False):
+        """Fetch the list of streams available to the specified user.
+ 
+        :param databasename: Name of the database
+        :type databasename: string
+        :param full: Return the full set of access levels for all streams.
+        :type full: boolean
+        :returns: List of available databases.
+        :rtype: list
+        :raise c8.exceptions.ListStreams: If request fails.
+        """
+        return self._tenant.list_accessible_streams_user(username=username,
+                                                         databasename=databasename,
+                                                         full=full)
+
+    # client.get_stream_access_level_user
+
+    def get_stream_access_level_user(self, username, streamname, databasename='_system'):
+        """Fetch the database access level for a specific stream.
+
+        :param streamname: Name of the stream
+        :type streamname: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :returns: AccessLevel of a db.
+        :rtype: string
+        :raise c8.exceptions.StreamAccessLevel: If request fails.
+        """
+        return self._tenant.get_stream_access_level_user(username=username, streamname=streamname,
+                                                         databasename= databasename)
+
+    # client.set_stream_access_level_user
+
+    def set_stream_access_level_user(self, username, streamname, databasename='_system', grant='ro'):
+        """Set the database access level for a specific stream.
+
+        :param streamname: Name of the stream
+        :type streamname: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :param grant: Use "rw" to set the database access level to Administrate .
+                      Use "ro" to set the database access level to Access.
+                      Use "none" to set the database access level to No access.
+        :type grant: string
+        :returns: Accesslevel of a particular db.
+        :rtype: Object
+        :raise c8.exceptions.SetStreamAccessLevel: If request fails.
+        """
+        return self._tenant.set_stream_access_level_user(username=username, streamname=streamname,
+                                                         databasename=databasename, grant=grant)
+
+    # client.clear_stream_access_level_user
+
+    def clear_stream_access_level_user(self, username, streamname, databasename='_system'):
+       
+        """Clear the database access level for a specific stream.
+
+        :param streamname: Name of the stream
+        :type streamname: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :returns: True if operation successful.
+        :rtype: booleaan
+        :raise c8.exceptions.ClearStreamAccessLevel: If request fails.
+        """
+        return self._tenant.clear_stream_access_level_user(username=username, streamname=streamname,
+                                                           databasename=databasename)
+
+    # client.get_billing_access_level_user
+
+    def get_billing_access_level_user(self, username):
+        """Fetch the billing access level.
+
+        :returns: AccessLevel of billing.
+        :rtype: string
+        :raise c8.exceptions.BillingAccessLevel: If request fails.
+        """
+        return self._tenant.get_billing_access_level_user(username=username)
+
+    # client.set_billing_access_level
+
+    def set_billing_access_level_user(self, username, grant='ro'):
+       
+        """Set the billing access level for user.
+
+        :param grant: Use "rw" to set the database access level to Administrate .
+                      Use "ro" to set the database access level to Access.
+                      Use "none" to set the database access level to No access.
+        :type grant: string
+        :returns: Billing Accesslevel of a particular db.
+        :rtype: Object
+        :raise c8.exceptions.SetBillingAccessLevel: If request fails.
+        """
+        return self._tenant.set_billing_access_level(username=username, grant=grant)
+
+    # client.clear_billing_access_level
+
+    def clear_billing_access_level_user(self, username):
+       
+        """Clear the billing access level.
+
+        :returns: True if operation successful.
+        :rtype: booleaan
+        :raise c8.exceptions.ClearBillingAccessLevel: If request fails.
+        """
+        return self._tenant.clear_billing_access_level(username=username)
+
+    # client.get_attributes_user
+
+    def get_attributes_user(self, username):
+       
+        """Fetch the list of attributes for the specified user.
+
+        :returns: All attributes for the specified user.
+        :rtype: dict
+        :raise c8.exceptions.GetAttributes: If request fails.
+        """
+        return self._tenant.get_attributes_user(username=username)
+
+    # client.update_attributes_user
+
+    def update_attributes_user(self, username, attributes):
+       
+        """Update the list of attributes for the specified user.
+
+        :param attributes: The key-value pairs of attributes with values that needs to be updated.
+        :type attributes: dict
+        :returns: The updated attributes.
+        :rtype: Object
+        :raise c8.exceptions.GetAUpdateAttributesttributes: If request fails.
+        """
+        return self._tenant.update_attributes_user(username=username, attributes=attributes)
+
+    # client.remove_all_attributes_user
+
+    def remove_all_attributes_user(self, username):
+       
+        """Remove all attributes of the specified user.
+
+        :returns: True if operation successful.
+        :rtype: booleaan
+        :raise c8.exceptions.RemoveAllAttributes: If request fails.
+        """
+        return self._tenant.remove_all_attributes_user(username=username)
+
+    # client.remove_attribute_user
+
+    def remove_attribute_user(self, username, attributeid):
+       
+        """Remove the specified attribute for the specified user.
+
+        :param attributeid: Name of the attribute
+        :type attributeid: string
+        :returns: True if operation successful.
+        :rtype: booleaan
+        :raise c8.exceptions.RemoveAttribute: If request fails.
+        """
+        return self._tenant.remove_attribute_user(username=username,attributeid=attributeid)
+
     # client.get_permissions
 
     def get_permissions(self, username):
@@ -1896,69 +2188,6 @@ class C8Client(object):
         :raise: c8.exceptions.PermissionListError: If retrieval fails.
         """
         return self._tenant.permissions(username)
-
-    # client.get_permission
-
-    def get_permission(self, username, fabric, collection=None):
-        """Return user permission for a specific fabric or collection.
-
-        :param username: Username.
-        :type username: str | unicode
-        :param fabric: fabric name.
-        :type fabric: str | unicode
-        :param collection: Collection name.
-        :type collection: str | unicode
-        :returns: Permission for given fabric or collection.
-        :rtype: str | unicode
-        :raise: c8.exceptions.PermissionGetError: If retrieval fails.
-        """
-        return self._tenant.permission(username=username, fabric=fabric,
-                                       collection=collection)
-
-    # client.update_permission
-
-    def update_permission(self,
-                          username,
-                          permission,
-                          fabric,
-                          collection=None):
-        """Update user permission for a specific fabric or collection.
-
-        :param username: Username.
-        :type username: str | unicode
-        :param fabric: fabric name.
-        :type fabric: str | unicode
-        :param collection: Collection name.
-        :type collection: str | unicode
-        :param permission: Allowed values are "rw" (read and write), "ro"
-            (read only) or "none" (no access).
-        :type permission: str | unicode
-        :returns: True if access was granted successfully.
-        :rtype: bool
-        :raise c8.exceptions.PermissionUpdateError: If update fails.
-        """
-        return self._tenant.update_permission(username=username,
-                                              permission=permission,
-                                              fabric=fabric,
-                                              collection=collection)
-
-    # client.reset_permission()
-
-    def reset_permission(self, username, fabric, collection=None):
-        """Reset user permission for a specific fabric or collection.
-
-        :param username: Username.
-        :type username: str | unicode
-        :param fabric: fabric name.
-        :type fabric: str | unicode
-        :param collection: Collection name.
-        :type collection: str | unicode
-        :returns: True if permission was reset successfully.
-        :rtype: bool
-        :raise c8.exceptions.PermissionRestError: If reset fails.
-        """
-        return self._tenant.reset_permission(username=username, fabric=fabric,
-                                             collection=collection)
 
     # client.kv_get_collections
 
