@@ -544,21 +544,8 @@ class GetDataBaseAccessLevel(C8ServerError):
 # Permission Exceptions #
 #########################
 
-
 class PermissionListError(C8ServerError):
     """Failed to list user permissions."""
-
-
-class PermissionGetError(C8ServerError):
-    """Failed to retrieve user permission."""
-
-
-class PermissionUpdateError(C8ServerError):
-    """Failed to update user permission."""
-
-
-class PermissionResetError(C8ServerError):
-    """Failed to reset user permission."""
 
 
 #####################
@@ -773,3 +760,19 @@ class AnalyzerNotFoundError(C8ServerError):
 
 class AnalyzerConflictError(C8ServerError):
     """The analyzer is still in use"""
+
+#######################
+# Attributes #
+#######################
+
+class GetAttributes(C8ServerError):
+    """Failed to fetch the Attributes for the specified user"""
+
+class UpdateAttributes(C8ServerError):
+    """Failed to update attributes for the specified user"""
+
+class RemoveAllAttributes(C8ServerError):
+    """Failed to remove all the attributes for the specified user"""
+
+class RemoveAttribute(C8ServerError):
+    """Failed to remove the given attribute for the specified user"""
