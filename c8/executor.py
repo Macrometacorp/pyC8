@@ -63,7 +63,7 @@ class DefaultExecutor(Executor):
     def __init__(self, connection):
         super(DefaultExecutor, self).__init__(connection)
 
-    def execute(self, request, response_handler):
+    def execute(self, request, response_handler, isUserApi=False):
         """Execute an API request and return the result.
 
         :param request: HTTP request.
@@ -73,8 +73,7 @@ class DefaultExecutor(Executor):
         :return: API execution result.
         :rtype: str | unicode | bool | int | list | dict
         """
-
-        response = self._conn.send_request(request)
+        response = self._conn.send_request(request, isUserApi=isUserApi)
         return response_handler(response)
 
 
@@ -95,7 +94,7 @@ class AsyncExecutor(Executor):
         super(AsyncExecutor, self).__init__(connection)
         self._return_result = return_result
 
-    def execute(self, request, response_handler):
+    def execute(self, request, response_handler, isUserApi=False):
         """Execute an API request asynchronously.
 
         :param request: HTTP request.
@@ -111,7 +110,7 @@ class AsyncExecutor(Executor):
         else:
             request.headers['x-c8-async'] = 'true'
 
-        resp = self._conn.send_request(request)
+        resp = self._conn.send_request(request, isUserApi=isUserApi)
         if not resp.is_success:
             raise AsyncExecuteError(resp, request)
         if not self._return_result:
