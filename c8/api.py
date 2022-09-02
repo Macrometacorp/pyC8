@@ -1,4 +1,3 @@
-from __future__ import absolute_import, unicode_literals
 
 __all__ = ['APIWrapper']
 
@@ -82,7 +81,7 @@ class APIWrapper(object):
         """
         return self._executor.context
 
-    def _execute(self, request, response_handler):
+    def _execute(self, request, response_handler, isUserApi=False):
         """Execute an API per execution context.
 
         :param request: HTTP request.
@@ -92,4 +91,4 @@ class APIWrapper(object):
         :return: API execution result.
         :rtype: str | unicode | bool | int | list | dict
         """
-        return self._executor.execute(request, response_handler)
+        return self._executor.execute(request, response_handler, isUserApi=isUserApi)
