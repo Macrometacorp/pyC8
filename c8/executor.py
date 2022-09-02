@@ -94,7 +94,7 @@ class AsyncExecutor(Executor):
         super(AsyncExecutor, self).__init__(connection)
         self._return_result = return_result
 
-    def execute(self, request, response_handler, isUserApi=False):
+    def execute(self, request, response_handler):
         """Execute an API request asynchronously.
 
         :param request: HTTP request.
@@ -110,7 +110,7 @@ class AsyncExecutor(Executor):
         else:
             request.headers['x-c8-async'] = 'true'
 
-        resp = self._conn.send_request(request, isUserApi=isUserApi)
+        resp = self._conn.send_request(request)
         if not resp.is_success:
             raise AsyncExecuteError(resp, request)
         if not self._return_result:
