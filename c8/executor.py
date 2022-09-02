@@ -63,7 +63,7 @@ class DefaultExecutor(Executor):
     def __init__(self, connection):
         super(DefaultExecutor, self).__init__(connection)
 
-    def execute(self, request, response_handler, isUserApi=False):
+    def execute(self, request, response_handler, customPrefix=None):
         """Execute an API request and return the result.
 
         :param request: HTTP request.
@@ -73,7 +73,7 @@ class DefaultExecutor(Executor):
         :return: API execution result.
         :rtype: str | unicode | bool | int | list | dict
         """
-        response = self._conn.send_request(request, isUserApi=isUserApi)
+        response = self._conn.send_request(request, customPrefix=customPrefix)
         return response_handler(response)
 
 
