@@ -443,6 +443,66 @@ class C8Client(object):
                                               system=system)
         return resp
 
+    # client.import_bulk
+
+    def import_bulk(self,
+                    collection_name,
+                    documents,
+                    details=True,
+                    primaryKey=None,
+                    replace=False):
+        """Insert multiple documents into the collection.
+
+        This is faster than :func:`c8.collection.Collection.insert_many`
+        but does not return as much information.
+
+        :param collection_name: Collection name to import documents in.
+        :type collection_name: str | unicode
+        :param documents: List of new documents to insert. If they contain the
+            "_key" or "_id" fields, the values are used as the keys of the new
+            documents (auto-generated otherwise). Any "_rev" field is ignored.
+        :type documents: [dict]
+        :param details: If set to True, the returned result will include an
+            additional list of detailed error messages.
+        :type details: bool
+        :param primaryKey: If not None then uses this field as the primary key for
+            the documents to be inserted.
+        :type primaryKey: str | unicode
+        :param replace: Action to take on unique key constraint violations
+            (for documents with "_key" fields). A bool "replace" if set to true replaces 
+            the existing documents with new ones else it won't replace the documents and
+            count it as "error".
+        :type replace: bool
+        :returns: Result of the bulk import.
+        :rtype: dict
+        :raise c8.exceptions.DocumentInsertError: If import fails.
+        """
+        _collection = self.get_collection(collection_name)
+        return _collection.import_bulk(documents=documents, details=details,
+                                       primaryKey=primaryKey, replace=replace)
+
+    # client.export
+
+    def export(self,
+               collection_name,
+               offset=None,
+               limit=None,
+               order=None):
+        """Export all documents in the collection.
+
+        :param offset: This option can be used to simulate paging.
+        :type offset: int
+        :param limit: This option can be used to simulate paging. Limits the result. Maximum: 1000.
+        :type limit: int
+        :param order: Sorts the result in specified order. Allowed values are "asc" or "desc".
+        :type order: str | unicode
+        :returns: Documents in the collection.
+        :rtype: dict
+        :raise c8.exceptions.DocumentGetError: If export fails.
+        """
+        _collection = self.get_collection(collection_name)
+        return _collection.export(offset=offset, limit=limit, order=order)
+
     # client.has_collection
 
     def has_collection(self, name):
