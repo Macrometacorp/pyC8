@@ -730,7 +730,7 @@ class C8Client(object):
         :raise c8.exceptions.DocumentUpdateError: If update fails.
         """
         _collection = self.get_collection(collection_name)
-        resp = _collection.update_document_many(documents=documents,
+        resp = _collection.update_many(documents=documents,
                                                 check_rev=check_rev,
                                                 merge=merge,
                                                 keep_none=keep_none,
@@ -914,7 +914,7 @@ class C8Client(object):
         :raise c8.exceptions.DocumentDeleteError: If delete fails.
         """
         _collection = self.get_collection(collection_name)
-        resp = _collection.delete(documents=documents,
+        resp = _collection.delete_many(documents=documents,
                                   check_rev=check_rev,
                                   return_old=return_old,
                                   sync=sync,
