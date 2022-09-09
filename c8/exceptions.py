@@ -166,12 +166,15 @@ class TenantCreateError(C8ServerError):
     """Failed to create tenant."""
 
 
-class TenantUpdateError(C8ClientError):
+class TenantUpdateError(C8ServerError):
     """Failed to update tenant."""
 
 
 class TenantDeleteError(C8ServerError):
     """Failed to delete tenant."""
+
+class TenantDetailsError(C8ServerError):
+    """Failed to retrieve tenant details."""
 
 #######################
 # Topic Exceptions #
