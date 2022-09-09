@@ -214,7 +214,7 @@ class Tenant(APIWrapper):
                 raise TenantCreateError(resp, request)
             return True
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="")
 
     def update_tenant(self, name, passwd='', extra={}):
         """Update a existing tenant.
