@@ -10,11 +10,11 @@ from c8.executor import (
 
 from c8.exceptions import (
     TenantDcListError,
-    TenantUpdateError,
     TenantListError,
     TenantCreateError,
     TenantDeleteError,
     TenantUpdateError,
+    TenantDetailsError,
     PermissionListError,
     UserCreateError,
     UserDeleteError,
@@ -154,7 +154,7 @@ class Tenant(APIWrapper):
                 retval.append(item['tenant'])
             return retval
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="")
 
     def has_tenant(self, name):
         """Check if a tenant exists.
@@ -226,7 +226,7 @@ class Tenant(APIWrapper):
         :type extra: [dict]
         :returns: True if tenant was created successfully.
         :rtype: bool
-        :raise c8.exceptions.TenantCreateError: If create fails.
+        :raise c8.exceptions.TenantUpdateError: If update fails.
 
         Here is an example entry for parameter **users**:
 
@@ -251,10 +251,31 @@ class Tenant(APIWrapper):
 
         def response_handler(resp):
             if not resp.is_success:
-                raise TenantUpdateError
+                raise TenantUpdateError(resp, request)
             return True
 
         return self._execute(request, response_handler)
+
+    def get_tenant_details(self, name):
+        """Get the details of the tenant.
+
+        :param name: Tenant name.
+        :type name: str | unicode
+        :returns: Tenant Details
+        :rtype: dict
+        :raise c8.exceptions.TenantDetailsError: If retrieval of details fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/_api/tenant/{tenantname}'.format(tenantname=name)
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise TenantDetailsError(resp, request)
+            return resp.body['result']
+
+        return self._execute(request, response_handler, customPrefix="")
 
     def delete_tenant(self, name, ignore_missing=False):
         """Delete the tenant.
@@ -280,7 +301,7 @@ class Tenant(APIWrapper):
                 raise TenantDeleteError(resp, request)
             return resp.body['result']
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="")
 
     def dclist(self, detail=False):
         """Return the list of names of Datacenters
@@ -306,7 +327,7 @@ class Tenant(APIWrapper):
                 dc_list.append(dc['name'])
             return dc_list
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="")
 
     def localdc(self, detail=True):
         """Return the list of local Datacenters
@@ -329,7 +350,7 @@ class Tenant(APIWrapper):
                 return resp.body
             return resp.body["name"]
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="")
 
     def assign_dc_spot(self, dc, spot_region=False):
         """Assigns spot region of a fed
@@ -353,7 +374,7 @@ class Tenant(APIWrapper):
                 raise SpotRegionAssignError(resp, request)
             return True
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="")
         
     ###################
     # User Management #
