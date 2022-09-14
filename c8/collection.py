@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
-import pandas
+import csv
 
 from numbers import Number
 
@@ -1042,15 +1042,21 @@ class StandardCollection(Collection):
         :rtype: bool | dict
         :raise c8.exceptions.DocumentInsertError: If insert fails.
         """
-        chunksize = 5000
+        data = csv.DictReader(open(csv_filepath, newline=''))
+        data_dict = {}
         index = 0
         result = []
-        for data in pandas.read_csv(csv_filepath, chunksize=chunksize,
-                                    iterator=True):
-            data = data.to_dict()
-            documents, index = self.get_documents_from_file(data, index)
-            resp = self.insert_many(documents, return_new, sync, silent)
-            result.append(resp)
+        for row in data:
+            for column, value in row.items():
+                data_dict.setdefault(column, {index: value})
+                temp_dict = data_dict.get(column)
+                temp_dict.update({index: value})
+            index += 1
+
+        documents, index = self.get_documents_from_file(data_dict, 0)
+        resp = self.insert_many(documents, return_new, sync, silent)
+        result.append(resp)
+
         return result
 
     def insert(self, document, return_new=False, sync=None, silent=False):

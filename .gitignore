@@ -3,7 +3,16 @@ _build/
 __pycache__/
 pyC8.egg-info/
 venv/
-.DS_Store
 dist/
+
+# Mac OS temp
+.DS_Store
+
+# Pytest cache
+.pytest_cache/
+
+# Jetbrains IDE temp files
+.idea/
+
 # Vim temp files
 *~
