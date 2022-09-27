@@ -147,7 +147,7 @@ class Search(APIWrapper):
 
     def create_view(self, 
         name,
-        propeties={},
+        properties={},
         view_type="search",
         ):
         """Creates a new view with a given name and properties if it does not
@@ -170,7 +170,7 @@ class Search(APIWrapper):
             endpoint=self._view_prefix,
             data={
                 "name": name,
-                "properties": propeties,
+                "properties": properties,
                 "type": view_type
             }
         )

@@ -62,77 +62,82 @@ Here is an overview example:
 
 ```python
 
-    from c8 import C8Client
-    import time
-    import warnings
-    warnings.filterwarnings("ignore")
-    region = "gdn1.macrometa.io"
-    demo_tenant = "mytenant@example.com"
-    demo_fabric = "_system"
-    demo_user = "user@example.com"
-    demo_user_name = "root"
-    demo_collection = "employees"
-    demo_stream = "demostream"
-    collname = "employees"
-    #--------------------------------------------------------------
-    print("Create C8Client Connection...")
-    client = C8Client(protocol='https', host=region, port=443,
-                         email=demo_tenant, password='hidden',
-                         geofabric=demo_fabric)
+from c8 import C8Client
+import time
+import warnings
 
-    #--------------------------------------------------------------
-    print("Create Collection and insert documents")
+warnings.filterwarnings("ignore")
+region = "gdn1.macrometa.io"
+demo_tenant = "mytenant@example.com"
+demo_fabric = "_system"
+demo_user = "user@example.com"
+demo_user_name = "root"
+demo_collection = "employees"
+demo_stream = "demostream"
+collname = "employees"
+# --------------------------------------------------------------
+print("Create C8Client Connection...")
+client = C8Client(protocol='https', host=region, port=443,
+                  email=demo_tenant, password='hidden',
+                  geofabric=demo_fabric)
 
-    if client.has_collection(collname):
-      print("Collection exists")
-    else:
-      client.create_collection(name=collname)
+# --------------------------------------------------------------
+print("Create Collection and insert documents")
 
-    # List all Collections
-    coll_list = client.get_collections()
-    print(coll_list)
+if client.has_collection(collname):
+    print("Collection exists")
+else:
+    client.create_collection(name=collname)
 
-    # Filter collection based on collection models DOC/KV/DYNAMO
-    colls = client.get_collections(collectionModel='DOC')
-    print(colls)
+# List all Collections
+coll_list = client.get_collections()
+print(coll_list)
 
-    # Get Collecion Handle and Insert
-    coll = client.get_collection(collname)
-    coll.insert({'firstname': 'John', 'lastname':'Berley', 'email':'john.berley@macrometa.io'})
+# Filter collection based on collection models DOC/KV/DYNAMO
+colls = client.get_collections(collection_model='DOC')
+print(colls)
 
-    # insert document
-    client.insert_document(collection_name=collname, document={'firstname': 'Jean', 'lastname':'Picard',    'email':'jean.picard@macrometa.io'})
-    doc = client.get_document(collname, "John" )
-    print(doc)
+# Get Collecion Handle and Insert
+coll = client.get_collection(collname)
+coll.insert(
+    {'firstname': 'John', 'lastname': 'Berley', 'email': 'john.berley@macrometa.io'})
 
-    # insert multiple documents
-    docs = [
-        {'firstname': 'James', 'lastname':'Kirk', 'email':'james.kirk@macrometa.io'},
-        {'firstname': 'Han', 'lastname':'Solo', 'email':'han.solo@macrometa.io'},
-        {'firstname': 'Bruce', 'lastname':'Wayne', 'email':'bruce.wayne@macrometa.io'}
-    ]
+# insert document
+client.insert_document(collection_name=collname,
+                       document={'firstname': 'Jean', 'lastname': 'Picard',
+                                 'email': 'jean.picard@macrometa.io'})
+doc = client.get_document(collname, "John")
+print(doc)
 
-    client.insert_document(collection_name=collname, document=docs)
+# insert multiple documents
+docs = [
+    {'firstname': 'James', 'lastname': 'Kirk', 'email': 'james.kirk@macrometa.io'},
+    {'firstname': 'Han', 'lastname': 'Solo', 'email': 'han.solo@macrometa.io'},
+    {'firstname': 'Bruce', 'lastname': 'Wayne', 'email': 'bruce.wayne@macrometa.io'}
+]
 
-    # insert documents from file
-    client.insert_document_from_file(collection_name=collname, csv_filepath="/home/user/test.csv")
+client.insert_document(collection_name=collname, document=docs)
 
-    # Add a hash Index
-    client.add_hash_index(collname, fields=['email'], unique=True)
+# insert documents from file
+client.insert_document_from_file(collection_name=collname,
+                                 csv_filepath="/home/user/test.csv")
 
-    #--------------------------------------------------------------
+# Add a hash Index
+client.add_hash_index(collname, fields=['email'], unique=True)
 
-    # Query a collection
-    print("query employees collection...")
-    query = 'FOR employee IN employees RETURN employee'
-    cursor = client.execute_query(query)
-    docs = [document for document in cursor]
-    print(docs)
+# --------------------------------------------------------------
 
-    #--------------------------------------------------------------
-    print("Delete Collection...")
-    # Delete Collection
-    client.delete_collection(name=collname)
+# Query a collection
+print("query employees collection...")
+query = 'FOR employee IN employees RETURN employee'
+cursor = client.execute_query(query)
+docs = [document for document in cursor]
+print(docs)
+
+# --------------------------------------------------------------
+print("Delete Collection...")
+# Delete Collection
+client.delete_collection(name=collname)
 
 ```
 

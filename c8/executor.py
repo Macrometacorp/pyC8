@@ -1,7 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-from six import string_types
-
 from collections import OrderedDict
 from uuid import uuid4
 

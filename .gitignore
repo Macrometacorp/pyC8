@@ -5,6 +5,9 @@ pyC8.egg-info/
 venv/
 dist/
 
+# Enviroment files
+.env
+
 # Mac OS temp
 .DS_Store
 
