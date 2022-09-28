@@ -120,11 +120,13 @@ class C8Client(object):
         :type email: str | unicode
         :param password: Password for basic authentication.
         :type password: str | unicode
+        :param token: Bearer Token for authentication.
+        :type token: str
+        :param apikey: Api Key for authentication.
+        :type apikey: str
 
         :returns: Standard fabric API wrapper.
         :type: c8.fabric.StandardFabric
-        :raise c8.exceptions.ServerConnectionError: If **verify** was set
-            to True and the connection to C8Db fails.
         """
         connection = TenantConnection(url=self._url,
                                       email=email,

@@ -42,7 +42,7 @@ The driver allows you to use three ways for authentication:-
   
   # Auth email password
   client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
-   email="user@example.com", password="hidden")
+   email="user@example.com", password="XXXXX")
 ```
 
 2. Using jwt
@@ -84,7 +84,7 @@ collname = "employees"
 # --------------------------------------------------------------
 print("Create C8Client Connection...")
 client = C8Client(protocol='https', host=federation, port=443,
-                  email=demo_tenant, password='hidden',
+                  email=demo_tenant, password='XXXXX',
                   geofabric=demo_fabric)
 
 # --------------------------------------------------------------
@@ -165,7 +165,7 @@ Example for **real-time updates** from a collection in fabric:
   #--------------------------------------------------------------
   print("Create C8Client Connection...")
   client = C8Client(protocol='https', host=federation, port=443,
-                       email=demo_tenant, password='hidden',
+                       email=demo_tenant, password='XXXXX',
                        geofabric=demo_fabric)
 
   #--------------------------------------------------------------
@@ -196,7 +196,7 @@ Example to **publish** documents to a stream:
   #--------------------------------------------------------------
   print("publish messages to stream...")
   client = C8Client(protocol='https', host=federation, port=443,
-                       email=demo_tenant, password='hidden',
+                       email=demo_tenant, password='XXXXX',
                        geofabric=demo_fabric)
 
   producer = client.create_stream_producer(stream)
@@ -227,7 +227,7 @@ Example to **subscribe** documents from a stream:
   #--------------------------------------------------------------
   print("publish messages to stream...")
   client = C8Client(protocol='https', host=federation, port=443,
-                       email=demo_tenant, password='hidden',
+                       email=demo_tenant, password='XXXXX',
                        geofabric=demo_fabric)
 
 
@@ -260,7 +260,7 @@ Example: **stream management**:
   #--------------------------------------------------------------
   print("publish messages to stream...")
   client = C8Client(protocol='https', host=federation, port=443,
-                       email=demo_tenant, password='hidden',
+                       email=demo_tenant, password='XXXXX',
                        geofabric=demo_fabric)
   
   #get_stream_stats
@@ -290,7 +290,7 @@ Advanced operations can be done using the `sream_colleciton` class.
    #--------------------------------------------------------------
    print("consume messages from stream...")
    client = C8Client(protocol='https', host=federation, port=443)
-   demotenant = client.tenant(email=demo_tenant, password='hidden')
+   demotenant = client.tenant(email=demo_tenant, password='XXXXX')
    fabric = demotenant.useFabric(demo_fabric)
    stream = fabric.stream()
     
