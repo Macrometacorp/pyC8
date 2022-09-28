@@ -1,6 +1,6 @@
 # PyC8
 
-Welcome to the GitHub page for **pyC8**, a Python driver for the Digital Edge Fabric.
+Welcome to the GitHub page for **pyC8**, a Python SDK for the Global Data Network.
 
 ### Features
 
@@ -12,9 +12,16 @@ Welcome to the GitHub page for **pyC8**, a Python driver for the Digital Edge Fa
 
 - Python versions 3.4, 3.5 and 3.6 are supported.
 
+### Developer environment
+To enable developer environment position ourselves to project's root and run:
+
+```bash
+pip install -r requirements/dev.txt
+```
+
 ### Build & Install
 
-To build,
+To build package we need to position ourselves to project's root and run:
 
 ```bash
  $ python setup.py build
@@ -67,17 +74,16 @@ import time
 import warnings
 
 warnings.filterwarnings("ignore")
-region = "gdn1.macrometa.io"
+federation = "gdn.paas.macrometa.io"
 demo_tenant = "mytenant@example.com"
 demo_fabric = "_system"
 demo_user = "user@example.com"
 demo_user_name = "root"
-demo_collection = "employees"
 demo_stream = "demostream"
 collname = "employees"
 # --------------------------------------------------------------
 print("Create C8Client Connection...")
-client = C8Client(protocol='https', host=region, port=443,
+client = C8Client(protocol='https', host=federation, port=443,
                   email=demo_tenant, password='hidden',
                   geofabric=demo_fabric)
 
@@ -149,17 +155,16 @@ Example for **real-time updates** from a collection in fabric:
   import time
   import warnings
   warnings.filterwarnings("ignore")
-  region = "gdn1.macrometa.io"
+  federation = "gdn.paas.macrometa.io"
   demo_tenant = "mytenant@example.com"
   demo_fabric = "_system"
   demo_user = "user@example.com"
   demo_user_name = "root"
-  demo_collection = "employees"
   demo_stream = "demostream"
   collname = "democollection"
   #--------------------------------------------------------------
   print("Create C8Client Connection...")
-  client = C8Client(protocol='https', host=region, port=443,
+  client = C8Client(protocol='https', host=federation, port=443,
                        email=demo_tenant, password='hidden',
                        geofabric=demo_fabric)
 
@@ -184,13 +189,13 @@ Example to **publish** documents to a stream:
   import warnings
   warnings.filterwarnings("ignore")
 
-  region = "gdn1.macrometa.io"
+  federation = "gdn.paas.macrometa.io"
   demo_tenant = "mytenant@example.com"
   demo_fabric = "_system"
   stream = "demostream"
   #--------------------------------------------------------------
   print("publish messages to stream...")
-  client = C8Client(protocol='https', host=region, port=443,
+  client = C8Client(protocol='https', host=federation, port=443,
                        email=demo_tenant, password='hidden',
                        geofabric=demo_fabric)
 
@@ -215,13 +220,13 @@ Example to **subscribe** documents from a stream:
   import warnings
   warnings.filterwarnings("ignore")
 
-  region = "gdn1.macrometa.io"
+  federation = "gdn.paas.macrometa.io"
   demo_tenant = "mytenant@example.com"
   demo_fabric = "_system"
   stream = "demostream"
   #--------------------------------------------------------------
   print("publish messages to stream...")
-  client = C8Client(protocol='https', host=region, port=443,
+  client = C8Client(protocol='https', host=federation, port=443,
                        email=demo_tenant, password='hidden',
                        geofabric=demo_fabric)
 
@@ -248,13 +253,13 @@ Example: **stream management**:
   import warnings
   warnings.filterwarnings("ignore")
 
-  region = "gdn1.macrometa.io"
+  federation = "gdn.paas.macrometa.io"
   demo_tenant = "mytenant@example.com"
   demo_fabric = "_system"
   stream = "demostream"
   #--------------------------------------------------------------
   print("publish messages to stream...")
-  client = C8Client(protocol='https', host=region, port=443,
+  client = C8Client(protocol='https', host=federation, port=443,
                        email=demo_tenant, password='hidden',
                        geofabric=demo_fabric)
   
@@ -278,13 +283,13 @@ Advanced operations can be done using the `sream_colleciton` class.
    import warnings
    warnings.filterwarnings("ignore")
 
-   region = "gdn1.macrometa.io"
+   federation = "gdn.paas.macrometa.io"
    demo_tenant = "mytenant@example.com"
    demo_fabric = "_system"
 
    #--------------------------------------------------------------
    print("consume messages from stream...")
-   client = C8Client(protocol='https', host=region, port=443)
+   client = C8Client(protocol='https', host=federation, port=443)
    demotenant = client.tenant(email=demo_tenant, password='hidden')
    fabric = demotenant.useFabric(demo_fabric)
    stream = fabric.stream()

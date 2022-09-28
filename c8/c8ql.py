@@ -196,7 +196,7 @@ class C8QL(APIWrapper):
         :param stream: Specify *true* and the query runs as a **stream**.
             The query result is not stored on server, but calculated on the fly.
         :type stream: bool
-        :param stream: Specify *true* and write sql query.
+        :param sql: Specify *true* and write sql query.
         :type sql: bool
         :return: Result cursor.
         :rtype: c8.cursor.Cursor
