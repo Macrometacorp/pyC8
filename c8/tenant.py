@@ -20,7 +20,6 @@ from c8.exceptions import (
     UserDeleteError,
     UserGetError,
     UserListError,
-    UserReplaceError,
     UserUpdateError,
     SpotRegionAssignError,
     DataBaseError,
@@ -166,40 +165,42 @@ class Tenant(APIWrapper):
         """
         return name in self.tenants()
 
-    def create_tenant(self, email, passwd='', dclist=[], extra={}):
+    def create_tenant(self, email, display_name=None, passwd='', plan=None, attribution=None, dclist=[], metadata={}, contact={}):
         """Create a new tenant.
 
-        :param name: Tenant name.
-        :type name: str | unicode
-        :param passwd: What I presume is the tenant admin user password.
+        :param email: Tenant email address.
+        :type email: str | unicode
+        :param display_name: Tenant display name.
+        :type display_name: str | unicode
+        :param passwd: Tenant password to be set.
         :type passwd: str
-        :param dclist: comma separated list of region where tenant will be
+        :param plan: Tenant plan to be set (example: FREE, METERED, ENTERPRISE).
+        :type plan: str | unicode
+        :param attribution: Tenant attribution (example: Macrometa, Cox-Edge).
+        :type attribution: str | unicode
+        :param dclist: comma separated list of region where the tenant will be
                        created. If no value passed tenant will be created
                        globally.
         :type dclist: list
-        :param extra: Extra config info.
-        :type extra: dict
-        :returns: True if tenant was created successfully.
-        :rtype: bool
+        :param metadata: Metadata info.
+        :type metadata: dict
+        :param contact: Contact info.
+        :type contact: dict
+        :returns: Created tenant details if creation was successful 
+        :rtype: dict
         :raise c8.exceptions.TenantCreateError: If create fails.
-
-        Here is an example entry for parameter **users**:
-
-        .. code-block:: python
-
-            {
-                'email': 'email'
-                'passwd': 'password',
-                'extra': {'Department': 'IT'}
-            }
         """
-        name = email.replace('@', "")
-        name = name.replace('.', "")
-        print(name)
-        data = {'name': name}
+        data = {}
+        if display_name is not None:
+            data['displayName'] = display_name
         data['email'] = email
         data['passwd'] = passwd
-        data['extra'] = extra
+        if plan is not None:
+            data['plan'] = plan.upper()
+        if attribution is not None:
+            data['attribution'] = attribution
+        data['metadata'] = metadata
+        data['contact'] = contact
         if dclist != '':
             data['dcList'] = dclist
 
@@ -212,36 +213,34 @@ class Tenant(APIWrapper):
         def response_handler(resp):
             if not resp.is_success:
                 raise TenantCreateError(resp, request)
-            return True
+            return resp.body
 
         return self._execute(request, response_handler, customPrefix="")
 
-    def update_tenant(self, name, passwd='', extra={}):
-        """Update a existing tenant.
+    def update_tenant(self, name, active=True, status="active", display_name=None, metadata=None):
+        """Update an existing tenant.
 
         :param name: Tenant name.
         :type name: str | unicode
-        :param passwd: What I presume is the tenant admin user password.
-        :param extra: Extra config info.
-        :type extra: [dict]
-        :returns: True if tenant was created successfully.
+        :param active: Whether the tenant is active or not.
+        :type active: bool
+        :param status: The current status of the tenant.
+        :type status: str | unicode
+        :param display_name: Display name of the tenant
+        :type display_name: str | unicode
+        :param metadata: Metadata info.
+        :type metadata: [dict]
+        :returns: True if the update was successful else False.
         :rtype: bool
         :raise c8.exceptions.TenantUpdateError: If update fails.
-
-        Here is an example entry for parameter **users**:
-
-        .. code-block:: python
-
-            {
-                'username': 'john',
-                'password': 'password',
-                'active': True,
-                'extra': {'Department': 'IT'}
-            }
         """
-        data = {'name': name}
-        data['passwd'] = passwd
-        data['extra'] = extra
+        data = {}
+        data['active'] = active
+        data['status'] = status
+        if display_name is not None:
+            data['displayName'] = display_name
+        if metadata is not None:
+            data['metadata'] = metadata
 
         request = Request(
             method='patch',
@@ -254,7 +253,7 @@ class Tenant(APIWrapper):
                 raise TenantUpdateError(resp, request)
             return True
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="")
 
     def get_tenant_details(self, name):
         """Get the details of the tenant.
@@ -438,13 +437,15 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler, customPrefix="/_api")
 
-    def create_user(self, username, email, password, active=True, extra=None):
+    def create_user(self, email, password, display_name=None, active=True, extra=None):
         """Create a new user.
 
-        :param username: Username.
-        :type username: str | unicode
-        :param password: Password.
+        :param email: Email address of the user.
+        :type email: str | unicode
+        :param password: Password to be set for the user.
         :type password: str | unicode
+        :param display_name: Display name for the user.
+        :type display_name: str | unicode
         :param active: True if user is active, False otherwise.
         :type active: bool
         :param extra: Additional data for the user.
@@ -453,7 +454,9 @@ class Tenant(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.UserCreateError: If create fails.
         """
-        data = {'user': username, 'email': email, 'passwd': password, 'active': active}
+        data = {'email': email, 'passwd': password, 'active': active}
+        if display_name is not None:
+            data['displayName'] = display_name
         if extra is not None:
             data['extra'] = extra
 
@@ -474,13 +477,19 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler, customPrefix="/_api")
 
-    def update_user(self, username, password=None, active=None, extra=None):
+    def update_user(self, username, password=None, display_name=None, email=None, is_verified=None, active=None, extra=None):
         """Update a user.
 
         :param username: Username.
         :type username: str | unicode
         :param password: New password.
         :type password: str | unicode
+        :param display_name: New display name for the user.
+        :type display_name: str | unicode
+        :param email: New email for the user.
+        :type email: str | unicode
+        :param is_verified: Whether the email is verified or not.
+        :type is_verified: bool
         :param active: Whether the user is active.
         :type active: bool
         :param extra: Additional data for the user.
@@ -492,9 +501,14 @@ class Tenant(APIWrapper):
         data = {}
         if password is not None:
             data['passwd'] = password
+        if display_name is not None:
+            data['displayName'] = display_name
+        if email is not None and is_verified is not None:
+            new_email = {'email': email, 'isVerified': is_verified}
+            data['newEmail'] = new_email
         if active is not None:
             data['active'] = active
-        if extra is not None and "queries" not in data["extra"]:
+        if extra is not None:
             data['extra'] = extra
 
         request = Request(
@@ -511,44 +525,6 @@ class Tenant(APIWrapper):
                 'active': resp.body['active'],
                 'extra': resp.body['extra'],
             }
-
-        return self._execute(request, response_handler, customPrefix="/_api")
-
-    def replace_user(self, username, password, active=None, extra=None):
-        """Replace a user.
-
-        :param username: Username.
-        :type username: str | unicode
-        :param password: New password.
-        :type password: str | unicode
-        :param active: Whether the user is active.
-        :type active: bool
-        :param extra: Additional data for the user.
-        :type extra: dict
-        :returns: New user details.
-        :rtype: dict
-        :raise c8.exceptions.UserReplaceError: If replace fails.
-        """
-        data = {'user': username, 'passwd': password}
-        if active is not None:
-            data['active'] = active
-        if extra is not None:
-            data['extra'] = extra
-
-        request = Request(
-            method='put',
-            endpoint='/user/{user}'.format(user=username),
-            data=data
-        )
-
-        def response_handler(resp):
-            if resp.is_success:
-                return {
-                    'username': resp.body['user'],
-                    'active': resp.body['active'],
-                    'extra': resp.body['extra'],
-                }
-            raise UserReplaceError(resp, request)
 
         return self._execute(request, response_handler, customPrefix="/_api")
 
