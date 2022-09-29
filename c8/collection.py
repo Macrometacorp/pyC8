@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
-import pandas
+import csv
 
 from numbers import Number
 
@@ -362,64 +362,39 @@ class Collection(APIWrapper):
         return self._execute(request, response_handler)
 
     def export(self,
+               offset=None,
                limit=None,
-               count=False,
-               batch_size=None,
-               flush=False,
-               flush_wait=None,
-               ttl=None,
-               filter_fields=None,
-               filter_type='include'):  # pragma: no cover
-        """Export all documents in the collection using a server cursor.
+               order=None):
+        """Export all documents in the collection.
 
-        :param flush: If set to True, flush the write-ahead log prior to the
-            export. If set to False, documents in the write-ahead log during
-            the export are not included in the result.
-        :type flush: bool
-        :param flush_wait: Max wait time in seconds for write-ahead log flush.
-        :type flush_wait: int
-        :param count: Include the document count in the server cursor.
-        :type count: bool
-        :param batch_size: Max number of documents in the batch fetched by
-            the cursor in one round trip.
-        :type batch_size: int
-        :param limit: Max number of documents fetched by the cursor.
+        :param offset: This option can be used to simulate paging.
+        :type offset: int
+        :param limit: This option can be used to simulate paging. Limits the result. Maximum: 1000.
         :type limit: int
-        :param ttl: Time-to-live for the cursor on the server.
-        :type ttl: int
-        :param filter_fields: Document fields to filter with.
-        :type filter_fields: [str | unicode]
-        :param filter_type: Allowed values are "include" or "exclude".
-        :type filter_type: str | unicode
-        :returns: Document cursor.
-        :rtype: c8.cursor.Cursor
+        :param order: Sorts the result in specified order. Allowed values are "asc" or "desc".
+        :type order: str | unicode
+        :returns: Documents in the collection.
+        :rtype: dict
         :raise c8.exceptions.DocumentGetError: If export fails.
         """
-        data = {'count': count, 'flush': flush}
-        if flush_wait is not None:
-            data['flushWait'] = flush_wait
-        if batch_size is not None:
-            data['batchSize'] = batch_size
+        data = {}
+        if offset is not None:
+            data['offset'] = offset
         if limit is not None:
             data['limit'] = limit
-        if ttl is not None:
-            data['ttl'] = ttl
-        if filter_fields is not None:
-            data['restrict'] = {
-                'fields': filter_fields,
-                'type': filter_type
-            }
+        if order=="asc" or order=="desc":
+            data['order'] = order
+
         request = Request(
-            method='post',
-            endpoint='/bulk/export',
-            params={'collection': self.name},
-            data=data
+            method='get',
+            endpoint='/export/{}'.format(self.name),
+            params=data
         )
 
         def response_handler(resp):
             if not resp.is_success:
                 raise DocumentGetError(resp, request)
-            return Cursor(self._conn, resp.body, 'export')
+            return resp.body['result']
 
         return self._execute(request, response_handler)   
 
@@ -1067,15 +1042,21 @@ class StandardCollection(Collection):
         :rtype: bool | dict
         :raise c8.exceptions.DocumentInsertError: If insert fails.
         """
-        chunksize = 5000
+        data = csv.DictReader(open(csv_filepath, newline=''))
+        data_dict = {}
         index = 0
         result = []
-        for data in pandas.read_csv(csv_filepath, chunksize=chunksize,
-                                    iterator=True):
-            data = data.to_dict()
-            documents, index = self.get_documents_from_file(data, index)
-            resp = self.insert_many(documents, return_new, sync, silent)
-            result.append(resp)
+        for row in data:
+            for column, value in row.items():
+                data_dict.setdefault(column, {index: value})
+                temp_dict = data_dict.get(column)
+                temp_dict.update({index: value})
+            index += 1
+
+        documents, index = self.get_documents_from_file(data_dict, 0)
+        resp = self.insert_many(documents, return_new, sync, silent)
+        result.append(resp)
+
         return result
 
     def insert(self, document, return_new=False, sync=None, silent=False):
@@ -1698,13 +1679,9 @@ class StandardCollection(Collection):
 
     def import_bulk(self,
                     documents,
-                    halt_on_error=True,
                     details=True,
-                    from_prefix=None,
-                    to_prefix=None,
-                    overwrite=None,
-                    on_duplicate=None,
-                    sync=None):
+                    primaryKey=None,
+                    replace=False):
         """Insert multiple documents into the collection.
 
         This is faster than :func:`c8.collection.Collection.insert_many`
@@ -1714,68 +1691,36 @@ class StandardCollection(Collection):
             "_key" or "_id" fields, the values are used as the keys of the new
             documents (auto-generated otherwise). Any "_rev" field is ignored.
         :type documents: [dict]
-        :param halt_on_error: Halt the entire import on an error.
-        :type halt_on_error: bool
         :param details: If set to True, the returned result will include an
             additional list of detailed error messages.
         :type details: bool
-        :param from_prefix: String prefix prepended to the value of "_from"
-            field in each edge document inserted. For example, prefix "foo"
-            prepended to "_from": "bar" will result in "_from": "foo/bar".
-            Applies only to edge collections.
-        :type from_prefix: str | unicode
-        :param to_prefix: String prefix prepended to the value of "_to" field
-            in edge document inserted. For example, prefix "foo" prepended to
-            "_to": "bar" will result in "_to": "foo/bar". Applies only to edge
-            collections.
-        :type to_prefix: str | unicode
-        :param overwrite: If set to True, all existing documents are removed
-            prior to the import. Indexes are still preserved.
-        :type overwrite: bool
-        :param on_duplicate: Action to take on unique key constraint violations
-            (for documents with "_key" fields). Allowed values are "error" (do
-            not import the new documents and count them as errors), "update"
-            (update the existing documents while preserving any fields missing
-            in the new ones), "replace" (replace the existing documents with
-            new ones), and  "ignore" (do not import the new documents and count
-            them as ignored, as opposed to counting them as errors). Options
-            "update" and "replace" may fail on secondary unique key constraint
-            violations.
-        :type on_duplicate: str | unicode
-        :param sync: Block until operation is synchronized to disk.
-        :type sync: bool
+        :param primaryKey: If not None then uses this field as the primary key for
+            the documents to be inserted.
+        :type primaryKey: str | unicode
+        :param replace: Action to take on unique key constraint violations
+            (for documents with "_key" fields). A bool "replace" if set to true replaces 
+            the existing documents with new ones else it won't replace the documents and
+            count it as "error".
+        :type replace: bool
         :returns: Result of the bulk import.
         :rtype: dict
         :raise c8.exceptions.DocumentInsertError: If import fails.
         """
+        data = {}
         documents = [self._ensure_key_from_id(doc) for doc in documents]
+        data['data'] = documents
 
-        params = {
-            'type': 'array',
-            'collection': self.name,
-            'complete': halt_on_error,
-            'details': details,
-        }
-        if halt_on_error is not None:
-            params['complete'] = halt_on_error
         if details is not None:
-            params['details'] = details
-        if from_prefix is not None:
-            params['fromPrefix'] = from_prefix
-        if to_prefix is not None:
-            params['toPrefix'] = to_prefix
-        if overwrite is not None:
-            params['overwrite'] = overwrite
-        if on_duplicate is not None:
-            params['onDuplicate'] = on_duplicate
-        if sync is not None:
-            params['waitForSync'] = sync
+            data['details'] = details
+        if primaryKey is not None:
+            data['primaryKey'] = primaryKey
+        if replace is not None:
+            data['replace'] = replace
 
         request = Request(
             method='post',
-            endpoint='/bulk/import',
-            data=documents,
-            params=params
+            endpoint='/import/{}'.format(self.name),
+            data=data
         )
 
         def response_handler(resp):

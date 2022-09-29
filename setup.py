@@ -14,8 +14,7 @@ setup(
     url='https://www.macrometa.io',
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
-    install_requires=['requests==2.25.1', 'six', 'websocket-client==0.57.0',
-                      'pandas>=0.24.2'],
+    install_requires=['requests==2.25.1', 'six', 'websocket-client==0.57.0'],
     tests_require=['pytest', 'mock', 'flake8'],
     classifiers=[
         'Intended Audience :: Developers',

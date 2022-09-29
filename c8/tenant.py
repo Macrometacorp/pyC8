@@ -10,15 +10,12 @@ from c8.executor import (
 
 from c8.exceptions import (
     TenantDcListError,
-    TenantUpdateError,
     TenantListError,
     TenantCreateError,
     TenantDeleteError,
     TenantUpdateError,
+    TenantDetailsError,
     PermissionListError,
-    PermissionGetError,
-    PermissionResetError,
-    PermissionUpdateError,
     UserCreateError,
     UserDeleteError,
     UserGetError,
@@ -38,7 +35,11 @@ from c8.exceptions import (
     ClearStreamAccessLevel,
     SetBillingAccessLevel,
     BillingAcessLevel,
-    ClearBillingAccessLevel
+    ClearBillingAccessLevel,
+    GetAttributes,
+    UpdateAttributes,
+    RemoveAllAttributes,
+    RemoveAttribute
 )
 
 __all__ = ['Tenant']
@@ -153,7 +154,7 @@ class Tenant(APIWrapper):
                 retval.append(item['tenant'])
             return retval
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="")
 
     def has_tenant(self, name):
         """Check if a tenant exists.
@@ -255,6 +256,27 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler, customPrefix="")
 
+    def get_tenant_details(self, name):
+        """Get the details of the tenant.
+
+        :param name: Tenant name.
+        :type name: str | unicode
+        :returns: Tenant Details
+        :rtype: dict
+        :raise c8.exceptions.TenantDetailsError: If retrieval of details fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/_api/tenant/{tenantname}'.format(tenantname=name)
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise TenantDetailsError(resp, request)
+            return resp.body['result']
+
+        return self._execute(request, response_handler, customPrefix="")
+
     def delete_tenant(self, name, ignore_missing=False):
         """Delete the tenant.
 
@@ -279,7 +301,7 @@ class Tenant(APIWrapper):
                 raise TenantDeleteError(resp, request)
             return resp.body['result']
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="")
 
     def dclist(self, detail=False):
         """Return the list of names of Datacenters
@@ -305,7 +327,7 @@ class Tenant(APIWrapper):
                 dc_list.append(dc['name'])
             return dc_list
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="")
 
     def localdc(self, detail=True):
         """Return the list of local Datacenters
@@ -328,7 +350,7 @@ class Tenant(APIWrapper):
                 return resp.body
             return resp.body["name"]
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="")
 
     def assign_dc_spot(self, dc, spot_region=False):
         """Assigns spot region of a fed
@@ -352,7 +374,7 @@ class Tenant(APIWrapper):
                 raise SpotRegionAssignError(resp, request)
             return True
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="")
         
     ###################
     # User Management #
@@ -389,7 +411,7 @@ class Tenant(APIWrapper):
                 'extra': record['extra'],
             } for record in resp.body['result']]
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     def user(self, username):
         """Return user details.
@@ -414,7 +436,7 @@ class Tenant(APIWrapper):
                 'extra': resp.body['extra']
             }
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     def create_user(self, email, password, display_name=None, active=True, extra=None):
         """Create a new user.
@@ -454,7 +476,7 @@ class Tenant(APIWrapper):
                 'extra': resp.body['extra'],
             }
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     def update_user(self, username, password=None, display_name=None, email=None, is_verified=None, active=None, extra=None):
         """Update a user.
@@ -505,7 +527,7 @@ class Tenant(APIWrapper):
                 'extra': resp.body['extra'],
             }
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     def delete_user(self, username, ignore_missing=False):
         """Delete a user.
@@ -531,7 +553,7 @@ class Tenant(APIWrapper):
                 return False
             raise UserDeleteError(resp, request)
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
 
     def list_accessible_databases_user(self, username, full=False):
@@ -556,11 +578,10 @@ class Tenant(APIWrapper):
                return resp.body['result']
             raise DataBaseError(resp, request)
 
-        return self._execute(request, response_handler)
-
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     def get_database_access_level_user(self, username, databasename=""):
-        """Lists accessible databases for a user.
+        """Fetch the access level for a specific database.
 
         :param username: Username.
         :type username: str | unicode
@@ -580,11 +601,11 @@ class Tenant(APIWrapper):
                return resp.body['result']
             raise DataBaseError(resp, request)
 
-        return self._execute(request, response_handler)
-
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     def remove_database_access_level_user(self, username, databasename=""):
-        """Lists accessible databases for a user.
+        """Clear the access level for the specific database of user. 
+        As consequence the default database access level is used.
 
         :param username: Username.
         :type username: str | unicode
@@ -604,10 +625,10 @@ class Tenant(APIWrapper):
                return resp.body
             raise DataBaseError(resp, request)
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     def set_database_access_level_user(self, username, databasename="", grant='ro'):
-        """Lists accessible databases for a user.
+        """Set the access levels for the specific database of user.
 
         :param username: Username.
         :type username: str | unicode
@@ -635,7 +656,7 @@ class Tenant(APIWrapper):
                return resp.body
             raise DataBaseError(resp, request)
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
 
     def get_collection_access_level_user(self, username, collection_name, databasename='_system'):
@@ -662,8 +683,7 @@ class Tenant(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
-
+        return self._execute(request, response_handler, customPrefix="/_api")
     
     def set_collection_access_level_user(self, username, collection_name, databasename='_system',
                                      grant='ro'):
@@ -698,8 +718,7 @@ class Tenant(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
-
+        return self._execute(request, response_handler, customPrefix="/_api")
     
     def clear_collection_access_level_user(self, username, collection_name, databasename='_system'):
        
@@ -730,12 +749,11 @@ class Tenant(APIWrapper):
                 elif resp.body['error'] is True:
                     return False
                 
-        return self._execute(request, response_handler)
-
+        return self._execute(request, response_handler, customPrefix="/_api")
 
 
     def list_accessible_streams_user(self, username, databasename='_system', full=False):
-        """Fetch the list of streams available to the specified keyid.
+        """Fetch the list of streams available to the specified user.
  
         :param databasename: Name of the database
         :type databasename: string
@@ -758,10 +776,9 @@ class Tenant(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
-
+        return self._execute(request, response_handler, customPrefix="/_api")
     
-    def get_stream_access_level_user(self, username, streamname, databasename='_system', local=False):
+    def get_stream_access_level_user(self, username, streamname, databasename='_system'):
         """Fetch the database access level for a specific stream.
 
         :param streamname: Name of the stream
@@ -772,17 +789,12 @@ class Tenant(APIWrapper):
         :rtype: string
         :raise c8.exceptions.StreamAccessLevel: If request fails.
         """
-        if local is False:
-            url = '/user/{}/database/{}/stream/{}?global=True'.format(username,
-                                                                 databasename,
-                                                                 streamname)
-        elif local is True:
-            url = '/user/{}/database/{}/stream/{}?global=False'.format(username,
-                                                                 databasename,
-                                                                 streamname)
+
         request = Request(
             method='get',
-            endpoint=url
+            endpoint='/user/{}/database/{}/stream/{}'.format(username,
+                                                             databasename,
+                                                             streamname)
         )
 
         def response_handler(resp):
@@ -791,10 +803,9 @@ class Tenant(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
-
+        return self._execute(request, response_handler, customPrefix="/_api")
     
-    def set_stream_access_level_user(self, username, streamname, databasename='_system', grant='ro', local=False):
+    def set_stream_access_level_user(self, username, streamname, databasename='_system', grant='ro'):
        
         """Set the database access level for a specific stream.
 
@@ -810,18 +821,12 @@ class Tenant(APIWrapper):
         :rtype: Object
         :raise c8.exceptions.SetStreamAccessLevel: If request fails.
         """
-        if local is False:
-            url = '/user/{}/database/{}/stream/{}?global=True'.format(username,
-                                                                 databasename,
-                                                                 streamname)
-        elif local is True:
-            url = '/user/{}/database/{}/stream/{}?global=False'.format(username,
-                                                                 databasename,
-                                                                 streamname)
 
         request = Request(
             method='put',
-            endpoint=url,
+            endpoint='/user/{}/database/{}/stream/{}'.format(username,
+                                                             databasename,
+                                                             streamname),
             data={
                 "grant": grant
             }
@@ -833,10 +838,9 @@ class Tenant(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
-
+        return self._execute(request, response_handler, customPrefix="/_api")
     
-    def clear_stream_access_level_user(self, username, streamname, databasename='_system', local=False):
+    def clear_stream_access_level_user(self, username, streamname, databasename='_system'):
        
         """Clear the database access level for a specific stream.
 
@@ -849,19 +853,11 @@ class Tenant(APIWrapper):
         :raise c8.exceptions.ClearStreamAccessLevel: If request fails.
         """
 
-        if local is False:
-            url = '/user/{}/database/{}/stream/{}?global=True'.format(username,
-                                                                 databasename,
-                                                                 streamname)
-        elif local is True:
-            url = '/user/{}/database/{}/stream/{}?global=False'.format(username,
-                                                                 databasename,
-                                                                 streamname)
-
         request = Request(
             method='delete',
-            endpoint=url
-           
+            endpoint='/user/{}/database/{}/stream/{}'.format(username,
+                                                             databasename,
+                                                             streamname)
         )
 
         def response_handler(resp):
@@ -873,7 +869,7 @@ class Tenant(APIWrapper):
                 elif resp.body['error'] is True:
                     return False
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
 
     def get_billing_access_level_user(self, username):
@@ -885,7 +881,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='get',
-            endpoint='/user/{}/billing'.format(username),
+            endpoint='/user/{}/billing'.format(username)
         )
 
         def response_handler(resp):
@@ -894,18 +890,17 @@ class Tenant(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
-
+        return self._execute(request, response_handler, customPrefix="/_api")
     
-    def set_billing_access_level(self, username, grant='ro'):
+    def set_billing_access_level_user(self, username, grant='ro'):
        
-        """Set the collection access level for billing.
+        """Set the billing access level for user.
 
         :param grant: Use "rw" to set the database access level to Administrate .
                       Use "ro" to set the database access level to Access.
                       Use "none" to set the database access level to No access.
         :type grant: string
-        :returns: Accesslevel of a particular db.
+        :returns: Billing Accesslevel of a particular user.
         :rtype: Object
         :raise c8.exceptions.SetBillingAccessLevel: If request fails.
         """
@@ -923,10 +918,9 @@ class Tenant(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
-
+        return self._execute(request, response_handler, customPrefix="/_api")
     
-    def clear_billing_access_level(self, username):
+    def clear_billing_access_level_user(self, username):
        
         """Clear the billing access level.
 
@@ -936,7 +930,7 @@ class Tenant(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/user/{}/billing'.format(username),
+            endpoint='/user/{}/billing'.format(username)
            
         )
 
@@ -946,8 +940,97 @@ class Tenant(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
+
+    def get_attributes_user(self, username):
+       
+        """Fetch the list of attributes for the specified user.
+
+        :returns: All attributes for the specified user.
+        :rtype: dict
+        :raise c8.exceptions.GetAttributes: If request fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/user/{}/attributes'.format(username) 
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise GetAttributes(resp, request)
+            else:
+                return resp.body
+                
+        return self._execute(request, response_handler, customPrefix="/_api")
+
+    def update_attributes_user(self, username, attributes):
+       
+        """Update the list of attributes for the specified user.
+
+        :param attributes: The key-value pairs of attributes with values that needs to be updated.
+        :type attributes: dict
+        :returns: The updated attributes.
+        :rtype: Object
+        :raise c8.exceptions.GetAUpdateAttributesttributes: If request fails.
+        """
+        request = Request(
+            method='put',
+            endpoint='/user/{}/attributes'.format(username),
+            data=attributes
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise UpdateAttributes(resp, request)
+            else:
+                return resp.body
+                
+        return self._execute(request, response_handler, customPrefix="/_api")
+
+    def remove_all_attributes_user(self, username):
+       
+        """Remove all attributes of the specified user.
+
+        :returns: True if operation successful.
+        :rtype: booleaan
+        :raise c8.exceptions.RemoveAllAttributes: If request fails.
+        """
+        request = Request(
+            method='delete',
+            endpoint='/user/{}/attributes/truncate'.format(username)
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RemoveAllAttributes(resp, request)
+            else:
+                return resp.body
+                
+        return self._execute(request, response_handler, customPrefix="/_api")
+
+    def remove_attribute_user(self, username, attributeid):
+       
+        """Remove the specified attribute for the specified user.
+
+        :param attributeid: Name of the attribute
+        :type attributeid: string
+        :returns: True if operation successful.
+        :rtype: booleaan
+        :raise c8.exceptions.RemoveAttribute: If request fails.
+        """
+        request = Request(
+            method='delete',
+            endpoint='/user/{}/attributes/{}'.format(username, attributeid)
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RemoveAttribute(resp, request)
+            else:
+                return resp.body
+                
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     #########################
     # Permission Management #
@@ -973,92 +1056,4 @@ class Tenant(APIWrapper):
                 return resp.body['result']
             raise PermissionListError(resp, request)
 
-        return self._execute(request, response_handler)
-
-    def permission(self, username, fabric, collection=None):
-        """Return user permission for a specific fabric or collection.
-
-        :param username: Username.
-        :type username: str | unicode
-        :param fabric: fabric name.
-        :type fabric: str | unicode
-        :param collection: Collection name.
-        :type collection: str | unicode
-        :returns: Permission for given fabric or collection.
-        :rtype: str | unicode
-        :raise: c8.exceptions.PermissionGetError: If retrieval fails.
-        """
-        endpoint = '/user/{}/database/{}'.format(username, fabric)
-        if collection is not None:
-            endpoint += '/' + collection
-        request = Request(method='get', endpoint=endpoint)
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise PermissionGetError(resp, request)
-            return resp.body['result']
-
-        return self._execute(request, response_handler)
-
-    def update_permission(self,
-                          username,
-                          permission,
-                          fabric,
-                          collection=None):
-        """Update user permission for a specific fabric or collection.
-
-        :param username: Username.
-        :type username: str | unicode
-        :param fabric: fabric name.
-        :type fabric: str | unicode
-        :param collection: Collection name.
-        :type collection: str | unicode
-        :param permission: Allowed values are "rw" (read and write), "ro"
-            (read only) or "none" (no access).
-        :type permission: str | unicode
-        :returns: True if access was granted successfully.
-        :rtype: bool
-        :raise c8.exceptions.PermissionUpdateError: If update fails.
-        """
-        endpoint = '/user/{}/database/{}'.format(username, fabric)
-        if collection is not None:
-            endpoint += '/' + collection
-
-        request = Request(
-            method='put',
-            endpoint=endpoint,
-            data={'grant': permission}
-        )
-
-        def response_handler(resp):
-            if resp.is_success:
-                return True
-            raise PermissionUpdateError(resp, request)
-
-        return self._execute(request, response_handler)
-
-    def reset_permission(self, username, fabric, collection=None):
-        """Reset user permission for a specific fabric or collection.
-
-        :param username: Username.
-        :type username: str | unicode
-        :param fabric: fabric name.
-        :type fabric: str | unicode
-        :param collection: Collection name.
-        :type collection: str | unicode
-        :returns: True if permission was reset successfully.
-        :rtype: bool
-        :raise c8.exceptions.PermissionRestError: If reset fails.
-        """
-        endpoint = '/user/{}/database/{}'.format(username, fabric)
-        if collection is not None:
-            endpoint += '/' + collection
-
-        request = Request(method='delete', endpoint=endpoint)
-
-        def response_handler(resp):
-            if resp.is_success:
-                return True
-            raise PermissionResetError(resp, request)
-
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
