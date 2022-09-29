@@ -1,25 +1,19 @@
 # PyC8
 
-Welcome to the GitHub page for **pyC8**, a Python SDK for the Global Data Network.
+Python SDK for the Macrometa Global Data Network.
 
-### Features
-
-
-- Clean Pythonic interface.
-- Lightweight.
-
-### Compatibility
+# Compatibility
 
 - Python versions 3.4, 3.5 and 3.6 are supported.
 
-### Developer environment
+# Developer environment
 To enable developer environment position ourselves to project's root and run:
 
 ```bash
 pip install -r requirements/dev.txt
 ```
 
-### Build & Install
+# Build & Install
 
 To build package we need to position ourselves to project's root and run:
 
@@ -32,40 +26,60 @@ To install locally,
  $ python setup.py build
 ```
 
-### Getting Started
+# Run end-to-end tests
+End-to-end tests can be found in tests/e2e.
+Before first run create .env file in tests/e2e/.
+In .env file add variables:
 
-The driver allows you to use three ways for authentication:-
+* FEDERATION_URL="<>"
+* FABRIC="<>"
+* TENANT_EMAIL="<>"
+* TENANT_PASSWORD="<>"
+* API_KEY="<>"
+* TOKEN="<>"
 
-1. Using the email id and password
+.env file is in .gitignore.
+
+To run tests position yourself in the project's root while your virtual environment is active and run:
+```bash
+python -m pytest
+```
+
+
+# Getting Started
+
+The SDK allows you to use three ways for authentication:
+
+1. Using the email and password
 
 ```python
   
-  # Auth email password
+  # Authentication email and password
   client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
    email="user@example.com", password="XXXXX")
 ```
 
-2. Using jwt
+2. Using bearer token
 
 ```python
 
-# Auth with token
+# Authentication with bearer token
 client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
- token=<your tokeb>)
+ token=<your token>)
 
 ```
 
 
-3. Using apikey
+3. Using api key
 
 ```python
 
-# AUh with api key
+# Authentication with api key
 
 client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
  apikey=<your api key>)
 ```
-Here is an overview example:
+## Usage:
 
 ```python
 
