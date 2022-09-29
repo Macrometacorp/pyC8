@@ -20,7 +20,6 @@ from c8.exceptions import (
     UserDeleteError,
     UserGetError,
     UserListError,
-    UserReplaceError,
     UserUpdateError,
     SpotRegionAssignError,
     DataBaseError,
