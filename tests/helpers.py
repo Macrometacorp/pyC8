@@ -18,7 +18,7 @@ def generate_fabric_name():
     :return: Random fabric name.
     :rtype: str | unicode
     """
-    return 'test_fabric_{}'.format(uuid4().hex)
+    return 'test_fabric_{}'.format(str(uuid4().hex)[:10])
 
 
 def generate_col_name():
@@ -72,7 +72,7 @@ def generate_username():
     :return: Random username.
     :rtype: str | unicode
     """
-    return 'test_user_{}'.format(uuid4().hex)
+    return 'test_user_{}'.format(str(uuid4().hex)[:10])
 
 
 def generate_string():
@@ -81,7 +81,7 @@ def generate_string():
     :return: Random unique string.
     :rtype: str | unicode
     """
-    return uuid4().hex
+    return f"Mm_{str(uuid4().hex)[:7]}4$"
 
 
 def generate_service_mount():

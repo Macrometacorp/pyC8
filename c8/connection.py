@@ -177,9 +177,8 @@ class Connection(object):
         # Below line is a debug to show what the full request URL is.
         # Useful in testing multitenancy API calls
         # if '_tenant' in request.endpoint and '_fabric' in request.endpoint:
-        if '_fabric' in request.endpoint:
+        if '/_fabric' in request.endpoint:
             find_url = self._url_prefix.find('/_fabric')
-            find_url += 1
             url = self._url_prefix[0:find_url]
             final_url = url + request.endpoint
         else:
