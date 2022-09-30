@@ -405,6 +405,8 @@ class Tenant(APIWrapper):
             if not resp.is_success:
                 raise UserListError(resp, request)
             return [{
+                'display_name': record['displayName'],
+                'email': record['email'],
                 'username': record['user'],
                 'active': record['active'],
                 'extra': record['extra'],
@@ -430,6 +432,8 @@ class Tenant(APIWrapper):
             if not resp.is_success:
                 raise UserGetError(resp, request)
             return {
+                'display_name': resp.body['displayName'],
+                'email': resp.body['email'],
                 'username': resp.body['user'],
                 'active': resp.body['active'],
                 'extra': resp.body['extra']
@@ -470,6 +474,8 @@ class Tenant(APIWrapper):
             if not resp.is_success:
                 raise UserCreateError(resp, request)
             return {
+                'display_name': resp.body['displayName'],
+                'email': resp.body['email'],
                 'username': resp.body['user'],
                 'active': resp.body['active'],
                 'extra': resp.body['extra'],
@@ -521,6 +527,8 @@ class Tenant(APIWrapper):
             if not resp.is_success:
                 raise UserUpdateError(resp, request)
             return {
+                'display_name': resp.body['displayName'],
+                'email': resp.body['email'],
                 'username': resp.body['user'],
                 'active': resp.body['active'],
                 'extra': resp.body['extra'],
