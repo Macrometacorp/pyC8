@@ -216,7 +216,7 @@ class Fabric(APIWrapper):
         """
 
         request = Request(method='put',
-                          endpoint='_fabric/{}/database/{}'.format(
+                          endpoint='/_fabric/{}/database/{}'.format(
                               fabric, new_dc))
 
         def response_handler(resp):
@@ -393,37 +393,17 @@ class Fabric(APIWrapper):
         :param name: Spot Region name, if spot_creation_type is set to
                      SPOT_REGION
         :type name: str
-        :param users: List of users with access to the new fabric, where each
-            user is a dictionary with fields "username", "password", "active"
-            and "extra" (see below for example). If not set, only the admin and
-            current user are granted access.
-        :type users: [dict]
+        :param users: List of users with access to the new fabric
+        :type users: [str | unicode]
         :param dclist: list of strings of datacenters
         :type dclist: [str | unicode]
         :returns: True if fabric was created successfully.
         :rtype: bool
         :raise c8.exceptions.FabricCreateError: If create fails.
-
-        Here is an example entry for parameter **users**:
-
-        .. code-block:: python
-
-            {
-                'username': 'john',
-                'password': 'password',
-                'active': True,
-                'extra': {'Department': 'IT'}
-            }
-
         """
         data = {'name': name}
         if users is not None:
-            data['users'] = [{
-                'username': user['username'],
-                'passwd': user['password'],
-                'active': user.get('active', True),
-                'extra': user.get('extra', {})
-            } for user in users]
+            data['users'] = users
 
         options = {}
         dcl = ''
