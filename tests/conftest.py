@@ -103,9 +103,6 @@ def pytest_unconfigure(config):  # pragma: no cover
     sys_fabric = global_data['sys_fabric']
     client = global_data['client']
 
-    # Remove all test async jobs (To do check async jobs)
-    #sys_fabric.clear_async_jobs()
-
     # Remove all test users.
     for user in client.get_users():
         email = user['email']
