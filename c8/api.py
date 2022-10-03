@@ -1,4 +1,3 @@
-
 __all__ = ['APIWrapper']
 
 
@@ -60,7 +59,6 @@ class APIWrapper(object):
         :rtype: bool
         """
         return self._conn.topic_persistence
-
 
     @property
     def username(self):

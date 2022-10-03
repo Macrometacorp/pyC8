@@ -1,20 +1,29 @@
 # PyC8
 
-Welcome to the GitHub page for **pyC8**, a Python driver for the Digital Edge Fabric.
+![PyPI](https://img.shields.io/pypi/v/pyC8)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyc8)
+![PyPI - Format](https://img.shields.io/pypi/format/pyc8)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/pyc8)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/pyc8)
 
-### Features
+Python SDK for the Macrometa Global Data Network.
 
+---
 
-- Clean Pythonic interface.
-- Lightweight.
+# Compatibility
 
-### Compatibility
+- Python 3.4 is minimum supported version by this library.
 
-- Python versions 3.4, 3.5 and 3.6 are supported.
+# Developer environment
+To enable developer environment position ourselves to project's root and run:
 
-### Build & Install
+```bash
+pip install -r requirements/dev.txt
+```
 
-To build,
+# Build & Install
+
+To build package we need to position ourselves to project's root and run:
 
 ```bash
  $ python setup.py build
@@ -25,114 +34,139 @@ To install locally,
  $ python setup.py build
 ```
 
-### Getting Started
+# Run end-to-end tests
+End-to-end tests can be found in tests/e2e.
+Before first run create .env file in tests/e2e/.
+In .env file add variables:
 
-The driver allows you to use three ways for authentication:-
+* FEDERATION_URL="<>"
+* FABRIC="<>"
+* TENANT_EMAIL="<>"
+* TENANT_PASSWORD="<>"
+* API_KEY="<>"
+* TOKEN="<>"
 
-1. Using the email id and password
+.env file is in .gitignore.
+
+To run tests position yourself in the project's root while your virtual environment is active and run:
+```bash
+python -m pytest
+```
+
+---
+
+# Getting Started
+
+The SDK allows you to use three ways for authentication:
+
+1. Using the email and password
 
 ```python
   
-  # Auth email password
+  # Authentication email and password
   client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
-   email="user@example.com", password="hidden")
+   email="user@example.com", password="XXXXX")
 ```
 
-2. Using jwt
+2. Using bearer token
 
 ```python
 
-# Auth with token
+# Authentication with bearer token
 client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
- token=<your tokeb>)
+ token=<your token>)
 
 ```
 
 
-3. Using apikey
+3. Using api key
 
 ```python
 
-# AUh with api key
+# Authentication with api key
 
 client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
  apikey=<your api key>)
 ```
-Here is an overview example:
+## Usage:
 
 ```python
 
-    from c8 import C8Client
-    import time
-    import warnings
-    warnings.filterwarnings("ignore")
-    region = "gdn1.macrometa.io"
-    demo_tenant = "mytenant@example.com"
-    demo_fabric = "_system"
-    demo_user = "user@example.com"
-    demo_user_name = "root"
-    demo_collection = "employees"
-    demo_stream = "demostream"
-    collname = "employees"
-    #--------------------------------------------------------------
-    print("Create C8Client Connection...")
-    client = C8Client(protocol='https', host=region, port=443,
-                         email=demo_tenant, password='hidden',
-                         geofabric=demo_fabric)
+from c8 import C8Client
+import time
+import warnings
 
-    #--------------------------------------------------------------
-    print("Create Collection and insert documents")
+warnings.filterwarnings("ignore")
+federation = "gdn.paas.macrometa.io"
+demo_tenant = "mytenant@example.com"
+demo_fabric = "_system"
+demo_user = "user@example.com"
+demo_user_name = "root"
+demo_stream = "demostream"
+collname = "employees"
+# --------------------------------------------------------------
+print("Create C8Client Connection...")
+client = C8Client(protocol='https', host=federation, port=443,
+                  email=demo_tenant, password='XXXXX',
+                  geofabric=demo_fabric)
 
-    if client.has_collection(collname):
-      print("Collection exists")
-    else:
-      client.create_collection(name=collname)
+# --------------------------------------------------------------
+print("Create Collection and insert documents")
 
-    # List all Collections
-    coll_list = client.get_collections()
-    print(coll_list)
+if client.has_collection(collname):
+    print("Collection exists")
+else:
+    client.create_collection(name=collname)
 
-    # Filter collection based on collection models DOC/KV/DYNAMO
-    colls = client.get_collections(collectionModel='DOC')
-    print(colls)
+# List all Collections
+coll_list = client.get_collections()
+print(coll_list)
 
-    # Get Collecion Handle and Insert
-    coll = client.get_collection(collname)
-    coll.insert({'firstname': 'John', 'lastname':'Berley', 'email':'john.berley@macrometa.io'})
+# Filter collection based on collection models DOC/KV/DYNAMO
+colls = client.get_collections(collection_model='DOC')
+print(colls)
 
-    # insert document
-    client.insert_document(collection_name=collname, document={'firstname': 'Jean', 'lastname':'Picard',    'email':'jean.picard@macrometa.io'})
-    doc = client.get_document(collname, "John" )
-    print(doc)
+# Get Collecion Handle and Insert
+coll = client.get_collection(collname)
+coll.insert(
+    {'firstname': 'John', 'lastname': 'Berley', 'email': 'john.berley@macrometa.io'})
 
-    # insert multiple documents
-    docs = [
-        {'firstname': 'James', 'lastname':'Kirk', 'email':'james.kirk@macrometa.io'},
-        {'firstname': 'Han', 'lastname':'Solo', 'email':'han.solo@macrometa.io'},
-        {'firstname': 'Bruce', 'lastname':'Wayne', 'email':'bruce.wayne@macrometa.io'}
-    ]
+# insert document
+client.insert_document(collection_name=collname,
+                       document={'firstname': 'Jean', 'lastname': 'Picard',
+                                 'email': 'jean.picard@macrometa.io'})
+doc = client.get_document(collname, "John")
+print(doc)
 
-    client.insert_document(collection_name=collname, document=docs)
+# insert multiple documents
+docs = [
+    {'firstname': 'James', 'lastname': 'Kirk', 'email': 'james.kirk@macrometa.io'},
+    {'firstname': 'Han', 'lastname': 'Solo', 'email': 'han.solo@macrometa.io'},
+    {'firstname': 'Bruce', 'lastname': 'Wayne', 'email': 'bruce.wayne@macrometa.io'}
+]
 
-    # insert documents from file
-    client.insert_document_from_file(collection_name=collname, csv_filepath="/home/user/test.csv")
+client.insert_document(collection_name=collname, document=docs)
 
-    # Add a hash Index
-    client.add_hash_index(collname, fields=['email'], unique=True)
+# insert documents from file
+client.insert_document_from_file(collection_name=collname,
+                                 csv_filepath="/home/user/test.csv")
 
-    #--------------------------------------------------------------
+# Add a hash Index
+client.add_hash_index(collname, fields=['email'], unique=True)
 
-    # Query a collection
-    print("query employees collection...")
-    query = 'FOR employee IN employees RETURN employee'
-    cursor = client.execute_query(query)
-    docs = [document for document in cursor]
-    print(docs)
+# --------------------------------------------------------------
 
-    #--------------------------------------------------------------
-    print("Delete Collection...")
-    # Delete Collection
-    client.delete_collection(name=collname)
+# Query a collection
+print("query employees collection...")
+query = 'FOR employee IN employees RETURN employee'
+cursor = client.execute_query(query)
+docs = [document for document in cursor]
+print(docs)
+
+# --------------------------------------------------------------
+print("Delete Collection...")
+# Delete Collection
+client.delete_collection(name=collname)
 
 ```
 
@@ -144,18 +178,17 @@ Example for **real-time updates** from a collection in fabric:
   import time
   import warnings
   warnings.filterwarnings("ignore")
-  region = "gdn1.macrometa.io"
+  federation = "gdn.paas.macrometa.io"
   demo_tenant = "mytenant@example.com"
   demo_fabric = "_system"
   demo_user = "user@example.com"
   demo_user_name = "root"
-  demo_collection = "employees"
   demo_stream = "demostream"
   collname = "democollection"
   #--------------------------------------------------------------
   print("Create C8Client Connection...")
-  client = C8Client(protocol='https', host=region, port=443,
-                       email=demo_tenant, password='hidden',
+  client = C8Client(protocol='https', host=federation, port=443,
+                       email=demo_tenant, password='XXXXX',
                        geofabric=demo_fabric)
 
   #--------------------------------------------------------------
@@ -179,14 +212,14 @@ Example to **publish** documents to a stream:
   import warnings
   warnings.filterwarnings("ignore")
 
-  region = "gdn1.macrometa.io"
+  federation = "gdn.paas.macrometa.io"
   demo_tenant = "mytenant@example.com"
   demo_fabric = "_system"
   stream = "demostream"
   #--------------------------------------------------------------
   print("publish messages to stream...")
-  client = C8Client(protocol='https', host=region, port=443,
-                       email=demo_tenant, password='hidden',
+  client = C8Client(protocol='https', host=federation, port=443,
+                       email=demo_tenant, password='XXXXX',
                        geofabric=demo_fabric)
 
   producer = client.create_stream_producer(stream)
@@ -210,14 +243,14 @@ Example to **subscribe** documents from a stream:
   import warnings
   warnings.filterwarnings("ignore")
 
-  region = "gdn1.macrometa.io"
+  federation = "gdn.paas.macrometa.io"
   demo_tenant = "mytenant@example.com"
   demo_fabric = "_system"
   stream = "demostream"
   #--------------------------------------------------------------
   print("publish messages to stream...")
-  client = C8Client(protocol='https', host=region, port=443,
-                       email=demo_tenant, password='hidden',
+  client = C8Client(protocol='https', host=federation, port=443,
+                       email=demo_tenant, password='XXXXX',
                        geofabric=demo_fabric)
 
 
@@ -243,14 +276,14 @@ Example: **stream management**:
   import warnings
   warnings.filterwarnings("ignore")
 
-  region = "gdn1.macrometa.io"
+  federation = "gdn.paas.macrometa.io"
   demo_tenant = "mytenant@example.com"
   demo_fabric = "_system"
   stream = "demostream"
   #--------------------------------------------------------------
   print("publish messages to stream...")
-  client = C8Client(protocol='https', host=region, port=443,
-                       email=demo_tenant, password='hidden',
+  client = C8Client(protocol='https', host=federation, port=443,
+                       email=demo_tenant, password='XXXXX',
                        geofabric=demo_fabric)
   
   #get_stream_stats
@@ -273,14 +306,14 @@ Advanced operations can be done using the `sream_colleciton` class.
    import warnings
    warnings.filterwarnings("ignore")
 
-   region = "gdn1.macrometa.io"
+   federation = "gdn.paas.macrometa.io"
    demo_tenant = "mytenant@example.com"
    demo_fabric = "_system"
 
    #--------------------------------------------------------------
    print("consume messages from stream...")
-   client = C8Client(protocol='https', host=region, port=443)
-   demotenant = client.tenant(email=demo_tenant, password='hidden')
+   client = C8Client(protocol='https', host=federation, port=443)
+   demotenant = client.tenant(email=demo_tenant, password='XXXXX')
    fabric = demotenant.useFabric(demo_fabric)
    stream = fabric.stream()
     

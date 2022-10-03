@@ -140,7 +140,9 @@ class C8QL(APIWrapper):
                 intermediate_commit_count=None,
                 intermediate_commit_size=None,
                 skip_inaccessible_collections=None,
-                stream=None):
+                stream=None,
+                sql=False
+                ):
         """Execute the query and return the result cursor.
 
         :param query: Query to execute.
@@ -149,7 +151,7 @@ class C8QL(APIWrapper):
             the result cursor.
         :type count: bool
         :param batch_size: Number of documents fetched by the cursor in one
-            round trip.
+            round trip
         :type batch_size: int
         :param ttl: Server side time-to-live for the cursor in seconds.
         :type ttl: int
@@ -194,6 +196,8 @@ class C8QL(APIWrapper):
         :param stream: Specify *true* and the query runs as a **stream**.
             The query result is not stored on server, but calculated on the fly.
         :type stream: bool
+        :param sql: Specify *true* and write sql query.
+        :type sql: bool
         :return: Result cursor.
         :rtype: c8.cursor.Cursor
         :raise c8.exceptions.C8QLQueryExecuteError: If execute fails.
@@ -237,9 +241,14 @@ class C8QL(APIWrapper):
             dumps(data),
         ) if self._is_transaction else None
 
+        if sql:
+            end_point = '/cursor/sql'
+        else:
+            end_point = '/cursor'
+
         request = Request(
             method='post',
-            endpoint='/cursor',
+            endpoint=end_point,
             data=data,
             command=command
         )
@@ -258,7 +267,7 @@ class C8QL(APIWrapper):
         :type query_id: str | unicode
         :return: True if kill request was sent successfully.
         :rtype: bool
-        :raise c8.exceptions.C8QLQueryKillError: If the send fails.
+        :raise c8.exceptions.C8QLQueryKillError: If send fails.
         """
         request = Request(
             method='delete',

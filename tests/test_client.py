@@ -20,7 +20,7 @@ def test_client_attributes():
         protocol='http',
         host='127.0.0.1',
         port=8529,
-        http_client=session
+        http_client=session,
     )
     assert client.version == __version__
     assert client.protocol == 'http'

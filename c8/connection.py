@@ -1,19 +1,16 @@
 from __future__ import absolute_import, unicode_literals
-import requests
+
 import json
 
-from c8.http import DefaultHTTPClient
+import requests
 
 import c8.constants as constants
-from c8.api import APIWrapper
-
-
 from c8.exceptions import (
-    TenantListError,
     C8AuthenticationError,
     C8TenantNotFoundError,
     C8TokenNotFoundError
 )
+from c8.http import DefaultHTTPClient
 
 __all__ = ['Connection']
 
