@@ -528,10 +528,6 @@ class UserUpdateError(C8ServerError):
     """Failed to update user."""
 
 
-class UserReplaceError(C8ServerError):
-    """Failed to replace user."""
-
-
 class UserDeleteError(C8ServerError):
     """Failed to delete user."""
 

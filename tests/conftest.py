@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals, division
 
 import pytest
+import time
 
 from c8 import C8Client
 from c8.fabric import StandardFabric
@@ -20,25 +21,27 @@ global_data = dict()
 
 
 def pytest_addoption(parser):
-    parser.addoption('--host', action='store', default='127.0.0.1')
-    parser.addoption('--port', action='store', default='8529')
-    parser.addoption('--passwd', action='store', default='passwd')
-    parser.addoption("--complete", action="store_true")
+    parser.addoption('--host', action='store', default='gdn.paas.macrometa.io')
+    parser.addoption('--protocol', action='store', default='https')
+    parser.addoption('--port', action='store', default='443')
+    parser.addoption('--email', action='store', default='nemo@nautilus.com')
+    parser.addoption('--passwd', action='store', default='XXXXXX')
+    parser.addoption('--geofabric', action='store', default='_system')
+    parser.addoption('git--complete', action='store_true')
 
 
 # noinspection PyShadowingNames
 def pytest_configure(config):
     client = C8Client(
-        protocol=config.getoption('protocol'),
         host=config.getoption('host'),
         port=config.getoption('port'),
-        apikey=config.getoption('apy_key')
+        protocol=config.getoption('protocol'),
+        email=config.getoption('email'),
+        password=config.getoption('passwd'),
+        geofabric=config.getoption('geofabric')
     )
-    sys_fabric = client.fabric(
-        name='_system',
-        username='root',
-        password=config.getoption('passwd')
-    )
+    tenant = client.tenant(config.getoption('email'), config.getoption('passwd'))
+    sys_fabric = tenant.useFabric('_system')
 
     # Create a user and non-system fabric for testing.
     username = generate_username()
@@ -47,17 +50,14 @@ def pytest_configure(config):
     bad_fabric_name = generate_fabric_name()
     sys_fabric.create_fabric(
         name=tst_fabric_name,
-        users=[{
-            'active': True,
-            'username': username,
-            'password': password,
-        }]
+        users=['root']
     )
-    tst_fabric = client.fabric(tst_fabric_name, username, password)
-    bad_fabric = client.fabric(bad_fabric_name, username, password)
+    bad_fabric = tenant.useFabric(bad_fabric_name)
+    tst_fabric = tenant.useFabric(tst_fabric_name)
 
     # Create a standard collection for testing.
     col_name = generate_col_name()
+    time.sleep(5)
     tst_col = tst_fabric.create_collection(col_name, edge=False)
     tst_col.add_skiplist_index(['val'])
     tst_col.add_fulltext_index(['text'])
@@ -99,24 +99,19 @@ def pytest_configure(config):
 
 
 # noinspection PyShadowingNames
-def pytest_unconfigure(*_):  # pragma: no cover
+def pytest_unconfigure(config):  # pragma: no cover
     sys_fabric = global_data['sys_fabric']
-
-    # Remove all test async jobs.
-    sys_fabric.clear_async_jobs()
-
-    # Remove all test tasks.
-    for task in sys_fabric.tasks():
-        task_name = task['name']
-        if task_name.startswith('test_task'):
-            sys_fabric.delete_task(task_name, ignore_missing=True)
+    client = global_data['client']
 
     # Remove all test users.
-    for user in sys_fabric.users():
+    for user in client.get_users():
+        email = user['email']
         username = user['username']
-        if username.startswith('test_user'):
-            sys_fabric.delete_user(username, ignore_missing=True)
+        if email.startswith('test_user'):
+            client.delete_user(username, ignore_missing=True)
 
+    tenant = client.tenant(config.getoption('email'), config.getoption('passwd'))
+    sys_fabric = tenant.useFabric('_system')
     # Remove all test fabrics.
     for fabric_name in sys_fabric.fabrics():
         if fabric_name.startswith('test_fabric'):

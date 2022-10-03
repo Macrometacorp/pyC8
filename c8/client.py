@@ -1,9 +1,9 @@
 from __future__ import absolute_import, unicode_literals
 
-from c8 import constants
 from c8.connection import TenantConnection
 from c8.tenant import Tenant
 from c8.version import __version__
+from c8 import constants
 
 __all__ = ['C8Client']
 
@@ -1897,15 +1897,23 @@ class C8Client(object):
 
     # client.create_user
 
-    def create_user(self, username, email, password, active=True, extra=None):
+    def create_user(self, email, password, display_name=None, active=True, extra=None):
         """Create a new user.
 
+<<<<<<< HEAD
         :param username: Username.
         :type username: str | unicode
         :param email: email.
         :type email: str | unicode
         :param password: Password.
+=======
+        :param email: Email address of the user.
+        :type email: str | unicode
+        :param password: Password to be set for the user.
+>>>>>>> master
         :type password: str | unicode
+        :param display_name: Display name for the user.
+        :type display_name: str | unicode
         :param active: True if user is active, False otherwise.
         :type active: bool
         :param extra: Additional data for the user.
@@ -1914,19 +1922,27 @@ class C8Client(object):
         :rtype: dict
         :raise c8.exceptions.UserCreateError: If create fails.
         """
-        return self._tenant.create_user(username=username,
-                                        email=email, password=password,
-                                        active=active, extra=extra)
+        return self._tenant.create_user(email=email, 
+                                        password=password,
+                                        display_name=display_name,
+                                        active=active,
+                                        extra=extra)
 
     # client.update_user
 
-    def update_user(self, username, password=None, active=None, extra=None):
+    def update_user(self, username, password=None, display_name=None, email=None, is_verified=None, active=None, extra=None):
         """Update a user.
 
         :param username: Username.
         :type username: str | unicode
         :param password: New password.
         :type password: str | unicode
+        :param display_name: New display name for the user.
+        :type display_name: str | unicode
+        :param email: New email for the user.
+        :type email: str | unicode
+        :param is_verified: Whether the email is verified or not.
+        :type is_verified: bool
         :param active: Whether the user is active.
         :type active: bool
         :param extra: Additional data for the user.
@@ -1935,28 +1951,13 @@ class C8Client(object):
         :rtype: dict
         :raise c8.exceptions.UserUpdateError: If update fails.
         """
-        return self._tenant.update_user(username=username, password=password,
-                                        active=active, extra=extra)
-
-    # client.replace_user
-
-    def replace_user(self, username, password, active=None, extra=None):
-        """Replace a user.
-
-        :param username: Username.
-        :type username: str | unicode
-        :param password: New password.
-        :type password: str | unicode
-        :param active: Whether the user is active.
-        :type active: bool
-        :param extra: Additional data for the user.
-        :type extra: dict
-        :returns: New user details.
-        :rtype: dict
-        :raise c8.exceptions.UserReplaceError: If replace fails.
-        """
-        return self._tenant.replace_user(username=username, password=password,
-                                         active=active, extra=extra)
+        return self._tenant.update_user(username=username,
+                                        password=password,
+                                        display_name=display_name,
+                                        email=email,
+                                        is_verified=is_verified,
+                                        active=active,
+                                        extra=extra)
 
     # client.delete_user
 
@@ -2708,36 +2709,4 @@ class C8Client(object):
         :rtype: dict
         """
         return self._search.get_analyzer_definition(name)
-
-    # def fabric(self, tenant, name, email, password, verify=False):
-    #     """Connect to a fabric and return the fabric API wrapper.
-
-    #     :param name: Fabric name.
-    #     :type name: str | unicode
-    #     :param username: Username for basic authentication.
-    #     :type username: str | unicode
-    #     :param password: Password for basic authentication.
-    #     :type password: str | unicode
-    #     :param verify: Verify the connection by sending a test request.
-    #     :type verify: bool
-    #     :returns: Standard fabric API wrapper.
-    #     :rtype: c8.fabric.StandardFabric
-    #     :raise c8.exceptions.ServerConnectionError: If **verify** was set
-    #         to True and the connection to C8Db fails.
-    #     """
-    #     connection = FabricConnection(
-    #         url=self._url, stream_port=self._stream_port, tenant=tenant,
-    #         fabric=name, email=email, password=password,
-    #         http_client=self._http_client
-    #     )
-    #     fabric = StandardFabric(connection)
-
-    #     if verify:  # Check the server connection by making a read API call
-    #         try:
-    #             fabric.ping()
-    #         except ServerConnectionError as err:
-    #             raise err
-    #         except Exception as err:
-    #             raise ServerConnectionError('bad connection: {}'.format(err))
-
-    #     return fabric
+    
