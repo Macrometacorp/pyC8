@@ -3,75 +3,72 @@ from __future__ import absolute_import, unicode_literals
 from six import string_types
 
 from c8.exceptions import (
-    DatabasePropertiesError,
+    FabricPropertiesError,
     UserCreateError,
     UserDeleteError,
     UserGetError,
-    UserListError,
-    UserReplaceError,
     UserUpdateError,
+    C8AuthenticationError
 )
 from tests.helpers import (
     assert_raises,
     extract,
-    generate_db_name,
     generate_username,
     generate_string,
 )
 
 
-def test_user_management(sys_db, bad_db):
+def test_user_management(client):
     # Test create user
-    username = generate_username()
+    display_name = generate_username()
+    email = f"{display_name}@macrometa.com"
     password = generate_string()
-    assert not sys_db.has_user(username)
-
-    new_user = sys_db.create_user(
-        username=username,
+    new_user = client.create_user(
+        email = email,
+        display_name=display_name,
         password=password,
         active=True,
         extra={'foo': 'bar'},
     )
-    assert new_user['username'] == username
+    assert new_user['display_name'] == display_name
+    assert new_user['email'] == email
     assert new_user['active'] is True
     assert new_user['extra'] == {'foo': 'bar'}
-    assert sys_db.has_user(username)
 
-    # Test create duplicate user
+    # Test has user
+    username = new_user['username']
+    assert client.has_user(username)
+
+    # Test create user using duplicate email
     with assert_raises(UserCreateError) as err:
-        sys_db.create_user(
-            username=username,
+        client.create_user(
+            email = email,
             password=password
         )
-    assert err.value.error_code == 1702
+    assert err.value.error_code == 100012
 
     # Test list users
-    for user in sys_db.users():
+    for user in client.get_users():
         assert isinstance(user['username'], string_types)
         assert isinstance(user['active'], bool)
         assert isinstance(user['extra'], dict)
-    assert sys_db.user(username) == new_user
-
-    # Test list users with bad fabric
-    with assert_raises(UserListError) as err:
-        bad_db.users()
-    assert err.value.error_code == 1228
+    assert client.get_user(username) == new_user
 
     # Test get user
-    users = sys_db.users()
+    users = client.get_users()
     for user in users:
         assert 'active' in user
         assert 'extra' in user
         assert 'username' in user
-    assert username in extract('username', sys_db.users())
+    assert username in extract('username', client.get_users())
 
     # Test get missing user
     with assert_raises(UserGetError) as err:
-        sys_db.user(generate_username())
+        client.get_user(generate_username())
     assert err.value.error_code == 1703
 
     # Update existing user
-    new_user = sys_db.update_user(
+    new_user = client.update_user(
         username=username,
         password=password,
         active=False,
@@ -80,113 +77,66 @@ def test_user_management(sys_db, bad_db):
     assert new_user['username'] == username
     assert new_user['active'] is False
     assert new_user['extra'] == {'bar': 'baz'}
-    assert sys_db.user(username) == new_user
+    assert client.get_user(username) == new_user
 
     # Update missing user
     with assert_raises(UserUpdateError) as err:
-        sys_db.update_user(
-            username=generate_username(),
-            password=generate_string()
-        )
-    assert err.value.error_code == 1703
-
-    # Replace existing user
-    new_user = sys_db.replace_user(
-        username=username,
-        password=password,
-        active=False,
-        extra={'baz': 'qux'},
-    )
-    assert new_user['username'] == username
-    assert new_user['active'] is False
-    assert new_user['extra'] == {'baz': 'qux'}
-    assert sys_db.user(username) == new_user
-
-    # Replace missing user
-    with assert_raises(UserReplaceError) as err:
-        sys_db.replace_user(
+        client.update_user(
             username=generate_username(),
             password=generate_string()
         )
     assert err.value.error_code == 1703
 
     # Delete an existing user
-    assert sys_db.delete_user(username) is True
+    assert client.delete_user(username) is True
 
     # Delete a missing user
     with assert_raises(UserDeleteError) as err:
-        sys_db.delete_user(username, ignore_missing=False)
+        client.delete_user(username, ignore_missing=False)
     assert err.value.error_code == 1703
-    assert sys_db.delete_user(username, ignore_missing=True) is False
+    assert client.delete_user(username, ignore_missing=True) is False
 
 
-def test_user_change_password(client, sys_db):
-    username = generate_username()
+def test_user_change_password(client, sys_fabric):
+    display_name = generate_username()
+    email = f"{display_name}@macrometa.com"
     password1 = generate_string()
     password2 = generate_string()
 
-    sys_db.create_user(username, password1)
-    sys_db.update_permission(username, 'rw', sys_db.name)
+    new_user = client.create_user(
+        email = email,
+        display_name=display_name,
+        password=password1,
+        active=True,
+        extra={'foo': 'bar'},
+    )
 
-    db1 = client.db(sys_db.name, username, password1)
-    db2 = client.db(sys_db.name, username, password2)
+    username = new_user['username']
+    client.set_database_access_level_user(username, sys_fabric.name, 'rw')
+
+    user1 = client.tenant(email, password1)
+    db1 = user1.useFabric(sys_fabric.name)
 
     # Check authentication
     assert isinstance(db1.properties(), dict)
-    with assert_raises(DatabasePropertiesError) as err:
-        db2.properties()
-    assert err.value.http_code == 401
+    with assert_raises(C8AuthenticationError) as err:
+        client.tenant(email, password2)
+    assert "\"errorNum\":401" in str(err.value)
 
     # Update the user password and check again
-    sys_db.update_user(username, password2)
+    client.update_user(username, password2)
+    user2 = client.tenant(email, password2)
+    db2 = user2.useFabric(sys_fabric.name)
     assert isinstance(db2.properties(), dict)
-    with assert_raises(DatabasePropertiesError) as err:
+    with assert_raises(FabricPropertiesError) as err:
         db1.properties()
     assert err.value.http_code == 401
 
     # Replace the user password back and check again
-    sys_db.update_user(username, password1)
+    client.update_user(username, password1)
+    user1 = client.tenant(email, password1)
+    db1 = user1.useFabric(sys_fabric.name)
     assert isinstance(db1.properties(), dict)
-    with assert_raises(DatabasePropertiesError) as err:
+    with assert_raises(FabricPropertiesError) as err:
         db2.properties()
-    assert err.value.http_code == 401
-
-
-def test_user_create_with_new_fabric(client, sys_db):
-    db_name = generate_db_name()
-
-    username1 = generate_username()
-    username2 = generate_username()
-    username3 = generate_username()
-
-    password1 = generate_string()
-    password2 = generate_string()
-    password3 = generate_string()
-
-    result = sys_db.create_fabric(
-        name=db_name,
-        users=[
-            {'username': username1, 'password': password1, 'active': True},
-            {'username': username2, 'password': password2, 'active': True},
-            {'username': username3, 'password': password3, 'active': False},
-        ]
-    )
-    assert result is True
-
-    # Test if the users were created properly
-    usernames = extract('username', sys_db.users())
-    assert all(u in usernames for u in [username1, username2, username3])
-
-    # Test if the first user has access to the fabric
-    db = client.db(db_name, username1, password1)
-    db.properties()
-
-    # Test if the second user also has access to the fabric
-    db = client.db(db_name, username2, password2)
-    db.properties()
-
-    # Test if the third user has access to the fabric (should not)
-    db = client.db(db_name, username3, password3)
-    with assert_raises(DatabasePropertiesError) as err:
-        db.properties()
     assert err.value.http_code == 401

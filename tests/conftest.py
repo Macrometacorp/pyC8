@@ -27,7 +27,7 @@ def pytest_addoption(parser):
     parser.addoption('--email', action='store', default='nemo@nautilus.com')
     parser.addoption('--passwd', action='store', default='XXXXXX')
     parser.addoption('--geofabric', action='store', default='_system')
-    parser.addoption('git--complete', action='store_true')
+    parser.addoption('--complete', action='store_true')
 
 
 # noinspection PyShadowingNames
