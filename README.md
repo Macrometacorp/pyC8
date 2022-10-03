@@ -1,10 +1,18 @@
 # PyC8
 
+![PyPI](https://img.shields.io/pypi/v/pyC8)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyc8)
+![PyPI - Format](https://img.shields.io/pypi/format/pyc8)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/pyc8)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/pyc8)
+
 Python SDK for the Macrometa Global Data Network.
+
+---
 
 # Compatibility
 
-- Python versions 3.4, 3.5 and 3.6 are supported.
+- Python 3.4 is minimum supported version by this library.
 
 # Developer environment
 To enable developer environment position ourselves to project's root and run:
@@ -45,6 +53,7 @@ To run tests position yourself in the project's root while your virtual environm
 python -m pytest
 ```
 
+---
 
 # Getting Started
 
