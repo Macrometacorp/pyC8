@@ -18,7 +18,7 @@ from c8.exceptions import (
     SetStreamAccessLevel,
     ClearStreamAccessLevel,
     SetBillingAccessLevel,
-    BillingAcessLevel,
+    BillingAccessLevel,
     ClearBillingAccessLevel
 )
 
@@ -444,7 +444,7 @@ class APIKeys(APIWrapper):
 
         def response_handler(resp):
             if not resp.is_success:
-                raise BillingAcessLevel(resp, request)
+                raise BillingAccessLevel(resp, request)
             else:
                 return resp.body['result']
                 
