@@ -29,6 +29,13 @@ def generate_col_name():
     """
     return 'test_collection_{}'.format(uuid4().hex)
 
+def generate_stream_name():
+    """Generate and return a random collection name.
+
+    :return: Random collection name.
+    :rtype: str | unicode
+    """
+    return 'test_stream_{}'.format(uuid4().hex)
 
 def generate_graph_name():
     """Generate and return a random graph name.
