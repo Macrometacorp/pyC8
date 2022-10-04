@@ -86,8 +86,10 @@ class C8ServerError(C8Error):
 class C8AuthenticationError(C8ClientError):
     """Failed to authenticate C8 User"""
 
+
 class C8TenantNotFoundError(C8ClientError):
     """Failed to get Tenant Name"""
+
 
 class C8TokenNotFoundError(C8ClientError):
     """Failed to get Token"""
@@ -142,6 +144,7 @@ class StreamCommunicationError(C8ServerError):
 class StreamEventError(C8ClientError):
     """Failed to process the event from C8 stream."""
 
+
 class StreamBadInputError(C8ClientError):
     """If the request doesn’t have the expected format"""
 
@@ -172,6 +175,7 @@ class TenantUpdateError(C8ServerError):
 
 class TenantDeleteError(C8ServerError):
     """Failed to delete tenant."""
+
 
 class TenantDetailsError(C8ServerError):
     """Failed to retrieve tenant details."""
@@ -483,6 +487,7 @@ class IndexCreateError(C8ServerError):
 class IndexDeleteError(C8ServerError):
     """Failed to delete collection index."""
 
+
 class GetIndexError(C8ServerError):
     """Failed to return the specified Index"""
     
@@ -543,6 +548,7 @@ class GetDataBaseAccessLevel(C8ServerError):
 # Permission Exceptions #
 #########################
 
+
 class PermissionListError(C8ServerError):
     """Failed to list user permissions."""
 
@@ -592,8 +598,10 @@ class EventGetError(C8ServerError):
 class EventDeleteError(C8ServerError):
     """Failed to delete the event."""
 
+
 class StreamAppGetSampleError(C8ServerError):
     """Error while retriving sample stream apps."""
+
 
 class StreamAppChangeActiveStateError(C8ServerError):
     """Error while changing active state of stream app."""
@@ -606,14 +614,18 @@ class StreamAppChangeActiveStateError(C8ServerError):
 class ListCollections(C8ServerError):
     """Failed to fetch the list of collections that use KV."""
 
+
 class CreateCollectionError(C8ServerError):
     """Failed to Create the given namesace/collection."""
+
 
 class DeleteCollectionError(C8ServerError):
     """Failed to Delete the given namespace/collection"""
 
+
 class InsertKVError(C8ServerError):
     """Failed to insert kv pair"""
+
 
 class DeleteEntryForKey(C8ServerError):
     """Failed to Delete entry for the specified key/keys"""
@@ -622,8 +634,10 @@ class DeleteEntryForKey(C8ServerError):
 class GetValueError(C8ServerError):
     """Failed to fetch the value for the specified key/keys"""
 
+
 class GetKeysError(C8ServerError):
     """Failed to get keys for the collection """
+
 
 class GetCountError(C8ServerError):
     """Failed to get the kv count for the collection"""
@@ -636,50 +650,66 @@ class GetCountError(C8ServerError):
 class CreateAPIKey(C8ServerError):
     """Failed to create API Key"""
 
+
 class RemoveAPIKey(C8ServerError):
     """Failed to remove API Key"""
+
 
 class GetAPIKeys(C8ServerError):
     """Failed to fetch the API keys"""
 
+
 class ListDataBases(C8ServerError):
     """Failed to fetch the databases for the specified key"""
+
 
 class DataBaseAccessLevel(C8ServerError):
     """Failed to fetch the database access level for the specified database"""
 
+
 class SetDataBaseAccessLevel(C8ServerError):
     """Failed to set the database access level for the specified database"""
+
 
 class ClearDataBaseAccessLevel(C8ServerError):
     """Failed to clear the database access level for the specified database"""
 
+
 class CollectionAccessLevel(C8ServerError):
     """Failed to fetch the database access level for the specified collection"""
+
 
 class SetCollectionAccessLevel(C8ServerError):
     """Failed to set the database access level for the specified collection"""
 
+
 class ClearCollectionAccessLevel(C8ServerError):
     """Failed to clear the database access level for the specified collection"""
+
 
 class StreamAccessLevel(C8ServerError):
     """Failed to fetch the database access level for the specified collection"""
 
+
 class SetStreamAccessLevel(C8ServerError):
     """Failed to set the database access level for the specified collection"""
+
 
 class ClearStreamAccessLevel(C8ServerError):
     """Failed to clear the database access level for the specified collection"""
 
+
 class ListStreams(C8ServerError):
     """Failed to fetch the streams for the specified key"""
+
 
 class BillingAcessLevel(C8ServerError):
     """Failed to fetch the billing access level"""
 
+
 class SetBillingAccessLevel(C8ServerError):
     """Failed to set the billing access level"""
+
 
 class ClearBillingAccessLevel(C8ServerError):
     """Failed to clear the billing access level"""
@@ -688,74 +718,98 @@ class ClearBillingAccessLevel(C8ServerError):
 # Search #
 #######################
 
+
 class SearchCollectionSetError(C8ServerError):
     """Failed to set search capabilities for given collection"""
+
 
 class SearchCollectionInvalidArgument(C8ServerError):
     """Invalid arguments supplied"""
 
+
 class SearchCollectionForbiddenError(C8ServerError):
     """Permission denied for the specified collection"""
+
 
 class SearchError(C8ServerError):
     """Failed to search given search string"""
 
+
 class SearchInvalidArgumentError(C8ServerError):
     """Invalid arguments supplied"""
+
 
 class SearchForbiddenError(C8ServerError):
     """Permission denied for the specified collection"""
 
+
 class SearchNotExistError(C8ServerError):
     """Collection does not exist or search is disabled for this collection"""
+
 
 class ViewCreateError(C8ServerError):
     """Failed to create view"""
 
+
 class ViewCreateViewNameMissingError(C8ServerError):
     """The view-name is missing, then a HTTP 400 is returned."""
+
 
 class ViewCreateViewNameUnknownError(C8ServerError):
     """The view-name is unknown, then a HTTP 404 is returned."""
 
+
 class ViewGetError(C8ServerError):
     """Failed to get view information"""
+
 
 class ViewNotFoundError(C8ServerError):
     """View does not exist"""
 
+
 class ViewRenameError(C8ServerError):
     """Failed to rename view"""
+
 
 class ViewDeleteError(C8ServerError):
     """Failed to delete view"""
 
+
 class ViewGetPropertiesError(C8ServerError):
     """Failed to get properties of given view"""
+
 
 class ViewUpdatePropertiesError(C8ServerError):
     """Failed to update properties of given view"""
 
+
 class AnalyzerListError(C8ServerError):
     """Failed to get list of all available analyzers"""
+
 
 class AnalyzerCreateError(C8ServerError):
     """Failed to create analyzer"""
 
+
 class AnalyzerInvalidParametersError(C8ServerError):
     """Invalid parameters provided"""
+
 
 class AnanlyzerForbiddenError(C8ServerError):
     """User does not have permission to create analyzers"""
 
+
 class AnalyzerDeleteError(C8ServerError):
     """Failed to delete analyzer"""
+
 
 class AnalyzerGetDefinitionError(C8ServerError):
     """Failed to get analyzer definition"""
 
+
 class AnalyzerNotFoundError(C8ServerError):
     """Analyzer configuration not found"""
+
 
 class AnalyzerConflictError(C8ServerError):
     """The analyzer is still in use"""
@@ -764,14 +818,18 @@ class AnalyzerConflictError(C8ServerError):
 # Attributes #
 #######################
 
+
 class GetAttributes(C8ServerError):
     """Failed to fetch the Attributes for the specified user"""
+
 
 class UpdateAttributes(C8ServerError):
     """Failed to update attributes for the specified user"""
 
+
 class RemoveAllAttributes(C8ServerError):
     """Failed to remove all the attributes for the specified user"""
+
 
 class RemoveAttribute(C8ServerError):
     """Failed to remove the given attribute for the specified user"""

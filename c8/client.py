@@ -1900,17 +1900,9 @@ class C8Client(object):
     def create_user(self, email, password, display_name=None, active=True, extra=None):
         """Create a new user.
 
-<<<<<<< HEAD
-        :param username: Username.
-        :type username: str | unicode
-        :param email: email.
-        :type email: str | unicode
-        :param password: Password.
-=======
         :param email: Email address of the user.
         :type email: str | unicode
         :param password: Password to be set for the user.
->>>>>>> master
         :type password: str | unicode
         :param display_name: Display name for the user.
         :type display_name: str | unicode
@@ -2709,4 +2701,36 @@ class C8Client(object):
         :rtype: dict
         """
         return self._search.get_analyzer_definition(name)
+
+    def redis_set(self, key, value, collection):
+        """
+        Set key to hold the string value. If key already holds a value,
+        it is overwritten, regardless of its type. Any previous time to live
+        associated with the key is discarded on successful SET operation.
+
+        :param key: Key of the data
+        :type key: str
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.set(key, value, collection)
+
+    def redis_get(self, key, collection):
+        """
+        Get the value of key. If the key does not exist the special value nil is
+        returned. An error is returned if the value stored at key is not a string,
+        because GET only handles string values.
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.get(key, collection)
     

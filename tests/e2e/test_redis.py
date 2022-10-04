@@ -18,7 +18,7 @@ Make sure that nba collection exists on fabric.
 """
 
 
-def test_sql_endpoint():
+def test_redis_set():
     load_dotenv()
     client = C8Client(protocol='https',
                       host=os.environ.get('FEDERATION_URL'),
@@ -28,13 +28,7 @@ def test_sql_endpoint():
                       geofabric=os.environ.get('FABRIC')
                       )
 
-    cursor = client.execute_query('SELECT * FROM newnba', sql=True)
-    docs = [doc for doc in cursor]
-
-    entries = ('_id', '_key', '_rev')
-    for doc in docs:
-        for key in entries:
-            if key in doc:
-                del doc[key]
-
-    assert response_content() == docs
+    response = client.redis_set("foo", "bar", "DinoRedisDB")
+    # Idea!!!
+    # client.Redis.redis_set()
+    print(response)
