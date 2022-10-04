@@ -2004,7 +2004,7 @@ class C8Client(object):
         :type databasename: str | unicode
         :returns: Access Details
         :rtype: string
-        :raise c8.exceptions.DataBaseError: If request fails.
+        :raise c8.exceptions.GetDataBaseAccessLevel: If request fails.
         """
         return self._tenant.get_database_access_level_user(username=username,
                                                            databasename=databasename)
@@ -2021,7 +2021,7 @@ class C8Client(object):
         :type databasename: str | unicode
         :returns: Object containing database details
         :rtype: object
-        :raise c8.exceptions.DataBaseError: If request fails.
+        :raise c8.exceptions.ClearDataBaseAccessLevel: If request fails.
         """
         return self._tenant.remove_database_access_level_user(username=username,
                                                               databasename=databasename)
@@ -2042,11 +2042,27 @@ class C8Client(object):
         :type grant: string
         :returns: Object containing database details
         :rtype: object
-        :raise c8.exceptions.DataBaseError: If request fails.
+        :raise c8.exceptions.SetDataBaseAccessLevel: If request fails.
         """
         return self._tenant.set_database_access_level_user(username=username,
                                                            databasename=databasename,
                                                            grant=grant)
+
+    # client.list_accessible_collections_user
+
+    def list_accessible_collections_user(self, username, databasename='_system'):
+        """Fetch the collection access level for a specific collection in a database.
+
+        :param username: Name of the user
+        :type username: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :returns: Fetch the list of collections access level for a specific user.
+        :rtype: string
+        :raise c8.exceptions.CollectionAccessLevel: If request fails.
+        """
+        return self._tenant.list_accessible_collections_user(username=username,
+                                                             databasename=databasename)
 
     # client.get_collection_access_level_user
 
@@ -2223,7 +2239,7 @@ class C8Client(object):
         :rtype: Object
         :raise c8.exceptions.SetBillingAccessLevel: If request fails.
         """
-        return self._tenant.set_billing_access_level(username=username, grant=grant)
+        return self._tenant.set_billing_access_level_user(username=username, grant=grant)
 
     # client.clear_billing_access_level
 
@@ -2235,7 +2251,7 @@ class C8Client(object):
         :rtype: booleaan
         :raise c8.exceptions.ClearBillingAccessLevel: If request fails.
         """
-        return self._tenant.clear_billing_access_level(username=username)
+        return self._tenant.clear_billing_access_level_user(username=username)
 
     # client.get_attributes_user
 
@@ -2259,7 +2275,7 @@ class C8Client(object):
         :type attributes: dict
         :returns: The updated attributes.
         :rtype: Object
-        :raise c8.exceptions.GetAUpdateAttributesttributes: If request fails.
+        :raise c8.exceptions.UpdateAttributes: If request fails.
         """
         return self._tenant.update_attributes_user(username=username,
                                                    attributes=attributes)
