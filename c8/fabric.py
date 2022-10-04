@@ -996,7 +996,7 @@ class Fabric(APIWrapper):
         def response_handler(resp):
            code = resp.status_code
            if resp.is_success:
-               return resp.body['result']
+               return True
            elif code == 403:
                raise StreamPermissionError(resp, request)
            elif code == 412:
