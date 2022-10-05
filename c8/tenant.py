@@ -666,21 +666,24 @@ class Tenant(APIWrapper):
 
         return self._execute(request, response_handler, customPrefix="/_api")
 
-    def list_accessible_collections_user(self, username, databasename='_system'):
+    def list_accessible_collections_user(self, username, databasename='_system', full=False):
         """Fetch the collection access level for a specific collection in a database.
 
         :param username: Name of the user
         :type username: string
         :param databasename: Name of the database
         :type databasename: string
+        :param full: Return the full set of access levels for all collections.
+        :type full: boolean
         :returns: Fetch the list of collections access level for a specific user.
         :rtype: string
         :raise c8.exceptions.CollectionAccessLevel: If request fails.
         """
         request = Request(
             method='get',
-            endpoint='/user/{}/database/{}/collection/'.format(username,
-                                                               databasename),
+            endpoint='/user/{}/database/{}/collection?full={}'.format(username,
+                                                                      databasename,
+                                                                      full),
         )
 
         def response_handler(resp):
@@ -1025,8 +1028,8 @@ class Tenant(APIWrapper):
         """Remove all attributes of the specified user.
 
         :returns: True if operation successful.
-        :rtype: booleaan
-        :raise c8.exceptions.RemoveAllAttributes: If request fails.
+        :returns: All attributes for the specified user.
+        :rtype: dict
         """
         request = Request(
             method='delete',
@@ -1047,8 +1050,8 @@ class Tenant(APIWrapper):
 
         :param attributeid: Name of the attribute
         :type attributeid: string
-        :returns: True if operation successful.
-        :rtype: booleaan
+        :returns: All attributes for the specified user.
+        :rtype: dict
         :raise c8.exceptions.RemoveAttribute: If request fails.
         """
         request = Request(
