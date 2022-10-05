@@ -5,6 +5,7 @@ import json
 
 from c8.exceptions import (
     CreateAPIKey,
+    GetAPIKeys,
     RemoveAPIKey,
     ListDataBases,
     DataBaseAccessLevel,
@@ -19,7 +20,11 @@ from c8.exceptions import (
     ClearStreamAccessLevel,
     SetBillingAccessLevel,
     BillingAccessLevel,
-    ClearBillingAccessLevel
+    ClearBillingAccessLevel,
+    GetAttributes,
+    UpdateAttributes,
+    RemoveAllAttributes,
+    RemoveAttribute
 )
 
 class APIKeys(APIWrapper):
@@ -58,9 +63,28 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
-    
+    def get_api_key(self):
+        """Fetch details of an api key.
+        :param keyid: Id of the key to be fetched.
+        :type name: str | unicode
+        :return: Details of the api key.
+        :rtype: dict
+        :raise c8.exceptions.GetAPIKeys: If request fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/key/{}'.format(self._keyid),
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise GetAPIKeys(resp, request)
+            return resp.body
+
+        return self._execute(request, response_handler, customPrefix="/_api")
+
     def remove_api_key(self):
         """Removes an api key.
         :param keyid: Id of the key to be created.
@@ -83,7 +107,7 @@ class APIKeys(APIWrapper):
                 else:
                     return False
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     
     def list_accessible_databases(self):
@@ -104,7 +128,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     
     def get_database_access_level(self, databasename):
@@ -128,7 +152,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     
     def set_database_access_level(self, databasename, grant='ro'):
@@ -159,7 +183,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     
     def clear_database_access_level(self, databasename):
@@ -187,9 +211,35 @@ class APIKeys(APIWrapper):
                 elif resp.body['error'] is True:
                     return False
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
 #------------------------------------------------------------------------
+
+    def list_accessible_collections(self, databasename='_system', full=False):
+        """Fetch all the accessible collections in a database.
+
+        :param databasename: Name of the database
+        :type databasename: string
+        :param full: Return the full set of access levels for all collections.
+        :type full: boolean
+        :return: AccessLevel of a db.
+        :rtype: string
+        :raise c8.exceptions.CollectionAccessLevel: If request fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/key/{}/database/{}/collection?full={}'.format(self._keyid,
+                                                                     databasename,
+                                                                     full),
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise CollectionAccessLevel(resp, request)
+            else:
+                return resp.body['result']
+
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     def get_collection_access_level(self, collection_name, databasename='_system'):
         """Fetch the collection access level for a specific collection in a database.
@@ -215,7 +265,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     
     def set_collection_access_level(self, collection_name, databasename='_system',
@@ -251,7 +301,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     
     def clear_collection_access_level(self, collection_name, databasename='_system'):
@@ -283,7 +333,7 @@ class APIKeys(APIWrapper):
                 elif resp.body['error'] is True:
                     return False
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
 #---------------------------------------------------------------------------
 
@@ -311,7 +361,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     
     def get_stream_access_level(self, streamname, databasename='_system', local=False):
@@ -344,7 +394,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     
     def set_stream_access_level(self, streamname, databasename='_system', grant='ro', local=False):
@@ -386,7 +436,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     
     def clear_stream_access_level(self, streamname, databasename='_system', local=False):
@@ -426,7 +476,7 @@ class APIKeys(APIWrapper):
                 elif resp.body['error'] is True:
                     return False
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
 #-----------------------------------------------------------------------------
 
@@ -448,7 +498,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     
     def set_billing_access_level(self, grant='ro'):
@@ -477,7 +527,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     
     def clear_billing_access_level(self):
@@ -500,4 +550,95 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
+
+#-----------------------------------------------------------------------------
+
+    def get_attributes(self):
+        """Fetch the list of attributes.
+
+        :returns: All attributes for the apikey.
+        :rtype: dict
+        :raise c8.exceptions.GetAttributes: If request fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/key/{}/attributes'.format(self._keyid),
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise GetAttributes(resp, request)
+            else:
+                return resp.body
+                
+        return self._execute(request, response_handler, customPrefix="/_api")
+
+    
+    def update_attributes(self, attributes):
+        """Update the list of attributes.
+
+        :param attributes: The key-value pairs of attributes with values that needs to be updated.
+        :type attributes: dict
+        :returns: The updated attributes.
+        :rtype: Object
+        :raise c8.exceptions.UpdateAttributes: If request fails.
+        """
+        request = Request(
+            method='put',
+            endpoint='/key/{}/attributes'.format(self._keyid),
+            data=attributes
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise UpdateAttributes(resp, request)
+            else:
+                return resp.body
+                
+        return self._execute(request, response_handler, customPrefix="/_api")
+
+    
+    def remove_all_attributes(self):
+        """Remove all attributes.
+
+        :returns: All attributes for the apikey.
+        :rtype: dict
+        :raise c8.exceptions.RemoveAllAttributes: If request fails.
+        """
+        request = Request(
+            method='delete',
+            endpoint='/key/{}/attributes/truncate'.format(self._keyid),
+           
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RemoveAllAttributes(resp, request)
+            else:
+                return resp.body
+                
+        return self._execute(request, response_handler, customPrefix="/_api")
+
+    def remove_attribute(self, attributeid):
+
+        """Remove the specified attribute.
+
+        :returns: All attributes for the apikey.
+        :rtype: dict
+        :raise c8.exceptions.RemoveAllAttributes: If request fails.
+        """
+        request = Request(
+            method='delete',
+            endpoint='/key/{}/attributes/{}'.format(self._keyid, attributeid),
+           
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RemoveAttribute(resp, request)
+            else:
+                return resp.body
+                
+        return self._execute(request, response_handler, customPrefix="/_api")
+    
