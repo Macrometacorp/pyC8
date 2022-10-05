@@ -213,7 +213,6 @@ class APIKeys(APIWrapper):
                 
         return self._execute(request, response_handler, customPrefix="/_api")
 
-#------------------------------------------------------------------------
 
     def list_accessible_collections(self, databasename='_system', full=False):
         """Fetch all the accessible collections in a database.
@@ -335,7 +334,6 @@ class APIKeys(APIWrapper):
                 
         return self._execute(request, response_handler, customPrefix="/_api")
 
-#---------------------------------------------------------------------------
 
     def list_accessible_streams(self, databasename='_system', full=False):
         """Fetch the list of streams available to the specified keyid.
@@ -478,7 +476,6 @@ class APIKeys(APIWrapper):
                 
         return self._execute(request, response_handler, customPrefix="/_api")
 
-#-----------------------------------------------------------------------------
 
     def get_billing_access_level(self):
         """Fetch the billing access level.
@@ -552,7 +549,6 @@ class APIKeys(APIWrapper):
                 
         return self._execute(request, response_handler, customPrefix="/_api")
 
-#-----------------------------------------------------------------------------
 
     def get_attributes(self):
         """Fetch the list of attributes.
