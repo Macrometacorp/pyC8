@@ -2050,19 +2050,22 @@ class C8Client(object):
 
     # client.list_accessible_collections_user
 
-    def list_accessible_collections_user(self, username, databasename='_system'):
+    def list_accessible_collections_user(self, username, databasename='_system', full=False):
         """Fetch the collection access level for a specific collection in a database.
 
         :param username: Name of the user
         :type username: string
         :param databasename: Name of the database
         :type databasename: string
+        :param full: Return the full set of access levels for all collections.
+        :type full: boolean
         :returns: Fetch the list of collections access level for a specific user.
         :rtype: string
         :raise c8.exceptions.CollectionAccessLevel: If request fails.
         """
         return self._tenant.list_accessible_collections_user(username=username,
-                                                             databasename=databasename)
+                                                             databasename=databasename,
+                                                             full=full)
 
     # client.get_collection_access_level_user
 
@@ -2476,6 +2479,12 @@ class C8Client(object):
     def list_all_api_keys(self):
         return self._fabric.list_all_api_keys()
 
+    # client.get_api_key
+
+    def get_api_key(self, keyid):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.get_api_key()
+
     # client.remove_api_key
 
     def remove_api_key(self, keyid):
@@ -2493,7 +2502,6 @@ class C8Client(object):
     def get_database_access_level(self, keyid, databasename):
         """Fetch the database access level for a specific database.
 
-
         :param databasename: Name of the database
         :type databasename: string
         :returns: AccessLevel of a db.
@@ -2510,6 +2518,10 @@ class C8Client(object):
     def clear_database_access_level(self, keyid, databasename):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.clear_database_access_level(databasename)
+
+    def list_accessible_collections(self, keyid, databasename='_system', full=False):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.list_accessible_collections(databasename, full)
 
     def get_collection_access_level(self, keyid, collection_name,
                                     databasename='_system'):
@@ -2559,6 +2571,22 @@ class C8Client(object):
     def clear_billing_access_level(self, keyid):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.clear_billing_access_level()
+
+    def get_attributes(self, keyid):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.get_attributes()
+
+    def update_attributes(self, keyid, attributes):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.update_attributes(attributes)
+
+    def remove_all_attributes(self, keyid):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.remove_all_attributes()
+
+    def remove_attribute(self, keyid, attributeid):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.remove_attribute(attributeid)
 
     def set_search(self, collection, enable, field):
         """Set search capability of a collection (enabling or disabling it). 
