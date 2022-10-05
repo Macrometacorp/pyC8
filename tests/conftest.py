@@ -129,6 +129,11 @@ def pytest_unconfigure(config):  # pragma: no cover
         if stream_name.startswith('c8globals.test_stream'):
             sys_fabric.delete_stream(stream_name)
 
+   # Remove all test apikeys.
+    for apikey in sys_fabric.list_all_api_keys():
+        apikey_id = apikey['keyid']
+        if apikey_id.startswith('test_apikey_id'):
+            client.remove_api_key(apikey_id)
 
 # noinspection PyProtectedMember
 def pytest_generate_tests(metafunc):
