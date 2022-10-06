@@ -21,11 +21,11 @@ global_data = dict()
 
 
 def pytest_addoption(parser):
-    parser.addoption('--host', action='store', default='nightly.eng.macrometa.io')
+    parser.addoption('--host', action='store', default='gdn.paas.macrometa.io')
     parser.addoption('--protocol', action='store', default='https')
     parser.addoption('--port', action='store', default='443')
-    parser.addoption('--email', action='store', default='edgar.garcia.qa@macrometa.com')
-    parser.addoption('--passwd', action='store', default='121@Macrometa')
+    parser.addoption('--email', action='store', default='nemo@nautilus.com')
+    parser.addoption('--passwd', action='store', default='XXXXXX')
     parser.addoption('--geofabric', action='store', default='_system')
     parser.addoption('--complete', action='store_true')
 
