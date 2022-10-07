@@ -711,7 +711,7 @@ class ListStreams(C8ServerError):
     """Failed to fetch the streams for the specified key"""
 
 
-class BillingAcessLevel(C8ServerError):
+class BillingAccessLevel(C8ServerError):
     """Failed to fetch the billing access level"""
 
 

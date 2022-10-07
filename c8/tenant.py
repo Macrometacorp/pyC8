@@ -25,6 +25,7 @@ from c8.exceptions import (
     DataBaseError,
     GetDataBaseAccessLevel,
     SetDataBaseAccessLevel,
+    ClearDataBaseAccessLevel,
     SetCollectionAccessLevel,
     CollectionAccessLevel,
     ClearCollectionAccessLevel,
@@ -33,7 +34,7 @@ from c8.exceptions import (
     SetStreamAccessLevel,
     ClearStreamAccessLevel,
     SetBillingAccessLevel,
-    BillingAcessLevel,
+    BillingAccessLevel,
     ClearBillingAccessLevel,
     GetAttributes,
     UpdateAttributes,
@@ -596,7 +597,7 @@ class Tenant(APIWrapper):
         :type databasename: str | unicode
         :returns: Access Details
         :rtype: string
-        :raise c8.exceptions.DataBaseError: If request fails.
+        :raise c8.exceptions.GetDataBaseAccessLevel: If request fails.
         """
         request = Request(
             method='get',
@@ -606,7 +607,7 @@ class Tenant(APIWrapper):
         def response_handler(resp):
             if resp.is_success:
                return resp.body['result']
-            raise DataBaseError(resp, request)
+            raise GetDataBaseAccessLevel(resp, request)
 
         return self._execute(request, response_handler, customPrefix="/_api")
 
@@ -620,7 +621,7 @@ class Tenant(APIWrapper):
         :type databasename: str | unicode
         :returns: Object containing database details
         :rtype: object
-        :raise c8.exceptions.DataBaseError: If request fails.
+        :raise c8.exceptions.ClearDataBaseAccessLevel: If request fails.
         """
         request = Request(
             method='delete',
@@ -629,8 +630,8 @@ class Tenant(APIWrapper):
 
         def response_handler(resp):
             if resp.is_success:
-               return resp.body
-            raise DataBaseError(resp, request)
+               return True
+            raise ClearDataBaseAccessLevel(resp, request)
 
         return self._execute(request, response_handler, customPrefix="/_api")
 
@@ -648,7 +649,7 @@ class Tenant(APIWrapper):
         :type grant: string
         :returns: Object containing database details
         :rtype: object
-        :raise c8.exceptions.DataBaseError: If request fails.
+        :raise c8.exceptions.SetDataBaseAccessLevel: If request fails.
         """
         request = Request(
             method='put',
@@ -661,10 +662,37 @@ class Tenant(APIWrapper):
         def response_handler(resp):
             if resp.is_success:
                return resp.body
-            raise DataBaseError(resp, request)
+            raise SetDataBaseAccessLevel(resp, request)
 
         return self._execute(request, response_handler, customPrefix="/_api")
 
+    def list_accessible_collections_user(self, username, databasename='_system', full=False):
+        """Fetch the collection access level for a specific collection in a database.
+
+        :param username: Name of the user
+        :type username: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :param full: Return the full set of access levels for all collections.
+        :type full: boolean
+        :returns: Fetch the list of collections access level for a specific user.
+        :rtype: string
+        :raise c8.exceptions.CollectionAccessLevel: If request fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/user/{}/database/{}/collection?full={}'.format(username,
+                                                                      databasename,
+                                                                      full),
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise CollectionAccessLevel(resp, request)
+            else:
+                return resp.body['result']
+                
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     def get_collection_access_level_user(self, username, collection_name, databasename='_system'):
         """Fetch the collection access level for a specific collection in a database.
@@ -893,7 +921,7 @@ class Tenant(APIWrapper):
 
         def response_handler(resp):
             if not resp.is_success:
-                raise BillingAcessLevel(resp, request)
+                raise BillingAccessLevel(resp, request)
             else:
                 return resp.body['result']
                 
@@ -979,7 +1007,7 @@ class Tenant(APIWrapper):
         :type attributes: dict
         :returns: The updated attributes.
         :rtype: Object
-        :raise c8.exceptions.GetAUpdateAttributesttributes: If request fails.
+        :raise c8.exceptions.UpdateAttributes: If request fails.
         """
         request = Request(
             method='put',
@@ -1000,8 +1028,8 @@ class Tenant(APIWrapper):
         """Remove all attributes of the specified user.
 
         :returns: True if operation successful.
-        :rtype: booleaan
-        :raise c8.exceptions.RemoveAllAttributes: If request fails.
+        :returns: All attributes for the specified user.
+        :rtype: dict
         """
         request = Request(
             method='delete',
@@ -1022,8 +1050,8 @@ class Tenant(APIWrapper):
 
         :param attributeid: Name of the attribute
         :type attributeid: string
-        :returns: True if operation successful.
-        :rtype: booleaan
+        :returns: All attributes for the specified user.
+        :rtype: dict
         :raise c8.exceptions.RemoveAttribute: If request fails.
         """
         request = Request(

@@ -1996,7 +1996,7 @@ class C8Client(object):
         :type databasename: str | unicode
         :returns: Access Details
         :rtype: string
-        :raise c8.exceptions.DataBaseError: If request fails.
+        :raise c8.exceptions.GetDataBaseAccessLevel: If request fails.
         """
         return self._tenant.get_database_access_level_user(username=username,
                                                            databasename=databasename)
@@ -2013,7 +2013,7 @@ class C8Client(object):
         :type databasename: str | unicode
         :returns: Object containing database details
         :rtype: object
-        :raise c8.exceptions.DataBaseError: If request fails.
+        :raise c8.exceptions.ClearDataBaseAccessLevel: If request fails.
         """
         return self._tenant.remove_database_access_level_user(username=username,
                                                               databasename=databasename)
@@ -2034,11 +2034,30 @@ class C8Client(object):
         :type grant: string
         :returns: Object containing database details
         :rtype: object
-        :raise c8.exceptions.DataBaseError: If request fails.
+        :raise c8.exceptions.SetDataBaseAccessLevel: If request fails.
         """
         return self._tenant.set_database_access_level_user(username=username,
                                                            databasename=databasename,
                                                            grant=grant)
+
+    # client.list_accessible_collections_user
+
+    def list_accessible_collections_user(self, username, databasename='_system', full=False):
+        """Fetch the collection access level for a specific collection in a database.
+
+        :param username: Name of the user
+        :type username: string
+        :param databasename: Name of the database
+        :type databasename: string
+        :param full: Return the full set of access levels for all collections.
+        :type full: boolean
+        :returns: Fetch the list of collections access level for a specific user.
+        :rtype: string
+        :raise c8.exceptions.CollectionAccessLevel: If request fails.
+        """
+        return self._tenant.list_accessible_collections_user(username=username,
+                                                             databasename=databasename,
+                                                             full=full)
 
     # client.get_collection_access_level_user
 
@@ -2215,7 +2234,7 @@ class C8Client(object):
         :rtype: Object
         :raise c8.exceptions.SetBillingAccessLevel: If request fails.
         """
-        return self._tenant.set_billing_access_level(username=username, grant=grant)
+        return self._tenant.set_billing_access_level_user(username=username, grant=grant)
 
     # client.clear_billing_access_level
 
@@ -2227,7 +2246,7 @@ class C8Client(object):
         :rtype: booleaan
         :raise c8.exceptions.ClearBillingAccessLevel: If request fails.
         """
-        return self._tenant.clear_billing_access_level(username=username)
+        return self._tenant.clear_billing_access_level_user(username=username)
 
     # client.get_attributes_user
 
@@ -2251,7 +2270,7 @@ class C8Client(object):
         :type attributes: dict
         :returns: The updated attributes.
         :rtype: Object
-        :raise c8.exceptions.GetAUpdateAttributesttributes: If request fails.
+        :raise c8.exceptions.UpdateAttributes: If request fails.
         """
         return self._tenant.update_attributes_user(username=username,
                                                    attributes=attributes)
@@ -2452,6 +2471,12 @@ class C8Client(object):
     def list_all_api_keys(self):
         return self._fabric.list_all_api_keys()
 
+    # client.get_api_key
+
+    def get_api_key(self, keyid):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.get_api_key()
+
     # client.remove_api_key
 
     def remove_api_key(self, keyid):
@@ -2469,7 +2494,6 @@ class C8Client(object):
     def get_database_access_level(self, keyid, databasename):
         """Fetch the database access level for a specific database.
 
-
         :param databasename: Name of the database
         :type databasename: string
         :returns: AccessLevel of a db.
@@ -2486,6 +2510,10 @@ class C8Client(object):
     def clear_database_access_level(self, keyid, databasename):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.clear_database_access_level(databasename)
+
+    def list_accessible_collections(self, keyid, databasename='_system', full=False):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.list_accessible_collections(databasename, full)
 
     def get_collection_access_level(self, keyid, collection_name,
                                     databasename='_system'):
@@ -2535,6 +2563,22 @@ class C8Client(object):
     def clear_billing_access_level(self, keyid):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.clear_billing_access_level()
+
+    def get_attributes(self, keyid):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.get_attributes()
+
+    def update_attributes(self, keyid, attributes):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.update_attributes(attributes)
+
+    def remove_all_attributes(self, keyid):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.remove_all_attributes()
+
+    def remove_attribute(self, keyid, attributeid):
+        _apiKeys = self._fabric.api_keys(keyid)
+        return _apiKeys.remove_attribute(attributeid)
 
     def set_search(self, collection, enable, field):
         """Set search capability of a collection (enabling or disabling it). 
@@ -2669,7 +2713,7 @@ class C8Client(object):
         :param name: The analyzer name.
         :type name: str | unicode
         :param properties: The properties used to configure the specified type.
-                           Value may be a string, an object or null. The default value is null.
+        Value may be a string, an object or null. The default value is null.
         :type properties: str | dict | unicode
         :param analyzer_type: The analyzer type.
         :type analyzer_type: str | unicode

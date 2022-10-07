@@ -1005,7 +1005,7 @@ class Fabric(APIWrapper):
         def response_handler(resp):
            code = resp.status_code
            if resp.is_success:
-               return resp.body['result']
+               return True
            elif code == 403:
                raise StreamPermissionError(resp, request)
            elif code == 412:
@@ -1360,7 +1360,7 @@ class Fabric(APIWrapper):
                 raise GetAPIKeys(resp, request)
             else:
                 return resp.body['result']
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, customPrefix="/_api")
 
     ##############################
     # Search, View and Analyzers #
