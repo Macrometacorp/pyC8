@@ -16,8 +16,8 @@ def setup_collection(col, docs):
     col.import_bulk(docs)
 
 
-def test_cursor_from_execute_query(db, col, docs):
-    cursor = db.c8ql.execute(
+def test_cursor_from_execute_query(tst_fabric, col, docs):
+    cursor = tst_fabric.c8ql.execute(
         'FOR d IN {} SORT d._key RETURN d'.format(col.name),
         count=True,
         batch_size=2,
@@ -81,8 +81,8 @@ def test_cursor_from_execute_query(db, col, docs):
     assert cursor.close(ignore_missing=True) is False
 
 
-def test_cursor_write_query(db, col, docs):
-    cursor = db.c8ql.execute(
+def test_cursor_write_query(tst_fabric, col, docs):
+    cursor = tst_fabric.c8ql.execute(
         '''
         FOR d IN {col} FILTER d._key == @first OR d._key == @second
         UPDATE {{_key: d._key, _val: @val }} IN {col}
@@ -133,8 +133,8 @@ def test_cursor_write_query(db, col, docs):
     assert cursor.close(ignore_missing=True) is False
 
 
-def test_cursor_invalid_id(db, col):
-    cursor = db.c8ql.execute(
+def test_cursor_invalid_id(tst_fabric, col):
+    cursor = tst_fabric.c8ql.execute(
         'FOR d IN {} SORT d._key RETURN d'.format(col.name),
         count=True,
         batch_size=2,
@@ -147,7 +147,7 @@ def test_cursor_invalid_id(db, col):
 
     with pytest.raises(CursorNextError) as err:
         list(cursor)
-    assert err.value.error_code == 1600
+    assert err.value.error_code == 400
 
     with pytest.raises(CursorCloseError) as err:
         cursor.close(ignore_missing=False)
@@ -168,8 +168,8 @@ def test_cursor_invalid_id(db, col):
     assert cursor.close() is None
 
 
-def test_cursor_premature_close(db, col, docs):
-    cursor = db.c8ql.execute(
+def test_cursor_premature_close(tst_fabric, col, docs):
+    cursor = tst_fabric.c8ql.execute(
         'FOR d IN {} SORT d._key RETURN d'.format(col.name),
         count=True,
         batch_size=2,
@@ -185,8 +185,8 @@ def test_cursor_premature_close(db, col, docs):
     assert cursor.close(ignore_missing=True) is False
 
 
-def test_cursor_context_manager(db, col, docs):
-    with db.c8ql.execute(
+def test_cursor_context_manager(tst_fabric, col, docs):
+    with tst_fabric.c8ql.execute(
             'FOR d IN {} SORT d._key RETURN d'.format(col.name),
             count=True,
             batch_size=2,
@@ -202,8 +202,8 @@ def test_cursor_context_manager(db, col, docs):
     assert cursor.close(ignore_missing=True) is False
 
 
-def test_cursor_manual_fetch_and_pop(db, col, docs):
-    cursor = db.c8ql.execute(
+def test_cursor_manual_fetch_and_pop(tst_fabric, col, docs):
+    cursor = tst_fabric.c8ql.execute(
         'FOR d IN {} SORT d._key RETURN d'.format(col.name),
         count=True,
         batch_size=1,
@@ -237,8 +237,8 @@ def test_cursor_manual_fetch_and_pop(db, col, docs):
     assert err.value.message == 'current batch is empty'
 
 
-def test_cursor_no_count(db, col):
-    cursor = db.c8ql.execute(
+def test_cursor_no_count(tst_fabric, col):
+    cursor = tst_fabric.c8ql.execute(
         'FOR d IN {} SORT d._key RETURN d'.format(col.name),
         count=False,
         batch_size=2,
