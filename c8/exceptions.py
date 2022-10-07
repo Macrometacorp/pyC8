@@ -93,9 +93,12 @@ class C8TenantNotFoundError(C8ClientError):
 
 class C8TokenNotFoundError(C8ClientError):
     """Failed to get Token"""
+
+
 #######################
 # Stream Exceptions #
 #######################
+
 
 class StreamProducerError(C8ClientError):
     """Failed to create Stream Producer"""
@@ -179,6 +182,7 @@ class TenantDeleteError(C8ServerError):
 
 class TenantDetailsError(C8ServerError):
     """Failed to retrieve tenant details."""
+
 
 #######################
 # Topic Exceptions #
@@ -320,6 +324,7 @@ class CollectionDeleteError(C8ServerError):
 class CollectionTruncateError(C8ServerError):
     """Failed to truncate collection."""
 
+
 #####################
 # Cursor Exceptions #
 #####################
@@ -368,6 +373,7 @@ class SpotRegionUpdateError(C8ServerError):
 
 class SpotRegionAssignError(C8ServerError):
     """Fails to assign region as Spot Region"""
+
 
 #######################
 # Document Exceptions #
@@ -490,7 +496,8 @@ class IndexDeleteError(C8ServerError):
 
 class GetIndexError(C8ServerError):
     """Failed to return the specified Index"""
-    
+
+
 #####################
 # Server Exceptions #
 #####################
@@ -543,6 +550,7 @@ class DataBaseError(C8ServerError):
 
 class GetDataBaseAccessLevel(C8ServerError):
     """Failed to fetch database access level for the specified user"""
+
 
 #########################
 # Permission Exceptions #
@@ -714,6 +722,7 @@ class SetBillingAccessLevel(C8ServerError):
 class ClearBillingAccessLevel(C8ServerError):
     """Failed to clear the billing access level"""
 
+
 #######################
 # Search #
 #######################
@@ -813,6 +822,7 @@ class AnalyzerNotFoundError(C8ServerError):
 
 class AnalyzerConflictError(C8ServerError):
     """The analyzer is still in use"""
+
 
 #######################
 # Attributes #

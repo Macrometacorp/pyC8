@@ -136,9 +136,9 @@ class Fabric(APIWrapper):
 
     @property
     def redis(self):
-        """Return Redis (Key Value) API wrapper.
+        """Return Redis API wrapper.
 
-        :returns: KV API wrapper.
+        :returns: Redis API wrapper.
         :rtype: c8.redis.redis_interface.RedisInterface
         """
         return RedisInterface(self._conn, self._executor)
