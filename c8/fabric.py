@@ -44,7 +44,8 @@ from c8.exceptions import (
     EventDeleteError,
     EventGetError,
     StreamAppGetSampleError,
-    GetAPIKeys, CollectionPropertiesError
+    GetAPIKeys,
+    CollectionPropertiesError
 )
 from c8.executor import (
     DefaultExecutor,
@@ -642,7 +643,7 @@ class Fabric(APIWrapper):
 
         request = Request(
             method='get',
-            endpoint=f'/collection/{collection_name}/figures',
+            endpoint='/collection/{}/figures'.format(collection_name),
         )
 
         def response_handler(resp):
@@ -672,7 +673,7 @@ class Fabric(APIWrapper):
 
         request = Request(
             method='put',
-            endpoint=f'/collection/{collection_name}/properties',
+            endpoint='/collection/{}/properties'.format(collection_name),
             data=data
         )
 

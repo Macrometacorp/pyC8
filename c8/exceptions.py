@@ -329,10 +329,6 @@ class CollectionPropertiesError(C8ServerError):
     """Failed to retrieve collection properties."""
 
 
-class CollectionConfigureError:
-    """Failed to configure collection properties."""
-
-
 #####################
 # Cursor Exceptions #
 #####################
