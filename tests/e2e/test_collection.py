@@ -4,7 +4,7 @@ from tests.helpers import generate_col_name, clean_doc
 def test_create_collection_endpoint(client):
     collection_name = generate_col_name()
     col = client.create_collection(collection_name)
-    assert repr(col) == f'<StandardCollection {collection_name}>'
+    assert repr(col) == '<StandardCollection {}>'.format(col.name)
     assert col.tenant_name == client._tenant.name
     assert col.name.startswith('test_collection') == True
 
