@@ -15,8 +15,7 @@ from tests.helpers import assert_raises, extract, generate_col_name
 def test_collection_attributes(client, col, tst_fabric):
     assert col.context in ['default', 'async', 'batch', 'transaction']
     assert col.tenant_name == client._tenant.name
-    fabric = client._tenant.useFabric(tst_fabric.name)
-    assert col.fabric_name == fabric.name
+    assert col.fabric_name == tst_fabric.name
     assert col.name.startswith('test_collection') == True
     assert repr(col) == '<StandardCollection {}>'.format(col.name)
 
