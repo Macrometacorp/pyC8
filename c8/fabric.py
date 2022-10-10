@@ -1351,7 +1351,7 @@ class Fabric(APIWrapper):
                 raise GetAPIKeys(resp, request)
             else:
                 return resp.body['result']
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     ##############################
     # Search, View and Analyzers #

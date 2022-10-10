@@ -87,7 +87,9 @@ def pytest_configure(config):
         'password': password,
         'sys_fabric': sys_fabric,
         'tst_fabric': tst_fabric,
+        'tst_fabric_name': tst_fabric_name,
         'bad_fabric': bad_fabric,
+        'bad_fabric_name': bad_fabric_name,
         'geo_index': geo_index,
         'col_name': col_name,
         'lecol_name': lecol_name,
@@ -186,6 +188,13 @@ def client():
 def sys_fabric():
     return global_data['sys_fabric']
 
+@pytest.fixture(autouse=False)
+def tst_fabric_name():
+    return global_data['tst_fabric_name']
+
+@pytest.fixture(autouse=False)
+def bad_fabric_name():
+    return global_data['bad_fabric_name']
 
 @pytest.fixture(autouse=False)
 def username():
