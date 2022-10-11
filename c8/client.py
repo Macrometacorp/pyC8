@@ -1900,17 +1900,9 @@ class C8Client(object):
     def create_user(self, email, password, display_name=None, active=True, extra=None):
         """Create a new user.
 
-<<<<<<< HEAD
-        :param username: Username.
-        :type username: str | unicode
-        :param email: email.
-        :type email: str | unicode
-        :param password: Password.
-=======
         :param email: Email address of the user.
         :type email: str | unicode
         :param password: Password to be set for the user.
->>>>>>> master
         :type password: str | unicode
         :param display_name: Display name for the user.
         :type display_name: str | unicode
@@ -2721,7 +2713,7 @@ class C8Client(object):
         :param name: The analyzer name.
         :type name: str | unicode
         :param properties: The properties used to configure the specified type.
-                           Value may be a string, an object or null. The default value is null.
+        Value may be a string, an object or null. The default value is null.
         :type properties: str | dict | unicode
         :param analyzer_type: The analyzer type.
         :type analyzer_type: str | unicode
@@ -2753,4 +2745,195 @@ class C8Client(object):
         :rtype: dict
         """
         return self._search.get_analyzer_definition(name)
-    
+
+    def redis_set(self, key, value, collection):
+        """
+        Set key to hold the string value. If key already holds a value,
+        it is overwritten, regardless of its type. Any previous time to live
+        associated with the key is discarded on successful SET operation.
+        More on https://redis.io/commands/set/
+
+        :param key: Key of the data
+        :type key: str
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.set(key, value, collection)
+
+    def redis_get(self, key, collection):
+        """
+        Get the value of key. If the key does not exist the special value nil is
+        returned. An error is returned if the value stored at key is not a string,
+        because GET only handles string values.
+        More on https://redis.io/commands/get/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.get(key, collection)
+
+    def redis_zadd(self, key, score, member, collection):
+        """
+        Adds all the specified members with the specified scores to the sorted set
+        stored at key. It is possible to specify multiple score / member pairs. If a
+        specified member is already a member of the sorted set, the score is updated
+        and the element reinserted at the right position to ensure the correct
+        ordering.
+        More on https://redis.io/commands/zadd/
+
+        :param key: Key of the data
+        :type key: str
+        :param score: Score of the data
+        :type score: int
+        :param member: Member of the data
+        :type member: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.zadd(key, score, member, collection)
+
+    def redis_zrange(self, key, start, stop, collection):
+        """
+        Returns the specified range of elements in the sorted set stored at <key>.
+        ZRANGE can perform different types of range queries: by index (rank), by the
+        score, or by lexicographical order.
+        More on https://redis.io/commands/zrange/
+
+        :param key: Key of the data
+        :type key: str
+        :param start: Start of the data
+        :type start: int
+        :param stop: Stop of the data
+        :type stop: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.zrange(key, start, stop, collection)
+
+    def redis_lpush(self, key, elements, collection):
+        """
+        Insert all the specified values at the head of the list stored at key. If key
+        does not exist, it is created as empty list before performing the push
+        operations. When key holds a value that is not a list, an error is returned.
+        It is possible to push multiple elements using a single command call just
+        specifying multiple members of the list in elements parameter.
+        More on https://redis.io/commands/lpush/
+
+        :param key: Key of the data
+        :type key: str
+        :param elements: List of the data
+        :type elements: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.lpush(key, elements, collection)
+
+    def redis_lrange(self, key, start, stop, collection):
+        """
+        Insert all the specified values at the head of the list stored at key. If key
+        does not exist, it is created as empty list before performing the push
+        operations. When key holds a value that is not a list, an error is returned.
+        It is possible to push multiple elements using a single command call just
+        specifying multiple members of the list in elements parameter.
+        More on https://redis.io/commands/lrange/
+
+        :param key: Key of the data
+        :type key: str
+        :param start: Start of the data
+        :type start: int
+        :param stop: Stop of the data
+        :type stop: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.lrange(key, start, stop, collection)
+
+    def redis_hset(self, key, field, value, collection):
+        """
+        Sets field in the hash stored at key to value. If key does not exist,
+        a new key holding a hash is created. If field already exists in the hash,
+        it is overwritten.
+        More on https://redis.io/commands/hset/
+
+        :param key: Key of the data
+        :type key: str
+        :param field: Field of the data
+        :type field: str
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.hset(key, field, value, collection)
+
+    def redis_hget(self, key, field, collection):
+        """
+        Returns the value associated with field in the hash stored at key.
+        More on https://redis.io/commands/hget/
+
+        :param key: Key of the data
+        :type key: str
+        :param field: Value of the data
+        :type field: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.hget(key, field, collection)
+
+    def redis_sadd(self, key, member, collection):
+        """
+        Add the specified members to the set stored at key. Specified members that
+        are already a member of this set are ignored. If key does not exist,
+        a new set is created before adding the specified members.
+        More on https://redis.io/commands/sadd/
+
+        :param key: Key of the data
+        :type key: str
+        :param member: Member of the data
+        :type member: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.sadd(key, member, collection)
+
+    def redis_spop(self, key, count, collection):
+        """
+        Removes and returns one or more random members from the set value store at key.
+        This operation is similar to SRANDMEMBER, that returns one or more random
+        elements from a set but does not remove it.
+        More on https://redis.io/commands/spop/
+
+        :param key: Key of the data
+        :type key: str
+        :param count: Count of the data
+        :type count: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.spop(key, count, collection)
+
+
