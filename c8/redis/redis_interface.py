@@ -21,8 +21,9 @@ class RedisInterface(APIWrapper, Commands):
 
     def command_parser(self, command, collection, *args):
         data = [command, *args]
+        filtered_data = [i for i in data if i is not None]
 
-        request = build_request(collection, data)
+        request = build_request(collection, filtered_data)
 
         def response_handler(response):
             if not response.is_success and request is not None:
@@ -30,10 +31,6 @@ class RedisInterface(APIWrapper, Commands):
             return response.body
 
         return self._execute(request, response_handler)
-
-    def set(self, key, value, collection):
-        request_response_handler = self.set_command(key, value, collection)
-        return self._execute(request_response_handler[0], request_response_handler[1])
 
     def append(self, key, value, collection):
         request_response_handler = self.append_command(key, value, collection)

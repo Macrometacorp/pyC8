@@ -20,7 +20,7 @@ REDIS_COLLECTION = "dinoRedisTest"
 def test_redis_set():
     client = get_client_instance()
 
-    response = client.redis_set("test2", "1", REDIS_COLLECTION)
+    response = client.redis_set("test", "1", REDIS_COLLECTION)
     print(response)
     # Response from platform
     assert {"code": 200, "result": "OK"} == response
@@ -105,6 +105,238 @@ def test_redis_incr():
     print(response)
     # Response from platform
     assert {"code": 200, "result": "2"} == response
+
+
+def test_redis_incrby():
+    client = get_client_instance()
+
+    response = client.redis_incrby("test", 10, REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "12"} == response
+
+
+def test_redis_incrbyfloat():
+    client = get_client_instance()
+
+    response = client.redis_incrbyfloat("test", 0.5, REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "12.5"} == response
+
+
+def test_redis_set_2():
+    client = get_client_instance()
+
+    response = client.redis_set("test2", "22", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_mget():
+    client = get_client_instance()
+
+    response = client.redis_mget(["test", "test2"], REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": ["12.5", "22"]} == response
+
+
+def test_redis_mset():
+    client = get_client_instance()
+
+    response = client.redis_mset(
+        {"test3": "value3", "test4": "value4"},
+        REDIS_COLLECTION
+    )
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_msetnx():
+    client = get_client_instance()
+
+    response = client.redis_msetnx(
+        {"test5": "value5", "test6": "value6"},
+        REDIS_COLLECTION
+    )
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_setex():
+    client = get_client_instance()
+
+    response = client.redis_setex("ttlKeySec", 30, "value", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_psetex():
+    client = get_client_instance()
+
+    response = client.redis_psetex("ttlKeyMs", 30000, "value", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_setbit():
+    client = get_client_instance()
+
+    response = client.redis_setbit("bitKey", 7, 0, REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 0} == response
+
+
+def test_redis_setnx():
+    client = get_client_instance()
+
+    response = client.redis_setnx("testSetNx", "1", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_setrange():
+    client = get_client_instance()
+
+    response = client.redis_setrange("testSetNx", 0, "2", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_setnx_2():
+    client = get_client_instance()
+
+    response = client.redis_setnx("testString", "string", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_strlen():
+    client = get_client_instance()
+
+    response = client.redis_strlen("testString", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 6} == response
+
+
+def test_redis_setnx_3():
+    client = get_client_instance()
+
+    response = client.redis_setnx("myKeyString", "foobar", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_bitcount():
+    client = get_client_instance()
+
+    response = client.redis_bitcount("myKeyString", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 26} == response
+
+
+def test_redis_bitcount_2():
+    client = get_client_instance()
+
+    response = client.redis_bitcount("myKeyString", REDIS_COLLECTION, 0, 0)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 4} == response
+
+
+# TODO Failed test
+# def test_redis_bitcount_3():
+#     client = get_client_instance()
+#
+#     response = client.redis_bitcount("myKeyString", REDIS_COLLECTION, 1, 1, "BYTE")
+#     print(response)
+#     # Response from platform
+#     assert {"code": 200, "result": 6} == response
+
+
+def test_redis_set_3():
+    client = get_client_instance()
+
+    response = client.redis_set("key1", "foobar", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_set_4():
+    client = get_client_instance()
+
+    response = client.redis_set("key2", "abcdef", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_bitop():
+    client = get_client_instance()
+
+    response = client.redis_bitop("AND", "dest", ["key1", "key2"], REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 6} == response
+
+
+def test_redis_setbit_2():
+    client = get_client_instance()
+
+    response = client.redis_setbit("mykey", 7, 1, REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 0} == response
+
+
+def test_redis_getbit():
+    client = get_client_instance()
+
+    response = client.redis_getbit("mykey", 7, REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_set_5():
+    client = get_client_instance()
+
+    response = client.redis_set("mykey2", '\x00\x00\x00', REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_bitpos():
+    client = get_client_instance()
+
+    response = client.redis_bitpos("mykey2", 0, REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 0} == response
+
+
+def test_redis_bitpos_2():
+    client = get_client_instance()
+
+    response = client.redis_bitpos("mykey2", 1, REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": -1} == response
 
 
 def test_redis_zadd():

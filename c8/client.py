@@ -2951,6 +2951,406 @@ class C8Client(object):
         redis_command = "INCR"
         return self._fabric.redis.command_parser(redis_command, collection, key)
 
+    def redis_incrby(self, key, increment, collection):
+        """
+        Increments the number stored at key by increment. If the key does not exist,
+        it is set to 0 before performing the operation. An error is returned if the
+        key contains a value of the wrong type or contains a string that can not be
+        represented as integer. This operation is limited to 64 bit signed integers.
+        More on https://redis.io/commands/incrby/
+
+        :param key: Key of the data
+        :type key: str
+        :param increment: Increment of the data
+        :type increment: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "INCRBY"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            increment
+        )
+
+    def redis_incrbyfloat(self, key, increment, collection):
+        """
+        Increment the string representing a floating point number stored at key by
+        the specified increment. By using a negative increment value, the result is
+        that the value stored at the key is decremented (by the obvious properties of
+        addition). If the key does not exist, it is set to 0 before performing the
+        operation. An error is returned if one of the following conditions occur:
+
+        The key contains a value of the wrong type (not a string).
+
+        The current key content or the specified increment are not parsable as a double
+        precision floating point number.
+
+        :param key: Key of the data
+        :type key: str
+        :param increment: Increment of the data
+        :type increment: float
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "INCRBYFLOAT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            increment
+        )
+
+    def redis_mget(self, keys, collection):
+        """
+        Returns the values of all specified keys. For every key that does not hold a
+        string value or does not exist, the special value nil is returned. Because of
+        this, the operation never fails.
+        More on https://redis.io/commands/mget/
+
+        :param keys: Keys of the data
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "MGET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            *keys
+        )
+
+    def redis_mset(self, data, collection):
+        """
+        Sets the given keys to their respective values. MSET replaces existing values
+        with new values, just as regular SET. See MSETNX if you don't want to
+        overwrite existing values.
+        More on https://redis.io/commands/mset/
+
+        :param data: Dictionary of the data
+        :type data: dict
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        data_list = []
+        for key, value in data.items():
+            data_list.append(key)
+            data_list.append(value)
+
+        redis_command = "MSET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            *data_list
+        )
+
+    def redis_psetex(self, key, milliseconds, value, collection):
+        """
+        Sets the given keys to their respective values. MSET replaces existing values
+        with new values, just as regular SET. See MSETNX if you don't want to
+        overwrite existing values.
+        More on https://redis.io/commands/mset/
+
+        :param key: Key of the data
+        :type key: str
+        :param milliseconds: TTL (time to leave) time of the data
+        :type milliseconds: int
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "PSETEX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            milliseconds,
+            value
+        )
+
+    def redis_setbit(self, key, offset, value, collection):
+        """
+        Sets or clears the bit at offset in the string value stored at key.
+        The bit is either set or cleared depending on value, which can be either 0 or 1.
+        More on https://redis.io/commands/setbit/
+
+        :param key: Key of the data
+        :type key: str
+        :param offset: Offset number
+        :type offset: int
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SETBIT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            offset,
+            value
+        )
+
+    def redis_msetnx(self, data, collection):
+        """
+        Sets the given keys to their respective values. MSETNX will not perform any
+        operation at all even if just a single key already exists.
+        More on https://redis.io/commands/msetnx/
+
+        :param data: Dictionary of the data
+        :type data: dict
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        data_list = []
+        for key, value in data.items():
+            data_list.append(key)
+            data_list.append(value)
+
+        redis_command = "MSETNX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            *data_list
+        )
+
+    def redis_setex(self, key, seconds, value, collection):
+        """
+        Set key to hold the string value and set key to timeout after a given number of
+        seconds.
+        More on https://redis.io/commands/setex/
+
+        :param key: Key of the data
+        :type key: str
+        :param seconds: TTL (time to leave) time of the data
+        :type seconds: int
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SETEX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            seconds,
+            value
+        )
+
+    def redis_setnx(self, key, value, collection):
+        """
+        Set key to hold string value if key does not exist. In that case, it is equal to
+        SET. When key already holds a value, no operation is performed.
+        SETNX is short for "SET if Not eXists".
+        More on https://redis.io/commands/setnx/
+
+        :param key: Key of the data
+        :type key: str
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SETNX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            value
+        )
+
+    def redis_setrange(self, key, offset, value, collection):
+        """
+        Overwrites part of the string stored at key, starting at the specified
+        offset, for the entire length of value. If the offset is larger than the
+        current length of the string at key, the string is padded with zero-bytes to
+        make offset fit. Non-existing keys are considered as empty strings, so this
+        command will make sure it holds a string large enough to be able to set value
+        at offset.
+        More on https://redis.io/commands/setrange/
+
+        :param key: Key of the data
+        :type key: str
+        :param offset: Offset of the data
+        :type offset: int
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SETRANGE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            offset,
+            value
+        )
+
+    def redis_strlen(self, key, collection):
+        """
+        Returns the length of the string value stored at key.
+        An error is returned when key holds a non-string value.
+        More on https://redis.io/commands/strlen/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "STRLEN"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
+    def redis_bitcount(self, key, collection, start=None, end=None, data_format=None):
+        """
+        By default all the bytes contained in the string are examined. It is possible
+        to specify the counting operation only in an interval passing the additional
+        arguments start and end.
+        More on https://redis.io/commands/bitcount/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param start: Count start
+        :type start: int
+        :param end: Count stop
+        :type end: int
+        :param data_format: Count format [BYTE | BIT]
+        :type data_format: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "BITCOUNT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            start,
+            end,
+            data_format
+        )
+
+    def redis_bitop(self, operation, deskey, keys, collection):
+        """
+        Perform a bitwise operation between multiple keys (containing string values) and
+        store the result in the destination key.
+        More on https://redis.io/commands/bitop/
+
+        :param operation: Operation AND, OR, XOR and NOT
+        :type operation: str
+        :param deskey: Destination key where operation is stored
+        :type deskey: str
+        :param keys: List of keys to perform operation on
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "BITOP"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            operation,
+            deskey,
+            *keys
+        )
+
+    def redis_getbit(self, key, offset, collection):
+        """
+        Returns the bit value at offset in the string value stored at key.
+        More on https://redis.io/commands/getbit/
+
+        :param key: Key of the data
+        :type key: str
+        :param offset: Offset of the data
+        :type offset: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "GETBIT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            offset,
+        )
+
+    def redis_bitpos(
+            self,
+            key,
+            bit,
+            collection,
+            start=None,
+            end=None,
+            data_format=None
+           ):
+        """
+        Return the position of the first bit set to 1 or 0 in a string.
+        The position is returned, thinking of the string as an array of bits from left
+        to right, where the first byte's most significant bit is at position 0, the
+        second byte's most significant bit is at position 8, and so forth.
+        More on https://redis.io/commands/bitpos/
+
+        :param key: Key of the data
+        :type key: str
+        :param bit: Key of the data
+        :type bit: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param start: Count start
+        :type start: int
+        :param end: Count stop
+        :type end: int
+        :param data_format: Count format [BYTE | BIT]
+        :type data_format: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "BITPOS"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            bit,
+            start,
+            end,
+            data_format
+        )
+
     def redis_zadd(self, key, score, member, collection):
         """
         Adds all the specified members with the specified scores to the sorted set
