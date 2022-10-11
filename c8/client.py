@@ -1395,12 +1395,6 @@ class C8Client(object):
         * `start_message_id`: The initial reader positioning is done by
                               specifying a message id. ("latest" or "earliest")
         * `local`: If the stream_stream is local or global default its global
-        * `receiver_queue_size`:
-            Sets the size of the reader receive queue. The reader receive
-            queue controls how many messages can be accumulated by the reader
-            before the application calls `read_next()`. Using a higher value
-            could potentially increase the reader throughput at the expense of
-            higher memory utilization.
         * `reader_name`: Sets the reader name.
 
         """
