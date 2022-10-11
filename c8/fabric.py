@@ -32,6 +32,7 @@ from c8.exceptions import (
     StreamConnectionError,
     StreamCreateError,
     StreamDeleteError,
+    StreamListError,
     StreamPermissionError,
     TenantDcListError,
     SpotRegionUpdateError,
@@ -941,7 +942,7 @@ class Fabric(APIWrapper):
                 } for col in map(dict, resp.body['result'])]
             elif code == 403:
                 raise StreamPermissionError(resp, request)
-            raise StreamConnectionError(resp, request)
+            raise StreamListError,(resp, request)
 
         return self._execute(request, response_handler)
 
@@ -968,7 +969,7 @@ class Fabric(APIWrapper):
         :param stream: name of stream
         :param local: Operate on a local stream instead of a global one.
         :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
+        :raise: c8.exceptions.StreamCreateError: If creating streams fails.
         """
         if local is True:
             endpoint = '{}/{}?global=False'.format(ENDPOINT, stream)
@@ -1014,33 +1015,6 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def terminate_stream(self, stream, isCollectionStream=False, local=False):
-        """Terminate a stream. A stream that is terminated will not accept any
-        more messages to be published and will let consumer to drain existing
-        messages in backlog
-
-        :param stream: name of stream
-        :param local: Operate on a local stream instead of a global one.
-        :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamPermissionError: Dont have permission.
-        """
-        if isCollectionStream is False:
-            if local is False:
-                stream = "c8globals." + stream
-            else:
-                stream = "c8locals." + stream
-        endpoint = '{}/{}/terminate?local={}'.format(ENDPOINT, stream, local)
-        request = Request(method='post', endpoint=endpoint)
-
-        def response_handler(resp):
-            code = resp.status_code
-            if resp.is_success:
-                return resp.body['result']
-            elif code == 403:
-                raise StreamPermissionError(resp, request)
-            raise StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)
 
     #####################
     # Restql Management #
