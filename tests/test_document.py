@@ -1,8 +1,6 @@
 from __future__ import absolute_import, unicode_literals
-
 import pytest
 from six import string_types
-
 from c8.exceptions import (
     DocumentDeleteError,
     DocumentGetError,
@@ -313,8 +311,8 @@ def test_document_update(col, docs):
 
 
 def test_document_update_many(col, docs):
+    # Insert docs on collection
     col.insert_many(docs)
-
     old_revs = {}
     doc_keys = [d['_key'] for d in docs]
 
@@ -801,7 +799,7 @@ def test_document_delete(col, docs):
     assert len(col) == 1
 
 
-def test_document_delete_many(col, docs, client):
+def test_document_delete_many(col, docs):
     # Set up test documents
     old_revs = {}
     doc_keys = [d['_key'] for d in docs]
