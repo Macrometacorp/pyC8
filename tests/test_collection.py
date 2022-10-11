@@ -1,7 +1,4 @@
 from __future__ import absolute_import, unicode_literals
-
-from six import string_types
-
 from c8.collection import StandardCollection
 from c8.exceptions import (
     CollectionPropertiesError,
@@ -12,7 +9,6 @@ from c8.exceptions import (
 from tests.helpers import assert_raises, extract, generate_col_name
 
 
-
 def test_collection_attributes(client, col, tst_fabric):
     assert col.context in ['default', 'async', 'batch', 'transaction']
     assert col.tenant_name == client._tenant.name
@@ -21,23 +17,19 @@ def test_collection_attributes(client, col, tst_fabric):
     assert repr(col) == '<StandardCollection {}>'.format(col.name)
 
 
-def test_collection_misc_methods(col, tst_fabric, client):
+def test_collection_misc_methods(col, tst_fabric):
     # Test get properties
     get_col_properties = tst_fabric.collection_figures(collection_name=col.name)
-
-
     assert get_col_properties['name'] == col.name
     assert get_col_properties['isSystem'] is False
-
     # Test get properties with bad collection
     with assert_raises(CollectionPropertiesError) or assert_raises(Exception) as err:
         tst_fabric.collection_figures(collection_name=generate_col_name())
     assert err.value.error_code == 1203
-    #
+
     # # Test configure properties
     prev_sync = get_col_properties['waitForSync']
     prev_has_stream = get_col_properties['hasStream']
-    #
 
     properties = tst_fabric.update_collection_properties(
 
@@ -49,7 +41,6 @@ def test_collection_misc_methods(col, tst_fabric, client):
     assert properties['isSystem'] is False
     assert properties['waitForSync'] is not prev_sync
     assert properties['hasStream'] is not prev_has_stream
-    #
 
     properties = tst_fabric.update_collection_properties(
 
@@ -60,22 +51,17 @@ def test_collection_misc_methods(col, tst_fabric, client):
     assert properties['isSystem'] is False
     assert properties['waitForSync'] == False
     assert properties['hasStream'] == True
-    #
-    #
+
     # Test configure properties with bad collection
     with assert_raises(CollectionPropertiesError) as err:
-
         tst_fabric.update_collection_properties(collection_name=generate_col_name(), wait_for_sync=True)
-
     assert err.value.error_code == 1203
-    #
+
     # Test preconditions
     doc_id = col.name + '/' + 'foo'
-
     tst_fabric.collection(col.name).insert({'_id': doc_id})
-
     assert len(col) == 1
-    #
+
     # Test truncate collection
     assert col.truncate() is True
     assert len(col) == 0
@@ -149,4 +135,3 @@ def test_collection_management(sys_fabric, client, bad_fabric):
         sys_fabric.delete_collection(col_name)
     assert err.value.error_code == 1203
     assert sys_fabric.delete_collection(col_name, ignore_missing=True) is False
-
