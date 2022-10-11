@@ -29,6 +29,21 @@ def generate_col_name():
     """
     return 'test_collection_{}'.format(uuid4().hex)
 
+def generate_stream_name():
+    """Generate and return a random stream name.
+
+    :return: Random stream name.
+    :rtype: str | unicode
+    """
+    return 'test_stream_{}'.format(uuid4().hex)
+
+def generate_apikey_id():
+    """Generate and return a random apikey id.
+
+    :return: Random apikey id
+    :rtype: str | unicode
+    """
+    return 'test_apikey_id_{}'.format(str(uuid4().hex)[:10])
 
 def generate_graph_name():
     """Generate and return a random graph name.

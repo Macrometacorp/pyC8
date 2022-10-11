@@ -9,6 +9,7 @@ import websocket
 from c8.api import APIWrapper
 from c8.c8ql import C8QL
 from c8.keyvalue import KV
+from c8.redis.redis_interface import RedisInterface
 from c8.collection import StandardCollection
 from c8.stream_apps import StreamApps
 from c8.apikeys import APIKeys
@@ -41,7 +42,6 @@ from c8.exceptions import (
     RestqlDeleteError,
     RestqlExecuteError,
     EventCreateError,
-    EventDeleteError,
     EventGetError,
     StreamAppGetSampleError,
     GetAPIKeys,
@@ -68,7 +68,7 @@ def raise_timeout(signum, frame):
     raise TimeoutError
 
 
-def printdata(event):
+def print_data(event):
     """Prints the event.
 
     :param event: real-time update.
@@ -135,11 +135,20 @@ class Fabric(APIWrapper):
         """
         return KV(self._conn, self._executor)
 
+    @property
+    def redis(self):
+        """Return Redis API wrapper.
+
+        :returns: Redis API wrapper.
+        :rtype: c8.redis.redis_interface.RedisInterface
+        """
+        return RedisInterface(self._conn, self._executor)
+
     def on_change(self, collection, callback, timeout=60):
         """Execute given input function on receiving a change.
 
-        :param collections: Collection name(s) regex to listen for
-        :type collections: str
+        :param collection: Collection name(s) regex to listen for
+        :type collection: str
         :param timeout: timeout value
         :type timeout: int
         :param callback: Function to execute on a change
@@ -1045,14 +1054,14 @@ class Fabric(APIWrapper):
         request = Request(method='delete', endpoint=endpoint)
 
         def response_handler(resp):
-            code = resp.status_code
-            if resp.is_success:
-                return resp.body['result']
-            elif code == 403:
-                raise StreamPermissionError(resp, request)
-            elif code == 412:
-                raise StreamDeleteError(resp, request)
-            raise StreamConnectionError(resp, request)
+           code = resp.status_code
+           if resp.is_success:
+               return True
+           elif code == 403:
+               raise StreamPermissionError(resp, request)
+           elif code == 412:
+               raise StreamDeleteError(resp, request)
+           raise StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
 
@@ -1406,7 +1415,7 @@ class Fabric(APIWrapper):
             else:
                 return resp.body['result']
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     ##############################
     # Search, View and Analyzers #

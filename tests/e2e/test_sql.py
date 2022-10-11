@@ -21,7 +21,8 @@ Make sure that nba collection exists on fabric.
 def test_sql_endpoint():
     load_dotenv()
     client = C8Client(protocol='https',
-                      host=os.environ.get('FEDERATION_URL'), port=443,
+                      host=os.environ.get('FEDERATION_URL'),
+                      port=443,
                       email=os.environ.get('TENANT_EMAIL'),
                       apikey=os.environ.get('API_KEY'),
                       geofabric=os.environ.get('FABRIC')
