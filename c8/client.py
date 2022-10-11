@@ -2762,7 +2762,62 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.set(key, value, collection)
+        redis_command = "SET"
+        return self._fabric.redis.command_parser(redis_command, collection, key, value)
+
+    def redis_append(self, key, value, collection):
+        """
+        If key already exists and is a string, this command appends the value at the
+        end of the string. If key does not exist it is created and set as an empty
+        string, so APPEND will be similar to SET in this special case.
+        More on https://redis.io/commands/append/
+
+        :param key: Key of the data
+        :type key: str
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.append(key, value, collection)
+
+    def redis_decr(self, key, collection):
+        """
+        Decrements the number stored at key by one. If the key does not exist,
+        it is set to 0 before performing the operation. An error is returned if the
+        key contains a value of the wrong type or contains a string that can not be
+        represented as integer. This operation is limited to 64 bit signed integers.
+        More on https://redis.io/commands/decr/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.decr(key, collection)
+
+    def redis_decrby(self, key, decrement, collection):
+        """
+        Decrements the number stored at key by decrement. If the key does not exist,
+        it is set to 0 before performing the operation. An error is returned if the
+        key contains a value of the wrong type or contains a string that can not be
+        represented as integer. This operation is limited to 64 bit signed integers.
+        More on https://redis.io/commands/decrby/
+
+        :param key: Key of the data
+        :type key: str
+        :param decrement: Decrement number
+        :type decrement: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        return self._fabric.redis.decrby(key, decrement, collection)
 
     def redis_get(self, key, collection):
         """
@@ -2779,6 +2834,122 @@ class C8Client(object):
         :rtype:
         """
         return self._fabric.redis.get(key, collection)
+
+    def redis_getdel(self, key, collection):
+        """
+        Get the value of key and delete the key. This command is similar to GET,
+        except for the fact that it also deletes the key on success (if and only if
+        the key's value type is a string).
+        More on https://redis.io/commands/getdel/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "GETDEL"
+        return self._fabric.redis.command_parser(redis_command, collection, key)
+
+    def redis_getex(self, key, collection, expiry_command=None, time=None):
+        """
+        Get the value of key and optionally set its expiration. GETEX is similar to
+        GET, but is a write command with additional options.
+        More on https://redis.io/commands/getex/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param expiry_command: Redis expiry command (ex. EX, PX, EXAT, PXAT)
+        :type expiry_command: str
+        :param time: Redis expiry time (ex. sec, ms, unix-time-seconds,
+        unix-time-milliseconds)
+        :type time: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "GETEX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            expiry_command,
+            time
+        )
+
+    def redis_getrange(self, key, start, end, collection):
+        """
+        Returns the substring of the string value stored at key, determined by the
+        offsets start and end (both are inclusive). Negative offsets can be used in
+        order to provide an offset starting from the end of the string. So -1 means
+        the last character, -2 the penultimate and so forth.
+        The function handles out of range requests by limiting the resulting range to
+        the actual length of the string.
+        More on https://redis.io/commands/getrange/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param start: Start string offset
+        :type start: int
+        :param end: End string offset
+        :type end: int
+        :returns:
+        :rtype:
+        """
+        redis_command = "GETRANGE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            start,
+            end
+        )
+
+    def redis_getset(self, key, value, collection):
+        """
+        Atomically sets key to value and returns the old value stored at key. Returns
+        an error when key exists but does not hold a string value. Any previous time
+        to live associated with the key is discarded on successful SET operation.
+        More on https://redis.io/commands/getset/
+
+        :param key: Key of the data
+        :type key: str
+        :param value: Start string offset
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "GETSET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            value
+        )
+
+    def redis_incr(self, key, collection):
+        """
+        Increments the number stored at key by one. If the key does not exist,
+        it is set to 0 before performing the operation. An error is returned if the
+        key contains a value of the wrong type or contains a string that can not be
+        represented as integer. This operation is limited to 64 bit signed integers.
+        More on https://redis.io/commands/incr/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "INCR"
+        return self._fabric.redis.command_parser(redis_command, collection, key)
 
     def redis_zadd(self, key, score, member, collection):
         """

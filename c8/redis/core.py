@@ -12,12 +12,6 @@ def build_request(collection, data):
     return request
 
 
-def response_handler(request, response):
-    if not response.is_success:
-        raise RedisServerError(response, request)
-    return response.body
-
-
 class RedisServerError(C8ServerError):
     """Redis Server Error"""
 

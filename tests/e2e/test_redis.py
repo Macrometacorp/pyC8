@@ -14,17 +14,43 @@ Tests need to be run in sequence since we first create data than query for that 
 data.
 """
 
-REDIS_COLLECTION = "testRedis"
+REDIS_COLLECTION = "dinoRedisTest"
 
 
 def test_redis_set():
-
     client = get_client_instance()
 
-    response = client.redis_set("test", "1", REDIS_COLLECTION)
+    response = client.redis_set("test2", "1", REDIS_COLLECTION)
     print(response)
     # Response from platform
     assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_append():
+    client = get_client_instance()
+
+    response = client.redis_append("test", "2", REDIS_COLLECTION)
+    print(response)
+    # Response from platform -> Number of strings in values
+    assert {"code": 200, "result": "2"} == response
+
+
+def test_redis_dec():
+    client = get_client_instance()
+
+    response = client.redis_decr("test", REDIS_COLLECTION)
+    print(response)
+    # Response from platform -> Number of strings in values
+    assert {"code": 200, "result": "11"} == response
+
+
+def test_redis_decby():
+    client = get_client_instance()
+
+    response = client.redis_decrby("test", 10, REDIS_COLLECTION)
+    print(response)
+    # Response from platform -> Returned value is int
+    assert {"code": 200, "result": 1} == response
 
 
 def test_redis_get():
@@ -34,6 +60,51 @@ def test_redis_get():
     print(response)
     # Response from platform -> make sure that we have data on platform "result": "2"
     assert {"code": 200, "result": "1"} == response
+
+
+def test_redis_getdel():
+    client = get_client_instance()
+
+    response = client.redis_getdel("test", REDIS_COLLECTION)
+    print(response)
+    # Response from platform -> make sure that we have data on platform "result": "2"
+    assert {"code": 200, "result": "1"} == response
+
+
+def test_redis_getex():
+    client = get_client_instance()
+
+    response = client.redis_getex("test", REDIS_COLLECTION, "EX", "200")
+    print(response)
+    # Response from platform -> make sure that we have data on platform "result": "2"
+    assert {"code": 200, "result": "1"} == response
+
+
+def test_redis_getrange():
+    client = get_client_instance()
+
+    response = client.redis_getrange("test", 0, 0, REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "1"} == response
+
+
+def test_redis_getset():
+    client = get_client_instance()
+
+    response = client.redis_getset("test", "test_value", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "1"} == response
+
+
+def test_redis_incr():
+    client = get_client_instance()
+
+    response = client.redis_incr("test", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "2"} == response
 
 
 def test_redis_zadd():

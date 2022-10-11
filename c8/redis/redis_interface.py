@@ -1,5 +1,6 @@
 from c8.api import APIWrapper
 
+from c8.redis.core import build_request, RedisServerError
 from c8.redis.commands import Commands
 
 
@@ -18,8 +19,32 @@ class RedisInterface(APIWrapper, Commands):
     def __repr__(self):
         return '<RedisInterface in {}>'.format(self._conn.fabric_name)
 
+    def command_parser(self, command, collection, *args):
+        data = [command, *args]
+
+        request = build_request(collection, data)
+
+        def response_handler(response):
+            if not response.is_success and request is not None:
+                raise RedisServerError(response, request)
+            return response.body
+
+        return self._execute(request, response_handler)
+
     def set(self, key, value, collection):
         request_response_handler = self.set_command(key, value, collection)
+        return self._execute(request_response_handler[0], request_response_handler[1])
+
+    def append(self, key, value, collection):
+        request_response_handler = self.append_command(key, value, collection)
+        return self._execute(request_response_handler[0], request_response_handler[1])
+
+    def decr(self, key, collection):
+        request_response_handler = self.decr_command(key, collection)
+        return self._execute(request_response_handler[0], request_response_handler[1])
+
+    def decrby(self, key, decrement, collection):
+        request_response_handler = self.decrby_command(key, decrement, collection)
         return self._execute(request_response_handler[0], request_response_handler[1])
 
     def get(self, key, collection):
