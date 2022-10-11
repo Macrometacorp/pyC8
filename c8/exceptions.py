@@ -99,6 +99,7 @@ class C8TokenNotFoundError(C8ClientError):
 # Stream Exceptions #
 #######################
 
+
 class StreamProducerError(C8ClientError):
     """Failed to create Stream Producer"""
 
@@ -327,10 +328,6 @@ class CollectionTruncateError(C8ServerError):
 
 class CollectionPropertiesError(C8ServerError):
     """Failed to retrieve collection properties."""
-
-
-class CollectionConfigureError:
-    """Failed to configure collection properties."""
 
 
 #####################
@@ -564,6 +561,7 @@ class GetDataBaseAccessLevel(C8ServerError):
 # Permission Exceptions #
 #########################
 
+
 class PermissionListError(C8ServerError):
     """Failed to list user permissions."""
 
@@ -718,7 +716,7 @@ class ListStreams(C8ServerError):
     """Failed to fetch the streams for the specified key"""
 
 
-class BillingAcessLevel(C8ServerError):
+class BillingAccessLevel(C8ServerError):
     """Failed to fetch the billing access level"""
 
 
@@ -733,6 +731,7 @@ class ClearBillingAccessLevel(C8ServerError):
 #######################
 # Search #
 #######################
+
 
 class SearchCollectionSetError(C8ServerError):
     """Failed to set search capabilities for given collection"""
@@ -833,6 +832,7 @@ class AnalyzerConflictError(C8ServerError):
 #######################
 # Attributes #
 #######################
+
 
 class GetAttributes(C8ServerError):
     """Failed to fetch the Attributes for the specified user"""

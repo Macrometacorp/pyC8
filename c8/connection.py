@@ -163,7 +163,7 @@ class Connection(object):
         self._url_prefix = new_prefix
         #return old_prefix, self._url_prefix
 
-    def send_request(self, request, customPrefix=None):
+    def send_request(self, request, custom_prefix=None):
         """Send an HTTP request to C8 server.
 
         :param request: HTTP request.
@@ -179,8 +179,8 @@ class Connection(object):
             url = self._url_prefix[0:find_url]
             final_url = url + request.endpoint
         else:
-            if customPrefix is not None:
-                final_url = self.url + customPrefix + request.endpoint
+            if custom_prefix is not None:
+                final_url = self.url + custom_prefix + request.endpoint
             else:
                 final_url = self._url_prefix + request.endpoint
     

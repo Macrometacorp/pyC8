@@ -87,7 +87,9 @@ def pytest_configure(config):
         'password': password,
         'sys_fabric': sys_fabric,
         'tst_fabric': tst_fabric,
+        'tst_fabric_name': tst_fabric_name,
         'bad_fabric': bad_fabric,
+        'bad_fabric_name': bad_fabric_name,
         'geo_index': geo_index,
         'col_name': col_name,
         'lecol_name': lecol_name,
@@ -124,6 +126,17 @@ def pytest_unconfigure(config):  # pragma: no cover
         if col_name.startswith('test_collection'):
             sys_fabric.delete_collection(col_name, ignore_missing=True)
 
+   # Remove all test streams.
+    for stream in sys_fabric.streams():
+        stream_name = stream['name']
+        if stream_name.startswith('c8globals.test_stream'):
+            sys_fabric.delete_stream(stream_name)
+
+   # Remove all test apikeys.
+    for apikey in sys_fabric.list_all_api_keys():
+        apikey_id = apikey['keyid']
+        if apikey_id.startswith('test_apikey_id'):
+            client.remove_api_key(apikey_id)
 
 # noinspection PyProtectedMember
 def pytest_generate_tests(metafunc):
@@ -181,6 +194,13 @@ def client():
 def sys_fabric():
     return global_data['sys_fabric']
 
+@pytest.fixture(autouse=False)
+def tst_fabric_name():
+    return global_data['tst_fabric_name']
+
+@pytest.fixture(autouse=False)
+def bad_fabric_name():
+    return global_data['bad_fabric_name']
 
 @pytest.fixture(autouse=False)
 def username():
