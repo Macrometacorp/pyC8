@@ -310,7 +310,7 @@ class StreamCollection(APIWrapper):
     def unsubscribe(self, subscription, local=False):
         """Unsubscribes the given subscription on all streams on a stream fabric
         :param subscription
-        :param local, boolean indicating whether the stream is locla or global
+        :param local, boolean indicating whether the stream is local or global
         :returns: 200, OK if operation successful
         raise c8.exceptions.StreamPermissionError: If unsubscribing fails.
         """
