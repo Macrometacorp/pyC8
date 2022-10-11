@@ -97,6 +97,7 @@ def pytest_configure(config):
         'ecol_name': ecol_name,
         'fvcol_name': fvcol_name,
         'tvcol_name': tvcol_name,
+
     })
 
 
@@ -177,6 +178,11 @@ def pytest_generate_tests(metafunc):
 
     elif 'bad_fabric' in metafunc.fixturenames:
         metafunc.parametrize('bad_fabric', bad_fabrics)
+
+
+@pytest.fixture(autouse=False)
+def tst_fabric():
+    return global_data['tst_fabric']
 
 
 @pytest.fixture(autouse=False)

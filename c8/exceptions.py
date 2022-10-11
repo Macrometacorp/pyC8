@@ -151,6 +151,7 @@ class StreamEventError(C8ClientError):
 class StreamBadInputError(C8ClientError):
     """If the request doesn’t have the expected format"""
 
+
 #######################
 # Tenant Exceptions #
 #######################
@@ -323,6 +324,10 @@ class CollectionDeleteError(C8ServerError):
 
 class CollectionTruncateError(C8ServerError):
     """Failed to truncate collection."""
+
+
+class CollectionPropertiesError(C8ServerError):
+    """Failed to retrieve collection properties."""
 
 
 #####################
@@ -709,6 +714,7 @@ class ClearStreamAccessLevel(C8ServerError):
 
 class ListStreams(C8ServerError):
     """Failed to fetch the streams for the specified key"""
+
 
 
 class BillingAccessLevel(C8ServerError):
