@@ -804,7 +804,6 @@ class Collection(APIWrapper):
             return details
 
         return self._execute(request, response_handler)
-        #return self._add_index(data)
 
     def add_skiplist_index(self,
                            fields,
@@ -920,11 +919,11 @@ class Collection(APIWrapper):
                     'inBackground': inBackground}  
             return self._add_index(data)
 
-    def delete_index(self, index_id, ignore_missing=False):
+    def delete_index(self, index_name, ignore_missing=False):
         """Delete an index.
 
-        :param index_id: Index ID.
-        :type index_id: str | unicode
+        :param index_name: Index name.
+        :type index_name: str | unicode
         :param ignore_missing: Do not raise an exception on missing index.
         :type ignore_missing: bool
         :returns: True if index was deleted successfully, False if index was
@@ -934,7 +933,7 @@ class Collection(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/index/{}/{}'.format(self.name, index_id)
+            endpoint='/index/{}/{}'.format(self.name, index_name)
         )
 
         def response_handler(resp):
