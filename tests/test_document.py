@@ -1,5 +1,4 @@
 from __future__ import absolute_import, unicode_literals
-import pytest
 from six import string_types
 from c8.exceptions import (
     DocumentDeleteError,
@@ -1470,7 +1469,7 @@ def test_document_management_via_db(tst_fabric, col):
         assert '_key' in result
         assert result['_id'] == doc_id
 
-    with pytest.raises(DocumentUpdateError) as err:
+    with assert_raises(DocumentUpdateError) as err:
         tst_fabric.collection(col.name).update({'_key': 'H'})
     assert str(err) == "<ExceptionInfo DocumentUpdateError('[HTTP 404][ERR 1202] document not found') tblen=5>"
 
