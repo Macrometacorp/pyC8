@@ -1235,6 +1235,43 @@ def test_document_import_bulk(col, docs):
         assert col[doc_key]['loc'] == doc['loc']
 
 
+def test_document_export(col, docs):
+    # Set up test documents
+    cursor = col.export()
+    assert len(cursor) == 0
+    col.insert_many(docs)
+
+    # Test export
+    cursor = col.export()
+    assert clean_doc(cursor) == docs
+    for x in range(len(cursor)):
+        assert cursor[x] == docs[x]
+
+    # Test export with count
+    assert len(cursor) == len(docs)
+    assert clean_doc(cursor) == docs
+
+    # Test export with a limit of 0
+    cursor = col.export(limit=0)
+    assert len(cursor) == len(docs)
+    assert clean_doc(cursor) == docs
+
+    # Test export with a limit of 1
+    cursor = col.export(limit=1)
+    assert len(cursor) == 1
+    assert len(list(cursor)) == 1
+
+    # Test export with a limit of 3
+    cursor = col.export(limit=3)
+    assert len(cursor) == 3
+
+    # Test export with a offset of 3
+    cursor = col.export(offset=3)
+    assert len(cursor) == (len(docs) - 3)
+    for x in range(3, len(cursor)):
+        assert cursor[x] == docs[x]
+
+
 def test_document_edge(lecol, docs, edocs):
     ecol = lecol  # legacy edge collection
 
