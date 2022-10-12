@@ -1244,8 +1244,8 @@ class Fabric(APIWrapper):
 
         return self._execute(req, response_handler)
 
-    def retrive_stream_app(self):
-        """retrieves a stream app by given body
+    def retrieve_stream_app(self):
+        """retrieves all the stream apps of a fabric
         """
         req = Request(
             method="get",
