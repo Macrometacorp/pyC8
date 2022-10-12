@@ -942,7 +942,7 @@ class Fabric(APIWrapper):
                 } for col in map(dict, resp.body['result'])]
             elif code == 403:
                 raise StreamPermissionError(resp, request)
-            raise StreamListError,(resp, request)
+            raise StreamListError(resp, request)
 
         return self._execute(request, response_handler)
 
