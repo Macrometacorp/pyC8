@@ -665,16 +665,12 @@ class Fabric(APIWrapper):
     def update_collection_properties(self, collection_name, has_stream=None, wait_for_sync=None):
         """Changes the properties of a collection.
            Note: except for waitForSync and hasStream, collection properties cannot be changed once a collection is created.
-
         :param collection_name: Collection name.
         :type collection_name: str | unicode
-<<<<<<< HEAD
-=======
         :param has_stream: True if creating a live collection stream.
         :type has_stream: bool
         :param wait_for_sync: True if all data must be synced to storage before operation returns.
         :type wait_for_sync: bool
->>>>>>> upstream/master
         """
 
         data = {}
