@@ -1578,12 +1578,11 @@ class C8Client(object):
     # client.retrieve_stream_app
 
     def retrieve_stream_app(self):
-        """retrives stream apps in a fabric
+        """retrieves stream apps in a fabric
 
-        :param: name of stream app
         :returns: Object with list of stream Apps
         """
-        return self._fabric.retrive_stream_app()
+        return self._fabric.retrieve_stream_app()
 
     # client.get_stream_app
 
@@ -1614,6 +1613,16 @@ class C8Client(object):
         """
         _streamapp = self._fabric.stream_app(streamapp_name)
         return _streamapp.change_state(active=activate)
+
+    # client.publish_message_http_source
+
+    def publish_message_http_source(self, streamapp_name, stream, message):
+        """publish messages via HTTP source streams
+        @stream: name of the http source stream
+        @message: message to be published
+        """
+        _streamapp = self._fabric.stream_app(streamapp_name)
+        return _streamapp.publish_message_http_source(stream=stream, message=message)
 
     # client.has_graph
 
