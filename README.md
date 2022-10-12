@@ -48,11 +48,6 @@ In .env file add variables:
 
 .env file is in .gitignore.
 
-Make sure that dotenv module is installed using:
-```bash
-pip3 install python-dotenv
-```
-
 To run tests position yourself in the project's root while your virtual environment is active and run:
 ```bash
 python -m pytest
