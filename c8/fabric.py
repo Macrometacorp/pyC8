@@ -1121,6 +1121,29 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
+    def import_restql(self, queries, details=False):
+        """Import custom queries.
+
+        :param queries: queries to be imported
+        :type queries: [dict]
+        :param details: Whether to include details
+        :type details: bool
+        :returns: Results of importing restql
+        :rtype: dict
+        :raise c8.exceptions.RestqlImportError: if restql operation failed
+        """
+
+        data = {'queries': queries, 'details': details}
+
+        request = Request(method="post", endpoint="/restql/import", data=data)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlImportError(resp, request)
+            return resp.body["result"]
+
+        return self._execute(request, response_handler)
+
     def execute_restql(self, name, data=None):
         """Execute restql by name.
 
@@ -1137,12 +1160,32 @@ class Fabric(APIWrapper):
             request = Request(method="post", data=data,
                               endpoint="/restql/execute/%s" % name)
         else:
-            request = Request(method="post",
+            request = Request(method="post", data={},
                               endpoint="/restql/execute/%s" % name)
 
         def response_handler(resp):
             if not resp.is_success:
                 raise RestqlExecuteError(resp, request)
+            return resp.body
+
+        return self._execute(request, response_handler)
+
+    def read_next_batch_restql(self, id):
+        """Read next batch from query worker cursor.
+
+        :param id: the cursor-identifier
+        :type id: int
+        :returns: Results of execute restql
+        :rtype: dict
+        :raise c8.exceptions.RestqlCursorError: if fetch next batch failed
+        """
+
+        request = Request(method="put",
+                          endpoint="/restql/fetch/{}".format(id))
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlCursorError(resp, request)
             return resp.body
 
         return self._execute(request, response_handler)
