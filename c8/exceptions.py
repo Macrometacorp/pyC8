@@ -652,6 +652,10 @@ class DeleteEntryForKey(C8ServerError):
     """Failed to Delete entry for the specified key/keys"""
 
 
+class RemoveKVError(C8ServerError):
+    """Failed to Delete entry for all the kv pairs in the collection"""
+
+
 class GetValueError(C8ServerError):
     """Failed to fetch the value for the specified key/keys"""
 
@@ -662,6 +666,11 @@ class GetKeysError(C8ServerError):
 
 class GetCountError(C8ServerError):
     """Failed to get the kv count for the collection"""
+
+
+class GetKVError(C8ServerError):
+    """Failed to get all the kv pairs in the collection"""
+
 
 
 #######################
