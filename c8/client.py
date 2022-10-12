@@ -1093,6 +1093,21 @@ class C8Client(object):
         """
         return self._fabric.save_restql(data)
 
+   # client.import_restql
+
+    def import_restql(self, queries, details=False):
+        """Import custom queries.
+
+        :param queries: queries to be imported
+        :type queries: [dict]
+        :param details: Whether to include details
+        :type details: bool
+        :returns: Results of restql API
+        :rtype: dict
+        :raise c8.exceptions.RestqlImportError: if restql operation failed
+        """
+        return self._fabric.import_restql(queries=queries, details=details)
+
     # client.execute_restql
 
     def execute_restql(self, name, data=None):
@@ -1107,6 +1122,19 @@ class C8Client(object):
         :raise c8.exceptions.RestqlExecuteError: if restql execution failed
         """
         return self._fabric.execute_restql(name, data=data)
+
+    # client.read_next_batch_restql
+
+    def read_next_batch_restql(self, id):
+        """Read next batch from query worker cursor.
+
+        :param id: the cursor-identifier
+        :type id: int
+        :returns: Results of execute restql
+        :rtype: dict
+        :raise c8.exceptions.RestqlCursorError: if fetch next batch failed
+        """
+        return self._fabric.read_next_batch_restql(id=id)
 
     # client.delete_restql
 
