@@ -41,6 +41,8 @@ from c8.exceptions import (
     RestqlUpdateError,
     RestqlDeleteError,
     RestqlExecuteError,
+    RestqlImportError,
+    RestqlCursorError,
     EventCreateError,
     EventGetError,
     StreamAppGetSampleError,
