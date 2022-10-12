@@ -153,7 +153,7 @@ class KV(APIWrapper):
         :param name: Collection name.
         :type name: str | unicode
         :param key: The key for which the object is to be deleted.
-        :type data: string
+        :type key: string
         :return: True if successfully deleted.
         :rtype: boolean
         :raise c8.exceptions.DeleteEntryForKey: If deletion fails.
@@ -179,7 +179,7 @@ class KV(APIWrapper):
         :param name: Collection name.
         :type name: str | unicode
         :param keys: The keys for which the object is to be deleted.
-        :type data: list
+        :type keys: list
         :return: List of deleted objects
         :rtype: List
         :raise c8.exceptions.DeleteEntryForKey: If deletion fails.
@@ -217,7 +217,7 @@ class KV(APIWrapper):
             if not resp.is_success:
                 raise GetValueError(resp, request)
             else:
-                return(resp.body)
+                return resp.body
                 
         return self._execute(request, response_handler)
 
@@ -255,7 +255,7 @@ class KV(APIWrapper):
             if not resp.is_success:
                 raise GetKeysError(resp, request)
             else:
-                return(resp.body["result"])
+                return resp.body["result"]
                 
         return self._execute(request, response_handler)
 
@@ -278,7 +278,7 @@ class KV(APIWrapper):
             if not resp.is_success:
                 raise GetCountError(resp, request)
             else:
-                return(resp.body["count"])
+                return resp.body["count"]
                 
         return self._execute(request, response_handler)
 
@@ -313,7 +313,7 @@ class KV(APIWrapper):
             if not resp.is_success:
                 raise GetKVError(resp, request)
             else:
-                return(resp.body)
+                return resp.body
                 
         return self._execute(request, response_handler)
 
