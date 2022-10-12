@@ -579,6 +579,10 @@ class RestqlCreateError(C8ServerError):
     """Failed to create restql."""
 
 
+class RestqlImportError(C8ServerError):
+    """Failed to import restql."""
+
+
 class RestqlDeleteError(C8ServerError):
     """Failed to delete restql."""
 
@@ -593,6 +597,10 @@ class RestqlUpdateError(C8ServerError):
 
 class RestqlExecuteError(C8ServerError):
     """Failed to execute restql."""
+
+
+class RestqlCursorError(C8ServerError):
+    """Failed to read next batch from cursor."""
 
 
 #######################
