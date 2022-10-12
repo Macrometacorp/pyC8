@@ -1,28 +1,22 @@
 from __future__ import absolute_import, unicode_literals
-
+import random
 from six import string_types
-
 from c8.collection import EdgeCollection
 from c8.exceptions import (
     DocumentDeleteError,
-    DocumentGetError,
     DocumentInsertError,
     DocumentParseError,
-    DocumentReplaceError,
     DocumentRevisionError,
     DocumentUpdateError,
-    EdgeDefinitionListError,
     EdgeDefinitionCreateError,
     EdgeDefinitionDeleteError,
     EdgeDefinitionReplaceError,
-    GraphListError,
     GraphCreateError,
     GraphDeleteError,
-    GraphPropertiesError,
     VertexCollectionCreateError,
     VertexCollectionDeleteError,
     VertexCollectionListError,
-    EdgeListError)
+)
 from tests.helpers import (
     assert_raises,
     clean_doc,
@@ -33,25 +27,19 @@ from tests.helpers import (
 )
 
 
-def test_graph_properties(graph, bad_graph, db):
+def test_graph_properties(graph, tst_fabric):
     assert repr(graph) == '<Graph {}>'.format(graph.name)
-
     properties = graph.properties()
     assert properties['id'] == '_graphs/{}'.format(graph.name)
     assert properties['name'] == graph.name
     assert len(properties['edge_definitions']) == 1
-    assert len(properties['orphan_collections']) == 2
+    assert properties['orphan_collections'] == []
     assert 'smart' in properties
-    assert 'smart_field' in properties
     assert 'shard_count' in properties
     assert isinstance(properties['revision'], string_types)
 
-    # Test properties with bad fabric
-    with assert_raises(GraphPropertiesError):
-        bad_graph.properties()
-
     new_graph_name = generate_graph_name()
-    new_graph = db.create_graph(
+    new_graph = tst_fabric.create_graph(
         new_graph_name,
         # TODO only possible with enterprise edition
         # smart=True,
@@ -64,58 +52,52 @@ def test_graph_properties(graph, bad_graph, db):
     assert properties['edge_definitions'] == []
     assert properties['orphan_collections'] == []
     assert isinstance(properties['revision'], string_types)
-
     # TODO only possible with enterprise edition
     # assert properties['smart'] is True
     # assert properties['smart_field'] == 'foo'
     # assert properties['shard_count'] == 2
 
 
-def test_graph_management(db, bad_db):
+def test_graph_management(tst_fabric):
     # Test create graph
     graph_name = generate_graph_name()
-    assert db.has_graph(graph_name) is False
+    assert tst_fabric.has_graph(graph_name) is False
 
-    graph = db.create_graph(graph_name)
-    assert db.has_graph(graph_name) is True
+    graph = tst_fabric.create_graph(graph_name)
+    assert tst_fabric.has_graph(graph_name) is True
     assert graph.name == graph_name
-    assert graph.db_name == db.name
+    assert graph.fabric_name == tst_fabric.name
 
     # Test create duplicate graph
     with assert_raises(GraphCreateError) as err:
-        db.create_graph(graph_name)
+        tst_fabric.create_graph(graph_name)
     assert err.value.error_code == 1925
 
     # Test get graph
-    result = db.graph(graph_name)
+    result = tst_fabric.graph(graph_name)
     assert result.name == graph.name
-    assert result.db_name == graph.db_name
+    assert result.fabric_name == graph.fabric_name
 
     # Test get graphs
-    result = db.graphs()
+    result = tst_fabric.graphs()
     for entry in result:
         assert 'revision' in entry
         assert 'edge_definitions' in entry
         assert 'orphan_collections' in entry
-    assert graph_name in extract('name', db.graphs())
-
-    # Test get graphs with bad fabric
-    with assert_raises(GraphListError) as err:
-        bad_db.graphs()
-    assert err.value.error_code == 1228
+    assert graph_name in extract('name', tst_fabric.graphs())
 
     # Test delete graph
-    assert db.delete_graph(graph_name) is True
-    assert graph_name not in extract('name', db.graphs())
+    assert tst_fabric.delete_graph(graph_name) is True
+    assert graph_name not in extract('name', tst_fabric.graphs())
 
     # Test delete missing graph
     with assert_raises(GraphDeleteError) as err:
-        db.delete_graph(graph_name)
+        tst_fabric.delete_graph(graph_name)
     assert err.value.error_code == 1924
-    assert db.delete_graph(graph_name, ignore_missing=True) is False
+    assert tst_fabric.delete_graph(graph_name, ignore_missing=True) is False
 
     # Create a graph with vertex and edge collections and delete the graph
-    graph = db.create_graph(graph_name)
+    graph = tst_fabric.create_graph(graph_name)
     ecol_name = generate_col_name()
     fvcol_name = generate_col_name()
     tvcol_name = generate_col_name()
@@ -127,136 +109,138 @@ def test_graph_management(db, bad_db):
         from_vertex_collections=[fvcol_name],
         to_vertex_collections=[tvcol_name]
     )
-    collections = extract('name', db.collections())
+    collections = extract('name', tst_fabric.collections())
     assert fvcol_name in collections
     assert tvcol_name in collections
     assert ecol_name in collections
 
-    db.delete_graph(graph_name)
-    collections = extract('name', db.collections())
+    tst_fabric.delete_graph(graph_name)
+    collections = extract('name', tst_fabric.collections())
     assert fvcol_name in collections
     assert tvcol_name in collections
     assert ecol_name in collections
 
     # Create a graph with vertex and edge collections and delete all
-    graph = db.create_graph(graph_name)
+    graph = tst_fabric.create_graph(graph_name)
     graph.create_edge_definition(
         edge_collection=ecol_name,
         from_vertex_collections=[fvcol_name],
         to_vertex_collections=[tvcol_name]
     )
-    db.delete_graph(graph_name, drop_collections=True)
-    collections = extract('name', db.collections())
+    tst_fabric.delete_graph(graph_name, drop_collections=True)
+    collections = extract('name', tst_fabric.collections())
     assert fvcol_name not in collections
     assert tvcol_name not in collections
     assert ecol_name not in collections
 
 
-def test_vertex_collection_management(db, graph, bad_graph):
+def test_vertex_collection_management(tst_fabric, graph, bad_graph, client):
     # Test create valid "from" vertex collection
     fvcol_name = generate_col_name()
     assert not graph.has_vertex_collection(fvcol_name)
-    assert not db.has_collection(fvcol_name)
+    assert not tst_fabric.has_collection(fvcol_name)
 
     fvcol = graph.create_vertex_collection(fvcol_name)
     assert graph.has_vertex_collection(fvcol_name)
-    assert db.has_collection(fvcol_name)
+    assert tst_fabric.has_collection(fvcol_name)
     assert fvcol.name == fvcol_name
     assert fvcol.graph == graph.name
     assert fvcol_name in repr(fvcol)
     assert fvcol_name in graph.vertex_collections()
-    assert fvcol_name in extract('name', db.collections())
+    assert fvcol_name in extract('name', tst_fabric.collections())
 
     # Test create duplicate vertex collection
     with assert_raises(VertexCollectionCreateError) as err:
         graph.create_vertex_collection(fvcol_name)
     assert err.value.error_code == 1938
     assert fvcol_name in graph.vertex_collections()
-    assert fvcol_name in extract('name', db.collections())
+    assert fvcol_name in extract('name', tst_fabric.collections())
 
     # Test create valid "to" vertex collection
     tvcol_name = generate_col_name()
     assert not graph.has_vertex_collection(tvcol_name)
-    assert not db.has_collection(tvcol_name)
+    assert not tst_fabric.has_collection(tvcol_name)
 
     tvcol = graph.create_vertex_collection(tvcol_name)
     assert graph.has_vertex_collection(tvcol_name)
-    assert db.has_collection(tvcol_name)
+    assert tst_fabric.has_collection(tvcol_name)
     assert tvcol_name == tvcol_name
     assert tvcol.graph == graph.name
     assert tvcol_name in repr(tvcol)
     assert tvcol_name in graph.vertex_collections()
-    assert tvcol_name in extract('name', db.collections())
+    assert tvcol_name in extract('name', tst_fabric.collections())
 
     # Test list vertex collection via bad fabric
     with assert_raises(VertexCollectionListError) as err:
-        bad_graph.vertex_collections()
-    assert err.value.error_code == 1228
+        client._tenant.useFabric(generate_graph_name()).graph(bad_graph.name).vertex_collections()
+    assert err.value.error_code == 11
 
     # Test delete missing vertex collection
     with assert_raises(VertexCollectionDeleteError) as err:
         graph.delete_vertex_collection(generate_col_name())
-    assert err.value.error_code == 1926
+    assert err.value.error_code == 1928
 
     # Test delete "to" vertex collection with purge option
     assert graph.delete_vertex_collection(tvcol_name, purge=True) is True
     assert tvcol_name not in graph.vertex_collections()
-    assert fvcol_name in extract('name', db.collections())
-    assert tvcol_name not in extract('name', db.collections())
+    assert fvcol_name in extract('name', tst_fabric.collections())
+    assert tvcol_name not in extract('name', tst_fabric.collections())
     assert not graph.has_vertex_collection(tvcol_name)
 
     # Test delete "from" vertex collection without purge option
     assert graph.delete_vertex_collection(fvcol_name, purge=False) is True
     assert fvcol_name not in graph.vertex_collections()
-    assert fvcol_name in extract('name', db.collections())
+    assert fvcol_name in extract('name', tst_fabric.collections())
     assert not graph.has_vertex_collection(fvcol_name)
 
 
-def test_edge_definition_management(db, graph, bad_graph):
+def test_edge_definition_management(tst_fabric, graph, fvcol, tvcol, ecol, bad_graph):
+    # Check graph with random generated edge definitions
     ecol_name = generate_col_name()
     assert not graph.has_edge_definition(ecol_name)
     assert not graph.has_edge_collection(ecol_name)
-    assert not db.has_collection(ecol_name)
+    assert not tst_fabric.has_collection(ecol_name)
 
-    ecol = graph.create_edge_definition(ecol_name, [], [])
-    assert graph.has_edge_definition(ecol_name)
-    assert graph.has_edge_collection(ecol_name)
-    assert db.has_collection(ecol_name)
-    assert isinstance(ecol, EdgeCollection)
+    # Test create edge definition with missing vertex collection
+    with assert_raises(EdgeDefinitionCreateError) as err:
+        graph.create_edge_definition(ecol_name, [], [])
+    assert err.value.error_code == 1923
 
-    ecol = graph.edge_collection(ecol_name)
-    assert ecol.name == ecol_name
-    assert ecol.name in repr(ecol)
-    assert ecol.graph == graph.name
-    assert {
-               'edge_collection': ecol_name,
-               'from_vertex_collections': [],
-               'to_vertex_collections': []
-           } in graph.edge_definitions()
-    assert ecol_name in extract('name', db.collections())
+    # Check existing edge definitions
+    assert [{
+        'edge_collection': ecol.name,
+        'from_vertex_collections': [fvcol.name],
+        'to_vertex_collections': [tvcol.name]
+    }] == graph.edge_definitions()
+    assert graph.has_edge_collection(ecol.name) == True
+    assert tst_fabric.has_collection(ecol.name) == True
 
     # Test create duplicate edge definition
     with assert_raises(EdgeDefinitionCreateError) as err:
-        graph.create_edge_definition(ecol_name, [], [])
+        graph.create_edge_definition(
+            edge_collection=ecol.name,
+            from_vertex_collections=[fvcol.name],
+            to_vertex_collections=[tvcol.name]
+        )
     assert err.value.error_code == 1920
 
     # Test create edge definition with existing vertex collection
     fvcol_name = generate_col_name()
     tvcol_name = generate_col_name()
     ecol_name = generate_col_name()
-    ecol = graph.create_edge_definition(
+    edge_col = graph.create_edge_definition(
         edge_collection=ecol_name,
         from_vertex_collections=[fvcol_name],
         to_vertex_collections=[tvcol_name]
     )
-    assert ecol.name == ecol_name
+    assert edge_col.name == ecol_name
     assert {
                'edge_collection': ecol_name,
                'from_vertex_collections': [fvcol_name],
                'to_vertex_collections': [tvcol_name]
            } in graph.edge_definitions()
-    assert ecol_name in extract('name', db.collections())
 
+    assert ecol_name in extract('name', tst_fabric.collections())
     vertex_collections = graph.vertex_collections()
     assert fvcol_name in vertex_collections
     assert tvcol_name in vertex_collections
@@ -278,13 +262,8 @@ def test_edge_definition_management(db, graph, bad_graph):
                'to_vertex_collections': [bad_vcol_name]
            } in graph.edge_definitions()
     assert bad_vcol_name in graph.vertex_collections()
-    assert bad_vcol_name in extract('name', db.collections())
-    assert bad_vcol_name in extract('name', db.collections())
-
-    # Test list edge definition with bad fabric
-    with assert_raises(EdgeDefinitionListError) as err:
-        bad_graph.edge_definitions()
-    assert err.value.error_code == 1228
+    assert bad_vcol_name in extract('name', tst_fabric.collections())
+    assert bad_vcol_name in extract('name', tst_fabric.collections())
 
     # Test replace edge definition (happy path)
     ecol = graph.replace_edge_definition(
@@ -321,12 +300,12 @@ def test_edge_definition_management(db, graph, bad_graph):
                'from_vertex_collections': [tvcol_name],
                'to_vertex_collections': [fvcol_name]
            } not in graph.edge_definitions()
-    assert ecol_name not in extract('name', db.collections())
+    assert ecol_name in extract('name', tst_fabric.collections())
     assert not graph.has_edge_definition(ecol_name)
     assert not graph.has_edge_collection(ecol_name)
 
 
-def test_create_graph_with_edge_definition(db):
+def test_create_graph_with_edge_definition(tst_fabric):
     new_graph_name = generate_graph_name()
     new_ecol_name = generate_col_name()
     fvcol_name = generate_col_name()
@@ -338,7 +317,7 @@ def test_create_graph_with_edge_definition(db):
         'from_vertex_collections': [fvcol_name],
         'to_vertex_collections': [tvcol_name]
     }
-    new_graph = db.create_graph(
+    new_graph = tst_fabric.create_graph(
         new_graph_name,
         edge_definitions=[edge_definition],
         orphan_collections=[ovcol_name]
@@ -424,12 +403,7 @@ def test_vertex_management(fvcol, bad_fvcol, fvdocs):
     old_rev = result['_rev']
     with assert_raises(DocumentRevisionError) as err:
         fvcol.get(key, rev=old_rev + '1', check_rev=True)
-    assert err.value.error_code in {1903, 1200}
-
-    # Test get existing vertex with bad fabric
-    with assert_raises(DocumentGetError) as err:
-        bad_fvcol.get(key)
-    assert err.value.error_code == 1228
+    assert err.value.error_code == 1200
 
     # Test update vertex with a single field change
     assert 'foo' not in fvcol.get(key)
@@ -466,14 +440,14 @@ def test_vertex_management(fvcol, bad_fvcol, fvdocs):
         new_rev = old_rev + '1'
         with assert_raises(DocumentRevisionError) as err:
             fvcol.update({'_key': key, '_rev': new_rev, 'bar': 500})
-        assert err.value.error_code == 1903
+        assert err.value.error_code == 1200
         assert fvcol[key]['foo'] == 200
         assert fvcol[key]['bar'] == 400
 
     # Test update vertex in missing vertex collection
     with assert_raises(DocumentUpdateError) as err:
-        bad_fvcol.update({'_key': key, 'bar': 500})
-    assert err.value.error_code == 1228
+        fvcol.update({'_key': '1000', 'bar': 500})
+    assert err.value.error_code == 1202
     assert fvcol[key]['foo'] == 200
     assert fvcol[key]['bar'] == 400
 
@@ -539,16 +513,9 @@ def test_vertex_management(fvcol, bad_fvcol, fvdocs):
         vertex = {'_key': key, '_rev': new_rev, 'bar': 600}
         with assert_raises(DocumentRevisionError) as err:
             fvcol.replace(vertex)
-        assert err.value.error_code == 1903
+        assert err.value.error_code == 1200
         assert fvcol[key]['bar'] == 500
         assert 'foo' not in fvcol[key]
-
-    # Test replace vertex with bad fabric
-    with assert_raises(DocumentReplaceError) as err:
-        bad_fvcol.replace({'_key': key, 'bar': 600})
-    assert err.value.error_code == 1228
-    assert fvcol[key]['bar'] == 500
-    assert 'foo' not in fvcol[key]
 
     # Test replace vertex with sync set to True
     vertex = {'_key': key, 'bar': 400, 'foo': 200}
@@ -564,7 +531,7 @@ def test_vertex_management(fvcol, bad_fvcol, fvdocs):
         vertex['_rev'] = old_rev + '1'
         with assert_raises(DocumentRevisionError) as err:
             fvcol.delete(vertex, check_rev=True)
-        assert err.value.error_code == 1903
+        assert err.value.error_code == 1200
         vertex['_rev'] = old_rev
         assert vertex in fvcol
 
@@ -724,9 +691,9 @@ def test_edge_management(ecol, bad_ecol, edocs, fvcol, fvdocs, tvcol, tvdocs):
     assert err.value.error_code in {1903, 1200}
 
     # Test get existing edge with bad fabric
-    with assert_raises(DocumentGetError) as err:
-        bad_ecol.get(key)
-    assert err.value.error_code == 1228
+    # with assert_raises(DocumentGetError) as err:
+    #     bad_ecol.get(key)
+    # assert err.value.error_code == 1228
 
     # Test update edge with a single field change
     assert 'foo' not in ecol.get(key)
@@ -761,8 +728,8 @@ def test_edge_management(ecol, bad_ecol, edocs, fvcol, fvdocs, tvcol, tvdocs):
 
     # Test update edge in missing edge collection
     with assert_raises(DocumentUpdateError) as err:
-        bad_ecol.update({'_key': key, 'bar': 500})
-    assert err.value.error_code == 1228
+        ecol.update({'_key': '1000', 'bar': 500})
+    assert err.value.error_code == 1202
     assert ecol[key]['foo'] == 200
     assert ecol[key]['bar'] == 400
 
@@ -838,14 +805,14 @@ def test_edge_management(ecol, bad_ecol, edocs, fvcol, fvdocs, tvcol, tvdocs):
         edge['_rev'] = old_rev + key
         with assert_raises(DocumentRevisionError) as err:
             ecol.replace(edge)
-        assert err.value.error_code == 1903
+        assert err.value.error_code == 1200
         assert ecol[key]['foo'] == 300
         assert ecol[key]['bar'] == 400
 
     # Test replace edge with bad fabric
-    with assert_raises(DocumentReplaceError) as err:
+    with assert_raises(DocumentRevisionError) as err:
         bad_ecol.replace(edge)
-    assert err.value.error_code == 1228
+    assert err.value.error_code == 1200
     assert ecol[key]['foo'] == 300
     assert ecol[key]['bar'] == 400
 
@@ -862,7 +829,7 @@ def test_edge_management(ecol, bad_ecol, edocs, fvcol, fvdocs, tvcol, tvdocs):
         edge['_rev'] = old_rev + '1'
         with assert_raises(DocumentRevisionError) as err:
             ecol.delete(edge, check_rev=True)
-        assert err.value.error_code == 1903
+        assert err.value.error_code == 1200
         edge['_rev'] = old_rev
         assert edge in ecol
 
@@ -881,7 +848,7 @@ def test_edge_management(ecol, bad_ecol, edocs, fvcol, fvdocs, tvcol, tvdocs):
     ecol.truncate()
 
 
-def test_vertex_edges(db, bad_db):
+def test_vertex_edges(tst_fabric, graph):
     graph_name = generate_graph_name()
     vcol_name = generate_col_name()
     ecol_name = generate_col_name()
@@ -894,7 +861,7 @@ def test_vertex_edges(db, bad_db):
     tony = {'_id': '{}/tony'.format(vcol_name)}
 
     # Create test graph, vertex and edge collections
-    school = db.create_graph(graph_name)
+    school = tst_fabric.create_graph(graph_name)
 
     vcol = school.create_vertex_collection(vcol_name)
     ecol = school.create_edge_definition(
@@ -940,11 +907,6 @@ def test_vertex_edges(db, bad_db):
     result = ecol.edges(anna, direction='out')
     assert len(result['edges']) == 1
 
-    bad_graph = bad_db.graph(graph_name)
-    with assert_raises(EdgeListError) as err:
-        bad_graph.edge_collection(ecol_name).edges(dave)
-    assert err.value.error_code == 1228
-
 
 def test_edge_management_via_graph(graph, ecol, fvcol, fvdocs, tvcol, tvdocs):
     for vertex in fvdocs:
@@ -954,11 +916,11 @@ def test_edge_management_via_graph(graph, ecol, fvcol, fvdocs, tvcol, tvdocs):
     ecol.truncate()
 
     # Get a random "from" vertex
-    from_vertex = fvcol.random()
+    from_vertex = fvcol.get({'_key': str(random.randint(1, 3))})
     assert graph.has_vertex(from_vertex)
 
     # Get a random "to" vertex
-    to_vertex = tvcol.random()
+    to_vertex = tvcol.get({'_key': str(random.randint(4, 6))})
     assert graph.has_vertex(to_vertex)
 
     # Test insert edge via graph object
