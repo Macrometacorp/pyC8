@@ -171,6 +171,31 @@ def test_add_persistent_index(col):
     assert result in col.indexes()
 
 
+def test_add_ttl_index(col):
+    fields = ['attr1']
+    # Test add_ttl_index
+    result = col.add_ttl_index(fields=fields, expireAfter=1)
+    # Test add ttl index result
+    expected_index = {
+        'sparse': True,
+        'type': 'ttl',
+        'fields': ['attr1'],
+        'unique': False,
+        'expireAfter': 1,
+        'selectivity': 1,
+    }
+
+    for key, value in expected_index.items():
+        assert result[key] == value
+
+    result.pop('new', None)
+    assert result in col.indexes()
+    # Test add_ttl_index with 2 fields
+    with assert_raises(IndexCreateError) as err:
+        col.add_ttl_index(fields=['attr1', 'attr2'], expireAfter=10)
+    assert err.value.error_code == 10
+
+
 def test_delete_index(col, bad_col):
     old_indexes = set(extract('name', col.indexes()))
     col.add_hash_index(['attr3', 'attr4'], unique=False)
