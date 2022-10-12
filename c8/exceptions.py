@@ -672,7 +672,6 @@ class GetKVError(C8ServerError):
     """Failed to get all the kv pairs in the collection"""
 
 
-
 #######################
 # API Keys #
 #######################
