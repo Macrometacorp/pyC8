@@ -2418,7 +2418,7 @@ class C8Client(object):
         :param name: Collection name.
         :type name: str | unicode
         :param key: The key for which the object is to be deleted.
-        :type data: string
+        :type key: string
         :returns: True if successfully deleted.
         :rtype: boolean
         :raise c8.exceptions.DeleteEntryForKey: If deletion fails.
@@ -2433,7 +2433,7 @@ class C8Client(object):
         :param name: Collection name.
         :type name: str | unicode
         :param keys: The keys for which the object is to be deleted.
-        :type data: list
+        :type keys: list
         :returns: List of deleted objects
         :rtype: List
         :raise c8.exceptions.DeleteEntryForKey: If deletion fails.
