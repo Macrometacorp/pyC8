@@ -2781,7 +2781,8 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.append(key, value, collection)
+        redis_command = "APPEND"
+        return self._fabric.redis.command_parser(redis_command, collection, key, value)
 
     def redis_decr(self, key, collection):
         """
@@ -2798,7 +2799,8 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.decr(key, collection)
+        redis_command = "DECR"
+        return self._fabric.redis.command_parser(redis_command, collection, key)
 
     def redis_decrby(self, key, decrement, collection):
         """
@@ -2817,7 +2819,13 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.decrby(key, decrement, collection)
+        redis_command = "DECRBY"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            decrement
+        )
 
     def redis_get(self, key, collection):
         """
@@ -2833,7 +2841,8 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.get(key, collection)
+        redis_command = "GET"
+        return self._fabric.redis.command_parser(redis_command, collection, key)
 
     def redis_getdel(self, key, collection):
         """
@@ -3371,7 +3380,14 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.zadd(key, score, member, collection)
+        redis_command = "ZADD"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            score,
+            member
+        )
 
     def redis_zrange(self, key, start, stop, collection):
         """
@@ -3391,7 +3407,14 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.zrange(key, start, stop, collection)
+        redis_command = "ZRANGE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            start,
+            stop
+        )
 
     def redis_lpush(self, key, elements, collection):
         """
@@ -3411,7 +3434,13 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.lpush(key, elements, collection)
+        redis_command = "LPUSH"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *elements
+        )
 
     def redis_lrange(self, key, start, stop, collection):
         """
@@ -3433,7 +3462,14 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.lrange(key, start, stop, collection)
+        redis_command = "LRANGE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            start,
+            stop
+        )
 
     def redis_hset(self, key, field, value, collection):
         """
@@ -3453,7 +3489,14 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.hset(key, field, value, collection)
+        redis_command = "HSET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            field,
+            value
+        )
 
     def redis_hget(self, key, field, collection):
         """
@@ -3469,7 +3512,37 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.hget(key, field, collection)
+        redis_command = "HGET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            field
+        )
+
+    def redis_hdel(self, key, fields, collection):
+        """
+        Removes the specified fields from the hash stored at key. Specified fields
+        that do not exist within this hash are ignored. If key does not exist,
+        it is treated as an empty hash and this command returns 0 More on
+        https://redis.io/commands/hdel/
+
+        :param key: Key of the data
+        :type key: str
+        :param fields: Field of the data
+        :type fields: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HDEL"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *fields
+        )
 
     def redis_sadd(self, key, member, collection):
         """
@@ -3487,7 +3560,13 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.sadd(key, member, collection)
+        redis_command = "SADD"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            member
+        )
 
     def redis_spop(self, key, count, collection):
         """
@@ -3505,6 +3584,12 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.spop(key, count, collection)
+        redis_command = "SPOP"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count
+        )
 
 

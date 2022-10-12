@@ -256,8 +256,8 @@ def test_redis_bitcount_2():
     # Response from platform
     assert {"code": 200, "result": 4} == response
 
-
-# TODO Failed test
+# This test fails
+# We support Redis commands till 6.2, bit/byte operation was added in 7.0
 # def test_redis_bitcount_3():
 #     client = get_client_instance()
 #
@@ -364,7 +364,7 @@ def test_redis_lpush():
     response = client.redis_lpush("list", list_data, REDIS_COLLECTION)
     print(response)
     # Response from platform
-    assert {"code": 200, "result": ["3"]} == response
+    assert {"code": 200, "result": 3} == response
 
 
 def test_redis_lrange():
