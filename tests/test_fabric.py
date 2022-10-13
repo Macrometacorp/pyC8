@@ -25,6 +25,19 @@ def test_fabric_misc_methods(fabric, client):
     with assert_raises(FabricPropertiesError) as err:
         client._tenant.useFabric(generate_fabric_name()).properties()
     assert err.value.error_code == 11
+    # Test fabric details method
+    details = fabric.fabrics_detail()
+    assert 'associated_regions' in details[0]['options']
+    assert 'dcList' in details[0]['options']
+    assert 'dynamo_local_tables' in details[0]['options']
+    assert 'realTime' in details[0]['options']
+    assert 'spotDc' in details[0]['options']
+    assert 'status' in details[0]['options']
+
+    dc_list = fabric.dclist()
+    assert len(dc_list) > 0
+    local_dc = fabric.localdc()
+    assert local_dc['_key'] in dc_list
 
 
 def test_fabric_management(fabric, client):
@@ -39,7 +52,6 @@ def test_fabric_management(fabric, client):
     assert sys_fabric.has_fabric(fabric_name) is False
     assert sys_fabric.create_fabric(fabric_name) is True
     assert sys_fabric.has_fabric(fabric_name) is True
-
     # Test create duplicate fabric
     with assert_raises(FabricCreateError) as err:
         sys_fabric.create_fabric(fabric_name)
