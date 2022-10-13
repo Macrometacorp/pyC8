@@ -25,12 +25,12 @@ def test_server_error(client, col, docs):
     assert isinstance(exc, C8ServerError)
     assert exc.source == 'server'
     assert exc.message == str(exc)
-    assert exc.message.startswith('[HTTP 409][ERR 1210] unique constraint')
+    assert exc.message.startswith('[HTTP 409][ERR 1210]')
     assert exc.url.startswith(client.base_url)
     assert exc.error_code == 1210
     assert exc.http_method == 'post'
     assert exc.http_code == 409
-    assert exc.http_headers['Server'] == 'C8Db'
+    assert exc.http_headers['Server'] == 'APISIX'
     assert isinstance(exc.http_headers, CaseInsensitiveDict)
 
     resp = exc.response
@@ -61,7 +61,7 @@ def test_server_error(client, col, docs):
     assert req.command is None
     assert req.params == {'returnNew': 0, 'silent': 0}
     assert req.data == json.dumps(document)
-    assert req.endpoint.startswith('/_api/document/' + col.name)
+    assert req.endpoint.startswith('/document/' + col.name)
 
 
 def test_client_error(col):
