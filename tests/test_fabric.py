@@ -1,83 +1,41 @@
 from __future__ import absolute_import, unicode_literals
-
-from datetime import datetime
-
-from six import string_types
-
 from c8.exceptions import (
     FabricCreateError,
     FabricDeleteError,
-    FabricListError,
     FabricPropertiesError,
-    ServerDetailsError,
-    ServerEchoError,
-    ServerVersionError,
-    ServerEngineError
 )
 from tests.helpers import assert_raises, generate_fabric_name
 
 
-def test_fabric_attributes(fabric, username):
+def test_fabric_attributes(fabric, client):
     assert fabric.context in ['default', 'async', 'batch', 'transaction']
-    assert fabric.username == username
-    assert fabric.fabric_name == fabric.name
+    assert fabric.tenant_name == client._tenant.name
     assert fabric.name.startswith('test_fabric')
     assert repr(fabric) == '<StandardFabric {}>'.format(fabric.name)
 
 
-def test_fabric_misc_methods(fabric, bad_fabric):
+def test_fabric_misc_methods(fabric, client):
     # Test get properties
     properties = fabric.properties()
-    assert 'id' in properties
-    assert 'path' in properties
+    assert 'associated_regions' in properties['options']
+    assert 'clusters' in properties['options']
     assert properties['name'] == fabric.name
     assert properties['system'] is False
-
     # Test get properties with bad fabric
     with assert_raises(FabricPropertiesError) as err:
-        bad_fabric.properties()
-    assert err.value.error_code == 1228
-
-    # Test get server version
-    assert isinstance(fabric.version(), string_types)
-
-    # Test get server version with bad fabric
-    with assert_raises(ServerVersionError) as err:
-        bad_fabric.version()
-    assert err.value.error_code == 1228
-
-    # Test get server details
-    details = fabric.details()
-    assert 'architecture' in details
-    assert 'server-version' in details
-
-    # Test get server details with bad fabric
-    with assert_raises(ServerDetailsError) as err:
-        bad_fabric.details()
-    assert err.value.error_code == 1228
-
-    # Test get storage engine
-    engine = fabric.engine()
-    assert engine['name'] in ['mmfiles', 'rocksfabric']
-    assert 'supports' in engine
-
-    # Test get storage engine with bad fabric
-    with assert_raises(ServerEngineError) as err:
-        bad_fabric.engine()
-    assert err.value.error_code == 1228
+        client._tenant.useFabric(generate_fabric_name()).properties()
+    assert err.value.error_code == 11
 
 
-def test_fabric_management(fabric, sys_fabric, bad_fabric):
+def test_fabric_management(fabric, client):
     # Test list fabrics
+    sys_fabric = client._tenant.useFabric('_system')
     result = sys_fabric.fabrics()
     assert '_system' in result
 
-    # Test list fabrics with bad fabric
-    with assert_raises(FabricListError):
-        bad_fabric.fabrics()
-
     # Test create fabric
     fabric_name = generate_fabric_name()
+
     assert sys_fabric.has_fabric(fabric_name) is False
     assert sys_fabric.create_fabric(fabric_name) is True
     assert sys_fabric.has_fabric(fabric_name) is True
