@@ -6,6 +6,96 @@ from c8.exceptions import (
 from tests.helpers import assert_raises, extract
 
 
+def test_add_index(col):
+    fields = ['attr1']
+    # Test create skiplist index
+    data = {'type': 'skiplist', 'fields': fields, 'unique': False, 'sparse': True, 'deduplicate': True}
+    resp = col.add_index(data)
+
+    expected_index = {
+        'sparse': True,
+        'type': 'skiplist',
+        'fields': ['attr1'],
+        'unique': False,
+        'deduplicate': True,
+        'new': True
+    }
+    for key, value in expected_index.items():
+        assert resp[key] == value
+
+    resp.pop('new', None)
+    assert resp in col.indexes()
+
+    # Test if unique set to true in global collection
+    data = {'type': 'skiplist', 'fields': fields, 'unique': True, 'sparse': True, 'deduplicate': True}
+    with assert_raises(IndexCreateError) as err:
+        col.add_index(data)
+    assert err.value.error_code == 400
+
+    # Test if unique set to false in global collection
+    data = {'type': 'hash', 'fields': fields, 'unique': False, 'sparse': True, 'deduplicate': True}
+    resp = col.add_index(data)
+    expected_index = {
+        'selectivity': 1,
+        'sparse': True,
+        'type': 'hash',
+        'fields': ['attr1'],
+        'unique': False,
+        'deduplicate': True,
+        'new': True,
+    }
+    for key, value in expected_index.items():
+        assert resp[key] == value
+
+    resp.pop('new', None)
+    assert resp in col.indexes()
+
+    # Test add_ttl_index
+    data = {'type': 'ttl', 'fields': fields, 'expireAfter': 0,
+            'inBackground': False}
+    resp = col.add_index(data)
+    # Test add ttl index result
+    expected_index = {
+        'sparse': True,
+        'type': 'ttl',
+        'fields': ['attr1'],
+        'unique': False,
+        'expireAfter': 0,
+        'selectivity': 1,
+    }
+
+    for key, value in expected_index.items():
+        assert resp[key] == value
+
+    resp.pop('new', None)
+    assert resp in col.indexes()
+    assert col.delete_index(resp['name']) == True
+
+    # Test add_ttl_index with 2 fields
+    fields = ['attr1', 'attr2']
+    data = {'type': 'ttl', 'fields': fields, 'expireAfter': 0, 'inBackground': False}
+    with assert_raises(IndexCreateError) as err:
+        col.add_index(data)
+    assert err.value.error_code == 10
+
+
+def test_get_index(col):
+    index = col.get_index('primary')
+    expected_index = {
+        'id': f'{col.name}/0',
+        'sparse': False,
+        'type': 'primary',
+        'fields': ['_key'],
+        'unique': True,
+        'name': 'primary',
+    }
+    assert expected_index['sparse'] == index['sparse']
+    assert expected_index['type'] == index['type']
+    assert expected_index['fields'] == index['fields']
+    assert expected_index['unique'] == index['unique']
+    assert expected_index['name'] == index['name']
+
+
 def test_list_indexes(col):
     # Test default primary index
     expected_index = {
