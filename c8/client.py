@@ -2587,7 +2587,7 @@ class C8Client(object):
         :param collection: Collection name on which search capabilities has to be enabled/disabled
         :type collection: str | unicode
         :param enable: Whether to enable / disable search capabilities
-        :type enable: bool
+        :type enable: string ("true" or "false")
         :param field: For which field to enable search capability.
         :type field: str | unicode
         :returns: True if set operation is successfull
@@ -2595,26 +2595,21 @@ class C8Client(object):
         """
         return self._search.set_search(collection, enable, field)
 
-    def create_view(self,
-                    name,
-                    properties={},
-                    view_type="search",
-                    ):
+    def create_view(self, name, links={}, primary_sort=[]):
         """Creates a new view with a given name and properties if it does not
         already exist.
-        Note: view can't be created with the links. Please use PUT/PATCH for links
-        management.
-
+        
         :param name: The name of the view
         :type name: str | unicode
-        :param properties: Properties related with given view
-        :type properties: dict
-        :param view_type: The type of the view. must be equal to "c8search"
-        :type view_type: str | unicode
-        :returns: object of new view
+        :param links: Link properties related with the view
+        :type links: dict
+        :param primary_sort: Array of object containg the fields on which
+        sorting needs to be done and whether the sort is asc or desc
+        :type primary_sort: [dict]
+        :return: object of new view
         :rtype: dict
         """
-        return self._search.create_view(name=name, properties={}, view_type="search")
+        return self._search.create_view(name, links, primary_sort)
 
     def list_all_views(self):
         """ List all views
@@ -2696,8 +2691,7 @@ class C8Client(object):
                   used to obtain the remaining results.
         :rtype: [dict]
         """
-        return self._search.search_in_collection(collection, search, bindVars=None,
-                                                 ttl=60)
+        return self._search.search_in_collection(collection, search, bindVars, ttl)
 
     def get_list_of_analyzer(self):
         """Get list of all available analyzers
@@ -2707,39 +2701,10 @@ class C8Client(object):
         """
         return self._search.get_list_of_analyzer()
 
-    def create_analyzer(self, name, analyzer_type, features=[], properties={}):
-        """Creates an analyzer with supplied definitions
-
-        :param name: The analyzer name.
-        :type name: str | unicode
-        :param properties: The properties used to configure the specified type.
-        Value may be a string, an object or null. The default value is null.
-        :type properties: str | dict | unicode
-        :param analyzer_type: The analyzer type.
-        :type analyzer_type: str | unicode
-        :param features: The set of features to set on the analyzer generated fields.
-                         The default value is an empty array.
-        :type features: list
-        :returns: Returns analyzer object if analyzer created successfully
-        :rtype: dict
-        """
-        return self._search.create_analyzer(name, analyzer_type, features=features,
-                                            properties=properties)
-
-    def delete_analyzer(self, name):
-        """Deletes given analyzer
-
-        :param name: Name of the analyzer to be deleted
-        :type name: str | unicode
-        :returns: True if analyzer deleted successfully
-        :rtype: bool
-        """
-        return self._search.delete_analyzer(name)
-
     def get_analyzer_definition(self, name):
         """Gets given analyzer definition
 
-        :param name: Name of the view to be deleted
+        :param name: Name of the view
         :type name: str | unicode
         :returns: Definition of the given analyzer
         :rtype: dict
