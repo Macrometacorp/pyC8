@@ -1,18 +1,12 @@
 from __future__ import absolute_import, unicode_literals
-
 from six import string_types
-
 from c8.exceptions import (
-    DocumentCountError,
     DocumentDeleteError,
     DocumentGetError,
-    DocumentInError,
     DocumentInsertError,
     DocumentReplaceError,
     DocumentRevisionError,
     DocumentUpdateError,
-    DocumentKeysError,
-    DocumentIDsError,
     DocumentParseError,
 )
 from tests.helpers import (
@@ -20,7 +14,7 @@ from tests.helpers import (
     clean_doc,
     extract,
     generate_doc_key,
-    generate_col_name
+    generate_col_name,
 )
 
 
@@ -106,7 +100,7 @@ def test_document_insert(col, docs):
     assert err.value.error_code == 1210
 
 
-def test_document_insert_many(col, bad_col, docs):
+def test_document_insert_many(col, docs):
     # Test insert_many with default options
     results = col.insert_many(docs)
     for result, doc in zip(results, docs):
@@ -182,11 +176,6 @@ def test_document_insert_many(col, bad_col, docs):
     results = col.insert_many(docs, return_new=False)
     for result, doc in zip(results, docs):
         isinstance(result, DocumentInsertError)
-
-    # Test get with bad fabric
-    with assert_raises(DocumentInsertError) as err:
-        bad_col.insert_many(docs)
-    assert err.value.error_code == 1228
 
 
 def test_document_update(col, docs):
@@ -320,9 +309,9 @@ def test_document_update(col, docs):
     assert col[doc['_key']]['val'] == 8
 
 
-def test_document_update_many(col, bad_col, docs):
+def test_document_update_many(col, docs):
+    # Insert docs on collection
     col.insert_many(docs)
-
     old_revs = {}
     doc_keys = [d['_key'] for d in docs]
 
@@ -441,7 +430,8 @@ def test_document_update_many(col, bad_col, docs):
     results = col.update_many(docs, check_rev=True)
     for result, doc_key in zip(results, doc_keys):
         assert isinstance(result, DocumentRevisionError)
-    for doc in col:
+    for x in range(col.count()):
+        doc = col.get({'_key': str(x + 1)})
         assert doc['val'] == 4
 
     # Test update_many with check_rev set to False
@@ -481,11 +471,9 @@ def test_document_update_many(col, bad_col, docs):
         assert col[doc_key]['val'] == 7
         old_revs[doc_key] = result['_rev']
 
-    # Test update_many with bad fabric
-    with assert_raises(DocumentUpdateError) as err:
-        bad_col.update_many(docs)
-    assert err.value.error_code == 1228
-
+    # Test update_many with non-existing doc
+    resp = col.update_many({'_key': '123'})
+    assert str(resp) == "[DocumentUpdateError('[HTTP 202][ERR 1227] invalid document type')]"
     # Test update_many with silent set to True
     for doc in docs:
         doc['val'] = 8
@@ -495,51 +483,8 @@ def test_document_update_many(col, bad_col, docs):
 
     # Test update_many with bad documents
     with assert_raises(DocumentParseError) as err:
-        bad_col.update_many([{}])
+        col.update_many([{}])
     assert str(err.value) == 'field "_key" or "_id" required'
-
-
-def test_document_update_match(col, bad_col, docs):
-    # Set up test documents
-    col.import_bulk(docs)
-
-    # Test update single matching document
-    assert col.update_match({'val': 2}, {'val': 1}) == 1
-    assert col['2']['val'] == 1
-
-    # Test update multiple matching documents
-    assert col.update_match({'val': 1}, {'foo': 1}) == 2
-    for doc_key in ['1', '2']:
-        assert col[doc_key]['val'] == 1
-        assert col[doc_key]['foo'] == 1
-
-    # Test update multiple matching documents with limit set to 1
-    assert col.update_match({'val': 1}, {'foo': 2}, limit=1) == 1
-    assert [doc.get('foo') for doc in col].count(2) == 1
-
-    # Test update matching documents with sync and keep_none set to True
-    assert col.update_match(
-        {'val': 3},
-        {'val': None},
-        sync=True,
-        keep_none=True
-    ) == 1
-    assert col['3']['val'] is None
-
-    # Test update matching documents with sync and keep_none set to False
-    assert col.update_match(
-        {'val': 1},
-        {'val': None},
-        sync=False,
-        keep_none=False
-    ) == 2
-    assert 'val' not in col['1']
-    assert 'val' not in col['2']
-
-    # Test update matching documents with bad fabric
-    with assert_raises(DocumentUpdateError) as err:
-        bad_col.update_match({'val': 1}, {'foo': 1})
-    assert err.value.error_code == 1228
 
 
 def test_document_replace(col, docs):
@@ -638,9 +583,8 @@ def test_document_replace(col, docs):
     assert col[doc['_key']]['val'] == 8
 
 
-def test_document_replace_many(col, bad_col, docs):
+def test_document_replace_many(col, docs):
     col.insert_many(docs)
-
     old_revs = {}
     doc_keys = list(d['_key'] for d in docs)
 
@@ -715,7 +659,8 @@ def test_document_replace_many(col, bad_col, docs):
     results = col.replace_many(docs, check_rev=True)
     for result, doc_key in zip(results, doc_keys):
         assert isinstance(result, DocumentRevisionError)
-    for doc in col:
+    for x in range(col.count()):
+        doc = col.get({'_key': str(x + 1)})
         assert 'foo' not in doc
         assert doc['baz'] == 4
 
@@ -759,10 +704,13 @@ def test_document_replace_many(col, bad_col, docs):
         assert 'foo' not in col[doc_key]
         old_revs[doc_key] = result['_rev']
 
-    # Test replace_many with bad fabric
-    with assert_raises(DocumentReplaceError) as err:
-        bad_col.replace_many(docs)
-    assert err.value.error_code == 1228
+    resp = col.replace_many([{'_key': '1000'}])
+    # Test replace_many with bad key
+    assert str(resp) == "[DocumentReplaceError('[HTTP 202][ERR 1202] document not found')]"
+
+    resp = col.replace_many([{'_key': 1}])
+    # Test replace_many with illegal key
+    assert str(resp) == "[DocumentReplaceError('[HTTP 202][ERR 1221] illegal document key')]"
 
     # Test replace_many with silent set to True
     for doc in docs:
@@ -776,32 +724,8 @@ def test_document_replace_many(col, bad_col, docs):
 
     # Test replace_many with bad documents
     with assert_raises(DocumentParseError) as err:
-        bad_col.replace_many([{}])
+        col.replace_many([{}])
     assert str(err.value) == 'field "_key" or "_id" required'
-
-
-def test_document_replace_match(col, bad_col, docs):
-    col.import_bulk(docs)
-
-    # Test replace single matching document
-    assert col.replace_match({'val': 2}, {'val': 1, 'foo': 1}) == 1
-    assert col['2']['val'] == 1
-    assert col['2']['foo'] == 1
-
-    # Test replace multiple matching documents
-    assert col.replace_match({'val': 1}, {'foo': 1}) == 2
-    for doc_key in ['1', '2']:
-        assert 'val' not in col[doc_key]
-        assert col[doc_key]['foo'] == 1
-
-    # Test replace multiple matching documents with limit and sync
-    assert col.replace_match({'foo': 1}, {'bar': 2}, limit=1, sync=True) == 1
-    assert [doc.get('bar') for doc in col].count(2) == 1
-
-    # Test replace matching documents with bad fabric
-    with assert_raises(DocumentReplaceError) as err:
-        bad_col.replace_match({'val': 1}, {'foo': 1})
-    assert err.value.error_code == 1228
 
 
 def test_document_delete(col, docs):
@@ -874,7 +798,7 @@ def test_document_delete(col, docs):
     assert len(col) == 1
 
 
-def test_document_delete_many(col, bad_col, docs):
+def test_document_delete_many(col, docs):
     # Set up test documents
     old_revs = {}
     doc_keys = [d['_key'] for d in docs]
@@ -955,117 +879,19 @@ def test_document_delete_many(col, bad_col, docs):
     for result, doc in zip(results, docs):
         assert isinstance(result, DocumentDeleteError)
     assert len(col) == 0
-
-    # Test delete_many with bad fabric
-    with assert_raises(DocumentDeleteError) as err:
-        bad_col.delete_many(docs)
-    assert err.value.error_code == 1228
+    resp = col.delete_many([{'_key': '1'}])
+    # Test delete_many with bad key
+    assert str(resp) == "[DocumentDeleteError('[HTTP 202][ERR 1202] document not found')]"
 
 
-def test_document_delete_match(col, bad_col, docs):
+def test_document_count(col, docs):
     # Set up test documents
     col.import_bulk(docs)
-
-    # Test delete matching documents with default options
-    doc = docs[0]
-    assert doc in col
-    assert col.delete_match(doc) == 1
-    assert doc not in col
-
-    # Test delete matching documents with sync
-    doc = docs[1]
-    assert doc in col
-    assert col.delete_match(doc, sync=True) == 1
-    assert doc not in col
-
-    # Test delete matching documents with limit of 2
-    assert col.delete_match({'text': 'bar'}, limit=2) == 2
-    assert [d['text'] for d in col].count('bar') == 1
-
-    # Test delete matching documents with bad fabric
-    with assert_raises(DocumentDeleteError) as err:
-        bad_col.delete_match(doc)
-    assert err.value.error_code == 1228
-
-
-def test_document_count(col, bad_col, docs):
-    # Set up test documents
-    col.import_bulk(docs)
-
     assert len(col) == len(docs)
     assert col.count() == len(docs)
 
-    with assert_raises(DocumentCountError):
-        len(bad_col)
 
-    with assert_raises(DocumentCountError):
-        bad_col.count()
-
-
-def test_document_find(col, bad_col, docs):
-    # Check preconditions
-    assert len(col) == 0
-
-    # Set up test documents
-    col.import_bulk(docs)
-
-    # Test find (single match) with default options
-    found = list(col.find({'val': 2}))
-    assert len(found) == 1
-    assert found[0]['_key'] == '2'
-
-    # Test find (multiple matches) with default options
-    col.update_match({'val': 2}, {'val': 1})
-    found = list(col.find({'val': 1}))
-    assert len(found) == 2
-    for doc in map(dict, found):
-        assert doc['_key'] in {'1', '2'}
-        assert doc['_key'] in col
-
-    # Test find with offset
-    with assert_raises(AssertionError) as err:
-        col.find({'val': 1}, skip=-1)
-    assert 'skip must be a non-negative int' == str(err.value)
-
-    found = list(col.find({'val': 1}, skip=100))
-    assert len(found) == 0
-
-    found = list(col.find({'val': 1}, skip=0))
-    assert len(found) == 2
-
-    found = list(col.find({'val': 1}, skip=1))
-    assert len(found) == 1
-    for doc in map(dict, found):
-        assert doc['_key'] in {'1', '2', '3'}
-        assert doc['_key'] in col
-
-    # Test find with limit
-    with assert_raises(AssertionError) as err:
-        col.find({}, limit=-1)
-    assert 'limit must be a non-negative int' == str(err.value)
-
-    for limit in [3, 4, 5]:
-        found = list(col.find({}, limit=limit))
-        assert len(found) == limit
-        for doc in map(dict, found):
-            assert doc['_key'] in extract('_key', docs)
-            assert doc['_key'] in col
-
-    # Test find in empty collection
-    col.truncate()
-    assert list(col.find({})) == []
-    assert list(col.find({'val': 1})) == []
-    assert list(col.find({'val': 2})) == []
-    assert list(col.find({'val': 3})) == []
-    assert list(col.find({'val': 4})) == []
-
-    # Test find with bad fabric
-    with assert_raises(DocumentGetError) as err:
-        bad_col.find({'val': 1})
-    assert err.value.error_code == 1228
-
-
-def test_document_find_near(col, bad_col, docs):
+def test_document_find_near(col, docs):
     col.import_bulk(docs)
 
     # Test find_near with default options
@@ -1093,10 +919,6 @@ def test_document_find_near(col, bad_col, docs):
     result = col.find_near(latitude=5, longitude=5, limit=3)
     assert extract('_key', result) == ['4', '5', '6']
 
-    # Test random with bad collection
-    with assert_raises(DocumentGetError):
-        bad_col.find_near(latitude=1, longitude=1, limit=1)
-
     # Test find_near in an empty collection
     col.truncate()
     result = col.find_near(latitude=1, longitude=1, limit=1)
@@ -1104,13 +926,13 @@ def test_document_find_near(col, bad_col, docs):
     result = col.find_near(latitude=5, longitude=5, limit=4)
     assert list(result) == []
 
-    # Test find near with bad collection
+    # Test find near with bad params
     with assert_raises(DocumentGetError) as err:
-        bad_col.find_near(latitude=1, longitude=1, limit=1)
-    assert err.value.error_code == 1228
+        col.find_near(latitude=360, longitude=1, limit=1)
+    assert err.value.error_code == 1505
 
 
-def test_document_find_in_range(col, bad_col, docs):
+def test_document_find_in_range(col, docs):
     col.import_bulk(docs)
 
     # Test find_in_range with default options
@@ -1143,13 +965,8 @@ def test_document_find_in_range(col, bad_col, docs):
     result = col.find_in_range('val', lower=1, upper=5, skip=2)
     assert extract('_key', result) == ['3', '4']
 
-    # Test find_in_range with bad collection
-    with assert_raises(DocumentGetError) as err:
-        bad_col.find_in_range(field='val', lower=1, upper=2, skip=2)
-    assert err.value.error_code == 1228
 
-
-def test_document_find_in_radius(col, bad_col):
+def test_document_find_in_radius(col):
     doc1 = {'_key': '1', 'loc': [1, 1]}
     doc2 = {'_key': '2', 'loc': [1, 4]}
     doc3 = {'_key': '3', 'loc': [4, 1]}
@@ -1178,114 +995,6 @@ def test_document_find_in_radius(col, bad_col):
         assert clean_doc(result[0]) == {'_key': '1', 'loc': [1, 1]}
     else:
         assert clean_doc(result[0]) == {'_key': '1', 'loc': [1, 1], 'dist': 0}
-
-    # Test find_in_radius with bad collection
-    with assert_raises(DocumentGetError) as err:
-        bad_col.find_in_radius(3, 3, 10)
-    assert err.value.error_code == 1228
-
-
-def test_document_find_in_box(col, bad_col, geo):
-    doc1 = {'_key': '1', 'loc': [1, 1]}
-    doc2 = {'_key': '2', 'loc': [1, 5]}
-    doc3 = {'_key': '3', 'loc': [5, 1]}
-    doc4 = {'_key': '4', 'loc': [5, 5]}
-
-    col.import_bulk([doc1, doc2, doc3, doc4])
-
-    # Test find_in_box with default options
-    result = col.find_in_box(
-        latitude1=0,
-        longitude1=0,
-        latitude2=6,
-        longitude2=3,
-        index=geo['id']
-    )
-    assert clean_doc(result) == [doc1, doc3]
-
-    # Test find_in_box with limit of -1
-    with assert_raises(AssertionError) as err:
-        col.find_in_box(
-            latitude1=0,
-            longitude1=0,
-            latitude2=6,
-            longitude2=3,
-            limit=-1,
-            index=geo['id']
-        )
-    assert 'limit must be a non-negative int' == str(err.value)
-
-    # Test find_in_box with limit of 0
-    result = col.find_in_box(
-        latitude1=0,
-        longitude1=0,
-        latitude2=6,
-        longitude2=3,
-        limit=0,
-        index=geo['id']
-    )
-    assert clean_doc(result) == [doc1, doc3]
-
-    # Test find_in_box with limit of 1
-    result = col.find_in_box(
-        latitude1=0,
-        longitude1=0,
-        latitude2=6,
-        longitude2=3,
-        limit=1,
-    )
-    assert clean_doc(result) == [doc3]
-
-    # Test find_in_box with limit of 4
-    result = col.find_in_box(
-        latitude1=0,
-        longitude1=0,
-        latitude2=10,
-        longitude2=10,
-        limit=4
-    )
-    assert clean_doc(result) == [doc1, doc2, doc3, doc4]
-
-    # Test find_in_box with limit of -1
-    with assert_raises(AssertionError) as err:
-        col.find_in_box(
-            latitude1=0,
-            longitude1=0,
-            latitude2=6,
-            longitude2=3,
-            skip=-1,
-        )
-    assert 'skip must be a non-negative int' == str(err.value)
-
-    # Test find_in_box with skip 1
-    result = col.find_in_box(
-        latitude1=0,
-        longitude1=0,
-        latitude2=6,
-        longitude2=3,
-        skip=1,
-    )
-    assert clean_doc(result) == [doc1]
-
-    # Test find_in_box with skip 3
-    result = col.find_in_box(
-        latitude1=0,
-        longitude1=0,
-        latitude2=10,
-        longitude2=10,
-        skip=2
-    )
-    assert clean_doc(result) == [doc1, doc2]
-
-    # Test find_in_box with bad collection
-    with assert_raises(DocumentGetError) as err:
-        bad_col.find_in_box(
-            latitude1=0,
-            longitude1=0,
-            latitude2=6,
-            longitude2=3,
-        )
-    assert err.value.error_code == 1228
 
 
 def test_document_find_by_text(col, docs):
@@ -1324,7 +1033,7 @@ def test_document_find_by_text(col, docs):
     assert err.value.error_code == 1571
 
 
-def test_document_has(col, bad_col, docs):
+def test_document_has(col, docs):
     # Set up test document
     result = col.insert(docs[0])
     rev = result['_rev']
@@ -1449,18 +1158,8 @@ def test_document_has(col, bad_col, docs):
             col.has(doc_input, rev=rev, check_rev=False)
         assert str(err.value) == expected_error_msg
 
-    # Test get with bad fabric
-    with assert_raises(DocumentInError) as err:
-        bad_col.has(doc_key)
-    assert err.value.error_code == 1228
 
-    # Test contains with bad fabric
-    with assert_raises(DocumentInError) as err:
-        assert doc_key in bad_col
-    assert err.value.error_code == 1228
-
-
-def test_document_get(col, bad_col, docs):
+def test_document_get(col, docs):
     # Set up test documents
     col.import_bulk(docs)
     doc = docs[0]
@@ -1504,243 +1203,15 @@ def test_document_get(col, bad_col, docs):
     assert result['_rev'] != bad_rev
     assert result['val'] == doc_val
 
-    # Test get with bad fabric
-    with assert_raises(DocumentGetError) as err:
-        bad_col.get(doc['_key'])
-    assert err.value.error_code == 1228
 
-    # Test get with bad fabric
-    with assert_raises(DocumentGetError) as err:
-        assert bad_col[doc['_key']]
-    assert err.value.error_code == 1228
-
-
-def test_document_get_many(col, bad_col, docs):
-    # Set up test documents
-    col.import_bulk(docs)
-
-    # Test get_many missing documents
-    assert col.get_many([generate_doc_key()]) == []
-
-    # Test get_many existing documents
-    result = col.get_many(docs[:1])
-    result = clean_doc(result)
-    assert result == docs[:1]
-
-    result = col.get_many(docs)
-    assert clean_doc(result) == docs
-
-    # Test get_many in empty collection
-    col.truncate()
-    assert col.get_many([]) == []
-    assert col.get_many(docs[:1]) == []
-    assert col.get_many(docs[:3]) == []
-
-    with assert_raises(DocumentGetError) as err:
-        bad_col.get_many(docs)
-    assert err.value.error_code == 1228
-
-
-def test_document_all(col, bad_col, docs):
-    # Set up test documents
-    col.import_bulk(docs)
-
-    # Test all with default options
-    cursor = col.all()
-    result = list(cursor)
-    assert clean_doc(result) == docs
-
-    # Test all with skip of -1
-    with assert_raises(AssertionError) as err:
-        col.all(skip=-1)
-    assert 'skip must be a non-negative int' == str(err.value)
-
-    # Test all with a skip of 0
-    cursor = col.all(skip=0)
-    result = list(cursor)
-    assert cursor.count() == len(docs)
-    assert clean_doc(result) == docs
-
-    # Test all with a skip of 1
-    cursor = col.all(skip=1)
-    result = list(cursor)
-    assert cursor.count() == len(result) == 5
-    assert all([clean_doc(d) in docs for d in result])
-
-    # Test all with a skip of 3
-    cursor = col.all(skip=3)
-    result = list(cursor)
-    assert cursor.count() == len(result) == 3
-    assert all([clean_doc(d) in docs for d in result])
-
-    # Test all with skip of -1
-    with assert_raises(AssertionError) as err:
-        col.all(limit=-1)
-    assert 'limit must be a non-negative int' == str(err.value)
-
-    # Test all with a limit of 0
-    cursor = col.all(limit=0)
-    result = list(cursor)
-    assert cursor.count() == len(result) == 0
-
-    # Test all with a limit of 1
-    cursor = col.all(limit=1)
-    result = list(cursor)
-    assert cursor.count() == len(result) == 1
-    assert all([clean_doc(d) in docs for d in result])
-
-    # Test all with a limit of 3
-    cursor = col.all(limit=3)
-    result = list(cursor)
-    assert cursor.count() == len(result) == 3
-    assert all([clean_doc(d) in docs for d in result])
-
-    # Test all with skip and limit
-    cursor = col.all(skip=5, limit=2)
-    result = list(cursor)
-    assert cursor.count() == len(result) == 1
-    assert all([clean_doc(d) in docs for d in result])
-
-    # Test export with bad fabric
-    with assert_raises(DocumentGetError) as err:
-        bad_col.all()
-    assert err.value.error_code == 1228
-
-
-def test_document_ids(col, bad_col, docs):
-    cursor = col.ids()
-    result = list(cursor)
-    assert result == []
-
-    col.import_bulk(docs)
-    cursor = col.ids()
-    result = list(cursor)
-    ids = set('{}/{}'.format(col.name, d['_key']) for d in docs)
-    assert set(result) == ids
-
-    # Test ids with bad fabric
-    with assert_raises(DocumentIDsError) as err:
-        bad_col.ids()
-    assert err.value.error_code == 1228
-
-
-def test_document_keys(col, bad_col, docs):
-    cursor = col.keys()
-    result = list(cursor)
-    assert result == []
-
-    col.import_bulk(docs)
-    cursor = col.keys()
-    result = list(cursor)
-    assert len(result) == len(docs)
-    assert sorted(result) == extract('_key', docs)
-
-    # Test keys with bad fabric
-    with assert_raises(DocumentKeysError) as err:
-        bad_col.keys()
-    assert err.value.error_code == 1228
-
-
-# def test_document_export(col, bad_col, docs):
-#     # Set up test documents
-#     col.insert_many(docs)
-#
-#     # Test export with flush set to True and flush_wait set to 1
-#     cursor = col.export(flush=True, flush_wait=1)
-#     assert clean_doc(cursor) == docs
-#     assert cursor.type == 'export'
-#
-#     # Test export with count
-#     cursor = col.export(flush=False, count=True)
-#     assert cursor.count == len(docs)
-#     assert clean_doc(cursor) == docs
-#
-#     # Test export with batch size
-#     cursor = col.export(flush=False, count=True, batch_size=1)
-#     assert cursor.count == len(docs)
-#     assert clean_doc(cursor) == docs
-#
-#     # Test export with time-to-live
-#     cursor = col.export(flush=False, count=True, ttl=10)
-#     assert cursor.count == len(docs)
-#     assert clean_doc(cursor) == docs
-#
-#     # Test export with filters
-#     cursor = col.export(
-#         count=True,
-#         flush=False,
-#         filter_fields=['text'],
-#         filter_type='exclude'
-#     )
-#     assert cursor.count == len(docs)
-#     assert all(['text' not in d for d in cursor])
-#
-#     # Test export with a limit of 0
-#     cursor = col.export(flush=False, count=True, limit=0)
-#     assert cursor.count == len(docs)
-#     assert clean_doc(cursor) == docs
-#
-#     # Test export with a limit of 1
-#     cursor = col.export(flush=False, count=True, limit=1)
-#     assert cursor.count == 1
-#     assert len(list(cursor)) == 1
-#     all([clean_doc(d) in docs for d in cursor])
-#
-#     # Test export with a limit of 3
-#     cursor = col.export(flush=False, count=True, limit=3)
-#     assert cursor.count == 3
-#     assert len(list(cursor)) == 3
-#     all([clean_doc(d) in docs for d in cursor])
-#
-#     # Test export with bad fabric
-#     with assert_raises(DocumentGetError):
-#         bad_col.export()
-#
-#     # Test closing export cursor
-#     cursor = col.export(flush=False, count=True, batch_size=1)
-#     assert cursor.close(ignore_missing=False) is True
-#     assert cursor.close(ignore_missing=True) is False
-#
-#     assert clean_doc(cursor.next()) in docs
-#     with assert_raises(CursorNextError):
-#         cursor.next()
-#     with assert_raises(CursorCloseError):
-#         cursor.close(ignore_missing=False)
-#
-#     cursor = col.export(flush=False, count=True)
-#     assert cursor.close(ignore_missing=True) is False
-
-
-def test_document_random(col, bad_col, docs):
-    # Set up test documents
-    col.import_bulk(docs)
-
-    # Test random in non-empty collection
-    for attempt in range(10):
-        random_doc = col.random()
-        assert clean_doc(random_doc) in docs
-
-    # Test random in empty collection
-    col.truncate()
-    for attempt in range(10):
-        random_doc = col.random()
-        assert random_doc is None
-
-    # Test random with bad fabric
-    with assert_raises(DocumentGetError) as err:
-        bad_col.random()
-    assert err.value.error_code == 1228
-
-
-def test_document_import_bulk(col, bad_col, docs):
+def test_document_import_bulk(col, docs):
     # Test import_bulk with default options
-    result = col.import_bulk(docs)
+    results = col.import_bulk(docs)
+    result = results['result']
     assert result['created'] == len(docs)
     assert result['errors'] == 0
-    assert result['empty'] == 0
-    assert result['updated'] == 0
-    assert result['ignored'] == 0
     assert 'details' in result
+
     for doc in docs:
         doc_key = doc['_key']
         assert doc_key in col
@@ -1749,13 +1220,11 @@ def test_document_import_bulk(col, bad_col, docs):
         assert col[doc_key]['loc'] == doc['loc']
     col.truncate()
 
-    # Test import bulk without details and with sync
-    result = col.import_bulk(docs, details=False, sync=True)
+    # Test import bulk without details
+    results = col.import_bulk(docs, details=False)
+    result = results['result']
     assert result['created'] == len(docs)
     assert result['errors'] == 0
-    assert result['empty'] == 0
-    assert result['updated'] == 0
-    assert result['ignored'] == 0
     assert 'details' not in result
     for doc in docs:
         doc_key = doc['_key']
@@ -1764,91 +1233,42 @@ def test_document_import_bulk(col, bad_col, docs):
         assert col[doc_key]['val'] == doc['val']
         assert col[doc_key]['loc'] == doc['loc']
 
-    # Test import_bulk duplicates with halt_on_error
-    with assert_raises(DocumentInsertError):
-        col.import_bulk(docs, halt_on_error=True)
 
-    # Test import bulk duplicates without halt_on_error
-    result = col.import_bulk(docs, halt_on_error=False)
-    assert result['created'] == 0
-    assert result['errors'] == len(docs)
-    assert result['empty'] == 0
-    assert result['updated'] == 0
-    assert result['ignored'] == 0
-    col.truncate()
+def test_document_export(col, docs):
+    # Set up test documents
+    cursor = col.export()
+    assert len(cursor) == 0
+    col.insert_many(docs)
 
-    # Test import bulk with bad fabric
-    with assert_raises(DocumentInsertError):
-        bad_col.import_bulk(docs, halt_on_error=True)
-    assert len(col) == 0
+    # Test export
+    cursor = col.export()
+    assert clean_doc(cursor) == docs
+    for x in range(len(cursor)):
+        assert cursor[x] == docs[x]
 
-    # Test import bulk with overwrite
-    result = col.import_bulk(docs, overwrite=True)
-    assert result['created'] == len(docs)
-    assert result['errors'] == 0
-    assert result['empty'] == 0
-    assert result['updated'] == 0
-    assert result['ignored'] == 0
-    for doc in docs:
-        doc_key = doc['_key']
-        assert doc_key in col
-        assert col[doc_key]['_key'] == doc_key
-        assert col[doc_key]['val'] == doc['val']
-        assert col[doc_key]['loc'] == doc['loc']
-    col.truncate()
+    # Test export with count
+    assert len(cursor) == len(docs)
+    assert clean_doc(cursor) == docs
 
-    # Test import bulk on_duplicate actions
-    doc = docs[0]
-    doc_key = doc['_key']
-    old_doc = {'_key': doc_key, 'foo': '2'}
-    new_doc = {'_key': doc_key, 'bar': '3'}
+    # Test export with a limit of 0
+    cursor = col.export(limit=0)
+    assert len(cursor) == len(docs)
+    assert clean_doc(cursor) == docs
 
-    col.insert(old_doc)
-    result = col.import_bulk([new_doc], on_duplicate='error',
-                             halt_on_error=False)
-    assert len(col) == 1
-    assert result['created'] == 0
-    assert result['errors'] == 1
-    assert result['empty'] == 0
-    assert result['updated'] == 0
-    assert result['ignored'] == 0
-    assert col[doc['_key']]['foo'] == '2'
-    assert 'bar' not in col[doc['_key']]
+    # Test export with a limit of 1
+    cursor = col.export(limit=1)
+    assert len(cursor) == 1
+    assert len(list(cursor)) == 1
 
-    result = col.import_bulk([new_doc], on_duplicate='ignore',
-                             halt_on_error=False)
-    assert len(col) == 1
-    assert result['created'] == 0
-    assert result['errors'] == 0
-    assert result['empty'] == 0
-    assert result['updated'] == 0
-    assert result['ignored'] == 1
-    assert col[doc['_key']]['foo'] == '2'
-    assert 'bar' not in col[doc['_key']]
+    # Test export with a limit of 3
+    cursor = col.export(limit=3)
+    assert len(cursor) == 3
 
-    result = col.import_bulk([new_doc], on_duplicate='update',
-                             halt_on_error=False)
-    assert len(col) == 1
-    assert result['created'] == 0
-    assert result['errors'] == 0
-    assert result['empty'] == 0
-    assert result['updated'] == 1
-    assert result['ignored'] == 0
-    assert col[doc['_key']]['foo'] == '2'
-    assert col[doc['_key']]['bar'] == '3'
-
-    col.truncate()
-    col.insert(old_doc)
-    result = col.import_bulk([new_doc], on_duplicate='replace',
-                             halt_on_error=False)
-    assert len(col) == 1
-    assert result['created'] == 0
-    assert result['errors'] == 0
-    assert result['empty'] == 0
-    assert result['updated'] == 1
-    assert result['ignored'] == 0
-    assert 'foo' not in col[doc['_key']]
-    assert col[doc['_key']]['bar'] == '3'
+    # Test export with a offset of 3
+    cursor = col.export(offset=3)
+    assert len(cursor) == (len(docs) - 3)
+    for x in range(3, len(cursor)):
+        assert cursor[x] == docs[x]
 
 
 def test_document_edge(lecol, docs, edocs):
@@ -1993,81 +1413,79 @@ def test_document_edge(lecol, docs, edocs):
         assert edoc['_key'] not in ecol
     assert len(ecol) == 0
 
-    # Test import bulk to_prefix and from_prefix
+    # Test import bulk without to_prefix and from_prefix
     for doc in edocs:
         doc['_from'] = 'foo'
         doc['_to'] = 'bar'
-    result = ecol.import_bulk(edocs, from_prefix='from', to_prefix='to')
-    assert result['created'] == 4
-    assert result['errors'] == 0
-    assert result['empty'] == 0
-    assert result['updated'] == 0
-    assert result['ignored'] == 0
-    for edoc in ecol:
-        assert edoc['_from'] == 'from/foo'
-        assert edoc['_to'] == 'to/bar'
+    results = ecol.import_bulk(edocs)
+    result = results['result']
+    assert result['created'] == 0
+    assert result['errors'] == 4
+    errors = result['details']['errors']
+    for x in range(len(errors)):
+        assert errors[x]['errorNumber'] == 1233
+        assert errors[x]['errorMessage'] == '{}: edge attribute missing or invalid'.format(x + 1)
 
 
-def test_document_management_via_db(db, col):
+def test_document_management_via_db(tst_fabric, col):
     doc1_id = col.name + '/foo'
     doc2_id = col.name + '/bar'
     doc1 = {'_key': 'foo'}
     doc2 = {'_id': doc2_id}
 
     # Test document insert with empty body
-    result = db.insert_document(col.name, {})
+    result = tst_fabric.collection(col.name).insert({})
     assert len(col) == 1
-    assert db.has_document(result['_id']) is True
-    assert db.has_document(result['_id'], rev=result['_rev']) is True
+    assert tst_fabric.collection(col.name).has(result['_id']) is True
+    assert tst_fabric.collection(col.name).has(result['_id'], rev=result['_rev']) is True
 
     # Test document insert with key
-    assert db.has_document(doc1_id) is False
-    result = db.insert_document(col.name, doc1)
+    assert tst_fabric.collection(col.name).has(doc1_id) is False
+    result = tst_fabric.collection(col.name).insert(doc1)
     assert result['_key'] == 'foo'
     assert result['_id'] == doc1_id
     assert len(col) == 2
-    assert db.has_document(doc1_id) is True
-    assert db.has_document(doc1_id, rev=result['_rev']) is True
+    assert tst_fabric.collection(col.name).has(doc1_id) is True
+    assert tst_fabric.collection(col.name).has(doc1_id, rev=result['_rev']) is True
 
     # Test document insert with ID
-    assert db.has_document(doc2_id) is False
-    result = db.insert_document(col.name, doc2)
+    assert tst_fabric.collection(col.name).has(doc2_id) is False
+    result = tst_fabric.collection(col.name).insert(doc2)
     assert result['_key'] == 'bar'
     assert result['_id'] == doc2_id
     assert len(col) == 3
-    assert db.has_document(doc2_id) is True
-    assert db.has_document(doc2_id, rev=result['_rev']) is True
+    assert tst_fabric.collection(col.name).has(doc2_id) is True
+    assert tst_fabric.collection(col.name).has(doc2_id, rev=result['_rev']) is True
 
     # Test document get with bad input
     with assert_raises(DocumentParseError) as err:
-        db.document(doc1)
-    assert str(err.value) == 'field "_id" required'
+        tst_fabric.collection(col.name).get({})
+    assert str(err.value) == 'field "_key" or "_id" required'
 
     # Test document get
     for doc_id in [doc1_id, doc2_id]:
-        result = db.document(doc_id)
+        result = tst_fabric.collection(col.name).get(doc_id)
         assert '_rev' in result
         assert '_key' in result
         assert result['_id'] == doc_id
 
-    # Test document update with bad input
-    with assert_raises(DocumentParseError) as err:
-        db.update_document(doc1)
-    assert str(err.value) == 'field "_id" required'
+    with assert_raises(DocumentUpdateError) as err:
+        tst_fabric.collection(col.name).update({'_key': 'H'})
+    assert str(err) == "<ExceptionInfo DocumentUpdateError('[HTTP 404][ERR 1202] document not found') tblen=5>"
 
     # Test document update
-    result = db.update_document({'_id': doc1_id, 'val': 100})
+    result = tst_fabric.collection(col.name).update({'_id': doc1_id, 'val': 100})
     assert result['_id'] == doc1_id
     assert col[doc1_id]['val'] == 100
     assert len(col) == 3
 
     # Test document replace with bad input
     with assert_raises(DocumentParseError) as err:
-        db.replace_document(doc1)
-    assert str(err.value) == 'field "_id" required'
+        tst_fabric.collection(col.name).replace({})
+    assert str(err.value) == 'field "_key" or "_id" required'
 
     # Test document replace
-    result = db.replace_document({'_id': doc1_id, 'num': 300})
+    result = tst_fabric.collection(col.name).replace({'_id': doc1_id, 'num': 300})
     assert result['_id'] == doc1_id
     assert 'val' not in col[doc1_id]
     assert col[doc1_id]['num'] == 300
@@ -2075,11 +1493,11 @@ def test_document_management_via_db(db, col):
 
     # Test document delete with bad input
     with assert_raises(DocumentParseError) as err:
-        db.delete_document(doc1)
-    assert str(err.value) == 'field "_id" required'
+        tst_fabric.collection(col.name).delete({})
+    assert str(err.value) == 'field "_key" or "_id" required'
 
     # Test document delete
-    result = db.delete_document({'_id': doc1_id})
+    result = tst_fabric.collection(col.name).delete({'_id': doc1_id})
     assert result['_id'] == doc1_id
     assert doc1_id not in col
     assert len(col) == 2
