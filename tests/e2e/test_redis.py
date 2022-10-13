@@ -379,10 +379,14 @@ def test_redis_lrange():
 def test_redis_hset():
     client = get_client_instance()
 
-    response = client.redis_hset("games", "action", "elden", REDIS_COLLECTION)
+    response = client.redis_hset(
+        "games",
+        {"action": "elden", "driving": "GT7"},
+        REDIS_COLLECTION
+    )
     print(response)
     # Response from platform
-    assert {"code": 200, "result": 1} == response
+    assert {"code": 200, "result": 2} == response
 
 
 def test_redis_hget():
@@ -392,6 +396,171 @@ def test_redis_hget():
     print(response)
     # Response from platform
     assert {"code": 200, "result": "elden"} == response
+
+
+def test_redis_hdel():
+    client = get_client_instance()
+
+    response = client.redis_hdel("games", ["action"], REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_hexists():
+    client = get_client_instance()
+
+    response = client.redis_hexists("games", "driving", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_hgetall():
+    client = get_client_instance()
+
+    response = client.redis_hgetall("games", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": ["driving", "GT7"]} == response
+
+
+def test_redis_hincrby():
+    client = get_client_instance()
+
+    response = client.redis_hincrby("myhash", "field", 5, REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 5} == response
+
+
+def test_redis_hincrbyfloat():
+    client = get_client_instance()
+
+    response = client.redis_hincrbyfloat("myhashfloat", "field", 10.5, REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": '10.500000'} == response
+
+
+def test_redis_hkeys():
+    client = get_client_instance()
+
+    response = client.redis_hkeys("games", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": ["driving"]} == response
+
+
+def test_redis_hlen():
+    client = get_client_instance()
+
+    response = client.redis_hlen("games", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_hset_2():
+    client = get_client_instance()
+
+    response = client.redis_hset(
+        "newgames",
+        {"action": "elden", "driving": "GT7"},
+        REDIS_COLLECTION
+    )
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 2} == response
+
+
+def test_redis_hmget():
+    client = get_client_instance()
+
+    response = client.redis_hmget("newgames", ["action", "driving"], REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": ["elden", "GT7"]} == response
+
+
+def test_redis_hmset():
+    client = get_client_instance()
+
+    response = client.redis_hmset(
+        "world",
+        {"land": "dog", "sea": "octopus"},
+        REDIS_COLLECTION
+    )
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_hmscan_1():
+    client = get_client_instance()
+
+    response = client.redis_hscan("games", 0, REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": ['cursor:driving', ['driving', 'GT7']]} == response
+
+
+def test_redis_hmscan_2():
+    client = get_client_instance()
+
+    response = client.redis_hscan("games", 0, REDIS_COLLECTION, "*", 100,)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": ["cursor:driving", ["driving", "GT7"]]} == response
+
+
+def test_redis_hstrlen():
+    client = get_client_instance()
+
+    response = client.redis_hstrlen("games", "driving", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": 3} == response
+
+
+def test_redis_hmset_2():
+    client = get_client_instance()
+
+    response = client.redis_hmset(
+        "coin",
+        {"heads": "obverse", "tails": "reverse", "edge": "null"},
+        REDIS_COLLECTION
+    )
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_hrandfield_1():
+    client = get_client_instance()
+
+    response = client.redis_hrandfield("coin", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert 200 == response.get("code")
+
+
+def test_redis_hrandfield_2():
+    client = get_client_instance()
+
+    response = client.redis_hrandfield("coin", REDIS_COLLECTION, -5, "WITHVALUES")
+    print(response)
+    # Response from platform
+    assert 200 == response.get("code")
+
+
+def test_redis_hvals():
+    client = get_client_instance()
+
+    response = client.redis_hvals("coin", REDIS_COLLECTION)
+    print(response)
+    # Response from platform
+    assert {"code": 200, "result": ["null", "obverse", "reverse"]} == response
 
 
 def test_redis_sadd():

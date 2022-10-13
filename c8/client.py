@@ -3471,7 +3471,7 @@ class C8Client(object):
             stop
         )
 
-    def redis_hset(self, key, field, value, collection):
+    def redis_hset(self, key, data, collection):
         """
         Sets field in the hash stored at key to value. If key does not exist,
         a new key holding a hash is created. If field already exists in the hash,
@@ -3480,22 +3480,24 @@ class C8Client(object):
 
         :param key: Key of the data
         :type key: str
-        :param field: Field of the data
-        :type field: str
-        :param value: Value of the data
-        :type value: str
+        :param data:  Dictionary of the data
+        :type data: dict
         :param collection: Name of the collection that we set values to
         :type collection: str
         :returns:
         :rtype:
         """
+        data_list = []
+        for dict_key, dict_value in data.items():
+            data_list.append(dict_key)
+            data_list.append(dict_value)
+
         redis_command = "HSET"
         return self._fabric.redis.command_parser(
             redis_command,
             collection,
             key,
-            field,
-            value
+            *data_list
         )
 
     def redis_hget(self, key, field, collection):
@@ -3524,12 +3526,12 @@ class C8Client(object):
         """
         Removes the specified fields from the hash stored at key. Specified fields
         that do not exist within this hash are ignored. If key does not exist,
-        it is treated as an empty hash and this command returns 0 More on
-        https://redis.io/commands/hdel/
+        it is treated as an empty hash and this command returns 0
+        More on https://redis.io/commands/hdel/
 
         :param key: Key of the data
         :type key: str
-        :param fields: Field of the data
+        :param fields: Fields of the data
         :type fields: list
         :param collection: Name of the collection that we set values to
         :type collection: str
@@ -3542,6 +3544,310 @@ class C8Client(object):
             collection,
             key,
             *fields
+        )
+
+    def redis_hexists(self, key, field, collection):
+        """
+        Returns if field is an existing field in the hash stored at key.
+        More on https://redis.io/commands/hexists/
+
+        :param key: Key of the data
+        :type key: str
+        :param field: Field of the data
+        :type field: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HEXISTS"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            field
+        )
+
+    def redis_hgetall(self, key, collection):
+        """
+        Returns all fields and values of the hash stored at key. In the returned
+        value, every field name is followed by its value, so the length of the reply
+        is twice the size of the hash.
+        More on https://redis.io/commands/hgetall/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HGETALL"
+        return self._fabric.redis.command_parser(redis_command, collection, key)
+
+    def redis_hincrby(self, key, field, increment, collection):
+        """
+        Increments the number stored at field in the hash stored at key by increment.
+        If key does not exist, a new key holding a hash is created. If field does not
+        exist the value is set to 0 before the operation is performed.
+        More on https://redis.io/commands/hincrby/
+
+        :param key: Key of the data
+        :type key: str
+        :param field: Field of the data
+        :type field: str
+        :param increment: Increment number
+        :type increment: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HINCRBY"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            field,
+            increment
+        )
+
+    def redis_hincrbyfloat(self, key, field, increment, collection):
+        """
+        Increment the specified field of a hash stored at key, and representing a
+        floating point number, by the specified increment. If the increment value is
+        negative, the result is to have the hash field value decremented instead of
+        incremented. If the field does not exist, it is set to 0 before performing
+        the operation. An error is returned if one of the following conditions occur:
+
+        The field contains a value of the wrong type (not a string).
+        The current field content or the specified increment are not parsable as a
+        double precision floating point number.
+        More on https://redis.io/commands/hincrbyfloat/
+
+        :param key: Key of the data
+        :type key: str
+        :param field: Field of the data
+        :type field: str
+        :param increment: Increment number
+        :type increment: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HINCRBYFLOAT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            field,
+            increment
+        )
+
+    def redis_hkeys(self, key, collection):
+        """
+        Returns all field names in the hash stored at key.
+        More on https://redis.io/commands/hkeys/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HKEYS"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
+    def redis_hlen(self, key, collection):
+        """
+        Returns the number of fields contained in the hash stored at key.
+        More on https://redis.io/commands/hlen/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HLEN"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
+    def redis_hmget(self, key, fields, collection):
+        """
+        Returns the values associated with the specified fields in the hash stored at
+        key. For every field that does not exist in the hash, a nil value is returned.
+        Because non-existing keys are treated as empty hashes, running HMGET against a
+        non-existing key will return a list of nil values.
+        More on https://redis.io/commands/hmget/
+
+        :param key: Key of the data
+        :type key: str
+        :param fields: Fields of the data
+        :type fields: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HMGET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *fields
+        )
+
+    def redis_hmset(self, key, data, collection):
+        """
+        Sets the specified fields to their respective values in the hash stored at
+        key. This command overwrites any specified fields already existing in the
+        hash. If key does not exist, a new key holding a hash is created. More on
+        More on https://redis.io/commands/hmset/
+
+        :param key: Key of the data
+        :type key: str
+        :param data: Dictionary of the data
+        :type data: dict
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        data_list = []
+        for dict_key, dict_value in data.items():
+            data_list.append(dict_key)
+            data_list.append(dict_value)
+
+        redis_command = "HMSET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *data_list
+        )
+
+    def redis_hscan(self, key, cursor, collection, pattern=None, count=None):
+        """
+        The SCAN command and the closely related commands SSCAN, HSCAN and ZSCAN are
+        used in order to incrementally iterate over a collection of elements.
+        More on https://redis.io/commands/scan/
+
+        :param key: Key of the data
+        :type key: str
+        :param cursor: Cursor value (start with 0)
+        :type cursor: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param pattern: It is possible to only iterate elements matching a given
+        glob-style pattern
+        :type pattern: str
+        :param count: COUNT the user specified the amount of work that should be done at
+        every call in order to retrieve elements from the collection
+        :type count: int
+        :returns:
+        :rtype:
+        """
+        redis_command = "HSCAN"
+        pattern_list = []
+        if pattern is not None:
+            pattern_list.append("MATCH")
+            pattern_list.append(pattern)
+
+        count_list = []
+        if count is not None:
+            count_list.append("COUNT")
+            count_list.append(count)
+
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            cursor,
+            *pattern_list,
+            *count_list
+        )
+
+    def redis_hstrlen(self, key, field, collection):
+        """
+        Returns the string length of the value associated with field in the hash stored
+        at key. If the key or the field do not exist, 0 is returned.
+        More on https://redis.io/commands/hstrlen/
+
+        :param key: Key of the data
+        :type key: str
+        :param field: Field of the data
+        :type field: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HSTRLEN"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            field,
+        )
+
+    def redis_hrandfield(self, key, collection, count=None, modifier=None):
+        """
+        When called with just the key argument, return a random field from the hash
+        value stored at key. f the provided count argument is positive, return an
+        array of distinct fields. The array's length is either count or the hash's
+        number of fields (HLEN), whichever is lower.
+        The optional WITHVALUES modifier changes the reply so it includes the respective
+        values of the randomly selected hash fields.
+        More on https://redis.io/commands/hrandfield/
+
+        :param key: Key of the data
+        :type key: str
+        :param count: Count of the data
+        :type count: int
+        :param modifier: The optional WITHVALUES modifier
+        :type modifier: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HRANDFIELD"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count,
+            modifier,
+        )
+
+    def redis_hvals(self, key, collection):
+        """
+        Returns all values in the hash stored at key.
+        More on https://redis.io/commands/hvals/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HVALS"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
         )
 
     def redis_sadd(self, key, member, collection):
