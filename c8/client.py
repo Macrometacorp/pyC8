@@ -1093,6 +1093,21 @@ class C8Client(object):
         """
         return self._fabric.save_restql(data)
 
+   # client.import_restql
+
+    def import_restql(self, queries, details=False):
+        """Import custom queries.
+
+        :param queries: queries to be imported
+        :type queries: [dict]
+        :param details: Whether to include details
+        :type details: bool
+        :returns: Results of restql API
+        :rtype: dict
+        :raise c8.exceptions.RestqlImportError: if restql operation failed
+        """
+        return self._fabric.import_restql(queries=queries, details=details)
+
     # client.execute_restql
 
     def execute_restql(self, name, data=None):
@@ -1107,6 +1122,19 @@ class C8Client(object):
         :raise c8.exceptions.RestqlExecuteError: if restql execution failed
         """
         return self._fabric.execute_restql(name, data=data)
+
+    # client.read_next_batch_restql
+
+    def read_next_batch_restql(self, id):
+        """Read next batch from query worker cursor.
+
+        :param id: the cursor-identifier
+        :type id: int
+        :returns: Results of execute restql
+        :rtype: dict
+        :raise c8.exceptions.RestqlCursorError: if fetch next batch failed
+        """
+        return self._fabric.read_next_batch_restql(id=id)
 
     # client.delete_restql
 
@@ -2378,8 +2406,7 @@ class C8Client(object):
         :rtype: boolean
         :raise c8.exceptions.CreateCollectionError: If creation fails.
         """
-        return self._fabric.key_value.create_collection(name=name,
-                                                        expiration=expiration)
+        return self._fabric.key_value.create_collection(name=name, expiration=expiration)
 
     # client.delete_collection_kv
 
@@ -2390,7 +2417,7 @@ class C8Client(object):
         :type name: str | unicode
         :returns: True if the request is successful.
         :rtype: boolean
-        :raise c8.exceptions.DeleteCollectionError: If creation fails.
+        :raise c8.exceptions.DeleteCollectionError: If delete fails.
         """
         return self._fabric.key_value.delete_collection(name=name)
 
@@ -2454,11 +2481,11 @@ class C8Client(object):
     # client.get_value_for_key
 
     def get_value_for_key(self, name, key):
-        """Delete an entry for a key.
+        """Get value for a key from key-value collection.
 
         :param name: Collection name.
         :type name: str | unicode
-        :param key: The key for which the object is to be deleted.
+        :param key: The key for which the value is to be fetched.
         :type key: string
         :returns: The value object.
         :rtype: object
@@ -2468,16 +2495,23 @@ class C8Client(object):
 
     # client.get_keys
 
-    def get_keys(self, name):
+    def get_keys(self, name, offset=None, limit=None, order=None):
         """gets keys of a collection.
 
         :param name: Collection name.
         :type name: str | unicode
+        :param offset: Offset to simulate paging.
+        :type offset: int
+        :param limit: Limit to simulate paging.
+        :type limit: int
+        :param order: Order the results ascending (asc) or descending (desc).
+        :type order: str | unicode
         :returns: List of Keys.
         :rtype: list
         :raise c8.exceptions.GetKeysError: If request fails.
         """
-        return self._fabric.key_value.get_keys(name)
+        return self._fabric.key_value.get_keys(name, offset=offset,
+                                               limit=limit, order=order)
 
     # client.get_kv_count
 
@@ -2491,6 +2525,39 @@ class C8Client(object):
         :raise c8.exceptions.GetCountError: If request fails.
         """
         return self._fabric.key_value.get_kv_count(name)
+
+    # client.get_key_value_pairs
+
+    def get_key_value_pairs(self, name, offset=None, limit=None):
+        """Fetch key-value pairs from collection. Optional list of keys
+        Note: Max limit is 100 keys per request.
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :param offset: Offset to simulate paging.
+        :type offset: int
+        :param limit: Limit to simulate paging.
+        :type limit: int
+        :return: The key value pairs from the collection.
+        :rtype: object
+        :raise c8.exceptions.GetKVError: If request fails.
+        """
+        return self._fabric.key_value.get_key_value_pairs(name=name,
+                                                          offset=offset,
+                                                          limit=limit)
+
+    # client.remove_key_value_pairs
+
+    def remove_key_value_pairs(self, name):
+        """Remove all key-value pairs in a collection
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :return: True if removal succeeds
+        :rtype: bool
+        :raise c8.exceptions.RemoveKVError: If request fails.
+        """
+        return self._fabric.key_value.remove_key_value_pairs(name)
 
     # client.create_api_key
 
