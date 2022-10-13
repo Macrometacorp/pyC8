@@ -1155,7 +1155,7 @@ class C8Client(object):
         :param stream: name of stream
         :param local: Operate on a local stream instead of a global one.
         :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
+        :raise: c8.exceptions.StreamCreateError: If creating streams fails.
         """
         return self._fabric.create_stream(stream, local=local)
 
@@ -1172,20 +1172,6 @@ class C8Client(object):
         """
         return self._fabric.delete_stream(stream, force=force)
 
-    # client.terminate_stream
-
-    def terminate_stream(self, stream, isCollectionStream=False, local=False):
-        """Delete the streams under the given fabric
-
-        :param stream: name of stream
-        :param isCollectionStream: collection is a stream flag
-        :param local: Operate on a local stream instead of a global one.
-        :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamDeleteError: If deleting streams fails.
-        """
-        return self._fabric.terminate_stream(stream=stream,
-                                             isCollectionStream=isCollectionStream,
-                                             local=local)
 
     # client.has_stream
 
@@ -1261,7 +1247,6 @@ class C8Client(object):
                                max_pending_messages=1000,
                                batching_enabled=False,
                                batching_max_messages=1000,
-                               batching_max_allowed_size_in_bytes=131072,
                                batching_max_publish_delay_ms=10,
                                message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION
                                ):
@@ -1318,7 +1303,6 @@ class C8Client(object):
                                        max_pending_messages=max_pending_messages,
                                        batching_enabled=batching_enabled,
                                        batching_max_messages=batching_max_messages,
-                                       batching_max_allowed_size_in_bytes=batching_max_allowed_size_in_bytes,
                                        batching_max_publish_delay_ms=batching_max_publish_delay_ms,
                                        message_routing_mode=message_routing_mode)
 
@@ -1395,12 +1379,10 @@ class C8Client(object):
 
     # client.create_stream_reader
 
-    def create_stream_reader(self, stream, start_message_id,
+    def create_stream_reader(self, stream, start_message_id="latest",
                              local=False, isCollectionStream=False,
-                             reader_listener=None,
                              receiver_queue_size=1000,
-                             reader_name=None,
-                             subscription_role_prefix=None,
+                             reader_name=None
                              ):
         """
         Create a reader on a particular topic
@@ -1408,17 +1390,11 @@ class C8Client(object):
         **Args**
 
         * `stream`: The name of the stream.
-        * `start_message_id`: The initial reader positioning is done by
-                              specifying a message id.
 
         **Options**
-
+        * `start_message_id`: The initial reader positioning is done by
+                              specifying a message id. ("latest" or "earliest")
         * `local`: If the stream_stream is local or global default its global
-        * `reader_listener`:
-            Sets a message listener for the reader. When the listener is set,
-            the application will receive messages through it. Calls to
-            `reader.read_next()` will not be allowed. The listener function
-            needs to accept (reader, message), for example:
         * `receiver_queue_size`:
             Sets the size of the reader receive queue. The reader receive
             queue controls how many messages can be accumulated by the reader
@@ -1426,27 +1402,25 @@ class C8Client(object):
             could potentially increase the reader throughput at the expense of
             higher memory utilization.
         * `reader_name`: Sets the reader name.
-        * `subscription_role_prefix`: Sets the subscription role prefix.
 
         """
         _stream = self._fabric.stream()
         return _stream.create_reader(stream=stream, start_message_id=start_message_id,
                                      local=local, isCollectionStream=isCollectionStream,
-                                     reader_listener=reader_listener,
                                      receiver_queue_size=receiver_queue_size,
-                                     reader_name=reader_name,
-                                     subscription_role_prefix=subscription_role_prefix)
+                                     reader_name=reader_name)
 
     # client.unsubscribe
-    def unsubscribe(self, subscription):
+    def unsubscribe(self, subscription, local=False):
         """Unsubscribes the given subscription on all streams on a stream fabric
 
         :param subscription
+        :param local, boolean indicating whether the stream is local or global
         :returns: 200, OK if operation successful
         raise c8.exceptions.StreamPermissionError: If unsubscribing fails.
         """
         _stream = self._fabric.stream()
-        return _stream.unsubscribe(subscription=subscription)
+        return _stream.unsubscribe(subscription=subscription, local=local)
 
     # client.delete_stream_subscription
 
@@ -1461,7 +1435,7 @@ class C8Client(object):
                                                  consumers
         """
         _stream = self._fabric.stream()
-        return _stream.delete_stream_subscription(stream, subscription, local=False)
+        return _stream.delete_stream_subscription(stream, subscription, local=local)
 
     # client.get_stream_subscriptions
 
@@ -1516,6 +1490,61 @@ class C8Client(object):
         _stream = self._fabric.stream()
         return _stream.clear_streams_backlog()
 
+    # client.get_message_stream_ttl
+
+    def get_message_stream_ttl(self, local=False):
+        """Get the TTl for messages in stream
+
+        :param local: Operate on a local stream instead of a global one.
+        :returns: 200, OK if operation successful
+        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
+                                                     for a stream fails.
+        """
+        _stream = self._fabric.stream()
+        return _stream.get_message_stream_ttl(local=local)
+
+    # client.publish_message_stream
+
+    def publish_message_stream(self, stream, message):
+        """Publish message in a stream
+
+        :param stream: name of stream.
+        :param message: Message to be published in the stream.
+        :returns: 200, OK if operation successful
+        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
+                                                     for a stream fails.
+        """
+        _stream = self._fabric.stream()
+        return _stream.publish_message_stream(stream=stream, message=message)
+
+    # client.set_message_stream_ttl
+
+    def set_message_stream_ttl(self, ttl, local=False):
+        """Set the TTl for messages in stream
+
+        :param ttl: Time to live for messages in all streams.
+        :param local: Operate on a local stream instead of a global one.
+        :returns: 200, OK if operation successful
+        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
+                                                     for a stream fails.
+        """
+        _stream = self._fabric.stream()
+        return _stream.set_message_stream_ttl(ttl=ttl, local=local)
+
+    # client.set_message_expiry_stream
+
+    def set_message_expiry_stream(self, stream, expiry):
+        """Set the expiration time for all messages on the stream.
+
+        :param stream: name of stream.
+        :param expiry: expiration time for all messages in seconds
+        :returns: 200, OK if operation successful
+        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
+                                                     for a stream fails.
+        """
+        _stream = self._fabric.stream()
+        return _stream.set_message_expiry_stream(stream=stream, expiry=expiry)
+
     # client.create_stream_app
 
     def create_stream_app(self, data, dclist=[]):
@@ -1549,12 +1578,11 @@ class C8Client(object):
     # client.retrieve_stream_app
 
     def retrieve_stream_app(self):
-        """retrives stream apps in a fabric
+        """retrieves stream apps in a fabric
 
-        :param: name of stream app
         :returns: Object with list of stream Apps
         """
-        return self._fabric.retrive_stream_app()
+        return self._fabric.retrieve_stream_app()
 
     # client.get_stream_app
 
@@ -1585,6 +1613,16 @@ class C8Client(object):
         """
         _streamapp = self._fabric.stream_app(streamapp_name)
         return _streamapp.change_state(active=activate)
+
+    # client.publish_message_http_source
+
+    def publish_message_http_source(self, streamapp_name, stream, message):
+        """publish messages via HTTP source streams
+        @stream: name of the http source stream
+        @message: message to be published
+        """
+        _streamapp = self._fabric.stream_app(streamapp_name)
+        return _streamapp.publish_message_http_source(stream=stream, message=message)
 
     # client.has_graph
 

@@ -130,3 +130,23 @@ class StreamApps(APIWrapper):
             return False
         # call the api
         return self._execute(req,response_handler)
+
+    def publish_message_http_source(self, stream, message):
+        """publish messages via HTTP source streams
+        @stream: name of the http source stream
+        @message: message to be published
+        """
+
+        # create request
+        req = Request(
+            method = "post",
+            endpoint='/streamapps/http/{}/{}'.format(self.name, stream),
+            data=message
+        )
+        # create response handler
+        def response_handler(resp):
+            if resp.is_success is True:
+                return resp.body
+            print(resp.body)
+            return False
+        return self._execute(req,response_handler)

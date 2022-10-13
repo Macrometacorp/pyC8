@@ -2,7 +2,9 @@ from __future__ import absolute_import, unicode_literals, division
 
 import pytest
 import time
+import os
 
+from dotenv import load_dotenv
 from c8 import C8Client
 from c8.fabric import StandardFabric
 from tests.executors import (
@@ -21,12 +23,13 @@ global_data = dict()
 
 
 def pytest_addoption(parser):
-    parser.addoption('--host', action='store', default='gdn.paas.macrometa.io')
+    load_dotenv()
+    parser.addoption('--host', action='store', default=os.environ.get('FEDERATION_URL'))
     parser.addoption('--protocol', action='store', default='https')
     parser.addoption('--port', action='store', default='443')
-    parser.addoption('--email', action='store', default='nemo@nautilus.com')
-    parser.addoption('--passwd', action='store', default='XXXXXX')
-    parser.addoption('--geofabric', action='store', default='_system')
+    parser.addoption('--email', action='store', default=os.environ.get('TENANT_EMAIL'))
+    parser.addoption('--passwd', action='store', default=os.environ.get('TENANT_PASSWORD'))
+    parser.addoption('--geofabric', action='store', default=os.environ.get('FABRIC'))
     parser.addoption('--complete', action='store_true')
 
 
