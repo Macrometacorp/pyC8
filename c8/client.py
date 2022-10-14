@@ -3442,6 +3442,82 @@ class C8Client(object):
             *elements
         )
 
+    def redis_lindex(self, key, index, collection):
+        """
+        Returns the element at index index in the list stored at key. The index is
+        zero-based, so 0 means the first element, 1 the second element and so on.
+        Negative indices can be used to designate elements starting at the tail of
+        the list. Here, -1 means the last element, -2 means the penultimate and so
+        forth.
+        More on https://redis.io/commands/lindex/
+
+        :param key: Key of the data
+        :type key: str
+        :param index: Index of data
+        :type index: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LINDEX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            index
+        )
+
+    def redis_linsert(self, key, modifier, pivot, element, collection):
+        """
+        Inserts element in the list stored at key either before or after the reference
+        value pivot.
+        More on https://redis.io/commands/linsert/
+
+        :param key: Key of the data
+        :type key: str
+        :param modifier: It can be BEFORE | AFTER
+        :type modifier: str
+        :param pivot: Pivot is reference value
+        :type pivot: str
+        :param element: New element to be added
+        :type element: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LINSERT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            modifier,
+            pivot,
+            element
+        )
+
+    def redis_llen(self, key, collection):
+        """
+        Returns the length of the list stored at key. If key does not exist,
+        it is interpreted as an empty list and 0 is returned. An error is returned
+        when the value stored at key is not a list.
+        More on https://redis.io/commands/linsert/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LLEN"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
     def redis_lrange(self, key, start, stop, collection):
         """
         Insert all the specified values at the head of the list stored at key. If key

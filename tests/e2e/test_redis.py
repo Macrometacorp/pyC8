@@ -14,7 +14,7 @@ Tests need to be run in sequence since we first create data than query for that 
 data.
 """
 
-REDIS_COLLECTION = "dinoRedisTest"
+REDIS_COLLECTION = "dinoRedis2"
 
 
 def test_redis_set():
@@ -367,13 +367,43 @@ def test_redis_lpush():
     assert {"code": 200, "result": 3} == response
 
 
+def test_redis_lindex():
+    client = get_client_instance()
+
+    response = client.redis_lindex("list", 0, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": "copper"} == response
+
+
+def test_redis_linsert():
+    client = get_client_instance()
+
+    response = client.redis_linsert(
+        "list",
+        "AFTER",
+        "copper",
+        "silver",
+        REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": 4} == response
+
+
+def test_redis_llen():
+    client = get_client_instance()
+
+    response = client.redis_llen("list", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 4} == response
+
+
 def test_redis_lrange():
     client = get_client_instance()
 
     response = client.redis_lrange("list", 0, 1, REDIS_COLLECTION)
     print(response)
     # Response from platform
-    assert {"code": 200, "result": ["copper", "gold"]} == response
+    assert {"code": 200, "result": ["copper", "silver"]} == response
 
 
 def test_redis_hset():
