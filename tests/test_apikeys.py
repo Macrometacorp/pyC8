@@ -248,11 +248,11 @@ def test_permission_exceptions(client):
 
     with assert_raises(GetAPIKeys) as err:
         client.get_api_key(bad_apikey_id)
-    assert err.value.http_code == 400
+    assert err.value.http_code == 404
 
     with assert_raises(RemoveAPIKey) as err:
         client.remove_api_key(bad_apikey_id)
-    assert err.value.http_code == 400
+    assert err.value.http_code == 404
 
     # Test that with invalid apikey, permissions (fabric level) should not be accessible
     with assert_raises(ListDataBases) as err:
