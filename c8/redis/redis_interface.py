@@ -4,6 +4,7 @@ from c8.redis.core import build_request, RedisServerError
 
 
 class RedisInterface(APIWrapper):
+
     """Redis API wrapper.
 
     :param connection: HTTP connection.
@@ -30,4 +31,5 @@ class RedisInterface(APIWrapper):
             return response.body
 
         return self._execute(request, response_handler)
+
 

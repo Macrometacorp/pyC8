@@ -32,6 +32,7 @@ from c8.exceptions import (
     StreamConnectionError,
     StreamCreateError,
     StreamDeleteError,
+    StreamListError,
     StreamPermissionError,
     TenantDcListError,
     SpotRegionUpdateError,
@@ -41,10 +42,13 @@ from c8.exceptions import (
     RestqlUpdateError,
     RestqlDeleteError,
     RestqlExecuteError,
+    RestqlImportError,
+    RestqlCursorError,
     EventCreateError,
     EventGetError,
     StreamAppGetSampleError,
-    GetAPIKeys
+    GetAPIKeys,
+    CollectionPropertiesError,
 )
 from c8.executor import (
     DefaultExecutor,
@@ -428,7 +432,7 @@ class Fabric(APIWrapper):
         if spot_creation_type == self.SPOT_CREATION_TYPES.NONE:
             options['spotDc'] = ''
         elif (spot_creation_type == self.SPOT_CREATION_TYPES.SPOT_REGION and
-                spot_dc):
+              spot_dc):
             options['spotDc'] = spot_dc
 
         data['options'] = options
@@ -604,7 +608,7 @@ class Fabric(APIWrapper):
         if key_offset is not None:
             key_options['offset'] = key_offset
         if spot_collection and local_collection:
-            return("Collection can either be spot or local")
+            return ("Collection can either be spot or local")
         else:
             data = {
                 'name': name,
@@ -639,6 +643,55 @@ class Fabric(APIWrapper):
             if resp.is_success:
                 return self.collection(name)
             raise CollectionCreateError(resp, request)
+
+        return self._execute(request, response_handler)
+
+    def collection_figures(self, collection_name):
+        """Returns an object containing statistics about a collection.
+
+        :param collection_name: Collection name.
+        :type collection_name: str | unicode
+        """
+
+        request = Request(
+            method='get',
+            endpoint='/collection/{}/figures'.format(collection_name),
+        )
+
+        def response_handler(resp):
+            if resp.is_success:
+                return resp.body
+            raise CollectionPropertiesError(resp, request)
+
+        return self._execute(request, response_handler)
+
+    def update_collection_properties(self, collection_name, has_stream=None, wait_for_sync=None):
+        """Changes the properties of a collection.
+           Note: except for waitForSync and hasStream, collection properties cannot be changed once a collection is created.
+        :param collection_name: Collection name.
+        :type collection_name: str | unicode
+        :param has_stream: True if creating a live collection stream.
+        :type has_stream: bool
+        :param wait_for_sync: True if all data must be synced to storage before operation returns.
+        :type wait_for_sync: bool
+        """
+
+        data = {}
+        if has_stream is not None:
+            data['hasStream'] = has_stream
+        if wait_for_sync is not None:
+            data['waitForSync'] = wait_for_sync
+
+        request = Request(
+            method='put',
+            endpoint='/collection/{}/properties'.format(collection_name),
+            data=data
+        )
+
+        def response_handler(resp):
+            if resp.is_success:
+                return resp.body
+            raise CollectionPropertiesError(resp, request)
 
         return self._execute(request, response_handler)
 
@@ -941,7 +994,7 @@ class Fabric(APIWrapper):
                 } for col in map(dict, resp.body['result'])]
             elif code == 403:
                 raise StreamPermissionError(resp, request)
-            raise StreamConnectionError(resp, request)
+            raise StreamListError(resp, request)
 
         return self._execute(request, response_handler)
 
@@ -968,7 +1021,7 @@ class Fabric(APIWrapper):
         :param stream: name of stream
         :param local: Operate on a local stream instead of a global one.
         :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
+        :raise: c8.exceptions.StreamCreateError: If creating streams fails.
         """
         if local is True:
             endpoint = '{}/{}?global=False'.format(ENDPOINT, stream)
@@ -998,49 +1051,22 @@ class Fabric(APIWrapper):
         """
         endpoint = f'{ENDPOINT}/{stream}'
         if force:
-           endpoint = endpoint + "?force=true"
+            endpoint = endpoint + "?force=true"
 
         request = Request(method='delete', endpoint=endpoint)
 
         def response_handler(resp):
-           code = resp.status_code
-           if resp.is_success:
-               return True
-           elif code == 403:
-               raise StreamPermissionError(resp, request)
-           elif code == 412:
-               raise StreamDeleteError(resp, request)
-           raise StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)
-
-    def terminate_stream(self, stream, isCollectionStream=False, local=False):
-        """Terminate a stream. A stream that is terminated will not accept any
-        more messages to be published and will let consumer to drain existing
-        messages in backlog
-
-        :param stream: name of stream
-        :param local: Operate on a local stream instead of a global one.
-        :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamPermissionError: Dont have permission.
-        """
-        if isCollectionStream is False:
-            if local is False:
-                stream = "c8globals." + stream
-            else:
-                stream = "c8locals." + stream
-        endpoint = '{}/{}/terminate?local={}'.format(ENDPOINT, stream, local)
-        request = Request(method='post', endpoint=endpoint)
-
-        def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return True
             elif code == 403:
                 raise StreamPermissionError(resp, request)
+            elif code == 412:
+                raise StreamDeleteError(resp, request)
             raise StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
+
 
     #####################
     # Restql Management #
@@ -1070,6 +1096,29 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
+    def import_restql(self, queries, details=False):
+        """Import custom queries.
+
+        :param queries: queries to be imported
+        :type queries: [dict]
+        :param details: Whether to include details
+        :type details: bool
+        :returns: Results of importing restql
+        :rtype: dict
+        :raise c8.exceptions.RestqlImportError: if restql operation failed
+        """
+
+        data = {'queries': queries, 'details': details}
+
+        request = Request(method="post", endpoint="/restql/import", data=data)
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlImportError(resp, request)
+            return resp.body["result"]
+
+        return self._execute(request, response_handler)
+
     def execute_restql(self, name, data=None):
         """Execute restql by name.
 
@@ -1086,12 +1135,32 @@ class Fabric(APIWrapper):
             request = Request(method="post", data=data,
                               endpoint="/restql/execute/%s" % name)
         else:
-            request = Request(method="post",
+            request = Request(method="post", data={},
                               endpoint="/restql/execute/%s" % name)
 
         def response_handler(resp):
             if not resp.is_success:
                 raise RestqlExecuteError(resp, request)
+            return resp.body
+
+        return self._execute(request, response_handler)
+
+    def read_next_batch_restql(self, id):
+        """Read next batch from query worker cursor.
+
+        :param id: the cursor-identifier
+        :type id: int
+        :returns: Results of execute restql
+        :rtype: dict
+        :raise c8.exceptions.RestqlCursorError: if fetch next batch failed
+        """
+
+        request = Request(method="put",
+                          endpoint="/restql/fetch/{}".format(id))
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RestqlCursorError(resp, request)
             return resp.body
 
         return self._execute(request, response_handler)
@@ -1234,7 +1303,7 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.EventGetError: if event creation failed
 
         """
-        request = Request(method="get", endpoint="/events/"+str(eventId))
+        request = Request(method="get", endpoint="/events/" + str(eventId))
 
         def response_handler(resp):
             if not resp.is_success:
@@ -1270,8 +1339,8 @@ class Fabric(APIWrapper):
 
         return self._execute(req, response_handler)
 
-    def retrive_stream_app(self):
-        """retrieves a stream app by given body
+    def retrieve_stream_app(self):
+        """retrieves all the stream apps of a fabric
         """
         req = Request(
             method="get",
@@ -1318,6 +1387,7 @@ class Fabric(APIWrapper):
             endpoint='/streamapps',
             data=json.dumps(req_body)
         )
+
         # create response handler
 
         def response_handler(resp):
@@ -1326,6 +1396,7 @@ class Fabric(APIWrapper):
                 return True
             print(resp.body)
             return False
+
         # call api
         return self._execute(req, response_handler)
 
@@ -1353,6 +1424,7 @@ class Fabric(APIWrapper):
             method="get",
             endpoint='/key',
         )
+
         # create response handler
 
         def response_handler(resp):
@@ -1360,7 +1432,8 @@ class Fabric(APIWrapper):
                 raise GetAPIKeys(resp, request)
             else:
                 return resp.body['result']
-        return self._execute(request, response_handler, customPrefix="/_api")
+
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     ##############################
     # Search, View and Analyzers #

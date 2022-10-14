@@ -35,8 +35,8 @@ To install locally,
 ```
 
 # Run end-to-end tests
-End-to-end tests can be found in tests/e2e.
-Before first run create .env file in tests/e2e/.
+End-to-end tests can be found in tests/.
+Before first run create .env file in tests/.
 In .env file add variables:
 
 * FEDERATION_URL="<>"

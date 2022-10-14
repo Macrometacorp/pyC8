@@ -2,7 +2,9 @@ from __future__ import absolute_import, unicode_literals, division
 
 import pytest
 import time
+import os
 
+from dotenv import load_dotenv
 from c8 import C8Client
 from c8.fabric import StandardFabric
 from tests.executors import (
@@ -21,12 +23,13 @@ global_data = dict()
 
 
 def pytest_addoption(parser):
-    parser.addoption('--host', action='store', default='gdn.paas.macrometa.io')
+    load_dotenv()
+    parser.addoption('--host', action='store', default=os.environ.get('FEDERATION_URL'))
     parser.addoption('--protocol', action='store', default='https')
     parser.addoption('--port', action='store', default='443')
-    parser.addoption('--email', action='store', default='nemo@nautilus.com')
-    parser.addoption('--passwd', action='store', default='XXXXXX')
-    parser.addoption('--geofabric', action='store', default='_system')
+    parser.addoption('--email', action='store', default=os.environ.get('TENANT_EMAIL'))
+    parser.addoption('--passwd', action='store', default=os.environ.get('TENANT_PASSWORD'))
+    parser.addoption('--geofabric', action='store', default=os.environ.get('FABRIC'))
     parser.addoption('--complete', action='store_true')
 
 
@@ -87,7 +90,9 @@ def pytest_configure(config):
         'password': password,
         'sys_fabric': sys_fabric,
         'tst_fabric': tst_fabric,
+        'tst_fabric_name': tst_fabric_name,
         'bad_fabric': bad_fabric,
+        'bad_fabric_name': bad_fabric_name,
         'geo_index': geo_index,
         'col_name': col_name,
         'lecol_name': lecol_name,
@@ -95,6 +100,7 @@ def pytest_configure(config):
         'ecol_name': ecol_name,
         'fvcol_name': fvcol_name,
         'tvcol_name': tvcol_name,
+
     })
 
 
@@ -178,6 +184,11 @@ def pytest_generate_tests(metafunc):
 
 
 @pytest.fixture(autouse=False)
+def tst_fabric():
+    return global_data['tst_fabric']
+
+
+@pytest.fixture(autouse=False)
 def client():
     return global_data['client']
 
@@ -186,6 +197,13 @@ def client():
 def sys_fabric():
     return global_data['sys_fabric']
 
+@pytest.fixture(autouse=False)
+def tst_fabric_name():
+    return global_data['tst_fabric_name']
+
+@pytest.fixture(autouse=False)
+def bad_fabric_name():
+    return global_data['bad_fabric_name']
 
 @pytest.fixture(autouse=False)
 def username():

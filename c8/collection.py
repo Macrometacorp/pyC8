@@ -711,7 +711,7 @@ class Collection(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def _add_index(self, data):
+    def add_index(self, data):
         """Helper method for creating a new index.
 
         :param data: Index data.
@@ -776,35 +776,7 @@ class Collection(APIWrapper):
             data['sparse'] = sparse
         if deduplicate is not None:
             data['deduplicate'] = deduplicate
-            
-        request = Request(
-            method='post',
-            endpoint='/index#hash',
-            data=data,
-            params={'collection': self.name}
-        )
-
-        def response_handler(resp):
-            if not resp.is_success:
-                raise IndexCreateError(resp, request)
-            details = resp.body
-            details['id'] = details['id'].split('/', 1)[1]
-            details.pop('error', None)
-            details.pop('code', None)
-            if 'minLength' in details:
-                details['min_length'] = details.pop('minLength')
-            if 'geoJson' in details:
-                details['geo_json'] = details.pop('geoJson')
-            if 'ignoreNull' in details:
-                details['ignore_none'] = details.pop('ignoreNull')
-            if 'selectivityEstimate' in details:
-                details['selectivity'] = details.pop('selectivityEstimate')
-            if 'isNewlyCreated' in details:
-                details['new'] = details.pop('isNewlyCreated')
-            return details
-
-        return self._execute(request, response_handler)
-        #return self._add_index(data)
+        return self.add_index(data)
 
     def add_skiplist_index(self,
                            fields,
@@ -834,7 +806,7 @@ class Collection(APIWrapper):
             data['sparse'] = sparse
         if deduplicate is not None:
             data['deduplicate'] = deduplicate
-        return self._add_index(data)
+        return self.add_index(data)
 
     def add_geo_index(self, fields, ordered=None):
         """Create a new geo-spatial index.
@@ -853,7 +825,7 @@ class Collection(APIWrapper):
         data = {'type': 'geo', 'fields': fields}
         if ordered is not None:
             data['geoJson'] = ordered
-        return self._add_index(data)
+        return self.add_index(data)
 
     def add_fulltext_index(self, fields, min_length=None):
         """Create a new fulltext index.
@@ -869,7 +841,7 @@ class Collection(APIWrapper):
         data = {'type': 'fulltext', 'fields': fields}
         if min_length is not None:
             data['minLength'] = min_length
-        return self._add_index(data)
+        return self.add_index(data)
 
     def add_persistent_index(self, fields, unique=None, sparse=None, deduplicate=None):
         """Create a new persistent index.
@@ -899,7 +871,7 @@ class Collection(APIWrapper):
             data['sparse'] = sparse
         if deduplicate is not None:
             data['deduplicate'] = deduplicate
-        return self._add_index(data)
+        return self.add_index(data)
 
     
     def add_ttl_index(self, fields, expireAfter=0, inBackground=False):
@@ -918,13 +890,13 @@ class Collection(APIWrapper):
             """
             data = {'type': 'ttl', 'fields': fields, 'expireAfter': expireAfter,
                     'inBackground': inBackground}  
-            return self._add_index(data)
+            return self.add_index(data)
 
-    def delete_index(self, index_id, ignore_missing=False):
+    def delete_index(self, index_name, ignore_missing=False):
         """Delete an index.
 
-        :param index_id: Index ID.
-        :type index_id: str | unicode
+        :param index_name: Index name.
+        :type index_name: str | unicode
         :param ignore_missing: Do not raise an exception on missing index.
         :type ignore_missing: bool
         :returns: True if index was deleted successfully, False if index was
@@ -934,7 +906,7 @@ class Collection(APIWrapper):
         """
         request = Request(
             method='delete',
-            endpoint='/index/{}/{}'.format(self.name, index_id)
+            endpoint='/index/{}/{}'.format(self.name, index_name)
         )
 
         def response_handler(resp):

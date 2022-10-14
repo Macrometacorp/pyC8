@@ -1,12 +1,8 @@
 from __future__ import absolute_import, unicode_literals
+import threading
+import time
 
 from c8.exceptions import (
-    C8QLCacheClearError,
-    C8QLCacheConfigureError,
-    C8QLCachePropertiesError,
-    C8QLFunctionCreateError,
-    C8QLFunctionDeleteError,
-    C8QLFunctionListError,
     C8QLQueryClearError,
     C8QLQueryExecuteError,
     C8QLQueryExplainError,
@@ -16,15 +12,15 @@ from c8.exceptions import (
 )
 from tests.helpers import assert_raises, extract
 
+def test_c8ql_attributes(client, tst_fabric_name):
+    tst_fabric = client._tenant.useFabric(tst_fabric_name)
+    assert tst_fabric.context in ['default', 'async', 'batch', 'transaction']
+    assert tst_fabric.tenant_name == client._tenant.name
+    assert tst_fabric.fabric_name == tst_fabric.name
+    assert repr(tst_fabric.c8ql) == '<C8QL in {}>'.format(tst_fabric_name)
 
-def test_c8ql_attributes(db, username):
-    assert db.context in ['default', 'async', 'batch', 'transaction']
-    assert db.username == username
-    assert db.db_name == db.name
-    assert repr(db.c8ql) == '<C8QL in {}>'.format(db.name)
-
-
-def test_c8ql_query_management(db, bad_db, col, docs):
+def test_c8ql_query_management(client, tst_fabric_name, bad_fabric_name, col, docs):
+    tst_fabric = client._tenant.useFabric(tst_fabric_name)
     plan_fields = [
         'estimatedNrItems',
         'estimatedCost',
@@ -34,11 +30,11 @@ def test_c8ql_query_management(db, bad_db, col, docs):
     ]
     # Test explain invalid query
     with assert_raises(C8QLQueryExplainError) as err:
-        db.c8ql.explain('INVALID QUERY')
+        tst_fabric.c8ql.explain('INVALID QUERY')
     assert err.value.error_code == 1501
 
     # Test explain valid query with all_plans set to False
-    plan = db.c8ql.explain(
+    plan = tst_fabric.c8ql.explain(
         'FOR d IN {} RETURN d'.format(col.name),
         all_plans=False,
         opt_rules=['-all', '+use-index-range']
@@ -46,7 +42,7 @@ def test_c8ql_query_management(db, bad_db, col, docs):
     assert all(field in plan for field in plan_fields)
 
     # Test explain valid query with all_plans set to True
-    plans = db.c8ql.explain(
+    plans = tst_fabric.c8ql.explain(
         'FOR d IN {} RETURN d'.format(col.name),
         all_plans=True,
         opt_rules=['-all', '+use-index-range'],
@@ -58,11 +54,11 @@ def test_c8ql_query_management(db, bad_db, col, docs):
 
     # Test validate invalid query
     with assert_raises(C8QLQueryValidateError) as err:
-        db.c8ql.validate('INVALID QUERY')
+        tst_fabric.c8ql.validate('INVALID QUERY')
     assert err.value.error_code == 1501
 
     # Test validate valid query
-    result = db.c8ql.validate('FOR d IN {} RETURN d'.format(col.name))
+    result = tst_fabric.c8ql.validate('FOR d IN {} RETURN d'.format(col.name))
     assert 'ast' in result
     assert 'bind_vars' in result
     assert 'collections' in result
@@ -70,12 +66,25 @@ def test_c8ql_query_management(db, bad_db, col, docs):
 
     # Test execute invalid C8QL query
     with assert_raises(C8QLQueryExecuteError) as err:
-        db.c8ql.execute('INVALID QUERY')
+        tst_fabric.c8ql.execute('INVALID QUERY')
     assert err.value.error_code == 1501
 
     # Test execute valid query
-    db.collection(col.name).import_bulk(docs)
-    cursor = db.c8ql.execute(
+    tst_fabric.collection(col.name).import_bulk(docs)
+    # Test for sql
+    cursor = tst_fabric.c8ql.execute(f'SELECT * FROM {col.name}', sql=True)
+    doc_response = [doc for doc in cursor]
+
+    entries = ('_id', '_rev')
+    for doc in doc_response:
+        for key in entries:
+            if key in doc:
+                del doc[key]
+
+    assert doc_response == docs
+
+    # Test for c8ql
+    cursor = tst_fabric.c8ql.execute(
         '''
         FOR d IN {col}
             UPDATE {{_key: d._key, _val: @val }} IN {col}
@@ -86,21 +95,14 @@ def test_c8ql_query_management(db, bad_db, col, docs):
         ttl=10,
         bind_vars={'val': 42},
         full_count=True,
-        max_plans=1000,
         optimizer_rules=['+all'],
-        cache=True,
-        memory_limit=1000000,
         fail_on_warning=False,
         profile=True,
         max_transaction_size=100000,
         max_warning_count=10,
-        intermediate_commit_count=1,
-        intermediate_commit_size=1000,
-        satellite_sync_wait=False,
-        write_collections=[col.name],
-        read_collections=[col.name]
+        skip_inaccessible_collections=False
     )
-    if db.context == 'transaction':
+    if tst_fabric.context == 'transaction':
         assert cursor.id is None
         assert cursor.type == 'cursor'
         assert cursor.batch() is not None
@@ -124,90 +126,71 @@ def test_c8ql_query_management(db, bad_db, col, docs):
         assert cursor.close(ignore_missing=True) is False
 
     # Kick off some long lasting queries in the background
-    db.begin_async_execution().c8ql.execute('RETURN SLEEP(100)')
-    db.begin_async_execution().c8ql.execute('RETURN SLEEP(50)')
+    def query():
+        with assert_raises(C8QLQueryExecuteError) as err:
+            tst_fabric.c8ql.execute('RETURN SLEEP(50)')
+        assert err.value.error_code == 1500
 
-    # Test list queries
-    queries = db.c8ql.queries()
-    for query in queries:
-        assert 'id' in query
-        assert 'query' in query
-        assert 'started' in query
-        assert 'state' in query
-        assert 'bind_vars' in query
-        assert 'runtime' in query
-    assert len(queries) == 2
+    def kill_query():
+        time.sleep(2)
+        # Test list queries
+        queries = tst_fabric.c8ql.queries()
+        for query in queries:
+            assert 'id' in query
+            assert 'query' in query
+            assert 'started' in query
+            assert 'state' in query
+            assert 'bind_vars' in query
+            assert 'runtime' in query
+        assert len(queries) == 2
 
-    # Test list queries with bad fabric
-    with assert_raises(C8QLQueryListError) as err:
-        bad_db.c8ql.queries()
-    assert err.value.error_code == 1228
+        # Test kill queries
+        query_id_1, query_id_2 = extract('id', queries)
+        assert tst_fabric.c8ql.kill(query_id_1) is True
+        while len(queries) > 1:
+            queries = tst_fabric.c8ql.queries()
+        assert query_id_1 not in extract('id', queries)
+    
+        assert tst_fabric.c8ql.kill(query_id_2) is True
+        while len(queries) > 0:
+            queries = tst_fabric.c8ql.queries()
+        assert query_id_2 not in extract('id', queries)
 
-    # Test kill queries
-    query_id_1, query_id_2 = extract('id', queries)
-    assert db.c8ql.kill(query_id_1) is True
+        # Test kill missing queries
+        with assert_raises(C8QLQueryKillError) as err:
+            tst_fabric.c8ql.kill(query_id_1)
+        assert err.value.error_code == 1591
+        with assert_raises(C8QLQueryKillError) as err:
+            tst_fabric.c8ql.kill(query_id_2)
+        assert err.value.error_code == 1591
 
-    while len(queries) > 1:
-        queries = db.c8ql.queries()
-    assert query_id_1 not in extract('id', queries)
+    def run_queries():
+        t1 = threading.Thread(target=query)
+        t2 = threading.Thread(target=query)
+        t3 = threading.Thread(target=kill_query)
+        t1.start(), t2.start(), t3.start()
+        t1.join(),t2.join(),t3.join()
 
-    assert db.c8ql.kill(query_id_2) is True
-    while len(queries) > 0:
-        queries = db.c8ql.queries()
-    assert query_id_2 not in extract('id', queries)
-
-    # Test kill missing queries
-    with assert_raises(C8QLQueryKillError) as err:
-        db.c8ql.kill(query_id_1)
-    assert err.value.error_code == 1591
-    with assert_raises(C8QLQueryKillError) as err:
-        db.c8ql.kill(query_id_2)
-    assert err.value.error_code == 1591
+    run_queries()
 
     # Test list slow queries
-    assert db.c8ql.slow_queries() == []
+    assert tst_fabric.c8ql.slow_queries() == []
+
+    # Test clear slow queries
+    assert tst_fabric.c8ql.clear_slow_queries() is True
+
+    bad_fabric = client._tenant.useFabric(bad_fabric_name)
+    # Test list queries with bad fabric
+    with assert_raises(C8QLQueryListError) as err:
+        bad_fabric.c8ql.queries()
+    assert err.value.error_code == 11
 
     # Test list slow queries with bad fabric
     with assert_raises(C8QLQueryListError) as err:
-        bad_db.c8ql.slow_queries()
-    assert err.value.error_code == 1228
-
-    # Test clear slow queries
-    assert db.c8ql.clear_slow_queries() is True
+        bad_fabric.c8ql.slow_queries()
+    assert err.value.error_code == 11
 
     # Test clear slow queries with bad fabric
     with assert_raises(C8QLQueryClearError) as err:
-        bad_db.c8ql.clear_slow_queries()
-    assert err.value.error_code == 1228
-
-def test_c8ql_cache_management(db, bad_db):
-    # Test get C8QL cache properties
-    properties = db.c8ql.cache.properties()
-    assert 'mode' in properties
-    assert 'limit' in properties
-
-    # Test get C8QL cache properties with bad fabric
-    with assert_raises(C8QLCachePropertiesError):
-        bad_db.c8ql.cache.properties()
-
-    # Test get C8QL cache configure properties
-    properties = db.c8ql.cache.configure(mode='on', limit=100)
-    assert properties['mode'] == 'on'
-    assert properties['limit'] == 100
-
-    properties = db.c8ql.cache.properties()
-    assert properties['mode'] == 'on'
-    assert properties['limit'] == 100
-
-    # Test get C8QL cache configure properties with bad fabric
-    with assert_raises(C8QLCacheConfigureError):
-        bad_db.c8ql.cache.configure(mode='on')
-
-    # Test get C8QL cache clear
-    result = db.c8ql.cache.clear()
-    assert isinstance(result, bool)
-
-    # Test get C8QL cache clear with bad fabric
-    with assert_raises(C8QLCacheClearError) as err:
-        bad_db.c8ql.cache.clear()
-    assert err.value.error_code == 1228
+        bad_fabric.c8ql.clear_slow_queries()
+    assert err.value.error_code == 11

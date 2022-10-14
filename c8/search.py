@@ -23,13 +23,8 @@ from c8.exceptions import (
     ViewGetPropertiesError,
     ViewUpdatePropertiesError,
     AnalyzerListError,
-    AnalyzerCreateError,
-    AnalyzerInvalidParametersError,
-    AnanlyzerForbiddenError,
-    AnalyzerDeleteError,
     AnalyzerGetDefinitionError,
-    AnalyzerNotFoundError,
-    AnalyzerConflictError
+    AnalyzerNotFoundError
 )
 
 
@@ -58,12 +53,13 @@ class Search(APIWrapper):
         to be enabled/disabled
         :type collection: str | unicode
         :param enable: Whether to enable / disable search capabilities
-        type enable: bool
+        :type enable: string ("true" or "false")
         :param field: For which field to enable search capability.
         :type field: str | unicode
         :return: True if set operation is successfull
         :rtype: bool
         """
+
         request = Request(
             method='POST',
             endpoint='/search/collection/{}'.format(collection),
@@ -140,27 +136,23 @@ class Search(APIWrapper):
         )
         # response handler
         def response_handler(resp):
-            if resp.is_success:
-                return resp.body["result"]
+            if not resp.is_success:
+                raise ViewGetError(resp, request)
+            return resp.body["result"]
         # execute request
         return self._execute(request, response_handler)
 
-    def create_view(self, 
-        name,
-        properties={},
-        view_type="search",
-        ):
+    def create_view(self, name, links={}, primary_sort=[]):
         """Creates a new view with a given name and properties if it does not
         already exist.
-        Note: view can't be created with the links. Please use PUT/PATCH for links
-        management.
         
         :param name: The name of the view
         :type name: str | unicode
-        :param properties: Properties related with given view
-        :type properties: dict
-        :param view_type: The type of the view. must be equal to "c8search"
-        :type view_type: str | unicode
+        :param links: Link properties related with the view
+        :type links: dict
+        :param primary_sort: Array of object containg the fields on which
+        sorting needs to be done and whether the sort is asc or desc
+        :type primary_sort: [dict]
         :return: object of new view
         :rtype: dict
         """
@@ -170,8 +162,9 @@ class Search(APIWrapper):
             endpoint=self._view_prefix,
             data={
                 "name": name,
-                "properties": properties,
-                "type": view_type
+                "links": links,
+                "primarySort": primary_sort,
+                "type": "search"
             }
         )
         # response handler
@@ -301,7 +294,8 @@ class Search(APIWrapper):
         # create request
         request = Request(
             method="PUT",
-            endpoint=self._view_prefix + "/{}/properties".format(view)
+            endpoint=self._view_prefix + "/{}/properties".format(view),
+            data=properties
         )
         # create response handler
         def response_handler(resp):
@@ -332,81 +326,10 @@ class Search(APIWrapper):
             return resp.body["result"]
         return self._execute(request, response_handler)
 
-    def create_analyzer(self, name,  analyzer_type, features=[], properties={}):
-        """Creates an analyzer with supplied definitions
-
-        :param name: The analyzer name.
-        :type name: str | unicode
-        :param properties: The properties used to configure the specified type.
-        Value may be a string, an object or null. The default value is null.
-        :type properties: str | dict | unicode
-        :param analyzer_type: The analyzer type.
-        :type analyzer_type: str | unicode
-        :param features: The set of features to set on the analyzer generated fields.
-        The default value is an empty array.
-        :type features: list
-        :return: Returns analyzer object if analyzer created successfully
-        :rtype: dict
-        """
-          # create request
-        
-        data = {
-                "name": name,
-                "type": analyzer_type,
-                "properties": properties,
-                "features": features
-            }
-        print("****", data)
-        request = Request(
-            method="POST",
-            endpoint=self._analyzer_prefix,
-            data=data
-        )
-       
-        # create response handler
-        def response_handler(resp):
-            if not resp.is_success:
-                raise AnalyzerCreateError(resp, request)
-            if resp.status_code == 400:
-                raise AnalyzerInvalidParametersError(resp, request)
-            if resp.status_code == 403:
-                raise AnanlyzerForbiddenError(resp, request)
-            return resp.body
-        return self._execute(request, response_handler)
-
-    def delete_analyzer(self, name):
-        """Deletes given analyzer
-
-        :param name: Name of the analyzer to be deleted
-        :type name: str | unicode
-        :return: True if analyzer deleted successfully
-        :rtype: bool
-        """
-        # create request
-        request = Request(
-            method="DELETE",
-            endpoint=self._analyzer_prefix + "/{}".format(name)
-        )
-        # create response handler
-        def response_handler(resp):
-            if not resp.is_success:
-                raise AnalyzerDeleteError(resp, request)
-            if resp.status_code == 400:
-                raise AnalyzerInvalidParametersError(resp, request)
-            if resp.status_code == 403:
-                raise AnanlyzerForbiddenError(resp, request)
-            if resp.status_code == 404:
-                raise AnalyzerNotFoundError(resp, request)
-            if resp.status_code == 409:
-                raise AnalyzerConflictError(resp, request)
-            return True
-        # execute request
-        return self._execute(request, response_handler)
-
     def get_analyzer_definition(self,name):
         """Gets given analyzer definition
 
-        :param name: Name of the view to be deleted
+        :param name: Name of the view
         :type name: str | unicode
         :return: Definition of the given analyzer
         :rtype: dict
@@ -419,10 +342,9 @@ class Search(APIWrapper):
         # create response handler
         def response_handler(resp):
             if not resp.is_success:
-                raise AnalyzerDeleteError(resp, request)
+                raise AnalyzerGetDefinitionError(resp, request)
             if resp.status_code == 404:
                 raise AnalyzerNotFoundError(resp, request)
             return resp.body
         # execute request
         return self._execute(request, response_handler)
-

@@ -15,7 +15,6 @@ from c8 import constants
 from c8.request import Request
 
 __all__ = ['StreamCollection']
-ENDPOINT = "/streams/"
 
 
 class Base64Socket(websocket.WebSocket):
@@ -75,7 +74,6 @@ class StreamCollection(APIWrapper):
                         max_pending_messages=1000,
                         batching_enabled=False,
                         batching_max_messages=1000,
-                        batching_max_allowed_size_in_bytes=131072,
                         batching_max_publish_delay_ms=10,
                         message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION
                         ):
@@ -131,7 +129,7 @@ class StreamCollection(APIWrapper):
             stream = type_constant.replace(".", "")+"s."+stream
         elif isCollectionStream is False:
             stream = stream
-        print("Calling has steram from create_producer: ", stream, local)
+        print("Calling has stream from create_producer: ", stream, local)
         flag = self.fabric.has_stream(stream, local=local, isCollectionStream=isCollectionStream)
         if flag:
             namespace = type_constant + self.fabric_name
@@ -150,7 +148,7 @@ class StreamCollection(APIWrapper):
             }
 
             params = {k: v for k, v in params.items() if v is not None}
-            url = self._ws_url + topic 
+            url = self._ws_url + topic + "?" + urlencode(params)
             print(url)
             return websocket.create_connection(url, header={'Authorization' : self.header['Authorization']}, class_=Base64Socket)
 
@@ -159,12 +157,10 @@ class StreamCollection(APIWrapper):
             ". Please create a stream and then stream producer"
         )
 
-    def create_reader(self, stream, start_message_id,
+    def create_reader(self, stream, start_message_id="latest",
                       local=False, isCollectionStream=False,
-                      reader_listener=None,
                       receiver_queue_size=1000,
-                      reader_name=None,
-                      subscription_role_prefix=None,
+                      reader_name=None
                       ):
         """
         Create a reader on a particular topic
@@ -172,17 +168,11 @@ class StreamCollection(APIWrapper):
         **Args**
 
         * `stream`: The name of the stream.
-        * `start_message_id`: The initial reader positioning is done by
-                              specifying a message id.
 
         **Options**
-
+        * `start_message_id`: The initial reader positioning is done by
+                              specifying a message id.(latest or earliest)
         * `local`: If the stream_stream is local or global default its global
-        * `reader_listener`:
-            Sets a message listener for the reader. When the listener is set,
-            the application will receive messages through it. Calls to
-            `reader.read_next()` will not be allowed. The listener function
-            needs to accept (reader, message), for example:
         * `receiver_queue_size`:
             Sets the size of the reader receive queue. The reader receive
             queue controls how many messages can be accumulated by the reader
@@ -190,7 +180,6 @@ class StreamCollection(APIWrapper):
             could potentially increase the reader throughput at the expense of
             higher memory utilization.
         * `reader_name`: Sets the reader name.
-        * `subscription_role_prefix`: Sets the subscription role prefix.
         """
         if isCollectionStream is False:
             if local is True:
@@ -318,15 +307,20 @@ class StreamCollection(APIWrapper):
             ". Please create a stream and then stream subscriber."
         )
     
-    def unsubscribe(self, subscription):
+    def unsubscribe(self, subscription, local=False):
         """Unsubscribes the given subscription on all streams on a stream fabric
         :param subscription
+        :param local, boolean indicating whether the stream is local or global
         :returns: 200, OK if operation successful
         raise c8.exceptions.StreamPermissionError: If unsubscribing fails.
         """
+        if local is False:
+            endpoint='/streams/subscription/{}?global=true'.format(subscription)
+        elif local is True:
+            endpoint='/streams/subscription/{}?global=false'.format(subscription)
         request = Request(
             method='delete',
-            endpoint='/streams/subcription/{}'.format(subscription)
+            endpoint=endpoint
         )
 
         def response_handler(resp):
@@ -415,7 +409,7 @@ class StreamCollection(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return json.loads(resp.body['result'])
+                return resp.body['result']
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
@@ -432,7 +426,6 @@ class StreamCollection(APIWrapper):
         :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
                                                      for a stream fails.
         """
-        #endpoint = '{}/{}/backlog?local={}'.format(ENDPOINT, stream, local)
         type_constant = constants.STREAM_GLOBAL_NS_PREFIX
         if local:
 
@@ -450,7 +443,7 @@ class StreamCollection(APIWrapper):
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return json.loads(resp.body['result'])
+                return resp.body['result']
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
@@ -472,58 +465,120 @@ class StreamCollection(APIWrapper):
             else:
                 stream = "c8globals." + stream
         if local is True:
-            endpoint = '{}/{}/stats?global=False'.format(ENDPOINT, stream)
+            endpoint = '/streams/{}/stats?global=False'.format(stream)
         elif local is False:
-            endpoint = '{}/{}/stats?global=True'.format(ENDPOINT, stream)
+            endpoint = '/streams/{}/stats?global=True'.format(stream)
 
         request = Request(method='get', endpoint=endpoint)
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return json.loads(resp.body['result'])
+                return resp.body['result']
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-    
-    # api not in latest swagger
-    '''
-    def reset_message_subscription(self, stream, subscription, message_id,
-                                   isCollectionStream=False, local=False):
-        """Reset subscription to message position closest to given position.
 
-        :param stream: name of stream
-        :param subscription: name of subscription
-        :param message_id: message object consisting of
-            { ledgerId	integer, entryId	integer, partitionIndex	integer }
+    def get_message_stream_ttl(self, local=False):
+        """Get the TTl for messages in stream
+
         :param local: Operate on a local stream instead of a global one.
         :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamUpdateError: If Subscription has active
-                                                 consumers
+        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
+                                                     for a stream fails.
         """
-        if isCollectionStream is False:
-            if local is True:
-                stream = "c8locals." + stream
-            else:
-                stream = "c8globals." + stream
-        endpoint = '{}/{}/subscription/{}?local={}'.format(ENDPOINT, stream,
-                                                           subscription, local)
-        request = Request(method='put', endpoint=endpoint, data=message_id)
+        if local is True:
+            endpoint = '/streams/ttl?global=False'
+        elif local is False:
+            endpoint = '/streams/ttl?global=True'
+
+        request = Request(method='get', endpoint=endpoint)
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return 'OK'
+                return resp.body['result']
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
-            elif code == 412:
-                raise ex.StreamUpdateError(resp, request)
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-    '''
+
+    def publish_message_stream(self, stream, message):
+        """Publish message in a stream
+
+        :param stream: name of stream.
+        :param message: Message to be published in the stream.
+        :returns: 200, OK if operation successful
+        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
+                                                     for a stream fails.
+        """
+
+        endpoint = '/streams/{}/publish'.format(stream)
+
+        request = Request(method='post', endpoint=endpoint, data=message)
+
+        def response_handler(resp):
+            code = resp.status_code
+            if resp.is_success:
+                return True
+            elif code == 403:
+                raise ex.StreamPermissionError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
+
+        return self._execute(request, response_handler)
+
+    def set_message_stream_ttl(self, ttl, local=False):
+        """Set the TTl for messages in stream
+
+        :param ttl: Time to live for messages in all streams.
+        :param local: Operate on a local stream instead of a global one.
+        :returns: 200, OK if operation successful
+        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
+                                                     for a stream fails.
+        """
+        if local is True:
+            endpoint = '/streams/ttl/{}?global=False'.format(ttl)
+        elif local is False:
+            endpoint = '/streams/ttl/{}?global=True'.format(ttl)
+
+        request = Request(method='post', endpoint=endpoint)
+
+        def response_handler(resp):
+            code = resp.status_code
+            if resp.is_success:
+                return resp.body['result']
+            elif code == 403:
+                raise ex.StreamPermissionError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
+
+        return self._execute(request, response_handler)
+
+    def set_message_expiry_stream(self, stream, expiry):
+        """Set the expiration time for all messages on the stream.
+
+        :param stream: name of stream.
+        :param expiry: expiration time for all messages in seconds
+        :returns: 200, OK if operation successful
+        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
+                                                     for a stream fails.
+        """
+
+        endpoint = '/streams/{}/expiry/{}'.format(stream, expiry)
+
+        request = Request(method='post', endpoint=endpoint)
+
+        def response_handler(resp):
+            code = resp.status_code
+            if resp.is_success:
+                return True
+            elif code == 403:
+                raise ex.StreamPermissionError(resp, request)
+            raise ex.StreamConnectionError(resp, request)
+
+        return self._execute(request, response_handler)
 
     def delete_stream_subscription(self, stream, subscription, local=False):
         """Delete a subscription.
@@ -535,8 +590,7 @@ class StreamCollection(APIWrapper):
         :raise: c8.exceptions.StreamDeleteError: If Subscription has active
                                                  consumers
         """
-        #endpoint = '{}/{}/subscription/{}?local={}'.format(ENDPOINT, stream,
-        #                                                   subscription, local)
+
         if local is False:
             endpoint='/streams/{}/subscriptions/{}?global=true'.format(stream, subscription)
         elif local is True:
@@ -544,10 +598,9 @@ class StreamCollection(APIWrapper):
 
         request = Request(method='delete', endpoint=endpoint)
         def response_handler(resp):
-            print(resp.body)
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return 'OK'
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             elif code == 412:
@@ -556,262 +609,3 @@ class StreamCollection(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    # api not in latest swagger
-    '''
-    def skip_all_messages_for_subscription(self, stream, subscription,
-                                           local=False, isCollectionStream=False):
-        """Skip all messages on a stream subscription
-
-        :param stream: name of stream
-        :param subscription: name of subscription
-        :param local: Operate on a local stream instead of a global one.
-        :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamPermissionError:Don't have permission
-        """
-
-        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-        if local:
-
-            type_constant = constants.STREAM_LOCAL_NS_PREFIX
-        
-        if isCollectionStream is False:
-
-            stream = type_constant.replace(".", "")+"s."+stream
-
-        endpoint = '{}/{}/subscription/{}/skip_all?local={}'.format(
-            ENDPOINT, stream, subscription, local)
-        
-        request = Request(method='post', endpoint=endpoint)
-
-        def response_handler(resp):
-            code = resp.status_code
-            if resp.is_success:
-                return 'OK'
-            elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)
-
-
-    def skip_messages_for_subscription(self, stream, subscription,
-                                       num_of_messages, local=False, isCollectionStream=False):
-        """Skip num messages on a topic subscription
-
-        :param stream: Name of stream
-        :param subscription: Name of subscription
-        :param num_of_messages: Number of messages
-        :param local: Operate on a local stream instead of a global one.
-        :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamPermissionError:Don't have permission
-        """
-        type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-        if local:
-
-            type_constant = constants.STREAM_LOCAL_NS_PREFIX
-        
-        if isCollectionStream is False:
-
-            stream = type_constant.replace(".", "")+"s."+stream
-
-        endpoint = '{}/{}/subscription/{}/skip/{}?local={}'.format(
-            ENDPOINT, stream, subscription, num_of_messages, local)
-        
-        request = Request(method='post', endpoint=endpoint)
-
-        def response_handler(resp):
-            code = resp.status_code
-            if resp.is_success:
-                return 'OK'
-            elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)
-    '''
-
-    # api not in latest swagger
-    '''
-    def expire_messages_for_all_subscription(self, stream, expire_time,
-                                             isCollectionStream=False, local=False):
-        """Expire messages on a stream subscription
-
-        :param stream:
-        :param subscription:
-        :param expire_time:
-        :param local: Operate on a local stream instead of a global one.
-        :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamPermissionError:Don't have permission
-        """
-        if isCollectionStream is False:
-            if local is True:
-                stream = "c8locals." + stream
-            else:
-                stream = "c8globals." + stream
-        endpoint = '{}/{}/all_subscription/expireMessages/{}?local={}'.format(
-            ENDPOINT, stream, expire_time, local)
-        request = Request(method='post', endpoint=endpoint)
-
-        def response_handler(resp):
-            code = resp.status_code
-            if resp.is_success:
-                return 'OK'
-            elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)
-
-    def expire_messages_for_subscription(self, stream, subscription,
-                                         expire_time, isCollectionStream=False,
-                                         local=False):
-
-        if isCollectionStream is False:
-            if local is True:
-                stream = "c8locals." + stream
-            else:
-                stream = "c8globals." + stream
-        endpoint = '{}/{}/subscription/{}/expireMessages/{}?local={}'.format(
-            ENDPOINT, stream, subscription, expire_time, local)
-        request = Request(method='post', endpoint=endpoint)
-
-        def response_handler(resp):
-            code = resp.status_code
-            if resp.is_success:
-                return 'OK'
-            elif code == 400:
-                raise ex.StreamBadInputError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)
-
-    def expire_messages_for_subscriptions(self, stream, expire_time,
-                                          isCollectionStream=False, local=False):
-        """Expire messages on all subscriptions of stream
-
-        :param stream:
-        :param subscription:
-        :param expire_time:
-        :param local: Operate on a local stream instead of a global one.
-        :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamPermissionError:Don't have permission
-        """
-        if isCollectionStream is False:
-            if local is True:
-                stream = "c8locals." + stream
-            else:
-                stream = "c8globals." + stream
-        endpoint = '{}/{}/all_subscription/expireMessages/{}?local={}'.format(
-            ENDPOINT, stream, expire_time, local)
-        request = Request(method='post', endpoint=endpoint)
-
-        def response_handler(resp):
-            code = resp.status_code
-            if resp.is_success:
-                return resp.body['result']
-            elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)
-    '''
-    
-    def reset_message_subscription_by_timestamp(self, stream, subscription,
-                                                timestamp, isCollectionStream=False, 
-                                                local=False):
-        """Reset subscription to message position closest to absolute timestamp
-
-        :param stream:
-        :param subscription:
-        :param timestamp:
-        :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamPermissionError:Don't have permission
-        """
-        if isCollectionStream is False:
-            if local is True:
-                stream = "c8locals." + stream
-            else:
-                stream = "c8globals." + stream
-        
-        endpoint = '{}/{}/subscription/{}/resetcursor/{}'.format(
-            ENDPOINT, stream, subscription, timestamp)
-        print("----", endpoint)
-        request = Request(method='post', endpoint=endpoint)
-
-        def response_handler(resp):
-            code = resp.status_code
-            print(code)
-            if resp.is_success:
-                return 'OK'
-            elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)
-
-
-    def reset_message_for_subscription(self, stream, subscription,
-                                       isCollectionStream=False, local=False):
-        """Reset subscription to message position closest to given position
-
-        :param stream: Name of stream
-        :param subscription: Name of subscription
-        :param timestamp: Timestamp
-        :param local: Operate on a local stream instead of a global one.
-        :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamDeleteError: If Subscription has active
-                                                 consumers
-        """
-        if isCollectionStream is False:
-            if local is True:
-                stream = "c8locals." + stream
-            else:
-                stream = "c8globals." + stream
-        endpoint = '{}/{}/subscription/{}/resetcursor?local={}'.format(
-            ENDPOINT, stream, subscription, local)
-        request = Request(method='post', endpoint=endpoint)
-
-        def response_handler(resp):
-            code = resp.status_code
-            if resp.is_success:
-                return resp.body['result']
-            elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)
-
-
-    def reset_message_subscription_by_position(self, stream, subscription,
-                                               message_position, isCollectionStream=False, 
-                                               local=False):
-        """It fence cursor and disconnects all active consumers before reseting
-        cursor.
-
-        :param stream: Name of stream
-        :param subscription: Name of subscription
-        :param message_position: Integer
-        :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamDeleteError: If Subscription has active
-                                                 consumers
-        """
-        if isCollectionStream is False:
-            if local is True:
-                stream = "c8locals." + stream
-            else:
-                stream = "c8globals." + stream
-        endpoint = '{}/{}/subscription/{}/position/{}'.format(
-            ENDPOINT, stream, subscription, message_position)
-        request = Request(method='post', endpoint=endpoint)
-
-        def response_handler(resp):
-            code = resp.status_code
-            if resp.is_success:
-                return resp.body['result']
-            elif code == 403:
-                raise ex.StreamPermissionError(resp, request)
-            elif code == 400:
-                raise ex.StreamBadInputError(resp, request)
-            raise ex.StreamConnectionError(resp, request)
-
-        return self._execute(request, response_handler)

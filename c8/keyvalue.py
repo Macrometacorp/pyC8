@@ -4,13 +4,16 @@ from json import dumps
 
 from c8.api import APIWrapper
 from c8.exceptions import (
-    ListCollections,
-    DeleteCollectionError,
-    InsertKVError,
-    DeleteEntryForKey,
-    GetKeysError,
-    GetCountError
-
+   ListCollections,
+   CreateCollectionError,
+   DeleteCollectionError,
+   InsertKVError,
+   GetValueError,
+   DeleteEntryForKey,
+   GetKeysError,
+   GetCountError,
+   GetKVError,
+   RemoveKVError
 )
 from c8.request import Request
 
@@ -67,7 +70,7 @@ class KV(APIWrapper):
 
         def response_handler(resp):
             if not resp.is_success:
-                raise ListCollections(resp, request)
+                raise CreateCollectionError(resp, request)
             else:
                 if resp.body["error"] is False and resp.body["name"] == name:
                     return True
@@ -193,11 +196,11 @@ class KV(APIWrapper):
         return self._execute(request, response_handler)
 
     def get_value_for_key(self, name, key):
-        """Delete an entry for a key.
+        """Get value for a key from key-value collection.
 
         :param name: Collection name.
         :type name: str | unicode
-        :param key: The key for which the object is to be deleted.
+        :param key: The key for which the value is to be fetched.
         :type key: string
         :return: The value object.
         :rtype: object
@@ -210,24 +213,39 @@ class KV(APIWrapper):
 
         def response_handler(resp):
             if not resp.is_success:
-                raise ListCollections(resp, request)
+                raise GetValueError(resp, request)
             else:
                 return resp.body
                 
         return self._execute(request, response_handler)
 
-    def get_keys(self, name):
+    def get_keys(self, name, offset=None, limit=None, order=None):
         """gets keys of a collection.
 
         :param name: Collection name.
         :type name: str | unicode
+        :param offset: Offset to simulate paging.
+        :type offset: int
+        :param limit: Limit to simulate paging.
+        :type limit: int
+        :param order: Order the results ascending (asc) or descending (desc).
+        :type order: str | unicode
         :return: List of Keys.
         :rtype: list
         :raise c8.exceptions.GetKeysError: If request fails.
         """
+        params={}
+        if offset is not None:
+            params['offset'] = offset
+        if limit is not None:
+            params['limit'] = limit
+        if order is not None:
+            params['order'] = order
+
         request = Request(
             method='get',
-            endpoint='/kv/{}/keys'.format(name)
+            endpoint='/kv/{}/keys'.format(name),
+            params=params
         )
 
         def response_handler(resp):
@@ -257,5 +275,62 @@ class KV(APIWrapper):
                 raise GetCountError(resp, request)
             else:
                 return resp.body["count"]
+                
+        return self._execute(request, response_handler)
+
+    def get_key_value_pairs(self, name, offset=None, limit=None):
+        """Fetch key-value pairs from collection. Optional list of keys
+        Note: Max limit is 100 keys per request.
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :param offset: Offset to simulate paging.
+        :type offset: int
+        :param limit: Limit to simulate paging.
+        :type limit: int
+        :return: The key value pairs from the collection.
+        :rtype: object
+        :raise c8.exceptions.GetKVError: If request fails.
+        """
+        params={}
+        if offset is not None:
+            params['offset'] = offset
+        if limit is not None:
+            params['limit'] = limit
+
+        request = Request(
+            method='post',
+            endpoint='/kv/{}/values'.format(name),
+            params=params
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise GetKVError(resp, request)
+            else:
+                return resp.body
+                
+        return self._execute(request, response_handler)
+
+    def remove_key_value_pairs(self, name):
+        """Remove all key-value pairs in a collection
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :return: True if removal succeeds
+        :rtype: bool
+        :raise c8.exceptions.RemoveKVError: If request fails.
+        """
+
+        request = Request(
+            method='put',
+            endpoint='/kv/{}/truncate'.format(name)
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise RemoveKVError(resp, request)
+            else:
+                return True
                 
         return self._execute(request, response_handler)

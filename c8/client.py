@@ -1093,6 +1093,21 @@ class C8Client(object):
         """
         return self._fabric.save_restql(data)
 
+   # client.import_restql
+
+    def import_restql(self, queries, details=False):
+        """Import custom queries.
+
+        :param queries: queries to be imported
+        :type queries: [dict]
+        :param details: Whether to include details
+        :type details: bool
+        :returns: Results of restql API
+        :rtype: dict
+        :raise c8.exceptions.RestqlImportError: if restql operation failed
+        """
+        return self._fabric.import_restql(queries=queries, details=details)
+
     # client.execute_restql
 
     def execute_restql(self, name, data=None):
@@ -1107,6 +1122,19 @@ class C8Client(object):
         :raise c8.exceptions.RestqlExecuteError: if restql execution failed
         """
         return self._fabric.execute_restql(name, data=data)
+
+    # client.read_next_batch_restql
+
+    def read_next_batch_restql(self, id):
+        """Read next batch from query worker cursor.
+
+        :param id: the cursor-identifier
+        :type id: int
+        :returns: Results of execute restql
+        :rtype: dict
+        :raise c8.exceptions.RestqlCursorError: if fetch next batch failed
+        """
+        return self._fabric.read_next_batch_restql(id=id)
 
     # client.delete_restql
 
@@ -1155,7 +1183,7 @@ class C8Client(object):
         :param stream: name of stream
         :param local: Operate on a local stream instead of a global one.
         :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
+        :raise: c8.exceptions.StreamCreateError: If creating streams fails.
         """
         return self._fabric.create_stream(stream, local=local)
 
@@ -1172,20 +1200,6 @@ class C8Client(object):
         """
         return self._fabric.delete_stream(stream, force=force)
 
-    # client.terminate_stream
-
-    def terminate_stream(self, stream, isCollectionStream=False, local=False):
-        """Delete the streams under the given fabric
-
-        :param stream: name of stream
-        :param isCollectionStream: collection is a stream flag
-        :param local: Operate on a local stream instead of a global one.
-        :returns: 200, OK if operation successful
-        :raise: c8.exceptions.StreamDeleteError: If deleting streams fails.
-        """
-        return self._fabric.terminate_stream(stream=stream,
-                                             isCollectionStream=isCollectionStream,
-                                             local=local)
 
     # client.has_stream
 
@@ -1261,7 +1275,6 @@ class C8Client(object):
                                max_pending_messages=1000,
                                batching_enabled=False,
                                batching_max_messages=1000,
-                               batching_max_allowed_size_in_bytes=131072,
                                batching_max_publish_delay_ms=10,
                                message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION
                                ):
@@ -1318,7 +1331,6 @@ class C8Client(object):
                                        max_pending_messages=max_pending_messages,
                                        batching_enabled=batching_enabled,
                                        batching_max_messages=batching_max_messages,
-                                       batching_max_allowed_size_in_bytes=batching_max_allowed_size_in_bytes,
                                        batching_max_publish_delay_ms=batching_max_publish_delay_ms,
                                        message_routing_mode=message_routing_mode)
 
@@ -1395,12 +1407,10 @@ class C8Client(object):
 
     # client.create_stream_reader
 
-    def create_stream_reader(self, stream, start_message_id,
+    def create_stream_reader(self, stream, start_message_id="latest",
                              local=False, isCollectionStream=False,
-                             reader_listener=None,
                              receiver_queue_size=1000,
-                             reader_name=None,
-                             subscription_role_prefix=None,
+                             reader_name=None
                              ):
         """
         Create a reader on a particular topic
@@ -1408,17 +1418,11 @@ class C8Client(object):
         **Args**
 
         * `stream`: The name of the stream.
-        * `start_message_id`: The initial reader positioning is done by
-                              specifying a message id.
 
         **Options**
-
+        * `start_message_id`: The initial reader positioning is done by
+                              specifying a message id. ("latest" or "earliest")
         * `local`: If the stream_stream is local or global default its global
-        * `reader_listener`:
-            Sets a message listener for the reader. When the listener is set,
-            the application will receive messages through it. Calls to
-            `reader.read_next()` will not be allowed. The listener function
-            needs to accept (reader, message), for example:
         * `receiver_queue_size`:
             Sets the size of the reader receive queue. The reader receive
             queue controls how many messages can be accumulated by the reader
@@ -1426,27 +1430,25 @@ class C8Client(object):
             could potentially increase the reader throughput at the expense of
             higher memory utilization.
         * `reader_name`: Sets the reader name.
-        * `subscription_role_prefix`: Sets the subscription role prefix.
 
         """
         _stream = self._fabric.stream()
         return _stream.create_reader(stream=stream, start_message_id=start_message_id,
                                      local=local, isCollectionStream=isCollectionStream,
-                                     reader_listener=reader_listener,
                                      receiver_queue_size=receiver_queue_size,
-                                     reader_name=reader_name,
-                                     subscription_role_prefix=subscription_role_prefix)
+                                     reader_name=reader_name)
 
     # client.unsubscribe
-    def unsubscribe(self, subscription):
+    def unsubscribe(self, subscription, local=False):
         """Unsubscribes the given subscription on all streams on a stream fabric
 
         :param subscription
+        :param local, boolean indicating whether the stream is local or global
         :returns: 200, OK if operation successful
         raise c8.exceptions.StreamPermissionError: If unsubscribing fails.
         """
         _stream = self._fabric.stream()
-        return _stream.unsubscribe(subscription=subscription)
+        return _stream.unsubscribe(subscription=subscription, local=local)
 
     # client.delete_stream_subscription
 
@@ -1461,7 +1463,7 @@ class C8Client(object):
                                                  consumers
         """
         _stream = self._fabric.stream()
-        return _stream.delete_stream_subscription(stream, subscription, local=False)
+        return _stream.delete_stream_subscription(stream, subscription, local=local)
 
     # client.get_stream_subscriptions
 
@@ -1516,6 +1518,61 @@ class C8Client(object):
         _stream = self._fabric.stream()
         return _stream.clear_streams_backlog()
 
+    # client.get_message_stream_ttl
+
+    def get_message_stream_ttl(self, local=False):
+        """Get the TTl for messages in stream
+
+        :param local: Operate on a local stream instead of a global one.
+        :returns: 200, OK if operation successful
+        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
+                                                     for a stream fails.
+        """
+        _stream = self._fabric.stream()
+        return _stream.get_message_stream_ttl(local=local)
+
+    # client.publish_message_stream
+
+    def publish_message_stream(self, stream, message):
+        """Publish message in a stream
+
+        :param stream: name of stream.
+        :param message: Message to be published in the stream.
+        :returns: 200, OK if operation successful
+        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
+                                                     for a stream fails.
+        """
+        _stream = self._fabric.stream()
+        return _stream.publish_message_stream(stream=stream, message=message)
+
+    # client.set_message_stream_ttl
+
+    def set_message_stream_ttl(self, ttl, local=False):
+        """Set the TTl for messages in stream
+
+        :param ttl: Time to live for messages in all streams.
+        :param local: Operate on a local stream instead of a global one.
+        :returns: 200, OK if operation successful
+        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
+                                                     for a stream fails.
+        """
+        _stream = self._fabric.stream()
+        return _stream.set_message_stream_ttl(ttl=ttl, local=local)
+
+    # client.set_message_expiry_stream
+
+    def set_message_expiry_stream(self, stream, expiry):
+        """Set the expiration time for all messages on the stream.
+
+        :param stream: name of stream.
+        :param expiry: expiration time for all messages in seconds
+        :returns: 200, OK if operation successful
+        :raise: c8.exceptions.StreamPermissionError: If getting subscriptions
+                                                     for a stream fails.
+        """
+        _stream = self._fabric.stream()
+        return _stream.set_message_expiry_stream(stream=stream, expiry=expiry)
+
     # client.create_stream_app
 
     def create_stream_app(self, data, dclist=[]):
@@ -1549,12 +1606,11 @@ class C8Client(object):
     # client.retrieve_stream_app
 
     def retrieve_stream_app(self):
-        """retrives stream apps in a fabric
+        """retrieves stream apps in a fabric
 
-        :param: name of stream app
         :returns: Object with list of stream Apps
         """
-        return self._fabric.retrive_stream_app()
+        return self._fabric.retrieve_stream_app()
 
     # client.get_stream_app
 
@@ -1585,6 +1641,16 @@ class C8Client(object):
         """
         _streamapp = self._fabric.stream_app(streamapp_name)
         return _streamapp.change_state(active=activate)
+
+    # client.publish_message_http_source
+
+    def publish_message_http_source(self, streamapp_name, stream, message):
+        """publish messages via HTTP source streams
+        @stream: name of the http source stream
+        @message: message to be published
+        """
+        _streamapp = self._fabric.stream_app(streamapp_name)
+        return _streamapp.publish_message_http_source(stream=stream, message=message)
 
     # client.has_graph
 
@@ -2340,8 +2406,7 @@ class C8Client(object):
         :rtype: boolean
         :raise c8.exceptions.CreateCollectionError: If creation fails.
         """
-        return self._fabric.key_value.create_collection(name=name,
-                                                        expiration=expiration)
+        return self._fabric.key_value.create_collection(name=name, expiration=expiration)
 
     # client.delete_collection_kv
 
@@ -2352,7 +2417,7 @@ class C8Client(object):
         :type name: str | unicode
         :returns: True if the request is successful.
         :rtype: boolean
-        :raise c8.exceptions.DeleteCollectionError: If creation fails.
+        :raise c8.exceptions.DeleteCollectionError: If delete fails.
         """
         return self._fabric.key_value.delete_collection(name=name)
 
@@ -2416,11 +2481,11 @@ class C8Client(object):
     # client.get_value_for_key
 
     def get_value_for_key(self, name, key):
-        """Delete an entry for a key.
+        """Get value for a key from key-value collection.
 
         :param name: Collection name.
         :type name: str | unicode
-        :param key: The key for which the object is to be deleted.
+        :param key: The key for which the value is to be fetched.
         :type key: string
         :returns: The value object.
         :rtype: object
@@ -2430,16 +2495,23 @@ class C8Client(object):
 
     # client.get_keys
 
-    def get_keys(self, name):
+    def get_keys(self, name, offset=None, limit=None, order=None):
         """gets keys of a collection.
 
         :param name: Collection name.
         :type name: str | unicode
+        :param offset: Offset to simulate paging.
+        :type offset: int
+        :param limit: Limit to simulate paging.
+        :type limit: int
+        :param order: Order the results ascending (asc) or descending (desc).
+        :type order: str | unicode
         :returns: List of Keys.
         :rtype: list
         :raise c8.exceptions.GetKeysError: If request fails.
         """
-        return self._fabric.key_value.get_keys(name)
+        return self._fabric.key_value.get_keys(name, offset=offset,
+                                               limit=limit, order=order)
 
     # client.get_kv_count
 
@@ -2453,6 +2525,39 @@ class C8Client(object):
         :raise c8.exceptions.GetCountError: If request fails.
         """
         return self._fabric.key_value.get_kv_count(name)
+
+    # client.get_key_value_pairs
+
+    def get_key_value_pairs(self, name, offset=None, limit=None):
+        """Fetch key-value pairs from collection. Optional list of keys
+        Note: Max limit is 100 keys per request.
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :param offset: Offset to simulate paging.
+        :type offset: int
+        :param limit: Limit to simulate paging.
+        :type limit: int
+        :return: The key value pairs from the collection.
+        :rtype: object
+        :raise c8.exceptions.GetKVError: If request fails.
+        """
+        return self._fabric.key_value.get_key_value_pairs(name=name,
+                                                          offset=offset,
+                                                          limit=limit)
+
+    # client.remove_key_value_pairs
+
+    def remove_key_value_pairs(self, name):
+        """Remove all key-value pairs in a collection
+
+        :param name: Collection name.
+        :type name: str | unicode
+        :return: True if removal succeeds
+        :rtype: bool
+        :raise c8.exceptions.RemoveKVError: If request fails.
+        """
+        return self._fabric.key_value.remove_key_value_pairs(name)
 
     # client.create_api_key
 
@@ -2587,7 +2692,7 @@ class C8Client(object):
         :param collection: Collection name on which search capabilities has to be enabled/disabled
         :type collection: str | unicode
         :param enable: Whether to enable / disable search capabilities
-        :type enable: bool
+        :type enable: string ("true" or "false")
         :param field: For which field to enable search capability.
         :type field: str | unicode
         :returns: True if set operation is successfull
@@ -2595,26 +2700,21 @@ class C8Client(object):
         """
         return self._search.set_search(collection, enable, field)
 
-    def create_view(self,
-                    name,
-                    properties={},
-                    view_type="search",
-                    ):
+    def create_view(self, name, links={}, primary_sort=[]):
         """Creates a new view with a given name and properties if it does not
         already exist.
-        Note: view can't be created with the links. Please use PUT/PATCH for links
-        management.
-
+        
         :param name: The name of the view
         :type name: str | unicode
-        :param properties: Properties related with given view
-        :type properties: dict
-        :param view_type: The type of the view. must be equal to "c8search"
-        :type view_type: str | unicode
-        :returns: object of new view
+        :param links: Link properties related with the view
+        :type links: dict
+        :param primary_sort: Array of object containg the fields on which
+        sorting needs to be done and whether the sort is asc or desc
+        :type primary_sort: [dict]
+        :return: object of new view
         :rtype: dict
         """
-        return self._search.create_view(name=name, properties={}, view_type="search")
+        return self._search.create_view(name, links, primary_sort)
 
     def list_all_views(self):
         """ List all views
@@ -2696,8 +2796,7 @@ class C8Client(object):
                   used to obtain the remaining results.
         :rtype: [dict]
         """
-        return self._search.search_in_collection(collection, search, bindVars=None,
-                                                 ttl=60)
+        return self._search.search_in_collection(collection, search, bindVars, ttl)
 
     def get_list_of_analyzer(self):
         """Get list of all available analyzers
@@ -2739,7 +2838,7 @@ class C8Client(object):
     def get_analyzer_definition(self, name):
         """Gets given analyzer definition
 
-        :param name: Name of the view to be deleted
+        :param name: Name of the view
         :type name: str | unicode
         :returns: Definition of the given analyzer
         :rtype: dict
@@ -3326,7 +3425,7 @@ class C8Client(object):
             start=None,
             end=None,
             data_format=None
-           ):
+    ):
         """
         Return the position of the first bit set to 1 or 0 in a string.
         The position is returned, thinking of the string as an array of bits from left

@@ -151,6 +151,7 @@ class StreamEventError(C8ClientError):
 class StreamBadInputError(C8ClientError):
     """If the request doesn’t have the expected format"""
 
+
 #######################
 # Tenant Exceptions #
 #######################
@@ -323,6 +324,10 @@ class CollectionDeleteError(C8ServerError):
 
 class CollectionTruncateError(C8ServerError):
     """Failed to truncate collection."""
+
+
+class CollectionPropertiesError(C8ServerError):
+    """Failed to retrieve collection properties."""
 
 
 #####################
@@ -574,6 +579,10 @@ class RestqlCreateError(C8ServerError):
     """Failed to create restql."""
 
 
+class RestqlImportError(C8ServerError):
+    """Failed to import restql."""
+
+
 class RestqlDeleteError(C8ServerError):
     """Failed to delete restql."""
 
@@ -588,6 +597,10 @@ class RestqlUpdateError(C8ServerError):
 
 class RestqlExecuteError(C8ServerError):
     """Failed to execute restql."""
+
+
+class RestqlCursorError(C8ServerError):
+    """Failed to read next batch from cursor."""
 
 
 #######################
@@ -639,6 +652,10 @@ class DeleteEntryForKey(C8ServerError):
     """Failed to Delete entry for the specified key/keys"""
 
 
+class RemoveKVError(C8ServerError):
+    """Failed to Delete entry for all the kv pairs in the collection"""
+
+
 class GetValueError(C8ServerError):
     """Failed to fetch the value for the specified key/keys"""
 
@@ -649,6 +666,10 @@ class GetKeysError(C8ServerError):
 
 class GetCountError(C8ServerError):
     """Failed to get the kv count for the collection"""
+
+
+class GetKVError(C8ServerError):
+    """Failed to get all the kv pairs in the collection"""
 
 
 #######################

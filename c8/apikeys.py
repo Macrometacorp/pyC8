@@ -63,7 +63,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     def get_api_key(self):
         """Fetch details of an api key.
@@ -83,7 +83,7 @@ class APIKeys(APIWrapper):
                 raise GetAPIKeys(resp, request)
             return resp.body
 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     def remove_api_key(self):
         """Removes an api key.
@@ -107,7 +107,7 @@ class APIKeys(APIWrapper):
                 else:
                     return False
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     
     def list_accessible_databases(self):
@@ -128,7 +128,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     
     def get_database_access_level(self, databasename):
@@ -152,7 +152,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     
     def set_database_access_level(self, databasename, grant='ro'):
@@ -183,7 +183,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     
     def clear_database_access_level(self, databasename):
@@ -211,7 +211,7 @@ class APIKeys(APIWrapper):
                 elif resp.body['error'] is True:
                     return False
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
 
     def list_accessible_collections(self, databasename='_system', full=False):
@@ -238,7 +238,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body['result']
 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     def get_collection_access_level(self, collection_name, databasename='_system'):
         """Fetch the collection access level for a specific collection in a database.
@@ -264,7 +264,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     
     def set_collection_access_level(self, collection_name, databasename='_system',
@@ -300,7 +300,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     
     def clear_collection_access_level(self, collection_name, databasename='_system'):
@@ -332,7 +332,7 @@ class APIKeys(APIWrapper):
                 elif resp.body['error'] is True:
                     return False
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
 
     def list_accessible_streams(self, databasename='_system', full=False):
@@ -359,7 +359,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     
     def get_stream_access_level(self, streamname, databasename='_system', local=False):
@@ -392,7 +392,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     
     def set_stream_access_level(self, streamname, databasename='_system', grant='ro', local=False):
@@ -434,7 +434,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     
     def clear_stream_access_level(self, streamname, databasename='_system', local=False):
@@ -474,7 +474,7 @@ class APIKeys(APIWrapper):
                 elif resp.body['error'] is True:
                     return False
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
 
     def get_billing_access_level(self):
@@ -495,7 +495,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body['result']
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     
     def set_billing_access_level(self, grant='ro'):
@@ -524,7 +524,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     
     def clear_billing_access_level(self):
@@ -547,7 +547,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
 
     def get_attributes(self):
@@ -568,7 +568,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     
     def update_attributes(self, attributes):
@@ -592,7 +592,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     
     def remove_all_attributes(self):
@@ -614,7 +614,7 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     def remove_attribute(self, attributeid):
 
@@ -636,5 +636,5 @@ class APIKeys(APIWrapper):
             else:
                 return resp.body
                 
-        return self._execute(request, response_handler, customPrefix="/_api")
+        return self._execute(request, response_handler, custom_prefix="/_api")
     
