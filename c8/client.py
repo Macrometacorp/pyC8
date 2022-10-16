@@ -446,12 +446,14 @@ class C8Client(object):
         :type ignore_missing: bool
         :param system: Whether the collection is a system collection.
         :type system: bool
-        :returns: True if collection was deleted successfully, False if
-            collection was not found and **ignore_missing** was set to True.
+        :returns: True if collection was deleted successfully,
+        False if collection was not found and **ignore_missing** was set to True.
         :rtype: bool
         """
-        resp = self._fabric.delete_collection(name=name, ignore_missing=ignore_missing,
-                                              system=system)
+        resp = self._fabric.delete_collection(
+            name=name,
+            ignore_missing=ignore_missing,
+            system=system)
         return resp
 
     # client.import_bulk
@@ -613,17 +615,32 @@ class C8Client(object):
         _collection = self.get_collection(collection_name)
 
         if isinstance(document, dict):
-            resp = _collection.insert(document=document, return_new=return_new,
-                                      sync=sync, silent=silent)
+            response = _collection.insert(
+                document=document,
+                return_new=return_new,
+                sync=sync,
+                silent=silent
+            )
+
         elif isinstance(document, list):
-            resp = _collection.insert_many(documents=document, return_new=return_new,
-                                           sync=sync, silent=silent)
-        return resp
+            response = _collection.insert_many(
+                documents=document,
+                return_new=return_new,
+                sync=sync,
+                silent=silent
+            )
+
+        return response
 
     # client.insert_document_from_file()
-    def insert_document_from_file(self, collection_name, csv_filepath, return_new=False,
-                                  sync=None,
-                                  silent=False):
+    def insert_document_from_file(
+            self,
+            collection_name,
+            csv_filepath,
+            return_new=False,
+            sync=None,
+            silent=False
+    ):
         """Insert a documents from csv file.
 
         :param collection_name: Collection name.
@@ -642,9 +659,11 @@ class C8Client(object):
             parameter **silent** was set to True.
         """
         _collection = self.get_collection(collection_name)
-        resp = _collection.insert_from_file(csv_filepath=csv_filepath,
-                                            return_new=return_new,
-                                            sync=sync, silent=silent)
+        resp = _collection.insert_from_file(
+            csv_filepath=csv_filepath,
+            return_new=return_new,
+            sync=sync, silent=silent
+        )
         return resp
 
     # client.update_document
@@ -3520,8 +3539,8 @@ class C8Client(object):
         Insert all the specified values at the head of the list stored at key. If key
         does not exist, it is created as empty list before performing the push
         operations. When key holds a value that is not a list, an error is returned.
-        It is possible to push multiple elements using a single command call just
-        specifying multiple members of the list in elements parameter.
+        So for instance the command LPUSH mylist a b c will result into a list
+        containing c as first element, b as second element and a as third element.
         More on https://redis.io/commands/lpush/
 
         :param key: Key of the data
@@ -3644,6 +3663,335 @@ class C8Client(object):
             key,
             start,
             stop
+        )
+
+    def redis_lmove(self, source, destination, where_from, where_to, collection):
+        """
+        Atomically returns and removes the first/last element (head/tail depending on
+        the wherefrom argument) of the list stored at source, and pushes the element
+        at the first/last element (head/tail depending on the whereto argument) of
+        the list stored at destination.
+        More on https://redis.io/commands/lmove/
+
+        :param source: Source list
+        :type source: str
+        :param destination: Destination list
+        :type destination: str
+        :param where_from: From where to move <LEFT | RIGHT>
+        :type where_from: str
+        :param where_to: Position to move in <LEFT | RIGHT>
+        :type where_to: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LMOVE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            source,
+            destination,
+            where_from,
+            where_to
+        )
+
+    def redis_lpos(
+            self,
+            key,
+            element,
+            collection,
+            rank=None,
+            count=None,
+            max_len=None
+    ):
+        """
+        The command returns the index of matching elements inside a Redis list. By
+        default, when no options are given, it will scan the list from head to tail,
+        looking for the first match of "element". The optional arguments and options
+        can modify the command's behavior. The RANK option specifies the "rank" of
+        the first element to return, in case there are multiple matches. A rank of 1
+        means to return the first match, 2 to return the second match, and so forth.
+        Sometimes we want to return not just the Nth matching element, but the
+        position of all the first N matching elements. This can be achieved using the
+        COUNT option.
+        Finally, the MAXLEN option tells the command to compare the provided element
+        only with a given maximum number of list items
+        More on https://redis.io/commands/scan/
+
+        :param key: Key of the data
+        :type key: str
+        :param element: Element to match
+        :type element: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param rank: A rank of 1 means to return the first match, 2 to return the second
+        match, and so forth.
+        :type rank: str
+        :param count: count is the number of results
+        :type count: int
+        :param max_len: compare the provided element only with a given maximum number of
+        list items
+        :type max_len: int
+        :returns:
+        :rtype:
+        """
+        redis_command = "LPOS"
+        rank_list = []
+        if rank is not None:
+            rank_list.append("RANK")
+            rank_list.append(rank)
+
+        count_list = []
+        if count is not None:
+            count_list.append("COUNT")
+            count_list.append(count)
+
+        max_len_list = []
+        if max_len is not None:
+            max_len_list.append("MAXLEN")
+            max_len_list.append(max_len)
+
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            element,
+            *rank_list,
+            *count_list,
+            *max_len_list
+        )
+
+    def redis_rpush(self, key, elements, collection):
+        """
+        Insert all the specified values at the tail of the list stored at key. If key
+        does not exist, it is created as empty list before performing the push
+        operation. When key holds a value that is not a list, an error is returned.
+        So for instance the command RPUSH mylist a b c will result into a list
+        containing a as first element, b as second element and c as third element.
+        More on https://redis.io/commands/rpush/
+
+        :param key: Key of the data
+        :type key: str
+        :param elements: List of the data
+        :type elements: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "RPUSH"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *elements
+        )
+
+    def redis_lpop(self, key, collection, count=None,):
+        """
+        Removes and returns the first elements of the list stored at key. By default,
+        the command pops a single element from the beginning of the list. When
+        provided with the optional count argument, the reply will consist of up to
+        count elements, depending on the list's length.
+        More on https://redis.io/commands/lpop/
+
+        :param key: Key of the list
+        :type key: str
+        :param count: Count number of elements to pop
+        :type count: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LPOP"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count,
+        )
+
+    def redis_lpushx(self, key, elements, collection):
+        """
+        Inserts specified values at the head of the list stored at key, only if key
+        already exists and holds a list. In contrary to LPUSH, no operation will be
+        performed when key does not yet exist.
+        More on https://redis.io/commands/lpushx/
+
+        :param key: Key of the data
+        :type key: str
+        :param elements: List of the data
+        :type elements: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LPUSHX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *elements
+        )
+
+    def redis_rpushx(self, key, elements, collection):
+        """
+        Inserts specified values at the tail of the list stored at key, only if key
+        already exists and holds a list. In contrary to RPUSH, no operation will be
+        performed when key does not yet exist.
+        More on https://redis.io/commands/rpushx/
+
+        :param key: Key of the data
+        :type key: str
+        :param elements: List of the data
+        :type elements: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "RPUSHX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *elements
+        )
+
+    def redis_lrem(self, key, count, element, collection):
+        """
+        Removes the first count occurrences of elements equal to element from the list
+        stored at key. The count argument influences the operation in the following
+        ways:
+        count > 0: Remove elements equal to element moving from head to tail.
+        count < 0: Remove elements equal to element moving from tail to head.
+        count = 0: Remove all elements equal to element.
+        More on https://redis.io/commands/lrem/
+
+        :param key: Key of the data
+        :type key: str
+        :param count: Number of elements to be removed
+        :type count: int
+        :param element: List element
+        :type element: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LREM"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count,
+            element
+        )
+
+    def redis_lset(self, key, index, element, collection):
+        """
+        Sets the list element at index to element. For more information on the index
+        argument, see LINDEX.
+        More on https://redis.io/commands/lset/
+
+        :param key: Key of the data
+        :type key: str
+        :param index: Index of element
+        :type index: int
+        :param element: List element
+        :type element: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LSET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            index,
+            element
+        )
+
+    def redis_ltrim(self, key, start, stop, collection):
+        """
+        Trim an existing list so that it will contain only the specified range of
+        elements specified. Both start and stop are zero-based indexes, where 0 is
+        the first element of the list (the head), 1 the next element and so on.
+        More on https://redis.io/commands/ltrim/
+
+        :param key: Key of the data
+        :type key: str
+        :param start: Start index of element
+        :type start: int
+        :param stop: Stop index of element
+        :type stop: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LTRIM"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            start,
+            stop
+        )
+
+    def redis_rpop(self, key, collection, count=None,):
+        """
+        Removes and returns the last elements of the list stored at key.
+        By default, the command pops a single element from the end of the list. When
+        provided with the optional count argument, the reply will consist of up to count
+        elements, depending on the list's length.
+        More on https://redis.io/commands/rpop/
+
+        :param key: Key of the list
+        :type key: str
+        :param count: Count number of elements to pop
+        :type count: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "RPOP"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count,
+        )
+
+    def redis_rpoplpush(self, source, destination, collection):
+        """
+        Atomically returns and removes the first/last element (head/tail depending on
+        the wherefrom argument) of the list stored at source, and pushes the element
+        at the first/last element (head/tail depending on the whereto argument) of
+        the list stored at destination.
+        More on https://redis.io/commands/lmove/
+
+        :param source: Source list
+        :type source: str
+        :param destination: Destination list
+        :type destination: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "RPOPLPUSH"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            source,
+            destination,
         )
 
     def redis_hset(self, key, data, collection):

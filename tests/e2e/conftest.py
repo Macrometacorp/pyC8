@@ -17,7 +17,7 @@ def get_client_instance():
     return client
 
 
-def response_content():
+def test_data_document():
     return [
         {
             'age': 25,

@@ -8,13 +8,26 @@ TENANT_EMAIL
 API_KEY
 FABRIC
 
-Make sure that redis collection exists on fabric with REDIS_COLLECTION string variable.
-
 Tests need to be run in sequence since we first create data than query for that same
 data.
 """
 
-REDIS_COLLECTION = "dinoRedis2"
+"""
+Test preparation - Create Collection
+Make sure that redis collection exists on fabric with REDIS_COLLECTION string variable.
+"""
+
+REDIS_COLLECTION = "testRedisCollection"
+
+
+def test_create_redis_collection():
+    client = get_client_instance()
+    response = client.create_collection(
+        REDIS_COLLECTION,
+        stream=True,
+    )
+    # Response from platform
+    assert REDIS_COLLECTION == response.name
 
 
 def test_redis_set():
@@ -29,14 +42,14 @@ def test_redis_append():
 
     response = client.redis_append("test", "2", REDIS_COLLECTION)
     # Response from platform -> Number of strings in values
-    assert {"code": 200, "result": "2"} == response
+    assert {"code": 200, "result": 2} == response
 
 
 def test_redis_dec():
     client = get_client_instance()
     response = client.redis_decr("test", REDIS_COLLECTION)
     # Response from platform -> Number of strings in values
-    assert {"code": 200, "result": "11"} == response
+    assert {"code": 200, "result": 11} == response
 
 
 def test_redis_decby():
@@ -62,44 +75,45 @@ def test_redis_getdel():
 
 def test_redis_getex():
     client = get_client_instance()
+    client.redis_set("test", "EX", REDIS_COLLECTION)
     response = client.redis_getex("test", REDIS_COLLECTION, "EX", "200")
     # Response from platform -> make sure that we have data on platform "result": "2"
-    assert {"code": 200, "result": "1"} == response
+    assert {"code": 200, "result": "EX"} == response
 
 
 def test_redis_getrange():
     client = get_client_instance()
     response = client.redis_getrange("test", 0, 0, REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": "1"} == response
+    assert {"code": 200, "result": "E"} == response
 
 
 def test_redis_getset():
     client = get_client_instance()
     response = client.redis_getset("test", "test_value", REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": "1"} == response
+    assert {"code": 200, "result": "EX"} == response
 
 
 def test_redis_incr():
     client = get_client_instance()
     response = client.redis_incr("test", REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": "2"} == response
+    assert {"code": 200, "result": 1} == response
 
 
 def test_redis_incrby():
     client = get_client_instance()
     response = client.redis_incrby("test", 10, REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": "12"} == response
+    assert {"code": 200, "result": 11} == response
 
 
 def test_redis_incrbyfloat():
     client = get_client_instance()
     response = client.redis_incrbyfloat("test", 0.5, REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": "12.5"} == response
+    assert {"code": 200, "result": '11.5'} == response
 
 
 def test_redis_set_2():
@@ -113,7 +127,7 @@ def test_redis_mget():
     client = get_client_instance()
     response = client.redis_mget(["test", "test2"], REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": ["12.5", "22"]} == response
+    assert {"code": 200, "result": ["11.5", "22"]} == response
 
 
 def test_redis_mset():
@@ -277,7 +291,7 @@ def test_redis_zadd():
     client = get_client_instance()
     response = client.redis_zadd("testZadd", 2, "test", REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": "1"} == response
+    assert {"code": 200, "result": 1} == response
 
 
 def test_redis_zrange():
@@ -329,6 +343,139 @@ def test_redis_lrange():
     assert {"code": 200, "result": ["copper", "silver"]} == response
 
 
+def test_redis_lpush_1():
+    client = get_client_instance()
+    list_data = ["a", "b", "c"]
+    response = client.redis_lpush("testList1", list_data, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 3} == response
+
+
+def test_redis_lpush_2():
+    client = get_client_instance()
+    list_data = ["x", "y", "z"]
+    response = client.redis_lpush("testList2", list_data, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 3} == response
+
+
+def test_redis_lmove():
+    client = get_client_instance()
+    response = client.redis_lmove(
+        "testList1",
+        "testList2",
+        "RIGHT",
+        "LEFT",
+        REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": "a"} == response
+
+
+def test_redis_rpush():
+    client = get_client_instance()
+    list_data = ["a", "b", "c", "d", 1, 2, 3, 4, 3, 3, 3]
+    response = client.redis_rpush("testListPos", list_data, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 11} == response
+
+
+def test_redis_lpos():
+    client = get_client_instance()
+    response = client.redis_lpos("testListPos", 3, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 6} == response
+
+
+def test_redis_lpos_2():
+    client = get_client_instance()
+    response = client.redis_lpos("testListPos", 3, REDIS_COLLECTION, 0, 3)
+    # Response from platform
+    assert {"code": 200, "result": [6, 8, 9]} == response
+
+
+def test_redis_lpop():
+    client = get_client_instance()
+    response = client.redis_lpop("testList2", REDIS_COLLECTION, 1)
+    # Response from platform
+    assert {"code": 200, "result": ["a"]} == response
+
+
+def test_redis_lpushx():
+    client = get_client_instance()
+    list_data = ["a", "b", "c", "d", 1, 2, 3, 4, 3, 3, 3]
+    response = client.redis_lpushx("testListPos", list_data, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 22} == response
+
+
+def test_redis_rpush_2():
+    client = get_client_instance()
+    list_data = ["a", "b", "c", "d", 1, 2, 3, 4, 3, 3, 3]
+    response = client.redis_rpush("testListRpushx", list_data, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 11} == response
+
+
+def test_redis_rpushx():
+    client = get_client_instance()
+    list_data = ["a", "b", "c", "d", 1, 2, 3, 4, 3, 3, 3]
+    response = client.redis_rpushx("testListRpushx", list_data, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 22} == response
+
+
+def test_redis_rpush_3():
+    client = get_client_instance()
+    list_data = ["hello", "hello", "foo", "hello"]
+    response = client.redis_rpush("testListLrem", list_data, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 4} == response
+
+
+def test_redis_lrem():
+    client = get_client_instance()
+    response = client.redis_lrem("testListLrem", -2, "hello", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 2} == response
+
+
+def test_redis_lset():
+    client = get_client_instance()
+    response = client.redis_lset("testListLrem", 0, "test", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_trim():
+    client = get_client_instance()
+    response = client.redis_ltrim("testListLrem", 0, 0, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_rpop():
+    client = get_client_instance()
+    response = client.redis_rpop("testListLrem", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": "test"} == response
+
+
+def test_redis_rpush_4():
+    client = get_client_instance()
+    list_data = ["one", "two", "three"]
+    response = client.redis_rpush("myPushList", list_data, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 3} == response
+
+
+def test_redis_rpoplpush():
+    client = get_client_instance()
+    response = client.redis_rpoplpush("myPushList", "myOtherPushList", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": "three"} == response
+
+
 def test_redis_hset():
     client = get_client_instance()
     response = client.redis_hset(
@@ -373,7 +520,7 @@ def test_redis_hincrby():
     client = get_client_instance()
     response = client.redis_hincrby("myhash", "field", 5, REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": 5} == response
+    assert {"code": 200, "result": '5'} == response
 
 
 def test_redis_hincrbyfloat():
@@ -477,7 +624,7 @@ def test_redis_hvals():
     client = get_client_instance()
     response = client.redis_hvals("coin", REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": ["null", "obverse", "reverse"]} == response
+    assert {"code": 200, "result": ["obverse", "reverse", "null"]} == response
 
 
 def test_redis_sadd():
@@ -492,4 +639,11 @@ def test_redis_spop():
     response = client.redis_spop("animals", 1, REDIS_COLLECTION)
     # Response from platform
     assert {"code": 200, "result": ['dog']} == response
+
+
+def test_delete_redis_collection():
+    client = get_client_instance()
+    response = client.delete_collection(REDIS_COLLECTION)
+    # Response from platform
+    assert True == response
 
