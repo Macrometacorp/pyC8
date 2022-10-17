@@ -1,7 +1,7 @@
 from conftest import get_client_instance
 
 """
-Tests need to be run in sequence since we first create collection after that we fill 
+Tests need to be run in sequence since we first create collection, after that we fill 
 collection with test data data, run tests and check for the results.
 """
 

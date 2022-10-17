@@ -1,14 +1,8 @@
 from conftest import get_client_instance, test_data_document
 
 """
-To run end to end test .env file in /e2e is needed.
-File needs to contain:
-FEDERATION_URL
-TENANT_EMAIL
-API_KEY
-FABRIC
-
-Make sure that nba collection exists on fabric.
+Tests need to be run in sequence since we first create collection, after that we fill 
+collection with test data data, run tests and check for the results.
 """
 
 SQL_COLLECTION = "testsqlcollection"
