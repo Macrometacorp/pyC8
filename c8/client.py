@@ -2825,35 +2825,6 @@ class C8Client(object):
         """
         return self._search.get_list_of_analyzer()
 
-    def create_analyzer(self, name, analyzer_type, features=[], properties={}):
-        """Creates an analyzer with supplied definitions
-
-        :param name: The analyzer name.
-        :type name: str | unicode
-        :param properties: The properties used to configure the specified type.
-        Value may be a string, an object or null. The default value is null.
-        :type properties: str | dict | unicode
-        :param analyzer_type: The analyzer type.
-        :type analyzer_type: str | unicode
-        :param features: The set of features to set on the analyzer generated fields.
-                         The default value is an empty array.
-        :type features: list
-        :returns: Returns analyzer object if analyzer created successfully
-        :rtype: dict
-        """
-        return self._search.create_analyzer(name, analyzer_type, features=features,
-                                            properties=properties)
-
-    def delete_analyzer(self, name):
-        """Deletes given analyzer
-
-        :param name: Name of the analyzer to be deleted
-        :type name: str | unicode
-        :returns: True if analyzer deleted successfully
-        :rtype: bool
-        """
-        return self._search.delete_analyzer(name)
-
     def get_analyzer_definition(self, name):
         """Gets given analyzer definition
 
