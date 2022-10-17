@@ -4344,7 +4344,7 @@ class C8Client(object):
             key,
         )
 
-    def redis_sadd(self, key, member, collection):
+    def redis_sadd(self, key, members, collection):
         """
         Add the specified members to the set stored at key. Specified members that
         are already a member of this set are ignored. If key does not exist,
@@ -4353,8 +4353,8 @@ class C8Client(object):
 
         :param key: Key of the data
         :type key: str
-        :param member: Member of the data
-        :type member: str
+        :param members: list of members
+        :type members: List
         :param collection: Name of the collection that we set values to
         :type collection: str
         :returns:
@@ -4365,6 +4365,203 @@ class C8Client(object):
             redis_command,
             collection,
             key,
+            *members
+        )
+
+    def redis_scard(self, key, collection):
+        """
+        Returns the set cardinality (number of elements) of the set stored at key.
+        More on https://redis.io/commands/scard/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SCARD"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
+    def redis_sdiff(self, keys, collection):
+        """
+        Returns the members of the set resulting from the difference between the first
+        set and all the successive sets.
+        More on https://redis.io/commands/sdiff/
+
+        :param keys: Key of the data
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SDIFF"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            *keys,
+        )
+
+    def redis_sdiffstore(self, destination, keys, collection):
+        """
+        This command is equal to SDIFF, but instead of returning the resulting set, it
+        is stored in destination.
+        More on https://redis.io/commands/sdiffstore/
+
+        :param destination: Key of the destination location
+        :type destination: string
+        :param keys: Key of the data
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SDIFFSTORE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            destination,
+            *keys,
+        )
+
+    def redis_sinter(self, keys, collection):
+        """
+        Returns the members of the set resulting from the intersection of all the given
+        sets.
+        More on https://redis.io/commands/sinter/
+
+        :param keys: Key of the data
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SINTER"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            *keys,
+        )
+
+    def redis_sinterstore(self, destination, keys, collection):
+        """
+        This command is equal to SINTER, but instead of returning the resulting set, it
+        is stored in destination.
+        More on https://redis.io/commands/sinterstore/
+
+        :param destination: Key of the destination location
+        :type destination: string
+        :param keys: Key of the data
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SINTERSTORE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            destination,
+            *keys,
+        )
+
+    def redis_sismember(self, key, member, collection):
+        """
+        Returns if member is a member of the set stored at key.
+        More on https://redis.io/commands/sismember/
+
+        :param key: Key of the data
+        :type key: str
+        :param member: list of members
+        :type member: string
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SISMEMBER"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            member
+        )
+
+    def redis_smembers(self, key, collection):
+        """
+        Returns all the members of the set value stored at key.
+        More on https://redis.io/commands/smembers/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SMEMBERS"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
+    def redis_smismember(self, key, members, collection):
+        """
+        Returns whether each member is a member of the set stored at key.
+        For every member, 1 is returned if the value is a member of the set, or 0 if the
+        element is not a member of the set or if key does not exist.
+        More on https://redis.io/commands/smismember/
+
+        :param key: Key of the data
+        :type key: str
+        :param members: list of members
+        :type members: List
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SMISMEMBER"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *members
+        )
+
+    def redis_smove(self, source, destination, member, collection):
+        """
+        Move member from the set at source to the set at destination. This operation is
+        atomic. In every given moment the element will appear to be a member of source
+        or destination for other clients.
+        More on https://redis.io/commands/smove/
+
+        :param source: Source set
+        :type source: str
+        :param destination: Destination set
+        :type destination: str
+        :param member: Member of the set to be moved
+        :type member: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SMOVE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            source,
+            destination,
             member
         )
 
@@ -4392,4 +4589,135 @@ class C8Client(object):
             count
         )
 
+    def redis_srandmember(self, key, collection, count=None):
+        """
+        When called with just the key argument, return a random element from the set
+        value stored at key. If the provided count argument is positive, return an array
+        of distinct elements. The array's length is either count or the set's
+        cardinality (SCARD), whichever is lower.
+        More on https://redis.io/commands/srandmember/
+
+        :param key: Key of the data
+        :type key: str
+        :param count: Count of the data
+        :type count: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SRANDMEMBER"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count
+        )
+
+    def redis_srem(self, key, members, collection):
+        """
+        Remove the specified members from the set stored at key. Specified members that
+        are not a member of this set are ignored. If key does not exist, it is treated
+        as an empty set and this command returns 0.
+        More on https://redis.io/commands/srem/
+
+        :param key: Key of the data
+        :type key: str
+        :param members: list of members
+        :type members: List
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SREM"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *members
+        )
+
+    def redis_sscan(self, key, cursor, collection, pattern=None, count=None):
+        """
+        The SCAN command and the closely related commands SSCAN, HSCAN and ZSCAN are
+        used in order to incrementally iterate over a collection of elements.
+        More on https://redis.io/commands/scan/
+
+        :param key: Key of the data
+        :type key: str
+        :param cursor: Cursor value (start with 0)
+        :type cursor: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param pattern: It is possible to only iterate elements matching a given
+        glob-style pattern
+        :type pattern: str
+        :param count: COUNT the user specified the amount of work that should be done at
+        every call in order to retrieve elements from the collection
+        :type count: int
+        :returns:
+        :rtype:
+        """
+        redis_command = "SSCAN"
+        pattern_list = []
+        if pattern is not None:
+            pattern_list.append("MATCH")
+            pattern_list.append(pattern)
+
+        count_list = []
+        if count is not None:
+            count_list.append("COUNT")
+            count_list.append(count)
+
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            cursor,
+            *pattern_list,
+            *count_list
+        )
+
+    def redis_sunion(self, keys, collection):
+        """
+        Returns the members of the set resulting from the union of all the given sets.
+        More on https://redis.io/commands/sunion/
+
+        :param keys: Key of the data
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SUNION"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            *keys,
+        )
+
+    def redis_sunionstore(self, destination, keys, collection):
+        """
+        This command is equal to SUNION, but instead of returning the resulting set, it
+        is stored in destination.
+        More on https://redis.io/commands/sunionstore/
+
+        :param destination: Key of the destination location
+        :type destination: string
+        :param keys: Key of the data
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SUNIONSTORE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            destination,
+            *keys,
+        )
 

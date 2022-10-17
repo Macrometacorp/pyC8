@@ -570,7 +570,7 @@ def test_redis_hmscan_1():
 
 def test_redis_hmscan_2():
     client = get_client_instance()
-    response = client.redis_hscan("games", 0, REDIS_COLLECTION, "*", 100,)
+    response = client.redis_hscan("games", 0, REDIS_COLLECTION, "*", 100)
     # Response from platform
     assert {"code": 200, "result": ["cursor:driving", ["driving", "GT7"]]} == response
 
@@ -617,7 +617,89 @@ def test_redis_hvals():
 
 def test_redis_sadd():
     client = get_client_instance()
-    response = client.redis_sadd("animals", "dog", REDIS_COLLECTION)
+    response = client.redis_sadd("animals", ["dog"], REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_scard():
+    client = get_client_instance()
+    response = client.redis_scard("animals", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_sdiff():
+    client = get_client_instance()
+    # Test Setup according to Redis docs
+    client.redis_sadd("key1", ["a", "b", "c"], REDIS_COLLECTION)
+    client.redis_sadd("key2", ["c"], REDIS_COLLECTION)
+    client.redis_sadd("key3", ["d", "e"], REDIS_COLLECTION)
+    response = client.redis_sdiff(["key1", "key2", "key3"], REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ["a", "b"]} == response
+
+
+def test_redis_sdiffstore():
+    client = get_client_instance()
+    response = client.redis_sdiffstore(
+        "destinationKey",
+        ["key1", "key2", "key3"],
+        REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": 2} == response
+
+
+def test_redis_sinter():
+    client = get_client_instance()
+    # Test Setup according to Redis docs
+    client.redis_sadd("key11", ["a", "b", "c"], REDIS_COLLECTION)
+    client.redis_sadd("key22", ["c", "d", "e"], REDIS_COLLECTION)
+    response = client.redis_sinter(["key11", "key22"], REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ["c"]} == response
+
+
+def test_redis_sinterstore():
+    client = get_client_instance()
+    response = client.redis_sinterstore(
+        "destinationInter",
+        ["key1", "key2"],
+        REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_sismember():
+    client = get_client_instance()
+    # Test Setup according to Redis docs
+    response = client.redis_sismember("key11", "a", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_smembers():
+    client = get_client_instance()
+    # Test Setup according to Redis docs
+    response = client.redis_smembers("key11", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ["a", "b", "c"]} == response
+
+
+def test_redis_smismember():
+    client = get_client_instance()
+    # Test Setup according to Redis docs
+    response = client.redis_smismember("key11", ["a", "b", "z"], REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": [1, 1, 0]} == response
+
+
+def test_redis_smove():
+    client = get_client_instance()
+    # Test Setup according to Redis docs
+    response = client.redis_smismember("key11", "key22", "b", REDIS_COLLECTION)
     # Response from platform
     assert {"code": 200, "result": 1} == response
 
@@ -627,6 +709,66 @@ def test_redis_spop():
     response = client.redis_spop("animals", 1, REDIS_COLLECTION)
     # Response from platform
     assert {"code": 200, "result": ['dog']} == response
+
+
+def test_redis_srandmember_1():
+    client = get_client_instance()
+    # Test Setup according to Redis docs
+    response = client.redis_srandmember("key22", REDIS_COLLECTION)
+    # Response from platform
+    assert 200 == response.get("code")
+
+
+def test_redis_srandmember_2():
+    client = get_client_instance()
+    # Test Setup according to Redis docs
+    response = client.redis_srandmember("key22", REDIS_COLLECTION, -5)
+    # Response from platform
+    assert 200 == response.get("code")
+
+
+def test_redis_srem():
+    client = get_client_instance()
+    # Test Setup according to Redis docs
+    response = client.redis_srem("key22", ["e", "b"], REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_sscan_1():
+    client = get_client_instance()
+    response = client.redis_sscan("key22", 0, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ['cursor:c', ['c', 'd']]} == response
+
+
+def test_redis_sscan_2():
+    client = get_client_instance()
+    response = client.redis_sscan("key22", 0, REDIS_COLLECTION, "*", 100)
+    # Response from platform
+    assert {"code": 200, "result": ['cursor:c', ['c', 'd']]} == response
+
+
+def test_redis_sunion():
+    client = get_client_instance()
+    # Test Setup according to Redis docs
+    client.redis_sadd("key111", ["a", "b", "c"], REDIS_COLLECTION)
+    client.redis_sadd("key222", ["c", "d", "e"], REDIS_COLLECTION)
+    response = client.redis_sunion(["key111", "key222"], REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ["a", "c", "e", "b", "d"]} == response
+
+
+def test_redis_union():
+    client = get_client_instance()
+    # Test Setup according to Redis docs
+    response = client.redis_sunionstore(
+        "destinationUnion",
+        ["key111", "key222"],
+        REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": ["a", "c", "e", "b", "d"]} == response
 
 
 def test_delete_redis_collection():
