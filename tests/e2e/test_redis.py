@@ -1,20 +1,8 @@
 from conftest import get_client_instance
 
 """
-To run end to end test .env file in /e2e is needed.
-File needs to contain:
-FEDERATION_URL
-TENANT_EMAIL
-API_KEY
-FABRIC
-
-Tests need to be run in sequence since we first create data than query for that same
-data.
-"""
-
-"""
-Test preparation - Create Collection
-Make sure that redis collection exists on fabric with REDIS_COLLECTION string variable.
+Tests need to be run in sequence since we first create collection, after that we fill 
+collection with test data data, run tests and check for the results.
 """
 
 REDIS_COLLECTION = "testRedisCollection"
