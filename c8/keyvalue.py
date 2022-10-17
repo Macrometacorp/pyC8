@@ -1,9 +1,8 @@
 from __future__ import absolute_import, unicode_literals
+
 from json import dumps
 
 from c8.api import APIWrapper
-from c8.request import Request
-
 from c8.exceptions import (
    ListCollections,
    CreateCollectionError,
@@ -16,6 +15,8 @@ from c8.exceptions import (
    GetKVError,
    RemoveKVError
 )
+from c8.request import Request
+
 
 class KV(APIWrapper):
     """KV (Key Value) API wrapper.
@@ -29,10 +30,8 @@ class KV(APIWrapper):
     def __init__(self, connection, executor):
         super(KV, self).__init__(connection, executor)
 
-
     def __repr__(self):
         return '<KV in {}>'.format(self._conn.fabric_name)
-
 
     def get_collections(self):
         """Returns the list of collections using kv.
@@ -53,7 +52,6 @@ class KV(APIWrapper):
                 
         return self._execute(request, response_handler)
 
-    
     def create_collection(self, name, expiration=False):
         """Creates Collection.
 
@@ -111,6 +109,7 @@ class KV(APIWrapper):
             method='delete',
             endpoint='/kv/{}'.format(name)
         )
+
         def response_handler(resp):
             if not resp.is_success:
                 raise DeleteCollectionError(resp, request)
@@ -121,7 +120,6 @@ class KV(APIWrapper):
                     return False
         return self._execute(request, response_handler)
 
-    
     def insert_key_value_pair(self, name, data=None):
         """Set a key value pair.
 
@@ -139,6 +137,7 @@ class KV(APIWrapper):
             data=dumps(data)
 
         )
+
         def response_handler(resp):
             if not resp.is_success:
                 raise InsertKVError(resp, request)
@@ -146,7 +145,6 @@ class KV(APIWrapper):
                 return resp.body
         return self._execute(request, response_handler)
 
-    
     def delete_entry_for_key(self, name, key):
         """Delete an entry for a key.
 
@@ -162,6 +160,7 @@ class KV(APIWrapper):
             method='delete',
             endpoint='/kv/{}/value/{}'.format(name, key)
         )
+
         def response_handler(resp):
             if not resp.is_success:
                 raise DeleteEntryForKey(resp, request)
@@ -172,7 +171,6 @@ class KV(APIWrapper):
                     return False
         return self._execute(request, response_handler)
 
-    
     def delete_entry_for_keys(self, name, keys=[]):
         """Deletes entries for multiple keys.
 
@@ -189,6 +187,7 @@ class KV(APIWrapper):
             endpoint='/kv/{}/values'.format(name),
             data=dumps(keys)
         )
+
         def response_handler(resp):
             if not resp.is_success:
                 raise DeleteEntryForKey(resp, request)
@@ -196,7 +195,6 @@ class KV(APIWrapper):
                 return resp.body
         return self._execute(request, response_handler)
 
-    
     def get_value_for_key(self, name, key):
         """Get value for a key from key-value collection.
 
@@ -221,7 +219,6 @@ class KV(APIWrapper):
                 
         return self._execute(request, response_handler)
 
-    
     def get_keys(self, name, offset=None, limit=None, order=None):
         """gets keys of a collection.
 
@@ -259,7 +256,6 @@ class KV(APIWrapper):
                 
         return self._execute(request, response_handler)
 
-
     def get_kv_count(self, name):
         """gets the kv count of a collection.
 
@@ -281,7 +277,6 @@ class KV(APIWrapper):
                 return resp.body["count"]
                 
         return self._execute(request, response_handler)
-
 
     def get_key_value_pairs(self, name, offset=None, limit=None):
         """Fetch key-value pairs from collection. Optional list of keys

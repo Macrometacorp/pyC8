@@ -446,12 +446,14 @@ class C8Client(object):
         :type ignore_missing: bool
         :param system: Whether the collection is a system collection.
         :type system: bool
-        :returns: True if collection was deleted successfully, False if
-            collection was not found and **ignore_missing** was set to True.
+        :returns: True if collection was deleted successfully,
+        False if collection was not found and **ignore_missing** was set to True.
         :rtype: bool
         """
-        resp = self._fabric.delete_collection(name=name, ignore_missing=ignore_missing,
-                                              system=system)
+        resp = self._fabric.delete_collection(
+            name=name,
+            ignore_missing=ignore_missing,
+            system=system)
         return resp
 
     # client.import_bulk
@@ -613,17 +615,32 @@ class C8Client(object):
         _collection = self.get_collection(collection_name)
 
         if isinstance(document, dict):
-            resp = _collection.insert(document=document, return_new=return_new,
-                                      sync=sync, silent=silent)
+            response = _collection.insert(
+                document=document,
+                return_new=return_new,
+                sync=sync,
+                silent=silent
+            )
+
         elif isinstance(document, list):
-            resp = _collection.insert_many(documents=document, return_new=return_new,
-                                           sync=sync, silent=silent)
-        return resp
+            response = _collection.insert_many(
+                documents=document,
+                return_new=return_new,
+                sync=sync,
+                silent=silent
+            )
+
+        return response
 
     # client.insert_document_from_file()
-    def insert_document_from_file(self, collection_name, csv_filepath, return_new=False,
-                                  sync=None,
-                                  silent=False):
+    def insert_document_from_file(
+            self,
+            collection_name,
+            csv_filepath,
+            return_new=False,
+            sync=None,
+            silent=False
+    ):
         """Insert a documents from csv file.
 
         :param collection_name: Collection name.
@@ -642,9 +659,11 @@ class C8Client(object):
             parameter **silent** was set to True.
         """
         _collection = self.get_collection(collection_name)
-        resp = _collection.insert_from_file(csv_filepath=csv_filepath,
-                                            return_new=return_new,
-                                            sync=sync, silent=silent)
+        resp = _collection.insert_from_file(
+            csv_filepath=csv_filepath,
+            return_new=return_new,
+            sync=sync, silent=silent
+        )
         return resp
 
     # client.update_document
@@ -2832,7 +2851,70 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.set(key, value, collection)
+        redis_command = "SET"
+        return self._fabric.redis.command_parser(redis_command, collection, key, value)
+
+    def redis_append(self, key, value, collection):
+        """
+        If key already exists and is a string, this command appends the value at the
+        end of the string. If key does not exist it is created and set as an empty
+        string, so APPEND will be similar to SET in this special case.
+        More on https://redis.io/commands/append/
+
+        :param key: Key of the data
+        :type key: str
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "APPEND"
+        return self._fabric.redis.command_parser(redis_command, collection, key, value)
+
+    def redis_decr(self, key, collection):
+        """
+        Decrements the number stored at key by one. If the key does not exist,
+        it is set to 0 before performing the operation. An error is returned if the
+        key contains a value of the wrong type or contains a string that can not be
+        represented as integer. This operation is limited to 64 bit signed integers.
+        More on https://redis.io/commands/decr/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "DECR"
+        return self._fabric.redis.command_parser(redis_command, collection, key)
+
+    def redis_decrby(self, key, decrement, collection):
+        """
+        Decrements the number stored at key by decrement. If the key does not exist,
+        it is set to 0 before performing the operation. An error is returned if the
+        key contains a value of the wrong type or contains a string that can not be
+        represented as integer. This operation is limited to 64 bit signed integers.
+        More on https://redis.io/commands/decrby/
+
+        :param key: Key of the data
+        :type key: str
+        :param decrement: Decrement number
+        :type decrement: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "DECRBY"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            decrement
+        )
 
     def redis_get(self, key, collection):
         """
@@ -2848,7 +2930,524 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.get(key, collection)
+        redis_command = "GET"
+        return self._fabric.redis.command_parser(redis_command, collection, key)
+
+    def redis_getdel(self, key, collection):
+        """
+        Get the value of key and delete the key. This command is similar to GET,
+        except for the fact that it also deletes the key on success (if and only if
+        the key's value type is a string).
+        More on https://redis.io/commands/getdel/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "GETDEL"
+        return self._fabric.redis.command_parser(redis_command, collection, key)
+
+    def redis_getex(self, key, collection, expiry_command=None, time=None):
+        """
+        Get the value of key and optionally set its expiration. GETEX is similar to
+        GET, but is a write command with additional options.
+        More on https://redis.io/commands/getex/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param expiry_command: Redis expiry command (ex. EX, PX, EXAT, PXAT)
+        :type expiry_command: str
+        :param time: Redis expiry time (ex. sec, ms, unix-time-seconds,
+        unix-time-milliseconds)
+        :type time: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "GETEX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            expiry_command,
+            time
+        )
+
+    def redis_getrange(self, key, start, end, collection):
+        """
+        Returns the substring of the string value stored at key, determined by the
+        offsets start and end (both are inclusive). Negative offsets can be used in
+        order to provide an offset starting from the end of the string. So -1 means
+        the last character, -2 the penultimate and so forth.
+        The function handles out of range requests by limiting the resulting range to
+        the actual length of the string.
+        More on https://redis.io/commands/getrange/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param start: Start string offset
+        :type start: int
+        :param end: End string offset
+        :type end: int
+        :returns:
+        :rtype:
+        """
+        redis_command = "GETRANGE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            start,
+            end
+        )
+
+    def redis_getset(self, key, value, collection):
+        """
+        Atomically sets key to value and returns the old value stored at key. Returns
+        an error when key exists but does not hold a string value. Any previous time
+        to live associated with the key is discarded on successful SET operation.
+        More on https://redis.io/commands/getset/
+
+        :param key: Key of the data
+        :type key: str
+        :param value: Start string offset
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "GETSET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            value
+        )
+
+    def redis_incr(self, key, collection):
+        """
+        Increments the number stored at key by one. If the key does not exist,
+        it is set to 0 before performing the operation. An error is returned if the
+        key contains a value of the wrong type or contains a string that can not be
+        represented as integer. This operation is limited to 64 bit signed integers.
+        More on https://redis.io/commands/incr/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "INCR"
+        return self._fabric.redis.command_parser(redis_command, collection, key)
+
+    def redis_incrby(self, key, increment, collection):
+        """
+        Increments the number stored at key by increment. If the key does not exist,
+        it is set to 0 before performing the operation. An error is returned if the
+        key contains a value of the wrong type or contains a string that can not be
+        represented as integer. This operation is limited to 64 bit signed integers.
+        More on https://redis.io/commands/incrby/
+
+        :param key: Key of the data
+        :type key: str
+        :param increment: Increment of the data
+        :type increment: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "INCRBY"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            increment
+        )
+
+    def redis_incrbyfloat(self, key, increment, collection):
+        """
+        Increment the string representing a floating point number stored at key by
+        the specified increment. By using a negative increment value, the result is
+        that the value stored at the key is decremented (by the obvious properties of
+        addition). If the key does not exist, it is set to 0 before performing the
+        operation. An error is returned if one of the following conditions occur:
+
+        The key contains a value of the wrong type (not a string).
+
+        The current key content or the specified increment are not parsable as a double
+        precision floating point number.
+
+        :param key: Key of the data
+        :type key: str
+        :param increment: Increment of the data
+        :type increment: float
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "INCRBYFLOAT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            increment
+        )
+
+    def redis_mget(self, keys, collection):
+        """
+        Returns the values of all specified keys. For every key that does not hold a
+        string value or does not exist, the special value nil is returned. Because of
+        this, the operation never fails.
+        More on https://redis.io/commands/mget/
+
+        :param keys: Keys of the data
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "MGET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            *keys
+        )
+
+    def redis_mset(self, data, collection):
+        """
+        Sets the given keys to their respective values. MSET replaces existing values
+        with new values, just as regular SET. See MSETNX if you don't want to
+        overwrite existing values.
+        More on https://redis.io/commands/mset/
+
+        :param data: Dictionary of the data
+        :type data: dict
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        data_list = []
+        for key, value in data.items():
+            data_list.append(key)
+            data_list.append(value)
+
+        redis_command = "MSET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            *data_list
+        )
+
+    def redis_psetex(self, key, milliseconds, value, collection):
+        """
+        Sets the given keys to their respective values. MSET replaces existing values
+        with new values, just as regular SET. See MSETNX if you don't want to
+        overwrite existing values.
+        More on https://redis.io/commands/mset/
+
+        :param key: Key of the data
+        :type key: str
+        :param milliseconds: TTL (time to leave) time of the data
+        :type milliseconds: int
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "PSETEX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            milliseconds,
+            value
+        )
+
+    def redis_setbit(self, key, offset, value, collection):
+        """
+        Sets or clears the bit at offset in the string value stored at key.
+        The bit is either set or cleared depending on value, which can be either 0 or 1.
+        More on https://redis.io/commands/setbit/
+
+        :param key: Key of the data
+        :type key: str
+        :param offset: Offset number
+        :type offset: int
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SETBIT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            offset,
+            value
+        )
+
+    def redis_msetnx(self, data, collection):
+        """
+        Sets the given keys to their respective values. MSETNX will not perform any
+        operation at all even if just a single key already exists.
+        More on https://redis.io/commands/msetnx/
+
+        :param data: Dictionary of the data
+        :type data: dict
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        data_list = []
+        for key, value in data.items():
+            data_list.append(key)
+            data_list.append(value)
+
+        redis_command = "MSETNX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            *data_list
+        )
+
+    def redis_setex(self, key, seconds, value, collection):
+        """
+        Set key to hold the string value and set key to timeout after a given number of
+        seconds.
+        More on https://redis.io/commands/setex/
+
+        :param key: Key of the data
+        :type key: str
+        :param seconds: TTL (time to leave) time of the data
+        :type seconds: int
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SETEX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            seconds,
+            value
+        )
+
+    def redis_setnx(self, key, value, collection):
+        """
+        Set key to hold string value if key does not exist. In that case, it is equal to
+        SET. When key already holds a value, no operation is performed.
+        SETNX is short for "SET if Not eXists".
+        More on https://redis.io/commands/setnx/
+
+        :param key: Key of the data
+        :type key: str
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SETNX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            value
+        )
+
+    def redis_setrange(self, key, offset, value, collection):
+        """
+        Overwrites part of the string stored at key, starting at the specified
+        offset, for the entire length of value. If the offset is larger than the
+        current length of the string at key, the string is padded with zero-bytes to
+        make offset fit. Non-existing keys are considered as empty strings, so this
+        command will make sure it holds a string large enough to be able to set value
+        at offset.
+        More on https://redis.io/commands/setrange/
+
+        :param key: Key of the data
+        :type key: str
+        :param offset: Offset of the data
+        :type offset: int
+        :param value: Value of the data
+        :type value: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "SETRANGE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            offset,
+            value
+        )
+
+    def redis_strlen(self, key, collection):
+        """
+        Returns the length of the string value stored at key.
+        An error is returned when key holds a non-string value.
+        More on https://redis.io/commands/strlen/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "STRLEN"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
+    def redis_bitcount(self, key, collection, start=None, end=None, data_format=None):
+        """
+        By default all the bytes contained in the string are examined. It is possible
+        to specify the counting operation only in an interval passing the additional
+        arguments start and end.
+        More on https://redis.io/commands/bitcount/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param start: Count start
+        :type start: int
+        :param end: Count stop
+        :type end: int
+        :param data_format: Count format [BYTE | BIT]
+        :type data_format: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "BITCOUNT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            start,
+            end,
+            data_format
+        )
+
+    def redis_bitop(self, operation, deskey, keys, collection):
+        """
+        Perform a bitwise operation between multiple keys (containing string values) and
+        store the result in the destination key.
+        More on https://redis.io/commands/bitop/
+
+        :param operation: Operation AND, OR, XOR and NOT
+        :type operation: str
+        :param deskey: Destination key where operation is stored
+        :type deskey: str
+        :param keys: List of keys to perform operation on
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "BITOP"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            operation,
+            deskey,
+            *keys
+        )
+
+    def redis_getbit(self, key, offset, collection):
+        """
+        Returns the bit value at offset in the string value stored at key.
+        More on https://redis.io/commands/getbit/
+
+        :param key: Key of the data
+        :type key: str
+        :param offset: Offset of the data
+        :type offset: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "GETBIT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            offset,
+        )
+
+    def redis_bitpos(
+            self,
+            key,
+            bit,
+            collection,
+            start=None,
+            end=None,
+            data_format=None
+    ):
+        """
+        Return the position of the first bit set to 1 or 0 in a string.
+        The position is returned, thinking of the string as an array of bits from left
+        to right, where the first byte's most significant bit is at position 0, the
+        second byte's most significant bit is at position 8, and so forth.
+        More on https://redis.io/commands/bitpos/
+
+        :param key: Key of the data
+        :type key: str
+        :param bit: Key of the data
+        :type bit: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param start: Count start
+        :type start: int
+        :param end: Count stop
+        :type end: int
+        :param data_format: Count format [BYTE | BIT]
+        :type data_format: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "BITPOS"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            bit,
+            start,
+            end,
+            data_format
+        )
 
     def redis_zadd(self, key, score, member, collection):
         """
@@ -2870,7 +3469,14 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.zadd(key, score, member, collection)
+        redis_command = "ZADD"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            score,
+            member
+        )
 
     def redis_zrange(self, key, start, stop, collection):
         """
@@ -2890,15 +3496,22 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.zrange(key, start, stop, collection)
+        redis_command = "ZRANGE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            start,
+            stop
+        )
 
     def redis_lpush(self, key, elements, collection):
         """
         Insert all the specified values at the head of the list stored at key. If key
         does not exist, it is created as empty list before performing the push
         operations. When key holds a value that is not a list, an error is returned.
-        It is possible to push multiple elements using a single command call just
-        specifying multiple members of the list in elements parameter.
+        So for instance the command LPUSH mylist a b c will result into a list
+        containing c as first element, b as second element and a as third element.
         More on https://redis.io/commands/lpush/
 
         :param key: Key of the data
@@ -2910,7 +3523,89 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.lpush(key, elements, collection)
+        redis_command = "LPUSH"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *elements
+        )
+
+    def redis_lindex(self, key, index, collection):
+        """
+        Returns the element at index index in the list stored at key. The index is
+        zero-based, so 0 means the first element, 1 the second element and so on.
+        Negative indices can be used to designate elements starting at the tail of
+        the list. Here, -1 means the last element, -2 means the penultimate and so
+        forth.
+        More on https://redis.io/commands/lindex/
+
+        :param key: Key of the data
+        :type key: str
+        :param index: Index of data
+        :type index: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LINDEX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            index
+        )
+
+    def redis_linsert(self, key, modifier, pivot, element, collection):
+        """
+        Inserts element in the list stored at key either before or after the reference
+        value pivot.
+        More on https://redis.io/commands/linsert/
+
+        :param key: Key of the data
+        :type key: str
+        :param modifier: It can be BEFORE | AFTER
+        :type modifier: str
+        :param pivot: Pivot is reference value
+        :type pivot: str
+        :param element: New element to be added
+        :type element: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LINSERT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            modifier,
+            pivot,
+            element
+        )
+
+    def redis_llen(self, key, collection):
+        """
+        Returns the length of the list stored at key. If key does not exist,
+        it is interpreted as an empty list and 0 is returned. An error is returned
+        when the value stored at key is not a list.
+        More on https://redis.io/commands/linsert/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LLEN"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
 
     def redis_lrange(self, key, start, stop, collection):
         """
@@ -2932,9 +3627,345 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.lrange(key, start, stop, collection)
+        redis_command = "LRANGE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            start,
+            stop
+        )
 
-    def redis_hset(self, key, field, value, collection):
+    def redis_lmove(self, source, destination, where_from, where_to, collection):
+        """
+        Atomically returns and removes the first/last element (head/tail depending on
+        the wherefrom argument) of the list stored at source, and pushes the element
+        at the first/last element (head/tail depending on the whereto argument) of
+        the list stored at destination.
+        More on https://redis.io/commands/lmove/
+
+        :param source: Source list
+        :type source: str
+        :param destination: Destination list
+        :type destination: str
+        :param where_from: From where to move <LEFT | RIGHT>
+        :type where_from: str
+        :param where_to: Position to move in <LEFT | RIGHT>
+        :type where_to: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LMOVE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            source,
+            destination,
+            where_from,
+            where_to
+        )
+
+    def redis_lpos(
+            self,
+            key,
+            element,
+            collection,
+            rank=None,
+            count=None,
+            max_len=None
+    ):
+        """
+        The command returns the index of matching elements inside a Redis list. By
+        default, when no options are given, it will scan the list from head to tail,
+        looking for the first match of "element". The optional arguments and options
+        can modify the command's behavior. The RANK option specifies the "rank" of
+        the first element to return, in case there are multiple matches. A rank of 1
+        means to return the first match, 2 to return the second match, and so forth.
+        Sometimes we want to return not just the Nth matching element, but the
+        position of all the first N matching elements. This can be achieved using the
+        COUNT option.
+        Finally, the MAXLEN option tells the command to compare the provided element
+        only with a given maximum number of list items
+        More on https://redis.io/commands/scan/
+
+        :param key: Key of the data
+        :type key: str
+        :param element: Element to match
+        :type element: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param rank: A rank of 1 means to return the first match, 2 to return the second
+        match, and so forth.
+        :type rank: str
+        :param count: count is the number of results
+        :type count: int
+        :param max_len: compare the provided element only with a given maximum number of
+        list items
+        :type max_len: int
+        :returns:
+        :rtype:
+        """
+        redis_command = "LPOS"
+        rank_list = []
+        if rank is not None:
+            rank_list.append("RANK")
+            rank_list.append(rank)
+
+        count_list = []
+        if count is not None:
+            count_list.append("COUNT")
+            count_list.append(count)
+
+        max_len_list = []
+        if max_len is not None:
+            max_len_list.append("MAXLEN")
+            max_len_list.append(max_len)
+
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            element,
+            *rank_list,
+            *count_list,
+            *max_len_list
+        )
+
+    def redis_rpush(self, key, elements, collection):
+        """
+        Insert all the specified values at the tail of the list stored at key. If key
+        does not exist, it is created as empty list before performing the push
+        operation. When key holds a value that is not a list, an error is returned.
+        So for instance the command RPUSH mylist a b c will result into a list
+        containing a as first element, b as second element and c as third element.
+        More on https://redis.io/commands/rpush/
+
+        :param key: Key of the data
+        :type key: str
+        :param elements: List of the data
+        :type elements: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "RPUSH"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *elements
+        )
+
+    def redis_lpop(self, key, collection, count=None,):
+        """
+        Removes and returns the first elements of the list stored at key. By default,
+        the command pops a single element from the beginning of the list. When
+        provided with the optional count argument, the reply will consist of up to
+        count elements, depending on the list's length.
+        More on https://redis.io/commands/lpop/
+
+        :param key: Key of the list
+        :type key: str
+        :param count: Count number of elements to pop
+        :type count: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LPOP"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count,
+        )
+
+    def redis_lpushx(self, key, elements, collection):
+        """
+        Inserts specified values at the head of the list stored at key, only if key
+        already exists and holds a list. In contrary to LPUSH, no operation will be
+        performed when key does not yet exist.
+        More on https://redis.io/commands/lpushx/
+
+        :param key: Key of the data
+        :type key: str
+        :param elements: List of the data
+        :type elements: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LPUSHX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *elements
+        )
+
+    def redis_rpushx(self, key, elements, collection):
+        """
+        Inserts specified values at the tail of the list stored at key, only if key
+        already exists and holds a list. In contrary to RPUSH, no operation will be
+        performed when key does not yet exist.
+        More on https://redis.io/commands/rpushx/
+
+        :param key: Key of the data
+        :type key: str
+        :param elements: List of the data
+        :type elements: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "RPUSHX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *elements
+        )
+
+    def redis_lrem(self, key, count, element, collection):
+        """
+        Removes the first count occurrences of elements equal to element from the list
+        stored at key. The count argument influences the operation in the following
+        ways:
+        count > 0: Remove elements equal to element moving from head to tail.
+        count < 0: Remove elements equal to element moving from tail to head.
+        count = 0: Remove all elements equal to element.
+        More on https://redis.io/commands/lrem/
+
+        :param key: Key of the data
+        :type key: str
+        :param count: Number of elements to be removed
+        :type count: int
+        :param element: List element
+        :type element: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LREM"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count,
+            element
+        )
+
+    def redis_lset(self, key, index, element, collection):
+        """
+        Sets the list element at index to element. For more information on the index
+        argument, see LINDEX.
+        More on https://redis.io/commands/lset/
+
+        :param key: Key of the data
+        :type key: str
+        :param index: Index of element
+        :type index: int
+        :param element: List element
+        :type element: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LSET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            index,
+            element
+        )
+
+    def redis_ltrim(self, key, start, stop, collection):
+        """
+        Trim an existing list so that it will contain only the specified range of
+        elements specified. Both start and stop are zero-based indexes, where 0 is
+        the first element of the list (the head), 1 the next element and so on.
+        More on https://redis.io/commands/ltrim/
+
+        :param key: Key of the data
+        :type key: str
+        :param start: Start index of element
+        :type start: int
+        :param stop: Stop index of element
+        :type stop: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "LTRIM"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            start,
+            stop
+        )
+
+    def redis_rpop(self, key, collection, count=None,):
+        """
+        Removes and returns the last elements of the list stored at key.
+        By default, the command pops a single element from the end of the list. When
+        provided with the optional count argument, the reply will consist of up to count
+        elements, depending on the list's length.
+        More on https://redis.io/commands/rpop/
+
+        :param key: Key of the list
+        :type key: str
+        :param count: Count number of elements to pop
+        :type count: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "RPOP"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count,
+        )
+
+    def redis_rpoplpush(self, source, destination, collection):
+        """
+        Atomically returns and removes the first/last element (head/tail depending on
+        the wherefrom argument) of the list stored at source, and pushes the element
+        at the first/last element (head/tail depending on the whereto argument) of
+        the list stored at destination.
+        More on https://redis.io/commands/lmove/
+
+        :param source: Source list
+        :type source: str
+        :param destination: Destination list
+        :type destination: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "RPOPLPUSH"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            source,
+            destination,
+        )
+
+    def redis_hset(self, key, data, collection):
         """
         Sets field in the hash stored at key to value. If key does not exist,
         a new key holding a hash is created. If field already exists in the hash,
@@ -2943,16 +3974,25 @@ class C8Client(object):
 
         :param key: Key of the data
         :type key: str
-        :param field: Field of the data
-        :type field: str
-        :param value: Value of the data
-        :type value: str
+        :param data:  Dictionary of the data
+        :type data: dict
         :param collection: Name of the collection that we set values to
         :type collection: str
         :returns:
         :rtype:
         """
-        return self._fabric.redis.hset(key, field, value, collection)
+        data_list = []
+        for dict_key, dict_value in data.items():
+            data_list.append(dict_key)
+            data_list.append(dict_value)
+
+        redis_command = "HSET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *data_list
+        )
 
     def redis_hget(self, key, field, collection):
         """
@@ -2968,7 +4008,341 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.hget(key, field, collection)
+        redis_command = "HGET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            field
+        )
+
+    def redis_hdel(self, key, fields, collection):
+        """
+        Removes the specified fields from the hash stored at key. Specified fields
+        that do not exist within this hash are ignored. If key does not exist,
+        it is treated as an empty hash and this command returns 0
+        More on https://redis.io/commands/hdel/
+
+        :param key: Key of the data
+        :type key: str
+        :param fields: Fields of the data
+        :type fields: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HDEL"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *fields
+        )
+
+    def redis_hexists(self, key, field, collection):
+        """
+        Returns if field is an existing field in the hash stored at key.
+        More on https://redis.io/commands/hexists/
+
+        :param key: Key of the data
+        :type key: str
+        :param field: Field of the data
+        :type field: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HEXISTS"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            field
+        )
+
+    def redis_hgetall(self, key, collection):
+        """
+        Returns all fields and values of the hash stored at key. In the returned
+        value, every field name is followed by its value, so the length of the reply
+        is twice the size of the hash.
+        More on https://redis.io/commands/hgetall/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HGETALL"
+        return self._fabric.redis.command_parser(redis_command, collection, key)
+
+    def redis_hincrby(self, key, field, increment, collection):
+        """
+        Increments the number stored at field in the hash stored at key by increment.
+        If key does not exist, a new key holding a hash is created. If field does not
+        exist the value is set to 0 before the operation is performed.
+        More on https://redis.io/commands/hincrby/
+
+        :param key: Key of the data
+        :type key: str
+        :param field: Field of the data
+        :type field: str
+        :param increment: Increment number
+        :type increment: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HINCRBY"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            field,
+            increment
+        )
+
+    def redis_hincrbyfloat(self, key, field, increment, collection):
+        """
+        Increment the specified field of a hash stored at key, and representing a
+        floating point number, by the specified increment. If the increment value is
+        negative, the result is to have the hash field value decremented instead of
+        incremented. If the field does not exist, it is set to 0 before performing
+        the operation. An error is returned if one of the following conditions occur:
+
+        The field contains a value of the wrong type (not a string).
+        The current field content or the specified increment are not parsable as a
+        double precision floating point number.
+        More on https://redis.io/commands/hincrbyfloat/
+
+        :param key: Key of the data
+        :type key: str
+        :param field: Field of the data
+        :type field: str
+        :param increment: Increment number
+        :type increment: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HINCRBYFLOAT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            field,
+            increment
+        )
+
+    def redis_hkeys(self, key, collection):
+        """
+        Returns all field names in the hash stored at key.
+        More on https://redis.io/commands/hkeys/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HKEYS"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
+    def redis_hlen(self, key, collection):
+        """
+        Returns the number of fields contained in the hash stored at key.
+        More on https://redis.io/commands/hlen/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HLEN"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
+    def redis_hmget(self, key, fields, collection):
+        """
+        Returns the values associated with the specified fields in the hash stored at
+        key. For every field that does not exist in the hash, a nil value is returned.
+        Because non-existing keys are treated as empty hashes, running HMGET against a
+        non-existing key will return a list of nil values.
+        More on https://redis.io/commands/hmget/
+
+        :param key: Key of the data
+        :type key: str
+        :param fields: Fields of the data
+        :type fields: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HMGET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *fields
+        )
+
+    def redis_hmset(self, key, data, collection):
+        """
+        Sets the specified fields to their respective values in the hash stored at
+        key. This command overwrites any specified fields already existing in the
+        hash. If key does not exist, a new key holding a hash is created. More on
+        More on https://redis.io/commands/hmset/
+
+        :param key: Key of the data
+        :type key: str
+        :param data: Dictionary of the data
+        :type data: dict
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        data_list = []
+        for dict_key, dict_value in data.items():
+            data_list.append(dict_key)
+            data_list.append(dict_value)
+
+        redis_command = "HMSET"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *data_list
+        )
+
+    def redis_hscan(self, key, cursor, collection, pattern=None, count=None):
+        """
+        The SCAN command and the closely related commands SSCAN, HSCAN and ZSCAN are
+        used in order to incrementally iterate over a collection of elements.
+        More on https://redis.io/commands/scan/
+
+        :param key: Key of the data
+        :type key: str
+        :param cursor: Cursor value (start with 0)
+        :type cursor: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param pattern: It is possible to only iterate elements matching a given
+        glob-style pattern
+        :type pattern: str
+        :param count: COUNT the user specified the amount of work that should be done at
+        every call in order to retrieve elements from the collection
+        :type count: int
+        :returns:
+        :rtype:
+        """
+        redis_command = "HSCAN"
+        pattern_list = []
+        if pattern is not None:
+            pattern_list.append("MATCH")
+            pattern_list.append(pattern)
+
+        count_list = []
+        if count is not None:
+            count_list.append("COUNT")
+            count_list.append(count)
+
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            cursor,
+            *pattern_list,
+            *count_list
+        )
+
+    def redis_hstrlen(self, key, field, collection):
+        """
+        Returns the string length of the value associated with field in the hash stored
+        at key. If the key or the field do not exist, 0 is returned.
+        More on https://redis.io/commands/hstrlen/
+
+        :param key: Key of the data
+        :type key: str
+        :param field: Field of the data
+        :type field: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HSTRLEN"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            field,
+        )
+
+    def redis_hrandfield(self, key, collection, count=None, modifier=None):
+        """
+        When called with just the key argument, return a random field from the hash
+        value stored at key. f the provided count argument is positive, return an
+        array of distinct fields. The array's length is either count or the hash's
+        number of fields (HLEN), whichever is lower.
+        The optional WITHVALUES modifier changes the reply so it includes the respective
+        values of the randomly selected hash fields.
+        More on https://redis.io/commands/hrandfield/
+
+        :param key: Key of the data
+        :type key: str
+        :param count: Count of the data
+        :type count: int
+        :param modifier: The optional WITHVALUES modifier
+        :type modifier: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HRANDFIELD"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count,
+            modifier,
+        )
+
+    def redis_hvals(self, key, collection):
+        """
+        Returns all values in the hash stored at key.
+        More on https://redis.io/commands/hvals/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "HVALS"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
 
     def redis_sadd(self, key, member, collection):
         """
@@ -2986,7 +4360,13 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.sadd(key, member, collection)
+        redis_command = "SADD"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            member
+        )
 
     def redis_spop(self, key, count, collection):
         """
@@ -3004,6 +4384,12 @@ class C8Client(object):
         :returns:
         :rtype:
         """
-        return self._fabric.redis.spop(key, count, collection)
+        redis_command = "SPOP"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count
+        )
 
 

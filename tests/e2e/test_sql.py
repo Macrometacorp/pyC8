@@ -1,34 +1,34 @@
-import os
-
-from dotenv import load_dotenv
-
-from c8 import C8Client
-from conftest import response_content
-
+from conftest import get_client_instance, test_data_document
 
 """
-To run end to end test .env file in /e2e is needed.
-File needs to contain:
-FEDERATION_URL
-TENANT_EMAIL
-API_KEY
-FABRIC
-
-Make sure that nba collection exists on fabric.
+Tests need to be run in sequence since we first create collection, after that we fill 
+collection with test data data, run tests and check for the results.
 """
+
+SQL_COLLECTION = "testsqlcollection"
+
+
+def test_create_redis_collection():
+    client = get_client_instance()
+    create_collection_response = client.create_collection(
+        SQL_COLLECTION
+    )
+    insert_document_response = client.insert_document(
+        SQL_COLLECTION,
+        silent=True,
+        document=test_data_document()
+    )
+    # Response from platform
+    assert True == insert_document_response
+    assert SQL_COLLECTION == create_collection_response.name
 
 
 def test_sql_endpoint():
-    load_dotenv()
-    client = C8Client(protocol='https',
-                      host=os.environ.get('FEDERATION_URL'),
-                      port=443,
-                      email=os.environ.get('TENANT_EMAIL'),
-                      apikey=os.environ.get('API_KEY'),
-                      geofabric=os.environ.get('FABRIC')
-                      )
-
-    cursor = client.execute_query('SELECT * FROM newnba', sql=True)
+    client = get_client_instance()
+    cursor = client.execute_query(
+        'SELECT * FROM {}'.format(SQL_COLLECTION),
+        sql=True
+    )
     docs = [doc for doc in cursor]
 
     entries = ('_id', '_key', '_rev')
@@ -37,4 +37,11 @@ def test_sql_endpoint():
             if key in doc:
                 del doc[key]
 
-    assert response_content() == docs
+    assert test_data_document() == docs
+
+
+def test_delete_sql_collection():
+    client = get_client_instance()
+    response = client.delete_collection(SQL_COLLECTION)
+    # Response from platform
+    assert True == response
