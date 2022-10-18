@@ -1112,7 +1112,7 @@ class C8Client(object):
         """
         return self._fabric.save_restql(data)
 
-   # client.import_restql
+    # client.import_restql
 
     def import_restql(self, queries, details=False):
         """Import custom queries.
@@ -1218,7 +1218,6 @@ class C8Client(object):
         :raise: c8.exceptions.StreamDeleteError: If creating streams fails.
         """
         return self._fabric.delete_stream(stream, force=force)
-
 
     # client.has_stream
 
@@ -1999,7 +1998,7 @@ class C8Client(object):
         :rtype: dict
         :raise c8.exceptions.UserCreateError: If create fails.
         """
-        return self._tenant.create_user(email=email, 
+        return self._tenant.create_user(email=email,
                                         password=password,
                                         display_name=display_name,
                                         active=active,
@@ -2007,7 +2006,8 @@ class C8Client(object):
 
     # client.update_user
 
-    def update_user(self, username, password=None, display_name=None, email=None, is_verified=None, active=None, extra=None):
+    def update_user(self, username, password=None, display_name=None, email=None, is_verified=None, active=None,
+                    extra=None):
         """Update a user.
 
         :param username: Username.
@@ -3759,7 +3759,7 @@ class C8Client(object):
             *elements
         )
 
-    def redis_lpop(self, key, collection, count=None,):
+    def redis_lpop(self, key, collection, count=None, ):
         """
         Removes and returns the first elements of the list stored at key. By default,
         the command pops a single element from the beginning of the list. When
@@ -3915,7 +3915,7 @@ class C8Client(object):
             stop
         )
 
-    def redis_rpop(self, key, collection, count=None,):
+    def redis_rpop(self, key, collection, count=None, ):
         """
         Removes and returns the last elements of the list stored at key.
         By default, the command pops a single element from the end of the list. When
@@ -4721,3 +4721,76 @@ class C8Client(object):
             *keys,
         )
 
+    def list_billing_plans(self):
+        """
+        Fetch a list of billing plans available
+
+        :returns: list of billing plans.
+        :rtype: list
+        :raise c8.plan.core.PlansServerError If list fails.
+        """
+        return self._fabric.plan.list_billing_plans()
+
+    def list_billing_plan_details(self, plan_name):
+        """
+        Given a valid plan_name, fetch details of the specific billing plan
+
+        :param plan_name: Name of the existing billing plan
+        :type plan_name: str
+        :returns: list of billing plans.
+        :rtype: list
+        :raise c8.plan.core.PlansServerError If list fails.
+        """
+        return self._fabric.plan.list_billing_plan_details(plan_name=plan_name)
+
+    def create_billing_plan(self, billing_plan_definition):
+        """
+        Given a valid billing_plan_definition, create a new billing plan
+
+        :param billing_plan_definition: Definition for the new billing plan
+        :type billing_plan_definition: dict
+        :returns: billing plan definition
+        :rtype: dict
+        :raise c8.plan.core.PlansServerError If create fails.
+        """
+        return self._fabric.plan.create_billing_plan(data=billing_plan_definition)
+
+    def modify_billing_plan(self, plan_name, billing_plan_definition):
+        """
+        Given a valid billing_plan_definition and the plan_name for
+        an existing billing plan, update the current billing plan
+
+        :param plan_name: Name of the existing billing plan
+        :type plan_name: str
+        :param billing_plan_definition: New definition for the billing plan
+        :type billing_plan_definition: dict
+        :returns: billing plan definition
+        :rtype: dict
+        :raise c8.plan.core.PlansServerError If the update fails.
+        """
+        return self._fabric.plan.modify_billing_plan(plan_name=plan_name, data=billing_plan_definition)
+
+    def remove_billing_plan(self, plan_name):
+        """
+        Given a valid plan_name, remove an existing billing plan.
+
+        :param plan_name: Name of the existing billing plan
+        :type plan_name: str
+        :returns: definition of the billing plan.
+        :rtype: list
+        :raise c8.plan.core.PlansServerError If remove fails.
+        """
+        return self._fabric.plan.remove_billing_plan(plan_name=plan_name)
+
+    def update_tenant_billing_plan(self, data):
+        """
+        Update the billing plan for a tenant.
+        Note: If tenant name is not specified, the tenant invoking the API is used to update billing plan.
+
+        :param data: dict formed by attribution, plan, tenant and payment_method_id
+        :type data: dict
+        :returns: definition of the billing plan.
+        :rtype: list
+        :raise c8.plan.core.PlansServerError If update fails.
+        """
+        return self._fabric.plan.update_tenant_billing_plan(data=data)

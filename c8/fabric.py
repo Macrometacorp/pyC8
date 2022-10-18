@@ -9,6 +9,7 @@ import websocket
 from c8.api import APIWrapper
 from c8.c8ql import C8QL
 from c8.keyvalue import KV
+from c8.plan.plan_interface import PlanInterface
 from c8.redis.redis_interface import RedisInterface
 from c8.collection import StandardCollection
 from c8.stream_apps import StreamApps
@@ -146,6 +147,15 @@ class Fabric(APIWrapper):
         :rtype: c8.redis.redis_interface.RedisInterface
         """
         return RedisInterface(self._conn, self._executor)
+
+    @property
+    def plan(self):
+        """Return Plan API wrapper
+
+        :returns: Plan API wrapper
+        :rtype: c8.plan.plan_interface.PlanInterface
+        """
+        return PlanInterface(self._conn, self._executor)
 
     def on_change(self, collection, callback, timeout=60):
         """Execute given input function on receiving a change.
@@ -1066,7 +1076,6 @@ class Fabric(APIWrapper):
             raise StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-
 
     #####################
     # Restql Management #
