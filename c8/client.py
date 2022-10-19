@@ -34,7 +34,6 @@ class C8Client(object):
             token=None,
             apikey=None
     ):
-
         self._protocol = protocol.strip('/')
         self._host = host.strip('/')
         self._port = int(port)
@@ -48,7 +47,7 @@ class C8Client(object):
         self.set_url()
         self._http_client = http_client
         self.get_tenant()
-
+        # Domains
         self._redis = None
 
     def set_url(self):
