@@ -129,7 +129,7 @@ class StreamCollection(APIWrapper):
             stream = type_constant.replace(".", "")+"s."+stream
         elif isCollectionStream is False:
             stream = stream
-        print("Calling has stream from create_producer: ", stream, local)
+
         flag = self.fabric.has_stream(stream, local=local, isCollectionStream=isCollectionStream)
         if flag:
             namespace = type_constant + self.fabric_name
@@ -149,7 +149,6 @@ class StreamCollection(APIWrapper):
 
             params = {k: v for k, v in params.items() if v is not None}
             url = self._ws_url + topic + "?" + urlencode(params)
-            print(url)
             return websocket.create_connection(url, header={'Authorization' : self.header['Authorization']}, class_=Base64Socket)
 
         raise ex.StreamProducerError(
