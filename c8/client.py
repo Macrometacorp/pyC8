@@ -6380,5 +6380,129 @@ class C8Client(object):
             *keys
         )
 
+    def redis_echo(
+            self,
+            message,
+            collection,
+    ):
+        """
+        Returns message.
+        More on https://redis.io/commands/echo/
+
+        :param message: Message to be sent
+        :type message: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "ECHO"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            message,
+        )
+
+    def redis_ping(
+            self,
+            collection,
+            message=None,
+    ):
+        """
+        Returns message.
+        More on https://redis.io/commands/ping/
+
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param message: Message to be sent
+        :type message: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "PING"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            message,
+        )
+
+    def redis_dbsize(
+            self,
+            collection,
+    ):
+        """
+        Return the number of keys in the currently-selected database.
+        More on https://redis.io/commands/dbsize/
+
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "DBSIZE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+        )
+
+    def redis_flushdb(
+            self,
+            collection,
+            async_flush=None
+    ):
+        """
+        Delete all the keys of the currently selected DB. This command never fails.
+        By default, FLUSHDB will synchronously flush all keys from the database.
+        Starting with Redis 6.2, setting the lazyfree-lazy-user-flush configuration
+        directive to "yes" changes the default flush mode to asynchronous. It is
+        possible to use one of the following modifiers to dictate the flushing mode
+        explicitly:
+        ASYNC: flushes the database asynchronously
+        SYNC: flushes the database synchronously
+        More on https://redis.io/commands/flushdb/
+
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param async_flush: Message to be sent
+        :type async_flush: bool
+        :returns:
+        :rtype:
+        """
+        if async_flush is True:
+            async_flush_command = "ASYNC"
+        else:
+            async_flush_command = None
+
+        redis_command = "FLUSHDB"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            async_flush_command
+        )
+
+    def redis_time(
+            self,
+            collection,
+    ):
+        """
+        The TIME command returns the current server time as a two items lists: a Unix
+        timestamp and the amount of microseconds already elapsed in the current
+        second. Basically the interface is very similar to the one of the
+        gettimeofday system call.
+        More on https://redis.io/commands/time/
+
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "TIME"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+        )
+
+
+
 
 

@@ -1289,6 +1289,55 @@ def test_redis_unlink():
     assert {"code": 200, "result": 2} == response
 
 
+def test_redis_echo():
+    client = get_client_instance()
+    response = client.redis_echo("Hello World!", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": "Hello World!"} == response
+
+
+def test_redis_ping():
+    client = get_client_instance()
+    response = client.redis_ping(REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": "PONG"} == response
+
+
+def test_redis_ping_2():
+    client = get_client_instance()
+    response = client.redis_ping(REDIS_COLLECTION, "Hello World!")
+    # Response from platform
+    assert {"code": 200, "result": "Hello World!"} == response
+
+
+def test_redis_dbsize():
+    client = get_client_instance()
+    response = client.redis_dbsize(REDIS_COLLECTION)
+    # Response from platform
+    assert 200 == response.get("code")
+
+
+def test_redis_flushdb():
+    client = get_client_instance()
+    response = client.redis_flushdb(REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_flushdb_2():
+    client = get_client_instance()
+    response = client.redis_flushdb(REDIS_COLLECTION, async_flush=True)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_time():
+    client = get_client_instance()
+    response = client.redis_time(REDIS_COLLECTION)
+    # Response from platform
+    assert 200 == response.get("code")
+
+
 def test_delete_redis_collection():
     client = get_client_instance()
     response = client.delete_collection(REDIS_COLLECTION)
