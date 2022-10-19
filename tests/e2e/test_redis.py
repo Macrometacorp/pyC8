@@ -134,7 +134,7 @@ def test_redis_msetnx():
         {"test5": "value5", "test6": "value6"},
         REDIS_COLLECTION
     )
-    
+
     # Response from platform
     assert {"code": 200, "result": 1} == response
 
@@ -208,6 +208,7 @@ def test_redis_bitcount_2():
     # Response from platform
     assert {"code": 200, "result": 4} == response
 
+
 # This test fails
 # We support Redis commands till 6.2, bit/byte operation was added in 7.0
 # def test_redis_bitcount_3():
@@ -273,20 +274,6 @@ def test_redis_bitpos_2():
     response = client.redis_bitpos("mykey2", 1, REDIS_COLLECTION)
     # Response from platform
     assert {"code": 200, "result": -1} == response
-
-
-def test_redis_zadd():
-    client = get_client_instance()
-    response = client.redis_zadd("testZadd", 2, "test", REDIS_COLLECTION)
-    # Response from platform
-    assert {"code": 200, "result": 1} == response
-
-
-def test_redis_zrange():
-    client = get_client_instance()
-    response = client.redis_zrange("testZadd", 0, 1, REDIS_COLLECTION)
-    # Response from platform
-    assert {"code": 200, "result": ["test"]} == response
 
 
 def test_redis_lpush():
@@ -471,7 +458,7 @@ def test_redis_hset():
         {"action": "elden", "driving": "GT7"},
         REDIS_COLLECTION
     )
-    
+
     # Response from platform
     assert {"code": 200, "result": 2} == response
 
@@ -589,7 +576,7 @@ def test_redis_hmset_2():
         {"heads": "obverse", "tails": "reverse", "edge": "null"},
         REDIS_COLLECTION
     )
-    
+
     # Response from platform
     assert {"code": 200, "result": "OK"} == response
 
@@ -632,19 +619,22 @@ def test_redis_scard():
 def test_redis_sdiff():
     client = get_client_instance()
     # Test Setup according to Redis docs
-    client.redis_sadd("key1", ["a", "b", "c"], REDIS_COLLECTION)
-    client.redis_sadd("key2", ["c"], REDIS_COLLECTION)
-    client.redis_sadd("key3", ["d", "e"], REDIS_COLLECTION)
-    response = client.redis_sdiff(["key1", "key2", "key3"], REDIS_COLLECTION)
+    client.redis_sadd("key1sdiff", ["a", "b", "c"], REDIS_COLLECTION)
+    client.redis_sadd("key2sdiff", ["c"], REDIS_COLLECTION)
+    client.redis_sadd("key3sdiff", ["d", "e"], REDIS_COLLECTION)
+    response = client.redis_sdiff(
+        ["key1sdiff", "key2sdiff", "key3sdiff"],
+        REDIS_COLLECTION
+    )
     # Response from platform
-    assert {"code": 200, "result": ["a", "b"]} == response
+    assert {"code": 200, "result": ["b", "a"]} == response
 
 
 def test_redis_sdiffstore():
     client = get_client_instance()
     response = client.redis_sdiffstore(
-        "destinationKey",
-        ["key1", "key2", "key3"],
+        "destinationKeysdiffstore",
+        ["key1sdiff", "key2sdiff", "key3sdiff"],
         REDIS_COLLECTION
     )
     # Response from platform
@@ -665,7 +655,7 @@ def test_redis_sinterstore():
     client = get_client_instance()
     response = client.redis_sinterstore(
         "destinationInter",
-        ["key1", "key2"],
+        ["key11", "key22"],
         REDIS_COLLECTION
     )
     # Response from platform
@@ -699,7 +689,7 @@ def test_redis_smismember():
 def test_redis_smove():
     client = get_client_instance()
     # Test Setup according to Redis docs
-    response = client.redis_smismember("key11", "key22", "b", REDIS_COLLECTION)
+    response = client.redis_smove("key11", "key22", "b", REDIS_COLLECTION)
     # Response from platform
     assert {"code": 200, "result": 1} == response
 
@@ -732,21 +722,22 @@ def test_redis_srem():
     # Test Setup according to Redis docs
     response = client.redis_srem("key22", ["e", "b"], REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": 1} == response
+    assert {"code": 200, "result": 2} == response
 
 
 def test_redis_sscan_1():
     client = get_client_instance()
-    response = client.redis_sscan("key22", 0, REDIS_COLLECTION)
+    client.redis_sadd("keyScan", ["a", "b", "c"], REDIS_COLLECTION)
+    response = client.redis_sscan("keyScan", 0, REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": ['cursor:c', ['c', 'd']]} == response
+    assert {"code": 200, "result": ["cursor:c", ["a", "b", "c"]]} == response
 
 
 def test_redis_sscan_2():
     client = get_client_instance()
-    response = client.redis_sscan("key22", 0, REDIS_COLLECTION, "*", 100)
+    response = client.redis_sscan("keyScan", 0, REDIS_COLLECTION, "*", 100)
     # Response from platform
-    assert {"code": 200, "result": ['cursor:c', ['c', 'd']]} == response
+    assert {"code": 200, "result": ["cursor:c", ["a", "b", "c"]]} == response
 
 
 def test_redis_sunion():
@@ -756,19 +747,391 @@ def test_redis_sunion():
     client.redis_sadd("key222", ["c", "d", "e"], REDIS_COLLECTION)
     response = client.redis_sunion(["key111", "key222"], REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": ["a", "c", "e", "b", "d"]} == response
+    assert {"code": 200, "result": ["a", "b", "c", "d", "e"]} == response
 
 
-def test_redis_union():
+def test_redis_sunionstore():
     client = get_client_instance()
     # Test Setup according to Redis docs
     response = client.redis_sunionstore(
-        "destinationUnion",
+        "destinationUnionStore",
         ["key111", "key222"],
         REDIS_COLLECTION
     )
     # Response from platform
-    assert {"code": 200, "result": ["a", "c", "e", "b", "d"]} == response
+    assert {"code": 200, "result": 5} == response
+
+
+def test_redis_zadd():
+    client = get_client_instance()
+    response = client.redis_zadd("testZadd", [1, "test"], REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_zadd_2():
+    client = get_client_instance()
+    response = client.redis_zadd(
+        "testZadd2",
+        [1, "test2"],
+        REDIS_COLLECTION,
+        options=["NX", "INCR"]
+    )
+    # Response from platform
+    assert {"code": 200, "result": "1"} == response
+
+
+def test_redis_zrange():
+    client = get_client_instance()
+    response = client.redis_zrange("testZadd", 0, 1, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ["test"]} == response
+
+
+def test_redis_zrange_2():
+    client = get_client_instance()
+    response = client.redis_zrange("testZadd", 0, 1, REDIS_COLLECTION, ["WITHSCORES"])
+    # Response from platform
+    assert {"code": 200, "result": ["test", 1]} == response
+
+
+def test_redis_zcard():
+    client = get_client_instance()
+    response = client.redis_zcard("testZadd", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_zcount():
+    client = get_client_instance()
+    response = client.redis_zcount("testZadd", 0, 2, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_zdiff():
+    client = get_client_instance()
+    client.redis_zadd("testDiff1", [1, "one"], REDIS_COLLECTION)
+    client.redis_zadd("testDiff1", [2, "two"], REDIS_COLLECTION)
+    client.redis_zadd("testDiff1", [3, "three"], REDIS_COLLECTION)
+    client.redis_zadd("testDiff2", [1, "one"], REDIS_COLLECTION)
+    client.redis_zadd("testDiff2", [2, "two"], REDIS_COLLECTION)
+    response = client.redis_zdiff(
+        2,
+        ["testDiff1", "testDiff2"],
+        REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ["three"]} == response
+
+
+def test_redis_zdiff_2():
+    client = get_client_instance()
+    response = client.redis_zdiff(
+        2,
+        ["testDiff1", "testDiff2"],
+        REDIS_COLLECTION,
+        with_scores=True
+    )
+    # Response from platform
+    assert {"code": 200, "result": ["three", 3]} == response
+
+
+def test_redis_zdiffstore():
+    client = get_client_instance()
+    response = client.redis_zdiffstore(
+        "destinationZdiff",
+        2,
+        ["testDiff1", "testDiff2"],
+        REDIS_COLLECTION,
+    )
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_zincrby():
+    client = get_client_instance()
+    response = client.redis_zincrby("testZadd", 1.5, "test", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 2.5} == response
+
+
+def test_redis_zinter():
+    client = get_client_instance()
+    client.redis_zadd("zset1", [1, "one", 2, "two"], REDIS_COLLECTION)
+    client.redis_zadd("zset2", [1, "one", 2, "two", 3, "three"], REDIS_COLLECTION)
+    response = client.redis_zinter(2, ["zset1", "zset2"], REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ["one", "two"]} == response
+
+
+def test_redis_zinter_2():
+    client = get_client_instance()
+    response = client.redis_zinter(
+        2,
+        ["zset1", "zset2"],
+        REDIS_COLLECTION,
+        with_scores=True
+    )
+    # Response from platform
+    assert {"code": 200, "result": ["one", 2, "two", 4]} == response
+
+
+def test_redis_zinterstore():
+    client = get_client_instance()
+    response = client.redis_zinterstore(
+        "zinterStore",
+        2,
+        ["zset1", "zset2"],
+        REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": 2} == response
+
+
+def test_redis_zlexcount():
+    client = get_client_instance()
+    client.redis_zadd(
+        "zlexSet1", [0, "a", 0, "b", 0, "c", 0, "d", 0, "e"],
+        REDIS_COLLECTION
+    )
+    client.redis_zadd("zlexSet1", [0, "f", 0, "g"], REDIS_COLLECTION)
+    response = client.redis_zlexcount("zlexSet1", "-", "+", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 7} == response
+
+
+def test_redis_zmscore():
+    client = get_client_instance()
+    response = client.redis_zmscore("zlexSet1", ["a", "b"], REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": [0, 0]} == response
+
+
+def test_redis_zpopmax():
+    client = get_client_instance()
+    client.redis_zadd("zpop", [1, "one", 2, "two", 3, "three"], REDIS_COLLECTION)
+    response = client.redis_zpopmax("zpop", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ["three", "3"]} == response
+
+
+def test_redis_zpopmin():
+    client = get_client_instance()
+    client.redis_zadd("zpop", [1, "one", 2, "two", 3, "three"], REDIS_COLLECTION)
+    response = client.redis_zpopmin("zpop", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ["one", "1"]} == response
+
+
+def test_redis_zrandmember():
+    client = get_client_instance()
+    response = client.redis_zrandmember("zpop", REDIS_COLLECTION)
+    # Response from platform
+    assert 200 == response.get("code")
+
+
+def test_redis_zrangebylex():
+    client = get_client_instance()
+    client.redis_zadd(
+        "zrangeByLexSet1", [0, "a", 0, "b", 0, "c", 0, "d", 0, "e", 0, "f", 0, "g"],
+        REDIS_COLLECTION
+    )
+    response = client.redis_zrangebylex("zrangeByLexSet1", "-", "[c", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ["a", "b", "c"]} == response
+
+
+def test_redis_zrangebyscore():
+    client = get_client_instance()
+    client.redis_zadd(
+        "zrangeByScoreSet1",
+        [1, "one", 2, "two", 3, "three"],
+        REDIS_COLLECTION
+    )
+    response = client.redis_zrangebyscore(
+        "zrangeByScoreSet1",
+        "-inf",
+        "+inf",
+        REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": ["one", "two", "three"]} == response
+
+
+def test_redis_zrank():
+    client = get_client_instance()
+    response = client.redis_zrank("zrangeByScoreSet1", "three", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 2} == response
+
+
+def test_redis_zrem():
+    client = get_client_instance()
+    response = client.redis_zrem(
+        "zrangeByScoreSet1",
+        ["two", "three"],
+        REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": 2} == response
+
+
+def test_redis_zremrangebylex():
+    client = get_client_instance()
+    client.redis_zadd(
+        "zremrangebylex", [0, "aaaaa", 0, "b", 0, "c", 0, "d", 0, "e"],
+        REDIS_COLLECTION
+    )
+    client.redis_zadd(
+        "zremrangebylex", [0, "foo", 0, "zap", 0, "zip", 0, "ALPHA", 0, "alpha"],
+        REDIS_COLLECTION
+    )
+    response = client.redis_zremrangebylex(
+        "zremrangebylex",
+        "[alpha",
+        "[omega",
+        REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": 6} == response
+
+
+def test_redis_zremrangebyrank():
+    client = get_client_instance()
+    client.redis_zadd(
+        "zremrangebyrank", [1, "one", 2, "two", 3, "three"],
+        REDIS_COLLECTION
+    )
+    response = client.redis_zremrangebyrank(
+        "zremrangebyrank",
+        0,
+        1,
+        REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": 2} == response
+
+
+def test_redis_zremrangebyscore():
+    client = get_client_instance()
+    client.redis_zadd(
+        "zremrangebyscore2", [1, "one", 2, "two", 3, "three"],
+        REDIS_COLLECTION
+    )
+    response = client.redis_zremrangebyscore(
+        "zremrangebyscore2",
+        "-inf",
+        "(2",
+        REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_zrevrange():
+    client = get_client_instance()
+    client.redis_zadd(
+        "zrevrange", [1, "one", 2, "two", 3, "three"],
+        REDIS_COLLECTION
+    )
+    response = client.redis_zrevrange("zrevrange", 0, -1, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ["three", "two", "one"]} == response
+
+
+def test_redis_zrevrangebylex():
+    client = get_client_instance()
+    client.redis_zadd(
+        "zrevrangebylex", [0, "a", 0, "b", 0, "c", 0, "d", 0, "e", 0, "f", 0, "g"],
+        REDIS_COLLECTION
+    )
+    response = client.redis_zrevrangebylex("zrevrangebylex", "[c", "-",
+                                           REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ["c", "b", "a"]} == response
+
+
+def test_redis_zrevrangebyscore():
+    client = get_client_instance()
+    client.redis_zadd(
+        "zrevrangebyscore",
+        [1, "one", 2, "two", 3, "three"],
+        REDIS_COLLECTION
+    )
+    response = client.redis_zrevrangebyscore(
+        "zrevrangebyscore",
+        "+inf",
+        "-inf",
+        REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": ["three", "two", "one"]} == response
+
+
+def test_redis_zrevrank():
+    client = get_client_instance()
+    response = client.redis_zrevrank("zrevrangebyscore", "one", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 2} == response
+
+
+def test_redis_zscan():
+    client = get_client_instance()
+    response = client.redis_zscan("zrevrangebyscore", 0, REDIS_COLLECTION)
+    # Response from platform
+    assert {
+               "code": 200,
+               "result": [
+                   "cursor:3-three",
+                   [1, "one", 2, "two", 3, "three"]
+               ]
+           } == response
+
+
+def test_redis_zscore():
+    client = get_client_instance()
+    response = client.redis_zscore("zrevrangebyscore", "one", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_zunion():
+    client = get_client_instance()
+    client.redis_zadd("zunionSet1", [1, "one", 2, "two"], REDIS_COLLECTION)
+    client.redis_zadd("zunionSet2", [1, "one", 2, "two", 3, "three"], REDIS_COLLECTION)
+    response = client.redis_zunion(2, ["zunionSet1", "zunionSet2"], REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": ["one", "three", "two"]} == response
+
+
+def test_redis_zunion_2():
+    client = get_client_instance()
+    response = client.redis_zunion(
+        2,
+        ["zunionSet1", "zunionSet2"],
+        REDIS_COLLECTION,
+        with_scores=True
+    )
+    # Response from platform
+    assert {"code": 200, "result": ["one", 2, "three", 3, "two", 4]} == response
+
+
+def test_redis_zunionstore():
+    client = get_client_instance()
+    client.redis_zadd("zunionStoreSet1", [1, "one", 2, "two"], REDIS_COLLECTION)
+    client.redis_zadd(
+        "zunionStoreSet2",
+        [1, "one", 2, "two", 3, "three"],
+        REDIS_COLLECTION
+    )
+    response = client.redis_zunionstore(
+        "zunionDestination",
+        2,
+        ["zunionStoreSet1", "zunionStoreSet2"],
+        REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": 3} == response
 
 
 def test_delete_redis_collection():
@@ -776,4 +1139,3 @@ def test_delete_redis_collection():
     response = client.delete_collection(REDIS_COLLECTION)
     # Response from platform
     assert True == response
-
