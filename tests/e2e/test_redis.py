@@ -1134,6 +1134,161 @@ def test_redis_zunionstore():
     assert {"code": 200, "result": 3} == response
 
 
+def test_redis_copy():
+    client = get_client_instance()
+    client.redis_set("dolly", "sheep", REDIS_COLLECTION)
+    response = client.redis_copy("dolly", "clone", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_exists():
+    client = get_client_instance()
+    response = client.redis_exists(["dolly", "clone"], REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 2} == response
+
+
+def test_redis_del():
+    client = get_client_instance()
+    response = client.redis_del(["dolly", "clone"], REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 2} == response
+
+
+def test_redis_expire():
+    client = get_client_instance()
+    client.redis_set("expire", "test", REDIS_COLLECTION)
+    response = client.redis_expire("expire", 30, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_expire_2():
+    client = get_client_instance()
+    client.redis_set("expire2", "test", REDIS_COLLECTION)
+    response = client.redis_expire("expire2", 30, REDIS_COLLECTION, "NX")
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_expireat():
+    client = get_client_instance()
+    client.redis_set("expireat", "test", REDIS_COLLECTION)
+    response = client.redis_expireat("expireat", 30, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_expireat_2():
+    client = get_client_instance()
+    client.redis_set("expireat2", "test", REDIS_COLLECTION)
+    response = client.redis_expireat("expireat2", 30, REDIS_COLLECTION, "NX")
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_persist():
+    client = get_client_instance()
+    response = client.redis_persist("expireat2", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_pexpire():
+    client = get_client_instance()
+    client.redis_set("pexpire", "test", REDIS_COLLECTION)
+    response = client.redis_pexpire("pexpire", 8000, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_pexpire_2():
+    client = get_client_instance()
+    client.redis_set("pexpire2", "test", REDIS_COLLECTION)
+    response = client.redis_pexpire("pexpire2", 8000, REDIS_COLLECTION, "NX")
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_pexpireat():
+    client = get_client_instance()
+    client.redis_set("pexpireat", "test", REDIS_COLLECTION)
+    response = client.redis_pexpire("pexpireat", 8000, REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_pexpireat_2():
+    client = get_client_instance()
+    client.redis_set("pexpireat2", "test", REDIS_COLLECTION)
+    response = client.redis_pexpire("pexpireat2", 8000, REDIS_COLLECTION, "NX")
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
+
+
+def test_redis_pttl():
+    client = get_client_instance()
+    client.redis_set("pttl", "test", REDIS_COLLECTION)
+    response = client.redis_pttl("pttl", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": -1} == response
+
+
+def test_redis_randomkey():
+    client = get_client_instance()
+    response = client.redis_randomkey(REDIS_COLLECTION)
+    # Response from platform
+    assert 200 == response.get("code")
+
+
+def test_redis_rename():
+    client = get_client_instance()
+    client.redis_set("rename", "test", REDIS_COLLECTION)
+    response = client.redis_rename("rename", "newName", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": "OK"} == response
+
+
+def test_redis_scan():
+    client = get_client_instance()
+    response = client.redis_scan(0, REDIS_COLLECTION)
+    # Response from platform
+    assert 200 == response.get("code")
+
+
+def test_redis_scan_2():
+    client = get_client_instance()
+    response = client.redis_scan(0, REDIS_COLLECTION, "*", 100)
+    # Response from platform
+    assert 200 == response.get("code")
+
+
+def test_redis_ttl():
+    client = get_client_instance()
+    client.redis_set("ttl", "test", REDIS_COLLECTION)
+    response = client.redis_ttl("ttl", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": -1} == response
+
+
+def test_redis_type():
+    client = get_client_instance()
+    client.redis_set("type", "test", REDIS_COLLECTION)
+    response = client.redis_type("type", REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": "string"} == response
+
+
+def test_redis_unlink():
+    client = get_client_instance()
+    client.redis_set("unlink1", "test", REDIS_COLLECTION)
+    client.redis_set("unlink2", "test", REDIS_COLLECTION)
+    response = client.redis_unlink(["unlink1", "unlink2"], REDIS_COLLECTION)
+    # Response from platform
+    assert {"code": 200, "result": 2} == response
+
+
 def test_delete_redis_collection():
     client = get_client_instance()
     response = client.delete_collection(REDIS_COLLECTION)

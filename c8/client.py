@@ -3021,7 +3021,7 @@ class C8Client(object):
         """
         return self._search.get_analyzer_definition(name)
 
-    def redis_set(self, key, value, collection):
+    def redis_set(self, key, value, collection, options=[]):
         """
         Set key to hold the string value. If key already holds a value,
         it is overwritten, regardless of its type. Any previous time to live
@@ -3034,11 +3034,20 @@ class C8Client(object):
         :type value: str
         :param collection: Name of the collection that we set values to
         :type collection: str
+        :param options: SET options [NX | XX] [GET] [EX seconds | PX milliseconds |
+        EXAT unix-time-seconds | PXAT unix-time-milliseconds | KEEPTTL]
+        :type options: list
         :returns:
         :rtype:
         """
         redis_command = "SET"
-        return self._fabric.redis.command_parser(redis_command, collection, key, value)
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            value,
+            *options
+        )
 
     def redis_append(self, key, value, collection):
         """
@@ -5883,4 +5892,493 @@ class C8Client(object):
             *keys,
             *options_command,
         )
+
+    def redis_copy(
+            self,
+            source,
+            destination,
+            collection,
+            destination_database=None,
+            replace=False
+    ):
+        """
+        This command copies the value stored at the source key to the destination
+        key. By default, the destination key is created in the logical database used
+        by the connection. The DB option allows specifying an alternative logical
+        database index for the destination key.
+        More on https://redis.io/commands/copy/
+
+        :param source: Source key to be copied
+        :type source: str
+        :param destination: Destination key to be copied
+        :type destination: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param destination_database: DB location where data will be copied
+        :type destination_database: str
+        :param replace: Replace removes destination key before copying value to it
+        :type replace: str
+        :returns:
+        :rtype:
+        """
+        options_command = []
+        if destination_database is not None:
+            options_command.append("DB")
+            options_command.append(destination_database)
+
+        if replace is True:
+            options_command.append("WITHSCORES")
+
+        redis_command = "COPY"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            source,
+            destination,
+            *options_command
+        )
+
+    def redis_del(
+            self,
+            keys,
+            collection,
+    ):
+        """
+        Removes the specified keys. A key is ignored if it does not exist.
+        More on https://redis.io/commands/del/
+
+        :param keys: List of keys to be deleted
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "DEL"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            *keys
+        )
+
+    def redis_exists(
+            self,
+            keys,
+            collection,
+    ):
+        """
+        Returns if key exists.
+        More on https://redis.io/commands/exists/
+
+        :param keys: List of keys to be checked
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "EXISTS"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            *keys
+        )
+
+    def redis_expire(
+            self,
+            key,
+            seconds,
+            collection,
+            options=None,
+    ):
+        """
+        Set a timeout on key. After the timeout has expired, the key will
+        automatically be deleted. A key with an associated timeout is often said to
+        be volatile in Redis terminology.
+        More on https://redis.io/commands/expire/
+
+        :param key: Key of the data
+        :type key: str
+        :param seconds: Time until key expires
+        :type seconds: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param options: Options of expire command [NX | XX | GT | LT]
+        :type options: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "EXPIRE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            seconds,
+            options
+        )
+
+    def redis_expireat(
+            self,
+            key,
+            unix_time_seconds,
+            collection,
+            options=None,
+    ):
+        """
+        EXPIREAT has the same effect and semantic as EXPIRE, but instead of
+        specifying the number of seconds representing the TTL (time to live),
+        it takes an absolute Unix timestamp (seconds since January 1, 1970). A
+        timestamp in the past will delete the key immediately.
+        More on https://redis.io/commands/expireat/
+
+        :param key: Key of the data
+        :type key: str
+        :param unix_time_seconds: Time until key expires
+        :type unix_time_seconds: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param options: Options of expire command [NX | XX | GT | LT]
+        :type options: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "EXPIREAT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            unix_time_seconds,
+            options
+        )
+
+    def redis_persist(
+            self,
+            key,
+            collection
+    ):
+        """
+        Remove the existing timeout on key, turning the key from volatile (a key with
+        an expire set) to persistent (a key that will never expire as no timeout is
+        associated).
+        More on https://redis.io/commands/persist/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "PERSIST"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
+    def redis_pexpire(
+            self,
+            key,
+            milliseconds,
+            collection,
+            options=None,
+    ):
+        """
+        EXPIREAT has the same effect and semantic as EXPIRE, but instead of
+        specifying the number of seconds representing the TTL (time to live),
+        it takes an absolute Unix timestamp (seconds since January 1, 1970). A
+        timestamp in the past will delete the key immediately.
+        More on https://redis.io/commands/pexpire/
+
+        :param key: Key of the data
+        :type key: str
+        :param milliseconds: Time until key expires
+        :type milliseconds: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param options: Options of expire command [NX | XX | GT | LT]
+        :type options: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "PEXPIRE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            milliseconds,
+            options
+        )
+
+    def redis_pexpireat(
+            self,
+            key,
+            unix_time_milliseconds,
+            collection,
+            options=None,
+    ):
+        """
+        PEXPIREAT has the same effect and semantic as EXPIREAT, but the Unix time at
+        which the key will expire is specified in milliseconds instead of seconds.
+        More on https://redis.io/commands/pexpireat/
+
+        :param key: Key of the data
+        :type key: str
+        :param unix_time_milliseconds: Time until key expires
+        :type unix_time_milliseconds: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param options: Options of expire command [NX | XX | GT | LT]
+        :type options: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "PEXPIREAT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            unix_time_milliseconds,
+            options
+        )
+
+    def redis_pttl(
+            self,
+            key,
+            collection,
+    ):
+        """
+        Like TTL this command returns the remaining time to live of a key that has an
+        expire set, with the sole difference that TTL returns the amount of remaining
+        time in seconds while PTTL returns it in milliseconds.
+        More on https://redis.io/commands/pttl/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "PTTL"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
+    def redis_randomkey(
+            self,
+            collection,
+    ):
+        """
+        Return a random key from the currently selected database.
+        More on https://redis.io/commands/randomkey/
+
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "RANDOMKEY"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+        )
+
+    def redis_rename(
+            self,
+            key,
+            new_key,
+            collection
+    ):
+        """
+        Renames key to newkey. It returns an error when key does not exist. If newkey
+        already exists it is overwritten, when this happens RENAME executes an
+        implicit DEL operation, so if the deleted key contains a very big value it
+        may cause high latency even if RENAME itself is usually a constant-time
+        operation.
+        More on https://redis.io/commands/rename/
+
+        :param key: Key to rename
+        :type key: str
+        :param new_key: New key name
+        :type new_key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "RENAME"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            new_key
+        )
+
+    def redis_renamenx(
+            self,
+            key,
+            new_key,
+            collection
+    ):
+        """
+        Renames key to newkey if newkey does not yet exist. It returns an error when
+        key does not exist. In Cluster mode, both key and newkey must be in the same
+        hash slot, meaning that in practice only keys that have the same hash tag can
+        be reliably renamed in cluster.
+        More on https://redis.io/commands/renamenx/
+
+        :param key: Key to rename
+        :type key: str
+        :param new_key: New key name
+        :type new_key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "RENAMENX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            new_key
+        )
+
+    def redis_scan(
+            self,
+            cursor,
+            collection,
+            pattern=None,
+            count=None,
+            data_type=None
+    ):
+        """
+        The SCAN command and the closely related commands SSCAN, HSCAN and ZSCAN are
+        used in order to incrementally iterate over a collection of elements.
+        More on https://redis.io/commands/scan/
+
+        :param cursor: Cursor value (start with 0)
+        :type cursor: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param pattern: It is possible to only iterate elements matching a given
+        glob-style pattern
+        :type pattern: str
+        :param count: COUNT the user specified the amount of work that should be done at
+        every call in order to retrieve elements from the collection
+        :type count: int
+        :param data_type: You can use the TYPE option to ask SCAN to only return objects that
+        match a given type, llowing you to iterate through the database looking for keys
+        of a specific type ex. zset
+        :type data_type: int
+        :returns:
+        :rtype:
+        """
+        pattern_list = []
+        if pattern is not None:
+            pattern_list.append("MATCH")
+            pattern_list.append(pattern)
+
+        count_list = []
+        if count is not None:
+            count_list.append("COUNT")
+            count_list.append(count)
+
+        type_list = []
+        if data_type is not None:
+            type_list.append("TYPE")
+            type_list.append(data_type)
+
+        redis_command = "SCAN"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            cursor,
+            *pattern_list,
+            *count_list,
+            *type_list
+        )
+
+    def redis_ttl(
+            self,
+            key,
+            collection,
+    ):
+        """
+        Returns the remaining time to live of a key that has a timeout. This
+        introspection capability allows a Redis client to check how many seconds a
+        given key will continue to be part of the dataset.
+        More on https://redis.io/commands/ttl/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "TTL"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
+    def redis_type(
+            self,
+            key,
+            collection,
+    ):
+        """
+        Returns the string representation of the type of the value stored at key. The
+        different types that can be returned are: string, list, set, zset, hash and
+        stream.
+        More on https://redis.io/commands/type/
+
+        :param key: Key of the data
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "TYPE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
+    def redis_unlink(
+            self,
+            keys,
+            collection,
+    ):
+        """
+        This command is very similar to DEL: it removes the specified keys. Just like
+        DEL a key is ignored if it does not exist. However the command performs the
+        actual memory reclaiming in a different thread, so it is not blocking,
+        while DEL is. This is where the command name comes from: the command just
+        unlinks the keys from the keyspace. The actual removal will happen later
+        asynchronously.
+        More on https://redis.io/commands/unlink/
+
+        :param keys: List of keys to be deleted
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "UNLINK"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            *keys
+        )
+
+
 
