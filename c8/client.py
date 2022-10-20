@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 from c8.connection import TenantConnection
 from c8.tenant import Tenant
+from c8.redis.redis_commands import RedisCommands
 from c8.version import __version__
 from c8 import constants
 
@@ -88,8 +89,7 @@ class C8Client(object):
         :rtype: c8.redis.redis_commands.RedisCommands
         """
         if self._redis is None:
-            from c8.redis.redis_commands import RedisCommands
-            self._redis = RedisCommands(self._fabric)
+            self._redis = RedisCommands(self._tenant._conn)
         return self._redis
 
     @property
