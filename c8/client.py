@@ -22,9 +22,19 @@ class C8Client(object):
     :type http_client: c8.http.HTTPClient
     """
 
-    def __init__(self, protocol="http", host='127.0.0.1', port=80,
-                 geofabric="_system", stream_port=constants.STREAM_PORT,
-                 email=None, password=None, http_client=None, token=None, apikey=None):
+    def __init__(
+            self,
+            protocol="http",
+            host='127.0.0.1',
+            port=80,
+            geofabric="_system",
+            stream_port=constants.STREAM_PORT,
+            email=None,
+            password=None,
+            http_client=None,
+            token=None,
+            apikey=None
+    ):
 
         self._protocol = protocol.strip('/')
         self._host = host.strip('/')
@@ -138,12 +148,14 @@ class C8Client(object):
         :returns: Standard fabric API wrapper.
         :type: c8.fabric.StandardFabric
         """
-        connection = TenantConnection(url=self._url,
-                                      email=email,
-                                      password=password,
-                                      token=token,
-                                      apikey=apikey,
-                                      http_client=self._http_client)
+        connection = TenantConnection(
+            url=self._url,
+            email=email,
+            password=password,
+            token=token,
+            apikey=apikey,
+            http_client=self._http_client
+        )
         tenant = Tenant(connection)
 
         return tenant
@@ -259,12 +271,14 @@ class C8Client(object):
 
     # client.add_hash_index
 
-    def add_hash_index(self,
-                       collection_name,
-                       fields,
-                       unique=None,
-                       sparse=None,
-                       deduplicate=None):
+    def add_hash_index(
+            self,
+            collection_name,
+            fields,
+            unique=None,
+            sparse=None,
+            deduplicate=None
+    ):
         """Create a new hash index.
 
         :param collection_name: Collection name to add index on.
@@ -284,10 +298,12 @@ class C8Client(object):
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
         _collection = self.get_collection(collection_name)
-        return _collection.add_hash_index(fields=fields,
-                                          unique=unique,
-                                          sparse=sparse,
-                                          deduplicate=deduplicate)
+        return _collection.add_hash_index(
+            fields=fields,
+            unique=unique,
+            sparse=sparse,
+            deduplicate=deduplicate
+        )
 
     # client.add_geo_index
 
@@ -308,17 +324,21 @@ class C8Client(object):
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
         _collection = self.get_collection(collection_name)
-        return _collection.add_geo_index(fields=fields,
-                                         ordered=ordered)
+        return _collection.add_geo_index(
+            fields=fields,
+            ordered=ordered
+        )
 
     # client.add_skiplist_index
 
-    def add_skiplist_index(self,
-                           collection_name,
-                           fields,
-                           unique=None,
-                           sparse=None,
-                           deduplicate=None):
+    def add_skiplist_index(
+            self,
+            collection_name,
+            fields,
+            unique=None,
+            sparse=None,
+            deduplicate=None
+    ):
         """Create a new skiplist index.
 
         :param collection_name: Collection name to add index on.
@@ -338,15 +358,23 @@ class C8Client(object):
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
         _collection = self.get_collection(collection_name)
-        return _collection.add_skiplist_index(fields=fields,
-                                              unique=unique,
-                                              sparse=sparse,
-                                              deduplicate=deduplicate)
+        return _collection.add_skiplist_index(
+            fields=fields,
+            unique=unique,
+            sparse=sparse,
+            deduplicate=deduplicate
+        )
 
     # client.add_persistent_index
 
-    def add_persistent_index(self, collection_name,
-                             fields, unique=None, sparse=None, deduplicate=False):
+    def add_persistent_index(
+            self,
+            collection_name,
+            fields,
+            unique=None,
+            sparse=None,
+            deduplicate=False
+    ):
         """Create a new persistent index.
 
         Unique persistent indexes on non-sharded keys are not supported in a
@@ -370,10 +398,12 @@ class C8Client(object):
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
         _collection = self.get_collection(collection_name)
-        return _collection.add_persistent_index(fields=fields,
-                                                unique=unique,
-                                                sparse=sparse,
-                                                deduplicate=deduplicate)
+        return _collection.add_persistent_index(
+            fields=fields,
+            unique=unique,
+            sparse=sparse,
+            deduplicate=deduplicate
+        )
 
     # client.add_fulltext_index
 
@@ -395,11 +425,13 @@ class C8Client(object):
 
     # client.add_ttl_index
 
-    def add_ttl_index(self,
-                      collection_name,
-                      fields,
-                      expire_after=0,
-                      in_background=False):
+    def add_ttl_index(
+            self,
+            collection_name,
+            fields,
+            expire_after=0,
+            in_background=False
+    ):
         """Create a new ttl index.
 
         :param collection_name: Collection name to add index on.
@@ -416,18 +448,21 @@ class C8Client(object):
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
         _collection = self.get_collection(collection_name)
-        return _collection.add_ttl_index(fields=fields, expireAfter=expire_after,
-                                         inBackground=in_background)
+        return _collection.add_ttl_index(
+            fields=fields,
+            expireAfter=expire_after,
+            inBackground=in_background
+        )
 
     # client.delete_index
 
-    def delete_index(self, collection_name, index_id, ignore_missing=False):
+    def delete_index(self, collection_name, index_name, ignore_missing=False):
         """Delete an index.
 
         :param collection_name: Collection name to add index on.
         :type collection_name: str | unicode
-        :param index_id: Index ID.
-        :type index_id: str | unicode
+        :param index_name: Index name.
+        :type index_name: str | unicode
         :param ignore_missing: Do not raise an exception on missing index.
         :type ignore_missing: bool
         :returns: True if index was deleted successfully, False if index was
@@ -436,8 +471,10 @@ class C8Client(object):
         :raise c8.exceptions.IndexDeleteError: If delete fails.
         """
         _collection = self.get_collection(collection_name)
-        return _collection.delete_index(index_id=index_id,
-                                        ignore_missing=ignore_missing)
+        return _collection.delete_index(
+            index_name=index_name,
+            ignore_missing=ignore_missing
+        )
 
     # client.get_index
 
@@ -463,17 +500,20 @@ class C8Client(object):
         resp = self._fabric.delete_collection(
             name=name,
             ignore_missing=ignore_missing,
-            system=system)
+            system=system
+        )
         return resp
 
     # client.import_bulk
 
-    def import_bulk(self,
-                    collection_name,
-                    documents,
-                    details=True,
-                    primaryKey=None,
-                    replace=False):
+    def import_bulk(
+            self,
+            collection_name,
+            documents,
+            details=True,
+            primaryKey=None,
+            replace=False
+    ):
         """Insert multiple documents into the collection.
 
         This is faster than :func:`c8.collection.Collection.insert_many`
@@ -501,16 +541,22 @@ class C8Client(object):
         :raise c8.exceptions.DocumentInsertError: If import fails.
         """
         _collection = self.get_collection(collection_name)
-        return _collection.import_bulk(documents=documents, details=details,
-                                       primaryKey=primaryKey, replace=replace)
+        return _collection.import_bulk(
+            documents=documents,
+            details=details,
+            primaryKey=primaryKey,
+            replace=replace
+        )
 
     # client.export
 
-    def export(self,
-               collection_name,
-               offset=None,
-               limit=None,
-               order=None):
+    def export(
+            self,
+            collection_name,
+            offset=None,
+            limit=None,
+            order=None
+    ):
         """Export all documents in the collection.
 
         :param collection_name: Collection name to add index on.
@@ -600,8 +646,14 @@ class C8Client(object):
 
     # client.insert_document
 
-    def insert_document(self, collection_name="", return_new=False,
-                        silent=False, sync=None, document=None):
+    def insert_document(
+            self,
+            collection_name="",
+            return_new=False,
+            silent=False,
+            sync=None,
+            document=None
+    ):
         """Insert a new document.
 
         :param collection_name: Collection name.
@@ -672,22 +724,25 @@ class C8Client(object):
         resp = _collection.insert_from_file(
             csv_filepath=csv_filepath,
             return_new=return_new,
-            sync=sync, silent=silent
+            sync=sync,
+            silent=silent
         )
         return resp
 
     # client.update_document
 
-    def update_document(self,
-                        collection_name,
-                        document,
-                        check_rev=True,
-                        merge=True,
-                        keep_none=True,
-                        return_new=False,
-                        return_old=False,
-                        sync=None,
-                        silent=False):
+    def update_document(
+            self,
+            collection_name,
+            document,
+            check_rev=True,
+            merge=True,
+            keep_none=True,
+            return_new=False,
+            return_old=False,
+            sync=None,
+            silent=False
+    ):
         """Update a document.
 
         :param collection_name: Collection name.
@@ -720,28 +775,32 @@ class C8Client(object):
         :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
         """
         _collection = self.get_collection(collection_name)
-        resp = _collection.update(document=document,
-                                  check_rev=check_rev,
-                                  merge=merge,
-                                  keep_none=keep_none,
-                                  return_new=return_new,
-                                  return_old=return_old,
-                                  sync=sync,
-                                  silent=silent)
+        resp = _collection.update(
+            document=document,
+            check_rev=check_rev,
+            merge=merge,
+            keep_none=keep_none,
+            return_new=return_new,
+            return_old=return_old,
+            sync=sync,
+            silent=silent
+        )
         return resp
 
     # client.update_document_many
 
-    def update_document_many(self,
-                             collection_name,
-                             documents,
-                             check_rev=True,
-                             merge=True,
-                             keep_none=True,
-                             return_new=False,
-                             return_old=False,
-                             sync=None,
-                             silent=False):
+    def update_document_many(
+            self,
+            collection_name,
+            documents,
+            check_rev=True,
+            merge=True,
+            keep_none=True,
+            return_new=False,
+            return_old=False,
+            sync=None,
+            silent=False
+    ):
         """Update multiple documents.
 
         If updating a document fails, the exception object is placed in the
@@ -776,26 +835,30 @@ class C8Client(object):
         :raise c8.exceptions.DocumentUpdateError: If update fails.
         """
         _collection = self.get_collection(collection_name)
-        resp = _collection.update_many(documents=documents,
-                                       check_rev=check_rev,
-                                       merge=merge,
-                                       keep_none=keep_none,
-                                       return_new=return_new,
-                                       return_old=return_old,
-                                       sync=sync,
-                                       silent=silent)
+        resp = _collection.update_many(
+            documents=documents,
+            check_rev=check_rev,
+            merge=merge,
+            keep_none=keep_none,
+            return_new=return_new,
+            return_old=return_old,
+            sync=sync,
+            silent=silent
+        )
         return resp
 
     # client.replace_document
 
-    def replace_document(self,
-                         collection_name,
-                         document,
-                         check_rev=True,
-                         return_new=False,
-                         return_old=False,
-                         sync=None,
-                         silent=False):
+    def replace_document(
+            self,
+            collection_name,
+            document,
+            check_rev=True,
+            return_new=False,
+            return_old=False,
+            sync=None,
+            silent=False
+    ):
         """Replace multiple documents.
 
         :param collection_name: Collection name.
@@ -825,24 +888,28 @@ class C8Client(object):
         :raise c8.exceptions.DocumentReplaceError: If replace fails.
         """
         _collection = self.get_collection(collection_name)
-        resp = _collection.replace(document=document,
-                                   check_rev=check_rev,
-                                   return_new=return_new,
-                                   return_old=return_old,
-                                   sync=sync,
-                                   silent=silent)
+        resp = _collection.replace(
+            document=document,
+            check_rev=check_rev,
+            return_new=return_new,
+            return_old=return_old,
+            sync=sync,
+            silent=silent
+        )
         return resp
 
     # client.replace_document_many
 
-    def replace_document_many(self,
-                              collection_name,
-                              documents,
-                              check_rev=True,
-                              return_new=False,
-                              return_old=False,
-                              sync=None,
-                              silent=False):
+    def replace_document_many(
+            self,
+            collection_name,
+            documents,
+            check_rev=True,
+            return_new=False,
+            return_old=False,
+            sync=None,
+            silent=False
+    ):
         """Replace multiple documents.
 
         If replacing a document fails, the exception object is placed in the
@@ -872,25 +939,29 @@ class C8Client(object):
         :raise c8.exceptions.DocumentReplaceError: If replace fails.
         """
         _collection = self.get_collection(collection_name)
-        resp = _collection.replace_many(documents=documents,
-                                        check_rev=check_rev,
-                                        return_new=return_new,
-                                        return_old=return_old,
-                                        sync=sync,
-                                        silent=silent)
+        resp = _collection.replace_many(
+            documents=documents,
+            check_rev=check_rev,
+            return_new=return_new,
+            return_old=return_old,
+            sync=sync,
+            silent=silent
+        )
         return resp
 
     # client.delete_document
 
-    def delete_document(self,
-                        collection_name,
-                        document,
-                        rev=None,
-                        check_rev=True,
-                        ignore_missing=False,
-                        return_old=False,
-                        sync=None,
-                        silent=False):
+    def delete_document(
+            self,
+            collection_name,
+            document,
+            rev=None,
+            check_rev=True,
+            ignore_missing=False,
+            return_old=False,
+            sync=None,
+            silent=False
+    ):
         """Delete a document.
 
         :param collection_name: Collection name.
@@ -924,24 +995,28 @@ class C8Client(object):
         :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
         """
         _collection = self.get_collection(collection_name)
-        resp = _collection.delete(document=document,
-                                  rev=rev,
-                                  check_rev=check_rev,
-                                  ignore_missing=ignore_missing,
-                                  return_old=return_old,
-                                  sync=sync,
-                                  silent=silent)
+        resp = _collection.delete(
+            document=document,
+            rev=rev,
+            check_rev=check_rev,
+            ignore_missing=ignore_missing,
+            return_old=return_old,
+            sync=sync,
+            silent=silent
+        )
         return resp
 
     # client.delete_document_many
 
-    def delete_document_many(self,
-                             collection_name,
-                             documents,
-                             return_old=False,
-                             check_rev=True,
-                             sync=None,
-                             silent=False):
+    def delete_document_many(
+            self,
+            collection_name,
+            documents,
+            return_old=False,
+            check_rev=True,
+            sync=None,
+            silent=False
+    ):
         """Delete multiple documents.
 
         If deleting a document fails, the exception object is placed in the
@@ -968,11 +1043,13 @@ class C8Client(object):
         :raise c8.exceptions.DocumentDeleteError: If delete fails.
         """
         _collection = self.get_collection(collection_name)
-        resp = _collection.delete_many(documents=documents,
-                                       check_rev=check_rev,
-                                       return_old=return_old,
-                                       sync=sync,
-                                       silent=silent)
+        resp = _collection.delete_many(
+            documents=documents,
+            check_rev=check_rev,
+            return_old=return_old,
+            sync=sync,
+            silent=silent
+        )
         return resp
 
     # client.get_collection_indexes
@@ -1048,17 +1125,22 @@ class C8Client(object):
         :raise c8.exceptions.C8QLQueryExplainError: If explain fails.
         """
         resp = self._fabric.c8ql.explain(
-            query, all_plans=all_plans, max_plans=max_plans, opt_rules=opt_rules)
+            query,
+            all_plans=all_plans,
+            max_plans=max_plans,
+            opt_rules=opt_rules
+        )
         return resp
 
     # client.execute_query
-    def execute_query(self,
-                      query,
-                      sql=False,
-                      count=False,
-                      bind_vars=None,
-                      profile=None,
-                      ):
+    def execute_query(
+            self,
+            query,
+            sql=False,
+            count=False,
+            bind_vars=None,
+            profile=None,
+    ):
         """Execute the query and return the result cursor.
 
         :param query: Query to execute.
@@ -1077,12 +1159,13 @@ class C8Client(object):
         :rtype: c8.cursor.Cursor
         :raise c8.exceptions.C8QLQueryExecuteError: If execute fails.
         """
-        resp = self._fabric.c8ql.execute(query,
-                                         sql=sql,
-                                         count=count,
-                                         bind_vars=bind_vars,
-                                         profile=profile,
-                                         )
+        resp = self._fabric.c8ql.execute(
+            query,
+            sql=sql,
+            count=count,
+            bind_vars=bind_vars,
+            profile=profile,
+        )
         return resp
 
     # client.get_running_queries
@@ -1240,9 +1323,11 @@ class C8Client(object):
         :returns: True=stream found; False=stream not found.
         :rtype: bool
         """
-        return self._fabric.has_stream(stream=stream,
-                                       isCollectionStream=isCollectionStream,
-                                       local=local)
+        return self._fabric.has_stream(
+            stream=stream,
+            isCollectionStream=isCollectionStream,
+            local=local
+        )
 
     # client.get_stream
 
@@ -1277,9 +1362,11 @@ class C8Client(object):
                                                      for a stream fails.
         """
         _stream = self._fabric.stream()
-        return _stream.get_stream_stats(stream,
-                                        isCollectionStream=isCollectionStream,
-                                        local=local)
+        return _stream.get_stream_stats(
+            stream,
+            isCollectionStream=isCollectionStream,
+            local=local
+        )
 
     # client.create_stream_producer
 
@@ -1296,16 +1383,20 @@ class C8Client(object):
         CUSTOM_PARTITION="CustomPartition"
     )
 
-    def create_stream_producer(self, stream, isCollectionStream=False, local=False,
-                               producer_name=None,
-                               initial_sequence_id=None, send_timeout_millis=30000,
-                               compression_type=COMPRESSION_TYPES.NONE,
-                               max_pending_messages=1000,
-                               batching_enabled=False,
-                               batching_max_messages=1000,
-                               batching_max_publish_delay_ms=10,
-                               message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION
-                               ):
+    def create_stream_producer(
+            self,
+            stream,
+            isCollectionStream=False,
+            local=False,
+            producer_name=None,
+            initial_sequence_id=None, send_timeout_millis=30000,
+            compression_type=COMPRESSION_TYPES.NONE,
+            max_pending_messages=1000,
+            batching_enabled=False,
+            batching_max_messages=1000,
+            batching_max_publish_delay_ms=10,
+            message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION
+    ):
         """Create a new producer on a given stream.
 
         **Args**
@@ -1351,32 +1442,39 @@ class C8Client(object):
 
         """
         _stream = self._fabric.stream()
-        return _stream.create_producer(stream, isCollectionStream=isCollectionStream,
-                                       local=local, producer_name=producer_name,
-                                       initial_sequence_id=initial_sequence_id,
-                                       send_timeout_millis=send_timeout_millis,
-                                       compression_type=compression_type,
-                                       max_pending_messages=max_pending_messages,
-                                       batching_enabled=batching_enabled,
-                                       batching_max_messages=batching_max_messages,
-                                       batching_max_publish_delay_ms=batching_max_publish_delay_ms,
-                                       message_routing_mode=message_routing_mode)
+        return _stream.create_producer(
+            stream, isCollectionStream=isCollectionStream,
+            local=local,
+            producer_name=producer_name,
+            initial_sequence_id=initial_sequence_id,
+            send_timeout_millis=send_timeout_millis,
+            compression_type=compression_type,
+            max_pending_messages=max_pending_messages,
+            batching_enabled=batching_enabled,
+            batching_max_messages=batching_max_messages,
+            batching_max_publish_delay_ms=batching_max_publish_delay_ms,
+            message_routing_mode=message_routing_mode
+        )
 
     # client.subscribe
     CONSUMER_TYPES = enum(EXCLUSIVE="Exclusive",
                           SHARED="Shared",
                           FAILOVER="Failover")
 
-    def subscribe(self, stream, isCollectionStream=False, local=False,
-                  subscription_name=None,
-                  consumer_type=CONSUMER_TYPES.EXCLUSIVE,
-                  message_listener=None,
-                  receiver_queue_size=1000,
-                  consumer_name=None,
-                  unacked_messages_timeout_ms=None,
-                  broker_consumer_stats_cache_time_ms=30000,
-                  is_read_compacted=False,
-                  ):
+    def subscribe(
+            self,
+            stream,
+            isCollectionStream=False,
+            local=False,
+            subscription_name=None,
+            consumer_type=CONSUMER_TYPES.EXCLUSIVE,
+            message_listener=None,
+            receiver_queue_size=1000,
+            consumer_name=None,
+            unacked_messages_timeout_ms=None,
+            broker_consumer_stats_cache_time_ms=30000,
+            is_read_compacted=False,
+    ):
         """
         Subscribe to the given topic and subscription combination.
 
@@ -1422,24 +1520,31 @@ class C8Client(object):
             will be cached in the client.
         """
         _stream = self._fabric.stream()
-        return _stream.subscribe(stream=stream,
-                                 local=local, isCollectionStream=isCollectionStream,
-                                 subscription_name=subscription_name,
-                                 consumer_type=consumer_type,
-                                 message_listener=message_listener,
-                                 receiver_queue_size=receiver_queue_size,
-                                 consumer_name=consumer_name,
-                                 unacked_messages_timeout_ms=unacked_messages_timeout_ms,
-                                 broker_consumer_stats_cache_time_ms=broker_consumer_stats_cache_time_ms,
-                                 is_read_compacted=is_read_compacted)
+        return _stream.subscribe(
+            stream=stream,
+            local=local,
+            isCollectionStream=isCollectionStream,
+            subscription_name=subscription_name,
+            consumer_type=consumer_type,
+            message_listener=message_listener,
+            receiver_queue_size=receiver_queue_size,
+            consumer_name=consumer_name,
+            unacked_messages_timeout_ms=unacked_messages_timeout_ms,
+            broker_consumer_stats_cache_time_ms=broker_consumer_stats_cache_time_ms,
+            is_read_compacted=is_read_compacted
+        )
 
     # client.create_stream_reader
 
-    def create_stream_reader(self, stream, start_message_id="latest",
-                             local=False, isCollectionStream=False,
-                             receiver_queue_size=1000,
-                             reader_name=None
-                             ):
+    def create_stream_reader(
+            self,
+            stream,
+            start_message_id="latest",
+            local=False,
+            isCollectionStream=False,
+            receiver_queue_size=1000,
+            reader_name=None
+    ):
         """
         Create a reader on a particular topic
 
@@ -1461,10 +1566,14 @@ class C8Client(object):
 
         """
         _stream = self._fabric.stream()
-        return _stream.create_reader(stream=stream, start_message_id=start_message_id,
-                                     local=local, isCollectionStream=isCollectionStream,
-                                     receiver_queue_size=receiver_queue_size,
-                                     reader_name=reader_name)
+        return _stream.create_reader(
+            stream=stream,
+            start_message_id=start_message_id,
+            local=local,
+            isCollectionStream=isCollectionStream,
+            receiver_queue_size=receiver_queue_size,
+            reader_name=reader_name
+        )
 
     # client.unsubscribe
     def unsubscribe(self, subscription, local=False):
@@ -1705,10 +1814,13 @@ class C8Client(object):
         return self._fabric.graphs()
 
     # client.create_graph
-    def create_graph(self, graph_name,
-                     edge_definitions=None,
-                     orphan_collections=None,
-                     shard_count=None):
+    def create_graph(
+            self,
+            graph_name,
+            edge_definitions=None,
+            orphan_collections=None,
+            shard_count=None
+    ):
         """Create a new graph.
 
         :param graph_name: Graph name.
@@ -1742,10 +1854,12 @@ class C8Client(object):
             }
         """
 
-        return self._fabric.create_graph(name=graph_name,
-                                         edge_definitions=edge_definitions,
-                                         orphan_collections=orphan_collections,
-                                         shard_count=shard_count)
+        return self._fabric.create_graph(
+            name=graph_name,
+            edge_definitions=edge_definitions,
+            orphan_collections=orphan_collections,
+            shard_count=shard_count
+        )
 
     # client.delete_graph
 
@@ -1764,9 +1878,11 @@ class C8Client(object):
         :rtype: bool
         :raise c8.exceptions.GraphDeleteError: If delete fails.
         """
-        return self._fabric.delete_graph(name=graph_name,
-                                         ignore_missing=ignore_missing,
-                                         drop_collections=drop_collections)
+        return self._fabric.delete_graph(
+            name=graph_name,
+            ignore_missing=ignore_missing,
+            drop_collections=drop_collections
+        )
 
     # client.get_graph
     def get_graph(self, graph_name):
@@ -1781,10 +1897,13 @@ class C8Client(object):
 
     # client.insert_edge
 
-    def insert_edge(self, graph_name,
-                    edge_collection,
-                    from_vertex_collections,
-                    to_vertex_collections):
+    def insert_edge(
+            self,
+            graph_name,
+            edge_collection,
+            from_vertex_collections,
+            to_vertex_collections
+    ):
         """Create a new edge definition.
 
         An edge definition consists of an edge collection, "from" vertex
@@ -1811,16 +1930,21 @@ class C8Client(object):
         :raise c8.exceptions.EdgeDefinitionCreateError: If create fails.
         """
         _graph = self._fabric.graph(graph_name)
-        return _graph.create_edge_definition(edge_collection=edge_collection,
-                                             from_vertex_collections=from_vertex_collections,
-                                             to_vertex_collections=to_vertex_collections)
+        return _graph.create_edge_definition(
+            edge_collection=edge_collection,
+            from_vertex_collections=from_vertex_collections,
+            to_vertex_collections=to_vertex_collections
+        )
 
     # client.replace_edge
 
-    def replace_edge(self, graph_name,
-                     edge_collection,
-                     from_vertex_collections,
-                     to_vertex_collections):
+    def replace_edge(
+            self,
+            graph_name,
+            edge_collection,
+            from_vertex_collections,
+            to_vertex_collections
+    ):
         """Replaces an edge definition.
 
         :param graph_name: Name of the Graph for which you want to create edge.
@@ -1836,17 +1960,21 @@ class C8Client(object):
         :raise c8.exceptions.EdgeDefinitionCreateError: If create fails.
         """
         _graph = self._fabric.graph(graph_name)
-        return _graph.replace_edge_definition(edge_collection=edge_collection,
-                                              from_vertex_collections=from_vertex_collections,
-                                              to_vertex_collections=to_vertex_collections)
+        return _graph.replace_edge_definition(
+            edge_collection=edge_collection,
+            from_vertex_collections=from_vertex_collections,
+            to_vertex_collections=to_vertex_collections
+        )
 
     # client.update_edge
-    def update_edge(self,
-                    graph_name, edge,
-                    check_rev=True,
-                    keep_none=True,
-                    sync=None,
-                    silent=False):
+    def update_edge(
+            self,
+            graph_name, edge,
+            check_rev=True,
+            keep_none=True,
+            sync=None,
+            silent=False
+    ):
         """Update an edge document.
 
         :param graph_name: Name of the Graph for which you want to create edge.
@@ -1872,11 +2000,13 @@ class C8Client(object):
         :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
         """
         _graph = self._fabric.graph(graph_name)
-        return _graph.update_edge(edge=edge,
-                                  check_rev=check_rev,
-                                  keep_none=keep_none,
-                                  sync=sync,
-                                  silent=silent)
+        return _graph.update_edge(
+            edge=edge,
+            check_rev=check_rev,
+            keep_none=keep_none,
+            sync=sync,
+            silent=silent
+        )
 
     # client.delete_edge
     def delete_edge(self, graph_name, edge_name, purge=False):
@@ -1913,14 +2043,16 @@ class C8Client(object):
 
     # client.link_edge
 
-    def link_edge(self,
-                  graph_name,
-                  collection,
-                  from_vertex,
-                  to_vertex,
-                  data=None,
-                  sync=None,
-                  silent=False):
+    def link_edge(
+            self,
+            graph_name,
+            collection,
+            from_vertex,
+            to_vertex,
+            data=None,
+            sync=None,
+            silent=False
+    ):
         """Insert a new edge document linking the given vertices.
 
         :param graph_name: Name of the Graph.
@@ -2008,16 +2140,28 @@ class C8Client(object):
         :rtype: dict
         :raise c8.exceptions.UserCreateError: If create fails.
         """
-        return self._tenant.create_user(email=email,
-                                        password=password,
-                                        display_name=display_name,
-                                        active=active,
-                                        extra=extra)
+
+        return self._tenant.create_user(
+            email=email,
+            password=password,
+            display_name=display_name,
+            active=active,
+            extra=extra
+        )
 
     # client.update_user
 
-    def update_user(self, username, password=None, display_name=None, email=None, is_verified=None, active=None,
-                    extra=None):
+    def update_user(
+            self,
+            username,
+            password=None,
+            display_name=None,
+            email=None,
+            is_verified=None,
+            active=None,
+            extra=None
+    ):
+
         """Update a user.
 
         :param username: Username.
@@ -2038,13 +2182,15 @@ class C8Client(object):
         :rtype: dict
         :raise c8.exceptions.UserUpdateError: If update fails.
         """
-        return self._tenant.update_user(username=username,
-                                        password=password,
-                                        display_name=display_name,
-                                        email=email,
-                                        is_verified=is_verified,
-                                        active=active,
-                                        extra=extra)
+        return self._tenant.update_user(
+            username=username,
+            password=password,
+            display_name=display_name,
+            email=email,
+            is_verified=is_verified,
+            active=active,
+            extra=extra
+        )
 
     # client.delete_user
 
@@ -2110,8 +2256,10 @@ class C8Client(object):
         :rtype: object
         :raise c8.exceptions.ClearDataBaseAccessLevel: If request fails.
         """
-        return self._tenant.remove_database_access_level_user(username=username,
-                                                              databasename=databasename)
+        return self._tenant.remove_database_access_level_user(
+            username=username,
+            databasename=databasename
+        )
 
     # client.set_database_access_level_user
 
@@ -2137,7 +2285,8 @@ class C8Client(object):
 
     # client.list_accessible_collections_user
 
-    def list_accessible_collections_user(self, username, databasename='_system', full=False):
+    def list_accessible_collections_user(self, username, databasename='_system',
+                                         full=False):
         """Fetch the collection access level for a specific collection in a database.
 
         :param username: Name of the user
@@ -2156,8 +2305,12 @@ class C8Client(object):
 
     # client.get_collection_access_level_user
 
-    def get_collection_access_level_user(self, username, collection_name,
-                                         databasename='_system'):
+    def get_collection_access_level_user(
+            self,
+            username,
+            collection_name,
+            databasename='_system'
+    ):
         """Fetch the collection access level for a specific collection in a database.
 
         :param collection_name: Name of the collection
@@ -2174,9 +2327,13 @@ class C8Client(object):
 
     # client.set_collection_access_level_user
 
-    def set_collection_access_level_user(self, username, collection_name,
-                                         databasename='_system',
-                                         grant='ro'):
+    def set_collection_access_level_user(
+            self,
+            username,
+            collection_name,
+            databasename='_system',
+            grant='ro'
+    ):
 
         """Set the collection access level for a specific collection in a database.
 
@@ -2192,15 +2349,21 @@ class C8Client(object):
         :rtype: Object
         :raise c8.exceptions.SetCollectionAccessLevel: If request fails.
         """
-        return self._tenant.set_collection_access_level_user(username=username,
-                                                             collection_name=collection_name,
-                                                             databasename=databasename,
-                                                             grant=grant)
+        return self._tenant.set_collection_access_level_user(
+            username=username,
+            collection_name=collection_name,
+            databasename=databasename,
+            grant=grant
+        )
 
     # client.clear_collection_access_level_user
 
-    def clear_collection_access_level_user(self, username, collection_name,
-                                           databasename='_system'):
+    def clear_collection_access_level_user(
+            self,
+            username,
+            collection_name,
+            databasename='_system'
+    ):
 
         """Clear the collection access level for a specific collection in a database.
 
@@ -2212,14 +2375,20 @@ class C8Client(object):
         :rtype: booleaan
         :raise c8.exceptions.ClearCollectionAccessLevel: If request fails.
         """
-        return self._tenant.clear_collection_access_level_user(username=username,
-                                                               collection_name=collection_name,
-                                                               databasename=databasename)
+        return self._tenant.clear_collection_access_level_user(
+            username=username,
+            collection_name=collection_name,
+            databasename=databasename
+        )
 
     # client.list_accessible_streams_user
 
-    def list_accessible_streams_user(self, username, databasename='_system',
-                                     full=False):
+    def list_accessible_streams_user(
+            self,
+            username,
+            databasename='_system',
+            full=False
+    ):
         """Fetch the list of streams available to the specified user.
 
         :param username: Name of the user
@@ -2232,14 +2401,20 @@ class C8Client(object):
         :rtype: list
         :raise c8.exceptions.ListStreams: If request fails.
         """
-        return self._tenant.list_accessible_streams_user(username=username,
-                                                         databasename=databasename,
-                                                         full=full)
+        return self._tenant.list_accessible_streams_user(
+            username=username,
+            databasename=databasename,
+            full=full
+        )
 
     # client.get_stream_access_level_user
 
-    def get_stream_access_level_user(self, username, streamname,
-                                     databasename='_system'):
+    def get_stream_access_level_user(
+            self,
+            username,
+            streamname,
+            databasename='_system'
+    ):
         """Fetch the database access level for a specific stream.
 
         :param username: Name of the user
@@ -2252,14 +2427,21 @@ class C8Client(object):
         :rtype: string
         :raise c8.exceptions.StreamAccessLevel: If request fails.
         """
-        return self._tenant.get_stream_access_level_user(username=username,
-                                                         streamname=streamname,
-                                                         databasename=databasename)
+        return self._tenant.get_stream_access_level_user(
+            username=username,
+            streamname=streamname,
+            databasename=databasename
+        )
 
     # client.set_stream_access_level_user
 
-    def set_stream_access_level_user(self, username, streamname, databasename='_system',
-                                     grant='ro'):
+    def set_stream_access_level_user(
+            self,
+            username,
+            streamname,
+            databasename='_system',
+            grant='ro'
+    ):
         """Set the database access level for a specific stream.
 
         :param username: Name of the user
@@ -2276,10 +2458,12 @@ class C8Client(object):
         :rtype: Object
         :raise c8.exceptions.SetStreamAccessLevel: If request fails.
         """
-        return self._tenant.set_stream_access_level_user(username=username,
-                                                         streamname=streamname,
-                                                         databasename=databasename,
-                                                         grant=grant)
+        return self._tenant.set_stream_access_level_user(
+            username=username,
+            streamname=streamname,
+            databasename=databasename,
+            grant=grant
+        )
 
     # client.clear_stream_access_level_user
 
@@ -2329,7 +2513,10 @@ class C8Client(object):
         :rtype: Object
         :raise c8.exceptions.SetBillingAccessLevel: If request fails.
         """
-        return self._tenant.set_billing_access_level_user(username=username, grant=grant)
+        return self._tenant.set_billing_access_level_user(
+            username=username,
+            grant=grant
+        )
 
     # client.clear_billing_access_level
 
@@ -2435,7 +2622,8 @@ class C8Client(object):
         :rtype: boolean
         :raise c8.exceptions.CreateCollectionError: If creation fails.
         """
-        return self._fabric.key_value.create_collection(name=name, expiration=expiration)
+        return self._fabric.key_value.create_collection(name=name,
+                                                        expiration=expiration)
 
     # client.delete_collection_kv
 
@@ -3457,62 +3645,6 @@ class C8Client(object):
             start,
             end,
             data_format
-        )
-
-    def redis_zadd(self, key, score, member, collection):
-        """
-        Adds all the specified members with the specified scores to the sorted set
-        stored at key. It is possible to specify multiple score / member pairs. If a
-        specified member is already a member of the sorted set, the score is updated
-        and the element reinserted at the right position to ensure the correct
-        ordering.
-        More on https://redis.io/commands/zadd/
-
-        :param key: Key of the data
-        :type key: str
-        :param score: Score of the data
-        :type score: int
-        :param member: Member of the data
-        :type member: str
-        :param collection: Name of the collection that we set values to
-        :type collection: str
-        :returns:
-        :rtype:
-        """
-        redis_command = "ZADD"
-        return self._fabric.redis.command_parser(
-            redis_command,
-            collection,
-            key,
-            score,
-            member
-        )
-
-    def redis_zrange(self, key, start, stop, collection):
-        """
-        Returns the specified range of elements in the sorted set stored at <key>.
-        ZRANGE can perform different types of range queries: by index (rank), by the
-        score, or by lexicographical order.
-        More on https://redis.io/commands/zrange/
-
-        :param key: Key of the data
-        :type key: str
-        :param start: Start of the data
-        :type start: int
-        :param stop: Stop of the data
-        :type stop: str
-        :param collection: Name of the collection that we set values to
-        :type collection: str
-        :returns:
-        :rtype:
-        """
-        redis_command = "ZRANGE"
-        return self._fabric.redis.command_parser(
-            redis_command,
-            collection,
-            key,
-            start,
-            stop
         )
 
     def redis_lpush(self, key, elements, collection):
@@ -4730,3 +4862,1038 @@ class C8Client(object):
             destination,
             *keys,
         )
+
+
+    def redis_zadd(
+            self,
+            key,
+            data,
+            collection,
+            options=[]
+    ):
+        """
+        Adds all the specified members with the specified scores to the sorted set
+        stored at key. It is possible to specify multiple score / member pairs. If a
+        specified member is already a member of the sorted set, the score is updated
+        and the element reinserted at the right position to ensure the correct
+        ordering.
+        More on https://redis.io/commands/zadd/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param data: List of score member data ex. [0, "test0", 1, "test1"]
+        :type data: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param options: Additional ZADD options [NX | XX] [GT | LT] [CH] [INCR]
+        :type options: list
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZADD"
+
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *options,
+            *data
+        )
+
+    def redis_zcard(self, key, collection):
+        """
+        Returns the sorted set cardinality (number of elements) of the sorted set stored
+        at key.
+        More on https://redis.io/commands/zcard/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZCARD"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+        )
+
+    def redis_zcount(self, key, minimum, maximum, collection):
+        """
+        Returns the number of elements in the sorted set at key with a score between min
+        and max.
+        The min and max arguments have the same semantic as described for ZRANGEBYSCORE.
+        More on https://redis.io/commands/zcount/
+
+        :param key: Key of the data
+        :type key: str
+        :param minimum: Minimum score
+        :type minimum: int
+        :param maximum: Maximum score
+        :type maximum: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZCOUNT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            minimum,
+            maximum
+        )
+
+    def redis_zdiff(self, num_keys, keys, collection, with_scores=False):
+        """
+        This command is similar to ZDIFFSTORE, but instead of storing the resulting
+        sorted set, it is returned to the client.
+        More on https://redis.io/commands/zdiff/
+
+        :param num_keys: Total number of input keys
+        :type num_keys: int
+        :param keys: List of keys of the sorted set
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param with_scores: Return score of member
+        :type with_scores: bool
+        :returns:
+        :rtype:
+        """
+
+        if with_scores is True:
+            with_scores_command = "WITHSCORES"
+        else:
+            with_scores_command = None
+
+        redis_command = "ZDIFF"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            num_keys,
+            *keys,
+            with_scores_command
+        )
+
+    def redis_zdiffstore(self, destination, num_keys, keys, collection):
+        """
+        Computes the difference between the first and all successive input sorted
+        sets and stores the result in destination. The total number of input keys is
+        specified by numkeys.
+        More on https://redis.io/commands/zdiffstore/
+
+        :param destination: Destination key to store result
+        :type destination: str
+        :param num_keys: Total number of input keys
+        :type num_keys: int
+        :param keys: List of keys of the sorted set
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+
+        redis_command = "ZDIFFSTORE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            destination,
+            num_keys,
+            *keys,
+        )
+
+    def redis_zincrby(self, key, increment, member, collection):
+        """
+        Increments the score of member in the sorted set stored at key by increment.
+        If member does not exist in the sorted set, it is added with increment as its
+        score (as if its previous score was 0.0). If key does not exist, a new sorted
+        set with the specified member as its sole member is created.
+        More on https://redis.io/commands/zincrby/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param increment: Value that increments score of the member
+        :type increment: float
+        :param member: Member to be incremented
+        :type member: string
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZINCRBY"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            increment,
+            member
+        )
+
+    def redis_zinter(
+            self,
+            num_keys,
+            keys,
+            collection,
+            options=None,
+            with_scores=False
+    ):
+        """
+        This command is similar to ZINTERSTORE, but instead of storing the resulting
+        sorted set, it is returned to the client.
+        For a description of the WEIGHTS and AGGREGATE options, see ZUNIONSTORE.
+        More on https://redis.io/commands/zinter/
+
+        :param num_keys: Total number of input keys
+        :type num_keys: int
+        :param keys: List of keys of the sorted set
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param options: Additional ZINTER options [WEIGHTS weight [weight ...]]
+        [AGGREGATE <SUM | MIN | MAX>]
+        :type options: list
+        :param with_scores: Return score of member
+        :type with_scores: bool
+        :returns:
+        :rtype:
+        """
+
+        options_command = []
+        if options is not None:
+            options_command = list(options)
+
+        if with_scores is True:
+            options_command.append("WITHSCORES")
+
+        redis_command = "ZINTER"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            num_keys,
+            *keys,
+            *options_command,
+        )
+
+    def redis_zinterstore(
+            self,
+            destination,
+            num_keys,
+            keys,
+            collection,
+            options=[]
+    ):
+        """
+        Computes the intersection of numkeys sorted sets given by the specified keys,
+        and stores the result in destination. It is mandatory to provide the number
+        of input keys (numkeys) before passing the input keys and the other (
+        optional) arguments. For a description of the WEIGHTS and AGGREGATE options,
+        see ZUNIONSTORE.
+        More on https://redis.io/commands/zinterstore/
+
+        :param destination: Destination key to store result
+        :type destination: str
+        :param num_keys: Total number of input keys
+        :type num_keys: int
+        :param keys: List of keys of the sorted set
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param options: Additional ZINTER options [WEIGHTS weight [weight ...]]
+        [AGGREGATE <SUM | MIN | MAX>]
+        :type options: list
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZINTERSTORE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            destination,
+            num_keys,
+            *keys,
+            *options,
+        )
+
+    def redis_zlexcount(self, key, minimum, maximum, collection):
+        """
+        When all the elements in a sorted set are inserted with the same score,
+        in order to force lexicographical ordering, this command returns the number
+        of elements in the sorted set at key with a value between min and max.
+        The min and max arguments have the same meaning as described for ZRANGEBYLEX.
+        More on https://redis.io/commands/zlexcount/
+
+        :param key: Key of the data
+        :type key: str
+        :param minimum: Minimum score
+        :type minimum: str
+        :param maximum: Maximum score
+        :type maximum: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZLEXCOUNT"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            minimum,
+            maximum
+        )
+
+    def redis_zmscore(self, key, members, collection):
+        """
+        Returns the scores associated with the specified members in the sorted set
+        stored at key.
+        More on https://redis.io/commands/zmscore/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param members: Members list of the sorted set
+        :type members: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZMSCORE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *members
+        )
+
+    def redis_zpopmax(self, key, collection, count=None):
+        """
+        Removes and returns up to count members with the highest scores in the sorted
+        set stored at key. When left unspecified, the default value for count is 1.
+        More on https://redis.io/commands/zpopmax/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param count: Number of elements to be removed
+        :type count: int
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZPOPMAX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count
+        )
+
+    def redis_zpopmin(self, key, collection, count=None):
+        """
+        Removes and returns up to count members with the lowest scores in the sorted set
+        stored at key.
+        When left unspecified, the default value for count is 1
+        More on https://redis.io/commands/zpopmin/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param count: Number of elements to be removed
+        :type count: int
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZPOPMIN"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count
+        )
+
+    def redis_zrandmember(self, key, collection, count=None, with_scores=False):
+        """
+        When called with just the key argument, return a random element from the
+        sorted set value stored at key. If the provided count argument is positive,
+        return an array of distinct elements. The array's length is either count or
+        the sorted set's cardinality (ZCARD), whichever is lower.
+        More on https://redis.io/commands/zrandmember/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param count: Number of elements to be removed
+        :type count: int
+        :param with_scores: Return score of member
+        :type with_scores: bool
+        :returns:
+        :rtype:
+        """
+        if with_scores is True:
+            with_scores_command = "WITHSCORES"
+        else:
+            with_scores_command = None
+
+        redis_command = "ZRANDMEMBER"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            count,
+            with_scores_command
+        )
+
+    def redis_zrange(self, key, start, stop, collection, options=[]):
+        """
+        Returns the specified range of elements in the sorted set stored at <key>.
+        ZRANGE can perform different types of range queries: by index (rank), by the
+        score, or by lexicographical order.
+        More on https://redis.io/commands/zrange/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param start: Start of the data
+        :type start: int
+        :param stop: Stop of the data
+        :type stop: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param options: Additional ZRANGE options [BYSCORE | BYLEX] [REV]
+        [LIMIT offset count] [WITHSCORES]
+        :type options: list
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZRANGE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            start,
+            stop,
+            *options
+        )
+
+    def redis_zrangebylex(
+            self,
+            key,
+            minimum,
+            maximum,
+            collection,
+            offset=None,
+            count=None
+    ):
+        """When all the elements in a sorted set are inserted with the same score,
+        in order to force lexicographical ordering, this command returns all the
+        elements in the sorted set at key with a value between min and max.
+        If the elements in the sorted set have different scores, the returned elements
+        are unspecified.
+        The optional LIMIT argument can be used to only get a range of the matching
+        elements (similar to SELECT LIMIT offset, count in SQL)
+        More on https://redis.io/commands/zrangebylex/
+
+        :param key: Key of the data
+        :type key: str
+        :param minimum: Minimum score
+        :type minimum: str
+        :param maximum: Maximum score
+        :type maximum: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param offset: Offset of the limit parameter
+        :type offset: str
+        :param count: Count of the limit parameter
+        :type count: int
+        :returns:
+        :rtype:
+        """
+        limit_list = []
+        if offset and count is not None:
+            limit_list.append("LIMIT")
+            limit_list.append(offset)
+            limit_list.append(count)
+
+        redis_command = "ZRANGEBYLEX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            minimum,
+            maximum,
+            *limit_list
+        )
+
+    def redis_zrangebyscore(
+            self,
+            key,
+            minimum,
+            maximum,
+            collection,
+            with_scores=None,
+            offset=None,
+            count=None
+    ):
+        """When all the elements in a sorted set are inserted with the same score,
+        in order to force lexicographical ordering, this command returns all the
+        elements in the sorted set at key with a value between min and max.
+        If the elements in the sorted set have different scores, the returned elements
+        are unspecified.
+        The optional LIMIT argument can be used to only get a range of the matching
+        elements (similar to SELECT LIMIT offset, count in SQL)
+        More on https://redis.io/commands/zrangebyscore/
+
+        :param key: Key of the data
+        :type key: str
+        :param minimum: Minimum score
+        :type minimum: str
+        :param maximum: Maximum score
+        :type maximum: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param with_scores: Return score of member
+        :type with_scores: bool
+        :param offset: Offset of the limit parameter
+        :type offset: str
+        :param count: Count of the limit parameter
+        :type count: int
+        :returns:
+        :rtype:
+        """
+        if with_scores is True:
+            with_scores_command = "WITHSCORES"
+        else:
+            with_scores_command = None
+
+        limit_list = []
+        if offset and count is not None:
+            limit_list.append("LIMIT")
+            limit_list.append(offset)
+            limit_list.append(count)
+
+        redis_command = "ZRANGEBYSCORE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            minimum,
+            maximum,
+            with_scores_command,
+            *limit_list
+        )
+
+    def redis_zrangestore(self, dst, key, minimum, maximum, collection, options=None):
+        """
+        This command is like ZRANGE, but stores the result in the <dst> destination key.
+        More on https://redis.io/commands/zrange/
+
+        :param dst: Key of the destination location
+        :type dst: string
+        :param key: Key of the sorted set
+        :type key: str
+        :param minimum: Start of the data
+        :type minimum: str
+        :param maximum: Stop of the data
+        :type maximum: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param options: Additional ZRANGE options [BYSCORE | BYLEX] [REV]
+        [LIMIT offset count] [WITHSCORES]
+        :type options: list
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZRANGESTORE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            dst,
+            key,
+            minimum,
+            maximum,
+            *options
+        )
+
+    def redis_zrank(self, key, member, collection):
+        """
+        Returns the rank of member in the sorted set stored at key, with the scores
+        ordered from low to high. The rank (or index) is 0-based, which means that
+        the member with the lowest score has rank 0.
+        More on https://redis.io/commands/zrank/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param member: Member of the sorted set
+        :type member: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZRANK"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            member
+        )
+
+    def redis_zrem(self, key, members, collection):
+        """
+        Removes the specified members from the sorted set stored at key. Non existing
+        members are ignored.
+        An error is returned when key exists and does not hold a sorted set.
+        More on https://redis.io/commands/zrem/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param members: List of members of the sorted set to be removed
+        :type members: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZREM"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            *members
+        )
+
+    def redis_zremrangebylex(
+            self,
+            key,
+            minimum,
+            maximum,
+            collection,
+    ):
+        """
+        When all the elements in a sorted set are inserted with the same score,
+        in order to force lexicographical ordering, this command removes all elements
+        in the sorted set stored at key between the lexicographical range specified
+        by min and max.
+        The meaning of min and max are the same of the ZRANGEBYLEX command.
+        More on https://redis.io/commands/zremrangebylex/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param minimum: Minimum parameter of the data
+        :type minimum: str
+        :param maximum: Maximum parameter of the data
+        :type maximum: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZREMRANGEBYLEX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            minimum,
+            maximum
+        )
+
+    def redis_zremrangebyrank(
+            self,
+            key,
+            start,
+            stop,
+            collection,
+    ):
+        """
+        Removes all elements in the sorted set stored at key with rank between start
+        and stop. Both start and stop are 0 -based indexes with 0 being the element
+        with the lowest score. These indexes can be negative numbers, where they
+        indicate offsets starting at the element with the highest score. For example:
+        -1 is the element with the highest score, -2 the element with the second
+        highest score and so forth.
+        More on https://redis.io/commands/zremrangebyrank/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param start: Start of the data
+        :type start: str
+        :param stop: Stop of the data
+        :type stop: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZREMRANGEBYRANK"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            start,
+            stop
+        )
+
+    def redis_zremrangebyscore(
+            self,
+            key,
+            minimum,
+            maximum,
+            collection,
+    ):
+        """
+        Removes all elements in the sorted set stored at key with a score between min
+        and max (inclusive).
+        More on https://redis.io/commands/zremrangebyscore/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param minimum: Minimum parameter of the data
+        :type minimum: str
+        :param maximum: Maximum parameter of the data
+        :type maximum: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZREMRANGEBYSCORE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            minimum,
+            maximum
+        )
+
+    def redis_zrevrange(self, key, start, stop, collection, with_scores=False):
+        """
+        Returns the specified range of elements in the sorted set stored at key. The
+        elements are considered to be ordered from the highest to the lowest score.
+        Descending lexicographical order is used for elements with equal score.
+        Apart from the reversed ordering, ZREVRANGE is similar to ZRANGE.
+        More on https://redis.io/commands/zrevrange/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param start: Start of the data
+        :type start: int
+        :param stop: Stop of the data
+        :type stop: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param with_scores: Return score of member
+        :type with_scores: bool
+        :returns:
+        :rtype:
+        """
+        if with_scores is True:
+            with_scores_command = "WITHSCORES"
+        else:
+            with_scores_command = None
+
+        redis_command = "ZREVRANGE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            start,
+            stop,
+            with_scores_command
+        )
+
+    def redis_zrevrangebylex(
+            self,
+            key,
+            minimum,
+            maximum,
+            collection,
+            offset=None,
+            count=None
+    ):
+        """When all the elements in a sorted set are inserted with the same score,
+        in order to force lexicographical ordering, this command returns all the
+        elements in the sorted set at key with a value between max and min.
+        Apart from the reversed ordering, ZREVRANGEBYLEX is similar to ZRANGEBYLEX.
+        The optional LIMIT argument can be used to only get a range of the matching
+        elements (similar to SELECT LIMIT offset, count in SQL) More on
+        https://redis.io/commands/zrevrangebylex/
+
+        :param key: Key of the data
+        :type key: str
+        :param minimum: Minimum score
+        :type minimum: str
+        :param maximum: Maximum score
+        :type maximum: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param offset: Offset of the limit parameter
+        :type offset: str
+        :param count: Count of the limit parameter
+        :type count: int
+        :returns:
+        :rtype:
+        """
+        limit_list = []
+        if offset and count is not None:
+            limit_list.append("LIMIT")
+            limit_list.append(offset)
+            limit_list.append(count)
+
+        redis_command = "ZREVRANGEBYLEX"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            minimum,
+            maximum,
+            *limit_list
+        )
+
+    def redis_zrevrangebyscore(
+            self,
+            key,
+            minimum,
+            maximum,
+            collection,
+            with_scores=None,
+            offset=None,
+            count=None
+    ):
+        """Returns all the elements in the sorted set at key with a score between max
+        and min (including elements with score equal to max or min). In contrary to
+        the default ordering of sorted sets, for this command the elements are
+        considered to be ordered from high to low scores.
+        Apart from the reversed ordering, ZREVRANGEBYSCORE is similar to ZRANGEBYSCORE.
+        The optional LIMIT argument can be used to only get a range of the matching
+        elements (similar to SELECT LIMIT offset, count in SQL)
+        More on https://redis.io/commands/zrevrangebyscore/
+
+        :param key: Key of the data
+        :type key: str
+        :param minimum: Minimum score
+        :type minimum: str
+        :param maximum: Maximum score
+        :type maximum: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param with_scores: Return score of member
+        :type with_scores: bool
+        :param offset: Offset of the limit parameter
+        :type offset: str
+        :param count: Count of the limit parameter
+        :type count: int
+        :returns:
+        :rtype:
+        """
+        if with_scores is True:
+            with_scores_command = "WITHSCORES"
+        else:
+            with_scores_command = None
+
+        limit_list = []
+        if offset and count is not None:
+            limit_list.append("LIMIT")
+            limit_list.append(offset)
+            limit_list.append(count)
+
+        redis_command = "ZREVRANGEBYSCORE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            minimum,
+            maximum,
+            with_scores_command,
+            *limit_list
+        )
+
+    def redis_zrevrank(self, key, member, collection):
+        """
+        Returns the rank of member in the sorted set stored at key, with the scores
+        ordered from high to low. The rank (or index) is 0-based, which means that
+        the member with the highest score has rank 0.
+        More on https://redis.io/commands/zrevrank/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param member: Member of the sorted set
+        :type member: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZREVRANK"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            member
+        )
+
+    def redis_zscan(self, key, cursor, collection, pattern=None, count=None):
+        """
+        The SCAN command and the closely related commands SSCAN, HSCAN and ZSCAN are
+        used in order to incrementally iterate over a collection of elements.
+        More on https://redis.io/commands/scan/
+
+        :param key: Key of the data
+        :type key: str
+        :param cursor: Cursor value (start with 0)
+        :type cursor: int
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param pattern: It is possible to only iterate elements matching a given
+        glob-style pattern
+        :type pattern: str
+        :param count: COUNT the user specified the amount of work that should be done at
+        every call in order to retrieve elements from the collection
+        :type count: int
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZSCAN"
+        pattern_list = []
+        if pattern is not None:
+            pattern_list.append("MATCH")
+            pattern_list.append(pattern)
+
+        count_list = []
+        if count is not None:
+            count_list.append("COUNT")
+            count_list.append(count)
+
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            cursor,
+            *pattern_list,
+            *count_list
+        )
+
+    def redis_zscore(self, key, member, collection):
+        """
+        Returns the sorted set cardinality (number of elements) of the sorted set stored
+        at key.
+        More on https://redis.io/commands/zscore/
+
+        :param key: Key of the sorted set
+        :type key: str
+        :param member: Member of the sorted set
+        :type member: str
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :returns:
+        :rtype:
+        """
+        redis_command = "ZSCORE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            key,
+            member
+        )
+
+    def redis_zunion(
+            self,
+            num_keys,
+            keys,
+            collection,
+            options=None,
+            with_scores=False
+    ):
+        """
+        This command is similar to ZUNIONSTORE, but instead of storing the resulting
+        sorted set, it is returned to the client. For a description of the WEIGHTS
+        and AGGREGATE options, see ZUNIONSTORE.
+        More on https://redis.io/commands/zunion/
+
+        :param num_keys: Total number of input keys
+        :type num_keys: int
+        :param keys: List of keys of the sorted set
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param options: Additional ZUNION options [WEIGHTS weight [weight ...]]
+        [AGGREGATE <SUM | MIN | MAX>]
+        :type options: list
+        :param with_scores: Return score of member
+        :type with_scores: bool
+        :returns:
+        :rtype:
+        """
+        options_command = []
+        if options is not None:
+            options_command = list(options)
+
+        if with_scores is True:
+            options_command.append("WITHSCORES")
+
+        redis_command = "ZUNION"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            num_keys,
+            *keys,
+            *options_command,
+        )
+
+    def redis_zunionstore(
+            self,
+            destination,
+            num_keys,
+            keys,
+            collection,
+            options=None,
+            with_scores=False
+    ):
+        """
+        Computes the union of numkeys sorted sets given by the specified keys,
+        and stores the result in destination. It is mandatory to provide the number
+        of input keys (numkeys) before passing the input keys and the other (
+        optional) arguments.
+        By default, the resulting score of an element is the sum of its scores in the
+        sorted sets where it exists.
+        More on https://redis.io/commands/zunionstore/
+
+        :param destination: Destination sorted set
+        :type destination: str
+        :param num_keys: Total number of input keys
+        :type num_keys: int
+        :param keys: List of keys of the sorted set
+        :type keys: list
+        :param collection: Name of the collection that we set values to
+        :type collection: str
+        :param options: Additional ZUNIONSTORE options [WEIGHTS weight [weight ...]]
+        [AGGREGATE <SUM | MIN | MAX>]
+        :type options: list
+        :param with_scores: Return score of member
+        :type with_scores: bool
+        :returns:
+        :rtype:
+        """
+        options_command = []
+        if options is not None:
+            options_command = list(options)
+
+        if with_scores is True:
+            options_command.append("WITHSCORES")
+
+        redis_command = "ZUNIONSTORE"
+        return self._fabric.redis.command_parser(
+            redis_command,
+            collection,
+            destination,
+            num_keys,
+            *keys,
+            *options_command,
+        )
+
