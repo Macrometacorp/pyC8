@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 from c8.connection import TenantConnection
+from c8.plan.plan_interface import PlanInterface
 from c8.tenant import Tenant
 from c8.version import __version__
 from c8 import constants
@@ -112,6 +113,15 @@ class C8Client(object):
         :rtype: str | unicode
         """
         return self._url
+
+    def plan(self):
+        """Return Plan API wrapper
+
+        :returns: Plan API wrapper
+        :rtype: c8.plan.plan_interface.PlanInterface
+        """
+
+        return PlanInterface(self._tenant._conn)
 
     def tenant(self, email='', password='', token=None, apikey=None):
         """Connect to a fabric and return the fabric API wrapper.
@@ -4720,77 +4730,3 @@ class C8Client(object):
             destination,
             *keys,
         )
-
-    def list_billing_plans(self):
-        """
-        Fetch a list of billing plans available
-
-        :returns: list of billing plans.
-        :rtype: list
-        :raise c8.plan.core.PlansServerError If list fails.
-        """
-        return self._fabric.plan.list_billing_plans()
-
-    def list_billing_plan_details(self, plan_name):
-        """
-        Given a valid plan_name, fetch details of the specific billing plan
-
-        :param plan_name: Name of the existing billing plan
-        :type plan_name: str
-        :returns: list of billing plans.
-        :rtype: list
-        :raise c8.plan.core.PlansServerError If list fails.
-        """
-        return self._fabric.plan.list_billing_plan_details(plan_name=plan_name)
-
-    def create_billing_plan(self, billing_plan_definition):
-        """
-        Given a valid billing_plan_definition, create a new billing plan
-
-        :param billing_plan_definition: Definition for the new billing plan
-        :type billing_plan_definition: dict
-        :returns: billing plan definition
-        :rtype: dict
-        :raise c8.plan.core.PlansServerError If create fails.
-        """
-        return self._fabric.plan.create_billing_plan(data=billing_plan_definition)
-
-    def modify_billing_plan(self, plan_name, billing_plan_definition):
-        """
-        Given a valid billing_plan_definition and the plan_name for
-        an existing billing plan, update the current billing plan
-
-        :param plan_name: Name of the existing billing plan
-        :type plan_name: str
-        :param billing_plan_definition: New definition for the billing plan
-        :type billing_plan_definition: dict
-        :returns: billing plan definition
-        :rtype: dict
-        :raise c8.plan.core.PlansServerError If the update fails.
-        """
-        return self._fabric.plan.modify_billing_plan(plan_name=plan_name, data=billing_plan_definition)
-
-    def remove_billing_plan(self, plan_name):
-        """
-        Given a valid plan_name, remove an existing billing plan.
-
-        :param plan_name: Name of the existing billing plan
-        :type plan_name: str
-        :returns: definition of the billing plan.
-        :rtype: list
-        :raise c8.plan.core.PlansServerError If remove fails.
-        """
-        return self._fabric.plan.remove_billing_plan(plan_name=plan_name)
-
-    def update_tenant_billing_plan(self, data):
-        """
-        Update the billing plan for a tenant.
-        Note: If tenant name is not specified, the tenant invoking the API is used to update billing plan.
-
-        :param data: dict formed by attribution, plan, tenant and payment_method_id
-        :type data: dict
-        :returns: definition of the billing plan.
-        :rtype: list
-        :raise c8.plan.core.PlansServerError If update fails.
-        """
-        return self._fabric.plan.update_tenant_billing_plan(data=data)
