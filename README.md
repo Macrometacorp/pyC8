@@ -21,7 +21,7 @@ To enable developer environment position ourselves to project's root and run:
 pip install -r requirements/dev.txt
 ```
 
-# Build & Install
+# Build and Install
 
 To build package we need to position ourselves to project's root and run:
 
@@ -53,6 +53,12 @@ To run tests position yourself in the project's root while your virtual environm
 python -m pytest
 ```
 
+# Update SDK
+
+```bash
+pip install --upgrade pyc8
+```
+
 ---
 
 # Getting Started
@@ -79,11 +85,11 @@ client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
 ```
 
 
-3. Using api key
+3. Using API key
 
 ```python
 
-# Authentication with api key
+# Authentication with API key
 
 client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
  apikey=<your api key>)
