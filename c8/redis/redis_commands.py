@@ -1,6 +1,12 @@
+from c8.redis.redis_interface import RedisInterface
+from c8.executor import (
+    DefaultExecutor,
+)
+
 class RedisCommands(object):
-    def __init__(self, standard_fabric):
-        self._standard_fabric = standard_fabric
+    def __init__(self, connection):
+        self._conn = connection
+        self._executor = DefaultExecutor(connection)
 
     def set(self, key, value, collection, options=[]):
         """
@@ -22,7 +28,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SET"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -47,7 +53,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "APPEND"
-        return self._standard_fabric.redis.command_parser(command, collection, key, value)
+        return RedisInterface(self._conn, self._executor).command_parser(command, collection, key, value)
 
     def decr(self, key, collection):
         """
@@ -65,7 +71,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "DECR"
-        return self._standard_fabric.redis.command_parser(command, collection, key)
+        return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
 
     def decrby(self, key, decrement, collection):
         """
@@ -85,7 +91,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "DECRBY"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -107,7 +113,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "GET"
-        return self._standard_fabric.redis.command_parser(command, collection, key)
+        return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
 
     def getdel(self, key, collection):
         """
@@ -124,7 +130,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "GETDEL"
-        return self._standard_fabric.redis.command_parser(command, collection, key)
+        return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
 
     def getex(self, key, collection, expiry_command=None, time=None):
         """
@@ -145,7 +151,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "GETEX"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -175,7 +181,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "GETRANGE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -200,7 +206,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "GETSET"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -223,7 +229,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "INCR"
-        return self._standard_fabric.redis.command_parser(command, collection, key)
+        return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
 
     def incrby(self, key, increment, collection):
         """
@@ -243,7 +249,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "INCRBY"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -273,7 +279,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "INCRBYFLOAT"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -295,7 +301,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "MGET"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             *keys
@@ -321,7 +327,7 @@ class RedisCommands(object):
             data_list.append(value)
 
         command = "MSET"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             *data_list
@@ -346,7 +352,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "PSETEX"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -372,7 +378,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SETBIT"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -399,7 +405,7 @@ class RedisCommands(object):
             data_list.append(value)
 
         command = "MSETNX"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             *data_list
@@ -423,7 +429,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SETEX"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -448,7 +454,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SETNX"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -477,7 +483,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SETRANGE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -499,7 +505,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "STRLEN"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -526,7 +532,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "BITCOUNT"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -553,7 +559,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "BITOP"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             operation,
@@ -576,7 +582,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "GETBIT"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -615,7 +621,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "BITPOS"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -644,7 +650,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "LPUSH"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -670,7 +676,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "LINDEX"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -697,7 +703,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "LINSERT"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -721,7 +727,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "LLEN"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -748,7 +754,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "LRANGE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -778,7 +784,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "LMOVE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             source,
@@ -843,7 +849,7 @@ class RedisCommands(object):
             max_len_list.append("MAXLEN")
             max_len_list.append(max_len)
 
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -872,7 +878,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "RPUSH"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -897,7 +903,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "LPOP"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -921,7 +927,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "LPUSHX"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -945,7 +951,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "RPUSHX"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -974,7 +980,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "LREM"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1000,7 +1006,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "LSET"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1027,7 +1033,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "LTRIM"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1053,7 +1059,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "RPOP"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1078,7 +1084,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "RPOPLPUSH"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             source,
@@ -1107,7 +1113,7 @@ class RedisCommands(object):
             data_list.append(dict_value)
 
         command = "HSET"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1129,7 +1135,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "HGET"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1153,7 +1159,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "HDEL"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1175,7 +1181,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "HEXISTS"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1197,7 +1203,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "HGETALL"
-        return self._standard_fabric.redis.command_parser(command, collection, key)
+        return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
 
     def hincrby(self, key, field, increment, collection):
         """
@@ -1218,7 +1224,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "HINCRBY"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1251,7 +1257,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "HINCRBYFLOAT"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1272,7 +1278,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "HKEYS"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1291,7 +1297,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "HLEN"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1315,7 +1321,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "HMGET"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1344,7 +1350,7 @@ class RedisCommands(object):
             data_list.append(dict_value)
 
         command = "HMSET"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1383,7 +1389,7 @@ class RedisCommands(object):
             count_list.append("COUNT")
             count_list.append(count)
 
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1408,7 +1414,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "HSTRLEN"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1437,7 +1443,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "HRANDFIELD"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1458,7 +1464,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "HVALS"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1481,7 +1487,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SADD"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1501,7 +1507,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SCARD"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1521,7 +1527,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SDIFF"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             *keys,
@@ -1543,7 +1549,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SDIFFSTORE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             destination,
@@ -1564,7 +1570,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SINTER"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             *keys,
@@ -1586,7 +1592,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SINTERSTORE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             destination,
@@ -1608,7 +1614,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SISMEMBER"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1628,7 +1634,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SMEMBERS"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1651,7 +1657,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SMISMEMBER"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1677,7 +1683,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SMOVE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             source,
@@ -1702,7 +1708,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SPOP"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1727,7 +1733,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SRANDMEMBER"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1751,7 +1757,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SREM"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1790,7 +1796,7 @@ class RedisCommands(object):
             count_list.append("COUNT")
             count_list.append(count)
 
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1812,7 +1818,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SUNION"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             *keys,
@@ -1834,7 +1840,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "SUNIONSTORE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             destination,
@@ -1869,7 +1875,7 @@ class RedisCommands(object):
         """
         command = "ZADD"
 
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1891,7 +1897,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZCARD"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1916,7 +1922,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZCOUNT"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -1948,7 +1954,7 @@ class RedisCommands(object):
             with_scores_command = None
 
         command = "ZDIFF"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             num_keys,
@@ -1976,7 +1982,7 @@ class RedisCommands(object):
         """
 
         command = "ZDIFFSTORE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             destination,
@@ -2004,7 +2010,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZINCRBY"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2049,7 +2055,7 @@ class RedisCommands(object):
             options_command.append("WITHSCORES")
 
         command = "ZINTER"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             num_keys,
@@ -2088,7 +2094,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZINTERSTORE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             destination,
@@ -2117,7 +2123,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZLEXCOUNT"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2141,7 +2147,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZMSCORE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2164,7 +2170,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZPOPMAX"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2188,7 +2194,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZPOPMIN"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2220,7 +2226,7 @@ class RedisCommands(object):
             with_scores_command = None
 
         command = "ZRANDMEMBER"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2250,7 +2256,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZRANGE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2299,7 +2305,7 @@ class RedisCommands(object):
             limit_list.append(count)
 
         command = "ZRANGEBYLEX"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2356,7 +2362,7 @@ class RedisCommands(object):
             limit_list.append(count)
 
         command = "ZRANGEBYSCORE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2388,7 +2394,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZRANGESTORE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             dst,
@@ -2415,7 +2421,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZRANK"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2439,7 +2445,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZREM"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2473,7 +2479,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZREMRANGEBYLEX"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2509,7 +2515,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZREMRANGEBYRANK"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2541,7 +2547,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZREMRANGEBYSCORE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2576,7 +2582,7 @@ class RedisCommands(object):
             with_scores_command = None
 
         command = "ZREVRANGE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2624,7 +2630,7 @@ class RedisCommands(object):
             limit_list.append(count)
 
         command = "ZREVRANGEBYLEX"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2681,7 +2687,7 @@ class RedisCommands(object):
             limit_list.append(count)
 
         command = "ZREVRANGEBYSCORE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2708,7 +2714,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZREVRANK"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2747,7 +2753,7 @@ class RedisCommands(object):
             count_list.append("COUNT")
             count_list.append(count)
 
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2772,7 +2778,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ZSCORE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -2815,7 +2821,7 @@ class RedisCommands(object):
             options_command.append("WITHSCORES")
 
         command = "ZUNION"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             num_keys,
@@ -2865,7 +2871,7 @@ class RedisCommands(object):
             options_command.append("WITHSCORES")
 
         command = "ZUNIONSTORE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             destination,
@@ -2911,7 +2917,7 @@ class RedisCommands(object):
             options_command.append("WITHSCORES")
 
         command = "COPY"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             source,
@@ -2936,7 +2942,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "DEL"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             *keys
@@ -2959,7 +2965,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "EXISTS"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             *keys
@@ -2990,7 +2996,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "EXPIRE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -3024,7 +3030,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "EXPIREAT"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -3051,7 +3057,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "PERSIST"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -3083,7 +3089,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "PEXPIRE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -3115,7 +3121,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "PEXPIREAT"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -3142,7 +3148,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "PTTL"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -3162,7 +3168,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "RANDOMKEY"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
         )
@@ -3191,7 +3197,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "RENAME"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -3221,7 +3227,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "RENAMENX"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -3274,7 +3280,7 @@ class RedisCommands(object):
             type_list.append(data_type)
 
         command = "SCAN"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             cursor,
@@ -3302,7 +3308,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "TTL"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -3327,7 +3333,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "TYPE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             key,
@@ -3355,7 +3361,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "UNLINK"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             *keys
@@ -3378,7 +3384,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "ECHO"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             message,
@@ -3401,7 +3407,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "PING"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             message,
@@ -3421,7 +3427,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "DBSIZE"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
         )
@@ -3455,7 +3461,7 @@ class RedisCommands(object):
             async_flush_command = None
 
         command = "FLUSHDB"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
             async_flush_command
@@ -3478,7 +3484,7 @@ class RedisCommands(object):
         :rtype:
         """
         command = "TIME"
-        return self._standard_fabric.redis.command_parser(
+        return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
         )
