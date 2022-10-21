@@ -3,6 +3,7 @@ from c8.executor import (
     DefaultExecutor,
 )
 
+
 class RedisCommands(object):
     def __init__(self, connection):
         self._conn = connection
@@ -21,11 +22,10 @@ class RedisCommands(object):
         :type value: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :param options: SET options [NX | XX] [GET] [EX seconds | PX milliseconds |
-        EXAT unix-time-seconds | PXAT unix-time-milliseconds | KEEPTTL]
+        :param options: Set options ex. [NX | XX] [GET] etc.
         :type options: list
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SET"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -49,8 +49,8 @@ class RedisCommands(object):
         :type value: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "APPEND"
         return RedisInterface(self._conn, self._executor).command_parser(command, collection, key, value)
@@ -67,8 +67,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "DECR"
         return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
@@ -87,8 +87,8 @@ class RedisCommands(object):
         :type decrement: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "DECRBY"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -109,8 +109,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "GET"
         return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
@@ -126,8 +126,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "GETDEL"
         return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
@@ -144,11 +144,10 @@ class RedisCommands(object):
         :type collection: str
         :param expiry_command: Redis expiry command (ex. EX, PX, EXAT, PXAT)
         :type expiry_command: str
-        :param time: Redis expiry time (ex. sec, ms, unix-time-seconds,
-        unix-time-milliseconds)
+        :param time: Redis expiry time (ex. sec, ms, unix-time-seconds etc.)
         :type time: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "GETEX"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -177,8 +176,8 @@ class RedisCommands(object):
         :type start: int
         :param end: End string offset
         :type end: int
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "GETRANGE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -202,8 +201,8 @@ class RedisCommands(object):
         :type value: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "GETSET"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -225,8 +224,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "INCR"
         return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
@@ -245,8 +244,8 @@ class RedisCommands(object):
         :type increment: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "INCRBY"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -263,9 +262,7 @@ class RedisCommands(object):
         that the value stored at the key is decremented (by the obvious properties of
         addition). If the key does not exist, it is set to 0 before performing the
         operation. An error is returned if one of the following conditions occur:
-
         The key contains a value of the wrong type (not a string).
-
         The current key content or the specified increment are not parsable as a double
         precision floating point number.
 
@@ -275,8 +272,8 @@ class RedisCommands(object):
         :type increment: float
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "INCRBYFLOAT"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -297,8 +294,8 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "MGET"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -318,8 +315,8 @@ class RedisCommands(object):
         :type data: dict
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         data_list = []
         for key, value in data.items():
@@ -348,8 +345,8 @@ class RedisCommands(object):
         :type value: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "PSETEX"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -374,8 +371,8 @@ class RedisCommands(object):
         :type value: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SETBIT"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -396,8 +393,8 @@ class RedisCommands(object):
         :type data: dict
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         data_list = []
         for key, value in data.items():
@@ -425,8 +422,8 @@ class RedisCommands(object):
         :type value: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SETEX"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -450,8 +447,8 @@ class RedisCommands(object):
         :type value: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SETNX"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -479,8 +476,8 @@ class RedisCommands(object):
         :type value: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SETRANGE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -501,8 +498,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "STRLEN"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -528,8 +525,8 @@ class RedisCommands(object):
         :type end: int
         :param data_format: Count format [BYTE | BIT]
         :type data_format: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "BITCOUNT"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -555,8 +552,8 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "BITOP"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -578,8 +575,8 @@ class RedisCommands(object):
         :type offset: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "GETBIT"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -617,8 +614,8 @@ class RedisCommands(object):
         :type end: int
         :param data_format: Count format [BYTE | BIT]
         :type data_format: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "BITPOS"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -646,8 +643,8 @@ class RedisCommands(object):
         :type elements: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "LPUSH"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -672,8 +669,8 @@ class RedisCommands(object):
         :type index: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "LINDEX"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -699,8 +696,8 @@ class RedisCommands(object):
         :type element: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "LINSERT"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -717,14 +714,14 @@ class RedisCommands(object):
         Returns the length of the list stored at key. If key does not exist,
         it is interpreted as an empty list and 0 is returned. An error is returned
         when the value stored at key is not a list.
-        More on https://redis.io/commands/linsert/
+        More on https://redis.io/commands/llen/
 
         :param key: Key of the data
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "LLEN"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -750,8 +747,8 @@ class RedisCommands(object):
         :type stop: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "LRANGE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -780,8 +777,8 @@ class RedisCommands(object):
         :type where_to: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "LMOVE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -823,15 +820,13 @@ class RedisCommands(object):
         :param collection: Name of the collection that we set values to
         :type collection: str
         :param rank: A rank of 1 means to return the first match, 2 to return the second
-        match, and so forth.
         :type rank: str
         :param count: count is the number of results
         :type count: int
-        :param max_len: compare the provided element only with a given maximum number of
-        list items
+        :param max_len: compare the element only with a maximum number of list items
         :type max_len: int
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "LPOS"
         rank_list = []
@@ -874,8 +869,8 @@ class RedisCommands(object):
         :type elements: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "RPUSH"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -899,8 +894,8 @@ class RedisCommands(object):
         :type count: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "LPOP"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -923,8 +918,8 @@ class RedisCommands(object):
         :type elements: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "LPUSHX"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -947,8 +942,8 @@ class RedisCommands(object):
         :type elements: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "RPUSHX"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -976,8 +971,8 @@ class RedisCommands(object):
         :type element: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "LREM"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1002,8 +997,8 @@ class RedisCommands(object):
         :type element: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "LSET"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1029,8 +1024,8 @@ class RedisCommands(object):
         :type stop: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "LTRIM"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1055,8 +1050,8 @@ class RedisCommands(object):
         :type count: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "RPOP"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1080,8 +1075,8 @@ class RedisCommands(object):
         :type destination: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "RPOPLPUSH"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1104,8 +1099,8 @@ class RedisCommands(object):
         :type data: dict
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         data_list = []
         for dict_key, dict_value in data.items():
@@ -1131,8 +1126,8 @@ class RedisCommands(object):
         :type field: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "HGET"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1155,8 +1150,8 @@ class RedisCommands(object):
         :type fields: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "HDEL"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1177,8 +1172,8 @@ class RedisCommands(object):
         :type field: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "HEXISTS"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1199,8 +1194,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "HGETALL"
         return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
@@ -1220,8 +1215,8 @@ class RedisCommands(object):
         :type increment: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "HINCRBY"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1239,7 +1234,6 @@ class RedisCommands(object):
         negative, the result is to have the hash field value decremented instead of
         incremented. If the field does not exist, it is set to 0 before performing
         the operation. An error is returned if one of the following conditions occur:
-
         The field contains a value of the wrong type (not a string).
         The current field content or the specified increment are not parsable as a
         double precision floating point number.
@@ -1253,8 +1247,8 @@ class RedisCommands(object):
         :type increment: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "HINCRBYFLOAT"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1274,8 +1268,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "HKEYS"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1293,8 +1287,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "HLEN"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1317,8 +1311,8 @@ class RedisCommands(object):
         :type fields: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "HMGET"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1341,8 +1335,8 @@ class RedisCommands(object):
         :type data: dict
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         data_list = []
         for dict_key, dict_value in data.items():
@@ -1369,14 +1363,12 @@ class RedisCommands(object):
         :type cursor: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :param pattern: It is possible to only iterate elements matching a given
-        glob-style pattern
+        :param pattern: It is possible to only iterate elements matching a given pattern
         :type pattern: str
-        :param count: COUNT the user specified the amount of work that should be done at
-        every call in order to retrieve elements from the collection
+        :param count: COUNT the user specified the amount of work that should be done
         :type count: int
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "HSCAN"
         pattern_list = []
@@ -1410,8 +1402,8 @@ class RedisCommands(object):
         :type field: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "HSTRLEN"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1439,8 +1431,8 @@ class RedisCommands(object):
         :type modifier: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "HRANDFIELD"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1460,8 +1452,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "HVALS"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1483,8 +1475,8 @@ class RedisCommands(object):
         :type members: List
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SADD"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1503,8 +1495,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SCARD"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1523,8 +1515,8 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SDIFF"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1545,8 +1537,8 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SDIFFSTORE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1566,8 +1558,8 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SINTER"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1588,8 +1580,8 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SINTERSTORE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1610,8 +1602,8 @@ class RedisCommands(object):
         :type member: string
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SISMEMBER"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1630,8 +1622,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SMEMBERS"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1653,8 +1645,8 @@ class RedisCommands(object):
         :type members: List
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SMISMEMBER"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1679,8 +1671,8 @@ class RedisCommands(object):
         :type member: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SMOVE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1704,8 +1696,8 @@ class RedisCommands(object):
         :type count: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SPOP"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1729,8 +1721,8 @@ class RedisCommands(object):
         :type count: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SRANDMEMBER"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1753,8 +1745,8 @@ class RedisCommands(object):
         :type members: List
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SREM"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1776,14 +1768,12 @@ class RedisCommands(object):
         :type cursor: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :param pattern: It is possible to only iterate elements matching a given
-        glob-style pattern
+        :param pattern: It is possible to only iterate elements matching a given pattern
         :type pattern: str
-        :param count: COUNT the user specified the amount of work that should be done at
-        every call in order to retrieve elements from the collection
+        :param count: COUNT the user specified the amount of work that should be done
         :type count: int
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SSCAN"
         pattern_list = []
@@ -1814,8 +1804,8 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SUNION"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1836,8 +1826,8 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "SUNIONSTORE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1870,8 +1860,8 @@ class RedisCommands(object):
         :type collection: str
         :param options: Additional ZADD options [NX | XX] [GT | LT] [CH] [INCR]
         :type options: list
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZADD"
 
@@ -1893,8 +1883,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZCARD"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1918,8 +1908,8 @@ class RedisCommands(object):
         :type maximum: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZCOUNT"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -1944,8 +1934,8 @@ class RedisCommands(object):
         :type collection: str
         :param with_scores: Return score of member
         :type with_scores: bool
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
 
         if with_scores is True:
@@ -1977,8 +1967,8 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
 
         command = "ZDIFFSTORE"
@@ -2006,8 +1996,8 @@ class RedisCommands(object):
         :type member: string
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZINCRBY"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2043,8 +2033,8 @@ class RedisCommands(object):
         :type options: list
         :param with_scores: Return score of member
         :type with_scores: bool
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
 
         options_command = []
@@ -2090,8 +2080,8 @@ class RedisCommands(object):
         :param options: Additional ZINTER options [WEIGHTS weight [weight ...]]
         [AGGREGATE <SUM | MIN | MAX>]
         :type options: list
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZINTERSTORE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2119,8 +2109,8 @@ class RedisCommands(object):
         :type maximum: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZLEXCOUNT"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2143,8 +2133,8 @@ class RedisCommands(object):
         :type members: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZMSCORE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2166,8 +2156,8 @@ class RedisCommands(object):
         :type collection: str
         :param count: Number of elements to be removed
         :type count: int
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZPOPMAX"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2190,8 +2180,8 @@ class RedisCommands(object):
         :type collection: str
         :param count: Number of elements to be removed
         :type count: int
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZPOPMIN"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2217,8 +2207,8 @@ class RedisCommands(object):
         :type count: int
         :param with_scores: Return score of member
         :type with_scores: bool
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         if with_scores is True:
             with_scores_command = "WITHSCORES"
@@ -2249,11 +2239,10 @@ class RedisCommands(object):
         :type stop: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :param options: Additional ZRANGE options [BYSCORE | BYLEX] [REV]
-        [LIMIT offset count] [WITHSCORES]
+        :param options: Additional ZRANGE options ex. [BYSCORE | BYLEX] [REV] etc.
         :type options: list
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZRANGE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2295,8 +2284,8 @@ class RedisCommands(object):
         :type offset: str
         :param count: Count of the limit parameter
         :type count: int
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         limit_list = []
         if offset and count is not None:
@@ -2347,8 +2336,8 @@ class RedisCommands(object):
         :type offset: str
         :param count: Count of the limit parameter
         :type count: int
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         if with_scores is True:
             with_scores_command = "WITHSCORES"
@@ -2387,11 +2376,10 @@ class RedisCommands(object):
         :type maximum: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :param options: Additional ZRANGE options [BYSCORE | BYLEX] [REV]
-        [LIMIT offset count] [WITHSCORES]
+        :param options: Additional ZRANGE options ex. [BYSCORE | BYLEX] [REV] etc.
         :type options: list
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZRANGESTORE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2417,8 +2405,8 @@ class RedisCommands(object):
         :type member: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZRANK"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2441,8 +2429,8 @@ class RedisCommands(object):
         :type members: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZREM"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2475,8 +2463,8 @@ class RedisCommands(object):
         :type maximum: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZREMRANGEBYLEX"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2511,8 +2499,8 @@ class RedisCommands(object):
         :type stop: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZREMRANGEBYRANK"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2543,8 +2531,8 @@ class RedisCommands(object):
         :type maximum: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZREMRANGEBYSCORE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2573,8 +2561,8 @@ class RedisCommands(object):
         :type collection: str
         :param with_scores: Return score of member
         :type with_scores: bool
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         if with_scores is True:
             with_scores_command = "WITHSCORES"
@@ -2620,8 +2608,8 @@ class RedisCommands(object):
         :type offset: str
         :param count: Count of the limit parameter
         :type count: int
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         limit_list = []
         if offset and count is not None:
@@ -2672,8 +2660,8 @@ class RedisCommands(object):
         :type offset: str
         :param count: Count of the limit parameter
         :type count: int
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         if with_scores is True:
             with_scores_command = "WITHSCORES"
@@ -2710,8 +2698,8 @@ class RedisCommands(object):
         :type member: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZREVRANK"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2733,14 +2721,12 @@ class RedisCommands(object):
         :type cursor: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :param pattern: It is possible to only iterate elements matching a given
-        glob-style pattern
+        :param pattern: It is possible to only iterate elements matching a given pattern
         :type pattern: str
-        :param count: COUNT the user specified the amount of work that should be done at
-        every call in order to retrieve elements from the collection
+        :param count: COUNT the user specified the amount of work that should be done
         :type count: int
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZSCAN"
         pattern_list = []
@@ -2774,8 +2760,8 @@ class RedisCommands(object):
         :type member: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ZSCORE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2805,13 +2791,12 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :param options: Additional ZUNION options [WEIGHTS weight [weight ...]]
-        [AGGREGATE <SUM | MIN | MAX>]
+        :param options: Additional ZUNION options ex. [WEIGHTS weight [weight ...]] etc.
         :type options: list
         :param with_scores: Return score of member
         :type with_scores: bool
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         options_command = []
         if options is not None:
@@ -2855,13 +2840,12 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :param options: Additional ZUNIONSTORE options [WEIGHTS weight [weight ...]]
-        [AGGREGATE <SUM | MIN | MAX>]
+        :param options: Additional ZUNIONSTORE options
         :type options: list
         :param with_scores: Return score of member
         :type with_scores: bool
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         options_command = []
         if options is not None:
@@ -2905,8 +2889,8 @@ class RedisCommands(object):
         :type destination_database: str
         :param replace: Replace removes destination key before copying value to it
         :type replace: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         options_command = []
         if destination_database is not None:
@@ -2938,8 +2922,8 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "DEL"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2961,8 +2945,8 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "EXISTS"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -2992,8 +2976,8 @@ class RedisCommands(object):
         :type collection: str
         :param options: Options of expire command [NX | XX | GT | LT]
         :type options: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "EXPIRE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3026,8 +3010,8 @@ class RedisCommands(object):
         :type collection: str
         :param options: Options of expire command [NX | XX | GT | LT]
         :type options: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "EXPIREAT"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3053,8 +3037,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "PERSIST"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3085,8 +3069,8 @@ class RedisCommands(object):
         :type collection: str
         :param options: Options of expire command [NX | XX | GT | LT]
         :type options: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "PEXPIRE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3117,8 +3101,8 @@ class RedisCommands(object):
         :type collection: str
         :param options: Options of expire command [NX | XX | GT | LT]
         :type options: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "PEXPIREAT"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3144,8 +3128,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "PTTL"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3164,8 +3148,8 @@ class RedisCommands(object):
 
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "RANDOMKEY"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3193,8 +3177,8 @@ class RedisCommands(object):
         :type new_key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "RENAME"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3223,8 +3207,8 @@ class RedisCommands(object):
         :type new_key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "RENAMENX"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3251,18 +3235,14 @@ class RedisCommands(object):
         :type cursor: int
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :param pattern: It is possible to only iterate elements matching a given
-        glob-style pattern
+        :param pattern: It is possible to only iterate elements matching a given pattern
         :type pattern: str
-        :param count: COUNT the user specified the amount of work that should be done at
-        every call in order to retrieve elements from the collection
+        :param count: COUNT the user specified the amount of work that should be done
         :type count: int
-        :param data_type: You can use the TYPE option to ask SCAN to only return objects that
-        match a given type, llowing you to iterate through the database looking for keys
-        of a specific type ex. zset
+        :param data_type: Set TYPE option to only return objects that match a given type
         :type data_type: int
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         pattern_list = []
         if pattern is not None:
@@ -3304,8 +3284,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "TTL"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3329,8 +3309,8 @@ class RedisCommands(object):
         :type key: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "TYPE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3357,8 +3337,8 @@ class RedisCommands(object):
         :type keys: list
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "UNLINK"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3380,8 +3360,8 @@ class RedisCommands(object):
         :type message: str
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "ECHO"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3403,8 +3383,8 @@ class RedisCommands(object):
         :type collection: str
         :param message: Message to be sent
         :type message: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "PING"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3423,8 +3403,8 @@ class RedisCommands(object):
 
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "DBSIZE"
         return RedisInterface(self._conn, self._executor).command_parser(
@@ -3452,8 +3432,8 @@ class RedisCommands(object):
         :type collection: str
         :param async_flush: Message to be sent
         :type async_flush: bool
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         if async_flush is True:
             async_flush_command = "ASYNC"
@@ -3480,8 +3460,8 @@ class RedisCommands(object):
 
         :param collection: Name of the collection that we set values to
         :type collection: str
-        :returns:
-        :rtype:
+        :returns: Returns response from server in format {"code": xx, "result": xx}
+        :rtype: dict
         """
         command = "TIME"
         return RedisInterface(self._conn, self._executor).command_parser(
