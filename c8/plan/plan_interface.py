@@ -13,6 +13,14 @@ class PlanInterface(APIWrapper):
     def __init__(self, connection):
         super().__init__(connection, executor=DefaultExecutor(connection))
 
+    def response_handler_generic(self, request):
+        def response_handler(response):
+            if not response.is_success and request is not None:
+                raise PlansServerError(response, request)
+            return response.body
+
+        return response_handler
+
     def list_billing_plans(self):
         """
         Fetch a list of billing plans available
@@ -22,10 +30,7 @@ class PlanInterface(APIWrapper):
         """
         request = build_request(method='GET', endpoint='/plan')
 
-        def response_handler(response):
-            if not response.is_success and request is not None:
-                raise PlansServerError(response, request)
-            return response.body
+        response_handler = self.response_handler_generic(request)
 
         return self._execute(request, response_handler)
 
@@ -40,10 +45,7 @@ class PlanInterface(APIWrapper):
         """
         request = build_request(method='GET', endpoint='/plan/{}'.format(plan_name))
 
-        def response_handler(response):
-            if not response.is_success and request is not None:
-                raise PlansServerError(response, request)
-            return response.body
+        response_handler = self.response_handler_generic(request)
 
         return self._execute(request, response_handler)
 
@@ -74,10 +76,7 @@ class PlanInterface(APIWrapper):
 
         request = build_request(method='POST', endpoint='/plan', data=data)
 
-        def response_handler(response):
-            if not response.is_success and request is not None:
-                raise PlansServerError(response, request)
-            return response.body
+        response_handler = self.response_handler_generic(request)
 
         return self._execute(request, response_handler)
 
@@ -109,10 +108,7 @@ class PlanInterface(APIWrapper):
                                         label=label, active=active, plan_details=plan_details)
         request = build_request(method='PATCH', endpoint='/plan/{}'.format(plan_name), data=data)
 
-        def response_handler(response):
-            if not response.is_success and request is not None:
-                raise PlansServerError(response, request)
-            return response.body
+        response_handler = self.response_handler_generic(request)
 
         return self._execute(request, response_handler)
 
@@ -127,10 +123,7 @@ class PlanInterface(APIWrapper):
         """
         request = build_request(method='DELETE', endpoint='/plan/{}'.format(plan_name))
 
-        def response_handler(response):
-            if not response.is_success and request is not None:
-                raise PlansServerError(response, request)
-            return response.body
+        response_handler = self.response_handler_generic(request)
 
         return self._execute(request, response_handler)
 
@@ -162,10 +155,7 @@ class PlanInterface(APIWrapper):
 
         request = build_request(method='POST', endpoint='/plan/update', data=plan_details)
 
-        def response_handler(response):
-            if not response.is_success and request is not None:
-                raise PlansServerError(response, request)
-            return response.body
+        response_handler = self.response_handler_generic(request)
 
         return self._execute(request, response_handler)
 
