@@ -45,6 +45,11 @@ In .env file add variables:
 * TENANT_PASSWORD="<>"
 * API_KEY="<>"
 * TOKEN="<>"
+* MM_TENANT_EMAIL="<>"
+* MM_TENANT_PASSWORD="<>"
+* MM_API_KEY="<>"
+
+**Note: MM_TENANT_EMAIL, MM_TENANT_PASSWORD, MM_API_KEY are super user credentials**
 
 .env file is in .gitignore.
 
