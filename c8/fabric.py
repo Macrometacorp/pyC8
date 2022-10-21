@@ -138,6 +138,7 @@ class Fabric(APIWrapper):
         return KV(self._conn, self._executor)
 
 
+
     def on_change(self, collection, callback, timeout=60):
         """Execute given input function on receiving a change.
 
@@ -1057,7 +1058,6 @@ class Fabric(APIWrapper):
             raise StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-
 
     #####################
     # Restql Management #

@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 from c8.connection import TenantConnection
+from c8.plan.plan_interface import PlanInterface
 from c8.tenant import Tenant
 from c8.redis.redis_commands import RedisCommands
 from c8.version import __version__
@@ -136,6 +137,15 @@ class C8Client(object):
         :rtype: str | unicode
         """
         return self._url
+
+    def plan(self):
+        """Return Plan API wrapper
+
+        :returns: Plan API wrapper
+        :rtype: c8.plan.plan_interface.PlanInterface
+        """
+
+        return PlanInterface(self._tenant._conn)
 
     def tenant(self, email='', password='', token=None, apikey=None):
         """Connect to a fabric and return the fabric API wrapper.
@@ -2144,6 +2154,7 @@ class C8Client(object):
         :rtype: dict
         :raise c8.exceptions.UserCreateError: If create fails.
         """
+
         return self._tenant.create_user(
             email=email,
             password=password,
@@ -2164,6 +2175,7 @@ class C8Client(object):
             active=None,
             extra=None
     ):
+
         """Update a user.
 
         :param username: Username.
@@ -3034,7 +3046,6 @@ class C8Client(object):
         :rtype: dict
         """
         return self._search.get_analyzer_definition(name)
-
 
 
 
