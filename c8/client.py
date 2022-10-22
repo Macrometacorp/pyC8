@@ -138,6 +138,7 @@ class C8Client(object):
         """
         return self._url
 
+    @property
     def plan(self):
         """Return Plan API wrapper
 
