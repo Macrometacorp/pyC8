@@ -220,9 +220,8 @@ def test_streamapp_exceptions(client, bad_fabric_name):
     # Get a stream application handle for advanced operations
     assert client.get_stream_app('Sample-Cargo-App') is False
     # Activate a stream application
-    with assert_raises(StreamAppChangeActiveStateError) as err:
+    with assert_raises(StreamAppChangeActiveStateError):
         client.activate_stream_app('Sample-Cargo-App', True)
-    assert err.value.http_code == 500
 
     # To operate on created apps, you need to create an instance of the app
     app = client._fabric.stream_app("Sample-Cargo-App")
