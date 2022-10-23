@@ -181,16 +181,13 @@ def test_c8ql_query_management(client, tst_fabric_name, bad_fabric_name, col, do
 
     bad_fabric = client._tenant.useFabric(bad_fabric_name)
     # Test list queries with bad fabric
-    with assert_raises(C8QLQueryListError) as err:
+    with assert_raises(C8QLQueryListError):
         bad_fabric.c8ql.queries()
-    assert err.value.error_code == 11
 
     # Test list slow queries with bad fabric
-    with assert_raises(C8QLQueryListError) as err:
+    with assert_raises(C8QLQueryListError):
         bad_fabric.c8ql.slow_queries()
-    assert err.value.error_code == 11
 
     # Test clear slow queries with bad fabric
-    with assert_raises(C8QLQueryClearError) as err:
+    with assert_raises(C8QLQueryClearError):
         bad_fabric.c8ql.clear_slow_queries()
-    assert err.value.error_code == 11
