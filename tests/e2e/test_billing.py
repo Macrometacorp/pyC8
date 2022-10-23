@@ -32,8 +32,7 @@ def test_update_contact(get_client_instance):
         "city": "South Bend",
         "state": "IN",
         "country": "US",
-        "zipcode": "46601",
-        "bi": "hi"
+        "zipcode": "46601"
     }
     # Test get billing update contact
     resp = get_client_instance.billing.update_contact(tenant=get_client_instance._tenant.name, contact=contact)
