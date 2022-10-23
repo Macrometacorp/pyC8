@@ -94,7 +94,7 @@ def test_data_document():
 
 def test_data_billing_plan():
     return {
-        "name": "Test",
+        "name": "TestPyC8",
         "planId": "1",
         "description": "New billing plan.",
         "featureGates": [
@@ -150,7 +150,7 @@ def test_data_update_plan():
 def test_update_tenant_billing_plan():
     return {
         "attribution": "Macrometa",
-        "plan": "Test",
+        "plan": "TestPyC8",
         "tenant": "edgar.garcia_macrometa.com",
         "payment_method_id": "pm_1KRHKj2eZvKYlo2CHkt3ra77"
     }
