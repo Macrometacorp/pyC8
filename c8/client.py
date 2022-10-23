@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 from c8.connection import TenantConnection
 from c8.plan.plan_interface import PlanInterface
+from c8.billing.billing_interface import BillingInterface
 from c8.tenant import Tenant
 from c8.redis.redis_commands import RedisCommands
 from c8.version import __version__
