@@ -42,6 +42,7 @@ In .env file add variables:
 * FEDERATION_URL="<>"
 * FABRIC="<>"
 * TENANT_EMAIL="<>"
+* TENANT_USERNAME="<>"
 * TENANT_PASSWORD="<>"
 * API_KEY="<>"
 * TOKEN="<>"
