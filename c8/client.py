@@ -186,6 +186,22 @@ class C8Client(object):
     def collection(self, collection_name):
         return self._fabric.collection(collection_name)
 
+    def get_collection_information(self, collection_name):
+        """Fetch the information about collection.
+
+        :param collection_name: The name of the collection to retrieve information.
+        :type collection_name: str
+        """
+        return self._fabric.get_collection_information(collection_name)
+
+    def collection_figures(self, collection_name):
+        """Returns an object containing statistics about a collection.
+
+        :param collection_name: Collection name.
+        :type collection_name: str | unicode
+        """
+        return self._fabric.collection_figures(collection_name)
+
     # client.create_collection
     def create_collection(self,
                           name,

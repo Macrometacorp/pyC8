@@ -9,6 +9,28 @@ from c8.exceptions import (
 from tests.helpers import assert_raises, extract, generate_col_name
 
 
+def test_get_collection_information(client):
+    # Test get information about collection
+    collection_name = generate_col_name()
+    client.create_collection(collection_name)
+    get_col_info = client.get_collection_information(collection_name=collection_name)
+    assert get_col_info['error'] is False
+    assert get_col_info['name'] == collection_name
+
+
+def test_collection_figures(client):
+    # Test get properties
+    collection_name = generate_col_name()
+    client.create_collection(collection_name)
+    get_col_properties = client.collection_figures(collection_name=collection_name)
+    assert get_col_properties['name'] == collection_name
+    assert get_col_properties['isSystem'] is False
+    # Test get properties with bad collection
+    with assert_raises(CollectionPropertiesError) or assert_raises(Exception) as err:
+        client.collection_figures(collection_name=generate_col_name())
+    assert err.value.error_code == 1203
+
+
 def test_collection_attributes(client, col, tst_fabric):
     assert col.context in ['default', 'async', 'batch', 'transaction']
     assert col.tenant_name == client._tenant.name
@@ -17,19 +39,14 @@ def test_collection_attributes(client, col, tst_fabric):
     assert repr(col) == '<StandardCollection {}>'.format(col.name)
 
 
-def test_collection_misc_methods(col, tst_fabric):
-    # Test get information about collection
-    get_col_info = tst_fabric.get_collection_information(collection_name=col.name)
-    assert get_col_info['error'] is False
-    assert get_col_info['name'] == col.name
-
+def test_collection_misc_methods(col, tst_fabric, client):
     # Test get properties
     get_col_properties = tst_fabric.collection_figures(collection_name=col.name)
     assert get_col_properties['name'] == col.name
     assert get_col_properties['isSystem'] is False
     # Test get properties with bad collection
     with assert_raises(CollectionPropertiesError) or assert_raises(Exception) as err:
-        tst_fabric.collection_figures(collection_name=generate_col_name())
+        client.collection_figures(collection_name=generate_col_name())
     assert err.value.error_code == 1203
 
     # # Test configure properties
