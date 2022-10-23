@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+from c8.JWT.jwt_interface import JwtInterface
 from c8.connection import TenantConnection
 from c8.plan.plan_interface import PlanInterface
 from c8.tenant import Tenant
@@ -147,6 +148,16 @@ class C8Client(object):
         """
 
         return PlanInterface(self._tenant._conn)
+
+    @property
+    def jwt(self):
+        """Return JWT API wrapper
+
+        :returns: JWT API wrapper
+        :rtype: c8.jwt.jwt_interface.JwtInterface
+        """
+
+        return JwtInterface(self._tenant._conn)
 
     def tenant(self, email='', password='', token=None, apikey=None):
         """Connect to a fabric and return the fabric API wrapper.
@@ -3047,7 +3058,3 @@ class C8Client(object):
         :rtype: dict
         """
         return self._search.get_analyzer_definition(name)
-
-
-
-
