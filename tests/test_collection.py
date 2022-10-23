@@ -1,10 +1,13 @@
 from __future__ import absolute_import, unicode_literals
+
+import json
+
 from c8.collection import StandardCollection
 from c8.exceptions import (
     CollectionPropertiesError,
     CollectionCreateError,
     CollectionListError,
-    CollectionDeleteError,
+    CollectionDeleteError, CollectionImportFromFileError,
 )
 from tests.helpers import assert_raises, extract, generate_col_name
 
@@ -140,3 +143,36 @@ def test_collection_management(sys_fabric, client, bad_fabric):
         sys_fabric.delete_collection(col_name)
     assert err.value.error_code == 1203
     assert sys_fabric.delete_collection(col_name, ignore_missing=True) is False
+
+
+def test_insert_from_file(client):
+    file = open('files/data.json')
+    documents = json.load(file)
+
+    collection_name = generate_col_name()
+    client.create_collection(collection_name)
+    client.insert_document_from_file(collection_name=collection_name, filepath='files/data.json')
+
+    data = client.collection(collection_name=collection_name).export(limit=len(documents))
+    entries = ('_id', '_key', '_rev')
+    for doc in data:
+        for key in entries:
+            if key in doc:
+                del doc[key]
+
+    assert documents == data
+
+    collection_name = generate_col_name()
+    client.create_collection(collection_name)
+    client.insert_document_from_file(collection_name=collection_name, filepath='files/data.csv')
+    data = client.collection(collection_name=collection_name).export(limit=len(documents))
+
+    assert len(data) == len(documents)
+
+    collection_name = generate_col_name()
+    client.create_collection(collection_name)
+
+    with assert_raises(CollectionImportFromFileError) as err:
+        client.insert_document_from_file(collection_name=collection_name, filepath='files/data')
+    assert str(err) == "<ExceptionInfo CollectionImportFromFileError('Invalid file') tblen=3>"
+    file.close()

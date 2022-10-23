@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import csv
+import json
 
 from numbers import Number
 
@@ -14,8 +15,6 @@ from c8.exceptions import (
     DocumentInError,
     DocumentDeleteError,
     DocumentGetError,
-    DocumentKeysError,
-    DocumentIDsError,
     DocumentInsertError,
     DocumentParseError,
     DocumentReplaceError,
@@ -25,7 +24,8 @@ from c8.exceptions import (
     IndexCreateError,
     IndexDeleteError,
     IndexListError,
-    GetIndexError
+    GetIndexError,
+    CollectionImportFromFileError
 )
 from c8.request import Request
 from c8.response import Response
@@ -273,7 +273,6 @@ class Collection(APIWrapper):
         """
         return self._name
 
-
     def truncate(self):
         """Delete all documents in the collection.
 
@@ -382,7 +381,7 @@ class Collection(APIWrapper):
             data['offset'] = offset
         if limit is not None:
             data['limit'] = limit
-        if order=="asc" or order=="desc":
+        if order == "asc" or order == "desc":
             data['order'] = order
 
         request = Request(
@@ -396,7 +395,7 @@ class Collection(APIWrapper):
                 raise DocumentGetError(resp, request)
             return resp.body['result']
 
-        return self._execute(request, response_handler)   
+        return self._execute(request, response_handler)
 
     def find_near(self, latitude, longitude, limit=None):
         """Return documents near a given coordinate.
@@ -598,7 +597,6 @@ class Collection(APIWrapper):
             return Cursor(self._conn, resp.body)
 
         return self._execute(request, response_handler)
-   
 
     def find_by_text(self, field, query, limit=None):
         """Return documents that match the given fulltext query.
@@ -652,7 +650,6 @@ class Collection(APIWrapper):
             return Cursor(self._conn, resp.body)
 
         return self._execute(request, response_handler)
-
 
     ####################
     # Index Management #
@@ -873,24 +870,23 @@ class Collection(APIWrapper):
             data['deduplicate'] = deduplicate
         return self.add_index(data)
 
-    
     def add_ttl_index(self, fields, expireAfter=0, inBackground=False):
-            """Create a new ttl index.
+        """Create a new ttl index.
 
-            :param fields: Document fields to index.
-            :type fields: [str | unicode]
-            :param expireAfter:  The time (in seconds) after
-                a document's creation after which the documents count as "expired".
-            :type expireAfter: int
-            :param inBackground: Expire Documents in Background.
-            :type inBackground: bool
-            :returns: New index details.
-            :rtype: dict
-            :raise c8.exceptions.IndexCreateError: If create fails.
-            """
-            data = {'type': 'ttl', 'fields': fields, 'expireAfter': expireAfter,
-                    'inBackground': inBackground}  
-            return self.add_index(data)
+        :param fields: Document fields to index.
+        :type fields: [str | unicode]
+        :param expireAfter:  The time (in seconds) after
+            a document's creation after which the documents count as "expired".
+        :type expireAfter: int
+        :param inBackground: Expire Documents in Background.
+        :type inBackground: bool
+        :returns: New index details.
+        :rtype: dict
+        :raise c8.exceptions.IndexCreateError: If create fails.
+        """
+        data = {'type': 'ttl', 'fields': fields, 'expireAfter': expireAfter,
+                'inBackground': inBackground}
+        return self.add_index(data)
 
     def delete_index(self, index_name, ignore_missing=False):
         """Delete an index.
@@ -995,12 +991,12 @@ class StandardCollection(Collection):
             documents.append(document)
         return documents, index
 
-    def insert_from_file(self, csv_filepath, return_new=False, sync=None,
+    def insert_from_file(self, filepath, return_new=False, sync=None,
                          silent=False):
         """Insert a documents from csv file.
 
-        :param csv_filepath: CSV file path which contains documents
-        :type csv_filepath: str
+        :param filepath: CSV file path which contains documents
+        :type filepath: str
         :param return_new: Include body of the new document in the returned
             metadata. Ignored if parameter **silent** is set to True.
         :type return_new: bool
@@ -1014,21 +1010,35 @@ class StandardCollection(Collection):
         :rtype: bool | dict
         :raise c8.exceptions.DocumentInsertError: If insert fails.
         """
-        data = csv.DictReader(open(csv_filepath, newline=''))
-        data_dict = {}
-        index = 0
         result = []
-        for row in data:
-            for column, value in row.items():
-                data_dict.setdefault(column, {index: value})
-                temp_dict = data_dict.get(column)
-                temp_dict.update({index: value})
-            index += 1
+        if filepath.endswith('.csv'):
+            try:
+                data = csv.DictReader(open(filepath, newline=''))
+                data_dict = {}
+                index = 0
 
-        documents, index = self.get_documents_from_file(data_dict, 0)
-        resp = self.insert_many(documents, return_new, sync, silent)
-        result.append(resp)
+                for row in data:
+                    for column, value in row.items():
+                        data_dict.setdefault(column, {index: value})
+                        temp_dict = data_dict.get(column)
+                        temp_dict.update({index: value})
+                    index += 1
 
+                documents, index = self.get_documents_from_file(data_dict, 0)
+                resp = self.insert_many(documents, return_new, sync, silent)
+                result.append(resp)
+            except StopIteration:
+                print("Invalid CSV file")
+        elif filepath.endswith('.json'):
+            try:
+                file = open(filepath)
+                documents = json.load(file)
+                resp = self.insert_many(documents, return_new, sync, silent)
+                result.append(resp)
+            except json.JSONDecodeError:
+                print("Invalid JSON file")
+        else:
+            raise CollectionImportFromFileError('Invalid file')
         return result
 
     def insert(self, document, return_new=False, sync=None, silent=False):
@@ -1329,7 +1339,6 @@ class StandardCollection(Collection):
 
         return self._execute(request, response_handler)
 
-
     def replace(self,
                 document,
                 check_rev=True,
@@ -1487,7 +1496,6 @@ class StandardCollection(Collection):
             return results
 
         return self._execute(request, response_handler)
-
 
     def delete(self,
                document,
@@ -1647,7 +1655,6 @@ class StandardCollection(Collection):
             return results
 
         return self._execute(request, response_handler)
-         
 
     def import_bulk(self,
                     documents,
