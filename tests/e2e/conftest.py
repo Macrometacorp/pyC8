@@ -1,33 +1,36 @@
 import os
+import pytest
 
 from dotenv import load_dotenv
 
 from c8 import C8Client
 
 
+load_dotenv()
+client = C8Client(protocol='https',
+                  host=os.environ.get('FEDERATION_URL'),
+                  port=443,
+                  email=os.environ.get('TENANT_EMAIL'),
+                  apikey=os.environ.get('API_KEY'),
+                  geofabric=os.environ.get('FABRIC')
+                  )
+
+mm_client = C8Client(protocol='https',
+                  host=os.environ.get('FEDERATION_URL'),
+                  port=443,
+                  email=os.environ.get('MM_TENANT_EMAIL'),
+                  apikey=os.environ.get('MM_API_KEY'),
+                  geofabric=os.environ.get('FABRIC')
+                  )
+
+
+@pytest.fixture
 def get_client_instance():
-    load_dotenv()
-    client = C8Client(protocol='https',
-                      host=os.environ.get('FEDERATION_URL'),
-                      port=443,
-                      email=os.environ.get('TENANT_EMAIL'),
-                      apikey=os.environ.get('API_KEY'),
-                      geofabric=os.environ.get('FABRIC')
-                      )
     return client
 
-
+@pytest.fixture
 def get_mm_client_instance():
-    load_dotenv()
-    client = C8Client(protocol='https',
-                      host=os.environ.get('FEDERATION_URL'),
-                      port=443,
-                      email=os.environ.get('MM_TENANT_EMAIL'),
-                      apikey=os.environ.get('MM_API_KEY'),
-                      geofabric=os.environ.get('FABRIC')
-                      )
-    return client
-
+    return mm_client
 
 def test_data_document():
     return [
