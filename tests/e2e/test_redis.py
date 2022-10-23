@@ -180,8 +180,7 @@ def test_redis_bitcount_2(get_client_instance):
 
 # This test fails
 # We support Redis commands till 6.2, bit/byte operation was added in 7.0
-# def test_redis_bitcount_3():
-#     get_client_instance = get_client_instance()
+# def test_redis_bitcount_3(get_client_instance):
 #
 #     response = get_client_instance.redis_bitcount("myKeyString", REDIS_COLLECTION, 1, 1, "BYTE")
 #     
@@ -1055,8 +1054,7 @@ def test_redis_persist(get_client_instance):
     assert {"code": 200, "result": 1} == response
 
 
-def test_redis_pexpire():
-    get_client_instance = get_client_instance()
+def test_redis_pexpire(get_client_instance):
     get_client_instance.redis.set("pexpire", "test", REDIS_COLLECTION)
     response = get_client_instance.redis.pexpire("pexpire", 8000, REDIS_COLLECTION)
     # Response from platform
