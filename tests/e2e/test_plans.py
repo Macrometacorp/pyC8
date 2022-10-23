@@ -1,5 +1,3 @@
-import pprint
-
 import pytest
 
 from tests.helpers import assert_raises
