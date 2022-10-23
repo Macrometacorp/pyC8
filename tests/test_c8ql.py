@@ -1,4 +1,6 @@
 from __future__ import absolute_import, unicode_literals
+
+import random
 import threading
 import time
 
@@ -10,7 +12,28 @@ from c8.exceptions import (
     C8QLQueryKillError,
     C8QLQueryValidateError,
 )
-from tests.helpers import assert_raises, extract
+from tests.helpers import assert_raises, extract, generate_col_name
+
+
+def test_export_data_query(client, docs):
+    collection_name = generate_col_name()
+    client.create_collection(collection_name)
+    client.insert_document(collection_name=collection_name, document=docs)
+    resp = client.export_data_query(query='FOR u IN @@collection RETURN u',
+                                    bind_vars={'@collection': collection_name})
+    assert resp['error'] is False
+    assert resp['result'] == docs
+
+    random_value = random.randint(1, len(docs))
+    resp = client.export_data_query(query='FOR u IN @@collection FILTER u.val > @value RETURN u',
+                                    bind_vars={'@collection': collection_name, 'value': random_value})
+    assert resp['error'] is False
+    assert len(resp['result']) == (len(docs) - random_value)
+
+    resp = client.export_data_query(query='FOR u IN {} RETURN u'.format(collection_name))
+    assert resp['error'] is False
+    assert resp['result'] == docs
+
 
 def test_c8ql_attributes(client, tst_fabric_name):
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
@@ -18,6 +41,7 @@ def test_c8ql_attributes(client, tst_fabric_name):
     assert tst_fabric.tenant_name == client._tenant.name
     assert tst_fabric.fabric_name == tst_fabric.name
     assert repr(tst_fabric.c8ql) == '<C8QL in {}>'.format(tst_fabric_name)
+
 
 def test_c8ql_query_management(client, tst_fabric_name, bad_fabric_name, col, docs):
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
@@ -150,7 +174,7 @@ def test_c8ql_query_management(client, tst_fabric_name, bad_fabric_name, col, do
         while len(queries) > 1:
             queries = tst_fabric.c8ql.queries()
         assert query_id_1 not in extract('id', queries)
-    
+
         assert tst_fabric.c8ql.kill(query_id_2) is True
         while len(queries) > 0:
             queries = tst_fabric.c8ql.queries()
@@ -169,7 +193,7 @@ def test_c8ql_query_management(client, tst_fabric_name, bad_fabric_name, col, do
         t2 = threading.Thread(target=query)
         t3 = threading.Thread(target=kill_query)
         t1.start(), t2.start(), t3.start()
-        t1.join(),t2.join(),t3.join()
+        t1.join(), t2.join(), t3.join()
 
     run_queries()
 

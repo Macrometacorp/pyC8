@@ -1,6 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-from c8.JWT.jwt_interface import JwtInterface
 from c8.connection import TenantConnection
 from c8.plan.plan_interface import PlanInterface
 from c8.tenant import Tenant
@@ -148,16 +147,6 @@ class C8Client(object):
         """
 
         return PlanInterface(self._tenant._conn)
-
-    @property
-    def jwt(self):
-        """Return JWT API wrapper
-
-        :returns: JWT API wrapper
-        :rtype: c8.jwt.jwt_interface.JwtInterface
-        """
-
-        return JwtInterface(self._tenant._conn)
 
     def tenant(self, email='', password='', token=None, apikey=None):
         """Connect to a fabric and return the fabric API wrapper.
@@ -1312,6 +1301,9 @@ class C8Client(object):
         :raise c8.exceptions.RestqlListError: if getting restql failed
         """
         return self._fabric.get_all_restql()
+
+    def export_data_query(self, query, bind_vars=None):
+        return self._fabric.c8ql.export_data_query(query=query, bind_vars=bind_vars)
 
     # client.create_stream
 

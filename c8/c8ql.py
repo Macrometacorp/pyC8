@@ -337,3 +337,20 @@ class C8QL(APIWrapper):
             return True
 
         return self._execute(request, response_handler)
+
+    def export_data_query(self, query, bind_vars):
+        data = {'query': query}
+        if bind_vars is not None:
+            data['bindVars'] = bind_vars
+        request = Request(
+            method='POST',
+            endpoint='/export',
+            data=data
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise C8QLQueryExecuteError(resp, request)
+            return resp.body
+
+        return self._execute(request, response_handler)

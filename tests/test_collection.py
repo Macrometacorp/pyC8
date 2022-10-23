@@ -18,6 +18,11 @@ def test_collection_attributes(client, col, tst_fabric):
 
 
 def test_collection_misc_methods(col, tst_fabric):
+    # Test get information about collection
+    get_col_info = tst_fabric.get_collection_information(collection_name=col.name)
+    assert get_col_info['error'] is False
+    assert get_col_info['name'] == col.name
+
     # Test get properties
     get_col_properties = tst_fabric.collection_figures(collection_name=col.name)
     assert get_col_properties['name'] == col.name

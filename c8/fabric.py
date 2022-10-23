@@ -137,8 +137,6 @@ class Fabric(APIWrapper):
         """
         return KV(self._conn, self._executor)
 
-
-
     def on_change(self, collection, callback, timeout=60):
         """Execute given input function on receiving a change.
 
@@ -648,6 +646,24 @@ class Fabric(APIWrapper):
         request = Request(
             method='get',
             endpoint='/collection/{}/figures'.format(collection_name),
+        )
+
+        def response_handler(resp):
+            if resp.is_success:
+                return resp.body
+            raise CollectionPropertiesError(resp, request)
+
+        return self._execute(request, response_handler)
+
+    def get_collection_information(self, collection_name):
+        """Fetch the information about collection.
+
+        :param collection_name: The name of the collection to retrieve information.
+        :type collection_name: str
+        """
+        request = Request(
+            method='get',
+            endpoint='/collection/{}'.format(collection_name),
         )
 
         def response_handler(resp):
