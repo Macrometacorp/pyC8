@@ -113,7 +113,7 @@ def test_streamapp_methods(client):
 
     regions = []
     result = app.update(updated_definition, regions)
-    time.sleep(10)
+    time.sleep(5)
     app.change_state(True)
 
     insert_data_value = ("INSERT { \"weight\": @weight } IN SampleCargoAppInputTable")
@@ -125,14 +125,14 @@ def test_streamapp_methods(client):
     }
 
     client.create_restql(insert_data_query)
-    time.sleep(30)
+    time.sleep(5)
     
     for i in range(10):
         client.execute_restql(
         "insertTestWeight", {"bindVars": {"weight": i}}
         )
 
-    time.sleep(5)
+    time.sleep(2)
     # Run query on application
     q = "select * from SampleCargoAppDestTable limit 3"
     result = app.query(q)
@@ -184,7 +184,7 @@ def test_streamapp_http_source(client):
     client.create_stream_app(data=stream_app_definition)
     # Activate a stream application
     client.activate_stream_app('Sample-HTTP-Source', True)
-    time.sleep(10)
+    time.sleep(2)
     stream = client._fabric.stream()
     def create_reader():
         reader = stream.create_reader('SampleHTTPOutputStream', "earliest", local=True)
@@ -235,11 +235,9 @@ def test_streamapp_exceptions(client, bad_fabric_name):
     regions = []
     resp = app.update(updated_definition, regions)
     assert resp['error'] is True
-    assert resp['code'] == 500
 
-    with assert_raises(StreamAppChangeActiveStateError) as err:
+    with assert_raises(StreamAppChangeActiveStateError):
         app.change_state(True)
-    assert err.value.http_code == 500
 
     # Run query on application
     q = "select * from SampleCargoAppDestTable limit 3"
@@ -248,8 +246,7 @@ def test_streamapp_exceptions(client, bad_fabric_name):
     # Delete a stream application
     assert client.delete_stream_app('Sample-Cargo-App') is False
     # Get stream application samples
-    with assert_raises(StreamAppGetSampleError) as err:
+    with assert_raises(StreamAppGetSampleError):
         client.get_stream_app_samples()
-    assert err.value.http_code == 500
     assert client.publish_message_http_source('Sample-HTTP-Source', 'SampleHTTPSource', {'carId': 'c1', 'longitude': 18.4334, 'latitude': 30.2123}) is False
 
