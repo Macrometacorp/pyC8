@@ -34,6 +34,32 @@ def test_export_data_query(client, docs):
     assert resp['error'] is False
     assert resp['result'] == docs
 
+    with assert_raises(C8QLQueryExecuteError) as err:
+        client.export_data_query(query='REMOVE "1" IN {}'.format(collection_name))
+    assert err.value.error_code == 10
+
+    with assert_raises(C8QLQueryExecuteError) as err:
+        client.export_data_query(query='UPDATE @id WITH {alive: false} IN @@collection',
+                                 bind_vars={'@collection': collection_name, 'id': 2})
+    assert err.value.error_code == 10
+
+    with assert_raises(C8QLQueryExecuteError) as err:
+        client.export_data_query(query='INSERT @value INTO @@collection',
+                                 bind_vars={'@collection': collection_name, 'value': {'value': 10}})
+    assert err.value.error_code == 10
+
+    with assert_raises(C8QLQueryExecuteError) as err:
+        client.export_data_query(query='FOR u IN @@collection REPLACE @value IN @@collection',
+                                 bind_vars={'@collection': collection_name, 'value': {'value': 2, 'text': 'zoo '}})
+    assert err.value.error_code == 10
+
+    with assert_raises(C8QLQueryExecuteError) as err:
+        client.export_data_query(query='UPSERT @value INSERT @toInsert UPDATE @toUpsert in @@collection',
+                                 bind_vars={'@collection': collection_name, 'value': {'text': 'zoo '},
+                                            'toInsert': {'_key': 2, 'updatedAt': 'DATE_NOW()'},
+                                            'toUpsert': {'_key': 2, 'updatedAt': 'December'}})
+    assert err.value.error_code == 10
+
 
 def test_c8ql_attributes(client, tst_fabric_name):
     tst_fabric = client._tenant.useFabric(tst_fabric_name)

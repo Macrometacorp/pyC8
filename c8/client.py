@@ -1303,6 +1303,19 @@ class C8Client(object):
         return self._fabric.get_all_restql()
 
     def export_data_query(self, query, bind_vars=None):
+        """Run the query and return list of result documents. Query cannot contain
+         the following keywords: INSERT, UPDATE, REPLACE, REMOVE and UPSERT.
+
+        :param query: C8QL query to execute
+        :type query: str
+        :param bind_vars: C8QL supports the usage of bind parameters, thus allowing to
+         separate the query text from literal values used in the query.
+        :type bind_vars: dict
+
+        :returns: Documents in the collection according to the query logic.
+        :rtype: dict
+        :raise c8.exceptions.C8QLQueryExecuteError: If export fails.
+        """
         return self._fabric.c8ql.export_data_query(query=query, bind_vars=bind_vars)
 
     # client.create_stream
