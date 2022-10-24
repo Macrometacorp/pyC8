@@ -368,6 +368,18 @@ class FabricCreateError(C8ServerError):
     """Failed to create fabric."""
 
 
+class FabricGetMetadataError(C8ServerError):
+    """Failed to get fabric information."""
+
+
+class FabricSetMetadataError(C8ServerError):
+    """Failed to set fabric metadata."""
+
+
+class FabricUpdateMetadataError(C8ServerError):
+    """Failed to update fabric metadata."""
+
+
 class FabricDeleteError(C8ServerError):
     """Failed to delete fabric."""
 
