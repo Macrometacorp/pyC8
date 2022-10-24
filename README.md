@@ -1,4 +1,4 @@
-# PyC8
+# PyC8 SDK
 
 ![PyPI](https://img.shields.io/pypi/v/pyC8)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyc8)
@@ -23,6 +23,8 @@ package manager for Python.
 ```commandline
 pip install pyC8
 ```
+
+After that you can check out our [getting started code examples](#getting-started).
 
 ## Development environment
 To enable developer environment position ourselves to project's root and run:
