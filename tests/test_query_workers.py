@@ -57,7 +57,7 @@ def test_restql_methods(client, tst_fabric_name, col):
     # Create and import queries
     client.create_restql(insert_data)
     client.import_restql(queries)
-    time.sleep(5)
+    time.sleep(2)
 
     resp = str(client.get_restqls())
     assert "getRecords" in resp
