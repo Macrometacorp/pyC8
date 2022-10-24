@@ -1,4 +1,4 @@
-# coding=utf-8 
+# coding=utf-8
 
 from __future__ import absolute_import, unicode_literals
 
@@ -18,7 +18,8 @@ class C8ClientError(C8Error):
     :ivar message: Error message.
     :vartype message: str | unicode
     """
-    source = 'client'
+
+    source = "client"
 
     def __init__(self, msg):
         super(C8ClientError, self).__init__(msg)
@@ -62,17 +63,17 @@ class C8ServerError(C8Error):
     :ivar error_message: Raw error message from C8Db server.
     :vartype error_message: str | unicode
     """
-    source = 'server'
+
+    source = "server"
 
     def __init__(self, resp, request, msg=None):
         msg = msg or resp.error_message or resp.status_text
         self.error_message = resp.error_message
         self.error_code = resp.error_code
         if self.error_code is not None:
-            msg = '[HTTP {}][ERR {}] {}'.format(
-                resp.status_code, self.error_code, msg)
+            msg = "[HTTP {}][ERR {}] {}".format(resp.status_code, self.error_code, msg)
         else:
-            msg = '[HTTP {}] {}'.format(resp.status_code, msg)
+            msg = "[HTTP {}] {}".format(resp.status_code, msg)
         super(C8ServerError, self).__init__(msg)
         self.message = msg
         self.url = resp.url
@@ -632,6 +633,7 @@ class StreamAppChangeActiveStateError(C8ServerError):
 # KV Exceptions #
 #######################
 
+
 class ListCollections(C8ServerError):
     """Failed to fetch the list of collections that use KV."""
 
@@ -661,7 +663,7 @@ class GetValueError(C8ServerError):
 
 
 class GetKeysError(C8ServerError):
-    """Failed to get keys for the collection """
+    """Failed to get keys for the collection"""
 
 
 class GetCountError(C8ServerError):
@@ -675,6 +677,7 @@ class GetKVError(C8ServerError):
 #######################
 # API Keys #
 #######################
+
 
 class CreateAPIKey(C8ServerError):
     """Failed to create API Key"""

@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 import json
 
-__all__ = ['Response']
+__all__ = ["Response"]
 
 
 class Response(object):
@@ -44,25 +44,19 @@ class Response(object):
     """
 
     __slots__ = (
-        'method',
-        'url',
-        'headers',
-        'status_code',
-        'status_text',
-        'body',
-        'raw_body',
-        'error_code',
-        'error_message',
-        'is_success',
+        "method",
+        "url",
+        "headers",
+        "status_code",
+        "status_text",
+        "body",
+        "raw_body",
+        "error_code",
+        "error_message",
+        "is_success",
     )
 
-    def __init__(self,
-                 method,
-                 url,
-                 headers,
-                 status_code,
-                 status_text,
-                 raw_body):
+    def __init__(self, method, url, headers, status_code, status_text, raw_body):
         self.method = method.lower()
         self.url = url
         self.headers = headers
@@ -78,8 +72,8 @@ class Response(object):
 
         # Extract error code and message.
         if isinstance(self.body, dict):
-            self.error_code = self.body.get('errorNum')
-            self.error_message = self.body.get('errorMessage')
+            self.error_code = self.body.get("errorNum")
+            self.error_message = self.body.get("errorMessage")
         else:
             self.error_code = None
             self.error_message = None

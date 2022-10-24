@@ -4,12 +4,12 @@ API Keys
 The Simple Way
 
 .. testcode::
-    
+
     from c8 import C8Client, C8QLQueryKillError
     # Initialize the C8 client.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
                       email='user@example.com', password='hidden')
-    
+
     # Create Collection
     if client.has_collection('testCollection'):
          print("Collection exists")
@@ -70,50 +70,49 @@ The Object Oriented Way
      tenant = client.tenant(email='mytenant@example.com', password='hidden')
      fabric = tenant.useFabric('_system')
      fabric.create_stream('testStream')
-     
+
      if fabric.has_collection('testCollection'):
          students = fabric.collection('testCollection')
      else:
          students = fabric.create_collection('testCollection')
      # API keys
-     
+
      apiKeys = fabric.api_keys("id1")
-     
+
      create = apiKeys.create_api_key()
-     
+
      print("Create API Key: ", create)
-     
+
      print("GET API Keys: ", fabric.list_all_api_keys())
-     
+
      print("Accessible Databases: ", apiKeys.list_accessible_databases())
-     
+
      print("Accessible Streams of a db: ", apiKeys.list_accessible_streams('_system'))
-     
+
      print("Set DB Access Level: ", apiKeys.set_database_access_level('_system', 'rw'))
-     
+
      print("Set Coll Access Level: ", apiKeys.set_collection_access_level('testCollection', '_system', 'rw'))
-     
+
      print("Set Stream Access Level: ", apiKeys.set_stream_access_level('testStream', '_system'))
-     
+
      print("Get DB Access Level", apiKeys.get_database_access_level('_system'))
-     
+
      print("Get Coll Access Level: ", apiKeys.get_collection_access_level('testCollection', '_system'))
-     
+
      print("Get Stream Access Level: ", apiKeys.get_stream_access_level('testStream', '_system'))
-     
+
      print("Clear DB Access Level: ", apiKeys.clear_database_access_level('_system'))
-     
+
      print("Clear Coll Access Level: ", apiKeys.clear_collection_access_level('testCollection', '_system'))
-     
+
      print("Clear Stream Access Level: ", apiKeys.clear_stream_access_level('testStream', '_system'))
-     
-     
+
+
      print("Get Billing Access Level: ", apiKeys.get_billing_access_level())
-     
+
      print("Set Billing Access Level: ", apiKeys.set_billing_access_level('ro'))
-     
+
      print("Clear Billing Access Level: ", apiKeys.clear_billing_access_level())
      remove = apiKeys.remove_api_key()
-     
-     print(remove)
 
+     print(remove)

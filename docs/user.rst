@@ -27,12 +27,12 @@ The Simple Way
                         active=True)
     print("TestUser: ", client.get_user("testuser"))
 
-    # Update User 
+    # Update User
     client.update_user(username='testuser', password='hidden',
                     active=False)
     # Delete User
     client.delete_user(username='testuser')
-    
+
 The Object Oriented Way
 
 .. testcode::

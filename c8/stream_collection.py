@@ -1,20 +1,19 @@
 from __future__ import absolute_import, unicode_literals
 
-from urllib.parse import urlparse, urlencode
-
 import base64
 import json
 import random
-import six
+from urllib.parse import urlencode, urlparse
 
+import six
 import websocket
 
-from c8.api import APIWrapper
-from c8 import exceptions as ex
 from c8 import constants
+from c8 import exceptions as ex
+from c8.api import APIWrapper
 from c8.request import Request
 
-__all__ = ['StreamCollection']
+__all__ = ["StreamCollection"]
 
 
 class Base64Socket(websocket.WebSocket):
@@ -32,34 +31,30 @@ class StreamCollection(APIWrapper):
     :type executor: c8.executor.Executor
     """
 
-    types = {4: 'persistent'}
+    types = {4: "persistent"}
 
     def enum(**enums):
-        return type('Enum', (), enums)
+        return type("Enum", (), enums)
 
     def close(self):
         """
-            Close the client and all the associated producers and consumers
+        Close the client and all the associated producers and consumers
         """
-    
-    CONSUMER_TYPES = enum(EXCLUSIVE="Exclusive",
-                          SHARED="Shared",
-                          FAILOVER="Failover")
 
-    COMPRESSION_TYPES = enum(LZ4="LZ4",
-                             ZLIB="ZLib",
-                             NONE=None)
+    CONSUMER_TYPES = enum(EXCLUSIVE="Exclusive", SHARED="Shared", FAILOVER="Failover")
+
+    COMPRESSION_TYPES = enum(LZ4="LZ4", ZLIB="ZLib", NONE=None)
 
     ROUTING_MODE = enum(
         SINGLE_PARTITION="SinglePartition",
         ROUND_ROBIN_PARTITION="RoundRobinPartition",  # noqa
-        CUSTOM_PARTITION="CustomPartition"
+        CUSTOM_PARTITION="CustomPartition",
     )
 
-    def __init__(self, fabric, connection, executor, url, port,
-                 operation_timeout_seconds):
-        """Create a new Stream client instance.
-        """
+    def __init__(
+        self, fabric, connection, executor, url, port, operation_timeout_seconds
+    ):
+        """Create a new Stream client instance."""
         super(StreamCollection, self).__init__(connection, executor)
         url = urlparse(url)
         self.header = connection.headers
@@ -67,16 +62,22 @@ class StreamCollection(APIWrapper):
         dcl_local = self.fabric.localdc(detail=True)
         ws_url = "wss://api-%s/_ws/ws/v2/"
         self._ws_url = ws_url % (dcl_local["tags"]["url"])
-           
-    def create_producer(self, stream, isCollectionStream=False, local=False, producer_name=None,
-                        initial_sequence_id=None, send_timeout_millis=30000,
-                        compression_type=COMPRESSION_TYPES.NONE,
-                        max_pending_messages=1000,
-                        batching_enabled=False,
-                        batching_max_messages=1000,
-                        batching_max_publish_delay_ms=10,
-                        message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION
-                        ):
+
+    def create_producer(
+        self,
+        stream,
+        isCollectionStream=False,
+        local=False,
+        producer_name=None,
+        initial_sequence_id=None,
+        send_timeout_millis=30000,
+        compression_type=COMPRESSION_TYPES.NONE,
+        max_pending_messages=1000,
+        batching_enabled=False,
+        batching_max_messages=1000,
+        batching_max_publish_delay_ms=10,
+        message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION,
+    ):
         """Create a new producer on a given stream.
 
         **Args**
@@ -126,41 +127,55 @@ class StreamCollection(APIWrapper):
             elif local is False:
                 type_constant = constants.STREAM_GLOBAL_NS_PREFIX
 
-            stream = type_constant.replace(".", "")+"s."+stream
+            stream = type_constant.replace(".", "") + "s." + stream
         elif isCollectionStream is False:
             stream = stream
 
-        flag = self.fabric.has_stream(stream, local=local, isCollectionStream=isCollectionStream)
+        flag = self.fabric.has_stream(
+            stream, local=local, isCollectionStream=isCollectionStream
+        )
         if flag:
             namespace = type_constant + self.fabric_name
-            topic = "producer/persistent/%s/%s/%s" % (self.tenant_name, namespace,
-                                               stream)
-            params =  {
-                "producerName":producer_name,
-                "initialSequenceId":initial_sequence_id,
-                "sendTimeoutMillis":send_timeout_millis,
-                "compressionType":compression_type,
-                "maxPendingMessages":max_pending_messages,
-                "batchingEnabled":batching_enabled,
-                "batchingMaxMessages":batching_max_messages,
-                "batchingMaxPublishDelay":batching_max_publish_delay_ms,
-                "messageRoutingMode":message_routing_mode
+            topic = "producer/persistent/%s/%s/%s" % (
+                self.tenant_name,
+                namespace,
+                stream,
+            )
+            params = {
+                "producerName": producer_name,
+                "initialSequenceId": initial_sequence_id,
+                "sendTimeoutMillis": send_timeout_millis,
+                "compressionType": compression_type,
+                "maxPendingMessages": max_pending_messages,
+                "batchingEnabled": batching_enabled,
+                "batchingMaxMessages": batching_max_messages,
+                "batchingMaxPublishDelay": batching_max_publish_delay_ms,
+                "messageRoutingMode": message_routing_mode,
             }
 
             params = {k: v for k, v in params.items() if v is not None}
             url = self._ws_url + topic + "?" + urlencode(params)
-            return websocket.create_connection(url, header={'Authorization' : self.header['Authorization']}, class_=Base64Socket)
+            return websocket.create_connection(
+                url,
+                header={"Authorization": self.header["Authorization"]},
+                class_=Base64Socket,
+            )
 
         raise ex.StreamProducerError(
-            "No stream present with name:" + stream +
-            ". Please create a stream and then stream producer"
+            "No stream present with name:"
+            + stream
+            + ". Please create a stream and then stream producer"
         )
 
-    def create_reader(self, stream, start_message_id="latest",
-                      local=False, isCollectionStream=False,
-                      receiver_queue_size=1000,
-                      reader_name=None
-                      ):
+    def create_reader(
+        self,
+        stream,
+        start_message_id="latest",
+        local=False,
+        isCollectionStream=False,
+        receiver_queue_size=1000,
+        reader_name=None,
+    ):
         """
         Create a reader on a particular topic
 
@@ -186,40 +201,48 @@ class StreamCollection(APIWrapper):
             elif local is False:
                 type_constant = constants.STREAM_GLOBAL_NS_PREFIX
 
-            stream = type_constant.replace(".", "")+"s."+stream
-        flag = self.fabric.has_stream(stream, local=local, isCollectionStream=isCollectionStream)
+            stream = type_constant.replace(".", "") + "s." + stream
+        flag = self.fabric.has_stream(
+            stream, local=local, isCollectionStream=isCollectionStream
+        )
         if flag:
             namespace = type_constant + self.fabric_name
 
-            topic = "reader/persistent/%s/%s/%s" % (self.tenant_name, namespace,
-                                               stream)
+            topic = "reader/persistent/%s/%s/%s" % (self.tenant_name, namespace, stream)
 
             params = {
                 "readerName": reader_name,
                 "receiverQueueSize": receiver_queue_size,
-                "messageId": start_message_id
+                "messageId": start_message_id,
             }
 
             params = {k: v for k, v in params.items() if v is not None}
             url = self._ws_url + topic + "?" + urlencode(params)
-            
-            return websocket.create_connection(url, header={'Authorization' : self.header['Authorization']})
+
+            return websocket.create_connection(
+                url, header={"Authorization": self.header["Authorization"]}
+            )
 
         raise ex.StreamSubscriberError(
-            "No stream present with name:" + stream +
-            ". Please create a stream and then stream reader."
+            "No stream present with name:"
+            + stream
+            + ". Please create a stream and then stream reader."
         )
 
-    def subscribe(self, stream, isCollectionStream=False, local=False,
-                  subscription_name=None,
-                  consumer_type=CONSUMER_TYPES.EXCLUSIVE,
-                  message_listener=None,
-                  receiver_queue_size=1000,
-                  consumer_name=None,
-                  unacked_messages_timeout_ms=None,
-                  broker_consumer_stats_cache_time_ms=30000,
-                  is_read_compacted=False,
-                  ):
+    def subscribe(
+        self,
+        stream,
+        isCollectionStream=False,
+        local=False,
+        subscription_name=None,
+        consumer_type=CONSUMER_TYPES.EXCLUSIVE,
+        message_listener=None,
+        receiver_queue_size=1000,
+        consumer_name=None,
+        unacked_messages_timeout_ms=None,
+        broker_consumer_stats_cache_time_ms=30000,
+        is_read_compacted=False,
+    ):
         """
         Subscribe to the given topic and subscription combination.
 
@@ -268,28 +291,32 @@ class StreamCollection(APIWrapper):
             type_constant = constants.STREAM_LOCAL_NS_PREFIX
         elif local is False:
             type_constant = constants.STREAM_GLOBAL_NS_PREFIX
-  
+
         if isCollectionStream is False:
-            stream = type_constant.replace(".", "")+"s."+stream
+            stream = type_constant.replace(".", "") + "s." + stream
 
         if isCollectionStream is True:
             stream = stream
-        flag = self.fabric.has_stream(stream, local=local, isCollectionStream=isCollectionStream)
+        flag = self.fabric.has_stream(
+            stream, local=local, isCollectionStream=isCollectionStream
+        )
         if flag:
 
             namespace = type_constant + self.fabric_name
 
             if not subscription_name:
                 subscription_name = "%s-%s-subscription-%s" % (
-                    self.tenant_name, self.fabric_name,
-                    str(random.randint(1, 1000)))
+                    self.tenant_name,
+                    self.fabric_name,
+                    str(random.randint(1, 1000)),
+                )
 
-
-            topic = "consumer/persistent/%s/%s/%s/%s" % (self.tenant_name,
-                                               namespace,
-                                               stream, 
-                                               subscription_name)
-
+            topic = "consumer/persistent/%s/%s/%s/%s" % (
+                self.tenant_name,
+                namespace,
+                stream,
+                subscription_name,
+            )
 
             params = {
                 "subscriptionType": consumer_type,
@@ -299,13 +326,16 @@ class StreamCollection(APIWrapper):
 
             params = {k: v for k, v in params.items() if v is not None}
             url = self._ws_url + topic + "?" + urlencode(params)
-            return websocket.create_connection(url, header={'Authorization' : self.header['Authorization']})
+            return websocket.create_connection(
+                url, header={"Authorization": self.header["Authorization"]}
+            )
 
         raise ex.StreamSubscriberError(
-            "No stream present with name:" + stream +
-            ". Please create a stream and then stream subscriber."
+            "No stream present with name:"
+            + stream
+            + ". Please create a stream and then stream subscriber."
         )
-    
+
     def unsubscribe(self, subscription, local=False):
         """Unsubscribes the given subscription on all streams on a stream fabric
         :param subscription
@@ -314,24 +344,21 @@ class StreamCollection(APIWrapper):
         raise c8.exceptions.StreamPermissionError: If unsubscribing fails.
         """
         if local is False:
-            endpoint='/streams/subscription/{}?global=true'.format(subscription)
+            endpoint = "/streams/subscription/{}?global=true".format(subscription)
         elif local is True:
-            endpoint='/streams/subscription/{}?global=false'.format(subscription)
-        request = Request(
-            method='delete',
-            endpoint=endpoint
-        )
+            endpoint = "/streams/subscription/{}?global=false".format(subscription)
+        request = Request(method="delete", endpoint=endpoint)
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return 'OK'
+                return "OK"
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-    
+
     def clear_streams_backlog(self):
         """Clear backlog for all streams on a stream fabric
 
@@ -340,15 +367,12 @@ class StreamCollection(APIWrapper):
                                                     all streams fails.
         """
 
-        request = Request(
-            method='post',
-            endpoint='/streams/clearbacklog'
-        )
+        request = Request(method="post", endpoint="/streams/clearbacklog")
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return 'OK'
+                return "OK"
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
@@ -365,14 +389,13 @@ class StreamCollection(APIWrapper):
         """
 
         request = Request(
-            method='post',
-            endpoint='/streams/clearbacklog/{}'.format(subscription)
+            method="post", endpoint="/streams/clearbacklog/{}".format(subscription)
         )
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return 'OK'
+                return "OK"
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
@@ -392,29 +415,28 @@ class StreamCollection(APIWrapper):
         if local:
 
             type_constant = constants.STREAM_LOCAL_NS_PREFIX
-        
+
         if isCollectionStream is False:
 
-            stream = type_constant.replace(".", "")+"s."+stream
+            stream = type_constant.replace(".", "") + "s." + stream
 
         if local is True:
-            endpoint = '/streams/{}/subscriptions?global=false'.format(stream)
-        
-        elif local is False:
-            endpoint = '/streams/{}/subscriptions?global=true'.format(stream)
+            endpoint = "/streams/{}/subscriptions?global=false".format(stream)
 
-        request = Request(method='get', endpoint=endpoint)
+        elif local is False:
+            endpoint = "/streams/{}/subscriptions?global=true".format(stream)
+
+        request = Request(method="get", endpoint=endpoint)
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return resp.body["result"]
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-
 
     def get_stream_backlog(self, stream, local=False, isCollectionStream=False):
         """Get estimated backlog for offline stream.
@@ -429,20 +451,21 @@ class StreamCollection(APIWrapper):
         if local:
 
             type_constant = constants.STREAM_LOCAL_NS_PREFIX
-        
+
         if isCollectionStream is False:
 
-            stream = type_constant.replace(".", "")+"s."+stream
-        
+            stream = type_constant.replace(".", "") + "s." + stream
+
         if local is False:
-            endpoint = '/streams/{}/backlog?global=true'.format(stream)
+            endpoint = "/streams/{}/backlog?global=true".format(stream)
         elif local is True:
-            endpoint = '/streams/{}/backlog?global=false'.format(stream)
-        request = Request(method='get', endpoint=endpoint)
+            endpoint = "/streams/{}/backlog?global=false".format(stream)
+        request = Request(method="get", endpoint=endpoint)
+
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return resp.body["result"]
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
@@ -464,16 +487,16 @@ class StreamCollection(APIWrapper):
             else:
                 stream = "c8globals." + stream
         if local is True:
-            endpoint = '/streams/{}/stats?global=False'.format(stream)
+            endpoint = "/streams/{}/stats?global=False".format(stream)
         elif local is False:
-            endpoint = '/streams/{}/stats?global=True'.format(stream)
+            endpoint = "/streams/{}/stats?global=True".format(stream)
 
-        request = Request(method='get', endpoint=endpoint)
+        request = Request(method="get", endpoint=endpoint)
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return resp.body["result"]
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
@@ -489,16 +512,16 @@ class StreamCollection(APIWrapper):
                                                      for a stream fails.
         """
         if local is True:
-            endpoint = '/streams/ttl?global=False'
+            endpoint = "/streams/ttl?global=False"
         elif local is False:
-            endpoint = '/streams/ttl?global=True'
+            endpoint = "/streams/ttl?global=True"
 
-        request = Request(method='get', endpoint=endpoint)
+        request = Request(method="get", endpoint=endpoint)
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return resp.body["result"]
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
@@ -515,9 +538,9 @@ class StreamCollection(APIWrapper):
                                                      for a stream fails.
         """
 
-        endpoint = '/streams/{}/publish'.format(stream)
+        endpoint = "/streams/{}/publish".format(stream)
 
-        request = Request(method='post', endpoint=endpoint, data=message)
+        request = Request(method="post", endpoint=endpoint, data=message)
 
         def response_handler(resp):
             code = resp.status_code
@@ -539,16 +562,16 @@ class StreamCollection(APIWrapper):
                                                      for a stream fails.
         """
         if local is True:
-            endpoint = '/streams/ttl/{}?global=False'.format(ttl)
+            endpoint = "/streams/ttl/{}?global=False".format(ttl)
         elif local is False:
-            endpoint = '/streams/ttl/{}?global=True'.format(ttl)
+            endpoint = "/streams/ttl/{}?global=True".format(ttl)
 
-        request = Request(method='post', endpoint=endpoint)
+        request = Request(method="post", endpoint=endpoint)
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return resp.body["result"]
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             raise ex.StreamConnectionError(resp, request)
@@ -565,9 +588,9 @@ class StreamCollection(APIWrapper):
                                                      for a stream fails.
         """
 
-        endpoint = '/streams/{}/expiry/{}'.format(stream, expiry)
+        endpoint = "/streams/{}/expiry/{}".format(stream, expiry)
 
-        request = Request(method='post', endpoint=endpoint)
+        request = Request(method="post", endpoint=endpoint)
 
         def response_handler(resp):
             code = resp.status_code
@@ -591,15 +614,20 @@ class StreamCollection(APIWrapper):
         """
 
         if local is False:
-            endpoint='/streams/{}/subscriptions/{}?global=true'.format(stream, subscription)
+            endpoint = "/streams/{}/subscriptions/{}?global=true".format(
+                stream, subscription
+            )
         elif local is True:
-            endpoint='/streams/{}/subscriptions/{}?global=false'.format(stream, subscription)
+            endpoint = "/streams/{}/subscriptions/{}?global=false".format(
+                stream, subscription
+            )
 
-        request = Request(method='delete', endpoint=endpoint)
+        request = Request(method="delete", endpoint=endpoint)
+
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return 'OK'
+                return "OK"
             elif code == 403:
                 raise ex.StreamPermissionError(resp, request)
             elif code == 412:
@@ -607,4 +635,3 @@ class StreamCollection(APIWrapper):
             raise ex.StreamConnectionError(resp, request)
 
         return self._execute(request, response_handler)
-

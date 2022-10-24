@@ -1,45 +1,54 @@
-from c8 import C8Client
+# flake8: noqa
 import requests
 
-#----------------------------
+from c8 import C8Client
+
+
+# ----------------------------
 class Cache:
-  def __init__(self, fabric):
-    self.fabric = fabric
-    if fabric.has_collection('cache'):
-        self.cache = fabric.collection('cache')
-    else:
-        self.cache = fabric.create_collection('cache')
+    def __init__(self, fabric):
+        self.fabric = fabric
+        if fabric.has_collection("cache"):
+            self.cache = fabric.collection("cache")
+        else:
+            self.cache = fabric.create_collection("cache")
 
-  def get(self, key):
-    return self.cache.get(key)
+    def get(self, key):
+        return self.cache.get(key)
 
-  def set(self, key, document, ttl=0):
-    if self.cache.has(key):
-        self.cache.replace(document)
-    else:
-        self.cache.insert(document)
-    return True
+    def set(self, key, document, ttl=0):
+        if self.cache.has(key):
+            self.cache.replace(document)
+        else:
+            self.cache.insert(document)
+        return True
 
-  def purge(self, keys):
-    for key in keys:
-        self.cache.delete(key)
-    return True
-#----------------------------
+    def purge(self, keys):
+        for key in keys:
+            self.cache.delete(key)
+        return True
+
+
+# ----------------------------
+
 
 def get_from_origin_db(key):
-    r = requests.get(url="https://openlibrary.org/subjects/"+key+".json?limit=0")
+    r = requests.get(url="https://openlibrary.org/subjects/" + key + ".json?limit=0")
     document = r.json()
     document["_key"] = key
     return document
+
 
 def write_to_origin_db(document):
     # Write to Origin DB
     print("writing to origin database..")
     # Origin specific code...
     return True
-#----------------------------
 
-if __name__ == '__main__':
+
+# ----------------------------
+
+if __name__ == "__main__":
     # variables
     fed_url = "gdn1.macrometa.io"
     user_mail = "user@example.com"
@@ -48,17 +57,17 @@ if __name__ == '__main__':
     keys = ["dogs", "cats", "birds", "books", "business"]
 
     print("\nConnection: federation:{},  user: {}".format(fed_url, user_mail))
-    client = C8Client(protocol='https', host=fed_url, port=443)
+    client = C8Client(protocol="https", host=fed_url, port=443)
     tenant = client.tenant(user_mail, user_password)
     fabric = tenant.useFabric(geo_fabric)
     cache = Cache(fabric)
-    cache.purge(keys) # Clean up cache data from any prior runs.
+    cache.purge(keys)  # Clean up cache data from any prior runs.
 
     # Macrometa GDN as Cache for Remote Origin Database
     print("----------------------\n1. First time access:\n----------------------")
     for key in keys:
         doc = cache.get(key)
-        if(doc is None):
+        if doc is None:
             print("CACHE_MISS: get from remote origin database...")
             doc = get_from_origin_db(key)
             print("CACHE_UPDATE: \ndoc:{}".format(doc))
@@ -70,7 +79,7 @@ if __name__ == '__main__':
     print("----------------------\n2. Second time access:\n----------------------")
     for key in keys:
         doc = cache.get(key)
-        if (doc is None):
+        if doc is None:
             print("CACHE_MISS: get from remote origin database...")
             doc = get_from_origin_db(key)
             print("CACHE_UPDATE: \ndoc:{}".format(doc))
@@ -79,16 +88,18 @@ if __name__ == '__main__':
             print("CACHE_HIT: \ndoc:{}".format(doc))
 
     # GDN Cache Geo distributed replication in action
-    print("------------------------------\n3. Access from different region:\n------------------------------")
+    print(
+        "------------------------------\n3. Access from different region:\n------------------------------"
+    )
     fed_url_asia = "gdn1-fra1.prod.macrometa.io"
-    client2 = C8Client(protocol='https', host=fed_url_asia, port=443)
+    client2 = C8Client(protocol="https", host=fed_url_asia, port=443)
     tenant2 = client.tenant(user_mail, user_password)
     fabric2 = tenant.useFabric(geo_fabric)
     cache2 = Cache(fabric)
 
     for key in keys:
         doc = cache2.get(key)
-        if (doc is None):
+        if doc is None:
             print("CACHE_MISS: get from remote origin database...")
             doc = get_from_origin_db(key)
             print("CACHE_UPDATE: \ndoc:{}".format(doc))
@@ -97,17 +108,21 @@ if __name__ == '__main__':
             print("CACHE_HIT: \ndoc:{}".format(doc))
 
     # Cache purge in action...
-    print("------------------------------\n4. Update cache from edge:\n------------------------------")
+    print(
+        "------------------------------\n4. Update cache from edge:\n------------------------------"
+    )
     for key in keys:
         doc = cache.get(key)
         doc["company"] = "macrometa"
         write_to_origin_db(doc)
         cache.set(key, doc)
 
-    print("------------------------------\n5. Access from different region:\n------------------------------")
+    print(
+        "------------------------------\n5. Access from different region:\n------------------------------"
+    )
     for key in keys:
         doc = cache2.get(key)
-        if (doc is None):
+        if doc is None:
             print("CACHE_MISS: get from remote origin database...")
             doc = get_from_origin_db(key)
             print("CACHE_UPDATE: \ndoc:{}".format(doc))

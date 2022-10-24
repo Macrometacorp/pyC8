@@ -121,5 +121,3 @@ Below are all exceptions from pyC8.
 
 .. automodule:: c8.exceptions
     :members:
-
-

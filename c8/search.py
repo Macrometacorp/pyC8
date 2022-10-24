@@ -1,31 +1,28 @@
 from __future__ import absolute_import, unicode_literals
 
 from c8.api import APIWrapper
-
-from c8.request import Request
-from c8.response import Response
-
 from c8.exceptions import (
-    SearchCollectionSetError,
-    SearchCollectionInvalidArgument,
+    AnalyzerGetDefinitionError,
+    AnalyzerListError,
+    AnalyzerNotFoundError,
     SearchCollectionForbiddenError,
+    SearchCollectionInvalidArgument,
+    SearchCollectionSetError,
     SearchError,
-    SearchInvalidArgumentError,
     SearchForbiddenError,
+    SearchInvalidArgumentError,
     SearchNotExistError,
     ViewCreateError,
     ViewCreateViewNameMissingError,
     ViewCreateViewNameUnknownError,
+    ViewDeleteError,
     ViewGetError,
+    ViewGetPropertiesError,
     ViewNotFoundError,
     ViewRenameError,
-    ViewDeleteError,
-    ViewGetPropertiesError,
     ViewUpdatePropertiesError,
-    AnalyzerListError,
-    AnalyzerGetDefinitionError,
-    AnalyzerNotFoundError
 )
+from c8.request import Request
 
 
 class Search(APIWrapper):
@@ -43,11 +40,11 @@ class Search(APIWrapper):
 
     def __init__(self, connection, executor):
         super(Search, self).__init__(connection, executor)
-        self._view_prefix = '/search/view'
-        self._analyzer_prefix = '/search/analyzer'
+        self._view_prefix = "/search/view"
+        self._analyzer_prefix = "/search/analyzer"
 
     def set_search(self, collection, enable, field):
-        """Set search capability of a collection (enabling or disabling it). 
+        """Set search capability of a collection (enabling or disabling it).
         If the collection does not exist, it will be created.
         :param collection: Collection name on which search capabilities has
         to be enabled/disabled
@@ -61,12 +58,9 @@ class Search(APIWrapper):
         """
 
         request = Request(
-            method='POST',
-            endpoint='/search/collection/{}'.format(collection),
-            params={
-                'enable': enable,
-                'field': field
-            }
+            method="POST",
+            endpoint="/search/collection/{}".format(collection),
+            params={"enable": enable, "field": field},
         )
 
         def response_handler(resp):
@@ -77,12 +71,13 @@ class Search(APIWrapper):
             if resp.status_code == 403:
                 raise SearchCollectionForbiddenError(resp, request)
             return True
+
         return self._execute(request, response_handler)
 
     def search_in_collection(self, collection, search, bindVars=None, ttl=60):
         """Search a collection for string matches.
 
-        :param collection: Collection name on which search has to be performed 
+        :param collection: Collection name on which search has to be performed
         :type collection: str | unicode
         :param search: search string needs to be search in given collection
         :type search: str | unicode
@@ -92,8 +87,8 @@ class Search(APIWrapper):
         :param ttl: default ttl will be 60 seconds
         :type ttl: int
         :return: The specified search query will be executed for the collection.
-        The results of the search will be in the response. If there are too 
-        many results, an "id" will be specified for the cursor that can be 
+        The results of the search will be in the response. If there are too
+        many results, an "id" will be specified for the cursor that can be
         used to obtain the remaining results.
         :rtype: [dict]
         """
@@ -105,8 +100,8 @@ class Search(APIWrapper):
                 "collection": collection,
                 "search": search,
                 "bindVars": bindVars,
-                "ttl": ttl
-            }
+                "ttl": ttl,
+            },
         )
         # create response handler
 
@@ -120,32 +115,32 @@ class Search(APIWrapper):
             if resp.status_code == 404:
                 raise SearchNotExistError(resp, request)
             return resp.body
+
         # execute request
         return self._execute(request, response_handler)
 
     def list_all_views(self):
-        """ List all views
+        """List all views
 
-        :return: Returns an object containing an array of all view descriptions. 
+        :return: Returns an object containing an array of all view descriptions.
         :rtype: [dict]
         """
         # create request
-        request = Request(
-            method="GET",
-            endpoint=self._view_prefix
-        )
+        request = Request(method="GET", endpoint=self._view_prefix)
         # response handler
+
         def response_handler(resp):
             if not resp.is_success:
                 raise ViewGetError(resp, request)
             return resp.body["result"]
+
         # execute request
         return self._execute(request, response_handler)
 
     def create_view(self, name, links={}, primary_sort=[]):
         """Creates a new view with a given name and properties if it does not
         already exist.
-        
+
         :param name: The name of the view
         :type name: str | unicode
         :param links: Link properties related with the view
@@ -164,10 +159,11 @@ class Search(APIWrapper):
                 "name": name,
                 "links": links,
                 "primarySort": primary_sort,
-                "type": "search"
-            }
+                "type": "search",
+            },
         )
         # response handler
+
         def response_handler(resp):
             if not resp.is_success:
                 raise ViewCreateError(resp, request)
@@ -176,6 +172,7 @@ class Search(APIWrapper):
             if resp.status_code == 404:
                 raise ViewCreateViewNameUnknownError(resp, request)
             return resp.body
+
         # execute request
         return self._execute(request, response_handler)
 
@@ -188,17 +185,16 @@ class Search(APIWrapper):
         :rtype: dict
         """
         # create request
-        request = Request(
-            method="GET",
-            endpoint=self._view_prefix + "/{}".format(view)
-        )
+        request = Request(method="GET", endpoint=self._view_prefix + "/{}".format(view))
         # create response handler
+
         def response_handler(resp):
             if not resp.is_success:
                 raise ViewGetError(resp, request)
             if resp.status_code == 404:
                 raise ViewNotFoundError(resp, request)
             return resp.body
+
         # execute request
         return self._execute(request, response_handler)
 
@@ -216,11 +212,10 @@ class Search(APIWrapper):
         request = Request(
             method="PUT",
             endpoint=self._view_prefix + "/{}/rename".format(old_name),
-            data={
-                "name": new_name
-            }
+            data={"name": new_name},
         )
         # create response handler
+
         def response_handler(resp):
             if not resp.is_success:
                 raise ViewRenameError(resp, request)
@@ -229,6 +224,7 @@ class Search(APIWrapper):
             if resp.status_code == 400:
                 raise ViewCreateViewNameUnknownError(resp, request)
             return True
+
         # execute request
         return self._execute(request, response_handler)
 
@@ -242,10 +238,10 @@ class Search(APIWrapper):
         """
         # create request
         request = Request(
-            method="DELETE",
-            endpoint=self._view_prefix + "/{}".format(view)
+            method="DELETE", endpoint=self._view_prefix + "/{}".format(view)
         )
         # create response handler
+
         def response_handler(resp):
             if not resp.is_success:
                 raise ViewDeleteError(resp, request)
@@ -254,10 +250,11 @@ class Search(APIWrapper):
             if resp.status_code == 400:
                 raise ViewCreateViewNameUnknownError(resp, request)
             return True
+
         # execute request
         return self._execute(request, response_handler)
 
-    def get_view_properties(self,view):
+    def get_view_properties(self, view):
         """Get view properties
 
         :param view: View name whos properties we need to get.
@@ -267,10 +264,10 @@ class Search(APIWrapper):
         """
         # create request
         request = Request(
-            method="GET",
-            endpoint=self._view_prefix + "/{}/properties".format(view)
+            method="GET", endpoint=self._view_prefix + "/{}/properties".format(view)
         )
         # create response handler
+
         def response_handler(resp):
             if not resp.is_success:
                 raise ViewGetPropertiesError(resp, request)
@@ -279,6 +276,7 @@ class Search(APIWrapper):
             if resp.status_code == 400:
                 raise ViewCreateViewNameUnknownError(resp, request)
             return resp.body
+
         return self._execute(request, response_handler)
 
     def update_view_properties(self, view, properties):
@@ -295,9 +293,10 @@ class Search(APIWrapper):
         request = Request(
             method="PUT",
             endpoint=self._view_prefix + "/{}/properties".format(view),
-            data=properties
+            data=properties,
         )
         # create response handler
+
         def response_handler(resp):
             if not resp.is_success:
                 raise ViewUpdatePropertiesError(resp, request)
@@ -306,6 +305,7 @@ class Search(APIWrapper):
             if resp.status_code == 400:
                 raise ViewCreateViewNameUnknownError(resp, request)
             return True
+
         return self._execute(request, response_handler)
 
     def get_list_of_analyzer(self):
@@ -314,19 +314,18 @@ class Search(APIWrapper):
         :returns: Returns list of all available analyzers
         :rtype: [dict]
         """
-         # create request
-        request = Request(
-            method="GET",
-            endpoint=self._analyzer_prefix 
-        )
+        # create request
+        request = Request(method="GET", endpoint=self._analyzer_prefix)
         # create response handler
+
         def response_handler(resp):
             if not resp.is_success:
                 raise AnalyzerListError(resp, request)
             return resp.body["result"]
+
         return self._execute(request, response_handler)
 
-    def get_analyzer_definition(self,name):
+    def get_analyzer_definition(self, name):
         """Gets given analyzer definition
 
         :param name: Name of the view
@@ -336,15 +335,16 @@ class Search(APIWrapper):
         """
         # create request
         request = Request(
-            method="GET",
-            endpoint=self._analyzer_prefix + "/{}".format(name)
+            method="GET", endpoint=self._analyzer_prefix + "/{}".format(name)
         )
         # create response handler
+
         def response_handler(resp):
             if not resp.is_success:
                 raise AnalyzerGetDefinitionError(resp, request)
             if resp.status_code == 404:
                 raise AnalyzerNotFoundError(resp, request)
             return resp.body
+
         # execute request
         return self._execute(request, response_handler)

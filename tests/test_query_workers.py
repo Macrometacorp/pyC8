@@ -1,42 +1,60 @@
 from __future__ import absolute_import, unicode_literals
+
 import time
 
 from c8.exceptions import (
     RestqlCreateError,
+    RestqlCursorError,
+    RestqlDeleteError,
+    RestqlExecuteError,
     RestqlImportError,
     RestqlListError,
-    RestqlExecuteError,
     RestqlUpdateError,
-    RestqlCursorError,
-    RestqlDeleteError
 )
-from tests.helpers import (
-    assert_raises
-)
+from tests.helpers import assert_raises
+
 
 def test_restql_methods(client, tst_fabric_name, col):
     client._tenant.useFabric(tst_fabric_name)
 
     input_docs = [
-        { "_key": "james.kirk@mafabriccrometa.io", "firstname": "James", "lastname": "Kirk", "email": "james.kirk@mafabriccrometa.io", "zipcode": "12312"},
-        { "_key": "han.solo@macrfabricometa.io", "firstname": "Han", "lastname": "Solo", "email": "han.solo@macrfabricometa.io", "zipcode": "12311"},
-        { "_key": "bruce.wayne@mfabricacrometa.io", "firstname": "Bruce", "lastname": "Wayne", "email": "bruce.wayne@mfabricacrometa.io", "zipcode": "12345" }
+        {
+            "_key": "james.kirk@mafabriccrometa.io",
+            "firstname": "James",
+            "lastname": "Kirk",
+            "email": "james.kirk@mafabriccrometa.io",
+            "zipcode": "12312",
+        },
+        {
+            "_key": "han.solo@macrfabricometa.io",
+            "firstname": "Han",
+            "lastname": "Solo",
+            "email": "han.solo@macrfabricometa.io",
+            "zipcode": "12311",
+        },
+        {
+            "_key": "bruce.wayne@mfabricacrometa.io",
+            "firstname": "Bruce",
+            "lastname": "Wayne",
+            "email": "bruce.wayne@mfabricacrometa.io",
+            "zipcode": "12345",
+        },
     ]
     update_keys = ["james.kirk@mafabriccrometa.io", "bruce.wayne@mfabricacrometa.io"]
     update_key_value = {
-        "bruce.wayne@mfabricacrometa.io": { "key": "bruce.wayne@mfabricacrometa.io", "zipcode": "22222" },
-        "james.kirk@mafabriccrometa.io": { "key": "james.kirk@mafabriccrometa.io", "zipcode": "55555"}
+        "bruce.wayne@mfabricacrometa.io": {
+            "key": "bruce.wayne@mfabricacrometa.io",
+            "zipcode": "22222",
+        },
+        "james.kirk@mafabriccrometa.io": {
+            "key": "james.kirk@mafabriccrometa.io",
+            "zipcode": "55555",
+        },
     }
-    insert_data_query = (
-        f"FOR doc in @InputDocs INSERT {{'firstname':doc.firstname, 'lastname':doc.lastname, 'email':doc.email, 'zipcode':doc.zipcode, '_key': doc._key}} IN {col.name}"
-    )
+    insert_data_query = f"FOR doc in @InputDocs INSERT {{'firstname':doc.firstname, 'lastname':doc.lastname, 'email':doc.email, 'zipcode':doc.zipcode, '_key': doc._key}} IN {col.name}"
     get_data_query = f"FOR doc IN {col.name} RETURN doc"
-    update_data_query = (
-        f"FOR i IN {col.name} FILTER i._key IN @updateKeys UPDATE i with {{ zipcode: (i._key == @updateKeyValue[i._key].key) ? @updateKeyValue[i._key].zipcode : i.zipcode }} IN {col.name}"
-    )
-    updated_insert_query = (
-        f"INSERT {{'_key': 'barry.allen@macrometa.io', 'value': 'Barry Allen'}} IN {col.name}"
-    )
+    update_data_query = f"FOR i IN {col.name} FILTER i._key IN @updateKeys UPDATE i with {{ zipcode: (i._key == @updateKeyValue[i._key].key) ? @updateKeyValue[i._key].zipcode : i.zipcode }} IN {col.name}"
+    updated_insert_query = f"INSERT {{'_key': 'barry.allen@macrometa.io', 'value': 'Barry Allen'}} IN {col.name}"
 
     insert_data = {
         "query": {
@@ -64,37 +82,32 @@ def test_restql_methods(client, tst_fabric_name, col):
     assert "updateRecord" in resp
     assert "insertRecord" in resp
 
-    client.execute_restql(
-        "insertRecord", {"bindVars": {"InputDocs": input_docs}}
-    )
+    client.execute_restql("insertRecord", {"bindVars": {"InputDocs": input_docs}})
 
     resp = client.execute_restql("getRecords")
-    result = resp['result']
-    assert input_docs[0]['_key'] == result[0]['_key']
-    assert input_docs[1]['_key'] == result[1]['_key']
+    result = resp["result"]
+    assert input_docs[0]["_key"] == result[0]["_key"]
+    assert input_docs[1]["_key"] == result[1]["_key"]
 
     client.execute_restql(
         "updateRecord",
-        {"bindVars": {"updateKeys": update_keys, "updateKeyValue": update_key_value}}
+        {"bindVars": {"updateKeys": update_keys, "updateKeyValue": update_key_value}},
     )
     resp = client.execute_restql("getRecords")
-    result = resp['result']
-    assert result[1]['zipcode'] == "22222"
-    assert result[2]['zipcode'] == "55555"
+    result = resp["result"]
+    assert result[1]["zipcode"] == "22222"
+    assert result[2]["zipcode"] == "55555"
 
     # Updating restqls
     client.update_restql("insertRecord", updated_insert_data)
     time.sleep(2)
     client.execute_restql("insertRecord")
-    resp = client.execute_restql(
-        "getRecords",
-        {"bindVars": {}, "batchSize": 2}
-    )
+    resp = client.execute_restql("getRecords", {"bindVars": {}, "batchSize": 2})
 
     # Read next batch from cursor
-    id = resp['id']
+    id = resp["id"]
     resp = client.read_next_batch_restql(id)
-    assert resp['result'][1]['_key'] == "barry.allen@macrometa.io"
+    assert resp["result"][1]["_key"] == "barry.allen@macrometa.io"
 
     # Deleting RestQls
     assert client.delete_restql("insertRecord") is True
@@ -102,21 +115,14 @@ def test_restql_methods(client, tst_fabric_name, col):
     assert client.delete_restql("updateRecord") is True
     assert col.truncate() is True
 
+
 def test_restql_exceptions(client, tst_fabric_name, col, bad_fabric_name):
     client._tenant.useFabric(tst_fabric_name)
 
-    update_data_query = (
-        f"FOR i IN {col.name} FILTER i._key IN @updateKeys UPDATE i with {{ zipcode: (i._key == @updateKeyValue[i._key].key) ? @updateKeyValue[i._key].zipcode : i.zipcode }} IN {col.name}"
-    )
-    updated_insert_query = (
-        f"INSERT {{'_key': 'barry.allen@macrometa.io', 'value': 'Barry Allen'}} IN {col.name}"
-    )
+    update_data_query = f"FOR i IN {col.name} FILTER i._key IN @updateKeys UPDATE i with {{ zipcode: (i._key == @updateKeyValue[i._key].key) ? @updateKeyValue[i._key].zipcode : i.zipcode }} IN {col.name}"
+    updated_insert_query = f"INSERT {{'_key': 'barry.allen@macrometa.io', 'value': 'Barry Allen'}} IN {col.name}"
 
-    insert_data = {
-        "query": {
-            "name": "insertRecord"
-        }
-    }
+    insert_data = {"query": {"name": "insertRecord"}}
     updated_insert_data = {
         "query": {
             "value": updated_insert_query,

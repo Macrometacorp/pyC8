@@ -1,32 +1,43 @@
 from __future__ import absolute_import, unicode_literals
 
+import base64
 import json
 import random
-import base64
 
 import websocket
 
-from c8.api import APIWrapper
-from c8.c8ql import C8QL
-from c8.keyvalue import KV
-from c8.collection import StandardCollection
-from c8.stream_apps import StreamApps
-from c8.apikeys import APIKeys
-from c8.search import Search
 from c8 import constants
+from c8.api import APIWrapper
+from c8.apikeys import APIKeys
+from c8.c8ql import C8QL
+from c8.collection import StandardCollection
 from c8.exceptions import (
     CollectionCreateError,
     CollectionDeleteError,
     CollectionListError,
-    FabricDeleteError,
+    CollectionPropertiesError,
+    EventCreateError,
+    EventGetError,
     FabricCreateError,
+    FabricDeleteError,
     FabricListError,
     FabricPropertiesError,
-    GraphListError,
+    GetAPIKeys,
     GraphCreateError,
     GraphDeleteError,
+    GraphListError,
+    RestqlCreateError,
+    RestqlCursorError,
+    RestqlDeleteError,
+    RestqlExecuteError,
+    RestqlImportError,
+    RestqlListError,
+    RestqlUpdateError,
+    RestqlValidationError,
     ServerConnectionError,
     ServerVersionError,
+    SpotRegionUpdateError,
+    StreamAppGetSampleError,
     StreamCommunicationError,
     StreamConnectionError,
     StreamCreateError,
@@ -34,49 +45,25 @@ from c8.exceptions import (
     StreamListError,
     StreamPermissionError,
     TenantDcListError,
-    SpotRegionUpdateError,
-    RestqlValidationError,
-    RestqlListError,
-    RestqlCreateError,
-    RestqlUpdateError,
-    RestqlDeleteError,
-    RestqlExecuteError,
-    RestqlImportError,
-    RestqlCursorError,
-    EventCreateError,
-    EventGetError,
-    StreamAppGetSampleError,
-    GetAPIKeys,
-    CollectionPropertiesError,
 )
-from c8.executor import (
-    DefaultExecutor,
-    AsyncExecutor,
-    BatchExecutor,
-)
+from c8.executor import AsyncExecutor, BatchExecutor, DefaultExecutor
 from c8.graph import Graph
-from c8.stream_collection import StreamCollection
+from c8.keyvalue import KV
 from c8.request import Request
+from c8.search import Search
+from c8.stream_apps import StreamApps
+from c8.stream_collection import StreamCollection
 
 __all__ = [
-    'StandardFabric',
-    'AsyncFabric',
-    'BatchFabric',
+    "StandardFabric",
+    "AsyncFabric",
+    "BatchFabric",
 ]
 ENDPOINT = "/streams"
 
 
 def raise_timeout(signum, frame):
     raise TimeoutError
-
-
-def print_data(event):
-    """Prints the event.
-
-    :param event: real-time update.
-    :type event: str | unicode
-    """
-    print(event)
 
 
 class Fabric(APIWrapper):
@@ -89,10 +76,11 @@ class Fabric(APIWrapper):
     """
 
     def enum(**enums):
-        return type('Enum', (), enums)
+        return type("Enum", (), enums)
 
-    SPOT_CREATION_TYPES = enum(AUTOMATIC='automatic', NONE='none',
-                               SPOT_REGION='spot_region')
+    SPOT_CREATION_TYPES = enum(
+        AUTOMATIC="automatic", NONE="none", SPOT_REGION="spot_region"
+    )
 
     def __init__(self, connection, executor):
         self.url = connection.url
@@ -137,8 +125,6 @@ class Fabric(APIWrapper):
         """
         return KV(self._conn, self._executor)
 
-
-
     def on_change(self, collection, callback, timeout=60):
         """Execute given input function on receiving a change.
 
@@ -150,38 +136,41 @@ class Fabric(APIWrapper):
         :type callback: function
         """
         if not callback:
-            raise ValueError('You must specify a callback function')
+            raise ValueError("You must specify a callback function")
 
         if not collection:
-            raise ValueError('You must specify a collection on which realtime '
-                             'data is to be watched!')
+            raise ValueError(
+                "You must specify a collection on which realtime "
+                "data is to be watched!"
+            )
 
         namespace = constants.STREAM_LOCAL_NS_PREFIX + self.fabric_name
 
         subscription_name = "%s-%s-subscription-%s" % (
-            self.tenant_name, self.fabric_name, str(random.randint(1, 1000)))
+            self.tenant_name,
+            self.fabric_name,
+            str(random.randint(1, 1000)),
+        )
 
         url = self.url.split("//")[1].split(":")[0]
 
         topic = "wss://{}/_ws/ws/v2/consumer/persistent/{}/{}/{}/{}".format(
-            url, self.tenant_name, namespace,
-            collection, subscription_name)
+            url, self.tenant_name, namespace, collection, subscription_name
+        )
 
-        ws = websocket.create_connection(
-            topic, header=self.header, timeout=timeout)
+        ws = websocket.create_connection(topic, header=self.header, timeout=timeout)
 
         try:
-            print("pyC8 Realtime: Begin monitoring realtime updates for " +
-                  topic)
+            # "pyC8 Realtime: Begin monitoring realtime updates for " + topic
             while True:
                 msg = json.loads(ws.recv())
-                data = base64.b64decode(msg['payload'])
-                ws.send(json.dumps({'messageId': msg['messageId']}))
+                data = base64.b64decode(msg["payload"])
+                ws.send(json.dumps({"messageId": msg["messageId"]}))
                 callback(data)
         except websocket.WebSocketTimeoutException:
             pass
         except Exception as e:
-            print(e)
+            raise Exception(e)
         finally:
             ws.close()
 
@@ -193,15 +182,15 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.FabricPropertiesError: If retrieval fails.
         """
         request = Request(
-            method='get',
-            endpoint='/database/current',
+            method="get",
+            endpoint="/database/current",
         )
 
         def response_handler(resp):
             if not resp.is_success:
                 raise FabricPropertiesError(resp, request)
-            result = resp.body['result']
-            result['system'] = result.pop('isSystem')
+            result = resp.body["result"]
+            result["system"] = result.pop("isSystem")
             return result
 
         return self._execute(request, response_handler)
@@ -220,9 +209,9 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.SpotRegionUpdateError: If updation fails.
         """
 
-        request = Request(method='put',
-                          endpoint='/_fabric/{}/database/{}'.format(
-                              fabric, new_dc))
+        request = Request(
+            method="put", endpoint="/_fabric/{}/database/{}".format(fabric, new_dc)
+        )
 
         def response_handler(resp):
             if not resp.is_success:
@@ -232,18 +221,15 @@ class Fabric(APIWrapper):
         return self._execute(request, response_handler)
 
     def fabrics_detail(self):
-        request = Request(
-            method='get',
-            endpoint='/database/user'
-        )
+        request = Request(method="get", endpoint="/database/user")
 
         def response_handler(resp):
             if not resp.is_success:
                 raise FabricListError(resp, request)
-            return [{
-                'name': col['name'],
-                'options': col['options']
-            } for col in map(dict, resp.body['result'])]
+            return [
+                {"name": col["name"], "options": col["options"]}
+                for col in map(dict, resp.body["result"])
+            ]
 
         return self._execute(request, response_handler)
 
@@ -254,16 +240,12 @@ class Fabric(APIWrapper):
         :rtype: str | unicode
         :raise c8.exceptions.ServerVersionError: If retrieval fails.
         """
-        request = Request(
-            method='get',
-            endpoint='/version',
-            params={'details': False}
-        )
+        request = Request(method="get", endpoint="/version", params={"details": False})
 
         def response_handler(resp):
             if not resp.is_success:
                 raise ServerVersionError(resp, request)
-            return resp.body['version']
+            return resp.body["version"]
 
         return self._execute(request, response_handler)
 
@@ -275,17 +257,16 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.ServerConnectionError: If ping fails.
         """
         request = Request(
-            method='get',
-            endpoint='/collection',
+            method="get",
+            endpoint="/collection",
         )
 
         def response_handler(resp):
             code = resp.status_code
             if code in {401, 403}:
-                raise ServerConnectionError('bad username and/or password')
+                raise ServerConnectionError("bad username and/or password")
             if not resp.is_success:
-                raise ServerConnectionError(
-                    resp.error_message or 'bad server response')
+                raise ServerConnectionError(resp.error_message or "bad server response")
             return code
 
         return self._execute(request, response_handler)
@@ -309,10 +290,7 @@ class Fabric(APIWrapper):
 
         tenant_name = properties["options"]["tenant"]
 
-        request = Request(
-            method='get',
-            endpoint='/datacenter/_tenant/%s' % tenant_name
-        )
+        request = Request(method="get", endpoint="/datacenter/_tenant/%s" % tenant_name)
 
         def response_handler(resp):
             if not resp.is_success:
@@ -334,10 +312,7 @@ class Fabric(APIWrapper):
         :rtype: [str | dict ]
         :raise c8.exceptions.TenantListError: If retrieval fails.
         """
-        request = Request(
-            method='get',
-            endpoint='/datacenter/local'
-        )
+        request = Request(method="get", endpoint="/datacenter/local")
 
         def response_handler(resp):
             if not resp.is_success:
@@ -359,15 +334,12 @@ class Fabric(APIWrapper):
         :rtype: [str | unicode]
         :raise c8.exceptions.FabricListError: If retrieval fails.
         """
-        request = Request(
-            method='get',
-            endpoint='/database'
-        )
+        request = Request(method="get", endpoint="/database")
 
         def response_handler(resp):
             if not resp.is_success:
                 raise FabricListError(resp, request)
-            return resp.body['result']
+            return resp.body["result"]
 
         return self._execute(request, response_handler)
 
@@ -381,8 +353,14 @@ class Fabric(APIWrapper):
         """
         return name in self.fabrics()
 
-    def create_fabric(self, name, spot_dc=None, users=None, dclist=None,
-                      spot_creation_type=SPOT_CREATION_TYPES.AUTOMATIC):
+    def create_fabric(
+        self,
+        name,
+        spot_dc=None,
+        users=None,
+        dclist=None,
+        spot_creation_type=SPOT_CREATION_TYPES.AUTOMATIC,
+    ):
         """Create a new fabric.
 
         :param name: Fabric name.
@@ -406,34 +384,29 @@ class Fabric(APIWrapper):
         :rtype: bool
         :raise c8.exceptions.FabricCreateError: If create fails.
         """
-        data = {'name': name}
+        data = {"name": name}
         if users is not None:
-            data['users'] = users
+            data["users"] = users
 
         options = {}
-        dcl = ''
+        dcl = ""
         if dclist:
             # Process dclist param (type list) to build up comma-separated
             # string of DCs
             for dc in dclist:
                 if len(dcl) > 0:
-                    dcl += ','
+                    dcl += ","
                 dcl += dc
-        options['dcList'] = dcl
+        options["dcList"] = dcl
 
         if spot_creation_type == self.SPOT_CREATION_TYPES.NONE:
-            options['spotDc'] = ''
-        elif (spot_creation_type == self.SPOT_CREATION_TYPES.SPOT_REGION and
-              spot_dc):
-            options['spotDc'] = spot_dc
+            options["spotDc"] = ""
+        elif spot_creation_type == self.SPOT_CREATION_TYPES.SPOT_REGION and spot_dc:
+            options["spotDc"] = spot_dc
 
-        data['options'] = options
+        data["options"] = options
 
-        request = Request(
-            method='post',
-            endpoint='/database',
-            data=data
-        )
+        request = Request(method="post", endpoint="/database", data=data)
 
         def response_handler(resp):
             if not resp.is_success:
@@ -454,17 +427,14 @@ class Fabric(APIWrapper):
         :rtype: bool
         :raise c8.exceptions.FabricDeleteError: If delete fails.
         """
-        request = Request(
-            method='delete',
-            endpoint='/database/{}'.format(name)
-        )
+        request = Request(method="delete", endpoint="/database/{}".format(name))
 
         def response_handler(resp):
             if resp.error_code == 1228 and ignore_missing:
                 return False
             if not resp.is_success:
                 raise FabricDeleteError(resp, request)
-            return resp.body['result']
+            return resp.body["result"]
 
         return self._execute(request, response_handler)
 
@@ -493,7 +463,7 @@ class Fabric(APIWrapper):
         :returns: True if collection exists, False otherwise.
         :rtype: bool
         """
-        return any(col['name'] == name for col in self.collections())
+        return any(col["name"] == name for col in self.collections())
 
     def collections(self, collectionModel=None):
         """Return the collections in the fabric.
@@ -502,48 +472,52 @@ class Fabric(APIWrapper):
         :rtype: [dict]
         :raise c8.exceptions.CollectionListError: If retrieval fails.
         """
-        request = Request(
-            method='get',
-            endpoint='/collection'
-        )
+        request = Request(method="get", endpoint="/collection")
 
         def response_handler(resp):
             if not resp.is_success:
                 raise CollectionListError(resp, request)
             if collectionModel is not None:
-                docs = [col for col in map(
-                    dict, resp.body['result']) if col['collectionModel'] == collectionModel]
+                docs = [
+                    col
+                    for col in map(dict, resp.body["result"])
+                    if col["collectionModel"] == collectionModel
+                ]
             else:
-                docs = [col for col in map(dict, resp.body['result'])]
-            return [{
-                'id': col['id'],
-                'name': col['name'],
-                'system': col['isSystem'],
-                'isSpot': col["isSpot"],
-                'type': StandardCollection.types[col['type']],
-                'status': StandardCollection.statuses[col['status']],
-                'collectionModel': col['collectionModel']
-            } for col in docs]
+                docs = [col for col in map(dict, resp.body["result"])]
+            return [
+                {
+                    "id": col["id"],
+                    "name": col["name"],
+                    "system": col["isSystem"],
+                    "isSpot": col["isSpot"],
+                    "type": StandardCollection.types[col["type"]],
+                    "status": StandardCollection.statuses[col["status"]],
+                    "collectionModel": col["collectionModel"],
+                }
+                for col in docs
+            ]
 
         return self._execute(request, response_handler)
 
-    def create_collection(self,
-                          name,
-                          sync=False,
-                          edge=False,
-                          user_keys=True,
-                          key_increment=None,
-                          key_offset=None,
-                          key_generator='traditional',
-                          shard_fields=None,
-                          index_bucket_count=None,
-                          sync_replication=None,
-                          enforce_replication_factor=None,
-                          spot_collection=False,
-                          local_collection=False,
-                          is_system=False,
-                          stream=False
-                          ):
+    def create_collection(
+        self,
+        name,
+        sync=False,
+        edge=False,
+        user_keys=True,
+        key_increment=None,
+        key_offset=None,
+        key_generator="traditional",
+        shard_fields=None,
+        index_bucket_count=None,
+        sync_replication=None,
+        enforce_replication_factor=None,
+        spot_collection=False,
+        local_collection=False,
+        is_system=False,
+        stream=False,
+    ):
         """Create a new collection.
 
         :param name: Collection name.
@@ -594,41 +568,38 @@ class Fabric(APIWrapper):
         :rtype: c8.collection.StandardCollection
         :raise c8.exceptions.CollectionCreateError: If create fails.
         """
-        key_options = {'type': key_generator, 'allowUserKeys': user_keys}
+        key_options = {"type": key_generator, "allowUserKeys": user_keys}
         if key_increment is not None:
-            key_options['increment'] = key_increment
+            key_options["increment"] = key_increment
         if key_offset is not None:
-            key_options['offset'] = key_offset
+            key_options["offset"] = key_offset
         if spot_collection and local_collection:
-            return ("Collection can either be spot or local")
+            return "Collection can either be spot or local"
         else:
             data = {
-                'name': name,
-                'waitForSync': sync,
-                'keyOptions': key_options,
-                'type': 3 if edge else 2,
-                'isSpot': spot_collection,
-                'isLocal': local_collection,
-                'isSystem': is_system,
-                'stream': stream,
+                "name": name,
+                "waitForSync": sync,
+                "keyOptions": key_options,
+                "type": 3 if edge else 2,
+                "isSpot": spot_collection,
+                "isLocal": local_collection,
+                "isSystem": is_system,
+                "stream": stream,
             }
 
         if shard_fields is not None:
-            data['shardKeys'] = shard_fields
+            data["shardKeys"] = shard_fields
         if index_bucket_count is not None:
-            data['indexBuckets'] = index_bucket_count
+            data["indexBuckets"] = index_bucket_count
 
         params = {}
         if sync_replication is not None:
-            params['waitForSyncReplication'] = sync_replication
+            params["waitForSyncReplication"] = sync_replication
         if enforce_replication_factor is not None:
-            params['enforceReplicationFactor'] = enforce_replication_factor
+            params["enforceReplicationFactor"] = enforce_replication_factor
 
         request = Request(
-            method='post',
-            endpoint='/collection',
-            params=params,
-            data=data
+            method="post", endpoint="/collection", params=params, data=data
         )
 
         def response_handler(resp):
@@ -646,8 +617,8 @@ class Fabric(APIWrapper):
         """
 
         request = Request(
-            method='get',
-            endpoint='/collection/{}/figures'.format(collection_name),
+            method="get",
+            endpoint="/collection/{}/figures".format(collection_name),
         )
 
         def response_handler(resp):
@@ -657,7 +628,9 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def update_collection_properties(self, collection_name, has_stream=None, wait_for_sync=None):
+    def update_collection_properties(
+        self, collection_name, has_stream=None, wait_for_sync=None
+    ):
         """Changes the properties of a collection.
            Note: except for waitForSync and hasStream, collection properties cannot be changed once a collection is created.
         :param collection_name: Collection name.
@@ -670,14 +643,14 @@ class Fabric(APIWrapper):
 
         data = {}
         if has_stream is not None:
-            data['hasStream'] = has_stream
+            data["hasStream"] = has_stream
         if wait_for_sync is not None:
-            data['waitForSync'] = wait_for_sync
+            data["waitForSync"] = wait_for_sync
 
         request = Request(
-            method='put',
-            endpoint='/collection/{}/properties'.format(collection_name),
-            data=data
+            method="put",
+            endpoint="/collection/{}/properties".format(collection_name),
+            data=data,
         )
 
         def response_handler(resp):
@@ -703,12 +676,10 @@ class Fabric(APIWrapper):
         """
         params = {}
         if system is not None:
-            params['isSystem'] = system
+            params["isSystem"] = system
 
         request = Request(
-            method='delete',
-            endpoint='/collection/{}'.format(name),
-            params=params
+            method="delete", endpoint="/collection/{}".format(name), params=params
         )
 
         def response_handler(resp):
@@ -743,7 +714,7 @@ class Fabric(APIWrapper):
         :rtype: bool
         """
         for graph in self.graphs():
-            if graph['name'] == name:
+            if graph["name"] == name:
                 return True
         return False
 
@@ -754,36 +725,36 @@ class Fabric(APIWrapper):
         :rtype: [dict]
         :raise c8.exceptions.GraphListError: If retrieval fails.
         """
-        request = Request(method='get', endpoint='/graph')
+        request = Request(method="get", endpoint="/graph")
 
         def response_handler(resp):
             if not resp.is_success:
                 raise GraphListError(resp, request)
             return [
                 {
-                    'id': body['_id'],
-                    'name': body['_key'],
-                    'revision': body['_rev'],
-                    'orphan_collections': body['orphanCollections'],
-                    'edge_definitions': [
+                    "id": body["_id"],
+                    "name": body["_key"],
+                    "revision": body["_rev"],
+                    "orphan_collections": body["orphanCollections"],
+                    "edge_definitions": [
                         {
-                            'edge_collection': definition['collection'],
-                            'from_vertex_collections': definition['from'],
-                            'to_vertex_collections': definition['to'],
-                        } for definition in body['edgeDefinitions']
+                            "edge_collection": definition["collection"],
+                            "from_vertex_collections": definition["from"],
+                            "to_vertex_collections": definition["to"],
+                        }
+                        for definition in body["edgeDefinitions"]
                     ],
-                    'shard_count': body.get('numberOfShards'),
-                    'replication_factor': body.get('replicationFactor')
-                } for body in resp.body['graphs']
+                    "shard_count": body.get("numberOfShards"),
+                    "replication_factor": body.get("replicationFactor"),
+                }
+                for body in resp.body["graphs"]
             ]
 
         return self._execute(request, response_handler)
 
-    def create_graph(self,
-                     name,
-                     edge_definitions=None,
-                     orphan_collections=None,
-                     shard_count=None):
+    def create_graph(
+        self, name, edge_definitions=None, orphan_collections=None, shard_count=None
+    ):
         """Create a new graph.
 
         :param name: Graph name.
@@ -816,23 +787,22 @@ class Fabric(APIWrapper):
                 'to_vertex_collections': ['lectures']
             }
         """
-        data = {'name': name}
+        data = {"name": name}
         if edge_definitions is not None:
-            data['edgeDefinitions'] = [{
-                'collection': definition['edge_collection'],
-                'from': definition['from_vertex_collections'],
-                'to': definition['to_vertex_collections']
-            } for definition in edge_definitions]
+            data["edgeDefinitions"] = [
+                {
+                    "collection": definition["edge_collection"],
+                    "from": definition["from_vertex_collections"],
+                    "to": definition["to_vertex_collections"],
+                }
+                for definition in edge_definitions
+            ]
         if orphan_collections is not None:
-            data['orphanCollections'] = orphan_collections
+            data["orphanCollections"] = orphan_collections
         if shard_count is not None:  # pragma: no cover
-            data['numberOfShards'] = shard_count
+            data["numberOfShards"] = shard_count
 
-        request = Request(
-            method='post',
-            endpoint='/graph',
-            data=data
-        )
+        request = Request(method="post", endpoint="/graph", data=data)
 
         def response_handler(resp):
             if resp.is_success:
@@ -858,12 +828,10 @@ class Fabric(APIWrapper):
         """
         params = {}
         if drop_collections is not None:
-            params['dropCollections'] = drop_collections
+            params["dropCollections"] = drop_collections
 
         request = Request(
-            method='delete',
-            endpoint='/graph/{}'.format(name),
-            params=params
+            method="delete", endpoint="/graph/{}".format(name), params=params
         )
 
         def response_handler(resp):
@@ -951,8 +919,14 @@ class Fabric(APIWrapper):
         :returns: stream collection API wrapper.
         :rtype: c8.stream_collection.StreamCollection
         """
-        return StreamCollection(self, self._conn, self._executor, self.url,
-                                self.stream_port, operation_timeout_seconds)
+        return StreamCollection(
+            self,
+            self._conn,
+            self._executor,
+            self.url,
+            self.stream_port,
+            operation_timeout_seconds,
+        )
 
     def streams(self, local=False):
         """Get list of all streams under given fabric
@@ -962,28 +936,30 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.StreamListError: If retrieving streams fails.
         """
         if local is False:
-            url_endpoint = '/streams?global=true'
+            url_endpoint = "/streams?global=true"
 
         elif local is True:
-            url_endpoint = '/streams?global=false'
+            url_endpoint = "/streams?global=false"
 
-        request = Request(
-            method='get',
-            endpoint=url_endpoint
-        )
+        request = Request(method="get", endpoint=url_endpoint)
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return [{
-                    'name': col['topic'],
-                    'topic': col['topic'],
-                    'local': col['local'],
-                    'db': col['db'],
-                    'tenant': col['tenant'],
-                    'type': StreamCollection.types[col['type']],
-                    'status': 'terminated' if 'terminated' in col else 'active',  # noqa
-                } for col in map(dict, resp.body['result'])]
+                return [
+                    {
+                        "name": col["topic"],
+                        "topic": col["topic"],
+                        "local": col["local"],
+                        "db": col["db"],
+                        "tenant": col["tenant"],
+                        "type": StreamCollection.types[col["type"]],
+                        "status": "terminated"
+                        if "terminated" in col
+                        else "active",  # noqa
+                    }
+                    for col in map(dict, resp.body["result"])
+                ]
             elif code == 403:
                 raise StreamPermissionError(resp, request)
             raise StreamListError(resp, request)
@@ -991,7 +967,7 @@ class Fabric(APIWrapper):
         return self._execute(request, response_handler)
 
     def has_stream(self, stream, isCollectionStream=False, local=False):
-        """ Check if the list of streams has a stream with the given name.
+        """Check if the list of streams has a stream with the given name.
 
         :param stream: The name of the stream for which to check in the list
                        of all streams.
@@ -1004,7 +980,7 @@ class Fabric(APIWrapper):
                 stream = "c8globals." + stream
             elif local is True and "c8locals" not in stream:
                 stream = "c8locals." + stream
-        return any(mystream['name'] == stream for mystream in self.streams(local=local))
+        return any(mystream["name"] == stream for mystream in self.streams(local=local))
 
     def create_stream(self, stream, local=False):
         """
@@ -1016,16 +992,16 @@ class Fabric(APIWrapper):
         :raise: c8.exceptions.StreamCreateError: If creating streams fails.
         """
         if local is True:
-            endpoint = '{}/{}?global=False'.format(ENDPOINT, stream)
+            endpoint = "{}/{}?global=False".format(ENDPOINT, stream)
         elif local is False:
-            endpoint = '{}/{}?global=True'.format(ENDPOINT, stream)
+            endpoint = "{}/{}?global=True".format(ENDPOINT, stream)
 
-        request = Request(method='post', endpoint=endpoint)
+        request = Request(method="post", endpoint=endpoint)
 
         def response_handler(resp):
             code = resp.status_code
             if resp.is_success:
-                return resp.body['result']
+                return resp.body["result"]
             elif code == 502:
                 raise StreamCommunicationError(resp, request)
             raise StreamCreateError(resp, request)
@@ -1041,11 +1017,11 @@ class Fabric(APIWrapper):
         :returns: 200, OK if operation successful
         :raise: c8.exceptions.StreamDeleteError: If deleting streams fails.
         """
-        endpoint = f'{ENDPOINT}/{stream}'
+        endpoint = f"{ENDPOINT}/{stream}"
         if force:
             endpoint = endpoint + "?force=true"
 
-        request = Request(method='delete', endpoint=endpoint)
+        request = Request(method="delete", endpoint=endpoint)
 
         def response_handler(resp):
             code = resp.status_code
@@ -1075,8 +1051,7 @@ class Fabric(APIWrapper):
 
         query_name = data["query"]["name"]
         if " " in query_name:
-            raise RestqlValidationError("White Spaces not allowed in Query "
-                                        "Name")
+            raise RestqlValidationError("White Spaces not allowed in Query " "Name")
 
         request = Request(method="post", endpoint="/restql", data=data)
 
@@ -1099,7 +1074,7 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.RestqlImportError: if restql operation failed
         """
 
-        data = {'queries': queries, 'details': details}
+        data = {"queries": queries, "details": details}
 
         request = Request(method="post", endpoint="/restql/import", data=data)
 
@@ -1123,11 +1098,13 @@ class Fabric(APIWrapper):
         """
 
         if data and "bindVars" in data:
-            request = Request(method="post", data=data,
-                              endpoint="/restql/execute/%s" % name)
+            request = Request(
+                method="post", data=data, endpoint="/restql/execute/%s" % name
+            )
         else:
-            request = Request(method="post", data={},
-                              endpoint="/restql/execute/%s" % name)
+            request = Request(
+                method="post", data={}, endpoint="/restql/execute/%s" % name
+            )
 
         def response_handler(resp):
             if not resp.is_success:
@@ -1146,8 +1123,7 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.RestqlCursorError: if fetch next batch failed
         """
 
-        request = Request(method="put",
-                          endpoint="/restql/fetch/{}".format(id))
+        request = Request(method="put", endpoint="/restql/fetch/{}".format(id))
 
         def response_handler(resp):
             if not resp.is_success:
@@ -1257,7 +1233,7 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.EventDeleteError: if event creation failed
 
         """
-        data = (json.dumps((eventIds)))
+        data = json.dumps((eventIds))
 
         request = Request(method="delete", endpoint="/events", data=data)
 
@@ -1317,41 +1293,35 @@ class Fabric(APIWrapper):
         """
         body = {"definition": data}
         req = Request(
-            method="post",
-            endpoint='/streamapps/validate',
-            data=json.dumps(body)
+            method="post", endpoint="/streamapps/validate", data=json.dumps(body)
         )
 
         def response_handler(resp):
             if resp.is_success is True:
                 return True
-            print(resp.body)
             return False
 
         return self._execute(req, response_handler)
 
     def retrieve_stream_app(self):
-        """retrieves all the stream apps of a fabric
-        """
+        """retrieves all the stream apps of a fabric"""
         req = Request(
             method="get",
-            endpoint='/streamapps',
+            endpoint="/streamapps",
         )
 
         def response_handler(resp):
             if resp.is_success is True:
                 return resp.body
-            print(resp.body)
             return False
 
         return self._execute(req, response_handler)
 
     def get_samples_stream_app(self):
-        """gets samples for stream apps
-        """
+        """gets samples for stream apps"""
         req = Request(
             method="get",
-            endpoint='/streamapps/samples',
+            endpoint="/streamapps/samples",
         )
 
         def response_handler(resp):
@@ -1368,24 +1338,15 @@ class Fabric(APIWrapper):
         :param dclist: regions where stream app has to be deployed
         """
         # create request body
-        req_body = {
-            "definition": data,
-            "regions": dclist
-        }
+        req_body = {"definition": data, "regions": dclist}
         # create request
-        req = Request(
-            method="post",
-            endpoint='/streamapps',
-            data=json.dumps(req_body)
-        )
+        req = Request(method="post", endpoint="/streamapps", data=json.dumps(req_body))
 
         # create response handler
 
         def response_handler(resp):
             if resp.is_success is True:
-                print(resp.body)
                 return True
-            print(resp.body)
             return False
 
         # call api
@@ -1413,7 +1374,7 @@ class Fabric(APIWrapper):
         """
         request = Request(
             method="get",
-            endpoint='/key',
+            endpoint="/key",
         )
 
         # create response handler
@@ -1422,7 +1383,7 @@ class Fabric(APIWrapper):
             if not resp.is_success:
                 raise GetAPIKeys(resp, request)
             else:
-                return resp.body['result']
+                return resp.body["result"]
 
         return self._execute(request, response_handler, custom_prefix="/_api")
 
@@ -1446,12 +1407,11 @@ class StandardFabric(Fabric):
 
     def __init__(self, connection):
         super(StandardFabric, self).__init__(
-            connection=connection,
-            executor=DefaultExecutor(connection)
+            connection=connection, executor=DefaultExecutor(connection)
         )
 
     def __repr__(self):
-        return '<StandardFabric {}>'.format(self.name)
+        return "<StandardFabric {}>".format(self.name)
 
     def begin_async_execution(self, return_result=True):
         """Begin async execution.
@@ -1496,12 +1456,11 @@ class AsyncFabric(Fabric):
 
     def __init__(self, connection, return_result):
         super(AsyncFabric, self).__init__(
-            connection=connection,
-            executor=AsyncExecutor(connection, return_result)
+            connection=connection, executor=AsyncExecutor(connection, return_result)
         )
 
     def __repr__(self):
-        return '<AsyncFabric {}>'.format(self.name)
+        return "<AsyncFabric {}>".format(self.name)
 
 
 class BatchFabric(Fabric):
@@ -1520,12 +1479,11 @@ class BatchFabric(Fabric):
 
     def __init__(self, connection, return_result):
         super(BatchFabric, self).__init__(
-            connection=connection,
-            executor=BatchExecutor(connection, return_result)
+            connection=connection, executor=BatchExecutor(connection, return_result)
         )
 
     def __repr__(self):
-        return '<BatchFabric {}>'.format(self.name)
+        return "<BatchFabric {}>".format(self.name)
 
     def __enter__(self):
         return self

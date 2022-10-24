@@ -1,4 +1,4 @@
-__all__ = ['APIWrapper']
+__all__ = ["APIWrapper"]
 
 
 class APIWrapper(object):
@@ -13,7 +13,7 @@ class APIWrapper(object):
     def __init__(self, connection, executor):
         self._conn = connection
         self._executor = executor
-        self._is_transaction = self.context == 'transaction'
+        self._is_transaction = self.context == "transaction"
 
     @property
     def tenant_name(self):
@@ -89,4 +89,6 @@ class APIWrapper(object):
         :return: API execution result.
         :rtype: str | unicode | bool | int | list | dict
         """
-        return self._executor.execute(request, response_handler, custom_prefix=custom_prefix)
+        return self._executor.execute(
+            request, response_handler, custom_prefix=custom_prefix
+        )

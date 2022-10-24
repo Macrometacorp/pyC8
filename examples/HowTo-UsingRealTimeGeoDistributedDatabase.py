@@ -1,26 +1,35 @@
-from c8 import C8Client
+# flake8: noqa
 import random
 import threading
 import time
 
+from c8 import C8Client
+
 # Variables
-service_url = "gdn1.macrometa.io" # The request will be automatically routed to closest location.
+service_url = (
+    "gdn1.macrometa.io"  # The request will be automatically routed to closest location.
+)
 user_mail = "user@example.com"
 user_password = "hidden"
 geo_fabric = "testfabric"
 collection_name = "employees" + str(random.randint(1, 10000))
 
+
 def create_callback():
     def callback_fn(event):
         print("received... document:{}".format(event))
         return
+
     fabric.on_change(collection_name, callback=callback_fn)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
 
     print("\n ------- CONNECTION SETUP  ------")
     print("user: {}, geofabric:{}".format(user_mail, geo_fabric))
-    client = C8Client(protocol='https', host=service_url, port=443) # Automatically routed to nearest region.
+    client = C8Client(
+        protocol="https", host=service_url, port=443
+    )  # Automatically routed to nearest region.
     tenant = client.tenant(user_mail, user_password)
     fabric = tenant.useFabric(geo_fabric)
 
@@ -28,7 +37,11 @@ if __name__ == '__main__':
     dclist = fabric.dclist(detail=True)
     for dc in dclist:
         print(" region: {}".format(dc["name"]))
-    print("Connected to closest region...\tregion: {}".format(fabric.localdc(detail=False)))
+    print(
+        "Connected to closest region...\tregion: {}".format(
+            fabric.localdc(detail=False)
+        )
+    )
 
     print("\n ------- CREATE GEO-REPLICATED COLLECTION  ------")
     employees = fabric.create_collection(collection_name)
@@ -44,10 +57,31 @@ if __name__ == '__main__':
 
     print("\n ------- INSERT DOCUMENTS  ------")
     print("Inserting 3 documents to the collection...")
-    employees.insert({'_key':'John', 'firstname': 'John', 'lastname':'Wayne', 'email':'john.wayne@macrometa.io'})
-    employees.insert({'_key':'Clark', 'firstname': 'Clark', 'lastname':'Kent', 'email':'clark.kent@macrometa.io'})
-    employees.insert({'_key': 'Bruce', 'firstname': 'Bruce', 'lastname':'Wayne', 'email':'bruce.wayne@macrometa.io'})
-  
+    employees.insert(
+        {
+            "_key": "John",
+            "firstname": "John",
+            "lastname": "Wayne",
+            "email": "john.wayne@macrometa.io",
+        }
+    )
+    employees.insert(
+        {
+            "_key": "Clark",
+            "firstname": "Clark",
+            "lastname": "Kent",
+            "email": "clark.kent@macrometa.io",
+        }
+    )
+    employees.insert(
+        {
+            "_key": "Bruce",
+            "firstname": "Bruce",
+            "lastname": "Wayne",
+            "email": "bruce.wayne@macrometa.io",
+        }
+    )
+
     print("Wait to close the callback...")
     rt_thread.join()
 

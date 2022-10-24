@@ -1,19 +1,18 @@
 from __future__ import absolute_import, unicode_literals
-import json
+
 import base64
+import json
 import threading
 
 from c8.exceptions import (
+    StreamConnectionError,
     StreamCreateError,
+    StreamListError,
     StreamProducerError,
     StreamSubscriberError,
-    StreamListError,
-    StreamConnectionError
 )
-from tests.helpers import (
-    assert_raises,
-    generate_stream_name
-)
+from tests.helpers import assert_raises, generate_stream_name
+
 
 def test_stream_methods(tst_fabric):
     # Test stream apis
@@ -31,14 +30,21 @@ def test_stream_methods(tst_fabric):
     assert stream.set_message_expiry_stream(stream_2, 3600) is True
 
     def create_subscriber():
-        subscriber = stream.subscribe(stream_name_1, local=False, subscription_name="topic_1", consumer_type=stream.CONSUMER_TYPES.EXCLUSIVE)
+        subscriber = stream.subscribe(
+            stream_name_1,
+            local=False,
+            subscription_name="topic_1",
+            consumer_type=stream.CONSUMER_TYPES.EXCLUSIVE,
+        )
 
         for i in range(10):
             m1 = json.loads(subscriber.recv())
-            msg1 = base64.b64decode(m1["payload"]).decode('utf-8')
-            msg = "Hello from  user--" +  "("+ str(i) +")"
+            msg1 = base64.b64decode(m1["payload"]).decode("utf-8")
+            msg = "Hello from  user--" + "(" + str(i) + ")"
             assert msg1 == msg
-            subscriber.send(json.dumps({'messageId': m1['messageId']}))#Acknowledge the received msg.
+            subscriber.send(
+                json.dumps({"messageId": m1["messageId"]})
+            )  # Acknowledge the received msg.
         subscriber.close()
 
     subscriber_thread = threading.Thread(target=create_subscriber)
@@ -48,7 +54,7 @@ def test_stream_methods(tst_fabric):
     producer = stream.create_producer(stream_name_1)
 
     for i in range(10):
-        msg = "Hello from  user--" +  "("+ str(i) +")"
+        msg = "Hello from  user--" + "(" + str(i) + ")"
         producer.send(msg)
     producer.close()
 
@@ -63,26 +69,29 @@ def test_stream_methods(tst_fabric):
 
     assert stream.publish_message_stream(stream_1, "Hello World") is True
     m1 = json.loads(subscriber_2.recv())
-    msg1 = base64.b64decode(m1["payload"]).decode('utf-8')
+    msg1 = base64.b64decode(m1["payload"]).decode("utf-8")
     assert msg1 == "Hello World"
-    subscriber_2.send(json.dumps({'messageId': m1['messageId']}))#Acknowledge the received msg.
+    subscriber_2.send(
+        json.dumps({"messageId": m1["messageId"]})
+    )  # Acknowledge the received msg.
 
     resp = stream.get_stream_subscriptions(stream_name_1)
-    assert resp == ['topic_1', 'topic_2']
+    assert resp == ["topic_1", "topic_2"]
 
     stream.get_stream_backlog(stream_name_1)
-    assert stream.clear_streams_backlog() == 'OK'
-    assert stream.clear_stream_backlog("topic_1") == 'OK'
+    assert stream.clear_streams_backlog() == "OK"
+    assert stream.clear_stream_backlog("topic_1") == "OK"
     stream.get_stream_stats(stream_name_1)
 
     subscriber_2.close()
     reader.close()
 
-    assert stream.unsubscribe(subscription="topic_2") == 'OK'
-    assert stream.delete_stream_subscription(stream_1, "topic_1") == 'OK'
+    assert stream.unsubscribe(subscription="topic_2") == "OK"
+    assert stream.delete_stream_subscription(stream_1, "topic_1") == "OK"
 
     assert tst_fabric.delete_stream(stream_1) is True
     assert tst_fabric.delete_stream(stream_2) is True
+
 
 def test_stream_exceptions(client, bad_fabric_name, tst_fabric, tst_fabric_name):
     # Test stream exceptions
@@ -101,7 +110,7 @@ def test_stream_exceptions(client, bad_fabric_name, tst_fabric, tst_fabric_name)
 
     with assert_raises(StreamProducerError) as err:
         stream.create_producer(stream_name_1)
-    
+
     with assert_raises(StreamSubscriberError) as err:
         stream.create_reader(stream_name_1, "latest")
 

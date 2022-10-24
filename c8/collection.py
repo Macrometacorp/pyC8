@@ -1,41 +1,33 @@
 from __future__ import absolute_import, unicode_literals
 
 import csv
-
-from numbers import Number
-
 from json import dumps
+from numbers import Number
 
 from c8.api import APIWrapper
 from c8.cursor import Cursor
 from c8.exceptions import (
     CollectionTruncateError,
     DocumentCountError,
-    DocumentInError,
     DocumentDeleteError,
     DocumentGetError,
-    DocumentKeysError,
-    DocumentIDsError,
+    DocumentInError,
     DocumentInsertError,
     DocumentParseError,
     DocumentReplaceError,
     DocumentRevisionError,
     DocumentUpdateError,
     EdgeListError,
+    GetIndexError,
     IndexCreateError,
     IndexDeleteError,
     IndexListError,
-    GetIndexError
 )
 from c8.request import Request
 from c8.response import Response
-from c8.utils import (
-    get_doc_id,
-    is_none_or_int,
-    is_none_or_str,
-)
+from c8.utils import get_doc_id, is_none_or_int, is_none_or_str
 
-__all__ = ['StandardCollection', 'VertexCollection', 'EdgeCollection']
+__all__ = ["StandardCollection", "VertexCollection", "EdgeCollection"]
 
 
 class Collection(APIWrapper):
@@ -49,24 +41,21 @@ class Collection(APIWrapper):
     :type name: str | unicode
     """
 
-    types = {
-        2: 'document',
-        3: 'edge'
-    }
+    types = {2: "document", 3: "edge"}
 
     statuses = {
-        1: 'new',
-        2: 'unloaded',
-        3: 'loaded',
-        4: 'unloading',
-        5: 'deleted',
-        6: 'loading'
+        1: "new",
+        2: "unloaded",
+        3: "loaded",
+        4: "unloading",
+        5: "deleted",
+        6: "loading",
     }
 
     def __init__(self, connection, executor, name):
         super(Collection, self).__init__(connection, executor)
         self._name = name
-        self._id_prefix = name + '/'
+        self._id_prefix = name + "/"
 
     def __iter__(self):
         return self.all()
@@ -95,55 +84,55 @@ class Collection(APIWrapper):
         :returns: Formatted body.
         :rtype: dict
         """
-        body.pop('code', None)
-        body.pop('error', None)
+        body.pop("code", None)
+        body.pop("error", None)
 
-        if 'name' not in body:
-            body['name'] = self.name
-        if 'isSystem' in body:
-            body['system'] = body.pop('isSystem')
-        if 'type' in body:
-            body['edge'] = body.pop('type') == 3
-        if 'waitForSync' in body:
-            body['sync'] = body.pop('waitForSync')
-        if 'statusString' in body:
-            body['status'] = body.pop('statusString')
-        elif 'status' in body:
-            body['status'] = self._get_status_text(body['status'])
-        if 'globallyUniqueId' in body:
-            body['global_id'] = body.pop('globallyUniqueId')
-        if 'objectId' in body:
-            body['id'] = body.pop('objectId')
-        if 'cacheEnabled' in body:
-            body['cache'] = body.pop('cacheEnabled')
-        if 'doCompact' in body:
-            body['compact'] = body.pop('doCompact')
-        if 'isVolatile' in body:
-            body['volatile'] = body.pop('isVolatile')
-        if 'shardKeys' in body:
-            body['shard_fields'] = body.pop('shardKeys')
-        if 'replicationFactor' in body:
-            body['replication_factor'] = body.pop('replicationFactor')
-        if 'isSmart' in body:
-            body['smart'] = body.pop('isSmart')
-        if 'indexBuckets' in body:
-            body['index_bucket_count'] = body.pop('indexBuckets')
-        if 'journalSize' in body:
-            body['journal_size'] = body.pop('journalSize')
-        if 'numberOfShards' in body:
-            body['shard_count'] = body.pop('numberOfShards')
+        if "name" not in body:
+            body["name"] = self.name
+        if "isSystem" in body:
+            body["system"] = body.pop("isSystem")
+        if "type" in body:
+            body["edge"] = body.pop("type") == 3
+        if "waitForSync" in body:
+            body["sync"] = body.pop("waitForSync")
+        if "statusString" in body:
+            body["status"] = body.pop("statusString")
+        elif "status" in body:
+            body["status"] = self._get_status_text(body["status"])
+        if "globallyUniqueId" in body:
+            body["global_id"] = body.pop("globallyUniqueId")
+        if "objectId" in body:
+            body["id"] = body.pop("objectId")
+        if "cacheEnabled" in body:
+            body["cache"] = body.pop("cacheEnabled")
+        if "doCompact" in body:
+            body["compact"] = body.pop("doCompact")
+        if "isVolatile" in body:
+            body["volatile"] = body.pop("isVolatile")
+        if "shardKeys" in body:
+            body["shard_fields"] = body.pop("shardKeys")
+        if "replicationFactor" in body:
+            body["replication_factor"] = body.pop("replicationFactor")
+        if "isSmart" in body:
+            body["smart"] = body.pop("isSmart")
+        if "indexBuckets" in body:
+            body["index_bucket_count"] = body.pop("indexBuckets")
+        if "journalSize" in body:
+            body["journal_size"] = body.pop("journalSize")
+        if "numberOfShards" in body:
+            body["shard_count"] = body.pop("numberOfShards")
 
-        key_options = body.pop('keyOptions', {})
-        if 'type' in key_options:
-            body['key_generator'] = key_options['type']
-        if 'increment' in key_options:
-            body['key_increment'] = key_options['increment']
-        if 'offset' in key_options:
-            body['key_offset'] = key_options['offset']
-        if 'allowUserKeys' in key_options:
-            body['user_keys'] = key_options['allowUserKeys']
-        if 'lastValue' in key_options:
-            body['key_last_value'] = key_options['lastValue']
+        key_options = body.pop("keyOptions", {})
+        if "type" in key_options:
+            body["key_generator"] = key_options["type"]
+        if "increment" in key_options:
+            body["key_increment"] = key_options["increment"]
+        if "offset" in key_options:
+            body["key_offset"] = key_options["offset"]
+        if "allowUserKeys" in key_options:
+            body["user_keys"] = key_options["allowUserKeys"]
+        if "lastValue" in key_options:
+            body["key_last_value"] = key_options["lastValue"]
         return body
 
     def _validate_id(self, doc_id):
@@ -157,7 +146,8 @@ class Collection(APIWrapper):
         """
         if not doc_id.startswith(self._id_prefix):
             raise DocumentParseError(
-                'bad collection name in document ID "{}"'.format(doc_id))
+                'bad collection name in document ID "{}"'.format(doc_id)
+            )
         return doc_id
 
     def _extract_id(self, body):
@@ -170,10 +160,10 @@ class Collection(APIWrapper):
         :raise c8.exceptions.DocumentParseError: On missing ID and key.
         """
         try:
-            if '_id' in body:
-                return self._validate_id(body['_id'])
+            if "_id" in body:
+                return self._validate_id(body["_id"])
             else:
-                return self._id_prefix + body['_key']
+                return self._id_prefix + body["_key"]
         except KeyError:
             raise DocumentParseError('field "_key" or "_id" required')
 
@@ -188,9 +178,9 @@ class Collection(APIWrapper):
         :rtype: (str | unicode, dict)
         """
         doc_id = self._extract_id(document)
-        if not check_rev or '_rev' not in document:
+        if not check_rev or "_rev" not in document:
             return doc_id, {}
-        return doc_id, {'If-Match': document['_rev']}
+        return doc_id, {"If-Match": document["_rev"]}
 
     def _prep_from_doc(self, document, rev, check_rev):
         """Prepare document ID, body and request headers.
@@ -206,18 +196,18 @@ class Collection(APIWrapper):
         """
         if isinstance(document, dict):
             doc_id = self._extract_id(document)
-            rev = rev or document.get('_rev')
+            rev = rev or document.get("_rev")
 
             if not check_rev or rev is None:
                 return doc_id, doc_id, {}
             elif self._is_transaction:
                 body = document.copy()
-                body['_rev'] = rev
-                return doc_id, body, {'If-Match': rev}
+                body["_rev"] = rev
+                return doc_id, body, {"If-Match": rev}
             else:
-                return doc_id, doc_id, {'If-Match': rev}
+                return doc_id, doc_id, {"If-Match": rev}
         else:
-            if '/' in document:
+            if "/" in document:
                 doc_id = self._validate_id(document)
             else:
                 doc_id = self._id_prefix + document
@@ -225,10 +215,10 @@ class Collection(APIWrapper):
             if not check_rev or rev is None:
                 return doc_id, doc_id, {}
             elif self._is_transaction:
-                body = {'_id': doc_id, '_rev': rev}
-                return doc_id, body, {'If-Match': rev}
+                body = {"_id": doc_id, "_rev": rev}
+                return doc_id, body, {"If-Match": rev}
             else:
-                return doc_id, doc_id, {'If-Match': rev}
+                return doc_id, doc_id, {"If-Match": rev}
 
     def _ensure_key_in_body(self, body):
         """Return the document body with "_key" field populated.
@@ -239,12 +229,12 @@ class Collection(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.DocumentParseError: On missing ID and key.
         """
-        if '_key' in body:
+        if "_key" in body:
             return body
-        elif '_id' in body:
-            doc_id = self._validate_id(body['_id'])
+        elif "_id" in body:
+            doc_id = self._validate_id(body["_id"])
             body = body.copy()
-            body['_key'] = doc_id[len(self._id_prefix):]
+            body["_key"] = doc_id[len(self._id_prefix) :]  # noqa: E203
             return body
         raise DocumentParseError('field "_key" or "_id" required')
 
@@ -258,10 +248,10 @@ class Collection(APIWrapper):
         """
         if not isinstance(body, dict):
             raise DocumentParseError("Document is not a dict")
-        if '_id' in body and '_key' not in body:
-            doc_id = self._validate_id(body['_id'])
+        if "_id" in body and "_key" not in body:
+            doc_id = self._validate_id(body["_id"])
             body = body.copy()
-            body['_key'] = doc_id[len(self._id_prefix):]
+            body["_key"] = doc_id[len(self._id_prefix) :]  # noqa: E203
         return body
 
     @property
@@ -273,7 +263,6 @@ class Collection(APIWrapper):
         """
         return self._name
 
-
     def truncate(self):
         """Delete all documents in the collection.
 
@@ -282,10 +271,10 @@ class Collection(APIWrapper):
         :raise c8.exceptions.CollectionTruncateError: If operation fails.
         """
         request = Request(
-            method='put',
-            endpoint='/collection/{}/truncate'.format(self.name),
-            command='db.{}.truncate()'.format(self.name),
-            write=self.name
+            method="put",
+            endpoint="/collection/{}/truncate".format(self.name),
+            command="db.{}.truncate()".format(self.name),
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -303,10 +292,10 @@ class Collection(APIWrapper):
         :raise c8.exceptions.DocumentCountError: If retrieval fails.
         """
         request = Request(
-            method='get',
-            endpoint='/collection/{}/count'.format(self.name),
-            command='db.{}.count()'.format(self.name),
-            read=self.name
+            method="get",
+            endpoint="/collection/{}/count".format(self.name),
+            command="db.{}.count()".format(self.name),
+            read=self.name,
         )
 
         def response_handler(resp):
@@ -314,7 +303,7 @@ class Collection(APIWrapper):
                 raise DocumentCountError(resp, request)
             if self._is_transaction:
                 return resp.body
-            return resp.body['count']
+            return resp.body["count"]
 
         return self._execute(request, response_handler)
 
@@ -337,17 +326,18 @@ class Collection(APIWrapper):
         """
         handle, body, headers = self._prep_from_doc(document, rev, check_rev)
 
-        command = 'db.{}.exists({})'.format(
-            self.name,
-            dumps(body)
-        ) if self._is_transaction else None
+        command = (
+            "db.{}.exists({})".format(self.name, dumps(body))
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='get',
-            endpoint='/document/{}'.format(handle),
+            method="get",
+            endpoint="/document/{}".format(handle),
             headers=headers,
             command=command,
-            read=self.name
+            read=self.name,
         )
 
         def response_handler(resp):
@@ -361,10 +351,7 @@ class Collection(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def export(self,
-               offset=None,
-               limit=None,
-               order=None):
+    def export(self, offset=None, limit=None, order=None):
         """Export all documents in the collection.
 
         :param offset: This option can be used to simulate paging.
@@ -379,24 +366,22 @@ class Collection(APIWrapper):
         """
         data = {}
         if offset is not None:
-            data['offset'] = offset
+            data["offset"] = offset
         if limit is not None:
-            data['limit'] = limit
-        if order=="asc" or order=="desc":
-            data['order'] = order
+            data["limit"] = limit
+        if order == "asc" or order == "desc":
+            data["order"] = order
 
         request = Request(
-            method='get',
-            endpoint='/export/{}'.format(self.name),
-            params=data
+            method="get", endpoint="/export/{}".format(self.name), params=data
         )
 
         def response_handler(resp):
             if not resp.is_success:
                 raise DocumentGetError(resp, request)
-            return resp.body['result']
+            return resp.body["result"]
 
-        return self._execute(request, response_handler)   
+        return self._execute(request, response_handler)
 
     def find_near(self, latitude, longitude, limit=None):
         """Return documents near a given coordinate.
@@ -416,43 +401,41 @@ class Collection(APIWrapper):
         :rtype: c8.cursor.Cursor
         :raises c8.exceptions.DocumentGetError: If retrieval fails.
         """
-        assert isinstance(latitude, Number), 'latitude must be a number'
-        assert isinstance(longitude, Number), 'longitude must be a number'
-        assert is_none_or_int(limit), 'limit must be a non-negative int'
+        assert isinstance(latitude, Number), "latitude must be a number"
+        assert isinstance(longitude, Number), "longitude must be a number"
+        assert is_none_or_int(limit), "limit must be a non-negative int"
 
         query = """
         FOR doc IN NEAR(@collection, @latitude, @longitude{})
             RETURN doc
-        """.format('' if limit is None else ', @limit ')
+        """.format(
+            "" if limit is None else ", @limit "
+        )
 
         bind_vars = {
-            'collection': self._name,
-            'latitude': latitude,
-            'longitude': longitude
+            "collection": self._name,
+            "latitude": latitude,
+            "longitude": longitude,
         }
         if limit is not None:
-            bind_vars['limit'] = limit
+            bind_vars["limit"] = limit
 
         if not self._is_transaction:
-            command = 'db.{}.near({},{}){}.toArray()'.format(
+            command = "db.{}.near({},{}){}.toArray()".format(
                 self.name,
                 latitude,
                 longitude,
-                '' if limit is None else '.limit({})'.format(limit),
+                "" if limit is None else ".limit({})".format(limit),
             )
         else:
             command = None
 
         request = Request(
-            method='post',
-            endpoint='/cursor',
-            data={
-                'query': query,
-                'bindVars': bind_vars,
-                'count': True
-            },
+            method="post",
+            endpoint="/cursor",
+            data={"query": query, "bindVars": bind_vars, "count": True},
             command=command,
-            read=self.name
+            read=self.name,
         )
 
         def response_handler(resp):
@@ -462,12 +445,7 @@ class Collection(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def find_in_range(self,
-                      field,
-                      lower,
-                      upper,
-                      skip=None,
-                      limit=None):
+    def find_in_range(self, field, lower, upper, skip=None, limit=None):
         """Return documents within a given range in a random order.
 
         A skiplist index must be defined in the collection to use this method.
@@ -486,16 +464,16 @@ class Collection(APIWrapper):
         :rtype: c8.cursor.Cursor
         :raises c8.exceptions.DocumentGetError: If retrieval fails.
         """
-        assert is_none_or_int(skip), 'skip must be a non-negative int'
-        assert is_none_or_int(limit), 'limit must be a non-negative int'
+        assert is_none_or_int(skip), "skip must be a non-negative int"
+        assert is_none_or_int(limit), "limit must be a non-negative int"
 
         bind_vars = {
-            '@collection': self._name,
-            'field': field,
-            'lower': lower,
-            'upper': upper,
-            'skip': 0 if skip is None else skip,
-            'limit': 2147483647 if limit is None else limit,  # 2 ^ 31 - 1
+            "@collection": self._name,
+            "field": field,
+            "lower": lower,
+            "upper": upper,
+            "skip": 0 if skip is None else skip,
+            "limit": 2147483647 if limit is None else limit,  # 2 ^ 31 - 1
         }
 
         query = """
@@ -505,25 +483,25 @@ class Collection(APIWrapper):
             RETURN doc
         """
 
-        command = 'db.{}.range({},{},{}){}{}.toArray()'.format(
-            self.name,
-            dumps(field),
-            dumps(lower),
-            dumps(upper),
-            '' if skip is None else '.skip({})'.format(skip),
-            '' if limit is None else '.limit({})'.format(limit),
-        ) if self._is_transaction else None
+        command = (
+            "db.{}.range({},{},{}){}{}.toArray()".format(
+                self.name,
+                dumps(field),
+                dumps(lower),
+                dumps(upper),
+                "" if skip is None else ".skip({})".format(skip),
+                "" if limit is None else ".limit({})".format(limit),
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='post',
-            endpoint='/cursor',
-            data={
-                'query': query,
-                'bindVars': bind_vars,
-                'count': True
-            },
+            method="post",
+            endpoint="/cursor",
+            data={"query": query, "bindVars": bind_vars, "count": True},
             command=command,
-            read=self.name
+            read=self.name,
         )
 
         def response_handler(resp):
@@ -554,42 +532,41 @@ class Collection(APIWrapper):
         :rtype: c8.cursor.Cursor
         :raises c8.exceptions.DocumentGetError: If retrieval fails.
         """
-        assert isinstance(latitude, Number), 'latitude must be a number'
-        assert isinstance(longitude, Number), 'longitude must be a number'
-        assert isinstance(radius, Number), 'radius must be a number'
-        assert is_none_or_str(distance_field), 'distance_field must be a str'
+        assert isinstance(latitude, Number), "latitude must be a number"
+        assert isinstance(longitude, Number), "longitude must be a number"
+        assert isinstance(radius, Number), "radius must be a number"
+        assert is_none_or_str(distance_field), "distance_field must be a str"
 
         query = """
         FOR doc IN WITHIN(@@collection, @latitude, @longitude, @radius{})
             RETURN doc
-        """.format('' if distance_field is None else ', @distance')
+        """.format(
+            "" if distance_field is None else ", @distance"
+        )
 
         bind_vars = {
-            '@collection': self._name,
-            'latitude': latitude,
-            'longitude': longitude,
-            'radius': radius
+            "@collection": self._name,
+            "latitude": latitude,
+            "longitude": longitude,
+            "radius": radius,
         }
         if distance_field is not None:
-            bind_vars['distance'] = distance_field
+            bind_vars["distance"] = distance_field
 
-        command = 'db.{}.within({},{},{}).toArray()'.format(
-            self.name,
-            latitude,
-            longitude,
-            radius
-        ) if self._is_transaction else None
+        command = (
+            "db.{}.within({},{},{}).toArray()".format(
+                self.name, latitude, longitude, radius
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='post',
-            endpoint='/cursor',
-            data={
-                'query': query,
-                'bindVars': bind_vars,
-                'count': True
-            },
+            method="post",
+            endpoint="/cursor",
+            data={"query": query, "bindVars": bind_vars, "count": True},
             command=command,
-            read=self.name
+            read=self.name,
         )
 
         def response_handler(resp):
@@ -598,7 +575,6 @@ class Collection(APIWrapper):
             return Cursor(self._conn, resp.body)
 
         return self._execute(request, response_handler)
-   
 
     def find_by_text(self, field, query, limit=None):
         """Return documents that match the given fulltext query.
@@ -613,34 +589,40 @@ class Collection(APIWrapper):
         :rtype: c8.cursor.Cursor
         :raises c8.exceptions.DocumentGetError: If retrieval fails.
         """
-        assert is_none_or_int(limit), 'limit must be a non-negative int'
+        assert is_none_or_int(limit), "limit must be a non-negative int"
 
         bind_vars = {
-            'collection': self._name,
-            'field': field,
-            'query': query,
+            "collection": self._name,
+            "field": field,
+            "query": query,
         }
         if limit is not None:
-            bind_vars['limit'] = limit
+            bind_vars["limit"] = limit
 
         c8ql = """
         FOR doc IN FULLTEXT(@collection, @field, @query{})
             RETURN doc
-        """.format('' if limit is None else ', @limit')
+        """.format(
+            "" if limit is None else ", @limit"
+        )
 
-        command = 'db.{}.fulltext({},{}){}.toArray()'.format(
-            self.name,
-            dumps(field),
-            dumps(query),
-            '' if limit is None else '.limit({})'.format(limit),
-        ) if self._is_transaction else None
+        command = (
+            "db.{}.fulltext({},{}){}.toArray()".format(
+                self.name,
+                dumps(field),
+                dumps(query),
+                "" if limit is None else ".limit({})".format(limit),
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='post',
-            endpoint='/cursor',
-            data={'query': c8ql, 'bindVars': bind_vars, 'count': True},
+            method="post",
+            endpoint="/cursor",
+            data={"query": c8ql, "bindVars": bind_vars, "count": True},
             command=command,
-            read=self.name
+            read=self.name,
         )
 
         def response_handler(resp):
@@ -652,7 +634,6 @@ class Collection(APIWrapper):
             return Cursor(self._conn, resp.body)
 
         return self._execute(request, response_handler)
-
 
     ####################
     # Index Management #
@@ -666,11 +647,11 @@ class Collection(APIWrapper):
         :raise c8.exceptions.IndexListError: If retrieval fails.
         """
         request = Request(
-            method='get',
-            endpoint='/index',
-            params={'collection': self.name},
-            command='db.{}.getIndexes()'.format(self.name),
-            read=self.name
+            method="get",
+            endpoint="/index",
+            params={"collection": self.name},
+            command="db.{}.getIndexes()".format(self.name),
+            read=self.name,
         )
 
         def response_handler(resp):
@@ -679,19 +660,19 @@ class Collection(APIWrapper):
             if self._is_transaction:
                 result = resp.body
             else:
-                result = resp.body['indexes']
+                result = resp.body["indexes"]
 
             indexes = []
             for index in result:
-                index['id'] = index['id'].split('/', 1)[-1]
-                if 'minLength' in index:
-                    index['min_length'] = index.pop('minLength')
-                if 'geoJson' in index:
-                    index['geo_json'] = index.pop('geoJson')
-                if 'ignoreNull' in index:
-                    index['ignore_none'] = index.pop('ignoreNull')
-                if 'selectivityEstimate' in index:
-                    index['selectivity'] = index.pop('selectivityEstimate')
+                index["id"] = index["id"].split("/", 1)[-1]
+                if "minLength" in index:
+                    index["min_length"] = index.pop("minLength")
+                if "geoJson" in index:
+                    index["geo_json"] = index.pop("geoJson")
+                if "ignoreNull" in index:
+                    index["ignore_none"] = index.pop("ignoreNull")
+                if "selectivityEstimate" in index:
+                    index["selectivity"] = index.pop("selectivityEstimate")
                 indexes.append(index)
             return indexes
 
@@ -699,8 +680,7 @@ class Collection(APIWrapper):
 
     def get_index(self, index_name):
         request = Request(
-            method='get',
-            endpoint='/index/{}/{}'.format(self.name, index_name)
+            method="get", endpoint="/index/{}/{}".format(self.name, index_name)
         )
 
         def response_handler(resp):
@@ -721,38 +701,34 @@ class Collection(APIWrapper):
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
         request = Request(
-            method='post',
-            endpoint='/index',
+            method="post",
+            endpoint="/index",
             data=data,
-            params={'collection': self.name}
+            params={"collection": self.name},
         )
 
         def response_handler(resp):
             if not resp.is_success:
                 raise IndexCreateError(resp, request)
             details = resp.body
-            details['id'] = details['id'].split('/', 1)[1]
-            details.pop('error', None)
-            details.pop('code', None)
-            if 'minLength' in details:
-                details['min_length'] = details.pop('minLength')
-            if 'geoJson' in details:
-                details['geo_json'] = details.pop('geoJson')
-            if 'ignoreNull' in details:
-                details['ignore_none'] = details.pop('ignoreNull')
-            if 'selectivityEstimate' in details:
-                details['selectivity'] = details.pop('selectivityEstimate')
-            if 'isNewlyCreated' in details:
-                details['new'] = details.pop('isNewlyCreated')
+            details["id"] = details["id"].split("/", 1)[1]
+            details.pop("error", None)
+            details.pop("code", None)
+            if "minLength" in details:
+                details["min_length"] = details.pop("minLength")
+            if "geoJson" in details:
+                details["geo_json"] = details.pop("geoJson")
+            if "ignoreNull" in details:
+                details["ignore_none"] = details.pop("ignoreNull")
+            if "selectivityEstimate" in details:
+                details["selectivity"] = details.pop("selectivityEstimate")
+            if "isNewlyCreated" in details:
+                details["new"] = details.pop("isNewlyCreated")
             return details
 
         return self._execute(request, response_handler)
 
-    def add_hash_index(self,
-                       fields,
-                       unique=None,
-                       sparse=None,
-                       deduplicate=None):
+    def add_hash_index(self, fields, unique=None, sparse=None, deduplicate=None):
         """Create a new hash index.
 
         :param fields: Document fields to index.
@@ -769,20 +745,16 @@ class Collection(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
-        data = {'type': 'hash', 'fields': fields}
+        data = {"type": "hash", "fields": fields}
         if unique is not None:
-            data['unique'] = unique
+            data["unique"] = unique
         if sparse is not None:
-            data['sparse'] = sparse
+            data["sparse"] = sparse
         if deduplicate is not None:
-            data['deduplicate'] = deduplicate
+            data["deduplicate"] = deduplicate
         return self.add_index(data)
 
-    def add_skiplist_index(self,
-                           fields,
-                           unique=None,
-                           sparse=None,
-                           deduplicate=None):
+    def add_skiplist_index(self, fields, unique=None, sparse=None, deduplicate=None):
         """Create a new skiplist index.
 
         :param fields: Document fields to index.
@@ -799,13 +771,13 @@ class Collection(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
-        data = {'type': 'skiplist', 'fields': fields}
+        data = {"type": "skiplist", "fields": fields}
         if unique is not None:
-            data['unique'] = unique
+            data["unique"] = unique
         if sparse is not None:
-            data['sparse'] = sparse
+            data["sparse"] = sparse
         if deduplicate is not None:
-            data['deduplicate'] = deduplicate
+            data["deduplicate"] = deduplicate
         return self.add_index(data)
 
     def add_geo_index(self, fields, ordered=None):
@@ -822,9 +794,9 @@ class Collection(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
-        data = {'type': 'geo', 'fields': fields}
+        data = {"type": "geo", "fields": fields}
         if ordered is not None:
-            data['geoJson'] = ordered
+            data["geoJson"] = ordered
         return self.add_index(data)
 
     def add_fulltext_index(self, fields, min_length=None):
@@ -838,9 +810,9 @@ class Collection(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
-        data = {'type': 'fulltext', 'fields': fields}
+        data = {"type": "fulltext", "fields": fields}
         if min_length is not None:
-            data['minLength'] = min_length
+            data["minLength"] = min_length
         return self.add_index(data)
 
     def add_persistent_index(self, fields, unique=None, sparse=None, deduplicate=None):
@@ -864,33 +836,36 @@ class Collection(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
-        data = {'type': 'persistent', 'fields': fields}
+        data = {"type": "persistent", "fields": fields}
         if unique is not None:
-            data['unique'] = unique
+            data["unique"] = unique
         if sparse is not None:
-            data['sparse'] = sparse
+            data["sparse"] = sparse
         if deduplicate is not None:
-            data['deduplicate'] = deduplicate
+            data["deduplicate"] = deduplicate
         return self.add_index(data)
 
-    
     def add_ttl_index(self, fields, expireAfter=0, inBackground=False):
-            """Create a new ttl index.
+        """Create a new ttl index.
 
-            :param fields: Document fields to index.
-            :type fields: [str | unicode]
-            :param expireAfter:  The time (in seconds) after
-                a document's creation after which the documents count as "expired".
-            :type expireAfter: int
-            :param inBackground: Expire Documents in Background.
-            :type inBackground: bool
-            :returns: New index details.
-            :rtype: dict
-            :raise c8.exceptions.IndexCreateError: If create fails.
-            """
-            data = {'type': 'ttl', 'fields': fields, 'expireAfter': expireAfter,
-                    'inBackground': inBackground}  
-            return self.add_index(data)
+        :param fields: Document fields to index.
+        :type fields: [str | unicode]
+        :param expireAfter:  The time (in seconds) after
+            a document's creation after which the documents count as "expired".
+        :type expireAfter: int
+        :param inBackground: Expire Documents in Background.
+        :type inBackground: bool
+        :returns: New index details.
+        :rtype: dict
+        :raise c8.exceptions.IndexCreateError: If create fails.
+        """
+        data = {
+            "type": "ttl",
+            "fields": fields,
+            "expireAfter": expireAfter,
+            "inBackground": inBackground,
+        }
+        return self.add_index(data)
 
     def delete_index(self, index_name, ignore_missing=False):
         """Delete an index.
@@ -905,8 +880,7 @@ class Collection(APIWrapper):
         :raise c8.exceptions.IndexDeleteError: If delete fails.
         """
         request = Request(
-            method='delete',
-            endpoint='/index/{}/{}'.format(self.name, index_name)
+            method="delete", endpoint="/index/{}/{}".format(self.name, index_name)
         )
 
         def response_handler(resp):
@@ -934,7 +908,7 @@ class StandardCollection(Collection):
         super(StandardCollection, self).__init__(connection, executor, name)
 
     def __repr__(self):
-        return '<StandardCollection {}>'.format(self.name)
+        return "<StandardCollection {}>".format(self.name)
 
     def __getitem__(self, key):
         return self.get(key)
@@ -958,17 +932,18 @@ class StandardCollection(Collection):
         """
         handle, body, headers = self._prep_from_doc(document, rev, check_rev)
 
-        command = 'db.{}.exists({}) || undefined'.format(
-            self.name,
-            dumps(body)
-        ) if self._is_transaction else None
+        command = (
+            "db.{}.exists({}) || undefined".format(self.name, dumps(body))
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='get',
-            endpoint='/document/{}'.format(handle),
+            method="get",
+            endpoint="/document/{}".format(handle),
             headers=headers,
             command=command,
-            read=self.name
+            read=self.name,
         )
 
         def response_handler(resp):
@@ -995,8 +970,7 @@ class StandardCollection(Collection):
             documents.append(document)
         return documents, index
 
-    def insert_from_file(self, csv_filepath, return_new=False, sync=None,
-                         silent=False):
+    def insert_from_file(self, csv_filepath, return_new=False, sync=None, silent=False):
         """Insert a documents from csv file.
 
         :param csv_filepath: CSV file path which contains documents
@@ -1014,7 +988,7 @@ class StandardCollection(Collection):
         :rtype: bool | dict
         :raise c8.exceptions.DocumentInsertError: If insert fails.
         """
-        data = csv.DictReader(open(csv_filepath, newline=''))
+        data = csv.DictReader(open(csv_filepath, newline=""))
         data_dict = {}
         index = 0
         result = []
@@ -1054,23 +1028,23 @@ class StandardCollection(Collection):
 
         document = self._ensure_key_from_id(document)
 
-        params = {'returnNew': return_new, 'silent': silent}
+        params = {"returnNew": return_new, "silent": silent}
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
-        command = 'db.{}.insert({},{})'.format(
-            self.name,
-            dumps(document),
-            dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            "db.{}.insert({},{})".format(self.name, dumps(document), dumps(params))
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='post',
-            endpoint='/document/{}'.format(self.name),
+            method="post",
+            endpoint="/document/{}".format(self.name),
             data=document,
             params=params,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -1080,11 +1054,7 @@ class StandardCollection(Collection):
 
         return self._execute(request, response_handler)
 
-    def insert_many(self,
-                    documents,
-                    return_new=False,
-                    sync=None,
-                    silent=False):
+    def insert_many(self, documents, return_new=False, sync=None, silent=False):
         """Insert multiple documents.
 
         If inserting a document fails, the exception object is placed in the
@@ -1109,23 +1079,23 @@ class StandardCollection(Collection):
         """
         documents = [self._ensure_key_from_id(doc) for doc in documents]
 
-        params = {'returnNew': return_new, 'silent': silent}
+        params = {"returnNew": return_new, "silent": silent}
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
-        command = 'db.{}.insert({},{})'.format(
-            self.name,
-            dumps(documents),
-            dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            "db.{}.insert({},{})".format(self.name, dumps(documents), dumps(params))
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='post',
-            endpoint='/document/{}'.format(self.name),
+            method="post",
+            endpoint="/document/{}".format(self.name),
             data=documents,
             params=params,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -1136,7 +1106,7 @@ class StandardCollection(Collection):
 
             results = []
             for result in resp.body:
-                if '_id' in result:
+                if "_id" in result:
                     results.append(result)
                 else:
                     sub_resp = Response(
@@ -1145,7 +1115,7 @@ class StandardCollection(Collection):
                         headers=resp.headers,
                         status_code=resp.status_code,
                         status_text=resp.status_text,
-                        raw_body=result
+                        raw_body=result,
                     )
                     results.append(DocumentInsertError(sub_resp, request))
 
@@ -1153,15 +1123,17 @@ class StandardCollection(Collection):
 
         return self._execute(request, response_handler)
 
-    def update(self,
-               document,
-               check_rev=True,
-               merge=True,
-               keep_none=True,
-               return_new=False,
-               return_old=False,
-               sync=None,
-               silent=False):
+    def update(
+        self,
+        document,
+        check_rev=True,
+        merge=True,
+        keep_none=True,
+        return_new=False,
+        return_old=False,
+        sync=None,
+        silent=False,
+    ):
         """Update a document.
 
         :param document: Partial or full document with the updated values. It
@@ -1192,32 +1164,32 @@ class StandardCollection(Collection):
         :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
         """
         params = {
-            'keepNull': keep_none,
-            'mergeObjects': merge,
-            'returnNew': return_new,
-            'returnOld': return_old,
-            'ignoreRevs': not check_rev,
-            'overwrite': not check_rev,
-            'silent': silent
+            "keepNull": keep_none,
+            "mergeObjects": merge,
+            "returnNew": return_new,
+            "returnOld": return_old,
+            "ignoreRevs": not check_rev,
+            "overwrite": not check_rev,
+            "silent": silent,
         }
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
-        command = 'db.{col}.update({doc},{doc},{opts})'.format(
-            col=self.name,
-            doc=dumps(document),
-            opts=dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            "db.{col}.update({doc},{doc},{opts})".format(
+                col=self.name, doc=dumps(document), opts=dumps(params)
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='patch',
-            endpoint='/document/{}'.format(
-                self._extract_id(document)
-            ),
+            method="patch",
+            endpoint="/document/{}".format(self._extract_id(document)),
             data=document,
             params=params,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -1227,20 +1199,22 @@ class StandardCollection(Collection):
                 raise DocumentUpdateError(resp, request)
             if silent is True:
                 return True
-            resp.body['_old_rev'] = resp.body.pop('_oldRev')
+            resp.body["_old_rev"] = resp.body.pop("_oldRev")
             return resp.body
 
         return self._execute(request, response_handler)
 
-    def update_many(self,
-                    documents,
-                    check_rev=True,
-                    merge=True,
-                    keep_none=True,
-                    return_new=False,
-                    return_old=False,
-                    sync=None,
-                    silent=False):
+    def update_many(
+        self,
+        documents,
+        check_rev=True,
+        merge=True,
+        keep_none=True,
+        return_new=False,
+        return_old=False,
+        sync=None,
+        silent=False,
+    ):
         """Update multiple documents.
 
         If updating a document fails, the exception object is placed in the
@@ -1273,31 +1247,33 @@ class StandardCollection(Collection):
         :raise c8.exceptions.DocumentUpdateError: If update fails.
         """
         params = {
-            'keepNull': keep_none,
-            'mergeObjects': merge,
-            'returnNew': return_new,
-            'returnOld': return_old,
-            'ignoreRevs': not check_rev,
-            'overwrite': not check_rev,
-            'silent': silent
+            "keepNull": keep_none,
+            "mergeObjects": merge,
+            "returnNew": return_new,
+            "returnOld": return_old,
+            "ignoreRevs": not check_rev,
+            "overwrite": not check_rev,
+            "silent": silent,
         }
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
         documents = [self._ensure_key_in_body(doc) for doc in documents]
-        command = 'db.{col}.update({docs},{docs},{opts})'.format(
-            col=self.name,
-            docs=dumps(documents),
-            opts=dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            "db.{col}.update({docs},{docs},{opts})".format(
+                col=self.name, docs=dumps(documents), opts=dumps(params)
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='patch',
-            endpoint='/document/{}'.format(self.name),
+            method="patch",
+            endpoint="/document/{}".format(self.name),
             data=documents,
             params=params,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -1308,35 +1284,36 @@ class StandardCollection(Collection):
 
             results = []
             for result in resp.body:
-                if '_id' not in result:
+                if "_id" not in result:
                     sub_resp = Response(
-                        method='patch',
+                        method="patch",
                         url=resp.url,
                         headers=resp.headers,
                         status_code=resp.status_code,
                         status_text=resp.status_text,
                         raw_body=result,
                     )
-                    if result['errorNum'] == 1200:
+                    if result["errorNum"] == 1200:
                         result = DocumentRevisionError(sub_resp, request)
                     else:
                         result = DocumentUpdateError(sub_resp, request)
                 else:
-                    result['_old_rev'] = result.pop('_oldRev')
+                    result["_old_rev"] = result.pop("_oldRev")
                 results.append(result)
 
             return results
 
         return self._execute(request, response_handler)
 
-
-    def replace(self,
-                document,
-                check_rev=True,
-                return_new=False,
-                return_old=False,
-                sync=None,
-                silent=False):
+    def replace(
+        self,
+        document,
+        check_rev=True,
+        return_new=False,
+        return_old=False,
+        sync=None,
+        silent=False,
+    ):
         """Replace a document.
 
         :param document: New document to replace the old one with. It must
@@ -1362,30 +1339,30 @@ class StandardCollection(Collection):
         :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
         """
         params = {
-            'returnNew': return_new,
-            'returnOld': return_old,
-            'ignoreRevs': not check_rev,
-            'overwrite': not check_rev,
-            'silent': silent
+            "returnNew": return_new,
+            "returnOld": return_old,
+            "ignoreRevs": not check_rev,
+            "overwrite": not check_rev,
+            "silent": silent,
         }
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
-        command = 'db.{col}.replace({doc},{doc},{opts})'.format(
-            col=self.name,
-            doc=dumps(document),
-            opts=dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            "db.{col}.replace({doc},{doc},{opts})".format(
+                col=self.name, doc=dumps(document), opts=dumps(params)
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='put',
-            endpoint='/document/{}'.format(
-                self._extract_id(document)
-            ),
+            method="put",
+            endpoint="/document/{}".format(self._extract_id(document)),
             params=params,
             data=document,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -1395,18 +1372,20 @@ class StandardCollection(Collection):
                 raise DocumentReplaceError(resp, request)
             if silent is True:
                 return True
-            resp.body['_old_rev'] = resp.body.pop('_oldRev')
+            resp.body["_old_rev"] = resp.body.pop("_oldRev")
             return resp.body
 
         return self._execute(request, response_handler)
 
-    def replace_many(self,
-                     documents,
-                     check_rev=True,
-                     return_new=False,
-                     return_old=False,
-                     sync=None,
-                     silent=False):
+    def replace_many(
+        self,
+        documents,
+        check_rev=True,
+        return_new=False,
+        return_old=False,
+        sync=None,
+        silent=False,
+    ):
         """Replace multiple documents.
 
         If replacing a document fails, the exception object is placed in the
@@ -1434,29 +1413,31 @@ class StandardCollection(Collection):
         :raise c8.exceptions.DocumentReplaceError: If replace fails.
         """
         params = {
-            'returnNew': return_new,
-            'returnOld': return_old,
-            'ignoreRevs': not check_rev,
-            'overwrite': not check_rev,
-            'silent': silent
+            "returnNew": return_new,
+            "returnOld": return_old,
+            "ignoreRevs": not check_rev,
+            "overwrite": not check_rev,
+            "silent": silent,
         }
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
         documents = [self._ensure_key_in_body(doc) for doc in documents]
-        command = 'db.{col}.replace({docs},{docs},{opts})'.format(
-            col=self.name,
-            docs=dumps(documents),
-            opts=dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            "db.{col}.replace({docs},{docs},{opts})".format(
+                col=self.name, docs=dumps(documents), opts=dumps(params)
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='put',
-            endpoint='/document/{}'.format(self.name),
+            method="put",
+            endpoint="/document/{}".format(self.name),
             params=params,
             data=documents,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -1467,36 +1448,37 @@ class StandardCollection(Collection):
 
             results = []
             for result in resp.body:
-                if '_id' not in result:
+                if "_id" not in result:
                     sub_resp = Response(
                         method=resp.method,
                         url=resp.url,
                         headers=resp.headers,
                         status_code=resp.status_code,
                         status_text=resp.status_text,
-                        raw_body=result
+                        raw_body=result,
                     )
-                    if result['errorNum'] == 1200:
+                    if result["errorNum"] == 1200:
                         result = DocumentRevisionError(sub_resp, request)
                     else:
                         result = DocumentReplaceError(sub_resp, request)
                 else:
-                    result['_old_rev'] = result.pop('_oldRev')
+                    result["_old_rev"] = result.pop("_oldRev")
                 results.append(result)
 
             return results
 
         return self._execute(request, response_handler)
 
-
-    def delete(self,
-               document,
-               rev=None,
-               check_rev=True,
-               ignore_missing=False,
-               return_old=False,
-               sync=None,
-               silent=False):
+    def delete(
+        self,
+        document,
+        rev=None,
+        check_rev=True,
+        ignore_missing=False,
+        return_old=False,
+        sync=None,
+        silent=False,
+    ):
         """Delete a document.
 
         :param document: Document ID, key or body. Document body must contain
@@ -1530,27 +1512,27 @@ class StandardCollection(Collection):
         handle, body, headers = self._prep_from_doc(document, rev, check_rev)
 
         params = {
-            'returnOld': return_old,
-            'ignoreRevs': not check_rev,
-            'overwrite': not check_rev,
-            'silent': silent
+            "returnOld": return_old,
+            "ignoreRevs": not check_rev,
+            "overwrite": not check_rev,
+            "silent": silent,
         }
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
-        command = 'db.{}.remove({},{})'.format(
-            self.name,
-            dumps(body),
-            dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            "db.{}.remove({},{})".format(self.name, dumps(body), dumps(params))
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='delete',
-            endpoint='/document/{}'.format(handle),
+            method="delete",
+            endpoint="/document/{}".format(handle),
             params=params,
             headers=headers,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -1564,12 +1546,9 @@ class StandardCollection(Collection):
 
         return self._execute(request, response_handler)
 
-    def delete_many(self,
-                    documents,
-                    return_old=False,
-                    check_rev=True,
-                    sync=None,
-                    silent=False):
+    def delete_many(
+        self, documents, return_old=False, check_rev=True, sync=None, silent=False
+    ):
         """Delete multiple documents.
 
         If deleting a document fails, the exception object is placed in the
@@ -1594,31 +1573,31 @@ class StandardCollection(Collection):
         :raise c8.exceptions.DocumentDeleteError: If delete fails.
         """
         params = {
-            'returnOld': return_old,
-            'ignoreRevs': not check_rev,
-            'overwrite': not check_rev,
-            'silent': silent
+            "returnOld": return_old,
+            "ignoreRevs": not check_rev,
+            "overwrite": not check_rev,
+            "silent": silent,
         }
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
         documents = [
             self._ensure_key_in_body(doc) if isinstance(doc, dict) else doc
             for doc in documents
         ]
-        command = 'db.{}.remove({},{})'.format(
-            self.name,
-            dumps(documents),
-            dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            "db.{}.remove({},{})".format(self.name, dumps(documents), dumps(params))
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='delete',
-            endpoint='/document/{}'.format(self.name),
+            method="delete",
+            endpoint="/document/{}".format(self.name),
             params=params,
             data=documents,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -1629,16 +1608,16 @@ class StandardCollection(Collection):
 
             results = []
             for result in resp.body:
-                if '_id' not in result:
+                if "_id" not in result:
                     sub_resp = Response(
                         method=resp.method,
                         url=resp.url,
                         headers=resp.headers,
                         status_code=resp.status_code,
                         status_text=resp.status_text,
-                        raw_body=result
+                        raw_body=result,
                     )
-                    if result['errorNum'] == 1200:
+                    if result["errorNum"] == 1200:
                         result = DocumentRevisionError(sub_resp, request)
                     else:
                         result = DocumentDeleteError(sub_resp, request)
@@ -1647,13 +1626,8 @@ class StandardCollection(Collection):
             return results
 
         return self._execute(request, response_handler)
-         
 
-    def import_bulk(self,
-                    documents,
-                    details=True,
-                    primaryKey=None,
-                    replace=False):
+    def import_bulk(self, documents, details=True, primaryKey=None, replace=False):
         """Insert multiple documents into the collection.
 
         This is faster than :func:`c8.collection.Collection.insert_many`
@@ -1670,7 +1644,7 @@ class StandardCollection(Collection):
             the documents to be inserted.
         :type primaryKey: str | unicode
         :param replace: Action to take on unique key constraint violations
-            (for documents with "_key" fields). A bool "replace" if set to true replaces 
+            (for documents with "_key" fields). A bool "replace" if set to true replaces
             the existing documents with new ones else it won't replace the documents and
             count it as "error".
         :type replace: bool
@@ -1680,19 +1654,17 @@ class StandardCollection(Collection):
         """
         data = {}
         documents = [self._ensure_key_from_id(doc) for doc in documents]
-        data['data'] = documents
+        data["data"] = documents
 
         if details is not None:
-            data['details'] = details
+            data["details"] = details
         if primaryKey is not None:
-            data['primaryKey'] = primaryKey
+            data["primaryKey"] = primaryKey
         if replace is not None:
-            data['replace'] = replace
+            data["replace"] = replace
 
         request = Request(
-            method='post',
-            endpoint='/import/{}'.format(self.name),
-            data=data
+            method="post", endpoint="/import/{}".format(self.name), data=data
         )
 
         def response_handler(resp):
@@ -1721,7 +1693,7 @@ class VertexCollection(Collection):
         self._graph = graph
 
     def __repr__(self):
-        return '<VertexCollection {}>'.format(self.name)
+        return "<VertexCollection {}>".format(self.name)
 
     def __getitem__(self, key):
         return self.get(key)
@@ -1754,20 +1726,18 @@ class VertexCollection(Collection):
         """
         handle, body, headers = self._prep_from_doc(vertex, rev, check_rev)
 
-        command = 'gm._graph("{}").{}.document({})'.format(
-            self.graph,
-            self.name,
-            dumps(body)
-        ) if self._is_transaction else None
+        command = (
+            'gm._graph("{}").{}.document({})'.format(self.graph, self.name, dumps(body))
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='get',
-            endpoint='/graph/{}/vertex/{}'.format(
-                self._graph, handle
-            ),
+            method="get",
+            endpoint="/graph/{}/vertex/{}".format(self._graph, handle),
             headers=headers,
             command=command,
-            read=self.name
+            read=self.name,
         )
 
         def response_handler(resp):
@@ -1779,7 +1749,7 @@ class VertexCollection(Collection):
                 raise DocumentGetError(resp, request)
             if self._is_transaction:
                 return resp.body
-            return resp.body['vertex']
+            return resp.body["vertex"]
 
         return self._execute(request, response_handler)
 
@@ -1802,26 +1772,25 @@ class VertexCollection(Collection):
         """
         vertex = self._ensure_key_from_id(vertex)
 
-        params = {'silent': silent}
+        params = {"silent": silent}
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
-        command = 'gm._graph("{}").{}.save({},{})'.format(
-            self.graph,
-            self.name,
-            dumps(vertex),
-            dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            'gm._graph("{}").{}.save({},{})'.format(
+                self.graph, self.name, dumps(vertex), dumps(params)
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='post',
-            endpoint='/graph/{}/vertex/{}'.format(
-                self._graph, self.name
-            ),
+            method="post",
+            endpoint="/graph/{}/vertex/{}".format(self._graph, self.name),
             data=vertex,
             params=params,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -1831,16 +1800,11 @@ class VertexCollection(Collection):
                 return True
             if self._is_transaction:
                 return resp.body
-            return resp.body['vertex']
+            return resp.body["vertex"]
 
         return self._execute(request, response_handler)
 
-    def update(self,
-               vertex,
-               check_rev=True,
-               keep_none=True,
-               sync=None,
-               silent=False):
+    def update(self, vertex, check_rev=True, keep_none=True, sync=None, silent=False):
         """Update a vertex document.
 
         :param vertex: Partial or full vertex document with updated values. It
@@ -1865,32 +1829,26 @@ class VertexCollection(Collection):
         """
         vertex_id, headers = self._prep_from_body(vertex, check_rev)
 
-        params = {
-            'keepNull': keep_none,
-            'overwrite': not check_rev,
-            'silent': silent
-        }
+        params = {"keepNull": keep_none, "overwrite": not check_rev, "silent": silent}
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
-        command = 'gm._graph("{}").{}.update("{}",{},{})'.format(
-            self.graph,
-            self.name,
-            vertex_id,
-            dumps(vertex),
-            dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            'gm._graph("{}").{}.update("{}",{},{})'.format(
+                self.graph, self.name, vertex_id, dumps(vertex), dumps(params)
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='patch',
-            endpoint='/graph/{}/vertex/{}'.format(
-                self._graph, vertex_id
-            ),
+            method="patch",
+            endpoint="/graph/{}/vertex/{}".format(self._graph, vertex_id),
             headers=headers,
             params=params,
             data=vertex,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -1903,8 +1861,8 @@ class VertexCollection(Collection):
             if self._is_transaction:
                 result = resp.body
             else:
-                result = resp.body['vertex']
-            result['_old_rev'] = result.pop('_oldRev')
+                result = resp.body["vertex"]
+            result["_old_rev"] = result.pop("_oldRev")
             return result
 
         return self._execute(request, response_handler)
@@ -1931,28 +1889,26 @@ class VertexCollection(Collection):
         """
         vertex_id, headers = self._prep_from_body(vertex, check_rev)
 
-        params = {'silent': silent}
+        params = {"silent": silent}
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
-        command = 'gm._graph("{}").{}.replace("{}",{},{})'.format(
-            self.graph,
-            self.name,
-            vertex_id,
-            dumps(vertex),
-            dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            'gm._graph("{}").{}.replace("{}",{},{})'.format(
+                self.graph, self.name, vertex_id, dumps(vertex), dumps(params)
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='put',
-            endpoint='/graph/{}/vertex/{}'.format(
-                self._graph, vertex_id
-            ),
+            method="put",
+            endpoint="/graph/{}/vertex/{}".format(self._graph, vertex_id),
             headers=headers,
             params=params,
             data=vertex,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -1965,18 +1921,13 @@ class VertexCollection(Collection):
             if self._is_transaction:
                 result = resp.body
             else:
-                result = resp.body['vertex']
-            result['_old_rev'] = result.pop('_oldRev')
+                result = resp.body["vertex"]
+            result["_old_rev"] = result.pop("_oldRev")
             return result
 
         return self._execute(request, response_handler)
 
-    def delete(self,
-               vertex,
-               rev=None,
-               check_rev=True,
-               ignore_missing=False,
-               sync=None):
+    def delete(self, vertex, rev=None, check_rev=True, ignore_missing=False, sync=None):
         """Delete a vertex document.
 
         :param vertex: Vertex document ID, key or body. Document body must
@@ -2003,23 +1954,22 @@ class VertexCollection(Collection):
         """
         handle, _, headers = self._prep_from_doc(vertex, rev, check_rev)
 
-        params = {} if sync is None else {'waitForSync': sync}
-        command = 'gm._graph("{}").{}.remove("{}",{})'.format(
-            self.graph,
-            self.name,
-            handle,
-            dumps(params)
-        ) if self._is_transaction else None
+        params = {} if sync is None else {"waitForSync": sync}
+        command = (
+            'gm._graph("{}").{}.remove("{}",{})'.format(
+                self.graph, self.name, handle, dumps(params)
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='delete',
-            endpoint='/graph/{}/vertex/{}'.format(
-                self._graph, handle
-            ),
+            method="delete",
+            endpoint="/graph/{}/vertex/{}".format(self._graph, handle),
             params=params,
             headers=headers,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -2052,7 +2002,7 @@ class EdgeCollection(Collection):
         self._graph = graph
 
     def __repr__(self):
-        return '<EdgeCollection {}>'.format(self.name)
+        return "<EdgeCollection {}>".format(self.name)
 
     def __getitem__(self, key):
         return self.get(key)
@@ -2085,20 +2035,18 @@ class EdgeCollection(Collection):
         """
         handle, body, headers = self._prep_from_doc(edge, rev, check_rev)
 
-        command = 'gm._graph("{}").{}.document({})'.format(
-            self.graph,
-            self.name,
-            dumps(body)
-        ) if self._is_transaction else None
+        command = (
+            'gm._graph("{}").{}.document({})'.format(self.graph, self.name, dumps(body))
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='get',
-            endpoint='/graph/{}/edge/{}'.format(
-                self._graph, handle
-            ),
+            method="get",
+            endpoint="/graph/{}/edge/{}".format(self._graph, handle),
             headers=headers,
             command=command,
-            read=self.name
+            read=self.name,
         )
 
         def response_handler(resp):
@@ -2110,7 +2058,7 @@ class EdgeCollection(Collection):
                 raise DocumentGetError(resp, request)
             if self._is_transaction:
                 return resp.body
-            return resp.body['edge']
+            return resp.body["edge"]
 
         return self._execute(request, response_handler)
 
@@ -2134,28 +2082,30 @@ class EdgeCollection(Collection):
         """
         edge = self._ensure_key_from_id(edge)
 
-        params = {'silent': silent}
+        params = {"silent": silent}
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
-        command = 'gm._graph("{}").{}.save("{}","{}",{},{})'.format(
-            self.graph,
-            self.name,
-            edge['_from'],
-            edge['_to'],
-            dumps(edge),
-            dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            'gm._graph("{}").{}.save("{}","{}",{},{})'.format(
+                self.graph,
+                self.name,
+                edge["_from"],
+                edge["_to"],
+                dumps(edge),
+                dumps(params),
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='post',
-            endpoint='/graph/{}/edge/{}'.format(
-                self._graph, self.name
-            ),
+            method="post",
+            endpoint="/graph/{}/edge/{}".format(self._graph, self.name),
             data=edge,
             params=params,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -2165,16 +2115,11 @@ class EdgeCollection(Collection):
                 return True
             if self._is_transaction:
                 return resp.body
-            return resp.body['edge']
+            return resp.body["edge"]
 
         return self._execute(request, response_handler)
 
-    def update(self,
-               edge,
-               check_rev=True,
-               keep_none=True,
-               sync=None,
-               silent=False):
+    def update(self, edge, check_rev=True, keep_none=True, sync=None, silent=False):
         """Update an edge document.
 
         :param edge: Partial or full edge document with updated values. It must
@@ -2199,32 +2144,26 @@ class EdgeCollection(Collection):
         """
         edge_id, headers = self._prep_from_body(edge, check_rev)
 
-        params = {
-            'keepNull': keep_none,
-            'overwrite': not check_rev,
-            'silent': silent
-        }
+        params = {"keepNull": keep_none, "overwrite": not check_rev, "silent": silent}
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
-        command = 'gm._graph("{}").{}.update("{}",{},{})'.format(
-            self.graph,
-            self.name,
-            edge_id,
-            dumps(edge),
-            dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            'gm._graph("{}").{}.update("{}",{},{})'.format(
+                self.graph, self.name, edge_id, dumps(edge), dumps(params)
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='patch',
-            endpoint='/graph/{}/edge/{}'.format(
-                self._graph, edge_id
-            ),
+            method="patch",
+            endpoint="/graph/{}/edge/{}".format(self._graph, edge_id),
             headers=headers,
             params=params,
             data=edge,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -2237,8 +2176,8 @@ class EdgeCollection(Collection):
             if self._is_transaction:
                 result = resp.body
             else:
-                result = resp.body['edge']
-            result['_old_rev'] = result.pop('_oldRev')
+                result = resp.body["edge"]
+            result["_old_rev"] = result.pop("_oldRev")
             return result
 
         return self._execute(request, response_handler)
@@ -2266,28 +2205,26 @@ class EdgeCollection(Collection):
         """
         edge_id, headers = self._prep_from_body(edge, check_rev)
 
-        params = {'silent': silent}
+        params = {"silent": silent}
         if sync is not None:
-            params['waitForSync'] = sync
+            params["waitForSync"] = sync
 
-        command = 'gm._graph("{}").{}.replace("{}",{},{})'.format(
-            self.graph,
-            self.name,
-            edge_id,
-            dumps(edge),
-            dumps(params)
-        ) if self._is_transaction else None
+        command = (
+            'gm._graph("{}").{}.replace("{}",{},{})'.format(
+                self.graph, self.name, edge_id, dumps(edge), dumps(params)
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='put',
-            endpoint='/graph/{}/edge/{}'.format(
-                self._graph, edge_id
-            ),
+            method="put",
+            endpoint="/graph/{}/edge/{}".format(self._graph, edge_id),
             headers=headers,
             params=params,
             data=edge,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -2300,18 +2237,13 @@ class EdgeCollection(Collection):
             if self._is_transaction:
                 result = resp.body
             else:
-                result = resp.body['edge']
-            result['_old_rev'] = result.pop('_oldRev')
+                result = resp.body["edge"]
+            result["_old_rev"] = result.pop("_oldRev")
             return result
 
         return self._execute(request, response_handler)
 
-    def delete(self,
-               edge,
-               rev=None,
-               check_rev=True,
-               ignore_missing=False,
-               sync=None):
+    def delete(self, edge, rev=None, check_rev=True, ignore_missing=False, sync=None):
         """Delete an edge document.
 
         :param edge: Edge document ID, key or body. Document body must contain
@@ -2338,23 +2270,22 @@ class EdgeCollection(Collection):
         """
         handle, _, headers = self._prep_from_doc(edge, rev, check_rev)
 
-        params = {} if sync is None else {'waitForSync': sync}
-        command = 'gm._graph("{}").{}.remove("{}",{})'.format(
-            self.graph,
-            self.name,
-            handle,
-            dumps(params)
-        ) if self._is_transaction else None
+        params = {} if sync is None else {"waitForSync": sync}
+        command = (
+            'gm._graph("{}").{}.remove("{}",{})'.format(
+                self.graph, self.name, handle, dumps(params)
+            )
+            if self._is_transaction
+            else None
+        )
 
         request = Request(
-            method='delete',
-            endpoint='/graph/{}/edge/{}'.format(
-                self._graph, handle
-            ),
+            method="delete",
+            endpoint="/graph/{}/edge/{}".format(self._graph, handle),
             params=params,
             headers=headers,
             command=command,
-            write=self.name
+            write=self.name,
         )
 
         def response_handler(resp):
@@ -2389,10 +2320,7 @@ class EdgeCollection(Collection):
         :rtype: bool | dict
         :raise c8.exceptions.DocumentInsertError: If insert fails.
         """
-        edge = {
-            '_from': get_doc_id(from_vertex),
-            '_to': get_doc_id(to_vertex)
-        }
+        edge = {"_from": get_doc_id(from_vertex), "_to": get_doc_id(to_vertex)}
         if data is not None:
             edge.update(self._ensure_key_from_id(data))
         return self.insert(edge, sync=sync, silent=silent)
@@ -2409,26 +2337,24 @@ class EdgeCollection(Collection):
         :rtype: dict
         :raise c8.exceptions.EdgeListError: If retrieval fails.
         """
-        params = {'vertex': get_doc_id(vertex)}
+        params = {"vertex": get_doc_id(vertex)}
         if direction is not None:
-            params['direction'] = direction
+            params["direction"] = direction
 
         request = Request(
-            method='get',
-            endpoint='/edges/{}'.format(self.name),
-            params=params
+            method="get", endpoint="/edges/{}".format(self.name), params=params
         )
 
         def response_handler(resp):
             if not resp.is_success:
                 raise EdgeListError(resp, request)
-            stats = resp.body['stats']
+            stats = resp.body["stats"]
             return {
-                'edges': resp.body['edges'],
-                'stats': {
-                    'filtered': stats['filtered'],
-                    'scanned_index': stats['scannedIndex'],
-                }
+                "edges": resp.body["edges"],
+                "stats": {
+                    "filtered": stats["filtered"],
+                    "scanned_index": stats["scannedIndex"],
+                },
             }
 
         return self._execute(request, response_handler)

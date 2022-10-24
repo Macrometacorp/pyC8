@@ -29,4 +29,4 @@ STREAMNAME_LOCAL_SYSTEM_DEFAULT = STREAM_LOCAL_NS_PREFIX + "_system"
 # TODO : Functions defaults
 
 if __name__ == "__main__":
-    print('This file is only meant to be used as an import module')
+    print("This file is only meant to be used as an import module")  # noqa: T201

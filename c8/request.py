@@ -1,12 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
 import json
+import warnings
 
 from six import moves, string_types
 
-import warnings
-
-__all__ = ['Request']
+__all__ = ["Request"]
 
 warnings.filterwarnings("ignore")
 
@@ -50,35 +49,37 @@ class Request(object):
     """
 
     __slots__ = (
-        'method',
-        'endpoint',
-        'headers',
-        'params',
-        'data',
-        'command',
-        'read',
-        'write'
+        "method",
+        "endpoint",
+        "headers",
+        "params",
+        "data",
+        "command",
+        "read",
+        "write",
     )
 
-    def __init__(self,
-                 method,
-                 endpoint,
-                 auth_tok=None,
-                 headers=None,
-                 params=None,
-                 data=None,
-                 command=None,
-                 read=None,
-                 write=None):
+    def __init__(
+        self,
+        method,
+        endpoint,
+        auth_tok=None,
+        headers=None,
+        params=None,
+        data=None,
+        command=None,
+        read=None,
+        write=None,
+    ):
         self.method = method
         self.endpoint = endpoint
         self.headers = headers or {}
 
         # Insert default headers.
-        self.headers['content-type'] = 'application/json'
-        self.headers['charset'] = 'utf-8'
+        self.headers["content-type"] = "application/json"
+        self.headers["charset"] = "utf-8"
         if auth_tok:
-            self.headers['Authorization'] = 'bearer ' + auth_tok
+            self.headers["Authorization"] = "bearer " + auth_tok
 
         # Sanitize URL params.
         if params is not None:
@@ -101,23 +102,23 @@ class Request(object):
         self.write = write
 
     def set_auth_token_in_header(self, auth_tok):
-        """ Set the Authorization header with the specified JWT auth token.
+        """Set the Authorization header with the specified JWT auth token.
 
         :param auth_tok: JWT Autentication to use in this request
         :type auth_tok: str | unicode
         """
         if auth_tok:
-            self.headers['Authorization'] = 'bearer ' + auth_tok
+            self.headers["Authorization"] = "bearer " + auth_tok
 
     def __str__(self):
         """Return the request details in string form."""
         path = self.endpoint
         if self.params is not None:
-            path += '?' + moves.urllib.parse.urlencode(self.params)
-        request_strings = ['{} {} HTTP/1.1'.format(self.method, path)]
+            path += "?" + moves.urllib.parse.urlencode(self.params)
+        request_strings = ["{} {} HTTP/1.1".format(self.method, path)]
         if self.headers is not None:
             for key, value in sorted(self.headers.items()):
-                request_strings.append('{}: {}'.format(key, value))
+                request_strings.append("{}: {}".format(key, value))
         if self.data is not None:
-            request_strings.append('\r\n{}'.format(self.data))
-        return '\r\n'.join(request_strings)
+            request_strings.append("\r\n{}".format(self.data))
+        return "\r\n".join(request_strings)

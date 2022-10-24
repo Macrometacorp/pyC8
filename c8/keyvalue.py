@@ -4,16 +4,16 @@ from json import dumps
 
 from c8.api import APIWrapper
 from c8.exceptions import (
-   ListCollections,
-   CreateCollectionError,
-   DeleteCollectionError,
-   InsertKVError,
-   GetValueError,
-   DeleteEntryForKey,
-   GetKeysError,
-   GetCountError,
-   GetKVError,
-   RemoveKVError
+    CreateCollectionError,
+    DeleteCollectionError,
+    DeleteEntryForKey,
+    GetCountError,
+    GetKeysError,
+    GetKVError,
+    GetValueError,
+    InsertKVError,
+    ListCollections,
+    RemoveKVError,
 )
 from c8.request import Request
 
@@ -31,7 +31,7 @@ class KV(APIWrapper):
         super(KV, self).__init__(connection, executor)
 
     def __repr__(self):
-        return '<KV in {}>'.format(self._conn.fabric_name)
+        return "<KV in {}>".format(self._conn.fabric_name)
 
     def get_collections(self):
         """Returns the list of collections using kv.
@@ -39,17 +39,14 @@ class KV(APIWrapper):
         :rtype: list
         :raise c8.exceptions.ListCollections: If retrieval fails.
         """
-        request = Request(
-            method='get',
-            endpoint='/kv'
-        )
+        request = Request(method="get", endpoint="/kv")
 
         def response_handler(resp):
             if not resp.is_success:
                 raise ListCollections(resp, request)
             else:
                 return resp.body["result"]
-                
+
         return self._execute(request, response_handler)
 
     def create_collection(self, name, expiration=False):
@@ -64,8 +61,7 @@ class KV(APIWrapper):
         :raise c8.exceptions.CreateCollectionError: If creation fails.
         """
         request = Request(
-            method='post',
-            endpoint='/kv/{}?expiration={}'.format(name, expiration)
+            method="post", endpoint="/kv/{}?expiration={}".format(name, expiration)
         )
 
         def response_handler(resp):
@@ -76,7 +72,7 @@ class KV(APIWrapper):
                     return True
                 else:
                     return False
-                
+
         return self._execute(request, response_handler)
 
     def has_collection(self, name):
@@ -90,7 +86,7 @@ class KV(APIWrapper):
         exists = False
         collections = self.get_collections()
         for collection in collections:
-            if collection['name'] == name:
+            if collection["name"] == name:
                 exists = True
                 break
             else:
@@ -105,10 +101,7 @@ class KV(APIWrapper):
         :rtype: boolean
         :raise c8.exceptions.DeleteCollectionError: If creation fails.
         """
-        request = Request(
-            method='delete',
-            endpoint='/kv/{}'.format(name)
-        )
+        request = Request(method="delete", endpoint="/kv/{}".format(name))
 
         def response_handler(resp):
             if not resp.is_success:
@@ -118,6 +111,7 @@ class KV(APIWrapper):
                     return True
                 else:
                     return False
+
         return self._execute(request, response_handler)
 
     def insert_key_value_pair(self, name, data=None):
@@ -132,10 +126,7 @@ class KV(APIWrapper):
         :raise c8.exceptions.InsertKVError: If insertion fails.
         """
         request = Request(
-            method='put',
-            endpoint='/kv/{}/value'.format(name),
-            data=dumps(data)
-
+            method="put", endpoint="/kv/{}/value".format(name), data=dumps(data)
         )
 
         def response_handler(resp):
@@ -143,6 +134,7 @@ class KV(APIWrapper):
                 raise InsertKVError(resp, request)
             else:
                 return resp.body
+
         return self._execute(request, response_handler)
 
     def delete_entry_for_key(self, name, key):
@@ -156,10 +148,7 @@ class KV(APIWrapper):
         :rtype: boolean
         :raise c8.exceptions.DeleteEntryForKey: If deletion fails.
         """
-        request = Request(
-            method='delete',
-            endpoint='/kv/{}/value/{}'.format(name, key)
-        )
+        request = Request(method="delete", endpoint="/kv/{}/value/{}".format(name, key))
 
         def response_handler(resp):
             if not resp.is_success:
@@ -169,6 +158,7 @@ class KV(APIWrapper):
                     return True
                 else:
                     return False
+
         return self._execute(request, response_handler)
 
     def delete_entry_for_keys(self, name, keys=[]):
@@ -183,9 +173,7 @@ class KV(APIWrapper):
         :raise c8.exceptions.DeleteEntryForKey: If deletion fails.
         """
         request = Request(
-            method='delete',
-            endpoint='/kv/{}/values'.format(name),
-            data=dumps(keys)
+            method="delete", endpoint="/kv/{}/values".format(name), data=dumps(keys)
         )
 
         def response_handler(resp):
@@ -193,6 +181,7 @@ class KV(APIWrapper):
                 raise DeleteEntryForKey(resp, request)
             else:
                 return resp.body
+
         return self._execute(request, response_handler)
 
     def get_value_for_key(self, name, key):
@@ -206,17 +195,14 @@ class KV(APIWrapper):
         :rtype: object
         :raise c8.exceptions.GetValueError: If request fails.
         """
-        request = Request(
-            method='get',
-            endpoint='/kv/{}/value/{}'.format(name, key)
-        )
+        request = Request(method="get", endpoint="/kv/{}/value/{}".format(name, key))
 
         def response_handler(resp):
             if not resp.is_success:
                 raise GetValueError(resp, request)
             else:
                 return resp.body
-                
+
         return self._execute(request, response_handler)
 
     def get_keys(self, name, offset=None, limit=None, order=None):
@@ -234,18 +220,16 @@ class KV(APIWrapper):
         :rtype: list
         :raise c8.exceptions.GetKeysError: If request fails.
         """
-        params={}
+        params = {}
         if offset is not None:
-            params['offset'] = offset
+            params["offset"] = offset
         if limit is not None:
-            params['limit'] = limit
+            params["limit"] = limit
         if order is not None:
-            params['order'] = order
+            params["order"] = order
 
         request = Request(
-            method='get',
-            endpoint='/kv/{}/keys'.format(name),
-            params=params
+            method="get", endpoint="/kv/{}/keys".format(name), params=params
         )
 
         def response_handler(resp):
@@ -253,7 +237,7 @@ class KV(APIWrapper):
                 raise GetKeysError(resp, request)
             else:
                 return resp.body["result"]
-                
+
         return self._execute(request, response_handler)
 
     def get_kv_count(self, name):
@@ -265,17 +249,14 @@ class KV(APIWrapper):
         :rtype: int
         :raise c8.exceptions.GetCountError: If request fails.
         """
-        request = Request(
-            method='get',
-            endpoint='/kv/{}/count'.format(name)
-        )
+        request = Request(method="get", endpoint="/kv/{}/count".format(name))
 
         def response_handler(resp):
             if not resp.is_success:
                 raise GetCountError(resp, request)
             else:
                 return resp.body["count"]
-                
+
         return self._execute(request, response_handler)
 
     def get_key_value_pairs(self, name, offset=None, limit=None):
@@ -292,16 +273,14 @@ class KV(APIWrapper):
         :rtype: object
         :raise c8.exceptions.GetKVError: If request fails.
         """
-        params={}
+        params = {}
         if offset is not None:
-            params['offset'] = offset
+            params["offset"] = offset
         if limit is not None:
-            params['limit'] = limit
+            params["limit"] = limit
 
         request = Request(
-            method='post',
-            endpoint='/kv/{}/values'.format(name),
-            params=params
+            method="post", endpoint="/kv/{}/values".format(name), params=params
         )
 
         def response_handler(resp):
@@ -309,7 +288,7 @@ class KV(APIWrapper):
                 raise GetKVError(resp, request)
             else:
                 return resp.body
-                
+
         return self._execute(request, response_handler)
 
     def remove_key_value_pairs(self, name):
@@ -322,15 +301,12 @@ class KV(APIWrapper):
         :raise c8.exceptions.RemoveKVError: If request fails.
         """
 
-        request = Request(
-            method='put',
-            endpoint='/kv/{}/truncate'.format(name)
-        )
+        request = Request(method="put", endpoint="/kv/{}/truncate".format(name))
 
         def response_handler(resp):
             if not resp.is_success:
                 raise RemoveKVError(resp, request)
             else:
                 return True
-                
+
         return self._execute(request, response_handler)

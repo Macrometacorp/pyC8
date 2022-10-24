@@ -1,7 +1,7 @@
 KV (Key value)
 ---------------
 
-The **KV**  feature allows us to insert data in the key value format, 
+The **KV**  feature allows us to insert data in the key value format,
 where "_key" is a unique field which allows you to track the entries and "value" is a string
 or json object.
 If the input is an array of objects then KV pairs are created in batch.
@@ -39,14 +39,14 @@ The format used to set a  value is as follows
  The Simple Way
 
  .. testcode::
-    
+
     from c8 import C8Client, C8QLQueryKillError
     # Initialize the C8 client.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
                       email='user@example.com', password='hidden')
 
     collection_name = 'testcollectionkv'
-    
+
     # Get List of Collections
     print(client.kv_get_collections())
 
@@ -101,7 +101,7 @@ The format used to set a  value is as follows
     print(client.delete_collection_kv(collection_name))
 
 
- 
+
 
 
  The Object Oriented Way
@@ -145,9 +145,9 @@ The format used to set a  value is as follows
                    "expireAt": 0
                  }
              ]
- 
+
     print(key_value.insert_key_value_pair(collection_name, data))
- 
+
     # Get value for a key
     print(key_value.get_value_for_key(collection_name, "string2"))
 
@@ -156,17 +156,16 @@ The format used to set a  value is as follows
 
     # Get KV Count
     print(key_value.get_kv_count(collection_name))
-    
+
     # Delete the entry for a particular key
     print(key_value.delete_entry_for_key(collection_name, "string2"))
 
     # Delete entries for multiple keys
     print(key_value.delete_entry_for_keys(collection_name, ["string4", "string1"]))
-     
+
      # Delete Collection
      print(client.delete_collection_kv(collection_name))
- 
- 
+
+
      # Delete Collection
      key_value.delete_collection(collection_name)
- 

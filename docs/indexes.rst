@@ -13,7 +13,7 @@ on fields ``_from`` and ``_to``. For more information on indexes, refer to
 
 The Simple Way
 
-.. code-block:: python 
+.. code-block:: python
 
     from c8 import C8Client, C8QLQueryKillError
     # Initialize the C8 client.
@@ -33,7 +33,7 @@ The Simple Way
     print("Indexes", client.list_collection_indexes(collection_name))
 
     # Add Indexes to a Collection
-    
+
     print("Add Hash Index", client.add_hash_index(collection_name,
              fields=['continent', 'country'], unique=True))
 

@@ -1,13 +1,9 @@
-from c8.request import Request
 from c8.exceptions import C8ServerError
+from c8.request import Request
 
 
 def build_request(method, endpoint, data=None):
-    request = Request(
-        method=method,
-        endpoint=endpoint,
-        data=data
-    )
+    request = Request(method=method, endpoint=endpoint, data=data)
     return request
 
 

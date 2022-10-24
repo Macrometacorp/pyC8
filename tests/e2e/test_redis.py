@@ -2,7 +2,7 @@ import pytest
 from conftest import get_client_instance
 
 """
-Tests need to be run in sequence since we first create collection, after that we fill 
+Tests need to be run in sequence since we first create collection, after that we fill
 collection with test data data, run tests and check for the results.
 """
 
@@ -94,7 +94,7 @@ def test_redis_incrby(setup_client):
 def test_redis_incrbyfloat(setup_client):
     response = setup_client.redis.incrbyfloat("test", 0.5, REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": '11.5'} == response
+    assert {"code": 200, "result": "11.5"} == response
 
 
 def test_redis_set_2(setup_client):
@@ -111,8 +111,7 @@ def test_redis_mget(setup_client):
 
 def test_redis_mset(setup_client):
     response = setup_client.redis.mset(
-        {"test3": "value3", "test4": "value4"},
-        REDIS_COLLECTION
+        {"test3": "value3", "test4": "value4"}, REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": "OK"} == response
@@ -120,8 +119,7 @@ def test_redis_mset(setup_client):
 
 def test_redis_msetnx(setup_client):
     response = setup_client.redis.msetnx(
-        {"test5": "value5", "test6": "value6"},
-        REDIS_COLLECTION
+        {"test5": "value5", "test6": "value6"}, REDIS_COLLECTION
     )
 
     # Response from platform
@@ -194,7 +192,7 @@ def test_redis_bitcount_2(setup_client):
 #     setup_client = get_client_instance()
 #
 #     response = setup_client.redis_bitcount("myKeyString", REDIS_COLLECTION, 1, 1, "BYTE")
-#     
+#
 #     # Response from platform
 #     assert {"code": 200, "result": 6} == response
 
@@ -212,7 +210,9 @@ def test_redis_set_4(setup_client):
 
 
 def test_redis_bitop(setup_client):
-    response = setup_client.redis.bitop("AND", "dest", ["key1", "key2"], REDIS_COLLECTION)
+    response = setup_client.redis.bitop(
+        "AND", "dest", ["key1", "key2"], REDIS_COLLECTION
+    )
     # Response from platform
     assert {"code": 200, "result": 6} == response
 
@@ -230,7 +230,7 @@ def test_redis_getbit(setup_client):
 
 
 def test_redis_set_5(setup_client):
-    response = setup_client.redis.set("mykey2", '\x00\x00\x00', REDIS_COLLECTION)
+    response = setup_client.redis.set("mykey2", "\x00\x00\x00", REDIS_COLLECTION)
     # Response from platform
     assert {"code": 200, "result": "OK"} == response
 
@@ -262,11 +262,7 @@ def test_redis_lindex(setup_client):
 
 def test_redis_linsert(setup_client):
     response = setup_client.redis.linsert(
-        "list",
-        "AFTER",
-        "copper",
-        "silver",
-        REDIS_COLLECTION
+        "list", "AFTER", "copper", "silver", REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": 4} == response
@@ -300,11 +296,7 @@ def test_redis_lpush_2(setup_client):
 
 def test_redis_lmove(setup_client):
     response = setup_client.redis.lmove(
-        "testList1",
-        "testList2",
-        "RIGHT",
-        "LEFT",
-        REDIS_COLLECTION
+        "testList1", "testList2", "RIGHT", "LEFT", REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": "a"} == response
@@ -395,16 +387,16 @@ def test_redis_rpush_4(setup_client):
 
 
 def test_redis_rpoplpush(setup_client):
-    response = setup_client.redis.rpoplpush("myPushList", "myOtherPushList", REDIS_COLLECTION)
+    response = setup_client.redis.rpoplpush(
+        "myPushList", "myOtherPushList", REDIS_COLLECTION
+    )
     # Response from platform
     assert {"code": 200, "result": "three"} == response
 
 
 def test_redis_hset(setup_client):
     response = setup_client.redis.hset(
-        "games",
-        {"action": "elden", "driving": "GT7"},
-        REDIS_COLLECTION
+        "games", {"action": "elden", "driving": "GT7"}, REDIS_COLLECTION
     )
 
     # Response from platform
@@ -438,13 +430,15 @@ def test_redis_hgetall(setup_client):
 def test_redis_hincrby(setup_client):
     response = setup_client.redis.hincrby("myhash", "field", 5, REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": '5'} == response
+    assert {"code": 200, "result": "5"} == response
 
 
 def test_redis_hincrbyfloat(setup_client):
-    response = setup_client.redis.hincrbyfloat("myhashfloat", "field", 10.5, REDIS_COLLECTION)
+    response = setup_client.redis.hincrbyfloat(
+        "myhashfloat", "field", 10.5, REDIS_COLLECTION
+    )
     # Response from platform
-    assert {"code": 200, "result": '10.500000'} == response
+    assert {"code": 200, "result": "10.500000"} == response
 
 
 def test_redis_hkeys(setup_client):
@@ -461,25 +455,23 @@ def test_redis_hlen(setup_client):
 
 def test_redis_hset_2(setup_client):
     response = setup_client.redis.hset(
-        "newgames",
-        {"action": "elden", "driving": "GT7"},
-        REDIS_COLLECTION
+        "newgames", {"action": "elden", "driving": "GT7"}, REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": 2} == response
 
 
 def test_redis_hmget(setup_client):
-    response = setup_client.redis.hmget("newgames", ["action", "driving"], REDIS_COLLECTION)
+    response = setup_client.redis.hmget(
+        "newgames", ["action", "driving"], REDIS_COLLECTION
+    )
     # Response from platform
     assert {"code": 200, "result": ["elden", "GT7"]} == response
 
 
 def test_redis_hmset(setup_client):
     response = setup_client.redis.hmset(
-        "world",
-        {"land": "dog", "sea": "octopus"},
-        REDIS_COLLECTION
+        "world", {"land": "dog", "sea": "octopus"}, REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": "OK"} == response
@@ -488,7 +480,7 @@ def test_redis_hmset(setup_client):
 def test_redis_hmscan_1(setup_client):
     response = setup_client.redis.hscan("games", 0, REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": ['cursor:driving', ['driving', 'GT7']]} == response
+    assert {"code": 200, "result": ["cursor:driving", ["driving", "GT7"]]} == response
 
 
 def test_redis_hmscan_2(setup_client):
@@ -507,7 +499,7 @@ def test_redis_hmset_2(setup_client):
     response = setup_client.redis.hmset(
         "coin",
         {"heads": "obverse", "tails": "reverse", "edge": "null"},
-        REDIS_COLLECTION
+        REDIS_COLLECTION,
     )
 
     # Response from platform
@@ -550,8 +542,7 @@ def test_redis_sdiff(setup_client):
     setup_client.redis.sadd("key2sdiff", ["c"], REDIS_COLLECTION)
     setup_client.redis.sadd("key3sdiff", ["d", "e"], REDIS_COLLECTION)
     response = setup_client.redis.sdiff(
-        ["key1sdiff", "key2sdiff", "key3sdiff"],
-        REDIS_COLLECTION
+        ["key1sdiff", "key2sdiff", "key3sdiff"], REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": ["b", "a"]} == response
@@ -561,7 +552,7 @@ def test_redis_sdiffstore(setup_client):
     response = setup_client.redis.sdiffstore(
         "destinationKeysdiffstore",
         ["key1sdiff", "key2sdiff", "key3sdiff"],
-        REDIS_COLLECTION
+        REDIS_COLLECTION,
     )
     # Response from platform
     assert {"code": 200, "result": 2} == response
@@ -578,9 +569,7 @@ def test_redis_sinter(setup_client):
 
 def test_redis_sinterstore(setup_client):
     response = setup_client.redis.sinterstore(
-        "destinationInter",
-        ["key11", "key22"],
-        REDIS_COLLECTION
+        "destinationInter", ["key11", "key22"], REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": 1} == response
@@ -617,7 +606,7 @@ def test_redis_smove(setup_client):
 def test_redis_spop(setup_client):
     response = setup_client.redis.spop("animals", 1, REDIS_COLLECTION)
     # Response from platform
-    assert {"code": 200, "result": ['dog']} == response
+    assert {"code": 200, "result": ["dog"]} == response
 
 
 def test_redis_srandmember_1(setup_client):
@@ -666,9 +655,7 @@ def test_redis_sunion(setup_client):
 def test_redis_sunionstore(setup_client):
     # Test Setup according to Redis docs
     response = setup_client.redis.sunionstore(
-        "destinationUnionStore",
-        ["key111", "key222"],
-        REDIS_COLLECTION
+        "destinationUnionStore", ["key111", "key222"], REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": 5} == response
@@ -682,10 +669,7 @@ def test_redis_zadd(setup_client):
 
 def test_redis_zadd_2(setup_client):
     response = setup_client.redis.zadd(
-        "testZadd2",
-        [1, "test2"],
-        REDIS_COLLECTION,
-        options=["NX", "INCR"]
+        "testZadd2", [1, "test2"], REDIS_COLLECTION, options=["NX", "INCR"]
     )
     # Response from platform
     assert {"code": 200, "result": "1"} == response
@@ -698,7 +682,9 @@ def test_redis_zrange(setup_client):
 
 
 def test_redis_zrange_2(setup_client):
-    response = setup_client.redis.zrange("testZadd", 0, 1, REDIS_COLLECTION, ["WITHSCORES"])
+    response = setup_client.redis.zrange(
+        "testZadd", 0, 1, REDIS_COLLECTION, ["WITHSCORES"]
+    )
     # Response from platform
     assert {"code": 200, "result": ["test", 1]} == response
 
@@ -721,20 +707,14 @@ def test_redis_zdiff(setup_client):
     setup_client.redis.zadd("testDiff1", [3, "three"], REDIS_COLLECTION)
     setup_client.redis.zadd("testDiff2", [1, "one"], REDIS_COLLECTION)
     setup_client.redis.zadd("testDiff2", [2, "two"], REDIS_COLLECTION)
-    response = setup_client.redis.zdiff(
-        2,
-        ["testDiff1", "testDiff2"],
-        REDIS_COLLECTION)
+    response = setup_client.redis.zdiff(2, ["testDiff1", "testDiff2"], REDIS_COLLECTION)
     # Response from platform
     assert {"code": 200, "result": ["three"]} == response
 
 
 def test_redis_zdiff_2(setup_client):
     response = setup_client.redis.zdiff(
-        2,
-        ["testDiff1", "testDiff2"],
-        REDIS_COLLECTION,
-        with_scores=True
+        2, ["testDiff1", "testDiff2"], REDIS_COLLECTION, with_scores=True
     )
     # Response from platform
     assert {"code": 200, "result": ["three", 3]} == response
@@ -767,10 +747,7 @@ def test_redis_zinter(setup_client):
 
 def test_redis_zinter_2(setup_client):
     response = setup_client.redis.zinter(
-        2,
-        ["zset1", "zset2"],
-        REDIS_COLLECTION,
-        with_scores=True
+        2, ["zset1", "zset2"], REDIS_COLLECTION, with_scores=True
     )
     # Response from platform
     assert {"code": 200, "result": ["one", 2, "two", 4]} == response
@@ -778,10 +755,7 @@ def test_redis_zinter_2(setup_client):
 
 def test_redis_zinterstore(setup_client):
     response = setup_client.redis.zinterstore(
-        "zinterStore",
-        2,
-        ["zset1", "zset2"],
-        REDIS_COLLECTION
+        "zinterStore", 2, ["zset1", "zset2"], REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": 2} == response
@@ -789,8 +763,7 @@ def test_redis_zinterstore(setup_client):
 
 def test_redis_zlexcount(setup_client):
     setup_client.redis.zadd(
-        "zlexSet1", [0, "a", 0, "b", 0, "c", 0, "d", 0, "e"],
-        REDIS_COLLECTION
+        "zlexSet1", [0, "a", 0, "b", 0, "c", 0, "d", 0, "e"], REDIS_COLLECTION
     )
     setup_client.redis.zadd("zlexSet1", [0, "f", 0, "g"], REDIS_COLLECTION)
     response = setup_client.redis.zlexcount("zlexSet1", "-", "+", REDIS_COLLECTION)
@@ -826,25 +799,23 @@ def test_redis_zrandmember(setup_client):
 
 def test_redis_zrangebylex(setup_client):
     setup_client.redis.zadd(
-        "zrangeByLexSet1", [0, "a", 0, "b", 0, "c", 0, "d", 0, "e", 0, "f", 0, "g"],
-        REDIS_COLLECTION
+        "zrangeByLexSet1",
+        [0, "a", 0, "b", 0, "c", 0, "d", 0, "e", 0, "f", 0, "g"],
+        REDIS_COLLECTION,
     )
-    response = setup_client.redis.zrangebylex("zrangeByLexSet1", "-", "[c", REDIS_COLLECTION)
+    response = setup_client.redis.zrangebylex(
+        "zrangeByLexSet1", "-", "[c", REDIS_COLLECTION
+    )
     # Response from platform
     assert {"code": 200, "result": ["a", "b", "c"]} == response
 
 
 def test_redis_zrangebyscore(setup_client):
     setup_client.redis.zadd(
-        "zrangeByScoreSet1",
-        [1, "one", 2, "two", 3, "three"],
-        REDIS_COLLECTION
+        "zrangeByScoreSet1", [1, "one", 2, "two", 3, "three"], REDIS_COLLECTION
     )
     response = setup_client.redis.zrangebyscore(
-        "zrangeByScoreSet1",
-        "-inf",
-        "+inf",
-        REDIS_COLLECTION
+        "zrangeByScoreSet1", "-inf", "+inf", REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": ["one", "two", "three"]} == response
@@ -858,9 +829,7 @@ def test_redis_zrank(setup_client):
 
 def test_redis_zrem(setup_client):
     response = setup_client.redis.zrem(
-        "zrangeByScoreSet1",
-        ["two", "three"],
-        REDIS_COLLECTION
+        "zrangeByScoreSet1", ["two", "three"], REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": 2} == response
@@ -868,18 +837,15 @@ def test_redis_zrem(setup_client):
 
 def test_redis_zremrangebylex(setup_client):
     setup_client.redis.zadd(
-        "zremrangebylex", [0, "aaaaa", 0, "b", 0, "c", 0, "d", 0, "e"],
-        REDIS_COLLECTION
+        "zremrangebylex", [0, "aaaaa", 0, "b", 0, "c", 0, "d", 0, "e"], REDIS_COLLECTION
     )
     setup_client.redis.zadd(
-        "zremrangebylex", [0, "foo", 0, "zap", 0, "zip", 0, "ALPHA", 0, "alpha"],
-        REDIS_COLLECTION
+        "zremrangebylex",
+        [0, "foo", 0, "zap", 0, "zip", 0, "ALPHA", 0, "alpha"],
+        REDIS_COLLECTION,
     )
     response = setup_client.redis.zremrangebylex(
-        "zremrangebylex",
-        "[alpha",
-        "[omega",
-        REDIS_COLLECTION
+        "zremrangebylex", "[alpha", "[omega", REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": 6} == response
@@ -887,14 +853,10 @@ def test_redis_zremrangebylex(setup_client):
 
 def test_redis_zremrangebyrank(setup_client):
     setup_client.redis.zadd(
-        "zremrangebyrank", [1, "one", 2, "two", 3, "three"],
-        REDIS_COLLECTION
+        "zremrangebyrank", [1, "one", 2, "two", 3, "three"], REDIS_COLLECTION
     )
     response = setup_client.redis.zremrangebyrank(
-        "zremrangebyrank",
-        0,
-        1,
-        REDIS_COLLECTION
+        "zremrangebyrank", 0, 1, REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": 2} == response
@@ -902,14 +864,10 @@ def test_redis_zremrangebyrank(setup_client):
 
 def test_redis_zremrangebyscore(setup_client):
     setup_client.redis.zadd(
-        "zremrangebyscore2", [1, "one", 2, "two", 3, "three"],
-        REDIS_COLLECTION
+        "zremrangebyscore2", [1, "one", 2, "two", 3, "three"], REDIS_COLLECTION
     )
     response = setup_client.redis.zremrangebyscore(
-        "zremrangebyscore2",
-        "-inf",
-        "(2",
-        REDIS_COLLECTION
+        "zremrangebyscore2", "-inf", "(2", REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": 1} == response
@@ -917,8 +875,7 @@ def test_redis_zremrangebyscore(setup_client):
 
 def test_redis_zrevrange(setup_client):
     setup_client.redis.zadd(
-        "zrevrange", [1, "one", 2, "two", 3, "three"],
-        REDIS_COLLECTION
+        "zrevrange", [1, "one", 2, "two", 3, "three"], REDIS_COLLECTION
     )
     response = setup_client.redis.zrevrange("zrevrange", 0, -1, REDIS_COLLECTION)
     # Response from platform
@@ -927,26 +884,23 @@ def test_redis_zrevrange(setup_client):
 
 def test_redis_zrevrangebylex(setup_client):
     setup_client.redis.zadd(
-        "zrevrangebylex", [0, "a", 0, "b", 0, "c", 0, "d", 0, "e", 0, "f", 0, "g"],
-        REDIS_COLLECTION
+        "zrevrangebylex",
+        [0, "a", 0, "b", 0, "c", 0, "d", 0, "e", 0, "f", 0, "g"],
+        REDIS_COLLECTION,
     )
-    response = setup_client.redis.zrevrangebylex("zrevrangebylex", "[c", "-",
-                                           REDIS_COLLECTION)
+    response = setup_client.redis.zrevrangebylex(
+        "zrevrangebylex", "[c", "-", REDIS_COLLECTION
+    )
     # Response from platform
     assert {"code": 200, "result": ["c", "b", "a"]} == response
 
 
 def test_redis_zrevrangebyscore(setup_client):
     setup_client.redis.zadd(
-        "zrevrangebyscore",
-        [1, "one", 2, "two", 3, "three"],
-        REDIS_COLLECTION
+        "zrevrangebyscore", [1, "one", 2, "two", 3, "three"], REDIS_COLLECTION
     )
     response = setup_client.redis.zrevrangebyscore(
-        "zrevrangebyscore",
-        "+inf",
-        "-inf",
-        REDIS_COLLECTION
+        "zrevrangebyscore", "+inf", "-inf", REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": ["three", "two", "one"]} == response
@@ -962,12 +916,9 @@ def test_redis_zscan(setup_client):
     response = setup_client.redis.zscan("zrevrangebyscore", 0, REDIS_COLLECTION)
     # Response from platform
     assert {
-               "code": 200,
-               "result": [
-                   "cursor:3-three",
-                   [1, "one", 2, "two", 3, "three"]
-               ]
-           } == response
+        "code": 200,
+        "result": ["cursor:3-three", [1, "one", 2, "two", 3, "three"]],
+    } == response
 
 
 def test_redis_zscore(setup_client):
@@ -978,18 +929,19 @@ def test_redis_zscore(setup_client):
 
 def test_redis_zunion(setup_client):
     setup_client.redis.zadd("zunionSet1", [1, "one", 2, "two"], REDIS_COLLECTION)
-    setup_client.redis.zadd("zunionSet2", [1, "one", 2, "two", 3, "three"], REDIS_COLLECTION)
-    response = setup_client.redis.zunion(2, ["zunionSet1", "zunionSet2"], REDIS_COLLECTION)
+    setup_client.redis.zadd(
+        "zunionSet2", [1, "one", 2, "two", 3, "three"], REDIS_COLLECTION
+    )
+    response = setup_client.redis.zunion(
+        2, ["zunionSet1", "zunionSet2"], REDIS_COLLECTION
+    )
     # Response from platform
     assert {"code": 200, "result": ["one", "three", "two"]} == response
 
 
 def test_redis_zunion_2(setup_client):
     response = setup_client.redis.zunion(
-        2,
-        ["zunionSet1", "zunionSet2"],
-        REDIS_COLLECTION,
-        with_scores=True
+        2, ["zunionSet1", "zunionSet2"], REDIS_COLLECTION, with_scores=True
     )
     # Response from platform
     assert {"code": 200, "result": ["one", 2, "three", 3, "two", 4]} == response
@@ -998,15 +950,10 @@ def test_redis_zunion_2(setup_client):
 def test_redis_zunionstore(setup_client):
     setup_client.redis.zadd("zunionStoreSet1", [1, "one", 2, "two"], REDIS_COLLECTION)
     setup_client.redis.zadd(
-        "zunionStoreSet2",
-        [1, "one", 2, "two", 3, "three"],
-        REDIS_COLLECTION
+        "zunionStoreSet2", [1, "one", 2, "two", 3, "three"], REDIS_COLLECTION
     )
     response = setup_client.redis.zunionstore(
-        "zunionDestination",
-        2,
-        ["zunionStoreSet1", "zunionStoreSet2"],
-        REDIS_COLLECTION
+        "zunionDestination", 2, ["zunionStoreSet1", "zunionStoreSet2"], REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": 3} == response
@@ -1193,4 +1140,4 @@ def test_redis_time(setup_client):
 def test_delete_redis_collection(setup_client):
     response = setup_client.delete_collection(REDIS_COLLECTION)
     # Response from platform
-    assert True == response
+    assert response is True

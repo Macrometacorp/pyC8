@@ -1,7 +1,7 @@
 StreamApps
 -----------
 
-A **StreamApps** contains a :`definition`. 
+A **StreamApps** contains a :`definition`.
 Here is an example showing how you can manage standard StreamApps:
 
 The Simple Way
@@ -45,7 +45,7 @@ The Simple Way
 
     # Deactivate a stream application
     print("Deactivate", client.activate_stream_app('DefaultScriptAppTest', False))
-    
+
     # Activate a stream application
     print("Activate", client.activate_stream_app('DefaultScriptAppTest', True))
 
@@ -70,7 +70,7 @@ The Object Oriented Way
     # Note that the 'mytenant' tenant should already exist.
     tenant = client.tenant(email='mytenant@example.com', password='hidden')
     fabric = tenant.useFabric('test')
-    
+
     # List all stream apps in the fabric.
     result = fabric.retrive_stream_app()
     print(result)
@@ -79,7 +79,7 @@ The Object Oriented Way
     result = fabric.get_samples_stream_app()
 
     # To validate a stream application definition use
-    data = "@App:name(\'Sample-Cargo-App\')\\n\\n-- Stream\\ndefine stream srcCargoStream (weight int);\\n\\n-- Table\\ndefine table destCargoTable (weight int, totalWeight long);\\n\\n-- Data Processing\\n@info(name=\'Query\')\\nselect weight, sum(weight) as totalWeight\\nfrom srcCargoStream\\ninsert into destCargoTable;" 
+    data = "@App:name(\'Sample-Cargo-App\')\\n\\n-- Stream\\ndefine stream srcCargoStream (weight int);\\n\\n-- Table\\ndefine table destCargoTable (weight int, totalWeight long);\\n\\n-- Data Processing\\n@info(name=\'Query\')\\nselect weight, sum(weight) as totalWeight\\nfrom srcCargoStream\\ninsert into destCargoTable;"
     result = fabric.validate_stream_app(data)
     print(result)
 
@@ -112,6 +112,6 @@ The Object Oriented Way
     print(result)
 
     # fire query on app using
-    q = "some query" 
+    q = "some query"
     result = app.query(q)
     print(result)

@@ -68,7 +68,7 @@ The Simple Way
     # get indexes
     index = client.get_collection_indexes(collname)
     print("indexes: ", index)
-    
+
     # Truncate Collection
     collection_handle.truncate()
 

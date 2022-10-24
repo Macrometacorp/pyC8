@@ -3,23 +3,16 @@ from __future__ import absolute_import, unicode_literals
 from collections import OrderedDict
 from uuid import uuid4
 
-from c8.exceptions import (
-    AsyncExecuteError,
-    BatchStateError,
-    BatchExecuteError,
-)
-from c8.job import (
-    AsyncJob,
-    BatchJob,
-)
+from c8.exceptions import AsyncExecuteError, BatchExecuteError, BatchStateError
+from c8.job import AsyncJob, BatchJob
 from c8.request import Request
 from c8.response import Response
 from c8.utils import suppress_warning
 
 __all__ = [
-    'DefaultExecutor',
-    'AsyncExecutor',
-    'BatchExecutor',
+    "DefaultExecutor",
+    "AsyncExecutor",
+    "BatchExecutor",
 ]
 
 
@@ -32,6 +25,7 @@ class Executor(object):  # pragma: no cover
     :param connection: HTTP connection.
     :type connection: c8.connection.Connection
     """
+
     context = None
 
     def __init__(self, connection):
@@ -56,7 +50,8 @@ class DefaultExecutor(Executor):
     :param connection: HTTP connection.
     :type connection: c8.connection.Connection
     """
-    context = 'default'
+
+    context = "default"
 
     def __init__(self, connection):
         super(DefaultExecutor, self).__init__(connection)
@@ -86,7 +81,8 @@ class AsyncExecutor(Executor):
         results are stored on server.
     :type return_result: bool
     """
-    context = 'async'
+
+    context = "async"
 
     def __init__(self, connection, return_result):
         super(AsyncExecutor, self).__init__(connection)
@@ -104,9 +100,9 @@ class AsyncExecutor(Executor):
         :rtype: c8.job.AsyncJob | None
         """
         if self._return_result:
-            request.headers['x-c8-async'] = 'store'
+            request.headers["x-c8-async"] = "store"
         else:
-            request.headers['x-c8-async'] = 'true'
+            request.headers["x-c8-async"] = "true"
 
         resp = self._conn.send_request(request)
         if not resp.is_success:
@@ -114,7 +110,7 @@ class AsyncExecutor(Executor):
         if not self._return_result:
             return None
 
-        job_id = resp.headers['x-c8-async-id']
+        job_id = resp.headers["x-c8-async-id"]
         return AsyncJob(self._conn, job_id, response_handler)
 
 
@@ -129,7 +125,8 @@ class BatchExecutor(Executor):
         client-side.
     :type return_result: bool
     """
-    context = 'batch'
+
+    context = "batch"
 
     def __init__(self, connection, return_result):
         super(BatchExecutor, self).__init__(connection)
@@ -163,7 +160,7 @@ class BatchExecutor(Executor):
             committed.
         """
         if self._committed:
-            raise BatchStateError('batch already committed')
+            raise BatchStateError("batch already committed")
 
         job = BatchJob(response_handler)
         self._queue[job.id] = (request, job)
@@ -184,7 +181,7 @@ class BatchExecutor(Executor):
         :raise c8.exceptions.BatchExecuteError: If commit fails.
         """
         if self._committed:
-            raise BatchStateError('batch already committed')
+            raise BatchStateError("batch already committed")
 
         self._committed = True
 
@@ -197,22 +194,21 @@ class BatchExecutor(Executor):
         # Buffer for building the batch request payload
         buffer = []
         for req, job in self._queue.values():
-            buffer.append('--{}'.format(boundary))
-            buffer.append('Content-Type: application/x-c8-batchpart')
-            buffer.append('Content-Id: {}'.format(job.id))
-            buffer.append('\r\n{}'.format(req))
-        buffer.append('--{}--'.format(boundary))
+            buffer.append("--{}".format(boundary))
+            buffer.append("Content-Type: application/x-c8-batchpart")
+            buffer.append("Content-Id: {}".format(job.id))
+            buffer.append("\r\n{}".format(req))
+        buffer.append("--{}--".format(boundary))
 
         request = Request(
-            method='post',
-            endpoint='/batch',
+            method="post",
+            endpoint="/batch",
             headers={
-                'Content-Type':
-                    'multipart/form-data; boundary={}'.format(boundary)
+                "Content-Type": "multipart/form-data; boundary={}".format(boundary)
             },
-            data='\r\n'.join(buffer)
+            data="\r\n".join(buffer),
         )
-        with suppress_warning('requests.packages.urllib3.connectionpool'):
+        with suppress_warning("requests.packages.urllib3.connectionpool"):
             resp = self._conn.send_request(request)
 
         if not resp.is_success:
@@ -221,20 +217,21 @@ class BatchExecutor(Executor):
         if not self._return_result:
             return None
 
-        raw_resps = resp.raw_body.split('--{}'.format(boundary))[1:-1]
+        raw_resps = resp.raw_body.split("--{}".format(boundary))[1:-1]
         if len(self._queue) != len(raw_resps):
             raise BatchStateError(
-                'expecting {} parts in batch response but got {}'.format(
-                    len(self._queue), len(raw_resps))
+                "expecting {} parts in batch response but got {}".format(
+                    len(self._queue), len(raw_resps)
+                )
             )
         for raw_resp in raw_resps:
             # Parse and breakdown the batch response body
-            resp_parts = raw_resp.strip().split('\r\n')
+            resp_parts = raw_resp.strip().split("\r\n")
             raw_content_id = resp_parts[1]
             raw_body = resp_parts[-1]
             raw_status = resp_parts[3]
-            job_id = raw_content_id.split(' ')[1]
-            _, status_code, status_text = raw_status.split(' ', 2)
+            job_id = raw_content_id.split(" ")[1]
+            _, status_code, status_text = raw_status.split(" ", 2)
 
             # Update the corresponding batch job
             queued_req, queued_job = self._queue[job_id]
@@ -244,8 +241,8 @@ class BatchExecutor(Executor):
                 headers={},
                 status_code=int(status_code),
                 status_text=status_text,
-                raw_body=raw_body
+                raw_body=raw_body,
             )
-            queued_job._status = 'done'
+            queued_job._status = "done"
 
         return self.jobs

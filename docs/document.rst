@@ -71,9 +71,9 @@ The simple Way
     # Initialize the C8 client.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
                           email='user@example.com', password='hidden')
-    
+
     collection_name = 'students'
-    
+
 
     # Create a new collection if it does not exist
     if client.has_collection(collection_name):
@@ -99,16 +99,16 @@ The simple Way
     # update document
     client.update_document(collection_name=collection_name,
                  document={'_key': 'John', 'age': 20})
-    
+
     # get all documents
     print(client.get_document_many(collection_name))
 
     print(client.get_document(collection_name, "John" )_
-        
+
     doc = {'_key': 'John', 'age': 20}
     doc['age'] = 35
     client.replace_document(collection_name, doc)
-    
+
     # delete document
     client.delete_document(collection_name, {'_key': 'John', 'age': 35})
 

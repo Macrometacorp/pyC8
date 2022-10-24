@@ -10,31 +10,35 @@ Python SDK for the Macrometa Global Data Network.
 
 ---
 
-# Compatibility
+## Supported Python Versions
+This library supports the following Python implementations:
 
-- Python 3.4 is minimum supported version by this library.
+Python 3.4
+Python 3.5
+Python 3.6
+Python 3.7
+Python 3.8
+Python 3.9
+Python 3.10
 
-# Developer environment
+## Installation
+
+Install from PyPi using [pip](https://pip.pypa.io/en/latest/), a
+package manager for Python.
+
+```commandline
+pip install pyC8
+```
+
+## Developer environment
 To enable developer environment position ourselves to project's root and run:
 
 ```bash
 pip install -r requirements/dev.txt
 ```
 
-# Build and Install
+## Testing
 
-To build package we need to position ourselves to project's root and run:
-
-```bash
- $ python setup.py build
-```
-To install locally,
-
-```bash
- $ python setup.py build
-```
-
-# Run end-to-end tests
 End-to-end tests can be found in tests/.
 Before first run create .env file in tests/.
 In .env file add variables:
@@ -53,13 +57,50 @@ In .env file add variables:
 
 .env file is in .gitignore.
 
-To run tests position yourself in the project's root while your virtual environment is active and run:
+To run tests position yourself in the project's root while your virtual environment
+is active and run:
 ```bash
 python -m pytest
 ```
 
-# Update SDK
+## Enable pre-commit hooks
 
+You will need to install pre-commit hooks
+Using homebrew:
+```bash
+brew install pre-commit
+```
+Using conda (via conda-forge):
+```bash
+conda install -c conda-forge pre-commit
+```
+To check installation run:
+```bash
+pre-commit --version
+```
+If installation was successful you will see version number.
+You can find the Pre-commit configuration in `.pre-commit-config.yaml`.
+Install the git hook scripts:
+```bash
+pre-commit install
+```
+Run against all files:
+```bash
+pre-commit run --all-files
+```
+If setup was successful pre-commit will run on every commit.
+Every time you clone a project that uses pre-commit, running `pre-commit install`
+should be the first thing you do.
+
+## Build
+
+To build package we need to position ourselves to project's root and run:
+
+```bash
+ $ python setup.py build
+```
+
+## Upgrade
 ```bash
 pip install --upgrade pyc8
 ```
@@ -73,7 +114,7 @@ The SDK allows you to use three ways for authentication:
 1. Using the email and password
 
 ```python
-  
+
   # Authentication email and password
   client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
    email="user@example.com", password="XXXXX")
@@ -296,7 +337,7 @@ Example: **stream management**:
   client = C8Client(protocol='https', host=federation, port=443,
                        email=demo_tenant, password='XXXXX',
                        geofabric=demo_fabric)
-  
+
   #get_stream_stats
   print("Stream Stats: ", client.get_stream_stats(stream))
 
@@ -306,13 +347,13 @@ Example: **stream management**:
 
   #print(client.clear_stream_backlog(subscription="test-subscription-1"))
   print(client.clear_streams_backlog())
-    
+
 ```
-    
+
 Advanced operations can be done using the `sream_colleciton` class.
 
 ```python
-   
+
    from c8 import C8Client
    import warnings
    warnings.filterwarnings("ignore")
@@ -327,27 +368,27 @@ Advanced operations can be done using the `sream_colleciton` class.
    demotenant = client.tenant(email=demo_tenant, password='XXXXX')
    fabric = demotenant.useFabric(demo_fabric)
    stream = fabric.stream()
-    
+
    #Skip all messages on a stream subscription
    stream_collection.skip_all_messages_for_subscription('demostream', 'demosub')
 
    #Skip num messages on a topic subscription
-   stream_collection.skip_messages_for_subscription('demostream', 'demosub', 10) 
+   stream_collection.skip_messages_for_subscription('demostream', 'demosub', 10)
    #Expire messages for a given subscription of a stream.
    #expire time is in seconds
-   stream_collection.expire_messages_for_subscription('demostream', 'demosub', 2) 
+   stream_collection.expire_messages_for_subscription('demostream', 'demosub', 2)
    #Expire messages on all subscriptions of stream
-   stream_collection.expire_messages_for_subscriptions('demostream',2) 
+   stream_collection.expire_messages_for_subscriptions('demostream',2)
    #Reset subscription to message position to closest timestamp
    #time is in milli-seconds
-   stream_collection.reset_message_subscription_by_timestamp('demostream','demosub', 5) 
+   stream_collection.reset_message_subscription_by_timestamp('demostream','demosub', 5)
    #Reset subscription to message position closest to given position
-   #stream_collection.reset_message_for_subscription('demostream', 'demosub') 
-   #stream_collection.reset_message_subscription_by_position('demostream','demosub', 4) 
+   #stream_collection.reset_message_for_subscription('demostream', 'demosub')
+   #stream_collection.reset_message_subscription_by_position('demostream','demosub', 4)
    #Unsubscribes the given subscription on all streams on a stream fabric
-   stream_collection.unsubscribe('demosub') 
+   stream_collection.unsubscribe('demosub')
    #delete subscription of a stream
-   #stream_collection.delete_stream_subscription('demostream', 'demosub' , local=False) 
+   #stream_collection.delete_stream_subscription('demostream', 'demosub' , local=False)
 ```
 
 Example for **restql** operations:
@@ -379,7 +420,7 @@ Example for **restql** operations:
   #--------------------------------------------------------------
   print("execute restql without bindVars...")
   response = client.execute_restql("demo")
-  print("Execute: ", response)  
+  print("Execute: ", response)
   #--------------------------------------------------------------
   # Update restql
   data = {
@@ -389,7 +430,7 @@ Example for **restql** operations:
         }
     }
   response = client.update_restql("demo", data)
-  
+
   #--------------------------------------------------------------
 
   print("execute restql with bindVars...")
@@ -399,7 +440,7 @@ Example for **restql** operations:
   print("get all restql...")
   response = fabric.get_all_restql()
   #--------------------------------------------------------------
-  
+
   print("delete restql...")
   response = fabric.delete_restql("demo")
 ```

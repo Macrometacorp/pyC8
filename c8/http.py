@@ -2,15 +2,14 @@ from __future__ import absolute_import, unicode_literals
 
 import socket
 import time
-
 from abc import ABCMeta, abstractmethod
-from urllib3.connection import HTTPConnection
 
 import requests
+from urllib3.connection import HTTPConnection
 
 from c8.response import Response
 
-__all__ = ['HTTPClient', 'DefaultHTTPClient']
+__all__ = ["HTTPClient", "DefaultHTTPClient"]
 
 
 class HTTPClient(object):  # pragma: no cover
@@ -19,13 +18,9 @@ class HTTPClient(object):  # pragma: no cover
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def send_request(self,
-                     method,
-                     url,
-                     headers=None,
-                     params=None,
-                     data=None,
-                     auth=None):
+    def send_request(
+        self, method, url, headers=None, params=None, data=None, auth=None
+    ):
         """Send an HTTP request.
 
         This method must be overridden by the user.
@@ -47,6 +42,7 @@ class HTTPClient(object):  # pragma: no cover
         """
         raise NotImplementedError
 
+
 # KARTIK : 20181211 : C8Platform#166 : Remote disconnect issue.
 # https://github.com/joowani/python-arango/issues/30#issuecomment-333771027
 # Also see: https://github.com/requests/requests/issues/3808
@@ -54,7 +50,7 @@ class HTTPClient(object):  # pragma: no cover
 
 class KeepaliveAdapter(requests.adapters.HTTPAdapter):
     def init_poolmanager(self, *args, **kwargs):
-        kwargs['socket_options'] = HTTPConnection.default_socket_options + [
+        kwargs["socket_options"] = HTTPConnection.default_socket_options + [
             (socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1),
         ]
         super(KeepaliveAdapter, self).init_poolmanager(*args, **kwargs)
@@ -68,16 +64,12 @@ class DefaultHTTPClient(HTTPClient):
         # KARTIK : 20181211 : C8Platform#166 : Implement keepalive adapter
         adapter = KeepaliveAdapter()
         adapter.max_retries = 5
-        self._session.mount('https://', adapter)
-        self._session.mount('http://', adapter)
+        self._session.mount("https://", adapter)
+        self._session.mount("http://", adapter)
 
-    def send_request(self,
-                     method,
-                     url,
-                     params=None,
-                     data=None,
-                     headers=None,
-                     auth=None):
+    def send_request(
+        self, method, url, params=None, data=None, headers=None, auth=None
+    ):
         """Send an HTTP request.
 
         :param method: HTTP method in lowercase (e.g. "post").
@@ -99,13 +91,13 @@ class DefaultHTTPClient(HTTPClient):
         if not headers:
             headers = {"Connection": "keep-alive"}
         else:
-            if 'Connection' in headers:
+            if "Connection" in headers:
                 del headers["Connection"]
             headers["Connection"] = "keep-alive"
 
         retry = 5
         time_sleep = 5
-        while(True):
+        while True:
             try:
                 raw_resp = self._session.request(
                     method=method,
@@ -115,7 +107,7 @@ class DefaultHTTPClient(HTTPClient):
                     headers=headers,
                     auth=auth,
                     verify=False,
-                    timeout=260
+                    timeout=260,
                 )
                 break
             except requests.ConnectionError:
@@ -123,8 +115,9 @@ class DefaultHTTPClient(HTTPClient):
                     raise Exception(
                         "requests.ConnectionError: Not able to connect to "
                         "url: %s. Please make sure the federation is up and "
-                        "running." % url)
-                print("Error in connecting the url. Retring...")
+                        "running." % url
+                    )
+                #  "Error in connecting the url. Retring..."
                 retry -= 1
                 time.sleep(time_sleep)
 
