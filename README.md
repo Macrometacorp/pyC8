@@ -11,15 +11,9 @@ Python SDK for the Macrometa Global Data Network.
 ---
 
 ## Supported Python Versions
-This library supports the following Python implementations:
+This SDK supports the following Python implementations:
 
-* Python 3.4
-* Python 3.5
-* Python 3.6
-* Python 3.7
-* Python 3.8
-* Python 3.9
-* Python 3.10
+* Python 3.4 - 3.10
 
 ## Installation
 
@@ -30,7 +24,7 @@ package manager for Python.
 pip install pyC8
 ```
 
-## Developer environment
+## Development environment
 To enable developer environment position ourselves to project's root and run:
 
 ```bash
@@ -41,21 +35,21 @@ pip install -r requirements/dev.txt
 
 End-to-end tests can be found in tests/.
 Before first run create .env file in tests/.
-In .env file add variables:
+In `.env` file add variables:
 
-* FEDERATION_URL="<>"
-* FABRIC="<>"
-* TENANT_EMAIL="<>"
-* TENANT_PASSWORD="<>"
-* API_KEY="<>"
-* TOKEN="<>"
-* MM_TENANT_EMAIL="<>"
-* MM_TENANT_PASSWORD="<>"
-* MM_API_KEY="<>"
+* `FEDERATION_URL="<your federation url>"`
+* `FABRIC="<selected fabric>"`
+* `TENANT_EMAIL="<your tenant email>"`
+* `TENANT_PASSWORD="<your tenant password>"`
+* `API_KEY="<your api key>"`
+* `TOKEN="<your token>"`
+* `MM_TENANT_EMAIL="<Macrometa tenant email>"`
+* `MM_TENANT_PASSWORD="<Macrometa tenant password>"`
+* `MM_API_KEY="<Macrometa apy key>"`
 
 **Note: MM_TENANT_EMAIL, MM_TENANT_PASSWORD, MM_API_KEY are super user credentials**
 
-.env file is in .gitignore.
+`.env` file is in `.gitignore`.
 
 To run tests position yourself in the project's root while your virtual environment
 is active and run:
