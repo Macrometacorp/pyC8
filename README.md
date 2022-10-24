@@ -10,12 +10,12 @@ Python SDK for the Macrometa Global Data Network.
 
 ---
 
-## Supported Python Versions
+## 🐍 Supported Python Versions
 This SDK supports the following Python implementations:
 
 * Python 3.4 - 3.10
 
-## Installation
+## ⚙️ Installation
 
 Install from PyPi using [pip](https://pip.pypa.io/en/latest/), a
 package manager for Python.
@@ -26,14 +26,14 @@ pip install pyC8
 
 After that you can check out our [getting started code examples](#getting-started).
 
-## Development environment
+## 🧶 Development environment
 To enable developer environment position ourselves to project's root and run:
 
 ```bash
 pip install -r requirements/dev.txt
 ```
 
-## Testing
+## 🧪 Testing
 
 End-to-end tests can be found in tests/.
 Before first run create .env file in tests/.
@@ -59,7 +59,7 @@ is active and run:
 python -m pytest
 ```
 
-## Enable pre-commit hooks
+## 🧰 Enable pre-commit hooks
 
 You will need to install pre-commit hooks
 Using homebrew:
@@ -88,7 +88,7 @@ If setup was successful pre-commit will run on every commit.
 Every time you clone a project that uses pre-commit, running `pre-commit install`
 should be the first thing you do.
 
-## Build
+## 🧱 Build
 
 To build package we need to position ourselves to project's root and run:
 
@@ -96,7 +96,7 @@ To build package we need to position ourselves to project's root and run:
  $ python setup.py build
 ```
 
-## Upgrade
+## 🪛 Upgrade
 ```bash
 pip install --upgrade pyc8
 ```
