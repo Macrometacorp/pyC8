@@ -22,6 +22,9 @@ from c8.exceptions import (
     FabricCreateError,
     FabricListError,
     FabricPropertiesError,
+    FabricGetMetadataError,
+    FabricUpdateMetadataError,
+    FabricSetMetadataError,
     GraphListError,
     GraphCreateError,
     GraphDeleteError,
@@ -439,6 +442,72 @@ class Fabric(APIWrapper):
             if not resp.is_success:
                 raise FabricCreateError(resp, request)
             return True
+
+        return self._execute(request, response_handler)
+
+    def get_fabric_metadata(self):
+        """Fetch information about a GeoFabric.
+
+        :returns: Fabric information.
+        :rtype: dict
+        :raise c8.exceptions.FabricGetMetadataError: If retrieval fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/database/metadata'
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise FabricGetMetadataError(resp, request)
+            return resp.body['result']
+
+        return self._execute(request, response_handler)
+
+    def set_fabric_metadata(self, metadata):
+        """Set the GeoFabric Metadata.
+
+        :param metadata: Fabric metadata.
+        :type metadata: dict
+        :returns: True if metadata was set successfully.
+        :rtype: bool
+        :raise c8.exceptions.FabricSetMetadataError: If set fails.
+        """
+
+        data = {"metadata": metadata}
+        request = Request(
+            method='put',
+            endpoint='/database/metadata',
+            data=data
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise FabricSetMetadataError(resp, request)
+            return resp.body['result']
+
+        return self._execute(request, response_handler)
+
+    def update_fabric_metadata(self, metadata):
+        """Modfiy the GeoFabric metadata.
+
+        :param metadata: Fabric metadata.
+        :type metadata: dict
+        :returns: True if metadata was set successfully.
+        :rtype: bool
+        :raise c8.exceptions.FabricUpdateMetadataError: If update fails.
+        """
+        data = {"metadata": metadata}
+        request = Request(
+            method='patch',
+            endpoint='/database/metadata',
+            data=data
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise FabricUpdateMetadataError(resp, request)
+            return resp.body['result']
 
         return self._execute(request, response_handler)
 
