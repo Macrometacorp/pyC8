@@ -27,7 +27,7 @@ pip install pyC8
 After that you can check out our [getting started code examples](#getting-started).
 
 ## 🧶 Development environment
-To enable developer environment position ourselves to project's root and run:
+To enable development environment position ourselves to project's root and run:
 
 ```bash
 pip install -r requirements/dev.txt
@@ -59,7 +59,7 @@ is active and run:
 python -m pytest
 ```
 
-## 🧰 Enable pre-commit hooks
+## 📐 Enable pre-commit hooks
 
 You will need to install pre-commit hooks
 Using homebrew:
@@ -88,7 +88,7 @@ If setup was successful pre-commit will run on every commit.
 Every time you clone a project that uses pre-commit, running `pre-commit install`
 should be the first thing you do.
 
-## 🧱 Build
+## 👨‍💻 Build
 
 To build package we need to position ourselves to project's root and run:
 
@@ -110,7 +110,6 @@ The SDK allows you to use three ways for authentication:
 1. Using the email and password
 
 ```python
-
   # Authentication email and password
   client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
    email="user@example.com", password="XXXXX")
@@ -119,27 +118,20 @@ The SDK allows you to use three ways for authentication:
 2. Using bearer token
 
 ```python
-
 # Authentication with bearer token
 client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
  token=<your token>)
-
 ```
-
 
 3. Using API key
 
 ```python
-
 # Authentication with API key
-
 client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
  apikey=<your api key>)
 ```
-## Usage:
 
 ```python
-
 from c8 import C8Client
 import time
 import warnings
@@ -215,9 +207,7 @@ print(docs)
 print("Delete Collection...")
 # Delete Collection
 client.delete_collection(name=collname)
-
 ```
-
 Example for **real-time updates** from a collection in fabric:
 
 ```python
@@ -244,8 +234,6 @@ Example for **real-time updates** from a collection in fabric:
        print(event)
    #--------------------------------------------------------------
   client.on_change("employees", timeout=10, callback=callback_fn)
-
-
 ```
 
 Example to **publish** documents to a stream:
@@ -276,7 +264,6 @@ Example to **publish** documents to a stream:
       msg1 = "Persistent: Hello from " + "("+ str(i) +")"
       producer.send(json.dumps(msg1))
       time.sleep(10) # 10 sec
-
 ```
 
 Example to **subscribe** documents from a stream:
@@ -313,14 +300,12 @@ Example to **subscribe** documents from a stream:
   print(client.get_stream_subscriptions(stream=stream, local=False))
 
   print(client.get_stream_backlog(stream=stream, local=False))
-
 ```
 
 Example: **stream management**:
 
 ```python
   from c8 import C8Client
-  import time
   import warnings
   warnings.filterwarnings("ignore")
 
@@ -343,7 +328,6 @@ Example: **stream management**:
 
   #print(client.clear_stream_backlog(subscription="test-subscription-1"))
   print(client.clear_streams_backlog())
-
 ```
 
 Advanced operations can be done using the `sream_colleciton` class.
@@ -441,9 +425,7 @@ Example for **restql** operations:
   response = fabric.delete_restql("demo")
 ```
 
-Workflow of **Spot Collections**
-
-spot collections can be assigned or updated using the `tenant` class.
+Workflow of **Spot Collections** spot collections can be assigned or updated using the `tenant` class.
 
 ```python
 
@@ -476,5 +458,4 @@ spot_collection = fabric.create_collection('spot-collection', spot_collection=Tr
 #Step 4: Update Spot primary region of the geo-fabric. To change it, we need system admin credentials
 sys_fabric = client.fabric(tenant=macrometa-admin, name='_system', username='root', password=macrometa-password)
 sys_fabric.update_spot_region('mytenant', 'spot-geo-fabric', 'REGION-2')
-
 ```
