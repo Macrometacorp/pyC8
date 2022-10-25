@@ -3,8 +3,12 @@ from c8.exceptions import (
     FabricCreateError,
     FabricDeleteError,
     FabricPropertiesError,
+    FabricGetMetadataError,
+    FabricUpdateMetadataError,
+    FabricSetMetadataError,
+    GetDcDetailError
 )
-from tests.helpers import assert_raises, generate_fabric_name
+from tests.helpers import assert_raises, generate_fabric_name, extract
 
 
 def test_fabric_attributes(fabric, client):
@@ -76,3 +80,62 @@ def test_fabric_management(fabric, client):
         sys_fabric.delete_fabric(fabric_name)
     assert err.value.error_code == 1228
     assert sys_fabric.delete_fabric(fabric_name, ignore_missing=True) is False
+
+def test_metadata(client, tst_fabric_name):
+    # Test get fabric metadata
+    tst_fabric = client._tenant.useFabric(tst_fabric_name)
+    resp = tst_fabric.get_fabric_metadata()
+    assert resp["options"]["metadata"] == None
+
+    # Test set fabric metadata
+    assert tst_fabric.set_fabric_metadata({"foo": "bar"}) is True
+    resp = tst_fabric.get_fabric_metadata()
+    assert resp["options"]["metadata"] == {"foo": "bar"}
+
+    # Test update fabric metadata
+    assert tst_fabric.update_fabric_metadata({"foo": "baz"}) is True
+    resp = tst_fabric.get_fabric_metadata()
+    assert resp["options"]["metadata"] == {"foo": "baz"}
+
+def test_datacenter(sys_fabric):
+    # Test datacenter methods
+    dclist = sys_fabric.dclist(detail=False)
+    localdc = sys_fabric.localdc(detail=False)
+    assert localdc in dclist
+    resp = sys_fabric.get_dc_detail(localdc)
+    assert resp["name"] == localdc
+    assert resp["local"] ==  True
+    assert localdc in extract('name', sys_fabric.dclist_all())
+
+    # Test invalid dc name
+    with assert_raises(GetDcDetailError) as err:
+        sys_fabric.get_dc_detail("invalid")
+    assert err.value.http_code == 404
+
+def test_bad_fabric(client, bad_fabric_name):
+    bad_fabric = client._tenant.useFabric(bad_fabric_name)
+    fabric_name = generate_fabric_name()
+
+    # Test create and delete functions on bad fabric
+    with assert_raises(FabricCreateError) as err:
+        bad_fabric.create_fabric(fabric_name)
+    assert err.value.error_code == 1228
+
+    with assert_raises(FabricDeleteError) as err:
+        bad_fabric.delete_fabric(fabric_name)
+    assert err.value.error_code == 1228
+
+    # Test metadata functions on bad fabric
+    with assert_raises(FabricGetMetadataError) as err:
+        bad_fabric.get_fabric_metadata()
+    assert err.value.error_code == 1228
+
+    with assert_raises(FabricSetMetadataError) as err:
+        bad_fabric.set_fabric_metadata({"foo": "bar"})
+    assert err.value.error_code == 1228
+
+    with assert_raises(FabricUpdateMetadataError) as err:
+        bad_fabric.update_fabric_metadata({"foo": "baz"})
+    assert err.value.error_code == 1228
+
+    client._tenant.useFabric('_system')

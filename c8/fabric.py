@@ -22,6 +22,9 @@ from c8.exceptions import (
     FabricCreateError,
     FabricListError,
     FabricPropertiesError,
+    FabricGetMetadataError,
+    FabricUpdateMetadataError,
+    FabricSetMetadataError,
     GraphListError,
     GraphCreateError,
     GraphDeleteError,
@@ -34,6 +37,10 @@ from c8.exceptions import (
     StreamListError,
     StreamPermissionError,
     TenantDcListError,
+    GetDcListError,
+    GetLocalDcError,
+    GetDcDetailError,
+    SpotRegionAssignError,
     SpotRegionUpdateError,
     RestqlValidationError,
     RestqlListError,
@@ -301,7 +308,7 @@ class Fabric(APIWrapper):
         :type: boolean
         :returns: DC List.
         :rtype: [str | unicode ]
-        :raise c8.exceptions.TenantListError: If retrieval fails.
+        :raise c8.exceptions.GetDcListError: If retrieval fails.
         """
         properties = self.properties()
         if not detail:
@@ -311,28 +318,28 @@ class Fabric(APIWrapper):
 
         request = Request(
             method='get',
-            endpoint='/datacenter/_tenant/%s' % tenant_name
+            endpoint='/datacenter/_tenant/{}'.format(tenant_name)
         )
 
         def response_handler(resp):
             if not resp.is_success:
-                raise TenantDcListError(resp, request)
+                raise GetDcListError(resp, request)
             dc_list = resp.body[0]["dcInfo"]
             for dc in dc_list:
                 if dc["name"] not in properties["options"]["dcList"]:
                     dc_list.remove(dc)
             return dc_list
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, custom_prefix="")
 
     def localdc(self, detail=True):
-        """Return the list of local Datacenters
+        """Fetch data for a local/regional the data center
 
-        :param detail: detail list of DCs if set to true else only DC names
+        :param detail: Details of local DC if set to true else only DC name.
         :type: boolean
-        :returns: DC List.
-        :rtype: [str | dict ]
-        :raise c8.exceptions.TenantListError: If retrieval fails.
+        :returns: Local DC details.
+        :rtype: str | dict
+        :raise c8.exceptions.GetLocalDcError: If retrieval fails.
         """
         request = Request(
             method='get',
@@ -341,12 +348,78 @@ class Fabric(APIWrapper):
 
         def response_handler(resp):
             if not resp.is_success:
-                raise TenantDcListError(resp, request)
+                raise GetLocalDcError(resp, request)
             if detail:
                 return resp.body
             return resp.body["name"]
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, custom_prefix="")
+
+    def get_dc_detail(self, dc):
+        """Fetch data for data center, identified by dc-name
+
+        :param dc: DC name
+        :type: str
+        :returns: DC details.
+        :rtype: dict
+        :raise c8.exceptions.GetDcDetailError: If retrieval fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/datacenter/{}'.format(dc)
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise GetDcDetailError(resp, request)
+            return resp.body
+
+        return self._execute(request, response_handler, custom_prefix="")
+
+    def dclist_all(self):
+        """Fetch data about all the data centers
+
+        :returns: DC List.
+        :rtype: [str | unicode ]
+        :raise c8.exceptions.GetDcListError: If retrieval fails.
+        """
+ 
+        request = Request(
+            method='get',
+            endpoint='/datacenter/all'
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise GetDcListError(resp, request)
+            return resp.body
+
+        return self._execute(request, response_handler, custom_prefix="")
+
+    def assign_dc_spot(self, dc, spot_region=False):
+        """Assigns spot region of a fed
+
+        :param dc: dc name
+        :type dc: str
+        :param spot_region: If True, makes the region a spot region
+        :type spot_region: bool
+        :returns: True if request successful, False otherwise
+        :rtype: bool
+        :raise c8.exceptions.SpotRegionAssignError: If assignment fails.
+        """
+        data = json.dumps(spot_region)
+        request = Request(
+            method='put',
+            endpoint='/datacenter/{}/{}'.format(dc, data)
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise SpotRegionAssignError(resp, request)
+            return True
+
+        return self._execute(request, response_handler, custom_prefix="")
+
 
     #######################
     # Fabric Management #
@@ -439,6 +512,72 @@ class Fabric(APIWrapper):
             if not resp.is_success:
                 raise FabricCreateError(resp, request)
             return True
+
+        return self._execute(request, response_handler)
+
+    def get_fabric_metadata(self):
+        """Fetch information about a GeoFabric.
+
+        :returns: Fabric information.
+        :rtype: dict
+        :raise c8.exceptions.FabricGetMetadataError: If retrieval fails.
+        """
+        request = Request(
+            method='get',
+            endpoint='/database/metadata'
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise FabricGetMetadataError(resp, request)
+            return resp.body['result']
+
+        return self._execute(request, response_handler)
+
+    def set_fabric_metadata(self, metadata):
+        """Set the GeoFabric Metadata.
+
+        :param metadata: Fabric metadata.
+        :type metadata: dict
+        :returns: True if metadata was set successfully.
+        :rtype: bool
+        :raise c8.exceptions.FabricSetMetadataError: If set fails.
+        """
+
+        data = {"metadata": metadata}
+        request = Request(
+            method='put',
+            endpoint='/database/metadata',
+            data=data
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise FabricSetMetadataError(resp, request)
+            return resp.body['result']
+
+        return self._execute(request, response_handler)
+
+    def update_fabric_metadata(self, metadata):
+        """Modfiy the GeoFabric metadata.
+
+        :param metadata: Fabric metadata.
+        :type metadata: dict
+        :returns: True if metadata was set successfully.
+        :rtype: bool
+        :raise c8.exceptions.FabricUpdateMetadataError: If update fails.
+        """
+        data = {"metadata": metadata}
+        request = Request(
+            method='patch',
+            endpoint='/database/metadata',
+            data=data
+        )
+
+        def response_handler(resp):
+            if not resp.is_success:
+                raise FabricUpdateMetadataError(resp, request)
+            return resp.body['result']
 
         return self._execute(request, response_handler)
 
