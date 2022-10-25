@@ -32,7 +32,7 @@ class PlanInterface(APIWrapper):
 
         response_handler = self.response_handler_generic(request)
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     def list_billing_plan_details(self, plan_name):
         """
@@ -47,7 +47,7 @@ class PlanInterface(APIWrapper):
 
         response_handler = self.response_handler_generic(request)
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     def create_billing_plan(
         self, name, features_gates, attribution, label, active, plan_details=None
@@ -85,7 +85,7 @@ class PlanInterface(APIWrapper):
 
         response_handler = self.response_handler_generic(request)
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     def modify_billing_plan(
         self,
@@ -132,7 +132,7 @@ class PlanInterface(APIWrapper):
 
         response_handler = self.response_handler_generic(request)
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     def remove_billing_plan(self, plan_name):
         """
@@ -147,7 +147,7 @@ class PlanInterface(APIWrapper):
 
         response_handler = self.response_handler_generic(request)
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     def update_tenant_billing_plan(
         self, attribution, plan, payment_method_id, tenant=None
@@ -183,7 +183,7 @@ class PlanInterface(APIWrapper):
 
         response_handler = self.response_handler_generic(request)
 
-        return self._execute(request, response_handler)
+        return self._execute(request, response_handler, custom_prefix="/_api")
 
     def create_plan_details(
         self, name, features_gates, attribution, label, active, plan_details

@@ -63,6 +63,8 @@ class DefaultExecutor(Executor):
         :type request: c8.request.Request
         :param response_handler: HTTP response handler.
         :type response_handler: callable
+        :param custom_prefix: Custom url-path value
+        :type custom_prefix: str
         :return: API execution result.
         :rtype: str | unicode | bool | int | list | dict
         """

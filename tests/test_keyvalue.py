@@ -68,17 +68,14 @@ def test_keyvalue_exceptions(client, tst_fabric_name, bad_fabric_name):
     # Tests with bad fabric (non existing)
     client._tenant.useFabric(bad_fabric_name)
 
-    with assert_raises(CreateCollectionError) as err:
+    with assert_raises(CreateCollectionError):
         client.create_collection_kv(bad_col_name)
-    assert err.value.http_code == 401
-
-    with assert_raises(ListCollections) as err:
+        
+    with assert_raises(ListCollections):
         client.has_collection_kv(bad_col_name)
-    assert err.value.http_code == 401
 
-    with assert_raises(ListCollections) as err:
+    with assert_raises(ListCollections):
         client.get_collections_kv()
-    assert err.value.http_code == 401
 
     # Tests with good fabric but bad collection
     client._tenant.useFabric(tst_fabric_name)

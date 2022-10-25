@@ -110,9 +110,8 @@ def test_collection_management(sys_fabric, client, bad_fabric):
     assert col_name in extract("name", sys_fabric.collections())
     bad = client._tenant.useFabric(bad_fabric)
     # Test list collections with bad fabric
-    with assert_raises(CollectionListError) as err:
+    with assert_raises(CollectionListError):
         bad.collections()
-    assert err.value.error_code == 11
 
     # Test get collection object
     sys_fabric = client._tenant.useFabric("_system")
