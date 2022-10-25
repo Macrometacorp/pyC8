@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 from c8.connection import TenantConnection
 from c8.plan.plan_interface import PlanInterface
+from c8.billing.billing_interface import BillingInterface
 from c8.tenant import Tenant
 from c8.redis.redis_commands import RedisCommands
 from c8.version import __version__
@@ -51,6 +52,7 @@ class C8Client(object):
         self.get_tenant()
         # Domains
         self._redis = None
+        self._billing = None
 
     def set_url(self):
         if "api-" in self.host:
@@ -92,6 +94,18 @@ class C8Client(object):
         if self._redis is None:
             self._redis = RedisCommands(self._tenant._conn)
         return self._redis
+
+    @property
+    def billing(self):
+        """
+        Access Macrometa Billing Interface
+
+        :returns: Macrometa Billing interface
+        :rtype: c8.billing.billing_interface
+        """
+        if self._billing is None:
+            self._billing = BillingInterface(self._tenant._conn)
+        return self._billing
 
     @property
     def version(self):

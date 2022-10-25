@@ -1,30 +1,19 @@
 from __future__ import absolute_import, unicode_literals
-import time
 
 from c8.exceptions import (
     SearchCollectionSetError,
-    SearchCollectionInvalidArgument,
-    SearchCollectionForbiddenError,
     SearchError,
-    SearchInvalidArgumentError,
-    SearchForbiddenError,
-    SearchNotExistError,
     ViewCreateError,
-    ViewCreateViewNameMissingError,
-    ViewCreateViewNameUnknownError,
     ViewGetError,
-    ViewNotFoundError,
     ViewRenameError,
     ViewDeleteError,
     ViewGetPropertiesError,
     ViewUpdatePropertiesError,
     AnalyzerListError,
     AnalyzerGetDefinitionError,
-    AnalyzerNotFoundError
 )
 from tests.helpers import (
     assert_raises,
-    generate_col_name,
     extract
 )
 
@@ -111,24 +100,20 @@ def test_search_exceptions(client, tst_fabric_name, col, docs, bad_fabric_name, 
     client._tenant.useFabric(bad_fabric_name)
 
     # Test set search in bad fabric
-    with assert_raises(SearchCollectionSetError) as err:
+    with assert_raises(SearchCollectionSetError):
         client.set_search(col.name, "true", "text")
-    assert err.value.http_code == 401
 
     # Test list all views in bad fabric
-    with assert_raises(ViewGetError) as err:
+    with assert_raises(ViewGetError):
         client.list_all_views()
-    assert err.value.http_code == 401
 
     # Test list all analyzers in bad fabric
-    with assert_raises(AnalyzerListError) as err:
+    with assert_raises(AnalyzerListError):
         client.get_list_of_analyzer()
-    assert err.value.http_code == 401
 
     # Test get analyzer definition in bad fabric
-    with assert_raises(AnalyzerGetDefinitionError) as err:
+    with assert_raises(AnalyzerGetDefinitionError):
         client.get_analyzer_definition("identity")
-    assert err.value.http_code == 401
 
     client._tenant.useFabric(tst_fabric_name)
     # Test search in bad collection

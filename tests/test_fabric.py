@@ -22,9 +22,9 @@ def test_fabric_misc_methods(fabric, client):
     assert properties['name'] == fabric.name
     assert properties['system'] is False
     # Test get properties with bad fabric
-    with assert_raises(FabricPropertiesError) as err:
+    with assert_raises(FabricPropertiesError):
         client._tenant.useFabric(generate_fabric_name()).properties()
-    assert err.value.error_code == 11
+
     # Test fabric details method
     details = fabric.fabrics_detail()
     assert 'associated_regions' in details[0]['options']

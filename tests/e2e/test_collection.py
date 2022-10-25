@@ -1,24 +1,24 @@
-from tests.helpers import generate_col_name, clean_doc
+from tests.helpers import generate_col_name
 
 
-def test_create_collection_endpoint(client):
+def test_create_collection_endpoint(client, tst_fabric_name):
     collection_name = generate_col_name()
+    client._tenant.useFabric(tst_fabric_name)
     col = client.create_collection(collection_name)
     assert repr(col) == '<StandardCollection {}>'.format(col.name)
     assert col.tenant_name == client._tenant.name
     assert col.name.startswith('test_collection') == True
 
-
 def test_collection_truncate(sys_fabric, col):
     assert sys_fabric.collection(col.name).truncate() == True
 
 
-def test_collection_doc_count(sys_fabric, col, docs):
+def test_collection_doc_count(col, docs):
     col.insert_many(docs)
     assert col.count() == len(docs)
 
 
-def test_collection_has_doc(sys_fabric, col, docs):
+def test_collection_has_doc(sys_fabric, col):
     doc_id = col.name + '/' + 'foo'
     col.insert({'_id': doc_id})
     assert sys_fabric.collection(col.name).has(doc_id) == True
@@ -36,7 +36,10 @@ def test_collection_export(col, docs):
     assert len(cursor) == 2
 
 
-def test_collection_indexes(col):
+def test_collection_indexes(client, tst_fabric_name):
+    collection_name = generate_col_name()
+    client._tenant.useFabric(tst_fabric_name)
+    col = client.create_collection(collection_name)
     fields = ['lat', 'lng']
     geo_index = col.add_geo_index(fields=fields)
     assert geo_index['fields'] == fields
@@ -75,23 +78,25 @@ def test_collection_indexes(col):
     assert col.delete_index(ttl_index['name']) == True
 
 
-def test_delete_collection_endpoint(client):
+def test_delete_collection_endpoint(client, tst_fabric_name):
     collection_name = generate_col_name()
+    client._tenant.useFabric(tst_fabric_name)
     client.create_collection(collection_name)
     assert client.delete_collection(collection_name) == True
 
 
-def test_has_collection_endpoint(client):
+def test_has_collection_endpoint(client, tst_fabric_name):
     collection_name = generate_col_name()
+    client._tenant.useFabric(tst_fabric_name)
     client.create_collection(collection_name)
     assert True == client.has_collection(collection_name)
     assert False == client.has_collection(generate_col_name())
 
 
-def test_collection_figures(sys_fabric, client):
+def test_collection_figures(client, tst_fabric_name):
     collection_name = generate_col_name()
+    fab = client._tenant.useFabric(tst_fabric_name)
     col = client.create_collection(collection_name, key_generator='autoincrement')
-    fab = client._tenant.useFabric('_system')
     get_col_properties = fab.collection_figures(collection_name=col.name)
     if col.context != 'transaction':
         assert 'id' in get_col_properties
