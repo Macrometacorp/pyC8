@@ -1,6 +1,4 @@
-import pytest
 from conftest import (
-    get_mm_client_instance,
     test_data_billing_plan,
     test_data_update_plan,
     test_update_tenant_billing_plan,
@@ -8,12 +6,6 @@ from conftest import (
 
 from c8.plan.core import PlansServerError
 from tests.helpers import assert_raises
-
-
-@pytest.fixture
-def plans_setup_client():
-    client = get_mm_client_instance()
-    return client
 
 
 def test_list_billing_plans(get_mm_client_instance):
