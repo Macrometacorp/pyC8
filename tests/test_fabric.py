@@ -5,9 +5,10 @@ from c8.exceptions import (
     FabricPropertiesError,
     FabricGetMetadataError,
     FabricUpdateMetadataError,
-    FabricSetMetadataError
+    FabricSetMetadataError,
+    GetDcDetailError
 )
-from tests.helpers import assert_raises, generate_fabric_name
+from tests.helpers import assert_raises, generate_fabric_name, extract
 
 
 def test_fabric_attributes(fabric, client):
