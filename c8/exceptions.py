@@ -384,6 +384,18 @@ class FabricDeleteError(C8ServerError):
     """Failed to delete fabric."""
 
 
+class GetDcListError(C8ServerError):
+    """Failed to retrieve DC list"""
+
+
+class GetLocalDcError(C8ServerError):
+    """Failed to get local DC information"""
+
+
+class GetDcDetailError(C8ServerError):
+    """Failed to get DC details"""
+
+
 class SpotRegionUpdateError(C8ServerError):
     """Failed to update Spot Region"""
 
