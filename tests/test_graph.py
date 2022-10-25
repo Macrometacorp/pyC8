@@ -171,9 +171,8 @@ def test_vertex_collection_management(tst_fabric, graph, bad_graph, client):
     assert tvcol_name in extract('name', tst_fabric.collections())
 
     # Test list vertex collection via bad fabric
-    with assert_raises(VertexCollectionListError) as err:
+    with assert_raises(VertexCollectionListError):
         client._tenant.useFabric(generate_graph_name()).graph(bad_graph.name).vertex_collections()
-    assert err.value.error_code == 11
 
     # Test delete missing vertex collection
     with assert_raises(VertexCollectionDeleteError) as err:

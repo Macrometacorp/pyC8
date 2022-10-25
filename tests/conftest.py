@@ -1,7 +1,6 @@
 from __future__ import absolute_import, unicode_literals, division
 
 import pytest
-import time
 import os
 
 from dotenv import load_dotenv
@@ -60,7 +59,6 @@ def pytest_configure(config):
 
     # Create a standard collection for testing.
     col_name = generate_col_name()
-    time.sleep(5)
     tst_col = tst_fabric.create_collection(col_name, edge=False)
     tst_col.add_skiplist_index(['val'])
     tst_col.add_fulltext_index(['text'])

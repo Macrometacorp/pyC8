@@ -57,7 +57,7 @@ def test_restql_methods(client, tst_fabric_name, col):
     # Create and import queries
     client.create_restql(insert_data)
     client.import_restql(queries)
-    time.sleep(5)
+    time.sleep(2)
 
     resp = str(client.get_restqls())
     assert "getRecords" in resp
@@ -143,14 +143,12 @@ def test_restql_exceptions(client, tst_fabric_name, col, bad_fabric_name):
 
     # Get restqls from invalid fabric
     client._tenant.useFabric(bad_fabric_name)
-    with assert_raises(RestqlListError) as err:
+    with assert_raises(RestqlListError):
         client.get_restqls()
-    assert err.value.http_code == 401
 
     # Delete restql from invalid fabric
-    with assert_raises(RestqlDeleteError) as err:
+    with assert_raises(RestqlDeleteError):
         client.delete_restql("insertRecord")
-    assert err.value.http_code == 401
 
     client._tenant.useFabric(tst_fabric_name)
 
