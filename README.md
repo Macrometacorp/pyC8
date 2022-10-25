@@ -104,3 +104,8 @@ pip install --upgrade pyc8
 ## 📗 Examples
 
 You can find code examples in our [getting started collection](GETTING_STARTED.md).
+
+## 📜 Code of Conduct
+
+This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md).
+By participating, you are expected to uphold this code. Please report unacceptable behavior to [support@macrometa.com](mailto:support@macrometa.com).
