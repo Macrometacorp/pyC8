@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import os
-import time
 
 import pytest
 from dotenv import load_dotenv

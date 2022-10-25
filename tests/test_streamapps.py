@@ -123,7 +123,7 @@ def test_streamapp_methods(client):
 
     client.create_restql(insert_data_query)
     time.sleep(5)
-    
+
     for i in range(10):
         client.execute_restql("insertTestWeight", {"bindVars": {"weight": i}})
 
@@ -179,7 +179,7 @@ def test_streamapp_http_source(client):
     # Create a stream application
     client.create_stream_app(data=stream_app_definition)
     # Activate a stream application
-    client.activate_stream_app('Sample-HTTP-Source', True)
+    client.activate_stream_app("Sample-HTTP-Source", True)
     time.sleep(2)
     stream = client._fabric.stream()
 
@@ -223,7 +223,7 @@ def test_streamapp_exceptions(client, bad_fabric_name):
     assert client.get_stream_app("Sample-Cargo-App") is False
     # Activate a stream application
     with assert_raises(StreamAppChangeActiveStateError):
-        client.activate_stream_app('Sample-Cargo-App', True)
+        client.activate_stream_app("Sample-Cargo-App", True)
 
     # To operate on created apps, you need to create an instance of the app
     app = client._fabric.stream_app("Sample-Cargo-App")
@@ -236,7 +236,7 @@ def test_streamapp_exceptions(client, bad_fabric_name):
 
     regions = []
     resp = app.update(updated_definition, regions)
-    assert resp['error'] is True
+    assert resp["error"] is True
 
     with assert_raises(StreamAppChangeActiveStateError):
         app.change_state(True)
@@ -250,4 +250,11 @@ def test_streamapp_exceptions(client, bad_fabric_name):
     # Get stream application samples
     with assert_raises(StreamAppGetSampleError):
         client.get_stream_app_samples()
-    assert client.publish_message_http_source('Sample-HTTP-Source', 'SampleHTTPSource', {'carId': 'c1', 'longitude': 18.4334, 'latitude': 30.2123}) is False
+    assert (
+        client.publish_message_http_source(
+            "Sample-HTTP-Source",
+            "SampleHTTPSource",
+            {"carId": "c1", "longitude": 18.4334, "latitude": 30.2123},
+        )
+        is False
+    )

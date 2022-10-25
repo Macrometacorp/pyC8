@@ -9,13 +9,9 @@ SQL_COLLECTION = "testsqlcollection"
 
 
 def test_create_redis_collection(get_client_instance):
-    create_collection_response = get_client_instance.create_collection(
-        SQL_COLLECTION
-    )
+    create_collection_response = get_client_instance.create_collection(SQL_COLLECTION)
     insert_document_response = get_client_instance.insert_document(
-        SQL_COLLECTION,
-        silent=True,
-        document=test_data_document()
+        SQL_COLLECTION, silent=True, document=test_data_document()
     )
     # Response from platform
     assert insert_document_response is True
@@ -24,8 +20,7 @@ def test_create_redis_collection(get_client_instance):
 
 def test_sql_endpoint(get_client_instance):
     cursor = get_client_instance.execute_query(
-        'SELECT * FROM {}'.format(SQL_COLLECTION),
-        sql=True
+        "SELECT * FROM {}".format(SQL_COLLECTION), sql=True
     )
     docs = [doc for doc in cursor]
 

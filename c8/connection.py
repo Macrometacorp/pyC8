@@ -78,12 +78,10 @@ class Connection(object):
                 body = json.loads(response.text)
                 self._tenant_name = body["result"][0]["tenant"]
 
-
         # self._url_prefix = '{}/_tenant/{}/_fabric/{}'.format(
         #    url, self._tenant_name, self._fabric_name)
 
         self._url_prefix = "{}/_fabric/{}/_api".format(url, self._fabric_name)
-
 
         # TODO : Handle the functions side of things
 

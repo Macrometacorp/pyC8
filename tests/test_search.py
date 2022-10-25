@@ -6,15 +6,11 @@ from c8.exceptions import (
     SearchCollectionSetError,
     SearchError,
     ViewCreateError,
-    ViewGetError,
-    ViewRenameError,
     ViewDeleteError,
     ViewGetError,
     ViewGetPropertiesError,
     ViewRenameError,
     ViewUpdatePropertiesError,
-    AnalyzerListError,
-    AnalyzerGetDefinitionError,
 )
 from tests.helpers import assert_raises, extract
 

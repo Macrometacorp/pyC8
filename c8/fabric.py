@@ -20,15 +20,20 @@ from c8.exceptions import (
     EventGetError,
     FabricCreateError,
     FabricDeleteError,
+    FabricGetMetadataError,
     FabricListError,
     FabricPropertiesError,
-    FabricGetMetadataError,
-    FabricUpdateMetadataError,
     FabricSetMetadataError,
+    FabricUpdateMetadataError,
+    GetAPIKeys,
+    GetDcDetailError,
+    GetDcListError,
+    GetLocalDcError,
     GraphCreateError,
     GraphDeleteError,
     GraphListError,
     RestqlCreateError,
+    RestqlCursorError,
     RestqlDeleteError,
     RestqlExecuteError,
     RestqlImportError,
@@ -37,6 +42,7 @@ from c8.exceptions import (
     RestqlValidationError,
     ServerConnectionError,
     ServerVersionError,
+    SpotRegionAssignError,
     SpotRegionUpdateError,
     StreamAppGetSampleError,
     StreamCommunicationError,
@@ -45,19 +51,6 @@ from c8.exceptions import (
     StreamDeleteError,
     StreamListError,
     StreamPermissionError,
-    TenantDcListError,
-    GetDcListError,
-    GetLocalDcError,
-    GetDcDetailError,
-    SpotRegionAssignError,
-    SpotRegionUpdateError,
-    RestqlValidationError,
-    GetAPIKeys,
-)
-from c8.executor import (
-    DefaultExecutor,
-    AsyncExecutor,
-    BatchExecutor,
 )
 from c8.executor import AsyncExecutor, BatchExecutor, DefaultExecutor
 from c8.graph import Graph
@@ -304,8 +297,7 @@ class Fabric(APIWrapper):
         tenant_name = properties["options"]["tenant"]
 
         request = Request(
-            method='get',
-            endpoint='/datacenter/_tenant/{}'.format(tenant_name)
+            method="get", endpoint="/datacenter/_tenant/{}".format(tenant_name)
         )
 
         def response_handler(resp):
@@ -348,10 +340,7 @@ class Fabric(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.GetDcDetailError: If retrieval fails.
         """
-        request = Request(
-            method='get',
-            endpoint='/datacenter/{}'.format(dc)
-        )
+        request = Request(method="get", endpoint="/datacenter/{}".format(dc))
 
         def response_handler(resp):
             if not resp.is_success:
@@ -367,11 +356,8 @@ class Fabric(APIWrapper):
         :rtype: [str | unicode ]
         :raise c8.exceptions.GetDcListError: If retrieval fails.
         """
- 
-        request = Request(
-            method='get',
-            endpoint='/datacenter/all'
-        )
+
+        request = Request(method="get", endpoint="/datacenter/all")
 
         def response_handler(resp):
             if not resp.is_success:
@@ -392,10 +378,7 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.SpotRegionAssignError: If assignment fails.
         """
         data = json.dumps(spot_region)
-        request = Request(
-            method='put',
-            endpoint='/datacenter/{}/{}'.format(dc, data)
-        )
+        request = Request(method="put", endpoint="/datacenter/{}/{}".format(dc, data))
 
         def response_handler(resp):
             if not resp.is_success:
@@ -403,7 +386,6 @@ class Fabric(APIWrapper):
             return True
 
         return self._execute(request, response_handler, custom_prefix="")
-
 
     #######################
     # Fabric Management #
@@ -504,15 +486,12 @@ class Fabric(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.FabricGetMetadataError: If retrieval fails.
         """
-        request = Request(
-            method='get',
-            endpoint='/database/metadata'
-        )
+        request = Request(method="get", endpoint="/database/metadata")
 
         def response_handler(resp):
             if not resp.is_success:
                 raise FabricGetMetadataError(resp, request)
-            return resp.body['result']
+            return resp.body["result"]
 
         return self._execute(request, response_handler)
 
@@ -527,16 +506,12 @@ class Fabric(APIWrapper):
         """
 
         data = {"metadata": metadata}
-        request = Request(
-            method='put',
-            endpoint='/database/metadata',
-            data=data
-        )
+        request = Request(method="put", endpoint="/database/metadata", data=data)
 
         def response_handler(resp):
             if not resp.is_success:
                 raise FabricSetMetadataError(resp, request)
-            return resp.body['result']
+            return resp.body["result"]
 
         return self._execute(request, response_handler)
 
@@ -550,16 +525,12 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.FabricUpdateMetadataError: If update fails.
         """
         data = {"metadata": metadata}
-        request = Request(
-            method='patch',
-            endpoint='/database/metadata',
-            data=data
-        )
+        request = Request(method="patch", endpoint="/database/metadata", data=data)
 
         def response_handler(resp):
             if not resp.is_success:
                 raise FabricUpdateMetadataError(resp, request)
-            return resp.body['result']
+            return resp.body["result"]
 
         return self._execute(request, response_handler)
 

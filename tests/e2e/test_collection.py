@@ -9,6 +9,7 @@ def test_create_collection_endpoint(client, tst_fabric_name):
     assert col.tenant_name == client._tenant.name
     assert col.name.startswith("test_collection") is True
 
+
 def test_collection_truncate(sys_fabric, col):
     assert sys_fabric.collection(col.name).truncate() is True
 
@@ -40,7 +41,7 @@ def test_collection_indexes(client, tst_fabric_name):
     collection_name = generate_col_name()
     client._tenant.useFabric(tst_fabric_name)
     col = client.create_collection(collection_name)
-    fields = ['lat', 'lng']
+    fields = ["lat", "lng"]
 
     geo_index = col.add_geo_index(fields=fields)
     assert geo_index["fields"] == fields
@@ -97,7 +98,7 @@ def test_has_collection_endpoint(client, tst_fabric_name):
 def test_collection_figures(client, tst_fabric_name):
     collection_name = generate_col_name()
     fab = client._tenant.useFabric(tst_fabric_name)
-    col = client.create_collection(collection_name, key_generator='autoincrement')
+    col = client.create_collection(collection_name, key_generator="autoincrement")
     get_col_properties = fab.collection_figures(collection_name=col.name)
     if col.context != "transaction":
         assert "id" in get_col_properties

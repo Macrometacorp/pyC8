@@ -70,7 +70,7 @@ def test_keyvalue_exceptions(client, tst_fabric_name, bad_fabric_name):
 
     with assert_raises(CreateCollectionError):
         client.create_collection_kv(bad_col_name)
-        
+
     with assert_raises(ListCollections):
         client.has_collection_kv(bad_col_name)
 
