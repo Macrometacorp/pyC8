@@ -159,6 +159,8 @@ class Connection(object):
 
         :param request: HTTP request.
         :type request: c8.request.Request
+        :param custom_prefix: Custom url-path value
+        :type custom_prefix: str
         :return: HTTP response.
         :rtype: c8.response.Response
         """
@@ -174,7 +176,7 @@ class Connection(object):
                 final_url = self.url + custom_prefix + request.endpoint
             else:
                 final_url = self._url_prefix + request.endpoint
-    
+
         headers = request.headers
 
         if self._token is not None:

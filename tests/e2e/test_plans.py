@@ -32,6 +32,7 @@ def test_list_billing_plans(get_mm_client_instance):
                    'pricing': billing_details_update['pricing'], 'isBundle': billing_details_update['isBundle'],
                    'demo': billing_details_update['demo'],
                    'metrics': billing_details_update['metrics']}
+
     resp = get_mm_client_instance.plan().modify_billing_plan(plan_name=billing_plan_name,
                                                          attribution=billing_details_update['attribution'],
                                                          active=billing_details_update['active'],
@@ -43,14 +44,16 @@ def test_list_billing_plans(get_mm_client_instance):
     # Test update tenant billing plan
     update_data = test_update_tenant_billing_plan()
     with assert_raises(PlansServerError) as err:
-        get_mm_client_instance.plan().update_tenant_billing_plan(attribution=update_data['attribution'],
-                                                             plan=update_data['plan'],
-                                                             payment_method_id=update_data['payment_method_id'],
-                                                             tenant=update_data['tenant'])
+
+    get_mm_client_instance.plan().update_tenant_billing_plan(attribution=update_data['attribution'],
+                                                         plan=update_data['plan'],
+                                                         payment_method_id=update_data['payment_method_id'],
+                                                         tenant=update_data['tenant'])
     assert err.value.error_code == 404
 
     # Test list billing plans
     resp = get_mm_client_instance.plan().list_billing_plans()
+
     for x in range(len(resp)):
         assert 'active' in resp[x]
         assert 'featureGates' in resp[x]
@@ -60,7 +63,7 @@ def test_list_billing_plans(get_mm_client_instance):
     resp = get_mm_client_instance.plan().remove_billing_plan(plan_name=billing_plan_name)
     for x in test_data_update_plan():
         assert x in resp
-
     resp = get_mm_client_instance.plan().list_billing_plans()
+
     for x in range(len(resp)):
         assert billing_plan_name not in resp[x]['name']
