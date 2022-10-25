@@ -6,7 +6,7 @@ The SDK supports three ways for authentication:
 
 ```python
   # Authentication email and password
-  client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
+  client = C8Client(protocol='https', host='gdn.macrometa.io', port=443,
    email="user@example.com", password="XXXXX")
 ```
 
@@ -14,7 +14,7 @@ The SDK supports three ways for authentication:
 
 ```python
 # Authentication with bearer token
-client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
+client = C8Client(protocol='https', host='gdn.macrometa.io', port=443,
  token=<your token>)
 ```
 
@@ -22,7 +22,7 @@ client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
 
 ```python
 # Authentication with API key
-client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
+client = C8Client(protocol='https', host='gdn.macrometa.io', port=443,
  apikey=<your api key>)
 ```
 
