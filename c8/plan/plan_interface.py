@@ -1,6 +1,6 @@
-from c8.executor import DefaultExecutor
-from c8.plan.core import build_request, PlansServerError
 from c8.api import APIWrapper
+from c8.executor import DefaultExecutor
+from c8.plan.core import PlansServerError, build_request
 
 
 class PlanInterface(APIWrapper):
@@ -28,7 +28,7 @@ class PlanInterface(APIWrapper):
         :rtype: list
         :raise c8.plan.core.PlansServerError If list fails.
         """
-        request = build_request(method='GET', endpoint='/plan')
+        request = build_request(method="GET", endpoint="/plan")
 
         response_handler = self.response_handler_generic(request)
 
@@ -43,14 +43,15 @@ class PlanInterface(APIWrapper):
         :rtype: list
         :raise c8.plan.core.PlansServerError If list fails.
         """
-        request = build_request(method='GET', endpoint='/plan/{}'.format(plan_name))
+        request = build_request(method="GET", endpoint="/plan/{}".format(plan_name))
 
         response_handler = self.response_handler_generic(request)
 
         return self._execute(request, response_handler, custom_prefix="/_api")
 
-    def create_billing_plan(self, name, features_gates, attribution, label,
-                            active, plan_details=None):
+    def create_billing_plan(
+        self, name, features_gates, attribution, label, active, plan_details=None
+    ):
         """
         Given a valid billing_plan_definition, create a new billing plan
         :param name: Name of the new billing plan
@@ -71,18 +72,31 @@ class PlanInterface(APIWrapper):
         :raise c8.plan.core.PlansServerError If create fails.
         """
 
-        data = self.create_plan_details(name=name, features_gates=features_gates, attribution=attribution,
-                                        label=label, active=active, plan_details=plan_details)
+        data = self.create_plan_details(
+            name=name,
+            features_gates=features_gates,
+            attribution=attribution,
+            label=label,
+            active=active,
+            plan_details=plan_details,
+        )
 
-        request = build_request(method='POST', endpoint='/plan', data=data)
+        request = build_request(method="POST", endpoint="/plan", data=data)
 
         response_handler = self.response_handler_generic(request)
 
         return self._execute(request, response_handler, custom_prefix="/_api")
 
-    def modify_billing_plan(self, plan_name, attribution, label, name=None,
-                            features_gates=None, active=None,
-                            plan_details=None):
+    def modify_billing_plan(
+        self,
+        plan_name,
+        attribution,
+        label,
+        name=None,
+        features_gates=None,
+        active=None,
+        plan_details=None,
+    ):
         """
         Given a valid billing_plan_definition, modify an existing billing plan
         :param plan_name: Current name for the plan
@@ -104,9 +118,17 @@ class PlanInterface(APIWrapper):
         :rtype: dict
         :raise c8.plan.core.PlansServerError If create fails.
         """
-        data = self.create_plan_details(name=name, features_gates=features_gates, attribution=attribution,
-                                        label=label, active=active, plan_details=plan_details)
-        request = build_request(method='PATCH', endpoint='/plan/{}'.format(plan_name), data=data)
+        data = self.create_plan_details(
+            name=name,
+            features_gates=features_gates,
+            attribution=attribution,
+            label=label,
+            active=active,
+            plan_details=plan_details,
+        )
+        request = build_request(
+            method="PATCH", endpoint="/plan/{}".format(plan_name), data=data
+        )
 
         response_handler = self.response_handler_generic(request)
 
@@ -121,13 +143,15 @@ class PlanInterface(APIWrapper):
         :rtype: list
         :raise c8.plan.core.PlansServerError If remove fails.
         """
-        request = build_request(method='DELETE', endpoint='/plan/{}'.format(plan_name))
+        request = build_request(method="DELETE", endpoint="/plan/{}".format(plan_name))
 
         response_handler = self.response_handler_generic(request)
 
         return self._execute(request, response_handler, custom_prefix="/_api")
 
-    def update_tenant_billing_plan(self, attribution, plan, payment_method_id, tenant=None):
+    def update_tenant_billing_plan(
+        self, attribution, plan, payment_method_id, tenant=None
+    ):
         """
         Update the billing plan for a tenant.
         Note: If tenant name is not specified, the tenant invoking the API is used to update billing plan.
@@ -145,35 +169,46 @@ class PlanInterface(APIWrapper):
         """
         plan_details = {}
         if attribution is not None:
-            plan_details['attribution'] = attribution
+            plan_details["attribution"] = attribution
         if plan is not None:
-            plan_details['plan'] = plan
+            plan_details["plan"] = plan
         if payment_method_id is not None:
-            plan_details['payment_method_id'] = payment_method_id
+            plan_details["payment_method_id"] = payment_method_id
         if tenant is not None:
-            plan_details['tenant'] = tenant
+            plan_details["tenant"] = tenant
 
-        request = build_request(method='POST', endpoint='/plan/update', data=plan_details)
+        request = build_request(
+            method="POST", endpoint="/plan/update", data=plan_details
+        )
 
         response_handler = self.response_handler_generic(request)
 
         return self._execute(request, response_handler, custom_prefix="/_api")
 
-    def create_plan_details(self, name, features_gates, attribution,
-                            label, active, plan_details):
+    def create_plan_details(
+        self, name, features_gates, attribution, label, active, plan_details
+    ):
         data = {}
         if name is not None:
-            data['name'] = name
+            data["name"] = name
         if features_gates is not None:
-            data['featureGates'] = features_gates
+            data["featureGates"] = features_gates
         if attribution is not None:
-            data['attribution'] = attribution
+            data["attribution"] = attribution
         if label is not None:
-            data['label'] = label
+            data["label"] = label
         if active is not None:
-            data['active'] = active
+            data["active"] = active
 
-        keys = ['planId', 'description', 'pricing', 'isBundle', 'metadata', 'demo', 'metrics']
+        keys = [
+            "planId",
+            "description",
+            "pricing",
+            "isBundle",
+            "metadata",
+            "demo",
+            "metrics",
+        ]
         for key in keys:
             if key in plan_details:
                 data[key] = plan_details[key]

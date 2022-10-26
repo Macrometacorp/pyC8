@@ -1,5 +1,7 @@
-from c8 import C8Client
+# flake8: noqa
 import random
+
+from c8 import C8Client
 
 # Variables
 fed_url = "gdn1.macrometa.io"
@@ -9,20 +11,42 @@ geo_fabric = "testfabric"
 collection_name = "addresses" + str(random.randint(1, 10000))
 
 # RESTQLs
-value = "INSERT {'firstname':@firstname, 'lastname':@lastname, 'email':@email, 'zipcode':@zipcode, '_key': 'abc'} IN %s" % collection_name
+value = (
+    "INSERT {'firstname':@firstname, 'lastname':@lastname, 'email':@email, 'zipcode':@zipcode, '_key': 'abc'} IN %s"
+    % collection_name
+)
 parameter = {"firstname": "", "lastname": "", "email": "", "zipcode": ""}
 
-insert_data = {"query": {"name": "insertRecord", "parameter": parameter, "value": value}} 
-get_data = {"query": {"name": "getRecords", "value": "FOR doc IN %s RETURN doc" % collection_name}}
-update_data = {"query": {"name": "updateRecord", "value": "UPDATE 'abc' WITH { \"lastname\": \"cena\" } IN %s" % collection_name }}
-delete_data= {"query": {"name": "deleteRecord", "value": "REMOVE 'abc' IN %s" % collection_name}}
-get_count = {"query": {"name": "countRecords", "value": "RETURN COUNT(FOR doc IN %s RETURN 1)" % collection_name}}
+insert_data = {
+    "query": {"name": "insertRecord", "parameter": parameter, "value": value}
+}
+get_data = {
+    "query": {
+        "name": "getRecords",
+        "value": "FOR doc IN %s RETURN doc" % collection_name,
+    }
+}
+update_data = {
+    "query": {
+        "name": "updateRecord",
+        "value": 'UPDATE \'abc\' WITH { "lastname": "cena" } IN %s' % collection_name,
+    }
+}
+delete_data = {
+    "query": {"name": "deleteRecord", "value": "REMOVE 'abc' IN %s" % collection_name}
+}
+get_count = {
+    "query": {
+        "name": "countRecords",
+        "value": "RETURN COUNT(FOR doc IN %s RETURN 1)" % collection_name,
+    }
+}
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     print("\n ------- CONNECTION SETUP  ------")
     print("tenant: {}, geofabric:{}".format(user_mail, geo_fabric))
-    client = C8Client(protocol='https', host=fed_url, port=443)
+    client = C8Client(protocol="https", host=fed_url, port=443)
     tenant = client.tenant(user_mail, user_password)
     fabric = tenant.useFabric(geo_fabric)
 
@@ -30,7 +54,11 @@ if __name__ == '__main__':
     dclist = fabric.dclist(detail=False)
     for dc in dclist:
         print("region: {}".format(dc))
-    print("Connected to closest region...\tregion: {}".format(fabric.localdc(detail=False)))
+    print(
+        "Connected to closest region...\tregion: {}".format(
+            fabric.localdc(detail=False)
+        )
+    )
 
     print("\n ------- CREATE GEO-REPLICATED COLLECTION  ------")
     employees = fabric.create_collection(collection_name)
@@ -48,8 +76,15 @@ if __name__ == '__main__':
     print("Insert data....")
     response = fabric.execute_restql(
         "insertRecord",
-        {"bindVars": {"firstname": "john", "lastname": "doe",
-                      "email": "john.doe@macrometa.io", "zipcode": "511037"}})
+        {
+            "bindVars": {
+                "firstname": "john",
+                "lastname": "doe",
+                "email": "john.doe@macrometa.io",
+                "zipcode": "511037",
+            }
+        },
+    )
     print("Get data....")
     response = fabric.execute_restql("getRecords")
     print("Update data....")

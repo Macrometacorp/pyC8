@@ -6,10 +6,10 @@ import pytest
 from requests.structures import CaseInsensitiveDict
 
 from c8.exceptions import (
+    C8ClientError,
     C8ServerError,
     DocumentInsertError,
     DocumentParseError,
-    C8ClientError
 )
 from c8.request import Request
 from c8.response import Response
@@ -23,58 +23,58 @@ def test_server_error(client, col, docs):
     exc = err.value
 
     assert isinstance(exc, C8ServerError)
-    assert exc.source == 'server'
+    assert exc.source == "server"
     assert exc.message == str(exc)
-    assert exc.message.startswith('[HTTP 409][ERR 1210]')
+    assert exc.message.startswith("[HTTP 409][ERR 1210]")
     assert exc.url.startswith(client.base_url)
     assert exc.error_code == 1210
-    assert exc.http_method == 'post'
+    assert exc.http_method == "post"
     assert exc.http_code == 409
-    assert exc.http_headers['Server'] == 'APISIX'
+    assert exc.http_headers["Server"] == "APISIX"
     assert isinstance(exc.http_headers, CaseInsensitiveDict)
 
     resp = exc.response
     expected_body = {
-        'code': exc.http_code,
-        'error': True,
-        'errorNum': exc.error_code,
-        'errorMessage': exc.error_message
+        "code": exc.http_code,
+        "error": True,
+        "errorNum": exc.error_code,
+        "errorMessage": exc.error_message,
     }
     assert isinstance(resp, Response)
     assert resp.is_success is False
     assert resp.error_code == exc.error_code
     assert resp.body == expected_body
     assert resp.error_code == 1210
-    assert resp.method == 'post'
+    assert resp.method == "post"
     assert resp.status_code == 409
-    assert resp.status_text == 'Conflict'
+    assert resp.status_text == "Conflict"
     assert json.loads(resp.raw_body) == expected_body
     assert resp.headers == exc.http_headers
     assert resp.url.startswith(client.base_url)
 
     req = exc.request
     assert isinstance(req, Request)
-    assert req.headers['content-type'] == 'application/json'
-    assert req.method == 'post'
+    assert req.headers["content-type"] == "application/json"
+    assert req.method == "post"
     assert req.read is None
     assert req.write == col.name
     assert req.command is None
-    assert req.params == {'returnNew': 0, 'silent': 0}
+    assert req.params == {"returnNew": 0, "silent": 0}
     assert req.data == json.dumps(document)
-    assert req.endpoint.startswith('/document/' + col.name)
+    assert req.endpoint.startswith("/document/" + col.name)
 
 
 def test_client_error(col):
     with pytest.raises(DocumentParseError) as err:
-        col.get({'_id': 'invalid'})  # malformed document
+        col.get({"_id": "invalid"})  # malformed document
     exc = err.value
 
     assert isinstance(exc, C8ClientError)
-    assert exc.source == 'client'
+    assert exc.source == "client"
     assert exc.error_code is None
     assert exc.error_message is None
     assert exc.message == str(exc)
-    assert exc.message.startswith('bad collection name')
+    assert exc.message.startswith("bad collection name")
     assert exc.url is None
     assert exc.http_method is None
     assert exc.http_code is None

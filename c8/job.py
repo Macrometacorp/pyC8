@@ -4,9 +4,9 @@ from uuid import uuid4
 
 from c8.exceptions import (
     AsyncJobCancelError,
-    AsyncJobStatusError,
-    AsyncJobResultError,
     AsyncJobClearError,
+    AsyncJobResultError,
+    AsyncJobStatusError,
     BatchJobResultError,
 )
 from c8.request import Request
@@ -56,7 +56,7 @@ class AsyncJob(Job):
     :type response_handler: callable
     """
 
-    __slots__ = ['_conn', '_id', '_response_handler']
+    __slots__ = ["_conn", "_id", "_response_handler"]
 
     def __init__(self, connection, job_id, response_handler):
         self._conn = connection
@@ -64,7 +64,7 @@ class AsyncJob(Job):
         self._response_handler = response_handler
 
     def __repr__(self):
-        return '<AsyncJob {}>'.format(self._id)
+        return "<AsyncJob {}>".format(self._id)
 
     @property
     def id(self):
@@ -88,17 +88,14 @@ class AsyncJob(Job):
         :rtype: str | unicode
         :raise c8.exceptions.AsyncJobStatusError: If retrieval fails.
         """
-        request = Request(
-            method='get',
-            endpoint='/job/{}'.format(self._id)
-        )
+        request = Request(method="get", endpoint="/job/{}".format(self._id))
         resp = self._conn.send_request(request)
         if resp.status_code == 204:
-            return 'pending'
+            return "pending"
         elif resp.is_success:
-            return 'done'
+            return "done"
         elif resp.error_code == 404:
-            error_message = 'job {} not found'.format(self._id)
+            error_message = "job {} not found".format(self._id)
             raise AsyncJobStatusError(resp, request, error_message)
         else:
             raise AsyncJobStatusError(resp, request)
@@ -116,19 +113,16 @@ class AsyncJob(Job):
         :raise c8.exceptions.C8Error: If the job raised an exception.
         :raise c8.exceptions.AsyncJobResultError: If retrieval fails.
         """
-        request = Request(
-            method='put',
-            endpoint='/job/{}'.format(self._id)
-        )
+        request = Request(method="put", endpoint="/job/{}".format(self._id))
         resp = self._conn.send_request(request)
         headers = resp.headers
-        if 'X-C8-Async-Id' in headers or 'x-c8-async-id' in headers:
+        if "X-C8-Async-Id" in headers or "x-c8-async-id" in headers:
             return self._response_handler(resp)
         if resp.status_code == 204:
-            error_message = 'job {} not done'.format(self._id)
+            error_message = "job {} not done".format(self._id)
             raise AsyncJobResultError(resp, request, error_message)
         elif resp.error_code == 404:
-            error_message = 'job {} not found'.format(self._id)
+            error_message = "job {} not found".format(self._id)
             raise AsyncJobResultError(resp, request, error_message)
         else:
             raise AsyncJobResultError(resp, request)
@@ -145,17 +139,14 @@ class AsyncJob(Job):
         :rtype: bool
         :raise c8.exceptions.AsyncJobCancelError: If cancel fails.
         """
-        request = Request(
-            method='put',
-            endpoint='/job/{}/cancel'.format(self._id)
-        )
+        request = Request(method="put", endpoint="/job/{}/cancel".format(self._id))
         resp = self._conn.send_request(request)
         if resp.status_code == 200:
             return True
         elif resp.error_code == 404:
             if ignore_missing:
                 return False
-            error_message = 'job {} not found'.format(self._id)
+            error_message = "job {} not found".format(self._id)
             raise AsyncJobCancelError(resp, request, error_message)
         else:
             raise AsyncJobCancelError(resp, request)
@@ -170,17 +161,14 @@ class AsyncJob(Job):
         :rtype: bool
         :raise c8.exceptions.AsyncJobClearError: If delete fails.
         """
-        request = Request(
-            method='delete',
-            endpoint='/job/{}'.format(self._id)
-        )
+        request = Request(method="delete", endpoint="/job/{}".format(self._id))
         resp = self._conn.send_request(request)
         if resp.is_success:
             return True
         elif resp.error_code == 404:
             if ignore_missing:
                 return False
-            error_message = 'job {} not found'.format(self._id)
+            error_message = "job {} not found".format(self._id)
             raise AsyncJobClearError(resp, request, error_message)
         else:
             raise AsyncJobClearError(resp, request)
@@ -193,16 +181,16 @@ class BatchJob(Job):
     :type response_handler: callable
     """
 
-    __slots__ = ['_id', '_status', '_response', '_response_handler']
+    __slots__ = ["_id", "_status", "_response", "_response_handler"]
 
     def __init__(self, response_handler):
         self._id = uuid4().hex
-        self._status = 'pending'
+        self._status = "pending"
         self._response = None
         self._response_handler = response_handler
 
     def __repr__(self):
-        return '<BatchJob {}>'.format(self._id)
+        return "<BatchJob {}>".format(self._id)
 
     @property
     def id(self):
@@ -234,6 +222,6 @@ class BatchJob(Job):
         :raise c8.exceptions.BatchJobResultError: If job result is not
             available (i.e. batch is not committed yet).
         """
-        if self._status == 'pending':
-            raise BatchJobResultError('result not available yet')
+        if self._status == "pending":
+            raise BatchJobResultError("result not available yet")
         return self._response_handler(self._response)

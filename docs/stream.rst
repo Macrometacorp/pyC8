@@ -11,9 +11,9 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
     # Initialize the C8 client.
     client = C8Client(protocol='https', host='gdn1.macrometa.io', port=443,
                           email='user@example.com', password='hidden')
-    
+
     stream = "teststream"
-    
+
     # Create stream
     print(client.create_stream(stream))
 
@@ -25,7 +25,7 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
 
     # Get Stream Statistics
     print("Stream Stats: ", client.get_stream_stats(stream))
-    
+
     # create producer
     producer = client.create_stream_producer(stream)
 
@@ -137,7 +137,7 @@ Macrometa Streams provide realtime pub/sub messaging capabilities for the Macrom
        print("Received message '{}' id='{}'".format(msg1, m1["messageId"]) #Print the received msg over stream
        print("Received message '{}' id='{}'".format(msg2, m2["messageId"]) #Print the received msg over stream
        subscriber1.send(json.dumps({'messageId': m1['messageId']}))#Acknowledge the received msg.
-       subscriber2.send(json.dumps({'messageId': m2['messageId']}))#Acknowledge the received msg. 
+       subscriber2.send(json.dumps({'messageId': m2['messageId']}))#Acknowledge the received msg.
 
     #Get the list of subscriptions for a given persistent local/global stream.
     stream_collection.get_stream_subscriptions('test-stream-1', local=False) #for global persistent stream

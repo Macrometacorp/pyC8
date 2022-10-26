@@ -56,13 +56,13 @@ The Simple Way
     # Kill Query(this should fail due to invalid ID).
     try:
         client.kill_query('some_query_id')
-    
+
     except C8QLQueryKillError as err:
         print('ERROR: ', err)
 
 
 
-The Object Oriented Way 
+The Object Oriented Way
 
 .. testcode::
 
@@ -120,5 +120,3 @@ The Object Oriented Way
         assert 'cannot kill query' in err.message
 
 See :ref:`C8QL` for API specification.
-
-

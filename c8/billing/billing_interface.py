@@ -1,7 +1,6 @@
-from c8.executor import DefaultExecutor
 from c8.api import APIWrapper
-
-from c8.billing.core import build_request, BillingServerError
+from c8.billing.core import BillingServerError, build_request
+from c8.executor import DefaultExecutor
 
 
 class BillingInterface(APIWrapper):
@@ -15,10 +14,12 @@ class BillingInterface(APIWrapper):
     """
 
     def __init__(self, connection):
-        super(BillingInterface, self).__init__(connection, executor=DefaultExecutor(connection))
+        super(BillingInterface, self).__init__(
+            connection, executor=DefaultExecutor(connection)
+        )
 
     def __repr__(self):
-        return '<BillingInterface> for {}'()
+        return "<BillingInterface> for {}"()
 
     def execute(self, request):
         def response_handler(response):
@@ -40,7 +41,7 @@ class BillingInterface(APIWrapper):
         :rtype: dict
         :raise c8.billing.core.BillingServerError If list fails.
         """
-        request = build_request(method='GET', endpoint='/account', tenant=tenant)
+        request = build_request(method="GET", endpoint="/account", tenant=tenant)
         return self.execute(request)
 
     def update_contact(self, tenant=None, contact={}):
@@ -59,23 +60,25 @@ class BillingInterface(APIWrapper):
         """
         data = {}
         attributes = [
-            'firstname',
-            'lastname',
-            'email',
-            'phone',
-            'line1',
-            'line2',
-            'city',
-            'state',
-            'country',
-            'zipcode'
+            "firstname",
+            "lastname",
+            "email",
+            "phone",
+            "line1",
+            "line2",
+            "city",
+            "state",
+            "country",
+            "zipcode",
         ]
 
         for attribute in attributes:
             if attribute in contact:
                 data[attribute] = contact[attribute]
 
-        request = build_request(method='PUT', endpoint='/contact', tenant=tenant, data=data)
+        request = build_request(
+            method="PUT", endpoint="/contact", tenant=tenant, data=data
+        )
         return self.execute(request)
 
     def get_previous_payments(self, tenant=None, months=10):
@@ -93,7 +96,9 @@ class BillingInterface(APIWrapper):
         :raise c8.billing.core.BillingServerError If list fails.
         """
         params = {"limit": months}
-        request = build_request(method='GET', endpoint='/payments', tenant=tenant, params=params)
+        request = build_request(
+            method="GET", endpoint="/payments", tenant=tenant, params=params
+        )
         return self.execute(request)
 
     def get_previous_invoices(self, tenant=None, months=3):
@@ -111,7 +116,9 @@ class BillingInterface(APIWrapper):
         :raise c8.billing.core.BillingServerError If list fails.
         """
         params = {"limit": months}
-        request = build_request(method='GET', endpoint='/invoices', tenant=tenant, params=params)
+        request = build_request(
+            method="GET", endpoint="/invoices", tenant=tenant, params=params
+        )
         return self.execute(request)
 
     def get_current_invoice(self, tenant=None):
@@ -126,7 +133,9 @@ class BillingInterface(APIWrapper):
         :rtype: dict
         :raise c8.billing.core.BillingServerError If list fails.
         """
-        request = build_request(method='GET', endpoint='/invoice/current', tenant=tenant)
+        request = build_request(
+            method="GET", endpoint="/invoice/current", tenant=tenant
+        )
         return self.execute(request)
 
     def get_specific_invoice(self, year, month, tenant=None):
@@ -145,14 +154,14 @@ class BillingInterface(APIWrapper):
         :rtype: dict
         :raise c8.billing.core.BillingServerError If list fails.
         """
-        request = build_request(method='GET', 
-                                endpoint='/invoices/{}/{}'.format(year, month), 
-                                tenant=tenant)
+        request = build_request(
+            method="GET", endpoint="/invoices/{}/{}".format(year, month), tenant=tenant
+        )
         return self.execute(request)
 
     def get_usage(self, tenant=None, start_date=None, end_date=None):
         """
-        Fetch usage of a tenant in a specific date range. If no query parameters are specified, usage from 
+        Fetch usage of a tenant in a specific date range. If no query parameters are specified, usage from
         start date of the month to current date is returned.
         Note: If tenant name is not specified, the tenant invoking the API is used.
               This API is not applicable for system tenants.
@@ -167,11 +176,13 @@ class BillingInterface(APIWrapper):
         :rtype: dict
         :raise c8.billing.core.BillingServerError If list fails.
         """
-        params={}
+        params = {}
         if start_date is not None and end_date is not None:
             params = {"startDate": start_date, "endDate": end_date}
 
-        request = build_request(method='GET', endpoint='/usage', tenant=tenant, params=params)
+        request = build_request(
+            method="GET", endpoint="/usage", tenant=tenant, params=params
+        )
         return self.execute(request)
 
     def get_usage_region(self, region, tenant=None, start_date=None, end_date=None):
@@ -193,12 +204,14 @@ class BillingInterface(APIWrapper):
         :rtype: dict
         :raise c8.billing.core.BillingServerError If list fails.
         """
-        params={}
+        params = {}
         if start_date is not None and end_date is not None:
             params = {"startDate": start_date, "endDate": end_date}
 
-        request = build_request(method='GET',
-                                endpoint='/region/{}/usage'.format(region),
-                                tenant=tenant,
-                                params=params)
+        request = build_request(
+            method="GET",
+            endpoint="/region/{}/usage".format(region),
+            tenant=tenant,
+            params=params,
+        )
         return self.execute(request)

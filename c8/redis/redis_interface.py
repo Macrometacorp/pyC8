@@ -1,6 +1,5 @@
 from c8.api import APIWrapper
-
-from c8.redis.core import build_request, RedisServerError
+from c8.redis.core import RedisServerError, build_request
 
 
 class RedisInterface(APIWrapper):
@@ -17,7 +16,7 @@ class RedisInterface(APIWrapper):
         super(RedisInterface, self).__init__(connection, executor)
 
     def __repr__(self):
-        return '<RedisInterface in {}>'.format(self._conn.fabric_name)
+        return "<RedisInterface in {}>".format(self._conn.fabric_name)
 
     def command_parser(self, command, collection, *args):
         data = [command, *args]
@@ -31,5 +30,3 @@ class RedisInterface(APIWrapper):
             return response.body
 
         return self._execute(request, response_handler)
-
-

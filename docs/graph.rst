@@ -72,7 +72,7 @@ The Object Oriented Way
 
     # Link Edges to from a graph
     print("Link: ", client.link_edge(graph_name=graph,collection="teach", from_vertex='teachers/jon', to_vertex='lectures/CSC101', data={'online': False}))
-    
+
     # Delete Edge
     print("Delete Edge: ", client.delete_edge(graph_name=graph, edge_name='teach', purge=False))
 

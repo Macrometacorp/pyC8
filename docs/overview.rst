@@ -245,7 +245,7 @@ Example for **restql** operations:
 
   client = C8Client(protocol='https', host=region, port=443)
   tenant = client.tenant(email="user@example.com", password="hidden")
-  fabric = tenant.useFabric('demo-fabric')                   
+  fabric = tenant.useFabric('demo-fabric')
   #--------------------------------------------------------------
   print("save restql...")
   data = {

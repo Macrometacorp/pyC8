@@ -3,14 +3,14 @@ from __future__ import absolute_import, unicode_literals
 from collections import deque
 
 from c8.exceptions import (
-    CursorNextError,
     CursorCloseError,
+    CursorEmptyError,
+    CursorNextError,
     CursorStateError,
-    CursorEmptyError
 )
 from c8.request import Request
 
-__all__ = ['Cursor']
+__all__ = ["Cursor"]
 
 
 class Cursor(object):
@@ -33,19 +33,19 @@ class Cursor(object):
     """
 
     __slots__ = [
-        '_conn',
-        '_type',
-        '_id',
-        '_count',
-        '_cached',
-        '_profile',
-        '_warnings',
-        '_has_more',
-        '_batch',
-        '_count'
+        "_conn",
+        "_type",
+        "_id",
+        "_count",
+        "_cached",
+        "_profile",
+        "_warnings",
+        "_has_more",
+        "_batch",
+        "_count",
     ]
 
-    def __init__(self, connection, init_data, cursor_type='cursor'):
+    def __init__(self, connection, init_data, cursor_type="cursor"):
         self._conn = connection
         self._type = cursor_type
         self._batch = deque()
@@ -82,7 +82,7 @@ class Cursor(object):
         self.close(ignore_missing=True)
 
     def __repr__(self):
-        return '<Cursor {}>'.format(self._id) if self._id else '<Cursor>'
+        return "<Cursor {}>".format(self._id) if self._id else "<Cursor>"
 
     def _update(self, data):
         """Update the cursor using data from C8Db server.
@@ -92,32 +92,32 @@ class Cursor(object):
         """
         result = {}
 
-        if 'id' in data:
-            self._id = data['id']
-            result['id'] = data['id']
-        if 'count' in data:
-            self._count = data['count']
-            result['count'] = data['count']
-        if 'cached' in data:
-            self._cached = data['cached']
-            result['cached'] = data['cached']
+        if "id" in data:
+            self._id = data["id"]
+            result["id"] = data["id"]
+        if "count" in data:
+            self._count = data["count"]
+            result["count"] = data["count"]
+        if "cached" in data:
+            self._cached = data["cached"]
+            result["cached"] = data["cached"]
 
-        self._has_more = data['hasMore']
-        result['has_more'] = data['hasMore']
+        self._has_more = data["hasMore"]
+        result["has_more"] = data["hasMore"]
 
-        self._batch.extend(data['result'])
-        result['batch'] = data['result']
+        self._batch.extend(data["result"])
+        result["batch"] = data["result"]
 
-        if 'extra' in data:
-            extra = data['extra']
+        if "extra" in data:
+            extra = data["extra"]
 
-            if 'profile' in extra:
-                self._profile = extra['profile']
-                result['profile'] = extra['profile']
+            if "profile" in extra:
+                self._profile = extra["profile"]
+                result["profile"] = extra["profile"]
 
-            if 'warnings' in extra:
-                self._warnings = extra['warnings']
-                result['warnings'] = extra['warnings']
+            if "warnings" in extra:
+                self._warnings = extra["warnings"]
+                result["warnings"] = extra["warnings"]
 
         return result
 
@@ -227,7 +227,7 @@ class Cursor(object):
         :raise c8.exceptions.CursorEmptyError: If current batch is empty.
         """
         if len(self._batch) == 0:
-            raise CursorEmptyError('current batch is empty')
+            raise CursorEmptyError("current batch is empty")
         return self._batch.popleft()
 
     def fetch(self):
@@ -239,11 +239,8 @@ class Cursor(object):
         :raise c8.exceptions.CursorStateError: If cursor ID is not set.
         """
         if self._id is None:
-            raise CursorStateError('cursor ID not set')
-        request = Request(
-            method='put',
-            endpoint='/cursor/{}'.format(self._id)
-        )
+            raise CursorStateError("cursor ID not set")
+        request = Request(method="put", endpoint="/cursor/{}".format(self._id))
         resp = self._conn.send_request(request)
 
         if not resp.is_success:
@@ -265,10 +262,7 @@ class Cursor(object):
         """
         if self._id is None:
             return None
-        request = Request(
-            method='delete',
-            endpoint='/cursor/{}'.format(self._id)
-        )
+        request = Request(method="delete", endpoint="/cursor/{}".format(self._id))
         resp = self._conn.send_request(request)
         if resp.is_success:
             return True

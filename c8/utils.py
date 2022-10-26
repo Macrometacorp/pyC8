@@ -32,10 +32,10 @@ def get_col_name(doc):
     :raise c8.exceptions.DocumentParseError: If document ID is missing.
     """
     try:
-        doc_id = doc['_id'] if isinstance(doc, dict) else doc
+        doc_id = doc["_id"] if isinstance(doc, dict) else doc
     except KeyError:
         raise DocumentParseError('field "_id" required')
-    return doc_id.split('/', 1)[0]
+    return doc_id.split("/", 1)[0]
 
 
 def get_doc_id(doc):
@@ -48,7 +48,7 @@ def get_doc_id(doc):
     :raise c8.exceptions.DocumentParseError: If document ID is missing.
     """
     try:
-        return doc['_id'] if isinstance(doc, dict) else doc
+        return doc["_id"] if isinstance(doc, dict) else doc
     except KeyError:
         raise DocumentParseError('field "_id" required')
 

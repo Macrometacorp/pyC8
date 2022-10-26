@@ -5,16 +5,16 @@ from json import dumps
 from c8.api import APIWrapper
 from c8.cursor import Cursor
 from c8.exceptions import (
-    C8QLQueryExplainError,
-    C8QLQueryValidateError,
-    C8QLQueryExecuteError,
-    C8QLQueryListError,
     C8QLQueryClearError,
-    C8QLQueryKillError
+    C8QLQueryExecuteError,
+    C8QLQueryExplainError,
+    C8QLQueryKillError,
+    C8QLQueryListError,
+    C8QLQueryValidateError,
 )
 from c8.request import Request
 
-__all__ = ['C8QL']
+__all__ = ["C8QL"]
 
 
 class C8QL(APIWrapper):
@@ -30,7 +30,7 @@ class C8QL(APIWrapper):
         super(C8QL, self).__init__(connection, executor)
 
     def __repr__(self):
-        return '<C8QL in {}>'.format(self._conn.fabric_name)
+        return "<C8QL in {}>".format(self._conn.fabric_name)
 
     # noinspection PyMethodMayBeStatic
     def _format_queries(self, body):
@@ -42,10 +42,10 @@ class C8QL(APIWrapper):
         :rtype: dict
         """
         for query in body:
-            if 'bindVars' in query:
-                query['bind_vars'] = query.pop('bindVars')
-            if 'runTime' in query:
-                query['runtime'] = query.pop('runTime')
+            if "bindVars" in query:
+                query["bind_vars"] = query.pop("bindVars")
+            if "runTime" in query:
+                query["runtime"] = query.pop("runTime")
         return body
 
     @property
@@ -76,25 +76,25 @@ class C8QL(APIWrapper):
         :rtype: dict | list
         :raise c8.exceptions.C8QLQueryExplainError: If explain fails.
         """
-        options = {'allPlans': all_plans}
+        options = {"allPlans": all_plans}
         if max_plans is not None:
-            options['maxNumberOfPlans'] = max_plans
+            options["maxNumberOfPlans"] = max_plans
         if opt_rules is not None:
-            options['optimizer'] = {'rules': opt_rules}
+            options["optimizer"] = {"rules": opt_rules}
 
         request = Request(
-            method='post',
-            endpoint='/query/explain',
-            data={'query': query, 'options': options}
+            method="post",
+            endpoint="/query/explain",
+            data={"query": query, "options": options},
         )
 
         def response_handler(resp):
             if not resp.is_success:
                 raise C8QLQueryExplainError(resp, request)
-            if 'plan' in resp.body:
-                return resp.body['plan']
+            if "plan" in resp.body:
+                return resp.body["plan"]
             else:
-                return resp.body['plans']
+                return resp.body["plans"]
 
         return self._execute(request, response_handler)
 
@@ -107,42 +107,39 @@ class C8QL(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.C8QLQueryValidateError: If validation fails.
         """
-        request = Request(
-            method='post',
-            endpoint='/query',
-            data={'query': query}
-        )
+        request = Request(method="post", endpoint="/query", data={"query": query})
 
         def response_handler(resp):
             if not resp.is_success:
                 raise C8QLQueryValidateError(resp, request)
             body = resp.body
-            body.pop('code', None)
-            body.pop('error', None)
-            if 'bindVars' in body:
-                body['bind_vars'] = body.pop('bindVars')
+            body.pop("code", None)
+            body.pop("error", None)
+            if "bindVars" in body:
+                body["bind_vars"] = body.pop("bindVars")
             return body
 
         return self._execute(request, response_handler)
 
-    def execute(self,
-                query,
-                count=False,
-                batch_size=None,
-                ttl=None,
-                bind_vars=None,
-                full_count=None,
-                optimizer_rules=None,
-                fail_on_warning=None,
-                profile=None,
-                max_transaction_size=None,
-                max_warning_count=None,
-                intermediate_commit_count=None,
-                intermediate_commit_size=None,
-                skip_inaccessible_collections=None,
-                stream=None,
-                sql=False
-                ):
+    def execute(
+        self,
+        query,
+        count=False,
+        batch_size=None,
+        ttl=None,
+        bind_vars=None,
+        full_count=None,
+        optimizer_rules=None,
+        fail_on_warning=None,
+        profile=None,
+        max_transaction_size=None,
+        max_warning_count=None,
+        intermediate_commit_count=None,
+        intermediate_commit_size=None,
+        skip_inaccessible_collections=None,
+        stream=None,
+        sql=False,
+    ):
         """Execute the query and return the result cursor.
 
         :param query: Query to execute.
@@ -202,56 +199,55 @@ class C8QL(APIWrapper):
         :rtype: c8.cursor.Cursor
         :raise c8.exceptions.C8QLQueryExecuteError: If execute fails.
         """
-        data = {'query': query, 'count': count}
+        data = {"query": query, "count": count}
         if batch_size is not None:
-            data['batchSize'] = batch_size
+            data["batchSize"] = batch_size
         if ttl is not None:
-            data['ttl'] = ttl
+            data["ttl"] = ttl
         if bind_vars is not None:
-            data['bindVars'] = bind_vars
+            data["bindVars"] = bind_vars
 
         options = {}
         if full_count is not None:
-            options['fullCount'] = full_count
+            options["fullCount"] = full_count
         if optimizer_rules is not None:
-            options['optimizer'] = {'rules': optimizer_rules}
+            options["optimizer"] = {"rules": optimizer_rules}
         if fail_on_warning is not None:
-            options['failOnWarning'] = fail_on_warning
+            options["failOnWarning"] = fail_on_warning
         if profile is not None:
-            options['profile'] = profile
+            options["profile"] = profile
         if max_transaction_size is not None:
-            options['maxTransactionSize'] = max_transaction_size
+            options["maxTransactionSize"] = max_transaction_size
         if max_warning_count is not None:
-            options['maxWarningCount'] = max_warning_count
+            options["maxWarningCount"] = max_warning_count
         if intermediate_commit_count is not None:
-            options['intermediateCommitCount'] = intermediate_commit_count
+            options["intermediateCommitCount"] = intermediate_commit_count
         if intermediate_commit_size is not None:
-            options['intermediateCommitSize'] = intermediate_commit_size
+            options["intermediateCommitSize"] = intermediate_commit_size
         if skip_inaccessible_collections is not None:
-            options['skipInaccessibleCollections'] = skip_inaccessible_collections
+            options["skipInaccessibleCollections"] = skip_inaccessible_collections
         if stream is not None:
-            options['stream'] = stream
+            options["stream"] = stream
         if options:
-            data['options'] = options
+            data["options"] = options
         data.update(options)
 
-        command = 'db._query({}, {}, {}).toArray()'.format(
-            dumps(query),
-            dumps(bind_vars),
-            dumps(data),
-        ) if self._is_transaction else None
+        command = (
+            "db._query({}, {}, {}).toArray()".format(
+                dumps(query),
+                dumps(bind_vars),
+                dumps(data),
+            )
+            if self._is_transaction
+            else None
+        )
 
         if sql:
-            end_point = '/cursor/sql'
+            end_point = "/cursor/sql"
         else:
-            end_point = '/cursor'
+            end_point = "/cursor"
 
-        request = Request(
-            method='post',
-            endpoint=end_point,
-            data=data,
-            command=command
-        )
+        request = Request(method="post", endpoint=end_point, data=data, command=command)
 
         def response_handler(resp):
             if not resp.is_success:
@@ -269,10 +265,7 @@ class C8QL(APIWrapper):
         :rtype: bool
         :raise c8.exceptions.C8QLQueryKillError: If send fails.
         """
-        request = Request(
-            method='delete',
-            endpoint='/query/{}'.format(query_id)
-        )
+        request = Request(method="delete", endpoint="/query/{}".format(query_id))
 
         def response_handler(resp):
             if not resp.is_success:
@@ -288,10 +281,7 @@ class C8QL(APIWrapper):
         :rtype: [dict]
         :raise c8.exceptions.C8QLQueryListError: If retrieval fails.
         """
-        request = Request(
-            method='get',
-            endpoint='/query/current'
-        )
+        request = Request(method="get", endpoint="/query/current")
 
         def response_handler(resp):
             if not resp.is_success:
@@ -307,10 +297,7 @@ class C8QL(APIWrapper):
         :rtype: [dict]
         :raise c8.exceptions.C8QLQueryListError: If retrieval fails.
         """
-        request = Request(
-            method='get',
-            endpoint='/query/slow'
-        )
+        request = Request(method="get", endpoint="/query/slow")
 
         def response_handler(resp):
             if not resp.is_success:
@@ -326,10 +313,7 @@ class C8QL(APIWrapper):
         :rtype: bool
         :raise c8.exceptions.C8QLQueryClearError: If operation fails.
         """
-        request = Request(
-            method='delete',
-            endpoint='/query/slow'
-        )
+        request = Request(method="delete", endpoint="/query/slow")
 
         def response_handler(resp):
             if not resp.is_success:

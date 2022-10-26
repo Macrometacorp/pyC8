@@ -1,22 +1,21 @@
 from __future__ import absolute_import, unicode_literals
 
 from c8.api import APIWrapper
-from c8.collection import EdgeCollection
-from c8.collection import VertexCollection
+from c8.collection import EdgeCollection, VertexCollection
 from c8.exceptions import (
-    EdgeDefinitionListError,
     EdgeDefinitionCreateError,
     EdgeDefinitionDeleteError,
+    EdgeDefinitionListError,
     EdgeDefinitionReplaceError,
     GraphPropertiesError,
-    VertexCollectionListError,
     VertexCollectionCreateError,
     VertexCollectionDeleteError,
+    VertexCollectionListError,
 )
 from c8.request import Request
 from c8.utils import get_col_name
 
-__all__ = ['Graph']
+__all__ = ["Graph"]
 
 
 class Graph(APIWrapper):
@@ -33,7 +32,7 @@ class Graph(APIWrapper):
         self._name = name
 
     def __repr__(self):
-        return '<Graph {}>'.format(self._name)
+        return "<Graph {}>".format(self._name)
 
     def _get_col_by_vertex(self, vertex):
         """Return the vertex collection for the given vertex document.
@@ -71,37 +70,34 @@ class Graph(APIWrapper):
         :rtype: dict
         :raise c8.exceptions.GraphPropertiesError: If retrieval fails.
         """
-        request = Request(
-            method='get',
-            endpoint='/graph/{}'.format(self._name)
-        )
+        request = Request(method="get", endpoint="/graph/{}".format(self._name))
 
         def response_handler(resp):
             if not resp.is_success:
                 raise GraphPropertiesError(resp, request)
-            body = resp.body['graph']
+            body = resp.body["graph"]
             properties = {
-                'id': body['_id'],
-                'name': body['name'],
-                'revision': body['_rev'],
-                'orphan_collections': body['orphanCollections'],
-                'edge_definitions': [
+                "id": body["_id"],
+                "name": body["name"],
+                "revision": body["_rev"],
+                "orphan_collections": body["orphanCollections"],
+                "edge_definitions": [
                     {
-                        'edge_collection': edge_definition['collection'],
-                        'from_vertex_collections': edge_definition['from'],
-                        'to_vertex_collections': edge_definition['to'],
+                        "edge_collection": edge_definition["collection"],
+                        "from_vertex_collections": edge_definition["from"],
+                        "to_vertex_collections": edge_definition["to"],
                     }
-                    for edge_definition in body['edgeDefinitions']
-                ]
+                    for edge_definition in body["edgeDefinitions"]
+                ],
             }
-            if 'isSmart' in body:
-                properties['smart'] = body['isSmart']
-            if 'smartGraphAttribute' in body:
-                properties['smart_field'] = body['smartGraphAttribute']
-            if 'numberOfShards' in body:
-                properties['shard_count'] = body['numberOfShards']
-            if 'replicationFactor' in body:
-                properties['replication_factor'] = body['replicationFactor']
+            if "isSmart" in body:
+                properties["smart"] = body["isSmart"]
+            if "smartGraphAttribute" in body:
+                properties["smart_field"] = body["smartGraphAttribute"]
+            if "numberOfShards" in body:
+                properties["shard_count"] = body["numberOfShards"]
+            if "replicationFactor" in body:
+                properties["replication_factor"] = body["replicationFactor"]
             return properties
 
         return self._execute(request, response_handler)
@@ -128,14 +124,14 @@ class Graph(APIWrapper):
         :raise c8.exceptions.VertexCollectionListError: If retrieval fails.
         """
         request = Request(
-            method='get',
-            endpoint='/graph/{}/vertex'.format(self._name),
+            method="get",
+            endpoint="/graph/{}/vertex".format(self._name),
         )
 
         def response_handler(resp):
             if not resp.is_success:
                 raise VertexCollectionListError(resp, request)
-            return sorted(set(resp.body['collections']))
+            return sorted(set(resp.body["collections"]))
 
         return self._execute(request, response_handler)
 
@@ -159,9 +155,9 @@ class Graph(APIWrapper):
         :raise c8.exceptions.VertexCollectionCreateError: If create fails.
         """
         request = Request(
-            method='post',
-            endpoint='/graph/{}/vertex'.format(self._name),
-            data={'collection': name}
+            method="post",
+            endpoint="/graph/{}/vertex".format(self._name),
+            data={"collection": name},
         )
 
         def response_handler(resp):
@@ -184,9 +180,9 @@ class Graph(APIWrapper):
         :raise c8.exceptions.VertexCollectionDeleteError: If delete fails.
         """
         request = Request(
-            method='delete',
-            endpoint='/graph/{}/vertex/{}'.format(self._name, name),
-            params={'dropCollection': purge}
+            method="delete",
+            endpoint="/graph/{}/vertex/{}".format(self._name, name),
+            params={"dropCollection": purge},
         )
 
         def response_handler(resp):
@@ -209,7 +205,7 @@ class Graph(APIWrapper):
         :rtype: bool
         """
         return any(
-            definition['edge_collection'] == name
+            definition["edge_collection"] == name
             for definition in self.edge_definitions()
         )
 
@@ -241,14 +237,13 @@ class Graph(APIWrapper):
         :raise c8.exceptions.EdgeDefinitionListError: If retrieval fails.
         """
         try:
-            return self.properties()['edge_definitions']
+            return self.properties()["edge_definitions"]
         except GraphPropertiesError as err:
             raise EdgeDefinitionListError(err.response, err.request)
 
-    def create_edge_definition(self,
-                               edge_collection,
-                               from_vertex_collections,
-                               to_vertex_collections):
+    def create_edge_definition(
+        self, edge_collection, from_vertex_collections, to_vertex_collections
+    ):
         """Create a new edge definition.
 
         An edge definition consists of an edge collection, "from" vertex
@@ -273,13 +268,13 @@ class Graph(APIWrapper):
         :raise c8.exceptions.EdgeDefinitionCreateError: If create fails.
         """
         request = Request(
-            method='post',
-            endpoint='/graph/{}/edge'.format(self._name),
+            method="post",
+            endpoint="/graph/{}/edge".format(self._name),
             data={
-                'collection': edge_collection,
-                'from': from_vertex_collections,
-                'to': to_vertex_collections
-            }
+                "collection": edge_collection,
+                "from": from_vertex_collections,
+                "to": to_vertex_collections,
+            },
         )
 
         def response_handler(resp):
@@ -289,10 +284,9 @@ class Graph(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def replace_edge_definition(self,
-                                edge_collection,
-                                from_vertex_collections,
-                                to_vertex_collections):
+    def replace_edge_definition(
+        self, edge_collection, from_vertex_collections, to_vertex_collections
+    ):
         """Replace an edge definition.
 
         :param edge_collection: Edge collection name.
@@ -306,15 +300,13 @@ class Graph(APIWrapper):
         :raise c8.exceptions.EdgeDefinitionReplaceError: If replace fails.
         """
         request = Request(
-            method='put',
-            endpoint='/graph/{}/edge/{}'.format(
-                self._name, edge_collection
-            ),
+            method="put",
+            endpoint="/graph/{}/edge/{}".format(self._name, edge_collection),
             data={
-                'collection': edge_collection,
-                'from': from_vertex_collections,
-                'to': to_vertex_collections
-            }
+                "collection": edge_collection,
+                "from": from_vertex_collections,
+                "to": to_vertex_collections,
+            },
         )
 
         def response_handler(resp):
@@ -338,9 +330,9 @@ class Graph(APIWrapper):
         :raise c8.exceptions.EdgeDefinitionDeleteError: If delete fails.
         """
         request = Request(
-            method='delete',
-            endpoint='/graph/{}/edge/{}'.format(self._name, name),
-            params={'dropCollection': purge}
+            method="delete",
+            endpoint="/graph/{}/edge/{}".format(self._name, name),
+            params={"dropCollection": purge},
         )
 
         def response_handler(resp):
@@ -411,12 +403,9 @@ class Graph(APIWrapper):
         """
         return self.vertex_collection(collection).insert(vertex, sync, silent)
 
-    def update_vertex(self,
-                      vertex,
-                      check_rev=True,
-                      keep_none=True,
-                      sync=None,
-                      silent=False):
+    def update_vertex(
+        self, vertex, check_rev=True, keep_none=True, sync=None, silent=False
+    ):
         """Update a vertex document.
 
         :param vertex: Partial or full vertex document with updated values. It
@@ -444,7 +433,7 @@ class Graph(APIWrapper):
             check_rev=check_rev,
             keep_none=keep_none,
             sync=sync,
-            silent=silent
+            silent=silent,
         )
 
     def replace_vertex(self, vertex, check_rev=True, sync=None, silent=False):
@@ -468,18 +457,12 @@ class Graph(APIWrapper):
         :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
         """
         return self._get_col_by_vertex(vertex).replace(
-            vertex=vertex,
-            check_rev=check_rev,
-            sync=sync,
-            silent=silent
+            vertex=vertex, check_rev=check_rev, sync=sync, silent=silent
         )
 
-    def delete_vertex(self,
-                      vertex,
-                      rev=None,
-                      check_rev=True,
-                      ignore_missing=False,
-                      sync=None):
+    def delete_vertex(
+        self, vertex, rev=None, check_rev=True, ignore_missing=False, sync=None
+    ):
         """Delete a vertex document.
 
         :param vertex: Vertex document ID or body with "_id" field.
@@ -508,7 +491,7 @@ class Graph(APIWrapper):
             rev=rev,
             check_rev=check_rev,
             ignore_missing=ignore_missing,
-            sync=sync
+            sync=sync,
         )
 
     ###################
@@ -573,12 +556,9 @@ class Graph(APIWrapper):
         """
         return self.edge_collection(collection).insert(edge, sync, silent)
 
-    def update_edge(self,
-                    edge,
-                    check_rev=True,
-                    keep_none=True,
-                    sync=None,
-                    silent=False):
+    def update_edge(
+        self, edge, check_rev=True, keep_none=True, sync=None, silent=False
+    ):
         """Update an edge document.
 
         :param edge: Partial or full edge document with updated values. It must
@@ -606,7 +586,7 @@ class Graph(APIWrapper):
             check_rev=check_rev,
             keep_none=keep_none,
             sync=sync,
-            silent=silent
+            silent=silent,
         )
 
     def replace_edge(self, edge, check_rev=True, sync=None, silent=False):
@@ -631,18 +611,12 @@ class Graph(APIWrapper):
         :raise c8.exceptions.DocumentRevisionError: If revisions mismatch.
         """
         return self._get_col_by_edge(edge).replace(
-            edge=edge,
-            check_rev=check_rev,
-            sync=sync,
-            silent=silent
+            edge=edge, check_rev=check_rev, sync=sync, silent=silent
         )
 
-    def delete_edge(self,
-                    edge,
-                    rev=None,
-                    check_rev=True,
-                    ignore_missing=False,
-                    sync=None):
+    def delete_edge(
+        self, edge, rev=None, check_rev=True, ignore_missing=False, sync=None
+    ):
         """Delete an edge document.
 
         :param edge: Edge document ID or body with "_id" field.
@@ -671,16 +645,12 @@ class Graph(APIWrapper):
             rev=rev,
             check_rev=check_rev,
             ignore_missing=ignore_missing,
-            sync=sync
+            sync=sync,
         )
 
-    def link(self,
-             collection,
-             from_vertex,
-             to_vertex,
-             data=None,
-             sync=None,
-             silent=False):
+    def link(
+        self, collection, from_vertex, to_vertex, data=None, sync=None, silent=False
+    ):
         """Insert a new edge document linking the given vertices.
 
         :param collection: Edge collection name.
@@ -708,7 +678,7 @@ class Graph(APIWrapper):
             to_vertex=to_vertex,
             data=data,
             sync=sync,
-            silent=silent
+            silent=silent,
         )
 
     def edges(self, collection, vertex, direction=None):

@@ -1,14 +1,14 @@
 from __future__ import absolute_import, unicode_literals
 
+from c8 import constants
+from c8.billing.billing_interface import BillingInterface
 from c8.connection import TenantConnection
 from c8.plan.plan_interface import PlanInterface
-from c8.billing.billing_interface import BillingInterface
-from c8.tenant import Tenant
 from c8.redis.redis_commands import RedisCommands
+from c8.tenant import Tenant
 from c8.version import __version__
-from c8 import constants
 
-__all__ = ['C8Client']
+__all__ = ["C8Client"]
 
 
 class C8Client(object):
@@ -25,20 +25,20 @@ class C8Client(object):
     """
 
     def __init__(
-            self,
-            protocol="http",
-            host='127.0.0.1',
-            port=80,
-            geofabric="_system",
-            stream_port=constants.STREAM_PORT,
-            email=None,
-            password=None,
-            http_client=None,
-            token=None,
-            apikey=None
+        self,
+        protocol="http",
+        host="127.0.0.1",
+        port=80,
+        geofabric="_system",
+        stream_port=constants.STREAM_PORT,
+        email=None,
+        password=None,
+        http_client=None,
+        token=None,
+        apikey=None,
     ):
-        self._protocol = protocol.strip('/')
-        self._host = host.strip('/')
+        self._protocol = protocol.strip("/")
+        self._host = host.strip("/")
         self._port = int(port)
         self._email = email
         self._password = password
@@ -56,20 +56,17 @@ class C8Client(object):
 
     def set_url(self):
         if "api-" in self.host:
-            self._url = '{}://{}:{}'.format(self._protocol,
-                                            self.host, self.port)
+            self._url = "{}://{}:{}".format(self._protocol, self.host, self.port)
         else:
-            self._url = '{}://api-{}:{}'.format(
-                self._protocol, self.host, self.port)
+            self._url = "{}://api-{}:{}".format(self._protocol, self.host, self.port)
 
     def set_port(self):
-        if self._protocol == 'https':
+        if self._protocol == "https":
             self._port = 443
 
     def get_tenant(self):
         if self._email and self._password:
-            self._tenant = self.tenant(
-                email=self._email, password=self._password)
+            self._tenant = self.tenant(email=self._email, password=self._password)
             self._fabric = self._tenant.useFabric(self._fabric_name)
         if self._token:
             self._tenant = self.tenant(token=self._token)
@@ -81,7 +78,7 @@ class C8Client(object):
             self._search = self._fabric.search()
 
     def __repr__(self):
-        return '<C8Client {}>'.format(self._url)
+        return "<C8Client {}>".format(self._url)
 
     @property
     def redis(self):
@@ -162,7 +159,7 @@ class C8Client(object):
 
         return PlanInterface(self._tenant._conn)
 
-    def tenant(self, email='', password='', token=None, apikey=None):
+    def tenant(self, email="", password="", token=None, apikey=None):
         """Connect to a fabric and return the fabric API wrapper.
 
         :param email: Email for basic authentication
@@ -183,7 +180,7 @@ class C8Client(object):
             password=password,
             token=token,
             apikey=apikey,
-            http_client=self._http_client
+            http_client=self._http_client,
         )
         tenant = Tenant(connection)
 
@@ -201,23 +198,24 @@ class C8Client(object):
         return self._fabric.collection(collection_name)
 
     # client.create_collection
-    def create_collection(self,
-                          name,
-                          sync=False,
-                          edge=False,
-                          user_keys=True,
-                          key_increment=None,
-                          key_offset=None,
-                          key_generator='traditional',
-                          shard_fields=None,
-                          index_bucket_count=None,
-                          sync_replication=None,
-                          enforce_replication_factor=None,
-                          spot_collection=False,
-                          local_collection=False,
-                          is_system=False,
-                          stream=False
-                          ):
+    def create_collection(
+        self,
+        name,
+        sync=False,
+        edge=False,
+        user_keys=True,
+        key_increment=None,
+        key_offset=None,
+        key_generator="traditional",
+        shard_fields=None,
+        index_bucket_count=None,
+        sync_replication=None,
+        enforce_replication_factor=None,
+        spot_collection=False,
+        local_collection=False,
+        is_system=False,
+        stream=False,
+    ):
         """Create a new collection.
 
         :param name: Collection name.
@@ -282,7 +280,7 @@ class C8Client(object):
             spot_collection=spot_collection,
             local_collection=local_collection,
             is_system=is_system,
-            stream=stream
+            stream=stream,
         )
         return resp
 
@@ -301,12 +299,7 @@ class C8Client(object):
     # client.add_hash_index
 
     def add_hash_index(
-            self,
-            collection_name,
-            fields,
-            unique=None,
-            sparse=None,
-            deduplicate=None
+        self, collection_name, fields, unique=None, sparse=None, deduplicate=None
     ):
         """Create a new hash index.
 
@@ -328,10 +321,7 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         return _collection.add_hash_index(
-            fields=fields,
-            unique=unique,
-            sparse=sparse,
-            deduplicate=deduplicate
+            fields=fields, unique=unique, sparse=sparse, deduplicate=deduplicate
         )
 
     # client.add_geo_index
@@ -353,20 +343,12 @@ class C8Client(object):
         :raise c8.exceptions.IndexCreateError: If create fails.
         """
         _collection = self.get_collection(collection_name)
-        return _collection.add_geo_index(
-            fields=fields,
-            ordered=ordered
-        )
+        return _collection.add_geo_index(fields=fields, ordered=ordered)
 
     # client.add_skiplist_index
 
     def add_skiplist_index(
-            self,
-            collection_name,
-            fields,
-            unique=None,
-            sparse=None,
-            deduplicate=None
+        self, collection_name, fields, unique=None, sparse=None, deduplicate=None
     ):
         """Create a new skiplist index.
 
@@ -388,21 +370,13 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         return _collection.add_skiplist_index(
-            fields=fields,
-            unique=unique,
-            sparse=sparse,
-            deduplicate=deduplicate
+            fields=fields, unique=unique, sparse=sparse, deduplicate=deduplicate
         )
 
     # client.add_persistent_index
 
     def add_persistent_index(
-            self,
-            collection_name,
-            fields,
-            unique=None,
-            sparse=None,
-            deduplicate=False
+        self, collection_name, fields, unique=None, sparse=None, deduplicate=False
     ):
         """Create a new persistent index.
 
@@ -428,10 +402,7 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         return _collection.add_persistent_index(
-            fields=fields,
-            unique=unique,
-            sparse=sparse,
-            deduplicate=deduplicate
+            fields=fields, unique=unique, sparse=sparse, deduplicate=deduplicate
         )
 
     # client.add_fulltext_index
@@ -455,11 +426,7 @@ class C8Client(object):
     # client.add_ttl_index
 
     def add_ttl_index(
-            self,
-            collection_name,
-            fields,
-            expire_after=0,
-            in_background=False
+        self, collection_name, fields, expire_after=0, in_background=False
     ):
         """Create a new ttl index.
 
@@ -478,9 +445,7 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         return _collection.add_ttl_index(
-            fields=fields,
-            expireAfter=expire_after,
-            inBackground=in_background
+            fields=fields, expireAfter=expire_after, inBackground=in_background
         )
 
     # client.delete_index
@@ -501,8 +466,7 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         return _collection.delete_index(
-            index_name=index_name,
-            ignore_missing=ignore_missing
+            index_name=index_name, ignore_missing=ignore_missing
         )
 
     # client.get_index
@@ -527,21 +491,14 @@ class C8Client(object):
         :rtype: bool
         """
         resp = self._fabric.delete_collection(
-            name=name,
-            ignore_missing=ignore_missing,
-            system=system
+            name=name, ignore_missing=ignore_missing, system=system
         )
         return resp
 
     # client.import_bulk
 
     def import_bulk(
-            self,
-            collection_name,
-            documents,
-            details=True,
-            primaryKey=None,
-            replace=False
+        self, collection_name, documents, details=True, primaryKey=None, replace=False
     ):
         """Insert multiple documents into the collection.
 
@@ -561,7 +518,7 @@ class C8Client(object):
             the documents to be inserted.
         :type primaryKey: str | unicode
         :param replace: Action to take on unique key constraint violations
-            (for documents with "_key" fields). A bool "replace" if set to true replaces 
+            (for documents with "_key" fields). A bool "replace" if set to true replaces
             the existing documents with new ones else it won't replace the documents and
             count it as "error".
         :type replace: bool
@@ -571,21 +528,12 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         return _collection.import_bulk(
-            documents=documents,
-            details=details,
-            primaryKey=primaryKey,
-            replace=replace
+            documents=documents, details=details, primaryKey=primaryKey, replace=replace
         )
 
     # client.export
 
-    def export(
-            self,
-            collection_name,
-            offset=None,
-            limit=None,
-            order=None
-    ):
+    def export(self, collection_name, offset=None, limit=None, order=None):
         """Export all documents in the collection.
 
         :param collection_name: Collection name to add index on.
@@ -654,7 +602,7 @@ class C8Client(object):
         """Return a document.
 
         :param collection: Collection Name
-        :type document: str 
+        :type document: str
         :param document: Document ID, key or body. Document body must contain
             the "_id" or "_key" field.
         :type document: str | unicode | dict
@@ -676,12 +624,12 @@ class C8Client(object):
     # client.insert_document
 
     def insert_document(
-            self,
-            collection_name="",
-            return_new=False,
-            silent=False,
-            sync=None,
-            document=None
+        self,
+        collection_name="",
+        return_new=False,
+        silent=False,
+        sync=None,
+        document=None,
     ):
         """Insert a new document.
 
@@ -707,30 +655,19 @@ class C8Client(object):
 
         if isinstance(document, dict):
             response = _collection.insert(
-                document=document,
-                return_new=return_new,
-                sync=sync,
-                silent=silent
+                document=document, return_new=return_new, sync=sync, silent=silent
             )
 
         elif isinstance(document, list):
             response = _collection.insert_many(
-                documents=document,
-                return_new=return_new,
-                sync=sync,
-                silent=silent
+                documents=document, return_new=return_new, sync=sync, silent=silent
             )
 
         return response
 
     # client.insert_document_from_file()
     def insert_document_from_file(
-            self,
-            collection_name,
-            csv_filepath,
-            return_new=False,
-            sync=None,
-            silent=False
+        self, collection_name, csv_filepath, return_new=False, sync=None, silent=False
     ):
         """Insert a documents from csv file.
 
@@ -751,26 +688,23 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         resp = _collection.insert_from_file(
-            csv_filepath=csv_filepath,
-            return_new=return_new,
-            sync=sync,
-            silent=silent
+            csv_filepath=csv_filepath, return_new=return_new, sync=sync, silent=silent
         )
         return resp
 
     # client.update_document
 
     def update_document(
-            self,
-            collection_name,
-            document,
-            check_rev=True,
-            merge=True,
-            keep_none=True,
-            return_new=False,
-            return_old=False,
-            sync=None,
-            silent=False
+        self,
+        collection_name,
+        document,
+        check_rev=True,
+        merge=True,
+        keep_none=True,
+        return_new=False,
+        return_old=False,
+        sync=None,
+        silent=False,
     ):
         """Update a document.
 
@@ -812,23 +746,23 @@ class C8Client(object):
             return_new=return_new,
             return_old=return_old,
             sync=sync,
-            silent=silent
+            silent=silent,
         )
         return resp
 
     # client.update_document_many
 
     def update_document_many(
-            self,
-            collection_name,
-            documents,
-            check_rev=True,
-            merge=True,
-            keep_none=True,
-            return_new=False,
-            return_old=False,
-            sync=None,
-            silent=False
+        self,
+        collection_name,
+        documents,
+        check_rev=True,
+        merge=True,
+        keep_none=True,
+        return_new=False,
+        return_old=False,
+        sync=None,
+        silent=False,
     ):
         """Update multiple documents.
 
@@ -872,21 +806,21 @@ class C8Client(object):
             return_new=return_new,
             return_old=return_old,
             sync=sync,
-            silent=silent
+            silent=silent,
         )
         return resp
 
     # client.replace_document
 
     def replace_document(
-            self,
-            collection_name,
-            document,
-            check_rev=True,
-            return_new=False,
-            return_old=False,
-            sync=None,
-            silent=False
+        self,
+        collection_name,
+        document,
+        check_rev=True,
+        return_new=False,
+        return_old=False,
+        sync=None,
+        silent=False,
     ):
         """Replace multiple documents.
 
@@ -923,21 +857,21 @@ class C8Client(object):
             return_new=return_new,
             return_old=return_old,
             sync=sync,
-            silent=silent
+            silent=silent,
         )
         return resp
 
     # client.replace_document_many
 
     def replace_document_many(
-            self,
-            collection_name,
-            documents,
-            check_rev=True,
-            return_new=False,
-            return_old=False,
-            sync=None,
-            silent=False
+        self,
+        collection_name,
+        documents,
+        check_rev=True,
+        return_new=False,
+        return_old=False,
+        sync=None,
+        silent=False,
     ):
         """Replace multiple documents.
 
@@ -974,22 +908,22 @@ class C8Client(object):
             return_new=return_new,
             return_old=return_old,
             sync=sync,
-            silent=silent
+            silent=silent,
         )
         return resp
 
     # client.delete_document
 
     def delete_document(
-            self,
-            collection_name,
-            document,
-            rev=None,
-            check_rev=True,
-            ignore_missing=False,
-            return_old=False,
-            sync=None,
-            silent=False
+        self,
+        collection_name,
+        document,
+        rev=None,
+        check_rev=True,
+        ignore_missing=False,
+        return_old=False,
+        sync=None,
+        silent=False,
     ):
         """Delete a document.
 
@@ -1031,20 +965,20 @@ class C8Client(object):
             ignore_missing=ignore_missing,
             return_old=return_old,
             sync=sync,
-            silent=silent
+            silent=silent,
         )
         return resp
 
     # client.delete_document_many
 
     def delete_document_many(
-            self,
-            collection_name,
-            documents,
-            return_old=False,
-            check_rev=True,
-            sync=None,
-            silent=False
+        self,
+        collection_name,
+        documents,
+        return_old=False,
+        check_rev=True,
+        sync=None,
+        silent=False,
     ):
         """Delete multiple documents.
 
@@ -1077,7 +1011,7 @@ class C8Client(object):
             check_rev=check_rev,
             return_old=return_old,
             sync=sync,
-            silent=silent
+            silent=silent,
         )
         return resp
 
@@ -1154,21 +1088,18 @@ class C8Client(object):
         :raise c8.exceptions.C8QLQueryExplainError: If explain fails.
         """
         resp = self._fabric.c8ql.explain(
-            query,
-            all_plans=all_plans,
-            max_plans=max_plans,
-            opt_rules=opt_rules
+            query, all_plans=all_plans, max_plans=max_plans, opt_rules=opt_rules
         )
         return resp
 
     # client.execute_query
     def execute_query(
-            self,
-            query,
-            sql=False,
-            count=False,
-            bind_vars=None,
-            profile=None,
+        self,
+        query,
+        sql=False,
+        count=False,
+        bind_vars=None,
+        profile=None,
     ):
         """Execute the query and return the result cursor.
 
@@ -1344,7 +1275,7 @@ class C8Client(object):
     # client.has_stream
 
     def has_stream(self, stream, isCollectionStream=False, local=False):
-        """ Check if the list of streams has a stream with the given name.
+        """Check if the list of streams has a stream with the given name.
 
         :param stream: The name of the stream for which to check in the list
                        of all streams.
@@ -1353,9 +1284,7 @@ class C8Client(object):
         :rtype: bool
         """
         return self._fabric.has_stream(
-            stream=stream,
-            isCollectionStream=isCollectionStream,
-            local=local
+            stream=stream, isCollectionStream=isCollectionStream, local=local
         )
 
     # client.get_stream
@@ -1392,39 +1321,36 @@ class C8Client(object):
         """
         _stream = self._fabric.stream()
         return _stream.get_stream_stats(
-            stream,
-            isCollectionStream=isCollectionStream,
-            local=local
+            stream, isCollectionStream=isCollectionStream, local=local
         )
 
     # client.create_stream_producer
 
     def enum(**enums):
-        return type('Enum', (), enums)
+        return type("Enum", (), enums)
 
-    COMPRESSION_TYPES = enum(LZ4="LZ4",
-                             ZLIB="ZLib",
-                             NONE=None)
+    COMPRESSION_TYPES = enum(LZ4="LZ4", ZLIB="ZLib", NONE=None)
 
     ROUTING_MODE = enum(
         SINGLE_PARTITION="SinglePartition",
         ROUND_ROBIN_PARTITION="RoundRobinPartition",  # noqa
-        CUSTOM_PARTITION="CustomPartition"
+        CUSTOM_PARTITION="CustomPartition",
     )
 
     def create_stream_producer(
-            self,
-            stream,
-            isCollectionStream=False,
-            local=False,
-            producer_name=None,
-            initial_sequence_id=None, send_timeout_millis=30000,
-            compression_type=COMPRESSION_TYPES.NONE,
-            max_pending_messages=1000,
-            batching_enabled=False,
-            batching_max_messages=1000,
-            batching_max_publish_delay_ms=10,
-            message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION
+        self,
+        stream,
+        isCollectionStream=False,
+        local=False,
+        producer_name=None,
+        initial_sequence_id=None,
+        send_timeout_millis=30000,
+        compression_type=COMPRESSION_TYPES.NONE,
+        max_pending_messages=1000,
+        batching_enabled=False,
+        batching_max_messages=1000,
+        batching_max_publish_delay_ms=10,
+        message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION,
     ):
         """Create a new producer on a given stream.
 
@@ -1472,7 +1398,8 @@ class C8Client(object):
         """
         _stream = self._fabric.stream()
         return _stream.create_producer(
-            stream, isCollectionStream=isCollectionStream,
+            stream,
+            isCollectionStream=isCollectionStream,
             local=local,
             producer_name=producer_name,
             initial_sequence_id=initial_sequence_id,
@@ -1482,27 +1409,25 @@ class C8Client(object):
             batching_enabled=batching_enabled,
             batching_max_messages=batching_max_messages,
             batching_max_publish_delay_ms=batching_max_publish_delay_ms,
-            message_routing_mode=message_routing_mode
+            message_routing_mode=message_routing_mode,
         )
 
     # client.subscribe
-    CONSUMER_TYPES = enum(EXCLUSIVE="Exclusive",
-                          SHARED="Shared",
-                          FAILOVER="Failover")
+    CONSUMER_TYPES = enum(EXCLUSIVE="Exclusive", SHARED="Shared", FAILOVER="Failover")
 
     def subscribe(
-            self,
-            stream,
-            isCollectionStream=False,
-            local=False,
-            subscription_name=None,
-            consumer_type=CONSUMER_TYPES.EXCLUSIVE,
-            message_listener=None,
-            receiver_queue_size=1000,
-            consumer_name=None,
-            unacked_messages_timeout_ms=None,
-            broker_consumer_stats_cache_time_ms=30000,
-            is_read_compacted=False,
+        self,
+        stream,
+        isCollectionStream=False,
+        local=False,
+        subscription_name=None,
+        consumer_type=CONSUMER_TYPES.EXCLUSIVE,
+        message_listener=None,
+        receiver_queue_size=1000,
+        consumer_name=None,
+        unacked_messages_timeout_ms=None,
+        broker_consumer_stats_cache_time_ms=30000,
+        is_read_compacted=False,
     ):
         """
         Subscribe to the given topic and subscription combination.
@@ -1560,19 +1485,19 @@ class C8Client(object):
             consumer_name=consumer_name,
             unacked_messages_timeout_ms=unacked_messages_timeout_ms,
             broker_consumer_stats_cache_time_ms=broker_consumer_stats_cache_time_ms,
-            is_read_compacted=is_read_compacted
+            is_read_compacted=is_read_compacted,
         )
 
     # client.create_stream_reader
 
     def create_stream_reader(
-            self,
-            stream,
-            start_message_id="latest",
-            local=False,
-            isCollectionStream=False,
-            receiver_queue_size=1000,
-            reader_name=None
+        self,
+        stream,
+        start_message_id="latest",
+        local=False,
+        isCollectionStream=False,
+        receiver_queue_size=1000,
+        reader_name=None,
     ):
         """
         Create a reader on a particular topic
@@ -1601,7 +1526,7 @@ class C8Client(object):
             local=local,
             isCollectionStream=isCollectionStream,
             receiver_queue_size=receiver_queue_size,
-            reader_name=reader_name
+            reader_name=reader_name,
         )
 
     # client.unsubscribe
@@ -1781,7 +1706,7 @@ class C8Client(object):
     # client.get_stream_app
 
     def get_stream_app(self, streamapp_name):
-        """returns info of a stream app 
+        """returns info of a stream app
 
         :param streamapp_name: name of stream app
         :returns: Information of a particular stream app
@@ -1792,8 +1717,7 @@ class C8Client(object):
     # client.get_stream_app_samples
 
     def get_stream_app_samples(self):
-        """gets samples for stream apps
-        """
+        """gets samples for stream apps"""
         return self._fabric.get_samples_stream_app()
 
     # client.activate_stream_app
@@ -1844,11 +1768,11 @@ class C8Client(object):
 
     # client.create_graph
     def create_graph(
-            self,
-            graph_name,
-            edge_definitions=None,
-            orphan_collections=None,
-            shard_count=None
+        self,
+        graph_name,
+        edge_definitions=None,
+        orphan_collections=None,
+        shard_count=None,
     ):
         """Create a new graph.
 
@@ -1887,7 +1811,7 @@ class C8Client(object):
             name=graph_name,
             edge_definitions=edge_definitions,
             orphan_collections=orphan_collections,
-            shard_count=shard_count
+            shard_count=shard_count,
         )
 
     # client.delete_graph
@@ -1910,7 +1834,7 @@ class C8Client(object):
         return self._fabric.delete_graph(
             name=graph_name,
             ignore_missing=ignore_missing,
-            drop_collections=drop_collections
+            drop_collections=drop_collections,
         )
 
     # client.get_graph
@@ -1927,11 +1851,11 @@ class C8Client(object):
     # client.insert_edge
 
     def insert_edge(
-            self,
-            graph_name,
-            edge_collection,
-            from_vertex_collections,
-            to_vertex_collections
+        self,
+        graph_name,
+        edge_collection,
+        from_vertex_collections,
+        to_vertex_collections,
     ):
         """Create a new edge definition.
 
@@ -1962,17 +1886,17 @@ class C8Client(object):
         return _graph.create_edge_definition(
             edge_collection=edge_collection,
             from_vertex_collections=from_vertex_collections,
-            to_vertex_collections=to_vertex_collections
+            to_vertex_collections=to_vertex_collections,
         )
 
     # client.replace_edge
 
     def replace_edge(
-            self,
-            graph_name,
-            edge_collection,
-            from_vertex_collections,
-            to_vertex_collections
+        self,
+        graph_name,
+        edge_collection,
+        from_vertex_collections,
+        to_vertex_collections,
     ):
         """Replaces an edge definition.
 
@@ -1992,17 +1916,12 @@ class C8Client(object):
         return _graph.replace_edge_definition(
             edge_collection=edge_collection,
             from_vertex_collections=from_vertex_collections,
-            to_vertex_collections=to_vertex_collections
+            to_vertex_collections=to_vertex_collections,
         )
 
     # client.update_edge
     def update_edge(
-            self,
-            graph_name, edge,
-            check_rev=True,
-            keep_none=True,
-            sync=None,
-            silent=False
+        self, graph_name, edge, check_rev=True, keep_none=True, sync=None, silent=False
     ):
         """Update an edge document.
 
@@ -2034,7 +1953,7 @@ class C8Client(object):
             check_rev=check_rev,
             keep_none=keep_none,
             sync=sync,
-            silent=silent
+            silent=silent,
         )
 
     # client.delete_edge
@@ -2073,14 +1992,14 @@ class C8Client(object):
     # client.link_edge
 
     def link_edge(
-            self,
-            graph_name,
-            collection,
-            from_vertex,
-            to_vertex,
-            data=None,
-            sync=None,
-            silent=False
+        self,
+        graph_name,
+        collection,
+        from_vertex,
+        to_vertex,
+        data=None,
+        sync=None,
+        silent=False,
     ):
         """Insert a new edge document linking the given vertices.
 
@@ -2107,12 +2026,14 @@ class C8Client(object):
         :raise c8.exceptions.DocumentInsertError: If insert fails.
         """
         _graph = self._fabric.graph(graph_name)
-        return _graph.link(collection=collection,
-                           from_vertex=from_vertex,
-                           to_vertex=to_vertex,
-                           data=data,
-                           sync=sync,
-                           silent=silent)
+        return _graph.link(
+            collection=collection,
+            from_vertex=from_vertex,
+            to_vertex=to_vertex,
+            data=data,
+            sync=sync,
+            silent=silent,
+        )
 
     # client.has_user
 
@@ -2175,20 +2096,20 @@ class C8Client(object):
             password=password,
             display_name=display_name,
             active=active,
-            extra=extra
+            extra=extra,
         )
 
     # client.update_user
 
     def update_user(
-            self,
-            username,
-            password=None,
-            display_name=None,
-            email=None,
-            is_verified=None,
-            active=None,
-            extra=None
+        self,
+        username,
+        password=None,
+        display_name=None,
+        email=None,
+        is_verified=None,
+        active=None,
+        extra=None,
     ):
 
         """Update a user.
@@ -2218,7 +2139,7 @@ class C8Client(object):
             email=email,
             is_verified=is_verified,
             active=active,
-            extra=extra
+            extra=extra,
         )
 
     # client.delete_user
@@ -2235,8 +2156,9 @@ class C8Client(object):
         :rtype: bool
         :raise c8.exceptions.UserDeleteError: If delete fails.
         """
-        return self._tenant.delete_user(username=username,
-                                        ignore_missing=ignore_missing)
+        return self._tenant.delete_user(
+            username=username, ignore_missing=ignore_missing
+        )
 
     # client.list_accessible_databases_user
 
@@ -2245,15 +2167,14 @@ class C8Client(object):
 
         :param username: Username.
         :type username: str | unicode
-        :param full: Return the full set of access levels for all databases 
+        :param full: Return the full set of access levels for all databases
                 and all collections if set to true.
         :type full: bool
         :returns: Object containing database details
         :rtype: list | object
         :raise c8.exceptions.DataBaseError: If request fails.
         """
-        return self._tenant.list_accessible_databases_user(username=username,
-                                                           full=full)
+        return self._tenant.list_accessible_databases_user(username=username, full=full)
 
     # client.get_database_access_level_user
 
@@ -2268,13 +2189,14 @@ class C8Client(object):
         :rtype: string
         :raise c8.exceptions.GetDataBaseAccessLevel: If request fails.
         """
-        return self._tenant.get_database_access_level_user(username=username,
-                                                           databasename=databasename)
+        return self._tenant.get_database_access_level_user(
+            username=username, databasename=databasename
+        )
 
     # client.remove_database_access_level_user
 
     def remove_database_access_level_user(self, username, databasename=""):
-        """Clear the access level for the specific database of user. 
+        """Clear the access level for the specific database of user.
         As consequence the default database access level is used.
 
         :param username: Username.
@@ -2286,13 +2208,12 @@ class C8Client(object):
         :raise c8.exceptions.ClearDataBaseAccessLevel: If request fails.
         """
         return self._tenant.remove_database_access_level_user(
-            username=username,
-            databasename=databasename
+            username=username, databasename=databasename
         )
 
     # client.set_database_access_level_user
 
-    def set_database_access_level_user(self, username, databasename="", grant='ro'):
+    def set_database_access_level_user(self, username, databasename="", grant="ro"):
         """Set the access levels for the specific database of user.
 
         :param username: Username.
@@ -2308,14 +2229,15 @@ class C8Client(object):
         :rtype: object
         :raise c8.exceptions.SetDataBaseAccessLevel: If request fails.
         """
-        return self._tenant.set_database_access_level_user(username=username,
-                                                           databasename=databasename,
-                                                           grant=grant)
+        return self._tenant.set_database_access_level_user(
+            username=username, databasename=databasename, grant=grant
+        )
 
     # client.list_accessible_collections_user
 
-    def list_accessible_collections_user(self, username, databasename='_system',
-                                         full=False):
+    def list_accessible_collections_user(
+        self, username, databasename="_system", full=False
+    ):
         """Fetch the collection access level for a specific collection in a database.
 
         :param username: Name of the user
@@ -2328,17 +2250,14 @@ class C8Client(object):
         :rtype: string
         :raise c8.exceptions.CollectionAccessLevel: If request fails.
         """
-        return self._tenant.list_accessible_collections_user(username=username,
-                                                             databasename=databasename,
-                                                             full=full)
+        return self._tenant.list_accessible_collections_user(
+            username=username, databasename=databasename, full=full
+        )
 
     # client.get_collection_access_level_user
 
     def get_collection_access_level_user(
-            self,
-            username,
-            collection_name,
-            databasename='_system'
+        self, username, collection_name, databasename="_system"
     ):
         """Fetch the collection access level for a specific collection in a database.
 
@@ -2350,18 +2269,16 @@ class C8Client(object):
         :rtype: string
         :raise c8.exceptions.CollectionAccessLevel: If request fails.
         """
-        return self._tenant.get_collection_access_level_user(username=username,
-                                                             collection_name=collection_name,
-                                                             databasename=databasename)
+        return self._tenant.get_collection_access_level_user(
+            username=username,
+            collection_name=collection_name,
+            databasename=databasename,
+        )
 
     # client.set_collection_access_level_user
 
     def set_collection_access_level_user(
-            self,
-            username,
-            collection_name,
-            databasename='_system',
-            grant='ro'
+        self, username, collection_name, databasename="_system", grant="ro"
     ):
 
         """Set the collection access level for a specific collection in a database.
@@ -2382,16 +2299,13 @@ class C8Client(object):
             username=username,
             collection_name=collection_name,
             databasename=databasename,
-            grant=grant
+            grant=grant,
         )
 
     # client.clear_collection_access_level_user
 
     def clear_collection_access_level_user(
-            self,
-            username,
-            collection_name,
-            databasename='_system'
+        self, username, collection_name, databasename="_system"
     ):
 
         """Clear the collection access level for a specific collection in a database.
@@ -2407,16 +2321,13 @@ class C8Client(object):
         return self._tenant.clear_collection_access_level_user(
             username=username,
             collection_name=collection_name,
-            databasename=databasename
+            databasename=databasename,
         )
 
     # client.list_accessible_streams_user
 
     def list_accessible_streams_user(
-            self,
-            username,
-            databasename='_system',
-            full=False
+        self, username, databasename="_system", full=False
     ):
         """Fetch the list of streams available to the specified user.
 
@@ -2431,18 +2342,13 @@ class C8Client(object):
         :raise c8.exceptions.ListStreams: If request fails.
         """
         return self._tenant.list_accessible_streams_user(
-            username=username,
-            databasename=databasename,
-            full=full
+            username=username, databasename=databasename, full=full
         )
 
     # client.get_stream_access_level_user
 
     def get_stream_access_level_user(
-            self,
-            username,
-            streamname,
-            databasename='_system'
+        self, username, streamname, databasename="_system"
     ):
         """Fetch the database access level for a specific stream.
 
@@ -2457,19 +2363,13 @@ class C8Client(object):
         :raise c8.exceptions.StreamAccessLevel: If request fails.
         """
         return self._tenant.get_stream_access_level_user(
-            username=username,
-            streamname=streamname,
-            databasename=databasename
+            username=username, streamname=streamname, databasename=databasename
         )
 
     # client.set_stream_access_level_user
 
     def set_stream_access_level_user(
-            self,
-            username,
-            streamname,
-            databasename='_system',
-            grant='ro'
+        self, username, streamname, databasename="_system", grant="ro"
     ):
         """Set the database access level for a specific stream.
 
@@ -2491,13 +2391,14 @@ class C8Client(object):
             username=username,
             streamname=streamname,
             databasename=databasename,
-            grant=grant
+            grant=grant,
         )
 
     # client.clear_stream_access_level_user
 
-    def clear_stream_access_level_user(self, username, streamname,
-                                       databasename='_system'):
+    def clear_stream_access_level_user(
+        self, username, streamname, databasename="_system"
+    ):
 
         """Clear the database access level for a specific stream.
 
@@ -2511,9 +2412,9 @@ class C8Client(object):
         :rtype: booleaan
         :raise c8.exceptions.ClearStreamAccessLevel: If request fails.
         """
-        return self._tenant.clear_stream_access_level_user(username=username,
-                                                           streamname=streamname,
-                                                           databasename=databasename)
+        return self._tenant.clear_stream_access_level_user(
+            username=username, streamname=streamname, databasename=databasename
+        )
 
     # client.get_billing_access_level_user
 
@@ -2528,7 +2429,7 @@ class C8Client(object):
 
     # client.set_billing_access_level
 
-    def set_billing_access_level_user(self, username, grant='ro'):
+    def set_billing_access_level_user(self, username, grant="ro"):
 
         """Set the billing access level for user.
 
@@ -2543,8 +2444,7 @@ class C8Client(object):
         :raise c8.exceptions.SetBillingAccessLevel: If request fails.
         """
         return self._tenant.set_billing_access_level_user(
-            username=username,
-            grant=grant
+            username=username, grant=grant
         )
 
     # client.clear_billing_access_level
@@ -2583,8 +2483,9 @@ class C8Client(object):
         :rtype: Object
         :raise c8.exceptions.UpdateAttributes: If request fails.
         """
-        return self._tenant.update_attributes_user(username=username,
-                                                   attributes=attributes)
+        return self._tenant.update_attributes_user(
+            username=username, attributes=attributes
+        )
 
     # client.remove_all_attributes_user
 
@@ -2612,8 +2513,9 @@ class C8Client(object):
         :rtype: booleaan
         :raise c8.exceptions.RemoveAttribute: If request fails.
         """
-        return self._tenant.remove_attribute_user(username=username,
-                                                  attributeid=attributeid)
+        return self._tenant.remove_attribute_user(
+            username=username, attributeid=attributeid
+        )
 
     # client.get_permissions
 
@@ -2651,8 +2553,9 @@ class C8Client(object):
         :rtype: boolean
         :raise c8.exceptions.CreateCollectionError: If creation fails.
         """
-        return self._fabric.key_value.create_collection(name=name,
-                                                        expiration=expiration)
+        return self._fabric.key_value.create_collection(
+            name=name, expiration=expiration
+        )
 
     # client.delete_collection_kv
 
@@ -2756,8 +2659,9 @@ class C8Client(object):
         :rtype: list
         :raise c8.exceptions.GetKeysError: If request fails.
         """
-        return self._fabric.key_value.get_keys(name, offset=offset,
-                                               limit=limit, order=order)
+        return self._fabric.key_value.get_keys(
+            name, offset=offset, limit=limit, order=order
+        )
 
     # client.get_kv_count
 
@@ -2788,9 +2692,9 @@ class C8Client(object):
         :rtype: object
         :raise c8.exceptions.GetKVError: If request fails.
         """
-        return self._fabric.key_value.get_key_value_pairs(name=name,
-                                                          offset=offset,
-                                                          limit=limit)
+        return self._fabric.key_value.get_key_value_pairs(
+            name=name, offset=offset, limit=limit
+        )
 
     # client.remove_key_value_pairs
 
@@ -2854,7 +2758,7 @@ class C8Client(object):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.get_database_access_level(databasename)
 
-    def set_database_access_level(self, keyid, databasename, grant='ro'):
+    def set_database_access_level(self, keyid, databasename, grant="ro"):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.set_database_access_level(databasename, grant=grant)
 
@@ -2862,44 +2766,51 @@ class C8Client(object):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.clear_database_access_level(databasename)
 
-    def list_accessible_collections(self, keyid, databasename='_system', full=False):
+    def list_accessible_collections(self, keyid, databasename="_system", full=False):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.list_accessible_collections(databasename, full)
 
-    def get_collection_access_level(self, keyid, collection_name,
-                                    databasename='_system'):
+    def get_collection_access_level(
+        self, keyid, collection_name, databasename="_system"
+    ):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.get_collection_access_level(collection_name, databasename)
 
-    def set_collection_access_level(self, keyid, collection_name,
-                                    databasename='_system',
-                                    grant='ro'):
+    def set_collection_access_level(
+        self, keyid, collection_name, databasename="_system", grant="ro"
+    ):
         _apiKeys = self._fabric.api_keys(keyid)
-        return _apiKeys.set_collection_access_level(collection_name, databasename,
-                                                    grant)
+        return _apiKeys.set_collection_access_level(
+            collection_name, databasename, grant
+        )
 
-    def clear_collection_access_level(self, keyid, collection_name,
-                                      databasename='_system'):
+    def clear_collection_access_level(
+        self, keyid, collection_name, databasename="_system"
+    ):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.clear_collection_access_level(collection_name, databasename)
 
-    def list_accessible_streams(self, keyid, databasename='_system', full=False):
+    def list_accessible_streams(self, keyid, databasename="_system", full=False):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.list_accessible_streams(databasename, full)
 
-    def get_stream_access_level(self, keyid, streamname, databasename='_system',
-                                local=False):
+    def get_stream_access_level(
+        self, keyid, streamname, databasename="_system", local=False
+    ):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.get_stream_access_level(streamname, databasename, local)
 
-    def set_stream_access_level(self, keyid, streamname, databasename='_system',
-                                grant='ro', local=False):
+    def set_stream_access_level(
+        self, keyid, streamname, databasename="_system", grant="ro", local=False
+    ):
         _apiKeys = self._fabric.api_keys(keyid)
-        return _apiKeys.set_stream_access_level(streamname, databasename, grant,
-                                                local=local)
+        return _apiKeys.set_stream_access_level(
+            streamname, databasename, grant, local=local
+        )
 
-    def clear_stream_access_level(self, keyid, streamname, databasename='_system',
-                                  local=False):
+    def clear_stream_access_level(
+        self, keyid, streamname, databasename="_system", local=False
+    ):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.clear_stream_access_level(streamname, databasename, local)
 
@@ -2907,7 +2818,7 @@ class C8Client(object):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.get_billing_access_level()
 
-    def set_billing_access_level(self, keyid, grant='ro'):
+    def set_billing_access_level(self, keyid, grant="ro"):
         _apiKeys = self._fabric.api_keys(keyid)
         return _apiKeys.set_billing_access_level(grant)
 
@@ -2932,7 +2843,7 @@ class C8Client(object):
         return _apiKeys.remove_attribute(attributeid)
 
     def set_search(self, collection, enable, field):
-        """Set search capability of a collection (enabling or disabling it). 
+        """Set search capability of a collection (enabling or disabling it).
         If the collection does not exist, it will be created.
 
         :param collection: Collection name on which search capabilities has to be enabled/disabled
@@ -2949,7 +2860,7 @@ class C8Client(object):
     def create_view(self, name, links={}, primary_sort=[]):
         """Creates a new view with a given name and properties if it does not
         already exist.
-        
+
         :param name: The name of the view
         :type name: str | unicode
         :param links: Link properties related with the view
@@ -2963,9 +2874,9 @@ class C8Client(object):
         return self._search.create_view(name, links, primary_sort)
 
     def list_all_views(self):
-        """ List all views
+        """List all views
 
-        :returns: Returns an object containing an array of all view descriptions. 
+        :returns: Returns an object containing an array of all view descriptions.
         :rtype: [dict]
         """
         return self._search.list_all_views()
@@ -3027,7 +2938,7 @@ class C8Client(object):
     def search_in_collection(self, collection, search, bindVars=None, ttl=60):
         """Search a collection for string matches.
 
-        :param collection: Collection name on which search has to be performed 
+        :param collection: Collection name on which search has to be performed
         :type collection: str | unicode
         :param search: search string needs to be search in given collection
         :type search: str | unicode
@@ -3037,8 +2948,8 @@ class C8Client(object):
         :param ttl: default ttl will be 60 seconds
         :type ttl: int
         :returns: The specified search query will be executed for the collection.
-                  The results of the search will be in the response. If there are too 
-                  many results, an "id" will be specified for the cursor that can be 
+                  The results of the search will be in the response. If there are too
+                  many results, an "id" will be specified for the cursor that can be
                   used to obtain the remaining results.
         :rtype: [dict]
         """
@@ -3061,7 +2972,3 @@ class C8Client(object):
         :rtype: dict
         """
         return self._search.get_analyzer_definition(name)
-
-
-
-

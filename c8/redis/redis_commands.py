@@ -1,7 +1,5 @@
+from c8.executor import DefaultExecutor
 from c8.redis.redis_interface import RedisInterface
-from c8.executor import (
-    DefaultExecutor,
-)
 
 
 class RedisCommands(object):
@@ -29,13 +27,9 @@ class RedisCommands(object):
         """
         command = "SET"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            value,
-            *options
+            command, collection, key, value, *options
         )
-    
+
     def append(self, key, value, collection):
         """
         If key already exists and is a string, this command appends the value at the
@@ -53,7 +47,9 @@ class RedisCommands(object):
         :rtype: dict
         """
         command = "APPEND"
-        return RedisInterface(self._conn, self._executor).command_parser(command, collection, key, value)
+        return RedisInterface(self._conn, self._executor).command_parser(
+            command, collection, key, value
+        )
 
     def decr(self, key, collection):
         """
@@ -71,7 +67,9 @@ class RedisCommands(object):
         :rtype: dict
         """
         command = "DECR"
-        return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
+        return RedisInterface(self._conn, self._executor).command_parser(
+            command, collection, key
+        )
 
     def decrby(self, key, decrement, collection):
         """
@@ -92,10 +90,7 @@ class RedisCommands(object):
         """
         command = "DECRBY"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            decrement
+            command, collection, key, decrement
         )
 
     def get(self, key, collection):
@@ -113,7 +108,9 @@ class RedisCommands(object):
         :rtype: dict
         """
         command = "GET"
-        return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
+        return RedisInterface(self._conn, self._executor).command_parser(
+            command, collection, key
+        )
 
     def getdel(self, key, collection):
         """
@@ -130,7 +127,9 @@ class RedisCommands(object):
         :rtype: dict
         """
         command = "GETDEL"
-        return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
+        return RedisInterface(self._conn, self._executor).command_parser(
+            command, collection, key
+        )
 
     def getex(self, key, collection, expiry_command=None, time=None):
         """
@@ -151,11 +150,7 @@ class RedisCommands(object):
         """
         command = "GETEX"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            expiry_command,
-            time
+            command, collection, key, expiry_command, time
         )
 
     def getrange(self, key, start, end, collection):
@@ -181,11 +176,7 @@ class RedisCommands(object):
         """
         command = "GETRANGE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            start,
-            end
+            command, collection, key, start, end
         )
 
     def getset(self, key, value, collection):
@@ -206,10 +197,7 @@ class RedisCommands(object):
         """
         command = "GETSET"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            value
+            command, collection, key, value
         )
 
     def incr(self, key, collection):
@@ -228,7 +216,9 @@ class RedisCommands(object):
         :rtype: dict
         """
         command = "INCR"
-        return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
+        return RedisInterface(self._conn, self._executor).command_parser(
+            command, collection, key
+        )
 
     def incrby(self, key, increment, collection):
         """
@@ -249,10 +239,7 @@ class RedisCommands(object):
         """
         command = "INCRBY"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            increment
+            command, collection, key, increment
         )
 
     def incrbyfloat(self, key, increment, collection):
@@ -277,10 +264,7 @@ class RedisCommands(object):
         """
         command = "INCRBYFLOAT"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            increment
+            command, collection, key, increment
         )
 
     def mget(self, keys, collection):
@@ -299,9 +283,7 @@ class RedisCommands(object):
         """
         command = "MGET"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            *keys
+            command, collection, *keys
         )
 
     def mset(self, data, collection):
@@ -325,9 +307,7 @@ class RedisCommands(object):
 
         command = "MSET"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            *data_list
+            command, collection, *data_list
         )
 
     def psetex(self, key, milliseconds, value, collection):
@@ -350,11 +330,7 @@ class RedisCommands(object):
         """
         command = "PSETEX"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            milliseconds,
-            value
+            command, collection, key, milliseconds, value
         )
 
     def setbit(self, key, offset, value, collection):
@@ -376,11 +352,7 @@ class RedisCommands(object):
         """
         command = "SETBIT"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            offset,
-            value
+            command, collection, key, offset, value
         )
 
     def msetnx(self, data, collection):
@@ -403,9 +375,7 @@ class RedisCommands(object):
 
         command = "MSETNX"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            *data_list
+            command, collection, *data_list
         )
 
     def setex(self, key, seconds, value, collection):
@@ -427,11 +397,7 @@ class RedisCommands(object):
         """
         command = "SETEX"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            seconds,
-            value
+            command, collection, key, seconds, value
         )
 
     def setnx(self, key, value, collection):
@@ -452,10 +418,7 @@ class RedisCommands(object):
         """
         command = "SETNX"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            value
+            command, collection, key, value
         )
 
     def setrange(self, key, offset, value, collection):
@@ -481,11 +444,7 @@ class RedisCommands(object):
         """
         command = "SETRANGE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            offset,
-            value
+            command, collection, key, offset, value
         )
 
     def strlen(self, key, collection):
@@ -530,12 +489,7 @@ class RedisCommands(object):
         """
         command = "BITCOUNT"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            start,
-            end,
-            data_format
+            command, collection, key, start, end, data_format
         )
 
     def bitop(self, operation, deskey, keys, collection):
@@ -557,11 +511,7 @@ class RedisCommands(object):
         """
         command = "BITOP"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            operation,
-            deskey,
-            *keys
+            command, collection, operation, deskey, *keys
         )
 
     def getbit(self, key, offset, collection):
@@ -586,15 +536,7 @@ class RedisCommands(object):
             offset,
         )
 
-    def bitpos(
-            self,
-            key,
-            bit,
-            collection,
-            start=None,
-            end=None,
-            data_format=None
-    ):
+    def bitpos(self, key, bit, collection, start=None, end=None, data_format=None):
         """
         Return the position of the first bit set to 1 or 0 in a string.
         The position is returned, thinking of the string as an array of bits from left
@@ -619,13 +561,7 @@ class RedisCommands(object):
         """
         command = "BITPOS"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            bit,
-            start,
-            end,
-            data_format
+            command, collection, key, bit, start, end, data_format
         )
 
     def lpush(self, key, elements, collection):
@@ -648,10 +584,7 @@ class RedisCommands(object):
         """
         command = "LPUSH"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *elements
+            command, collection, key, *elements
         )
 
     def lindex(self, key, index, collection):
@@ -674,10 +607,7 @@ class RedisCommands(object):
         """
         command = "LINDEX"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            index
+            command, collection, key, index
         )
 
     def linsert(self, key, modifier, pivot, element, collection):
@@ -701,12 +631,7 @@ class RedisCommands(object):
         """
         command = "LINSERT"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            modifier,
-            pivot,
-            element
+            command, collection, key, modifier, pivot, element
         )
 
     def llen(self, key, collection):
@@ -732,11 +657,12 @@ class RedisCommands(object):
 
     def lrange(self, key, start, stop, collection):
         """
-        Insert all the specified values at the head of the list stored at key. If key
-        does not exist, it is created as empty list before performing the push
-        operations. When key holds a value that is not a list, an error is returned.
-        It is possible to push multiple elements using a single command call just
-        specifying multiple members of the list in elements parameter.
+        Returns the specified elements of the list stored at key. The offsets start
+        and stop are zero-based indexes, with 0 being the first element of the list (
+        the head of the list), 1 being the next element and so on. These offsets can
+        also be negative numbers indicating offsets starting at the end of the list.
+        For example, -1 is the last element of the list, -2 the penultimate,
+        and so on.
         More on https://redis.io/commands/lrange/
 
         :param key: Key of the data
@@ -752,11 +678,7 @@ class RedisCommands(object):
         """
         command = "LRANGE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            start,
-            stop
+            command, collection, key, start, stop
         )
 
     def lmove(self, source, destination, where_from, where_to, collection):
@@ -782,23 +704,10 @@ class RedisCommands(object):
         """
         command = "LMOVE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            source,
-            destination,
-            where_from,
-            where_to
+            command, collection, source, destination, where_from, where_to
         )
 
-    def lpos(
-            self,
-            key,
-            element,
-            collection,
-            rank=None,
-            count=None,
-            max_len=None
-    ):
+    def lpos(self, key, element, collection, rank=None, count=None, max_len=None):
         """
         The command returns the index of matching elements inside a Redis list. By
         default, when no options are given, it will scan the list from head to tail,
@@ -845,13 +754,7 @@ class RedisCommands(object):
             max_len_list.append(max_len)
 
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            element,
-            *rank_list,
-            *count_list,
-            *max_len_list
+            command, collection, key, element, *rank_list, *count_list, *max_len_list
         )
 
     def rpush(self, key, elements, collection):
@@ -874,13 +777,15 @@ class RedisCommands(object):
         """
         command = "RPUSH"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *elements
+            command, collection, key, *elements
         )
 
-    def lpop(self, key, collection, count=None, ):
+    def lpop(
+        self,
+        key,
+        collection,
+        count=None,
+    ):
         """
         Removes and returns the first elements of the list stored at key. By default,
         the command pops a single element from the beginning of the list. When
@@ -923,10 +828,7 @@ class RedisCommands(object):
         """
         command = "LPUSHX"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *elements
+            command, collection, key, *elements
         )
 
     def rpushx(self, key, elements, collection):
@@ -947,10 +849,7 @@ class RedisCommands(object):
         """
         command = "RPUSHX"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *elements
+            command, collection, key, *elements
         )
 
     def lrem(self, key, count, element, collection):
@@ -976,11 +875,7 @@ class RedisCommands(object):
         """
         command = "LREM"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            count,
-            element
+            command, collection, key, count, element
         )
 
     def lset(self, key, index, element, collection):
@@ -1002,11 +897,7 @@ class RedisCommands(object):
         """
         command = "LSET"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            index,
-            element
+            command, collection, key, index, element
         )
 
     def ltrim(self, key, start, stop, collection):
@@ -1029,14 +920,15 @@ class RedisCommands(object):
         """
         command = "LTRIM"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            start,
-            stop
+            command, collection, key, start, stop
         )
 
-    def rpop(self, key, collection, count=None, ):
+    def rpop(
+        self,
+        key,
+        collection,
+        count=None,
+    ):
         """
         Removes and returns the last elements of the list stored at key.
         By default, the command pops a single element from the end of the list. When
@@ -1109,10 +1001,7 @@ class RedisCommands(object):
 
         command = "HSET"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *data_list
+            command, collection, key, *data_list
         )
 
     def hget(self, key, field, collection):
@@ -1131,10 +1020,7 @@ class RedisCommands(object):
         """
         command = "HGET"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            field
+            command, collection, key, field
         )
 
     def hdel(self, key, fields, collection):
@@ -1155,10 +1041,7 @@ class RedisCommands(object):
         """
         command = "HDEL"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *fields
+            command, collection, key, *fields
         )
 
     def hexists(self, key, field, collection):
@@ -1177,10 +1060,7 @@ class RedisCommands(object):
         """
         command = "HEXISTS"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            field
+            command, collection, key, field
         )
 
     def hgetall(self, key, collection):
@@ -1198,7 +1078,9 @@ class RedisCommands(object):
         :rtype: dict
         """
         command = "HGETALL"
-        return RedisInterface(self._conn, self._executor).command_parser(command, collection, key)
+        return RedisInterface(self._conn, self._executor).command_parser(
+            command, collection, key
+        )
 
     def hincrby(self, key, field, increment, collection):
         """
@@ -1220,11 +1102,7 @@ class RedisCommands(object):
         """
         command = "HINCRBY"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            field,
-            increment
+            command, collection, key, field, increment
         )
 
     def hincrbyfloat(self, key, field, increment, collection):
@@ -1252,11 +1130,7 @@ class RedisCommands(object):
         """
         command = "HINCRBYFLOAT"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            field,
-            increment
+            command, collection, key, field, increment
         )
 
     def hkeys(self, key, collection):
@@ -1316,10 +1190,7 @@ class RedisCommands(object):
         """
         command = "HMGET"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *fields
+            command, collection, key, *fields
         )
 
     def hmset(self, key, data, collection):
@@ -1345,10 +1216,7 @@ class RedisCommands(object):
 
         command = "HMSET"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *data_list
+            command, collection, key, *data_list
         )
 
     def hscan(self, key, cursor, collection, pattern=None, count=None):
@@ -1382,12 +1250,7 @@ class RedisCommands(object):
             count_list.append(count)
 
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            cursor,
-            *pattern_list,
-            *count_list
+            command, collection, key, cursor, *pattern_list, *count_list
         )
 
     def hstrlen(self, key, field, collection):
@@ -1480,10 +1343,7 @@ class RedisCommands(object):
         """
         command = "SADD"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *members
+            command, collection, key, *members
         )
 
     def scard(self, key, collection):
@@ -1607,10 +1467,7 @@ class RedisCommands(object):
         """
         command = "SISMEMBER"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            member
+            command, collection, key, member
         )
 
     def smembers(self, key, collection):
@@ -1650,10 +1507,7 @@ class RedisCommands(object):
         """
         command = "SMISMEMBER"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *members
+            command, collection, key, *members
         )
 
     def smove(self, source, destination, member, collection):
@@ -1676,11 +1530,7 @@ class RedisCommands(object):
         """
         command = "SMOVE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            source,
-            destination,
-            member
+            command, collection, source, destination, member
         )
 
     def spop(self, key, count, collection):
@@ -1701,10 +1551,7 @@ class RedisCommands(object):
         """
         command = "SPOP"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            count
+            command, collection, key, count
         )
 
     def srandmember(self, key, collection, count=None):
@@ -1726,10 +1573,7 @@ class RedisCommands(object):
         """
         command = "SRANDMEMBER"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            count
+            command, collection, key, count
         )
 
     def srem(self, key, members, collection):
@@ -1750,10 +1594,7 @@ class RedisCommands(object):
         """
         command = "SREM"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *members
+            command, collection, key, *members
         )
 
     def sscan(self, key, cursor, collection, pattern=None, count=None):
@@ -1787,12 +1628,7 @@ class RedisCommands(object):
             count_list.append(count)
 
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            cursor,
-            *pattern_list,
-            *count_list
+            command, collection, key, cursor, *pattern_list, *count_list
         )
 
     def sunion(self, keys, collection):
@@ -1837,13 +1673,7 @@ class RedisCommands(object):
             *keys,
         )
 
-    def zadd(
-            self,
-            key,
-            data,
-            collection,
-            options=[]
-    ):
+    def zadd(self, key, data, collection, options=[]):
         """
         Adds all the specified members with the specified scores to the sorted set
         stored at key. It is possible to specify multiple score / member pairs. If a
@@ -1866,11 +1696,7 @@ class RedisCommands(object):
         command = "ZADD"
 
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *options,
-            *data
+            command, collection, key, *options, *data
         )
 
     def zcard(self, key, collection):
@@ -1913,11 +1739,7 @@ class RedisCommands(object):
         """
         command = "ZCOUNT"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            minimum,
-            maximum
+            command, collection, key, minimum, maximum
         )
 
     def zdiff(self, num_keys, keys, collection, with_scores=False):
@@ -1945,11 +1767,7 @@ class RedisCommands(object):
 
         command = "ZDIFF"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            num_keys,
-            *keys,
-            with_scores_command
+            command, collection, num_keys, *keys, with_scores_command
         )
 
     def zdiffstore(self, destination, num_keys, keys, collection):
@@ -2001,21 +1819,10 @@ class RedisCommands(object):
         """
         command = "ZINCRBY"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            increment,
-            member
+            command, collection, key, increment, member
         )
 
-    def zinter(
-            self,
-            num_keys,
-            keys,
-            collection,
-            options=None,
-            with_scores=False
-    ):
+    def zinter(self, num_keys, keys, collection, options=None, with_scores=False):
         """
         This command is similar to ZINTERSTORE, but instead of storing the resulting
         sorted set, it is returned to the client.
@@ -2053,14 +1860,7 @@ class RedisCommands(object):
             *options_command,
         )
 
-    def zinterstore(
-            self,
-            destination,
-            num_keys,
-            keys,
-            collection,
-            options=[]
-    ):
+    def zinterstore(self, destination, num_keys, keys, collection, options=[]):
         """
         Computes the intersection of numkeys sorted sets given by the specified keys,
         and stores the result in destination. It is mandatory to provide the number
@@ -2114,11 +1914,7 @@ class RedisCommands(object):
         """
         command = "ZLEXCOUNT"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            minimum,
-            maximum
+            command, collection, key, minimum, maximum
         )
 
     def zmscore(self, key, members, collection):
@@ -2138,10 +1934,7 @@ class RedisCommands(object):
         """
         command = "ZMSCORE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *members
+            command, collection, key, *members
         )
 
     def zpopmax(self, key, collection, count=None):
@@ -2161,10 +1954,7 @@ class RedisCommands(object):
         """
         command = "ZPOPMAX"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            count
+            command, collection, key, count
         )
 
     def zpopmin(self, key, collection, count=None):
@@ -2185,10 +1975,7 @@ class RedisCommands(object):
         """
         command = "ZPOPMIN"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            count
+            command, collection, key, count
         )
 
     def zrandmember(self, key, collection, count=None, with_scores=False):
@@ -2217,11 +2004,7 @@ class RedisCommands(object):
 
         command = "ZRANDMEMBER"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            count,
-            with_scores_command
+            command, collection, key, count, with_scores_command
         )
 
     def zrange(self, key, start, stop, collection, options=[]):
@@ -2246,23 +2029,10 @@ class RedisCommands(object):
         """
         command = "ZRANGE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            start,
-            stop,
-            *options
+            command, collection, key, start, stop, *options
         )
 
-    def zrangebylex(
-            self,
-            key,
-            minimum,
-            maximum,
-            collection,
-            offset=None,
-            count=None
-    ):
+    def zrangebylex(self, key, minimum, maximum, collection, offset=None, count=None):
         """When all the elements in a sorted set are inserted with the same score,
         in order to force lexicographical ordering, this command returns all the
         elements in the sorted set at key with a value between min and max.
@@ -2295,23 +2065,18 @@ class RedisCommands(object):
 
         command = "ZRANGEBYLEX"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            minimum,
-            maximum,
-            *limit_list
+            command, collection, key, minimum, maximum, *limit_list
         )
 
     def zrangebyscore(
-            self,
-            key,
-            minimum,
-            maximum,
-            collection,
-            with_scores=None,
-            offset=None,
-            count=None
+        self,
+        key,
+        minimum,
+        maximum,
+        collection,
+        with_scores=None,
+        offset=None,
+        count=None,
     ):
         """When all the elements in a sorted set are inserted with the same score,
         in order to force lexicographical ordering, this command returns all the
@@ -2352,13 +2117,7 @@ class RedisCommands(object):
 
         command = "ZRANGEBYSCORE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            minimum,
-            maximum,
-            with_scores_command,
-            *limit_list
+            command, collection, key, minimum, maximum, with_scores_command, *limit_list
         )
 
     def zrangestore(self, dst, key, minimum, maximum, collection, options=None):
@@ -2383,13 +2142,7 @@ class RedisCommands(object):
         """
         command = "ZRANGESTORE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            dst,
-            key,
-            minimum,
-            maximum,
-            *options
+            command, collection, dst, key, minimum, maximum, *options
         )
 
     def zrank(self, key, member, collection):
@@ -2410,10 +2163,7 @@ class RedisCommands(object):
         """
         command = "ZRANK"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            member
+            command, collection, key, member
         )
 
     def zrem(self, key, members, collection):
@@ -2434,18 +2184,15 @@ class RedisCommands(object):
         """
         command = "ZREM"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            *members
+            command, collection, key, *members
         )
 
     def zremrangebylex(
-            self,
-            key,
-            minimum,
-            maximum,
-            collection,
+        self,
+        key,
+        minimum,
+        maximum,
+        collection,
     ):
         """
         When all the elements in a sorted set are inserted with the same score,
@@ -2468,19 +2215,15 @@ class RedisCommands(object):
         """
         command = "ZREMRANGEBYLEX"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            minimum,
-            maximum
+            command, collection, key, minimum, maximum
         )
 
     def zremrangebyrank(
-            self,
-            key,
-            start,
-            stop,
-            collection,
+        self,
+        key,
+        start,
+        stop,
+        collection,
     ):
         """
         Removes all elements in the sorted set stored at key with rank between start
@@ -2504,19 +2247,15 @@ class RedisCommands(object):
         """
         command = "ZREMRANGEBYRANK"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            start,
-            stop
+            command, collection, key, start, stop
         )
 
     def zremrangebyscore(
-            self,
-            key,
-            minimum,
-            maximum,
-            collection,
+        self,
+        key,
+        minimum,
+        maximum,
+        collection,
     ):
         """
         Removes all elements in the sorted set stored at key with a score between min
@@ -2536,11 +2275,7 @@ class RedisCommands(object):
         """
         command = "ZREMRANGEBYSCORE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            minimum,
-            maximum
+            command, collection, key, minimum, maximum
         )
 
     def zrevrange(self, key, start, stop, collection, with_scores=False):
@@ -2571,22 +2306,11 @@ class RedisCommands(object):
 
         command = "ZREVRANGE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            start,
-            stop,
-            with_scores_command
+            command, collection, key, start, stop, with_scores_command
         )
 
     def zrevrangebylex(
-            self,
-            key,
-            minimum,
-            maximum,
-            collection,
-            offset=None,
-            count=None
+        self, key, minimum, maximum, collection, offset=None, count=None
     ):
         """When all the elements in a sorted set are inserted with the same score,
         in order to force lexicographical ordering, this command returns all the
@@ -2619,23 +2343,18 @@ class RedisCommands(object):
 
         command = "ZREVRANGEBYLEX"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            minimum,
-            maximum,
-            *limit_list
+            command, collection, key, minimum, maximum, *limit_list
         )
 
     def zrevrangebyscore(
-            self,
-            key,
-            minimum,
-            maximum,
-            collection,
-            with_scores=None,
-            offset=None,
-            count=None
+        self,
+        key,
+        minimum,
+        maximum,
+        collection,
+        with_scores=None,
+        offset=None,
+        count=None,
     ):
         """Returns all the elements in the sorted set at key with a score between max
         and min (including elements with score equal to max or min). In contrary to
@@ -2676,13 +2395,7 @@ class RedisCommands(object):
 
         command = "ZREVRANGEBYSCORE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            minimum,
-            maximum,
-            with_scores_command,
-            *limit_list
+            command, collection, key, minimum, maximum, with_scores_command, *limit_list
         )
 
     def zrevrank(self, key, member, collection):
@@ -2703,10 +2416,7 @@ class RedisCommands(object):
         """
         command = "ZREVRANK"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            member
+            command, collection, key, member
         )
 
     def zscan(self, key, cursor, collection, pattern=None, count=None):
@@ -2740,12 +2450,7 @@ class RedisCommands(object):
             count_list.append(count)
 
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            cursor,
-            *pattern_list,
-            *count_list
+            command, collection, key, cursor, *pattern_list, *count_list
         )
 
     def zscore(self, key, member, collection):
@@ -2765,20 +2470,10 @@ class RedisCommands(object):
         """
         command = "ZSCORE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            member
+            command, collection, key, member
         )
 
-    def zunion(
-            self,
-            num_keys,
-            keys,
-            collection,
-            options=None,
-            with_scores=False
-    ):
+    def zunion(self, num_keys, keys, collection, options=None, with_scores=False):
         """
         This command is similar to ZUNIONSTORE, but instead of storing the resulting
         sorted set, it is returned to the client. For a description of the WEIGHTS
@@ -2815,13 +2510,7 @@ class RedisCommands(object):
         )
 
     def zunionstore(
-            self,
-            destination,
-            num_keys,
-            keys,
-            collection,
-            options=None,
-            with_scores=False
+        self, destination, num_keys, keys, collection, options=None, with_scores=False
     ):
         """
         Computes the union of numkeys sorted sets given by the specified keys,
@@ -2865,12 +2554,7 @@ class RedisCommands(object):
         )
 
     def copy(
-            self,
-            source,
-            destination,
-            collection,
-            destination_database=None,
-            replace=False
+        self, source, destination, collection, destination_database=None, replace=False
     ):
         """
         This command copies the value stored at the source key to the destination
@@ -2902,17 +2586,13 @@ class RedisCommands(object):
 
         command = "COPY"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            source,
-            destination,
-            *options_command
+            command, collection, source, destination, *options_command
         )
 
     def delete(
-            self,
-            keys,
-            collection,
+        self,
+        keys,
+        collection,
     ):
         """
         Removes the specified keys. A key is ignored if it does not exist.
@@ -2927,15 +2607,13 @@ class RedisCommands(object):
         """
         command = "DEL"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            *keys
+            command, collection, *keys
         )
 
     def exists(
-            self,
-            keys,
-            collection,
+        self,
+        keys,
+        collection,
     ):
         """
         Returns if key exists.
@@ -2950,17 +2628,15 @@ class RedisCommands(object):
         """
         command = "EXISTS"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            *keys
+            command, collection, *keys
         )
 
     def expire(
-            self,
-            key,
-            seconds,
-            collection,
-            options=None,
+        self,
+        key,
+        seconds,
+        collection,
+        options=None,
     ):
         """
         Set a timeout on key. After the timeout has expired, the key will
@@ -2981,19 +2657,15 @@ class RedisCommands(object):
         """
         command = "EXPIRE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            seconds,
-            options
+            command, collection, key, seconds, options
         )
 
     def expireat(
-            self,
-            key,
-            unix_time_seconds,
-            collection,
-            options=None,
+        self,
+        key,
+        unix_time_seconds,
+        collection,
+        options=None,
     ):
         """
         EXPIREAT has the same effect and semantic as EXPIRE, but instead of
@@ -3015,18 +2687,10 @@ class RedisCommands(object):
         """
         command = "EXPIREAT"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            unix_time_seconds,
-            options
+            command, collection, key, unix_time_seconds, options
         )
 
-    def persist(
-            self,
-            key,
-            collection
-    ):
+    def persist(self, key, collection):
         """
         Remove the existing timeout on key, turning the key from volatile (a key with
         an expire set) to persistent (a key that will never expire as no timeout is
@@ -3048,11 +2712,11 @@ class RedisCommands(object):
         )
 
     def pexpire(
-            self,
-            key,
-            milliseconds,
-            collection,
-            options=None,
+        self,
+        key,
+        milliseconds,
+        collection,
+        options=None,
     ):
         """
         EXPIREAT has the same effect and semantic as EXPIRE, but instead of
@@ -3074,19 +2738,15 @@ class RedisCommands(object):
         """
         command = "PEXPIRE"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            milliseconds,
-            options
+            command, collection, key, milliseconds, options
         )
 
     def pexpireat(
-            self,
-            key,
-            unix_time_milliseconds,
-            collection,
-            options=None,
+        self,
+        key,
+        unix_time_milliseconds,
+        collection,
+        options=None,
     ):
         """
         PEXPIREAT has the same effect and semantic as EXPIREAT, but the Unix time at
@@ -3106,17 +2766,13 @@ class RedisCommands(object):
         """
         command = "PEXPIREAT"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            unix_time_milliseconds,
-            options
+            command, collection, key, unix_time_milliseconds, options
         )
 
     def pttl(
-            self,
-            key,
-            collection,
+        self,
+        key,
+        collection,
     ):
         """
         Like TTL this command returns the remaining time to live of a key that has an
@@ -3139,8 +2795,8 @@ class RedisCommands(object):
         )
 
     def randomkey(
-            self,
-            collection,
+        self,
+        collection,
     ):
         """
         Return a random key from the currently selected database.
@@ -3157,12 +2813,7 @@ class RedisCommands(object):
             collection,
         )
 
-    def rename(
-            self,
-            key,
-            new_key,
-            collection
-    ):
+    def rename(self, key, new_key, collection):
         """
         Renames key to newkey. It returns an error when key does not exist. If newkey
         already exists it is overwritten, when this happens RENAME executes an
@@ -3182,18 +2833,10 @@ class RedisCommands(object):
         """
         command = "RENAME"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            new_key
+            command, collection, key, new_key
         )
 
-    def renamenx(
-            self,
-            key,
-            new_key,
-            collection
-    ):
+    def renamenx(self, key, new_key, collection):
         """
         Renames key to newkey if newkey does not yet exist. It returns an error when
         key does not exist. In Cluster mode, both key and newkey must be in the same
@@ -3212,20 +2855,10 @@ class RedisCommands(object):
         """
         command = "RENAMENX"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            key,
-            new_key
+            command, collection, key, new_key
         )
 
-    def scan(
-            self,
-            cursor,
-            collection,
-            pattern=None,
-            count=None,
-            data_type=None
-    ):
+    def scan(self, cursor, collection, pattern=None, count=None, data_type=None):
         """
         The SCAN command and the closely related commands SSCAN, HSCAN and ZSCAN are
         used in order to incrementally iterate over a collection of elements.
@@ -3261,18 +2894,13 @@ class RedisCommands(object):
 
         command = "SCAN"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            cursor,
-            *pattern_list,
-            *count_list,
-            *type_list
+            command, collection, cursor, *pattern_list, *count_list, *type_list
         )
 
     def ttl(
-            self,
-            key,
-            collection,
+        self,
+        key,
+        collection,
     ):
         """
         Returns the remaining time to live of a key that has a timeout. This
@@ -3295,9 +2923,9 @@ class RedisCommands(object):
         )
 
     def type(
-            self,
-            key,
-            collection,
+        self,
+        key,
+        collection,
     ):
         """
         Returns the string representation of the type of the value stored at key. The
@@ -3320,9 +2948,9 @@ class RedisCommands(object):
         )
 
     def unlink(
-            self,
-            keys,
-            collection,
+        self,
+        keys,
+        collection,
     ):
         """
         This command is very similar to DEL: it removes the specified keys. Just like
@@ -3342,15 +2970,13 @@ class RedisCommands(object):
         """
         command = "UNLINK"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            *keys
+            command, collection, *keys
         )
 
     def echo(
-            self,
-            message,
-            collection,
+        self,
+        message,
+        collection,
     ):
         """
         Returns message.
@@ -3371,9 +2997,9 @@ class RedisCommands(object):
         )
 
     def ping(
-            self,
-            collection,
-            message=None,
+        self,
+        collection,
+        message=None,
     ):
         """
         Returns message.
@@ -3394,8 +3020,8 @@ class RedisCommands(object):
         )
 
     def dbsize(
-            self,
-            collection,
+        self,
+        collection,
     ):
         """
         Return the number of keys in the currently-selected database.
@@ -3412,11 +3038,7 @@ class RedisCommands(object):
             collection,
         )
 
-    def flushdb(
-            self,
-            collection,
-            async_flush=None
-    ):
+    def flushdb(self, collection, async_flush=None):
         """
         Delete all the keys of the currently selected DB. This command never fails.
         By default, FLUSHDB will synchronously flush all keys from the database.
@@ -3442,14 +3064,12 @@ class RedisCommands(object):
 
         command = "FLUSHDB"
         return RedisInterface(self._conn, self._executor).command_parser(
-            command,
-            collection,
-            async_flush_command
+            command, collection, async_flush_command
         )
 
     def time(
-            self,
-            collection,
+        self,
+        collection,
     ):
         """
         The TIME command returns the current server time as a two items lists: a Unix

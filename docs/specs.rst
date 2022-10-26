@@ -151,5 +151,3 @@ VertexCollection
 
 .. autoclass:: c8.collection.VertexCollection
     :members:
-
-

@@ -1,46 +1,42 @@
 from __future__ import absolute_import, unicode_literals
-import time
 
 from c8.exceptions import (
-   ListCollections,
-   CreateCollectionError,
-   DeleteCollectionError,
-   InsertKVError,
-   GetValueError,
-   DeleteEntryForKey,
-   GetKeysError,
-   GetCountError,
-   GetKVError,
-   RemoveKVError
+    CreateCollectionError,
+    DeleteCollectionError,
+    DeleteEntryForKey,
+    GetCountError,
+    GetKeysError,
+    GetKVError,
+    GetValueError,
+    InsertKVError,
+    ListCollections,
+    RemoveKVError,
 )
-from tests.helpers import (
-    assert_raises,
-    generate_col_name,
-    extract
-)
+from tests.helpers import assert_raises, extract, generate_col_name
+
 
 def test_keyvalue_methods(client, tst_fabric_name):
     client._tenant.useFabric(tst_fabric_name)
     col_name = generate_col_name()
     key_values = [
-        {'_key': '1', 'value': 'foo'},
-        {'_key': '2', 'value': 'bar'},
-        {'_key': '3', 'value': 'foobar'}
+        {"_key": "1", "value": "foo"},
+        {"_key": "2", "value": "bar"},
+        {"_key": "3", "value": "foobar"},
     ]
 
     assert client.create_collection_kv(col_name) is True
     assert client.has_collection_kv(col_name) is True
-    assert col_name in extract('name', client.get_collections_kv())
+    assert col_name in extract("name", client.get_collections_kv())
 
     client.insert_key_value_pair(col_name, key_values)
     resp = client.get_key_value_pairs(col_name)
-    assert resp['result'][0]['value'] == "foo"
+    assert resp["result"][0]["value"] == "foo"
 
     resp = client.get_key_value_pairs(col_name, offset=1, limit=1)
-    assert resp['result'][0]['value'] == "bar"
+    assert resp["result"][0]["value"] == "bar"
 
     resp = client.get_value_for_key(col_name, "1")
-    assert resp['value'] == "foo"
+    assert resp["value"] == "foo"
 
     resp = client.get_keys(col_name)
     assert resp[0] == "1"
@@ -58,26 +54,23 @@ def test_keyvalue_methods(client, tst_fabric_name):
     assert client.remove_key_value_pairs(col_name) is True
     assert client.get_kv_count(col_name) == 0
     resp = client.get_key_value_pairs(col_name, offset=0, limit=2)
-    assert resp['result'] == []
+    assert resp["result"] == []
 
     assert client.delete_collection_kv(col_name) is True
     assert client.has_collection_kv(col_name) is False
 
+
 def test_keyvalue_exceptions(client, tst_fabric_name, bad_fabric_name):
     bad_col_name = generate_col_name()
     col_name = generate_col_name()
-    key_values = [
-        {'_key': '1'},
-        {'_key': '2'},
-        {'_key': '3'}
-    ]
+    key_values = [{"_key": "1"}, {"_key": "2"}, {"_key": "3"}]
 
     # Tests with bad fabric (non existing)
     client._tenant.useFabric(bad_fabric_name)
 
     with assert_raises(CreateCollectionError):
         client.create_collection_kv(bad_col_name)
-    
+
     with assert_raises(ListCollections):
         client.has_collection_kv(bad_col_name)
 

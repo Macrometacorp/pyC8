@@ -6,10 +6,7 @@ from uuid import uuid4
 import pytest
 
 from c8.cursor import Cursor
-from c8.exceptions import (
-    AsyncExecuteError,
-    BatchExecuteError,
-)
+from c8.exceptions import AsyncExecuteError, BatchExecuteError
 
 
 def generate_fabric_name():
@@ -18,7 +15,7 @@ def generate_fabric_name():
     :return: Random fabric name.
     :rtype: str | unicode
     """
-    return 'test_fabric_{}'.format(str(uuid4().hex)[:10])
+    return "test_fabric_{}".format(str(uuid4().hex)[:10])
 
 
 def generate_col_name():
@@ -27,7 +24,8 @@ def generate_col_name():
     :return: Random collection name.
     :rtype: str | unicode
     """
-    return 'test_collection_{}'.format(uuid4().hex)
+    return "test_collection_{}".format(uuid4().hex)
+
 
 def generate_stream_name():
     """Generate and return a random stream name.
@@ -35,7 +33,8 @@ def generate_stream_name():
     :return: Random stream name.
     :rtype: str | unicode
     """
-    return 'test_stream_{}'.format(uuid4().hex)
+    return "test_stream_{}".format(uuid4().hex)
+
 
 def generate_apikey_id():
     """Generate and return a random apikey id.
@@ -43,7 +42,8 @@ def generate_apikey_id():
     :return: Random apikey id
     :rtype: str | unicode
     """
-    return 'test_apikey_id_{}'.format(str(uuid4().hex)[:10])
+    return "test_apikey_id_{}".format(str(uuid4().hex)[:10])
+
 
 def generate_graph_name():
     """Generate and return a random graph name.
@@ -51,7 +51,7 @@ def generate_graph_name():
     :return: Random graph name.
     :rtype: str | unicode
     """
-    return 'test_graph_{}'.format(uuid4().hex)
+    return "test_graph_{}".format(uuid4().hex)
 
 
 def generate_doc_key():
@@ -60,7 +60,7 @@ def generate_doc_key():
     :return: Random document key.
     :rtype: str | unicode
     """
-    return 'test_document_{}'.format(uuid4().hex)
+    return "test_document_{}".format(uuid4().hex)
 
 
 def generate_task_name():
@@ -69,7 +69,7 @@ def generate_task_name():
     :return: Random task name.
     :rtype: str | unicode
     """
-    return 'test_task_{}'.format(uuid4().hex)
+    return "test_task_{}".format(uuid4().hex)
 
 
 def generate_task_id():
@@ -78,7 +78,7 @@ def generate_task_id():
     :return: Random task ID
     :rtype: str | unicode
     """
-    return 'test_task_id_{}'.format(uuid4().hex)
+    return "test_task_id_{}".format(uuid4().hex)
 
 
 def generate_username():
@@ -87,7 +87,7 @@ def generate_username():
     :return: Random username.
     :rtype: str | unicode
     """
-    return 'test_user_{}'.format(str(uuid4().hex)[:10])
+    return "test_user_{}".format(str(uuid4().hex)[:10])
 
 
 def generate_string():
@@ -105,7 +105,7 @@ def generate_service_mount():
     :return: Random service name.
     :rtype: str | unicode
     """
-    return '/test_{}'.format(uuid4().hex)
+    return "/test_{}".format(uuid4().hex)
 
 
 def clean_doc(obj):
@@ -118,12 +118,13 @@ def clean_doc(obj):
     """
     if isinstance(obj, (Cursor, list, deque)):
         docs = [clean_doc(d) for d in obj]
-        return sorted(docs, key=lambda doc: doc['_key'])
+        return sorted(docs, key=lambda doc: doc["_key"])
 
     if isinstance(obj, dict):
         return {
-            field: value for field, value in obj.items()
-            if field in {'_key', '_from', '_to'} or not field.startswith('_')
+            field: value
+            for field, value in obj.items()
+            if field in {"_key", "_from", "_to"} or not field.startswith("_")
         }
 
 
@@ -146,8 +147,10 @@ def assert_raises(exception):
     :param exception: Expected exception.
     :type: Exception
     """
-    return pytest.raises((
-        exception,
-        AsyncExecuteError,
-        BatchExecuteError,
-    ))
+    return pytest.raises(
+        (
+            exception,
+            AsyncExecuteError,
+            BatchExecuteError,
+        )
+    )
