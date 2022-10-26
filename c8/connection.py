@@ -45,10 +45,6 @@ class Connection(object):
         self._header = ""
 
         # Construct the URL prefix in the required format.
-        # if not fabric_name:
-        #    self._fabric_name = constants.DB_DEFAULT
-        # else:
-        #    self._fabric_name = fabric_name
         if self._token is not None:
             self._auth_token = self._token
 
@@ -77,9 +73,6 @@ class Connection(object):
             if response.status_code == 200:
                 body = json.loads(response.text)
                 self._tenant_name = body["result"][0]["tenant"]
-
-        # self._url_prefix = '{}/_tenant/{}/_fabric/{}'.format(
-        #    url, self._tenant_name, self._fabric_name)
 
         self._url_prefix = "{}/_fabric/{}/_api".format(url, self._fabric_name)
 
