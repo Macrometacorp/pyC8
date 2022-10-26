@@ -4,10 +4,33 @@ from c8.collection import StandardCollection
 from c8.exceptions import (
     CollectionCreateError,
     CollectionDeleteError,
+    CollectionFindError,
     CollectionListError,
     CollectionPropertiesError,
 )
 from tests.helpers import assert_raises, extract, generate_col_name
+
+
+def test_get_collection_information(client, col, tst_fabric_name):
+    tst_fabric = client._tenant.useFabric(tst_fabric_name)
+    collection = tst_fabric.collection(col.name)
+    # Test get information about collection
+    get_col_info = collection.get_collection_information()
+    assert get_col_info["error"] is False
+    assert get_col_info["name"] == collection.name
+    with assert_raises(CollectionFindError):
+        tst_fabric.get_collection_information(collection_name=generate_col_name())
+
+
+def test_collection_figures(client, col, tst_fabric_name):
+    # Test get properties
+    tst_fabric = client._tenant.useFabric(tst_fabric_name)
+    collection = tst_fabric.collection(col.name)
+    get_col_properties = collection.collection_figures()
+    assert get_col_properties["name"] == collection.name
+    assert get_col_properties["isSystem"] is False
+    with assert_raises(CollectionFindError):
+        tst_fabric.collection_figures(collection_name=generate_col_name())
 
 
 def test_collection_attributes(client, col, tst_fabric):
@@ -24,9 +47,8 @@ def test_collection_misc_methods(col, tst_fabric):
     assert get_col_properties["name"] == col.name
     assert get_col_properties["isSystem"] is False
     # Test get properties with bad collection
-    with assert_raises(CollectionPropertiesError) or assert_raises(Exception) as err:
+    with assert_raises(CollectionFindError):
         tst_fabric.collection_figures(collection_name=generate_col_name())
-    assert err.value.error_code == 1203
 
     # # Test configure properties
     prev_sync = get_col_properties["waitForSync"]

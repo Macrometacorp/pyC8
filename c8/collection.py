@@ -7,6 +7,7 @@ from numbers import Number
 from c8.api import APIWrapper
 from c8.cursor import Cursor
 from c8.exceptions import (
+    CollectionPropertiesError,
     CollectionTruncateError,
     DocumentCountError,
     DocumentDeleteError,
@@ -262,6 +263,44 @@ class Collection(APIWrapper):
         :rtype: str | unicode
         """
         return self._name
+
+    def get_collection_information(self):
+        """Fetch the information about collection.
+
+        :returns: information about collection as  searchEnabled, globallyUniqueId,
+        isSystem, waitForSync, hasStream, isLocal, isSpot,collectionModel, type, id.
+        :rtype: dict
+        """
+        request = Request(
+            method="get",
+            endpoint="/collection/{}".format(self.name),
+        )
+
+        def response_handler(resp):
+            if resp.is_success:
+                return resp.body
+            raise CollectionPropertiesError(resp, request)
+
+        return self._execute(request, response_handler)
+
+    def collection_figures(self):
+        """Returns an object containing statistics about a collection.
+
+        :returns: statistics related with cache, index, document size, key options
+        :rtype: dict
+        """
+
+        request = Request(
+            method="get",
+            endpoint="/collection/{}/figures".format(self.name),
+        )
+
+        def response_handler(resp):
+            if resp.is_success:
+                return resp.body
+            raise CollectionPropertiesError(resp, request)
+
+        return self._execute(request, response_handler)
 
     def truncate(self):
         """Delete all documents in the collection.

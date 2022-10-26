@@ -14,6 +14,7 @@ from c8.collection import StandardCollection
 from c8.exceptions import (
     CollectionCreateError,
     CollectionDeleteError,
+    CollectionFindError,
     CollectionListError,
     CollectionPropertiesError,
     EventCreateError,
@@ -572,7 +573,7 @@ class Fabric(APIWrapper):
         if self.has_collection(name):
             return StandardCollection(self._conn, self._executor, name)
         else:
-            raise Exception("Collection not found")
+            raise CollectionFindError("Collection not found")
 
     def has_collection(self, name):
         """Check if collection exists in the fabric.
@@ -733,19 +734,25 @@ class Fabric(APIWrapper):
 
         :param collection_name: Collection name.
         :type collection_name: str | unicode
+        :returns: statistics related with cache, index, document size, key options
+        :rtype: dict
         """
 
-        request = Request(
-            method="get",
-            endpoint="/collection/{}/figures".format(collection_name),
-        )
+        collection = self.collection(name=collection_name)
+        return collection.collection_figures()
 
-        def response_handler(resp):
-            if resp.is_success:
-                return resp.body
-            raise CollectionPropertiesError(resp, request)
+    def get_collection_information(self, collection_name):
+        """Fetch the information about collection.
 
-        return self._execute(request, response_handler)
+        :param collection_name: Collection name.
+        :type collection_name: str | unicode
+        :returns: information about collection as  searchEnabled, globallyUniqueId,
+        isSystem, waitForSync, hasStream, isLocal, isSpot,collectionModel, type, id.
+        :rtype: dict
+        """
+
+        collection = self.collection(name=collection_name)
+        return collection.get_collection_information()
 
     def update_collection_properties(
         self, collection_name, has_stream=None, wait_for_sync=None

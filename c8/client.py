@@ -197,6 +197,27 @@ class C8Client(object):
     def collection(self, collection_name):
         return self._fabric.collection(collection_name)
 
+    def get_collection_information(self, collection_name):
+        """Fetch the information about collection.
+
+        :param collection_name: Collection name.
+        :type collection_name: str | unicode
+        :returns: information about collection as  searchEnabled, globallyUniqueId,
+        isSystem, waitForSync, hasStream, isLocal, isSpot,collectionModel, type, id.
+        :rtype: dict
+        """
+        return self._fabric.get_collection_information(collection_name)
+
+    def collection_figures(self, collection_name):
+        """Returns an object containing statistics about a collection.
+
+        :param collection_name: Collection name.
+        :type collection_name: str | unicode
+        :returns: statistics related with cache, index, document size, key options
+        :rtype: dict
+        """
+        return self._fabric.collection_figures(collection_name)
+
     # client.create_collection
     def create_collection(
         self,
