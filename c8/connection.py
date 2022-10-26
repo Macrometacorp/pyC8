@@ -44,7 +44,6 @@ class Connection(object):
         self._apikey = apikey
         self._header = ""
 
-        # Construct the URL prefix in the required format.
         if self._token is not None:
             self._auth_token = self._token
 
