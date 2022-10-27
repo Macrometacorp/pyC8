@@ -1,7 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-import csv
-import json
 from json import dumps
 from numbers import Number
 
@@ -27,7 +25,15 @@ from c8.exceptions import (
 )
 from c8.request import Request
 from c8.response import Response
-from c8.utils import get_doc_id, is_none_or_int, is_none_or_str
+from c8.utils import (
+    csv_reader,
+    get_doc_id,
+    get_documents_from_file,
+    group_csv_key_values,
+    is_none_or_int,
+    is_none_or_str,
+    json_reader,
+)
 
 __all__ = ["StandardCollection", "VertexCollection", "EdgeCollection"]
 
@@ -959,19 +965,6 @@ class StandardCollection(Collection):
 
         return self._execute(request, response_handler)
 
-    def get_documents_from_file(self, data, index):
-        documents = []
-        for key in data.keys():
-            first_key = key
-            break
-        for counter in range(len(data[first_key])):
-            document = {}
-            for key in data.keys():
-                document[key] = data[key][index]
-            index += 1
-            documents.append(document)
-        return documents, index
-
     def insert_from_file(self, filepath, return_new=False, sync=None, silent=False):
         """Insert a documents from csv file.
         :param filepath: CSV or JSON file path which contains documents
@@ -991,34 +984,20 @@ class StandardCollection(Collection):
         """
         result = []
         if filepath.endswith(".csv"):
-            try:
-                data = csv.DictReader(open(filepath, newline=""))
-                data_dict = {}
-                index = 0
+            data = csv_reader(filepath)
+            data_dict = group_csv_key_values(data)
+            documents, index = get_documents_from_file(data_dict, 0)
+            resp = self.insert_many(documents, return_new, sync, silent)
+            result.append(resp)
+            return result
 
-                for row in data:
-                    for column, value in row.items():
-                        data_dict.setdefault(column, {index: value})
-                        temp_dict = data_dict.get(column)
-                        temp_dict.update({index: value})
-                    index += 1
-
-                documents, index = self.get_documents_from_file(data_dict, 0)
-                resp = self.insert_many(documents, return_new, sync, silent)
-                result.append(resp)
-            except StopIteration:
-                raise Exception("Invalid CSV file")
         elif filepath.endswith(".json"):
-            try:
-                file = open(filepath)
-                documents = json.load(file)
-                resp = self.insert_many(documents, return_new, sync, silent)
-                result.append(resp)
-            except json.JSONDecodeError:
-                raise Exception("Invalid JSON file")
+            documents = json_reader(filepath)
+            resp = self.insert_many(documents, return_new, sync, silent)
+            result.append(resp)
+            return result
         else:
             raise CollectionImportFromFileError("Invalid file")
-        return result
 
     def insert(self, document, return_new=False, sync=None, silent=False):
         """Insert a new document.

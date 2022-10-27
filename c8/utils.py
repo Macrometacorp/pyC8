@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+import csv
+import json
 import logging
 from contextlib import contextmanager
 
@@ -73,3 +75,45 @@ def is_none_or_str(obj):
     :rtype: bool
     """
     return obj is None or isinstance(obj, string_types)
+
+
+def json_reader(filepath):
+    try:
+        file = open(filepath)
+        return json.load(file)
+    except json.JSONDecodeError:
+        raise Exception("Invalid JSON file")
+
+
+def csv_reader(filepath):
+    try:
+        loaded = csv.DictReader(open(filepath, newline=""))
+        return loaded
+    except csv.Error:
+        raise csv.Error
+
+
+def group_csv_key_values(data):
+    data_dict = {}
+    index = 0
+    for row in data:
+        for column, value in row.items():
+            data_dict.setdefault(column, {index: value})
+            temp_dict = data_dict.get(column)
+            temp_dict.update({index: value})
+        index += 1
+    return data_dict
+
+
+def get_documents_from_file(data, index):
+    documents = []
+    for key in data.keys():
+        first_key = key
+        break
+    for counter in range(len(data[first_key])):
+        document = {}
+        for key in data.keys():
+            document[key] = data[key][index]
+        index += 1
+        documents.append(document)
+    return documents, index
