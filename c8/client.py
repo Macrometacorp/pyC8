@@ -667,14 +667,14 @@ class C8Client(object):
 
     # client.insert_document_from_file()
     def insert_document_from_file(
-        self, collection_name, csv_filepath, return_new=False, sync=None, silent=False
+        self, collection_name, filepath, return_new=False, sync=None, silent=False
     ):
         """Insert a documents from csv file.
 
         :param collection_name: Collection name.
         :type collection_name: str | unicode
-        :param csv_filepath: CSV file path which contains documents
-        :type csv_filepath: str
+        :param filepath: CSV or JSON file path which contains documents
+        :type filepath: str
         :param return_new: Include body of the new document in the returned
             metadata. Ignored if parameter **silent** is set to True.
         :type return_new: bool
@@ -688,7 +688,7 @@ class C8Client(object):
         """
         _collection = self.get_collection(collection_name)
         resp = _collection.insert_from_file(
-            csv_filepath=csv_filepath, return_new=return_new, sync=sync, silent=silent
+            filepath=filepath, return_new=return_new, sync=sync, silent=silent
         )
         return resp
 

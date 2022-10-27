@@ -331,6 +331,10 @@ class CollectionPropertiesError(C8ServerError):
     """Failed to retrieve collection properties."""
 
 
+class CollectionImportFromFileError(C8ClientError):
+    """Failed to load data from file"""
+
+
 #####################
 # Cursor Exceptions #
 #####################
