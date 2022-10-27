@@ -729,31 +729,6 @@ class Fabric(APIWrapper):
 
         return self._execute(request, response_handler)
 
-    def collection_figures(self, collection_name):
-        """Returns an object containing statistics about a collection.
-
-        :param collection_name: Collection name.
-        :type collection_name: str | unicode
-        :returns: statistics related with cache, index, document size, key options
-        :rtype: dict
-        """
-
-        collection = self.collection(name=collection_name)
-        return collection.collection_figures()
-
-    def get_collection_information(self, collection_name):
-        """Fetch the information about collection.
-
-        :param collection_name: Collection name.
-        :type collection_name: str | unicode
-        :returns: information about collection as  searchEnabled, globallyUniqueId,
-        isSystem, waitForSync, hasStream, isLocal, isSpot,collectionModel, type, id.
-        :rtype: dict
-        """
-
-        collection = self.collection(name=collection_name)
-        return collection.get_collection_information()
-
     def update_collection_properties(
         self, collection_name, has_stream=None, wait_for_sync=None
     ):

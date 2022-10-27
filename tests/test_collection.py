@@ -19,7 +19,7 @@ def test_get_collection_information(client, col, tst_fabric_name):
     assert get_col_info["error"] is False
     assert get_col_info["name"] == collection.name
     with assert_raises(CollectionFindError):
-        tst_fabric.get_collection_information(collection_name=generate_col_name())
+        tst_fabric.collection(generate_col_name()).get_collection_information()
 
 
 def test_collection_figures(client, col, tst_fabric_name):
@@ -30,7 +30,7 @@ def test_collection_figures(client, col, tst_fabric_name):
     assert get_col_properties["name"] == collection.name
     assert get_col_properties["isSystem"] is False
     with assert_raises(CollectionFindError):
-        tst_fabric.collection_figures(collection_name=generate_col_name())
+        tst_fabric.collection(generate_col_name()).collection_figures()
 
 
 def test_collection_attributes(client, col, tst_fabric):
@@ -43,12 +43,12 @@ def test_collection_attributes(client, col, tst_fabric):
 
 def test_collection_misc_methods(col, tst_fabric):
     # Test get properties
-    get_col_properties = tst_fabric.collection_figures(collection_name=col.name)
+    get_col_properties = tst_fabric.collection(col.name).collection_figures()
     assert get_col_properties["name"] == col.name
     assert get_col_properties["isSystem"] is False
     # Test get properties with bad collection
-    with assert_raises(CollectionFindError):
-        tst_fabric.collection_figures(collection_name=generate_col_name())
+    # with assert_raises(CollectionFindError):
+    #     tst_fabric.collection_figures(collection_name=generate_col_name())
 
     # # Test configure properties
     prev_sync = get_col_properties["waitForSync"]
@@ -87,13 +87,12 @@ def test_collection_misc_methods(col, tst_fabric):
     assert len(col) == 0
 
 
-def test_collection_management(sys_fabric, client, bad_fabric):
+def test_collection_management(tst_fabric, client, bad_fabric):
     # Test create collection
-    sys_fabric = client._tenant.useFabric("_system")
     col_name = generate_col_name()
-    assert sys_fabric.has_collection(col_name) is False
+    assert tst_fabric.has_collection(col_name) is False
 
-    col = sys_fabric.create_collection(
+    col = tst_fabric.create_collection(
         name=col_name,
         sync=False,
         edge=False,
@@ -110,9 +109,9 @@ def test_collection_management(sys_fabric, client, bad_fabric):
         is_system=False,
         stream=False,
     )
-    assert sys_fabric.has_collection(col_name) is True
+    assert tst_fabric.has_collection(col_name) is True
 
-    get_col_properties = sys_fabric.collection_figures(collection_name=col.name)
+    get_col_properties = tst_fabric.collection(col.name).collection_figures()
     if col.context != "transaction":
         assert "id" in get_col_properties
     assert get_col_properties["name"] == col_name
@@ -125,32 +124,31 @@ def test_collection_management(sys_fabric, client, bad_fabric):
 
     # Test create duplicate collection
     with assert_raises(CollectionCreateError) as err:
-        sys_fabric.create_collection(col_name)
+        tst_fabric.create_collection(col_name)
     assert err.value.error_code == 1207
 
     # Test list collections
-    assert col_name in extract("name", sys_fabric.collections())
+    assert col_name in extract("name", tst_fabric.collections())
     bad = client._tenant.useFabric(bad_fabric)
     # Test list collections with bad fabric
     with assert_raises(CollectionListError):
         bad.collections()
 
     # Test get collection object
-    sys_fabric = client._tenant.useFabric("_system")
-    test_col = sys_fabric.collection(col.name)
+    test_col = tst_fabric.collection(col.name)
     assert isinstance(test_col, StandardCollection)
     assert test_col.name == col.name
 
-    test_col = sys_fabric[col.name]
+    test_col = tst_fabric[col.name]
     assert isinstance(test_col, StandardCollection)
     assert test_col.name == col.name
 
     # Test delete collection
-    assert sys_fabric.delete_collection(col_name, system=False) is True
-    assert col_name not in extract("name", sys_fabric.collections())
+    assert tst_fabric.delete_collection(col_name, system=False) is True
+    assert col_name not in extract("name", tst_fabric.collections())
 
     # Test drop missing collection
     with assert_raises(CollectionDeleteError) as err:
-        sys_fabric.delete_collection(col_name)
+        tst_fabric.delete_collection(col_name)
     assert err.value.error_code == 1203
-    assert sys_fabric.delete_collection(col_name, ignore_missing=True) is False
+    assert tst_fabric.delete_collection(col_name, ignore_missing=True) is False

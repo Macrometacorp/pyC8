@@ -99,7 +99,7 @@ def test_collection_figures(client, tst_fabric_name):
     collection_name = generate_col_name()
     fab = client._tenant.useFabric(tst_fabric_name)
     col = client.create_collection(collection_name, key_generator="autoincrement")
-    get_col_properties = fab.collection_figures(collection_name=col.name)
+    get_col_properties = fab.collection(col.name).collection_figures()
     if col.context != "transaction":
         assert "id" in get_col_properties
     assert get_col_properties["name"] == col.name

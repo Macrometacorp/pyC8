@@ -206,7 +206,8 @@ class C8Client(object):
         isSystem, waitForSync, hasStream, isLocal, isSpot,collectionModel, type, id.
         :rtype: dict
         """
-        return self._fabric.get_collection_information(collection_name)
+        collection = self.collection(collection_name)
+        return collection.get_collection_information(collection_name)
 
     def collection_figures(self, collection_name):
         """Returns an object containing statistics about a collection.
@@ -216,7 +217,8 @@ class C8Client(object):
         :returns: statistics related with cache, index, document size, key options
         :rtype: dict
         """
-        return self._fabric.collection_figures(collection_name)
+        collection = self.collection(collection_name)
+        return collection.collection_figures(collection_name)
 
     # client.create_collection
     def create_collection(
