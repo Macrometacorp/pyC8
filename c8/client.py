@@ -644,6 +644,10 @@ class C8Client(object):
         resp = _collection.get(document=document, rev=rev, check_rev=check_rev)
         return resp
 
+    def get_all_documents(self, collection_name):
+        collection = self.collection(collection_name)
+        return collection.get_all_documents()
+
     # client.insert_document
 
     def insert_document(

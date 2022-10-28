@@ -1,9 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
+import math
 from json import dumps
 from numbers import Number
 
 from c8.api import APIWrapper
+from c8.c8ql import C8QL
 from c8.cursor import Cursor
 from c8.exceptions import (
     CollectionImportFromFileError,
@@ -262,6 +264,15 @@ class Collection(APIWrapper):
             body = body.copy()
             body["_key"] = doc_id[len(self._id_prefix) :]  # noqa: E203
         return body
+
+    @property
+    def c8ql(self):
+        """Return C8QL (C8Db Query Language) API wrapper.
+
+        :returns: C8QL API wrapper.
+        :rtype: c8.c8ql.C8QL
+        """
+        return C8QL(self._conn, self._executor)
 
     @property
     def name(self):
@@ -1003,6 +1014,21 @@ class StandardCollection(Collection):
             return resp.body
 
         return self._execute(request, response_handler)
+
+    def get_all_documents(self):
+        document_count = self.count()
+        iterations = int(math.ceil(document_count / 1000))
+        data = []
+        for i in range(iterations):
+            offset = i * 1000
+            query = "FOR doc IN {} LIMIT {}, {} RETURN doc".format(
+                self.name, offset, 1000
+            )
+            cursor = self.c8ql.execute(query, count=True, batch_size=1000)
+            data.append(cursor.batch())
+
+        result = [item for sublist in data for item in sublist]
+        return result
 
     def insert_from_file(self, filepath, return_new=False, sync=None, silent=False):
         """Insert a documents from csv file.
