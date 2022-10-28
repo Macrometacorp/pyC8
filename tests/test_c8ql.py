@@ -14,6 +14,76 @@ from c8.exceptions import (
 from tests.helpers import assert_raises, extract
 
 
+def test_export_data_query_invalid_operations(client, col, tst_fabric_name):
+    client._tenant.useFabric(tst_fabric_name)
+    # Testing invalid operation REMOVE
+    with assert_raises(C8QLQueryExecuteError) as err:
+        client.export_data_query(query='REMOVE "1" IN {}'.format(col.name))
+    assert err.value.error_code == 10
+
+    # Testing invalid operation UPDATE
+    with assert_raises(C8QLQueryExecuteError) as err:
+        client.export_data_query(
+            query="UPDATE @id WITH {alive: false} IN @@collection",
+            bind_vars={"@collection": col.name, "id": 2},
+        )
+    assert err.value.error_code == 10
+
+    # Testing invalid operation INSERT
+    with assert_raises(C8QLQueryExecuteError) as err:
+        client.export_data_query(
+            query="INSERT @value INTO @@collection",
+            bind_vars={"@collection": col.name, "value": {"value": 10}},
+        )
+    assert err.value.error_code == 10
+
+    # Testing invalid operation REPLACE
+    with assert_raises(C8QLQueryExecuteError) as err:
+        client.export_data_query(
+            query="FOR u IN @@collection REPLACE @value IN @@collection",
+            bind_vars={"@collection": col.name, "value": {"value": 2, "text": "zoo "}},
+        )
+    assert err.value.error_code == 10
+
+    # Testing invalid operation UPSERT
+    with assert_raises(C8QLQueryExecuteError) as err:
+        client.export_data_query(
+            query="UPSERT @value INSERT @toInsert UPDATE @toUpsert in @@collection",
+            bind_vars={
+                "@collection": col.name,
+                "value": {"text": "zoo "},
+                "toInsert": {"_key": 2, "updatedAt": "DATE_NOW()"},
+                "toUpsert": {"_key": 2, "updatedAt": "December"},
+            },
+        )
+    assert err.value.error_code == 10
+
+
+def test_export_data_query(client, docs, tst_fabric_name, col):
+    client._tenant.useFabric(tst_fabric_name)
+    client.insert_document(collection_name=col.name, document=docs)
+
+    # Test export data query
+    resp = client.export_data_query(
+        query="FOR u IN @@collection RETURN u", bind_vars={"@collection": col.name}
+    )
+    assert resp["error"] is False
+    assert resp["result"] == docs
+
+    # Test export data query with filter
+    resp = client.export_data_query(
+        query="FOR u IN @@collection FILTER u.val > @value RETURN u",
+        bind_vars={"@collection": col.name, "value": 1},
+    )
+    assert resp["error"] is False
+    assert len(resp["result"]) == (len(docs) - 1)
+
+    # Test export data query without bind_vars
+    resp = client.export_data_query(query="FOR u IN {} RETURN u".format(col.name))
+    assert resp["error"] is False
+    assert resp["result"] == docs
+
+
 def test_c8ql_attributes(client, tst_fabric_name):
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
     assert tst_fabric.context in ["default", "async", "batch", "transaction"]

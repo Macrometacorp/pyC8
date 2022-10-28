@@ -311,6 +311,10 @@ class BatchExecuteError(C8ServerError):
 #########################
 
 
+class CollectionFindError(C8ClientError):
+    """Failed to retrieve collection."""
+
+
 class CollectionListError(C8ServerError):
     """Failed to retrieve collections."""
 
