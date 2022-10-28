@@ -1,9 +1,12 @@
 from __future__ import absolute_import, unicode_literals
 
+import json
+
 from c8.collection import StandardCollection
 from c8.exceptions import (
     CollectionCreateError,
     CollectionDeleteError,
+    CollectionImportFromFileError,
     CollectionFindError,
     CollectionListError,
     CollectionPropertiesError,
@@ -47,10 +50,10 @@ def test_collection_misc_methods(col, tst_fabric):
     assert get_col_properties["name"] == col.name
     assert get_col_properties["isSystem"] is False
     # Test get properties with bad collection
-    # with assert_raises(CollectionFindError):
-    #     tst_fabric.collection_figures(collection_name=generate_col_name())
+    with assert_raises(CollectionFindError):
+        tst_fabric.collection(generate_col_name()).collection_figures()
 
-    # # Test configure properties
+    # Test configure properties
     prev_sync = get_col_properties["waitForSync"]
     prev_has_stream = get_col_properties["hasStream"]
 
@@ -152,3 +155,41 @@ def test_collection_management(tst_fabric, client, bad_fabric):
         tst_fabric.delete_collection(col_name)
     assert err.value.error_code == 1203
     assert tst_fabric.delete_collection(col_name, ignore_missing=True) is False
+
+
+def test_insert_from_file(client, tst_fabric_name, col):
+    file = open("files/data.json")
+    documents = json.load(file)
+
+    client._tenant.useFabric(tst_fabric_name)
+    client.insert_document_from_file(
+        collection_name=col.name, filepath="files/data.json"
+    )
+
+    data = client.collection(collection_name=col.name).export(limit=len(documents))
+    entries = ("_id", "_key", "_rev")
+    for doc in data:
+        for key in entries:
+            if key in doc:
+                del doc[key]
+
+    assert documents == data
+    col.truncate()
+
+    client.insert_document_from_file(
+        collection_name=col.name, filepath="files/data.csv"
+    )
+    data = client.collection(collection_name=col.name).export(limit=len(documents))
+
+    assert len(data) == len(documents)
+    col.truncate()
+
+    with assert_raises(CollectionImportFromFileError) as err:
+        client.insert_document_from_file(
+            collection_name=col.name, filepath="files/data"
+        )
+    assert (
+        str(err)
+        == "<ExceptionInfo CollectionImportFromFileError('Invalid file') tblen=3>"
+    )
+    file.close()
