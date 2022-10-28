@@ -50,10 +50,10 @@ def test_collection_misc_methods(col, tst_fabric):
     assert get_col_properties["name"] == col.name
     assert get_col_properties["isSystem"] is False
     # Test get properties with bad collection
-    # with assert_raises(CollectionFindError):
-    #     tst_fabric.collection_figures(collection_name=generate_col_name())
+    with assert_raises(CollectionFindError):
+        tst_fabric.collection(generate_col_name()).collection_figures()
 
-    # # Test configure properties
+    # Test configure properties
     prev_sync = get_col_properties["waitForSync"]
     prev_has_stream = get_col_properties["hasStream"]
 
@@ -176,7 +176,6 @@ def test_insert_from_file(client, tst_fabric_name, col):
     assert documents == data
     col.truncate()
 
-    client.collection(col.name)
     client.insert_document_from_file(
         collection_name=col.name, filepath="files/data.csv"
     )
