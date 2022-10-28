@@ -197,6 +197,29 @@ class C8Client(object):
     def collection(self, collection_name):
         return self._fabric.collection(collection_name)
 
+    def get_collection_information(self, collection_name):
+        """Fetch the information about collection.
+
+        :param collection_name: Collection name.
+        :type collection_name: str | unicode
+        :returns: information about collection as  searchEnabled, globallyUniqueId,
+        isSystem, waitForSync, hasStream, isLocal, isSpot,collectionModel, type, id.
+        :rtype: dict
+        """
+        collection = self.collection(collection_name)
+        return collection.get_collection_information(collection_name)
+
+    def collection_figures(self, collection_name):
+        """Returns an object containing statistics about a collection.
+
+        :param collection_name: Collection name.
+        :type collection_name: str | unicode
+        :returns: statistics related with cache, index, document size, key options
+        :rtype: dict
+        """
+        collection = self.collection(collection_name)
+        return collection.collection_figures(collection_name)
+
     # client.create_collection
     def create_collection(
         self,
@@ -1151,6 +1174,21 @@ class C8Client(object):
         :raise c8.exceptions.C8QLQueryKillError: If the send fails.
         """
         return self._fabric.c8ql.kill(query_id)
+
+    def export_data_query(self, query, bind_vars=None):
+        """Run the query and return list of result documents. Query cannot contain
+         the following keywords: INSERT, UPDATE, REPLACE, REMOVE and UPSERT.
+
+        :param query: C8QL query to execute
+        :type query: str
+        :param bind_vars: C8QL supports the usage of bind parameters, thus allowing to
+         separate the query text from literal values used in the query.
+        :type bind_vars: dict
+        :returns: Documents in the collection according to the query logic.
+        :rtype: dict
+        :raise c8.exceptions.C8QLQueryExecuteError: If export fails.
+        """
+        return self._fabric.c8ql.export_data_query(query=query, bind_vars=bind_vars)
 
     # client.create_restql
 

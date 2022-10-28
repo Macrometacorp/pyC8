@@ -14,6 +14,7 @@ from c8.collection import StandardCollection
 from c8.exceptions import (
     CollectionCreateError,
     CollectionDeleteError,
+    CollectionFindError,
     CollectionListError,
     CollectionPropertiesError,
     EventCreateError,
@@ -572,7 +573,7 @@ class Fabric(APIWrapper):
         if self.has_collection(name):
             return StandardCollection(self._conn, self._executor, name)
         else:
-            raise Exception("Collection not found")
+            raise CollectionFindError("Collection not found")
 
     def has_collection(self, name):
         """Check if collection exists in the fabric.
@@ -725,25 +726,6 @@ class Fabric(APIWrapper):
             if resp.is_success:
                 return self.collection(name)
             raise CollectionCreateError(resp, request)
-
-        return self._execute(request, response_handler)
-
-    def collection_figures(self, collection_name):
-        """Returns an object containing statistics about a collection.
-
-        :param collection_name: Collection name.
-        :type collection_name: str | unicode
-        """
-
-        request = Request(
-            method="get",
-            endpoint="/collection/{}/figures".format(collection_name),
-        )
-
-        def response_handler(resp):
-            if resp.is_success:
-                return resp.body
-            raise CollectionPropertiesError(resp, request)
 
         return self._execute(request, response_handler)
 
