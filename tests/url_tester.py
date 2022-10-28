@@ -6,7 +6,7 @@ from urllib.request import urlopen, Request
 
 
 def get_md_files():
-    """ Return list of markdown files in root directory """
+    """ Return list of markdown files in root directory and subdirectories """
     files = []
     dir_path = r"../**/*.md"
     for file in glob.glob(dir_path, recursive=True):
