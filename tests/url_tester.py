@@ -1,29 +1,51 @@
-from urllib.request import Request, urlopen
+import glob
+import re
+
 from urllib.error import HTTPError, URLError
+from urllib.request import urlopen, Request
 
 
-req = Request(
-        url = "https://macrometa.com/docs/",
-        headers = {"User-Agent": "Mozilla/5.0"}
-      )
+def get_md_files():
+    """ Return list of markdown files in root directory """
+    files = []
+    dir_path = r"../**/*.md"
+    for file in glob.glob(dir_path, recursive=True):
+        files.append(file)
 
-# Add your urls below
-urls = [
-    "https://macrometa.com/docs/account-management/api-keys/",
-    "https://macrometa.com/docs/account-management/auth/user-auth"
-]
+    return files
+
+def find_md_links(md):
+    """ Return list of links in markdown """
+    regex_url = re.compile("((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)"\
+                       "(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\("\
+                       "([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))")
+    links = list(regex_url.findall(md))
+
+    return links
+
+files = get_md_files()
 
 is_broken = False
-for url in urls:
-    req.full_url = url
-    try:
-        resp = urlopen(req)
-    except HTTPError as e:
-        is_broken = True
-        print("Page down: ", req.full_url, " ", e)
-    except URLError as e:
-        is_broken = True
-        print("Page down: ", req.full_url, " ", e)
+for file in files:
+    with open(file, "r") as f:
+        text = f.read()
+        urls = find_md_links(text)
+
+    for url in urls:
+        req = Request(
+            url = url[0],
+            headers = {"User-Agent": "Mozilla/5.0"}
+        )
+        try:
+            resp = urlopen(req)
+        except HTTPError as e:
+            is_broken = True
+            print("Page down: ", req.full_url, " ", e)
+        except URLError as e:
+            is_broken = True
+            print("Page down: ", req.full_url, " ", e)
 
 if(is_broken is False):
     print("All pages are up!")
+else:
+    raise RuntimeError("Above pages have broken links")
