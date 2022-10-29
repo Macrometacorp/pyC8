@@ -2749,6 +2749,12 @@ class C8Client(object):
 
     # client.create_api_key
 
+    def get_jwt(self, email, password, tenant=None, username=None):
+        payload = {"email": email, "password": password}
+        if tenant is not None and username is not None:
+            payload.update({"tenant": tenant, "username": username})
+        return self._tenant._conn._get_auth_token(payload=payload)
+
     def create_api_key(self, keyid):
         """Creates an api key.
 
