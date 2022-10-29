@@ -129,3 +129,5 @@ def test_get_jwt(client):
     assert "jwt" in resp
     assert resp["username"] == os.environ.get("TENANT_USERNAME")
     assert resp["tenant"] == os.environ.get("TENANT_EMAIL").replace("@", "_")
+
+    client.delete_user(username=user["username"])
