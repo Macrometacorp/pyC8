@@ -3,10 +3,12 @@ from __future__ import absolute_import, unicode_literals
 import csv
 import json
 import logging
+from collections import deque
 from contextlib import contextmanager
 
 from six import string_types
 
+from c8.cursor import Cursor
 from c8.exceptions import DocumentParseError
 
 
@@ -117,3 +119,23 @@ def get_documents_from_file(data, index):
         index += 1
         documents.append(document)
     return documents, index
+
+
+def clean_doc(obj):
+    """Return the document(s) with all extra system keys stripped.
+
+    :param obj: document(s)
+    :type obj: list | dict | c8.cursor.Cursor
+    :return: Document(s) with the system keys stripped
+    :rtype: list | dict
+    """
+    if isinstance(obj, (Cursor, list, deque)):
+        docs = [clean_doc(d) for d in obj]
+        return sorted(docs, key=lambda doc: doc["_key"])
+
+    if isinstance(obj, dict):
+        return {
+            field: value
+            for field, value in obj.items()
+            if field in {"_key", "_from", "_to"} or not field.startswith("_")
+        }

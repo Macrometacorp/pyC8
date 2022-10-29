@@ -204,6 +204,7 @@ def test_all_documents(client, col, tst_fabric_name):
         )
     )
     resp = client.get_all_documents(collection_name=col.name)
+
     assert document_count == len(resp)
     for i in range(len(resp)):
         assert resp[i]["value"] == i + 1

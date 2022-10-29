@@ -13,6 +13,7 @@ from c8.exceptions import (
     C8QLQueryValidateError,
 )
 from c8.request import Request
+from c8.utils import clean_doc
 
 __all__ = ["C8QL"]
 
@@ -346,3 +347,23 @@ class C8QL(APIWrapper):
             return resp.body
 
         return self._execute(request, response_handler)
+
+    def get_all_batches(self, query, batch_size=1000):
+        """Returns all batches for a query
+
+        :param query: Query to Execute
+        :type query: str
+        :param batch_size: Batch size is a configurable number, After each loop the offset will
+        increment by the batch size and return the next set of values.
+        :type batch_size: int
+
+        :returns: Documents, or None if not found.
+        :rtype: dict | None
+        :raise c8.exceptions.C8QLQueryExecuteError: If retrieval fails.
+        """
+        cursor = self.execute(query=query, batch_size=batch_size, stream=True)
+        while cursor.has_more():
+            cursor.fetch()
+
+        result = clean_doc(cursor.batch())
+        return result

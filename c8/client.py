@@ -644,9 +644,39 @@ class C8Client(object):
         resp = _collection.get(document=document, rev=rev, check_rev=check_rev)
         return resp
 
-    def get_all_documents(self, collection_name):
-        collection = self.collection(collection_name)
-        return collection.get_all_documents()
+    def get_all_documents(self, collection_name, batch_size=1000):
+        """Return a list of documents.
+
+        :param collection_name: Collection Name
+        :type collection_name: str
+        :param batch_size: Batch size is a configurable number, After each loop the offset will
+        increment by the batch size and return the next set of values.
+        :type batch_size: int
+
+        :returns: Documents, or None if not found.
+        :rtype: dict | None
+        :raise c8.exceptions.C8QLQueryExecuteError: If retrieval fails.
+        """
+        return self._fabric.c8ql.get_all_batches(
+            query="FOR doc IN {} RETURN doc".format(collection_name),
+            batch_size=batch_size,
+        )
+
+    def get_all_batches(self, query, batch_size=1000):
+        """Returns all batches for a query
+
+        :param query: Query to Execute
+        :type query: str
+        :param batch_size: Batch size is a configurable number, After each loop the offset will
+        increment by the batch size and return the next set of values.
+        :type batch_size: int
+
+        :returns: Documents, or None if not found.
+        :rtype: dict | None
+        :raise c8.exceptions.C8QLQueryExecuteError: If retrieval fails.
+        """
+
+        return self._fabric.c8ql.get_all_batches(query=query, batch_size=batch_size)
 
     # client.insert_document
 
