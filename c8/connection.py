@@ -85,10 +85,12 @@ class Connection(object):
             data.update({"password": password})
             if email is not None:
                 data.update({"email": email})
-            elif tenant is not None:
-                data.update({"tenant": tenant})
-            elif username is not None:
-                data.update({"username": username})
+            elif tenant is not None and username is not None:
+                data.update({"tenant": tenant, "username": username})
+            else:
+                raise C8AuthenticationError(
+                    "Failed to Authenticate the C8DB user, Error: Invalid JSON"
+                )
         else:
             data = {"email": self._email, "password": self._password}
 

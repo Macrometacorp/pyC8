@@ -464,6 +464,7 @@ class Tenant(APIWrapper):
                 "username": resp.body["user"],
                 "active": resp.body["active"],
                 "extra": resp.body["extra"],
+                "tenant": resp.body["tenant"],
             }
 
         return self._execute(request, response_handler, custom_prefix="/_api")

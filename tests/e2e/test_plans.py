@@ -1,11 +1,4 @@
-from conftest import (
-    test_data_billing_plan,
-    test_data_update_plan,
-    test_update_tenant_billing_plan,
-)
-
-from c8.plan.core import PlansServerError
-from tests.helpers import assert_raises
+from conftest import test_data_billing_plan, test_data_update_plan
 
 
 def test_list_billing_plans(get_mm_client_instance):
@@ -62,17 +55,6 @@ def test_list_billing_plans(get_mm_client_instance):
 
     for x in test_data_update_plan():
         assert x in resp[0]
-
-    # Test update tenant billing plan
-    update_data = test_update_tenant_billing_plan()
-    with assert_raises(PlansServerError) as err:
-        get_mm_client_instance.plan.update_tenant_billing_plan(
-            attribution=update_data["attribution"],
-            plan=update_data["plan"],
-            payment_method_id=update_data["payment_method_id"],
-            tenant=update_data["tenant"],
-        )
-    assert err.value.error_code == 404
 
     # Test list billing plans
     resp = get_mm_client_instance.plan.list_billing_plans()

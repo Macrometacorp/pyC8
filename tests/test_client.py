@@ -114,24 +114,32 @@ def test_get_jwt(client):
 
     assert "jwt" in resp
     assert resp["username"] == user["username"]
-    assert resp["tenant"] == client._tenant.name
+    assert resp["tenant"] == user["tenant"]
 
     resp = client.get_jwt(email=user["email"], password="121@Macrometa")
 
     assert "jwt" in resp
     assert resp["username"] == user["username"]
-    assert resp["tenant"] == client._tenant.name
+    assert resp["tenant"] == user["tenant"]
+
+    resp = client.get_jwt(
+        tenant=user["tenant"], password="121@Macrometa", username=user["username"]
+    )
+
+    assert "jwt" in resp
+    assert resp["username"] == user["username"]
+    assert resp["tenant"] == user["tenant"]
 
     resp = client._tenant._conn._get_auth_token()
     assert "jwt" in resp
     assert resp["username"] == "root"
-    assert resp["tenant"] == client._tenant.name
+    assert resp["tenant"] == user["tenant"]
 
     with assert_raises(C8AuthenticationError):
         client.get_jwt(password="121@Macrometa")
 
     with assert_raises(C8AuthenticationError):
-        client.get_jwt(tenant=client._tenant.name, password="121@Macrometa")
+        client.get_jwt(tenant=user["tenant"], password="121@Macrometa")
 
     with assert_raises(C8AuthenticationError):
         client.get_jwt(username=user["username"], password="121@Macrometa")

@@ -44,6 +44,7 @@ def test_user_management(client):
         assert isinstance(user["username"], string_types)
         assert isinstance(user["active"], bool)
         assert isinstance(user["extra"], dict)
+    new_user.pop("tenant")
     assert client.get_user(username) == new_user
 
     # Test get user
