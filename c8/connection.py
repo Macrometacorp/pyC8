@@ -79,19 +79,16 @@ class Connection(object):
 
         # TODO : Handle the functions side of things
 
-    def _get_auth_token(self, payload=None):
+    def _get_auth_token(self, email=None, password=None, tenant=None, username=None):
         data = {}
-
-        if payload is not None:
-            if "email" in payload and "password" in payload:
-                data.update(
-                    {"email": payload["email"], "password": payload["password"]}
-                )
-            if "tenant" in payload and "username" in payload:
-                data.update(
-                    {"tenant": payload["tenant"], "username": payload["username"]}
-                )
-
+        if password is not None:
+            data.update({"password": password})
+            if email is not None:
+                data.update({"email": email})
+            elif tenant is not None:
+                data.update({"tenant": tenant})
+            elif username is not None:
+                data.update({"username": username})
         else:
             data = {"email": self._email, "password": self._password}
 

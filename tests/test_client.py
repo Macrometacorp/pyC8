@@ -1,8 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
 import os
-import random
-import string
 
 import requests
 from dotenv import load_dotenv
@@ -101,33 +99,47 @@ def test_client_custom_http_client():
 
 
 def test_get_jwt(client):
-    load_dotenv()
     client._tenant.useFabric("_system")
     user = client.create_user(
-        email="{}@macrometa.com".format(
-            "".join(random.choice(string.ascii_lowercase) for i in range(10))
-        ),
+        email="{}@macrometa.io".format(generate_username()),
         password="121@Macrometa",
     )
 
     resp = client.get_jwt(
         email=user["email"],
         password="121@Macrometa",
-        tenant=os.environ.get("TENANT_EMAIL").replace("@", "_"),
+        tenant=client._tenant.name,
         username=user["username"],
     )
+
     assert "jwt" in resp
     assert resp["username"] == user["username"]
-    assert resp["tenant"] == os.environ.get("TENANT_EMAIL").replace("@", "_")
+    assert resp["tenant"] == client._tenant.name
 
     resp = client.get_jwt(email=user["email"], password="121@Macrometa")
+
     assert "jwt" in resp
     assert resp["username"] == user["username"]
-    assert resp["tenant"] == os.environ.get("TENANT_EMAIL").replace("@", "_")
+    assert resp["tenant"] == client._tenant.name
 
     resp = client._tenant._conn._get_auth_token()
     assert "jwt" in resp
-    assert resp["username"] == os.environ.get("TENANT_USERNAME")
-    assert resp["tenant"] == os.environ.get("TENANT_EMAIL").replace("@", "_")
+    assert resp["username"] == "root"
+    assert resp["tenant"] == client._tenant.name
+
+    with assert_raises(C8AuthenticationError):
+        client.get_jwt(password="121@Macrometa")
+
+    with assert_raises(C8AuthenticationError):
+        client.get_jwt(tenant=client._tenant.name, password="121@Macrometa")
+
+    with assert_raises(C8AuthenticationError):
+        client.get_jwt(username=user["username"], password="121@Macrometa")
+
+    with assert_raises(C8AuthenticationError):
+        client.get_jwt(
+            email="{}@macrometa.io".format(generate_username()),
+            password=generate_string(),
+        )
 
     client.delete_user(username=user["username"])
