@@ -196,7 +196,7 @@ def test_insert_from_file(client, tst_fabric_name, col):
 
 
 def test_all_documents(client, col, tst_fabric_name):
-    document_count = 10003
+    document_count = 2003
     client._tenant.useFabric(tst_fabric_name)
     client.execute_query(
         query="FOR doc IN 1..{} INSERT {{value:doc}} INTO {}".format(
