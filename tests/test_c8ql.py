@@ -83,7 +83,6 @@ def test_export_data_query(client, docs, tst_fabric_name, col):
     assert resp["error"] is False
     assert resp["result"] == docs
 
-
 def test_c8ql_attributes(client, tst_fabric_name):
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
     assert tst_fabric.context in ["default", "async", "batch", "transaction"]
@@ -91,66 +90,67 @@ def test_c8ql_attributes(client, tst_fabric_name):
     assert tst_fabric.fabric_name == tst_fabric.name
     assert repr(tst_fabric.c8ql) == "<C8QL in {}>".format(tst_fabric_name)
 
-
 def test_explain_query(client, tst_fabric_name, col):
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
     plan_fields = [
-        'estimatedNrItems',
-        'estimatedCost',
-        'rules',
-        'variables',
-        'collections',
+        "estimatedNrItems",
+        "estimatedCost",
+        "rules",
+        "variables",
+        "collections",
     ]
     # Test explain invalid query
     with assert_raises(C8QLQueryExplainError) as err:
-        tst_fabric.c8ql.explain('INVALID QUERY')
+        tst_fabric.c8ql.explain("INVALID QUERY")
     assert err.value.error_code == 1501
 
     # Test explain valid query with all_plans set to False
     plan = tst_fabric.c8ql.explain(
-        'FOR d IN {} RETURN d'.format(col.name),
+        "FOR d IN {} RETURN d".format(col.name),
         all_plans=False,
-        opt_rules=['-all', '+use-index-range']
+        opt_rules=["-all", "+use-index-range"],
     )
     assert all(field in plan for field in plan_fields)
 
     # Test explain valid query with all_plans set to True
     plans = tst_fabric.c8ql.explain(
-        'FOR d IN {} RETURN d'.format(col.name),
+        "FOR d IN {} RETURN d".format(col.name),
         all_plans=True,
-        opt_rules=['-all', '+use-index-range'],
-        max_plans=10
+        opt_rules=["-all", "+use-index-range"],
+        max_plans=10,
     )
     for plan in plans:
         assert all(field in plan for field in plan_fields)
     assert len(plans) < 10
 
+
 def test_validate_query(tst_fabric, col):
     # Test validate invalid query
     with assert_raises(C8QLQueryValidateError) as err:
-        tst_fabric.c8ql.validate('INVALID QUERY')
+        tst_fabric.c8ql.validate("INVALID QUERY")
     assert err.value.error_code == 1501
 
     # Test validate valid query
-    result = tst_fabric.c8ql.validate('FOR d IN {} RETURN d'.format(col.name))
-    assert 'ast' in result
-    assert 'bind_vars' in result
-    assert 'collections' in result
-    assert 'parsed' in result
+    result = tst_fabric.c8ql.validate("FOR d IN {} RETURN d".format(col.name))
+    assert "ast" in result
+    assert "bind_vars" in result
+    assert "collections" in result
+    assert "parsed" in result
+
 
 def test_execute_query(tst_fabric, col, docs):
     # Test execute invalid C8QL query
     with assert_raises(C8QLQueryExecuteError) as err:
-        tst_fabric.c8ql.execute('INVALID QUERY')
+        tst_fabric.c8ql.execute("INVALID QUERY")
     assert err.value.error_code == 1501
 
     # Test execute valid query
     tst_fabric.collection(col.name).import_bulk(docs)
     # Test for sql
-    cursor = tst_fabric.c8ql.execute(f'SELECT * FROM {col.name}', sql=True)
+    cursor = tst_fabric.c8ql.execute("SELECT * FROM {}".format(col.name), sql=True)
     doc_response = [doc for doc in cursor]
 
-    entries = ('_id', '_rev')
+    entries = ("_id", "_rev")
     for doc in doc_response:
         for key in entries:
             if key in doc:
@@ -160,51 +160,54 @@ def test_execute_query(tst_fabric, col, docs):
 
     # Test for c8ql
     cursor = tst_fabric.c8ql.execute(
-        '''
+        """
         FOR d IN {col}
             UPDATE {{_key: d._key, _val: @val }} IN {col}
             RETURN NEW
-        '''.format(col=col.name),
+        """.format(
+            col=col.name
+        ),
         count=True,
         batch_size=1,
         ttl=10,
-        bind_vars={'val': 42},
+        bind_vars={"val": 42},
         full_count=True,
-        optimizer_rules=['+all'],
+        optimizer_rules=["+all"],
         fail_on_warning=False,
         profile=True,
         max_transaction_size=100000,
         max_warning_count=10,
-        skip_inaccessible_collections=False
+        skip_inaccessible_collections=False,
     )
-    if tst_fabric.context == 'transaction':
+    if tst_fabric.context == "transaction":
         assert cursor.id is None
-        assert cursor.type == 'cursor'
+        assert cursor.type == "cursor"
         assert cursor.batch() is not None
         assert cursor.has_more() is False
         assert cursor.count() == len(col)
         assert cursor.cached() is None
         assert cursor.profile() is None
         assert cursor.warnings() is None
-        assert extract('_key', cursor) == extract('_key', docs)
+        assert extract("_key", cursor) == extract("_key", docs)
         assert cursor.close() is None
     else:
         assert cursor.id is not None
-        assert cursor.type == 'cursor'
+        assert cursor.type == "cursor"
         assert cursor.batch() is not None
         assert cursor.has_more() is True
         assert cursor.count() == len(col)
         assert cursor.cached() is False
         assert cursor.profile() is not None
         assert cursor.warnings() == []
-        assert extract('_key', cursor) == extract('_key', docs)
+        assert extract("_key", cursor) == extract("_key", docs)
         assert cursor.close(ignore_missing=True) is False
+
 
 def test_kill_query(tst_fabric):
     # Kick off some long lasting queries in the background
     def query():
         with assert_raises(C8QLQueryExecuteError) as err:
-            tst_fabric.c8ql.execute('RETURN SLEEP(50)')
+            tst_fabric.c8ql.execute("RETURN SLEEP(50)")
         assert err.value.error_code == 1500
 
     def kill_query():
@@ -212,25 +215,25 @@ def test_kill_query(tst_fabric):
         # Test list queries
         queries = tst_fabric.c8ql.queries()
         for query in queries:
-            assert 'id' in query
-            assert 'query' in query
-            assert 'started' in query
-            assert 'state' in query
-            assert 'bind_vars' in query
-            assert 'runtime' in query
+            assert "id" in query
+            assert "query" in query
+            assert "started" in query
+            assert "state" in query
+            assert "bind_vars" in query
+            assert "runtime" in query
         assert len(queries) == 2
 
         # Test kill queries
-        query_id_1, query_id_2 = extract('id', queries)
+        query_id_1, query_id_2 = extract("id", queries)
         assert tst_fabric.c8ql.kill(query_id_1) is True
         while len(queries) > 1:
             queries = tst_fabric.c8ql.queries()
-        assert query_id_1 not in extract('id', queries)
-    
+        assert query_id_1 not in extract("id", queries)
+
         assert tst_fabric.c8ql.kill(query_id_2) is True
         while len(queries) > 0:
             queries = tst_fabric.c8ql.queries()
-        assert query_id_2 not in extract('id', queries)
+        assert query_id_2 not in extract("id", queries)
 
         # Test kill missing queries
         with assert_raises(C8QLQueryKillError) as err:
@@ -245,9 +248,10 @@ def test_kill_query(tst_fabric):
         t2 = threading.Thread(target=query)
         t3 = threading.Thread(target=kill_query)
         t1.start(), t2.start(), t3.start()
-        t1.join(),t2.join(),t3.join()
+        t1.join(), t2.join(), t3.join()
 
     run_queries()
+
 
 def test_slow_queries(client, tst_fabric, bad_fabric_name):
     # Test list slow queries
@@ -269,15 +273,18 @@ def test_slow_queries(client, tst_fabric, bad_fabric_name):
     with assert_raises(C8QLQueryClearError):
         bad_fabric.c8ql.clear_slow_queries()
 
+
 def test_get_all_batches(client, col, tst_fabric_name):
-    document_count = 2003
+    document_count = 10003
     client._tenant.useFabric(tst_fabric_name)
     client.execute_query(
         query="FOR doc IN 1..{} INSERT {{value:doc}} INTO {}".format(
             document_count, col.name
         )
     )
-    resp = client.get_all_batches(query="FOR doc IN {} FILTER doc._key > 0 RETURN doc".format(col.name))
+    resp = client.get_all_batches(
+        query="FOR doc IN {} FILTER doc._key > 0 RETURN doc".format(col.name)
+    )
     assert document_count == len(resp)
     for i in range(len(resp)):
         assert resp[i]["value"] == i + 1
@@ -289,7 +296,9 @@ def test_get_all_batches(client, col, tst_fabric_name):
             document_count, col.name
         )
     )
-    resp = client.get_all_batches(query="FOR doc IN {} FILTER doc._key > 0 RETURN doc".format(col.name))
+    resp = client.get_all_batches(
+        query="FOR doc IN {} FILTER doc._key > 0 RETURN doc".format(col.name)
+    )
     assert document_count == len(resp)
     for i in range(len(resp)):
         assert resp[i]["value"] == i + 1
