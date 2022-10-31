@@ -5,7 +5,7 @@ The first step to start using GDN is establishing a connection to [gdn.paas.macr
 
 ```python
 from c8 import C8Client
-client = C8Client(protocol='https', host='gdn.paas.macrometa.io', port=443, apikey=<your api key>)
+client = C8Client(protocol='https', host='gdn.paas.macrometa.io', port=443, apikey='your api key')
 ```
 ## Create a collection
 A [Collection](https://macrometa.com/docs/collections/) consists of documents, and they can be local(only stores data in one region) or global(replicates data and maintains consistency across regions). Macrometa offers several types of collections such as [Document Store](https://macrometa.com/docs/collections/documents/), [Key-Value Store](https://macrometa.com/docs/collections/keyvalue/), [Dynamo Table](https://macrometa.com/docs/collections/dynamo/create-dynamo-table) and [Graph-Edge collection](https://macrometa.com/docs/collections/graphs/). For this example we are going to create a [Document Store](https://macrometa.com/docs/collections/documents/).
@@ -13,29 +13,32 @@ A [Collection](https://macrometa.com/docs/collections/) consists of documents, a
 ```python
 client.create_collection(name='employees', sync=False, edge=False, local_collection=False, stream=False)
 ```
-# CRUD Operations for collections
+# CRUD Operations for Document Store collection
+A [document collection](https://macrometa.com/docs/collections/documents/) is a NoSQL database that stores data in JSON format (JavaScript Object Notation). Unlike traditional Relational Database Management Systems, document databases do not require a schema or a pre-defined structure with fixed tables and attributes. 
 ## Insert Document
-Documents are stored in collections. Macrometa GDN is schemaless, so you do not need to define valid document attributes when creating your collection. Documents with completely different structures can be stored in the same collection.
+Documents are stored in [collections](https://macrometa.com/docs/collections/). Documents with completely different structures can be stored in the same collection.
 
-**Inserting docs in 'employees' collection:**
+**Inserting documents in 'employees' collection:**
+
+[Add documents to collection](https://macrometa.com/docs/collections/documents/add-document)
 ```python
 docs = [
-    {'_key': 'Han', 'firstname': 'Han', 'lastname': 'Solo', 'email': 'han.solo@macrfabricometa.io', 'age': 35,
+    {'_key': 'Han', 'firstname': 'Han', 'lastname': 'Solo', 'email': 'han.solo@macrometa.io', 'age': 35,
      'role': 'Manager'},
-    {'_key': 'Bruce', 'firstname': 'Bruce', 'lastname': 'Wayne', 'email': 'bruce.wayne@mfabricacrometa.io', 'age': 40,
+    {'_key': 'Bruce', 'firstname': 'Bruce', 'lastname': 'Wayne', 'email': 'bruce.wayne@macrometa.io', 'age': 40,
      'role': 'Developer', 'phone': '1-999-888-9999'},
-    {'_key': 'Jon', 'firstname': 'Jon', 'lastname': 'Doe', 'email': 'jon.doe@macrfabricometa.io', 'age': 25,
+    {'_key': 'Jon', 'firstname': 'Jon', 'lastname': 'Doe', 'email': 'jon.doe@macrometa.io', 'age': 25,
      'role': 'Manager'},
-    {'_key': 'Zoe', 'firstname': 'Zoe', 'lastname': 'Hazim', 'email': 'zoe.hazim@macrfabricometa.io', 'age': 20,
+    {'_key': 'Zoe', 'firstname': 'Zoe', 'lastname': 'Hazim', 'email': 'zoe.hazim@macrometa.io', 'age': 20,
      'role': 'Director'},
-    {'_key': 'Emma', 'firstname': 'Emma', 'lastname': 'Watson', 'email': 'emma.watson@macrfabricometa.io', 'age': 25,
+    {'_key': 'Emma', 'firstname': 'Emma', 'lastname': 'Watson', 'email': 'emma.watson@macrometa.io', 'age': 25,
      'role': 'Director'}
 ]
 client.insert_document(collection_name='employees', document=docs)
 ```
 
 ## Read Document
-Macrometa is robust. It uses [C8QL](https://macrometa.com/docs/queryworkers/c8ql/) to create, retrieve, modify and delete data stored in the globally distributed platform. This example demonstrates how to retrieve a particular document.
+This example demonstrates how to retrieve a particular document with its *_key*.
 
 **Retreive an specific document with it's _key value:**
 ```python
@@ -43,14 +46,14 @@ client.get_document(collection='employees', document={'_key': 'Han'})
 ```
 
 ## Update Document
-The [update](https://macrometa.com/docs/queryworkers/c8ql/got-tutorial/c8ql-crud#update-documents) operation can partially update a document in a collection. The document must contain the attributes and values to be updated and the _key attribute to identify the document to be updated. For this example the email for *Han* will be updated.
+The update operation can partially update a document in a collection. The document must contain the attributes and values to be updated and the _key attribute to identify the document to be updated. For this example the email for *Han* will be updated.
 
 ```python
 client.update_document(collection_name='employees', document={'_key': 'Han', 'email': 'han@updated_macrometa.io'})
 ```
 
 ## Delete Document
-The [delete](https://macrometa.com/docs/queryworkers/c8ql/got-tutorial/c8ql-crud#delete-documents) operation is used to remove a document from a collection. For this example *Han* will be removed from the **employees** collection.
+The [delete](https://macrometa.com/docs/collections/documents/document-store-data#delete-document) operation is used to remove a document from a collection. For this example *Han* will be removed from the **employees** collection.
 ```python
 client.delete_document(collection_name='employees', document={'_key': 'Han'})
 ```
@@ -67,11 +70,19 @@ docs = [document for document in cursor]
 ```
 
 It might not always be necessary to return all documents that a FOR loop would normally return. In those cases, you can limit the number of documents with a [LIMIT()](https://macrometa.com/docs/queryworkers/c8ql/operations/limit) operation. For this case, it will be used along with the [SORT()](https://macrometa.com/docs/queryworkers/c8ql/operations/sort) operation.
+The first 2 documents are returned with the below query.
 ```python
 query = "FOR doc IN employees SORT doc.age LIMIT 2 RETURN doc"
 cursor = client.execute_query(query=query)
 docs = [document for document in cursor]
 ```
+Another function usually used with [LIMIT is OFFSET](https://macrometa.com/docs/cep/query-guide/query#limit--offset). The offset value specifies how many elements from the result shall be skipped. It must be 0 or greater. The count value specifies how many elements should be at most included in the result.
+```python
+query = "FOR doc IN employees SORT doc.age LIMIT 2, 4 RETURN doc"
+cursor = client.execute_query(query=query)
+docs = [document for document in cursor]
+```
+
 [Grouping](https://macrometa.com/docs/queryworkers/c8ql/examples/grouping) results is a common operation when retrieving data. To group results by arbitrary criteria, C8QL provides the [COLLECT](https://macrometa.com/docs/queryworkers/c8ql/operations/collect) keyword. [COLLECT](https://macrometa.com/docs/queryworkers/c8ql/operations/collect) will perform a grouping, but no aggregation. In the following example let's group by **age** and return only the **first name** of the employee using the  expansion operator [*].
 
 ```python
