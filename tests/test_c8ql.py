@@ -275,7 +275,7 @@ def test_slow_queries(client, tst_fabric, bad_fabric_name):
 
 
 def test_get_all_batches(client, col, tst_fabric_name):
-    document_count = 10003
+    document_count = 2003
     client._tenant.useFabric(tst_fabric_name)
     client.execute_query(
         query="FOR doc IN 1..{} INSERT {{value:doc}} INTO {}".format(
