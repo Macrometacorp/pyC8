@@ -1198,14 +1198,12 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.RestqlExecuteError: if restql execution failed
         """
 
-        if data and "bindVars" in data:
-            request = Request(
-                method="post", data=data, endpoint="/restql/execute/%s" % name
-            )
-        else:
-            request = Request(
-                method="post", data={}, endpoint="/restql/execute/%s" % name
-            )
+        if data is None or not("bindVars" in data or "batchSize" in data):
+            data = {}
+
+        request = Request(
+            method="post", data=data, endpoint="/restql/execute/{}".format(name)
+        )
 
         def response_handler(resp):
             if not resp.is_success:

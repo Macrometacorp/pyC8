@@ -307,6 +307,25 @@ class C8Client(object):
         )
         return resp
 
+    # client.update_collection_properties
+    def update_collection_properties(
+        self, collection_name, has_stream=None, wait_for_sync=None
+    ):
+        """Changes the properties of a collection.
+           Note: except for waitForSync and hasStream, collection properties cannot be changed once a collection is created.
+        :param collection_name: Collection name.
+        :type collection_name: str | unicode
+        :param has_stream: True if creating a live collection stream.
+        :type has_stream: bool
+        :param wait_for_sync: True if all data must be synced to storage before operation returns.
+        :type wait_for_sync: bool
+        """
+        return self._fabric.update_collection_properties(
+            collection_name=collection_name,
+            has_stream=has_stream,
+            wait_for_sync=wait_for_sync
+        )
+
     # client.list_collection_indexes
     def list_collection_indexes(self, collection_name):
         """Delete the collection.

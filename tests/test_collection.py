@@ -6,8 +6,8 @@ from c8.collection import StandardCollection
 from c8.exceptions import (
     CollectionCreateError,
     CollectionDeleteError,
-    CollectionImportFromFileError,
     CollectionFindError,
+    CollectionImportFromFileError,
     CollectionListError,
     CollectionPropertiesError,
 )

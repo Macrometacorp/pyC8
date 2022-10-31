@@ -102,7 +102,7 @@ def test_restql_methods(client, tst_fabric_name, col):
     client.update_restql("insertRecord", updated_insert_data)
     time.sleep(2)
     client.execute_restql("insertRecord")
-    resp = client.execute_restql("getRecords", {"bindVars": {}, "batchSize": 2})
+    resp = client.execute_restql("getRecords", {"batchSize": 2})
 
     # Read next batch from cursor
     id = resp["id"]
