@@ -53,7 +53,7 @@ client.update_document(collection_name='employees', document={'_key': 'Han', 'em
 ```
 
 ## Delete Document
-The [delete](https://macrometa.com/docs/collections/documents/document-store-data#delete-document) operation is used to remove a document from a collection. For this example *Han* will be removed from the **employees** collection.
+The delete operation is used to remove a document from a collection. For this example *Han* will be removed from the **employees** collection.
 ```python
 client.delete_document(collection_name='employees', document={'_key': 'Han'})
 ```
