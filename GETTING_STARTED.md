@@ -14,7 +14,9 @@ A [Collection](https://macrometa.com/docs/collections/) consists of documents, a
 client.create_collection(name='employees', sync=False, edge=False, local_collection=False, stream=False)
 ```
 # CRUD Operations for Document Store collection
-A [document collection](https://macrometa.com/docs/collections/documents/) is a NoSQL database that stores data in JSON format (JavaScript Object Notation). Unlike traditional Relational Database Management Systems, document databases do not require a schema or a pre-defined structure with fixed tables and attributes. 
+A [document collection](https://macrometa.com/docs/collections/documents/) is a NoSQL database that stores data in JSON format (JavaScript Object Notation). Unlike traditional Relational Database Management Systems, document databases do not require a schema or a pre-defined structure with fixed tables and attributes.
+
+[See the complete example for this section here](./examples/document_store_crud.py)
 ## Insert Document
 Documents are stored in [collections](https://macrometa.com/docs/collections/). Documents with completely different structures can be stored in the same collection.
 
@@ -62,6 +64,8 @@ client.delete_document(collection_name='employees', document={'_key': 'Han'})
 Working with data can be complex. CRUD operations usually need more logic or conditions to reach the desired results. At Macrometa the [C8 query language (C8QL)](https://macrometa.com/docs/queryworkers/c8ql/) can be used to create, retrieve, modify and delete data that are stored in the Macrometa geo-distributed fast data platform.
 **Check out the [operators](https://macrometa.com/docs/queryworkers/c8ql/) and [examples](https://macrometa.com/docs/queryworkers/c8ql/examples/) in Macrometa**
 
+[See the complete example for this section here](./examples/working_with_c8ql.py)
+
 Let's [FILTER](https://macrometa.com/docs/queryworkers/c8ql/operations/filter) results by **role** and **age** and return a custom object using [ C8QL](https://macrometa.com/docs/queryworkers/c8ql/):
 ```python
 query = "FOR doc IN employees FILTER doc.role == 'Manager' FILTER doc.age > 30 RETURN {'Name':doc.firstname,'Last Name':doc.lastname,'Email':doc.email}"
@@ -102,7 +106,7 @@ client.get_all_documents(collection_name="employees")
 ```
 
 ## Returning all data records returned by any query via batches
-The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes). 
+The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes).
 The following method should be used to retrieve all the data from any query via batches despite this default limit of 1,000 documents per query.
 
 You need to specify your query in the `query` parameter
@@ -256,7 +260,7 @@ Streams are flows of data in GDN to capture data in motion. Messages are sent vi
 ## Basic operations for streams -
 
 ### Create a stream
-In the following example a stream named `quickStart` is created globally (as local is set to False). 
+In the following example a stream named `quickStart` is created globally (as local is set to False).
 ```python
 client.create_stream(stream="quickStart", local=False)
 ```
