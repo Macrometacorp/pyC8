@@ -51,7 +51,9 @@ class Connection(object):
             self._auth_token = self._apikey
 
         if self._email != "" and password != "":
-            self._auth_token, self._tenant_name = self._get_auth_token()
+            body = self._get_auth_token()
+            self._auth_token = body.get("jwt")
+            self._tenant_name = body.get("tenant")
             self._header = {"Authorization": "Bearer " + self._auth_token}
 
         if self._tenant_name == "" and self._token is not None:
@@ -77,14 +79,25 @@ class Connection(object):
 
         # TODO : Handle the functions side of things
 
-    def _get_auth_token(self):
-        data = {
-            "email": self._email,
-            "password": self._password,
-        }
+    def _get_auth_token(self, email=None, password=None, tenant=None, username=None):
+        data = {}
+        if password is not None:
+            data.update({"password": password})
+            if email is not None:
+                data.update({"email": email})
+            elif tenant is not None and username is not None:
+                data.update({"tenant": tenant, "username": username})
+            else:
+                raise C8AuthenticationError(
+                    "Failed to Authenticate the C8DB user, Error: Invalid JSON"
+                )
+        else:
+            data = {"email": self._email, "password": self._password}
+
         data = json.dumps(data)
         url = self.url + "/_open/auth"
         response = requests.post(url, data=data)
+
         if response.status_code == 200:
             body = json.loads(response.text)
             tenant = body.get("tenant")
@@ -107,7 +120,7 @@ class Connection(object):
                     self.url, self._email, response.text
                 )
             )
-        return token, tenant
+        return body
 
     @property
     def headers(self):
@@ -212,7 +225,6 @@ class TenantConnection(Connection):
     """
 
     def __init__(self, url, email, password, token, apikey, http_client):
-
         super(TenantConnection, self).__init__(
             url=url,
             email=email,

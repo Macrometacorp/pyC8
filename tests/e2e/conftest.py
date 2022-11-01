@@ -27,7 +27,6 @@ mm_client = C8Client(
 
 @pytest.fixture
 def get_client_instance():
-
     return client
 
 
@@ -144,13 +143,4 @@ def test_data_update_plan():
         ],
         "active": True,
         "demo": False,
-    }
-
-
-def test_update_tenant_billing_plan():
-    return {
-        "attribution": "Macrometa",
-        "plan": "TestPyC8",
-        "tenant": "edgar.garcia_macrometa.com",
-        "payment_method_id": "pm_1KRHKj2eZvKYlo2CHkt3ra77",
     }

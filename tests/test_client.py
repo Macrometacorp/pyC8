@@ -96,3 +96,58 @@ def test_client_custom_http_client():
         client.get_streams()
     assert err.value.http_code == 401
     assert http_client.counter == 1
+
+
+def test_get_jwt(client):
+    client._tenant.useFabric("_system")
+    user = client.create_user(
+        email="{}@macrometa.io".format(generate_username()),
+        password="121@Macrometa",
+    )
+
+    resp = client.get_jwt(
+        email=user["email"],
+        password="121@Macrometa",
+        tenant=client._tenant.name,
+        username=user["username"],
+    )
+
+    assert "jwt" in resp
+    assert resp["username"] == user["username"]
+    assert resp["tenant"] == user["tenant"]
+
+    resp = client.get_jwt(email=user["email"], password="121@Macrometa")
+
+    assert "jwt" in resp
+    assert resp["username"] == user["username"]
+    assert resp["tenant"] == user["tenant"]
+
+    resp = client.get_jwt(
+        tenant=user["tenant"], password="121@Macrometa", username=user["username"]
+    )
+
+    assert "jwt" in resp
+    assert resp["username"] == user["username"]
+    assert resp["tenant"] == user["tenant"]
+
+    resp = client._tenant._conn._get_auth_token()
+    assert "jwt" in resp
+    assert resp["username"] == "root"
+    assert resp["tenant"] == user["tenant"]
+
+    with assert_raises(C8AuthenticationError):
+        client.get_jwt(password="121@Macrometa")
+
+    with assert_raises(C8AuthenticationError):
+        client.get_jwt(tenant=user["tenant"], password="121@Macrometa")
+
+    with assert_raises(C8AuthenticationError):
+        client.get_jwt(username=user["username"], password="121@Macrometa")
+
+    with assert_raises(C8AuthenticationError):
+        client.get_jwt(
+            email="{}@macrometa.io".format(generate_username()),
+            password=generate_string(),
+        )
+
+    client.delete_user(username=user["username"])
