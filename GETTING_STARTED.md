@@ -257,6 +257,7 @@ client.delete_collection(name="employees")
 # Streams
 Streams are flows of data in GDN to capture data in motion. Messages are sent via streams by publishers to consumers who then do something with the message. Refer [Streams](https://macrometa.com/docs/streams/)
 
+[See the complete example here](./examples/streams.py)
 ## Basic operations for streams -
 
 ### Create a stream
@@ -330,7 +331,9 @@ client.delete_stream(stream="c8globals.quickStart")
 Macrometa GDN allows you to integrate streaming data and take appropriate actions. Most stream processing use cases involve collecting, analyzing, and integrating or acting on data generated during business activities by various sources.
 Refer [Stream Workers](https://macrometa.com/docs/cep/) and [Stream Worker Query Guide](https://macrometa.com/docs/cep/query-guide/)
 
-## Basic operations for stream workers -
+## Basic operations for stream workers
+
+[See the complete example here](./examples/stream_workers.py)
 
 ### Validate a stream worker
 Validate the stream worker for syntax errors before saving.
