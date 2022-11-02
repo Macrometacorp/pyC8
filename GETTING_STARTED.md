@@ -60,6 +60,18 @@ The delete operation is used to remove a document from a collection. For this ex
 client.delete_document(collection_name='employees', document={'_key': 'Han'})
 ```
 
+## Truncate a collection
+All the data records inside the collection can be removed by truncating the collection. In the following example all the data inside **employees** collection is removed.
+```python
+client.collection(collection_name="employees").truncate()
+```
+
+## Delete a collection
+In the following example, **employees** collection is deleted.
+```python
+client.delete_collection(name="employees")
+```
+
 ## Working with C8QL
 Working with data can be complex. CRUD operations usually need more logic or conditions to reach the desired results. At Macrometa the [C8 query language (C8QL)](https://macrometa.com/docs/queryworkers/c8ql/) can be used to create, retrieve, modify and delete data that are stored in the Macrometa geo-distributed fast data platform.
 **Check out the [operators](https://macrometa.com/docs/queryworkers/c8ql/) and [examples](https://macrometa.com/docs/queryworkers/c8ql/examples/) in Macrometa**
@@ -129,7 +141,9 @@ client.get_all_batches(query="FOR doc IN employees FILTER doc.email LIKE '%macro
 # Query Workers
 A query worker is set of named, parameterized C8QL queries stored in GDN that you can run from a dedicated REST endpoint. The query worker will be created automatically globally and is available from the region closest to the user. Refer [Query Workers](https://macrometa.com/docs/queryworkers/query-workers)
 
-## Operations for query workers -
+## Operations for query workers
+
+[See the full example here](./examples/query_workers.py)
 
 ### Create a query worker
 In the following example a query worker named `insertRecord` is created which inserts documents into the **employees** collection.
@@ -227,12 +241,6 @@ In the following example query worker, `insertRecord` is deleted.
 client.delete_restql(name="insertRecord")
 ```
 
-## Truncate a collection
-All the data records inside the collection can be removed by truncating the collection. In the following example all the data inside **employees** collection is removed.
-```python
-col = client.collection(collection_name="employees")
-col.truncate()
-```
 
 ## Get real-time updates from a collection
 Example to get real-time updates from **employees** collection:
@@ -258,12 +266,6 @@ Or
 2. By updating the collection `properties` with `has_stream` as True after the collection is already created:
 ```python
 client.update_collection_properties(collection_name="employees", has_stream=True)
-```
-
-## Delete a collection
-In the following example, **employees** collection is deleted.
-```python
-client.delete_collection(name="employees")
 ```
 
 # Streams
