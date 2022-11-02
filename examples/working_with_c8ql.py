@@ -76,5 +76,9 @@ query = "FOR doc IN employees COLLECT age = doc.age INTO employeesByAge RETURN {
 cursor = client.execute_query(query=query)
 docs = [document for document in cursor]
 
+# Example of how to use SQL like query
+cursor = client.execute_query(query="SELECT * FROM {}".format("employees"), sql=True)
+docs = [doc for doc in cursor]
+
 # Delete employees collection
 client.delete_collection(name="employees")

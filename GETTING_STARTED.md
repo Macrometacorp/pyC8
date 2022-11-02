@@ -107,6 +107,16 @@ cursor = client.execute_query(query=query)
 docs = [document for document in cursor]
 ```
 
+## SQL
+Macrometa SQL dialect supports DQL (SELECT statement), DML statements (UPDATE, INSERT and DELETE) and a subset of DDL statements.
+
+Let's create a query using SQL syntax, you need to use the same **execute_query** as above, with the **sql** param as **True**
+
+```python
+cursor = client.execute_query(query="SELECT * FROM {}".format('employees'), sql=True)
+docs = [doc for doc in cursor]
+```
+
 
 ## Returning all data records inside the collection via batches
 The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes).
@@ -238,6 +248,8 @@ Example to get real-time updates from **employees** collection:
 :::note
 Enable the 'Stream' parameter within the collection to get real-time updates if not already enabled
 :::
+
+[See the complete example here](./examples/get_realtime_updates_from_collection.py)
 ```python
 def callback_fn(event):
     print(event)
