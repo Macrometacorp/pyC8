@@ -129,15 +129,6 @@ for i in range(iterations):
 flat_data = [item for sublist in data for item in sublist]
 ```
 
-## Returning all data records returned by any query via batches
-The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes).
-The following method should be used to retrieve all the data from any query via batches despite this default limit of 1,000 documents per query.
-
-You need to specify your query in the `query` parameter
-```python
-client.get_all_batches(query="FOR doc IN employees FILTER doc.email LIKE '%macrometa.io' RETURN doc")
-```
-
 # Query Workers
 A query worker is set of named, parameterized C8QL queries stored in GDN that you can run from a dedicated REST endpoint. The query worker will be created automatically globally and is available from the region closest to the user. Refer [Query Workers](https://macrometa.com/docs/queryworkers/query-workers)
 
