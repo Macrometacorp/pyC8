@@ -1,131 +1,150 @@
 # Getting Started
 
-The SDK supports three ways for authentication:
-
-1. Using the email and password:
-
-```python
-  # Authentication email and password
-  client = C8Client(protocol='https', host='gdn.macrometa.io', port=443,
-   email="user@example.com", password="XXXXX")
-```
-
-2. Using bearer token:
-
-```python
-# Authentication with bearer token
-client = C8Client(protocol='https', host='gdn.macrometa.io', port=443,
- token=<your token>)
-```
-
-3. Using API key:
-
-```python
-# Authentication with API key
-client = C8Client(protocol='https', host='gdn.macrometa.io', port=443,
- apikey=<your api key>)
-```
+## Auth - Connect to GDN
+The first step to start using GDN is establishing a connection to [gdn.paas.macrometa.io](https://gdn.paas.macrometa.io/). When this code executes, it initializes the server connection to your nearest region. You can access your Macrometa GDN account using several methods, such as [API keys](https://macrometa.com/docs/account-management/api-keys/), [User authentication](https://macrometa.com/docs/account-management/auth/user-auth), [Token-based authentication (JWT)](https://macrometa.com/docs/account-management/auth/jwts). For this example the method used is API key.
 
 ```python
 from c8 import C8Client
-import time
-import warnings
-
-warnings.filterwarnings("ignore")
-federation = "gdn.paas.macrometa.io"
-demo_tenant = "mytenant@example.com"
-demo_fabric = "_system"
-demo_user = "user@example.com"
-demo_user_name = "root"
-demo_stream = "demostream"
-collname = "employees"
-# --------------------------------------------------------------
-print("Create C8Client Connection...")
-client = C8Client(protocol='https', host=federation, port=443,
-                  email=demo_tenant, password='XXXXX',
-                  geofabric=demo_fabric)
-
-# --------------------------------------------------------------
-print("Create Collection and insert documents")
-
-if client.has_collection(collname):
-    print("Collection exists")
-else:
-    client.create_collection(name=collname)
-
-# List all Collections
-coll_list = client.get_collections()
-print(coll_list)
-
-# Filter collection based on collection models DOC/KV/DYNAMO
-colls = client.get_collections(collection_model='DOC')
-print(colls)
-
-# Get Collecion Handle and Insert
-coll = client.get_collection(collname)
-coll.insert(
-    {'firstname': 'John', 'lastname': 'Berley', 'email': 'john.berley@macrometa.io'})
-
-# insert document
-client.insert_document(collection_name=collname,
-                       document={'firstname': 'Jean', 'lastname': 'Picard',
-                                 'email': 'jean.picard@macrometa.io'})
-doc = client.get_document(collname, "John")
-print(doc)
-
-# insert multiple documents
-docs = [
-    {'firstname': 'James', 'lastname': 'Kirk', 'email': 'james.kirk@macrometa.io'},
-    {'firstname': 'Han', 'lastname': 'Solo', 'email': 'han.solo@macrometa.io'},
-    {'firstname': 'Bruce', 'lastname': 'Wayne', 'email': 'bruce.wayne@macrometa.io'}
-]
-
-client.insert_document(collection_name=collname, document=docs)
-
-# insert documents from file
-client.insert_document_from_file(collection_name=collname,
-                                 csv_filepath="/home/user/test.csv")
-
-# Add a hash Index
-client.add_hash_index(collname, fields=['email'], unique=True)
-
-# --------------------------------------------------------------
-
-# Query a collection
-print("query employees collection...")
-query = 'FOR employee IN employees RETURN employee'
-cursor = client.execute_query(query)
-docs = [document for document in cursor]
-print(docs)
-
-# --------------------------------------------------------------
-print("Delete Collection...")
-# Delete Collection
-client.delete_collection(name=collname)
+client = C8Client(protocol='https', host='gdn.paas.macrometa.io', port=443, apikey='your api key')
 ```
+## Create a collection
+A [Collection](https://macrometa.com/docs/collections/) consists of documents, and they can be local(only stores data in one region) or global(replicates data and maintains consistency across regions). Macrometa offers several types of collections such as [Document Store](https://macrometa.com/docs/collections/documents/), [Key-Value Store](https://macrometa.com/docs/collections/keyvalue/), [Dynamo Table](https://macrometa.com/docs/collections/dynamo/create-dynamo-table) and [Graph-Edge collection](https://macrometa.com/docs/collections/graphs/). For this example we are going to create a [Document Store](https://macrometa.com/docs/collections/documents/).
+
+```python
+client.create_collection(name='employees', sync=False, edge=False, local_collection=False, stream=False)
+```
+# CRUD Operations for Document Store collection
+A [document collection](https://macrometa.com/docs/collections/documents/) is a NoSQL database that stores data in JSON format (JavaScript Object Notation). Unlike traditional Relational Database Management Systems, document databases do not require a schema or a pre-defined structure with fixed tables and attributes.
+
+[See the complete example for this section here](./examples/document_store_crud.py)
+## Insert Document
+Documents are stored in [collections](https://macrometa.com/docs/collections/). Documents with completely different structures can be stored in the same collection.
+
+**Inserting documents in 'employees' collection:**
+
+[Add documents to collection](https://macrometa.com/docs/collections/documents/add-document)
+```python
+docs = [
+    {'_key': 'Han', 'firstname': 'Han', 'lastname': 'Solo', 'email': 'han.solo@macrometa.io', 'age': 35,
+     'role': 'Manager'},
+    {'_key': 'Bruce', 'firstname': 'Bruce', 'lastname': 'Wayne', 'email': 'bruce.wayne@macrometa.io', 'age': 40,
+     'role': 'Developer', 'phone': '1-999-888-9999'},
+    {'_key': 'Jon', 'firstname': 'Jon', 'lastname': 'Doe', 'email': 'jon.doe@macrometa.io', 'age': 25,
+     'role': 'Manager'},
+    {'_key': 'Zoe', 'firstname': 'Zoe', 'lastname': 'Hazim', 'email': 'zoe.hazim@macrometa.io', 'age': 20,
+     'role': 'Director'},
+    {'_key': 'Emma', 'firstname': 'Emma', 'lastname': 'Watson', 'email': 'emma.watson@macrometa.io', 'age': 25,
+     'role': 'Director'}
+]
+client.insert_document(collection_name='employees', document=docs)
+```
+
+## Read Document
+This example demonstrates how to retrieve a particular document with its *_key*.
+
+**Retreive an specific document with it's _key value:**
+```python
+client.get_document(collection='employees', document={'_key': 'Han'})
+```
+
+## Update Document
+The update operation can partially update a document in a collection. The document must contain the attributes and values to be updated and the _key attribute to identify the document to be updated. For this example the email for *Han* will be updated.
+
+```python
+client.update_document(collection_name='employees', document={'_key': 'Han', 'email': 'han@updated_macrometa.io'})
+```
+
+## Delete Document
+The delete operation is used to remove a document from a collection. For this example *Han* will be removed from the **employees** collection.
+```python
+client.delete_document(collection_name='employees', document={'_key': 'Han'})
+```
+
+## Truncate a collection
+All the data records inside the collection can be removed by truncating the collection. In the following example all the data inside **employees** collection is removed.
+```python
+client.collection(collection_name="employees").truncate()
+```
+
+## Delete a collection
+In the following example, **employees** collection is deleted.
+```python
+client.delete_collection(name="employees")
+```
+
+## Working with C8QL
+Working with data can be complex. CRUD operations usually need more logic or conditions to reach the desired results. At Macrometa the [C8 query language (C8QL)](https://macrometa.com/docs/queryworkers/c8ql/) can be used to create, retrieve, modify and delete data that are stored in the Macrometa geo-distributed fast data platform.
+**Check out the [operators](https://macrometa.com/docs/queryworkers/c8ql/) and [examples](https://macrometa.com/docs/queryworkers/c8ql/examples/) in Macrometa**
+
+[See the complete example for this section here](./examples/working_with_c8ql.py)
+
+Let's [FILTER](https://macrometa.com/docs/queryworkers/c8ql/operations/filter) results by **role** and **age** and return a custom object using [ C8QL](https://macrometa.com/docs/queryworkers/c8ql/):
+```python
+query = "FOR doc IN employees FILTER doc.role == 'Manager' FILTER doc.age > 30 RETURN {'Name':doc.firstname,'Last Name':doc.lastname,'Email':doc.email}"
+cursor = client.execute_query(query=query)
+docs = [document for document in cursor]
+```
+
+It might not always be necessary to return all documents that a FOR loop would normally return. In those cases, you can limit the number of documents with a [LIMIT()](https://macrometa.com/docs/queryworkers/c8ql/operations/limit) operation. For this case, it will be used along with the [SORT()](https://macrometa.com/docs/queryworkers/c8ql/operations/sort) operation.
+The first 2 documents are returned with the below query.
+```python
+query = "FOR doc IN employees SORT doc.age LIMIT 2 RETURN doc"
+cursor = client.execute_query(query=query)
+docs = [document for document in cursor]
+```
+Another function usually used with [LIMIT is OFFSET](https://macrometa.com/docs/cep/query-guide/query#limit--offset). The offset value specifies how many elements from the result shall be skipped. It must be 0 or greater. The count value specifies how many elements should be at most included in the result.
+```python
+query = "FOR doc IN employees SORT doc.age LIMIT 2, 4 RETURN doc"
+cursor = client.execute_query(query=query)
+docs = [document for document in cursor]
+```
+
+[Grouping](https://macrometa.com/docs/queryworkers/c8ql/examples/grouping) results is a common operation when retrieving data. To group results by arbitrary criteria, C8QL provides the [COLLECT](https://macrometa.com/docs/queryworkers/c8ql/operations/collect) keyword. [COLLECT](https://macrometa.com/docs/queryworkers/c8ql/operations/collect) will perform a grouping, but no aggregation. In the following example let's group by **age** and return only the **first name** of the employee using the  expansion operator [*].
+
+```python
+query = "FOR doc IN employees COLLECT age = doc.age INTO employeesByAge RETURN {age, employee: employeesByAge[*].doc.firstname}"
+cursor = client.execute_query(query=query)
+docs = [document for document in cursor]
+```
+
+## SQL
+Macrometa SQL dialect supports DQL (SELECT statement), DML statements (UPDATE, INSERT and DELETE) and a subset of DDL statements.
+
+Let's create a query using SQL syntax, you need to use the same **execute_query** as above, with the **sql** param as **True**
+
+```python
+cursor = client.execute_query(query="SELECT * FROM {}".format('employees'), sql=True)
+docs = [doc for doc in cursor]
+```
+
 
 ## Returning all data records inside the collection via batches
 The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes).
 The following method should be used to retrieve data from a collection in batches despite this default limit of 1,000 documents per query.
 
-You need to specify the collection name in the `collection_name` parameter
+[See the full example here](./examples/get_data_in_batches.py)
 ```python
-client.get_all_documents(collection_name="employees")
-```
+collection_name = "result"
+document_count = fabric.collection(collection_name).count()
+iterations = int(math.ceil(document_count / 1000))
+data = []
 
-## Returning all data records returned by any query via batches
-The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes). 
-The following method should be used to retrieve all the data from any query via batches despite this default limit of 1,000 documents per query.
+for i in range(iterations):
+    a = i * 1000
+    query = "FOR doc IN {} LIMIT {}, {} RETURN doc".format(collection_name, a, 1000)
+    cursor = fabric.c8ql.execute(query, count=True, batch_size=1000)
+    data.append(cursor.batch())
 
-You need to specify your query in the `query` parameter
-```python
-client.get_all_batches(query="FOR doc IN employees FILTER doc.email LIKE '%macrometa.io' RETURN doc")
+# Clean the data
+flat_data = [item for sublist in data for item in sublist]
 ```
 
 # Query Workers
 A query worker is set of named, parameterized C8QL queries stored in GDN that you can run from a dedicated REST endpoint. The query worker will be created automatically globally and is available from the region closest to the user. Refer [Query Workers](https://macrometa.com/docs/queryworkers/query-workers)
 
-## Operations for query workers -
+## Operations for query workers
+
+[See the full example here](./examples/query_workers.py)
 
 ### Create a query worker
 In the following example a query worker named `insertRecord` is created which inserts documents into the **employees** collection.
@@ -223,18 +242,14 @@ In the following example query worker, `insertRecord` is deleted.
 client.delete_restql(name="insertRecord")
 ```
 
-## Truncate a collection
-All the data records inside the collection can be removed by truncating the collection. In the following example all the data inside **employees** collection is removed.
-```python
-col = client.collection(collection_name="employees")
-col.truncate()
-```
 
 ## Get real-time updates from a collection
 Example to get real-time updates from **employees** collection:
 :::note
 Enable the 'Stream' parameter within the collection to get real-time updates if not already enabled
 :::
+
+[See the complete example here](./examples/get_realtime_updates_from_collection.py)
 ```python
 def callback_fn(event):
     print(event)
@@ -256,19 +271,14 @@ Or
 client.update_collection_properties(collection_name="employees", has_stream=True)
 ```
 
-## Delete a collection
-In the following example, **employees** collection is deleted.
-```python
-client.delete_collection(name="employees")
-```
-
 # Streams
 Streams are flows of data in GDN to capture data in motion. Messages are sent via streams by publishers to consumers who then do something with the message. Refer [Streams](https://macrometa.com/docs/streams/)
 
+[See the complete example here](./examples/streams.py)
 ## Basic operations for streams -
 
 ### Create a stream
-In the following example a stream named `quickStart` is created globally (as local is set to False). 
+In the following example a stream named `quickStart` is created globally (as local is set to False).
 ```python
 client.create_stream(stream="quickStart", local=False)
 ```
@@ -338,7 +348,9 @@ client.delete_stream(stream="c8globals.quickStart")
 Macrometa GDN allows you to integrate streaming data and take appropriate actions. Most stream processing use cases involve collecting, analyzing, and integrating or acting on data generated during business activities by various sources.
 Refer [Stream Workers](https://macrometa.com/docs/cep/) and [Stream Worker Query Guide](https://macrometa.com/docs/cep/query-guide/)
 
-## Basic operations for stream workers -
+## Basic operations for stream workers
+
+[See the complete example here](./examples/stream_workers.py)
 
 ### Validate a stream worker
 Validate the stream worker for syntax errors before saving.

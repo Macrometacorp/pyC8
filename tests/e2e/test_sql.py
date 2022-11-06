@@ -8,7 +8,7 @@ collection with test data data, run tests and check for the results.
 SQL_COLLECTION = "testsqlcollection"
 
 
-def test_create_redis_collection(get_client_instance):
+def test_create_sql_collection(get_client_instance):
     create_collection_response = get_client_instance.create_collection(SQL_COLLECTION)
     insert_document_response = get_client_instance.insert_document(
         SQL_COLLECTION, silent=True, document=test_data_document()
