@@ -663,6 +663,44 @@ class C8Client(object):
         resp = _collection.get(document=document, rev=rev, check_rev=check_rev)
         return resp
 
+    # client.get_all_documents
+
+    def get_all_documents(self, collection_name, batch_size=1000):
+        """Return a list of documents.
+        :param collection_name: Collection Name
+        :type collection_name: str
+        :param batch_size: Batch size is a configurable number. Results are retieved by continuously 
+            calling the next batch of cursor of size batch_size
+        :type batch_size: int
+        :returns: Documents, or None if not found.
+        :rtype: dict | None
+        :raise c8.exceptions.C8QLQueryExecuteError: If retrieval fails.
+        """
+        return self._fabric.c8ql.get_all_batches(
+            query="FOR doc IN {} RETURN doc".format(collection_name),
+            batch_size=batch_size,
+        )
+
+    # client.get_all_batches
+
+    def get_all_batches(self, query, batch_size=1000, sql=False):
+        """Returns all batches for a query. It should only be used for Read operations. Query cannot contain
+        the following keywords: INSERT, UPDATE, REPLACE, REMOVE and UPSERT.
+
+        :param query: Query to Execute
+        :type query: str
+        :param batch_size: Batch size is a configurable number. Results are retieved by continuously 
+            calling the next batch of cursor of size batch_size
+        :type batch_size: int
+        :param sql: Specify *true* and write sql query.
+        :type sql: bool
+        :returns: Documents, or None if not found.
+        :rtype: dict | None
+        :raise c8.exceptions.C8QLQueryExecuteError: If retrieval fails.
+        """
+
+        return self._fabric.c8ql.get_all_batches(query=query, batch_size=batch_size, sql=sql)
+
     # client.insert_document
 
     def insert_document(
