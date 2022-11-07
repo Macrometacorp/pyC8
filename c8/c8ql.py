@@ -5,6 +5,7 @@ from json import dumps
 from c8.api import APIWrapper
 from c8.cursor import Cursor
 from c8.exceptions import (
+    C8QLGetAllBatchesError,
     C8QLQueryClearError,
     C8QLQueryExecuteError,
     C8QLQueryExplainError,
@@ -13,6 +14,7 @@ from c8.exceptions import (
     C8QLQueryValidateError,
 )
 from c8.request import Request
+from c8.utils import clean_doc
 
 __all__ = ["C8QL"]
 
@@ -346,3 +348,30 @@ class C8QL(APIWrapper):
             return resp.body
 
         return self._execute(request, response_handler)
+
+
+    def get_all_batches(self, query, batch_size=1000, sql=False):
+        """Returns all batches for a query. It should only be used for Read operations. Query cannot contain
+         the following keywords: INSERT, UPDATE, REPLACE, REMOVE and UPSERT.
+
+        :param query: Query to Execute
+        :type query: str
+        :param batch_size: Batch size is a configurable number, After each loop the offset will
+        increment by the batch size and return the next set of values.
+        :type batch_size: int
+        :param sql: Specify *true* and write sql query.
+        :type sql: bool
+        :returns: Documents, or None if not found.
+        :rtype: dict | None
+        :raise c8.exceptions.C8QLQueryExecuteError: If retrieval fails.
+        """
+        write_ops = ["INSERT", "UPDATE", "REPLACE", "REMOVE", "UPSERT"]
+        if (any(ele in query.upper() for ele in write_ops)):
+            raise C8QLGetAllBatchesError("Write operations provided in the query. Only read operations can be provided")
+
+        cursor = self.execute(query=query, batch_size=batch_size, stream=True, sql=sql)
+        while cursor.has_more():
+            cursor.fetch()
+
+        result = clean_doc(cursor.batch())
+        return result
