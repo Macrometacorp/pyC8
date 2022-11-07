@@ -5,7 +5,7 @@ client = C8Client(
     protocol="https", host="gdn.paas.macrometa.io", port=443, apikey="<your API key>"
 )
 
-collection_name = "test_redis_collection_4"
+collection_name = "test_redis_collection"
 client.create_collection(collection_name, stream=True)
 
 # redis string type example
