@@ -701,7 +701,12 @@ class C8Client(object):
         :raise c8.exceptions.C8QLQueryExecuteError: If retrieval fails.
         """
 
-        return self._fabric.c8ql.get_all_batches(query=query, bind_vars=bind_vars, batch_size=batch_size, sql=sql)
+        return self._fabric.c8ql.get_all_batches(
+            query=query,
+            bind_vars=bind_vars,
+            batch_size=batch_size,
+            sql=sql,
+        )
 
     # client.insert_document
 
