@@ -276,7 +276,6 @@ def test_slow_queries(client, tst_fabric, bad_fabric_name):
 
 
 def test_get_all_batches(client, col, tst_fabric_name):
-    # Test for c8ql 
     document_count = 2003
     client._tenant.useFabric(tst_fabric_name)
     client.execute_query(
@@ -286,15 +285,6 @@ def test_get_all_batches(client, col, tst_fabric_name):
     )
     resp = client.get_all_batches(
         query="FOR doc IN {} FILTER doc._key > 0 RETURN doc".format(col.name)
-    )
-    assert document_count == len(resp)
-    for i in range(len(resp)):
-        assert resp[i]["value"] == i + 1
-
-    # Test for sql
-    resp = client.get_all_batches(
-        query="SELECT * FROM {}".format(col.name),
-        sql=True
     )
     assert document_count == len(resp)
     for i in range(len(resp)):
