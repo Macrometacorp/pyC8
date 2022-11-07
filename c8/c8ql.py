@@ -350,12 +350,14 @@ class C8QL(APIWrapper):
         return self._execute(request, response_handler)
 
 
-    def get_all_batches(self, query, batch_size=1000, sql=False):
+    def get_all_batches(self, query, bind_vars=None, batch_size=1000, sql=False):
         """Returns all batches for a query. It should only be used for Read operations. Query cannot contain
          the following keywords: INSERT, UPDATE, REPLACE, REMOVE and UPSERT.
 
         :param query: Query to Execute
         :type query: str
+        :param bind_vars: Bind variables for the query.
+        :type bind_vars: dict
         :param batch_size: Batch size is a configurable number. Results are retieved by continuously 
             calling the next batch of cursor of size batch_size
         :type batch_size: int
@@ -369,7 +371,7 @@ class C8QL(APIWrapper):
         if (any(ele in query.upper() for ele in write_ops)):
             raise C8QLGetAllBatchesError("Write operations provided in the query. Only read operations can be provided")
 
-        cursor = self.execute(query=query, batch_size=batch_size, stream=True, sql=sql)
+        cursor = self.execute(query=query, bind_vars=bind_vars, batch_size=batch_size, stream=True, sql=sql)
         while cursor.has_more():
             cursor.fetch()
 
