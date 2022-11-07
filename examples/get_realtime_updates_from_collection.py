@@ -3,7 +3,9 @@ import sys
 from c8 import C8Client
 
 # Creating client instance with API KEY
-client = C8Client(protocol="https", host="eng.paas.macrometa.io", port=443, apikey="")
+client = C8Client(
+    protocol="https", host="eng.paas.macrometa.io", port=443, apikey="<your API key>"
+)
 
 # Creating global employees collection
 client.create_collection(

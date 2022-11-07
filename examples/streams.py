@@ -4,7 +4,9 @@ import json
 from c8 import C8Client
 
 # Creating client instance with API KEY
-client = C8Client(protocol="https", host="gdn.paas.macrometa.io", port=443, apikey="")
+client = C8Client(
+    protocol="https", host="gdn.paas.macrometa.io", port=443, apikey="<your API key>"
+)
 
 # Create a stream
 client.create_stream(stream="quickStart", local=False)
