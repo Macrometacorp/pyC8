@@ -193,3 +193,30 @@ def test_insert_from_file(client, tst_fabric_name, col):
         == "<ExceptionInfo CollectionImportFromFileError('Invalid file') tblen=3>"
     )
     file.close()
+
+
+def test_all_documents(client, col, tst_fabric_name):
+    document_count = 2003
+    client._tenant.useFabric(tst_fabric_name)
+    client.execute_query(
+        query="FOR doc IN 1..{} INSERT {{value:doc}} INTO {}".format(
+            document_count, col.name
+        )
+    )
+    resp = client.get_all_documents(collection_name=col.name)
+
+    assert document_count == len(resp)
+    for i in range(len(resp)):
+        assert resp[i]["value"] == i + 1
+    col.truncate()
+
+    document_count = 11
+    client.execute_query(
+        query="FOR doc IN 1..{} INSERT {{value:doc}} INTO {}".format(
+            document_count, col.name
+        )
+    )
+    resp = client.get_all_documents(collection_name=col.name)
+    assert document_count == len(resp)
+    for i in range(len(resp)):
+        assert resp[i]["value"] == i + 1
