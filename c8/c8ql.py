@@ -356,8 +356,8 @@ class C8QL(APIWrapper):
 
         :param query: Query to Execute
         :type query: str
-        :param batch_size: Batch size is a configurable number, After each loop the offset will
-        increment by the batch size and return the next set of values.
+        :param batch_size: Batch size is a configurable number. Results are retieved by continuously 
+            calling the next batch of cursor of size batch_size
         :type batch_size: int
         :param sql: Specify *true* and write sql query.
         :type sql: bool
