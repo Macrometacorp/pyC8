@@ -98,7 +98,7 @@ To build package we need to position ourselves to project's root and run:
 
 ## 🪛 Upgrade
 ```bash
-pip install --upgrade pyc8
+pip install --upgrade pyC8
 ```
 
 ## 📗 Examples
