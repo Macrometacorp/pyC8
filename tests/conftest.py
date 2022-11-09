@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, unicode_literals
 import os
 
 import pytest
+import time
 from dotenv import load_dotenv
 
 from c8 import C8Client
@@ -79,6 +80,7 @@ def pytest_configure(config):
         to_vertex_collections=[tvcol_name],
     )
 
+    time.sleep(1)
     global_data.update(
         {
             "client": client,
