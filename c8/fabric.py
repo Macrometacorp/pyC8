@@ -1198,7 +1198,7 @@ class Fabric(APIWrapper):
         :raise c8.exceptions.RestqlExecuteError: if restql execution failed
         """
 
-        if data is None or not("bindVars" in data or "batchSize" in data):
+        if data is None or not ("bindVars" in data or "batchSize" in data):
             data = {}
 
         request = Request(
