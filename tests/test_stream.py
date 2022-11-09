@@ -14,19 +14,20 @@ from c8.exceptions import (
 from tests.helpers import assert_raises, generate_stream_name
 
 
-def test_stream_methods(tst_fabric):
+def test_stream_methods(client):
     # Test stream apis
+    sys_fabric = client._tenant.useFabric("_system")
     stream_name_1 = generate_stream_name()
     stream_name_2 = generate_stream_name()
-    tst_fabric.create_stream(stream_name_1)
-    tst_fabric.create_stream(stream_name_2, True)
+    sys_fabric.create_stream(stream_name_1)
+    sys_fabric.create_stream(stream_name_2, True)
 
     stream_1 = "c8globals." + stream_name_1
     stream_2 = "c8locals." + stream_name_2
 
     time.sleep(0.5)
-    assert tst_fabric.has_stream(stream_name_1) is True
-    stream = tst_fabric.stream()
+    assert sys_fabric.has_stream(stream_name_1) is True
+    stream = sys_fabric.stream()
 
     assert stream.set_message_expiry_stream(stream_2, 3600) is True
 
@@ -79,8 +80,8 @@ def test_stream_methods(tst_fabric):
     assert stream.unsubscribe(subscription="topic_2") == "OK"
     assert stream.delete_stream_subscription(stream_1, "topic_1") == "OK"
 
-    assert tst_fabric.delete_stream(stream_1) is True
-    assert tst_fabric.delete_stream(stream_2) is True
+    assert sys_fabric.delete_stream(stream_1) is True
+    assert sys_fabric.delete_stream(stream_2) is True
 
 
 def test_stream_exceptions(client, bad_fabric_name, tst_fabric, tst_fabric_name):
