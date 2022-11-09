@@ -13,20 +13,13 @@ client.create_collection(collection_name)
 query = "FOR doc IN 1..2000 INSERT {{value: doc}} INTO {}".format(collection_name)
 cursor = client.execute_query(query=query)
 
-fabric = client._fabric
-# Get the document count of the collection to calculate iterations
-document_count = fabric.collection(collection_name).count()
-iterations = int(math.ceil(document_count / 1000))
-data = []
+# Return all documents in the collection
+docs_collection = client.get_all_documents(collection_name=collection_name)
 
-for i in range(iterations):
-    a = i * 1000
-    query = "FOR doc IN {} LIMIT {}, {} RETURN doc".format(collection_name, a, 1000)
-    cursor = fabric.c8ql.execute(query, count=True, batch_size=1000)
-    data.append(cursor.batch())
-
-# Clean the data
-flat_data = [item for sublist in data for item in sublist]
+# Return all documents returned by a query
+docs_query = client.get_all_batches(
+                query="FOR doc IN {} FILTER doc._key > 0 RETURN doc".format(collection_name)
+             )
 
 # Delete collection
 client.delete_collection(collection_name)
