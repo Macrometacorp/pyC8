@@ -354,7 +354,10 @@ class C8QL(APIWrapper):
         """Returns all batches for a query. It should only be used for Read operations. Query cannot contain
          the following keywords: INSERT, UPDATE, REPLACE, REMOVE and UPSERT.
 
-        :param query: Query to Execute
+         Note: Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled))
+         to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
+
+        :param query: Query to execute
         :type query: str
         :param bind_vars: Bind variables for the query.
         :type bind_vars: dict
