@@ -25,9 +25,8 @@ def pytest_addoption(parser):
     parser.addoption("--host", action="store", default=os.environ.get("FEDERATION_URL"))
     parser.addoption("--protocol", action="store", default="https")
     parser.addoption("--port", action="store", default="443")
-    parser.addoption("--email", action="store", default=os.environ.get("TENANT_EMAIL"))
     parser.addoption(
-        "--passwd", action="store", default=os.environ.get("TENANT_PASSWORD")
+        "--apikey", action="store", default=os.environ.get("API_KEY")
     )
     parser.addoption("--geofabric", action="store", default=os.environ.get("FABRIC"))
     parser.addoption("--complete", action="store_true")
@@ -39,11 +38,10 @@ def pytest_configure(config):
         host=config.getoption("host"),
         port=config.getoption("port"),
         protocol=config.getoption("protocol"),
-        email=config.getoption("email"),
-        password=config.getoption("passwd"),
+        apikey=config.getoption("apikey"),
         geofabric=config.getoption("geofabric"),
     )
-    tenant = client.tenant(config.getoption("email"), config.getoption("passwd"))
+    tenant = client.tenant(apikey=config.getoption("apikey"))
     sys_fabric = tenant.useFabric("_system")
 
     # Create a user and non-system fabric for testing.
@@ -80,7 +78,7 @@ def pytest_configure(config):
         to_vertex_collections=[tvcol_name],
     )
 
-    time.sleep(1)
+    time.sleep(2)
     global_data.update(
         {
             "client": client,
@@ -114,7 +112,7 @@ def pytest_unconfigure(config):  # pragma: no cover
         if email.startswith("test_user"):
             client.delete_user(username, ignore_missing=True)
 
-    tenant = client.tenant(config.getoption("email"), config.getoption("passwd"))
+    tenant = client.tenant(apikey=config.getoption("apikey"))
     sys_fabric = tenant.useFabric("_system")
     # Remove all test fabrics.
     for fabric_name in sys_fabric.fabrics():
@@ -127,10 +125,16 @@ def pytest_unconfigure(config):  # pragma: no cover
         if col_name.startswith("test_collection"):
             sys_fabric.delete_collection(col_name, ignore_missing=True)
 
+    # Remove all test graphs.
+    for graph in sys_fabric.graphs():
+        graph_name = graph["name"]
+        if col_name.startswith("test_graph"):
+            sys_fabric.delete_graph(graph_name, ignore_missing=True)
+
     # Remove all test streams.
     for stream in sys_fabric.streams():
         stream_name = stream["name"]
-        if stream_name.startswith("c8globals.test_stream"):
+        if stream_name.startswith("c8globals.test_stream") or stream_name.startswith("c8locals.test_stream"):
             sys_fabric.delete_stream(stream_name)
 
     # Remove all test apikeys.
