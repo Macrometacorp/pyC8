@@ -376,5 +376,6 @@ def test_permission_exceptions(client, sys_fabric):
         user.remove_attribute_user(username, "foo")
     assert err.value.http_code == 403
 
+    time.sleep(0.5)
     assert sys_fabric.delete_stream(stream_1) is True
     assert sys_fabric.delete_collection(col_name_1) is True
