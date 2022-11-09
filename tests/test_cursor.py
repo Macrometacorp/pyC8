@@ -21,7 +21,7 @@ def test_cursor_from_execute_query(tst_fabric, col, docs):
         "FOR d IN {} SORT d._key RETURN d".format(col.name),
         count=True,
         batch_size=2,
-        ttl=1000,
+        ttl=30,
         optimizer_rules=["+all"],
         profile=True,
     )
@@ -93,7 +93,7 @@ def test_cursor_write_query(tst_fabric, col, docs):
         bind_vars={"first": "1", "second": "2", "val": 42},
         count=True,
         batch_size=1,
-        ttl=1000,
+        ttl=30,
         optimizer_rules=["+all"],
         profile=True,
     )
@@ -140,7 +140,7 @@ def test_cursor_invalid_id(tst_fabric, col):
         "FOR d IN {} SORT d._key RETURN d".format(col.name),
         count=True,
         batch_size=2,
-        ttl=1000,
+        ttl=30,
         optimizer_rules=["+all"],
         profile=True,
     )
@@ -175,7 +175,7 @@ def test_cursor_premature_close(tst_fabric, col, docs):
         "FOR d IN {} SORT d._key RETURN d".format(col.name),
         count=True,
         batch_size=2,
-        ttl=1000,
+        ttl=30,
         optimizer_rules=["+all"],
         profile=True,
     )
@@ -192,7 +192,7 @@ def test_cursor_context_manager(tst_fabric, col, docs):
         "FOR d IN {} SORT d._key RETURN d".format(col.name),
         count=True,
         batch_size=2,
-        ttl=1000,
+        ttl=30,
         optimizer_rules=["+all"],
         profile=True,
     ) as cursor:
@@ -209,7 +209,7 @@ def test_cursor_manual_fetch_and_pop(tst_fabric, col, docs):
         "FOR d IN {} SORT d._key RETURN d".format(col.name),
         count=True,
         batch_size=1,
-        ttl=1000,
+        ttl=30,
         optimizer_rules=["+all"],
         profile=True,
     )
@@ -244,7 +244,7 @@ def test_cursor_no_count(tst_fabric, col):
         "FOR d IN {} SORT d._key RETURN d".format(col.name),
         count=False,
         batch_size=2,
-        ttl=1000,
+        ttl=30,
         optimizer_rules=["+all"],
         profile=True,
     )
