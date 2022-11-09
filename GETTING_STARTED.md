@@ -124,6 +124,7 @@ The following method should be used to retrieve data from a collection in batche
 
 :::note
 Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled)) to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
+:::
 
 [See the full example here](./examples/get_data_in_batches.py)
 
@@ -138,6 +139,7 @@ The following method should be used to retrieve all the data from any query via 
 
 :::note
 Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled)) to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
+:::
 
 [See the full example here](./examples/get_data_in_batches.py)
 
