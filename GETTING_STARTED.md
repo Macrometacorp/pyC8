@@ -122,21 +122,28 @@ docs = [doc for doc in cursor]
 The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes).
 The following method should be used to retrieve data from a collection in batches despite this default limit of 1,000 documents per query.
 
+:::note
+Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled)) to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
+
 [See the full example here](./examples/get_data_in_batches.py)
+
+You need to specify the collection name in the `collection_name` parameter
 ```python
-collection_name = "result"
-document_count = fabric.collection(collection_name).count()
-iterations = int(math.ceil(document_count / 1000))
-data = []
+client.get_all_documents(collection_name="employees")
+```
 
-for i in range(iterations):
-    a = i * 1000
-    query = "FOR doc IN {} LIMIT {}, {} RETURN doc".format(collection_name, a, 1000)
-    cursor = fabric.c8ql.execute(query, count=True, batch_size=1000)
-    data.append(cursor.batch())
+## Returning all data records returned by any query via batches
+The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes). 
+The following method should be used to retrieve all the data from any query via batches despite this default limit of 1,000 documents per query.
 
-# Clean the data
-flat_data = [item for sublist in data for item in sublist]
+:::note
+Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled)) to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
+
+[See the full example here](./examples/get_data_in_batches.py)
+
+You need to specify your query in the `query` parameter
+```python
+client.get_all_batches(query="FOR doc IN employees FILTER doc.email LIKE '%macrometa.io' RETURN doc")
 ```
 
 # Query Workers
