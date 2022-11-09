@@ -666,7 +666,11 @@ class C8Client(object):
     # client.get_all_documents
 
     def get_all_documents(self, collection_name, batch_size=1000):
-        """Return a list of documents.
+        """Return all the documents inside the given collection.
+
+         Note: Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled))
+         to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
+
         :param collection_name: Collection Name
         :type collection_name: str
         :param batch_size: Batch size is a configurable number. Results are retieved by continuously 
@@ -685,7 +689,10 @@ class C8Client(object):
 
     def get_all_batches(self, query, bind_vars=None, batch_size=1000):
         """Returns all batches for a query. It should only be used for Read operations. Query cannot contain
-        the following keywords: INSERT, UPDATE, REPLACE, REMOVE and UPSERT.
+         the following keywords: INSERT, UPDATE, REPLACE, REMOVE and UPSERT.
+
+         Note: Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled))
+         to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
 
         :param query: Query to Execute
         :type query: str
