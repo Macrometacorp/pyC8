@@ -1,9 +1,9 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import os
+import time
 
 import pytest
-import time
 from dotenv import load_dotenv
 
 from c8 import C8Client
@@ -25,9 +25,7 @@ def pytest_addoption(parser):
     parser.addoption("--host", action="store", default=os.environ.get("FEDERATION_URL"))
     parser.addoption("--protocol", action="store", default="https")
     parser.addoption("--port", action="store", default="443")
-    parser.addoption(
-        "--apikey", action="store", default=os.environ.get("API_KEY")
-    )
+    parser.addoption("--apikey", action="store", default=os.environ.get("API_KEY"))
     parser.addoption("--geofabric", action="store", default=os.environ.get("FABRIC"))
     parser.addoption("--complete", action="store_true")
 
@@ -134,7 +132,9 @@ def pytest_unconfigure(config):  # pragma: no cover
     # Remove all test streams.
     for stream in sys_fabric.streams():
         stream_name = stream["name"]
-        if stream_name.startswith("c8globals.test_stream") or stream_name.startswith("c8locals.test_stream"):
+        if stream_name.startswith("c8globals.test_stream") or stream_name.startswith(
+            "c8locals.test_stream"
+        ):
             sys_fabric.delete_stream(stream_name)
 
     # Remove all test apikeys.
