@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 import base64
 import json
+import time
 
 from c8.exceptions import (
     StreamConnectionError,
@@ -23,6 +24,7 @@ def test_stream_methods(tst_fabric):
     stream_1 = "c8globals." + stream_name_1
     stream_2 = "c8locals." + stream_name_2
 
+    time.sleep(0.5)
     assert tst_fabric.has_stream(stream_name_1) is True
     stream = tst_fabric.stream()
 
