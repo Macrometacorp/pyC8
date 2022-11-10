@@ -164,9 +164,8 @@ def test_restql_exceptions(client, tst_fabric_name, col, bad_fabric_name):
     assert err.value.http_code == 400
 
     # Update non existing restql
-    with assert_raises(RestqlUpdateError) as err:
+    with assert_raises(RestqlUpdateError):
         client.update_restql("insertRecord", updated_insert_data)
-    assert err.value.http_code == 500
 
     # Read next batch from non existing cursor
     with assert_raises(RestqlCursorError) as err:

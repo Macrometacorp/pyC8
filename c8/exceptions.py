@@ -260,6 +260,10 @@ class C8QLFunctionDeleteError(C8ServerError):
     """Failed to delete C8QL user function."""
 
 
+class C8QLGetAllBatchesError(C8ClientError):
+    """Failed to retrieve all batches for the query"""
+
+
 ##############################
 # Async Execution Exceptions #
 ##############################

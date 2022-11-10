@@ -41,15 +41,10 @@ In `.env` file add variables:
 
 * `FEDERATION_URL="<your federation url>"`
 * `FABRIC="<selected fabric>"`
-* `TENANT_EMAIL="<your tenant email>"`
-* `TENANT_PASSWORD="<your tenant password>"`
 * `API_KEY="<your api key>"`
-* `TOKEN="<your token>"`
-* `MM_TENANT_EMAIL="<Macrometa tenant email>"`
-* `MM_TENANT_PASSWORD="<Macrometa tenant password>"`
 * `MM_API_KEY="<Macrometa apy key>"`
 
-**Note: MM_TENANT_EMAIL, MM_TENANT_PASSWORD, MM_API_KEY are super user credentials**
+**Note: MM_API_KEY is an apikey of the super user**
 
 `.env` file is in `.gitignore`.
 

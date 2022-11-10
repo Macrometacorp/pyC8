@@ -323,7 +323,7 @@ class C8Client(object):
         return self._fabric.update_collection_properties(
             collection_name=collection_name,
             has_stream=has_stream,
-            wait_for_sync=wait_for_sync
+            wait_for_sync=wait_for_sync,
         )
 
     # client.list_collection_indexes
@@ -662,6 +662,55 @@ class C8Client(object):
         _collection = self.get_collection(collection)
         resp = _collection.get(document=document, rev=rev, check_rev=check_rev)
         return resp
+
+    # client.get_all_documents
+
+    def get_all_documents(self, collection_name, batch_size=1000):
+        """Return all the documents inside the given collection.
+
+         Note: Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled))
+         to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
+
+        :param collection_name: Collection Name
+        :type collection_name: str
+        :param batch_size: Batch size is a configurable number. Results are retieved by continuously 
+            calling the next batch of cursor of size batch_size
+        :type batch_size: int
+        :returns: Documents, or None if not found.
+        :rtype: dict | None
+        :raise c8.exceptions.C8QLQueryExecuteError: If retrieval fails.
+        """
+        return self._fabric.c8ql.get_all_batches(
+            query="FOR doc IN {} RETURN doc".format(collection_name),
+            batch_size=batch_size,
+        )
+
+    # client.get_all_batches
+
+    def get_all_batches(self, query, bind_vars=None, batch_size=1000):
+        """Returns all batches for a query. It should only be used for Read operations. Query cannot contain
+         the following keywords: INSERT, UPDATE, REPLACE, REMOVE and UPSERT.
+
+         Note: Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled))
+         to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
+
+        :param query: Query to Execute
+        :type query: str
+        :param bind_vars: Bind variables for the query.
+        :type bind_vars: dict
+        :param batch_size: Batch size is a configurable number. Results are retieved by continuously 
+            calling the next batch of cursor of size batch_size
+        :type batch_size: int
+        :returns: Documents, or None if not found.
+        :rtype: dict | None
+        :raise c8.exceptions.C8QLQueryExecuteError: If retrieval fails.
+        """
+
+        return self._fabric.c8ql.get_all_batches(
+            query=query,
+            bind_vars=bind_vars,
+            batch_size=batch_size,
+        )
 
     # client.insert_document
 

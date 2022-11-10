@@ -4,6 +4,7 @@ import threading
 import time
 
 from c8.exceptions import (
+    C8QLGetAllBatchesError,
     C8QLQueryClearError,
     C8QLQueryExecuteError,
     C8QLQueryExplainError,
@@ -83,7 +84,6 @@ def test_export_data_query(client, docs, tst_fabric_name, col):
     assert resp["error"] is False
     assert resp["result"] == docs
 
-
 def test_c8ql_attributes(client, tst_fabric_name):
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
     assert tst_fabric.context in ["default", "async", "batch", "transaction"]
@@ -91,8 +91,7 @@ def test_c8ql_attributes(client, tst_fabric_name):
     assert tst_fabric.fabric_name == tst_fabric.name
     assert repr(tst_fabric.c8ql) == "<C8QL in {}>".format(tst_fabric_name)
 
-
-def test_c8ql_query_management(client, tst_fabric_name, bad_fabric_name, col, docs):
+def test_explain_query(client, tst_fabric_name, col):
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
     plan_fields = [
         "estimatedNrItems",
@@ -125,6 +124,8 @@ def test_c8ql_query_management(client, tst_fabric_name, bad_fabric_name, col, do
         assert all(field in plan for field in plan_fields)
     assert len(plans) < 10
 
+
+def test_validate_query(tst_fabric, col):
     # Test validate invalid query
     with assert_raises(C8QLQueryValidateError) as err:
         tst_fabric.c8ql.validate("INVALID QUERY")
@@ -137,6 +138,8 @@ def test_c8ql_query_management(client, tst_fabric_name, bad_fabric_name, col, do
     assert "collections" in result
     assert "parsed" in result
 
+
+def test_execute_query(tst_fabric, col, docs):
     # Test execute invalid C8QL query
     with assert_raises(C8QLQueryExecuteError) as err:
         tst_fabric.c8ql.execute("INVALID QUERY")
@@ -145,7 +148,7 @@ def test_c8ql_query_management(client, tst_fabric_name, bad_fabric_name, col, do
     # Test execute valid query
     tst_fabric.collection(col.name).import_bulk(docs)
     # Test for sql
-    cursor = tst_fabric.c8ql.execute(f"SELECT * FROM {col.name}", sql=True)
+    cursor = tst_fabric.c8ql.execute("SELECT * FROM {}".format(col.name), sql=True)
     doc_response = [doc for doc in cursor]
 
     entries = ("_id", "_rev")
@@ -200,6 +203,8 @@ def test_c8ql_query_management(client, tst_fabric_name, bad_fabric_name, col, do
         assert extract("_key", cursor) == extract("_key", docs)
         assert cursor.close(ignore_missing=True) is False
 
+
+def test_kill_query(tst_fabric):
     # Kick off some long lasting queries in the background
     def query():
         with assert_raises(C8QLQueryExecuteError) as err:
@@ -248,6 +253,8 @@ def test_c8ql_query_management(client, tst_fabric_name, bad_fabric_name, col, do
 
     run_queries()
 
+
+def test_slow_queries(client, tst_fabric, bad_fabric_name):
     # Test list slow queries
     assert tst_fabric.c8ql.slow_queries() == []
 
@@ -266,3 +273,75 @@ def test_c8ql_query_management(client, tst_fabric_name, bad_fabric_name, col, do
     # Test clear slow queries with bad fabric
     with assert_raises(C8QLQueryClearError):
         bad_fabric.c8ql.clear_slow_queries()
+
+
+def test_get_all_batches(client, col, tst_fabric_name):
+    document_count = 2003
+    client._tenant.useFabric(tst_fabric_name)
+    client.execute_query(
+        query="FOR doc IN 1..{} INSERT {{value:doc}} INTO {}".format(
+            document_count, col.name
+        )
+    )
+    resp = client.get_all_batches(
+        query="FOR doc IN {} FILTER doc._key > 0 RETURN doc".format(col.name)
+    )
+    assert document_count == len(resp)
+    for i in range(len(resp)):
+        assert resp[i]["value"] == i + 1
+    col.truncate()
+
+    document_count = 11
+    client.execute_query(
+        query="FOR doc IN 1..{} INSERT {{value:doc}} INTO {}".format(
+            document_count, col.name
+        )
+    )
+    resp = client.get_all_batches(
+        query="FOR doc IN {} FILTER doc._key > 0 RETURN doc".format(col.name)
+    )
+    assert document_count == len(resp)
+    for i in range(len(resp)):
+        assert resp[i]["value"] == i + 1
+    col.truncate()
+
+
+def test_invalid_get_all_batches(client, col, tst_fabric_name):
+    client._tenant.useFabric(tst_fabric_name)
+
+    # Testing invalid operation REMOVE
+    with assert_raises(C8QLGetAllBatchesError) as err:
+        client.get_all_batches(query='remove "1" in {}'.format(col.name))
+
+    # Testing invalid operation UPDATE
+    with assert_raises(C8QLGetAllBatchesError) as err:
+        client.get_all_batches(
+            query="UPDATE @id WITH {alive: false} IN @@collection",
+            bind_vars={"@collection": col.name, "id": 2},
+        )
+
+    # Testing invalid operation INSERT
+    with assert_raises(C8QLGetAllBatchesError) as err:
+        client.get_all_batches(
+            query="insert @value into @@collection",
+            bind_vars={"@collection": col.name, "value": {"value": 10}},
+        )
+
+    # Testing invalid operation REPLACE
+    with assert_raises(C8QLGetAllBatchesError) as err:
+        client.get_all_batches(
+            query="FOR u IN @@collection REPLACE @value IN @@collection",
+            bind_vars={"@collection": col.name, "value": {"value": 2, "text": "zoo "}},
+        )
+
+    # Testing invalid operation UPSERT
+    with assert_raises(C8QLGetAllBatchesError) as err:
+        client.get_all_batches(
+            query="UPSERT @value INSERT @toInsert UPDATE @toUpsert in @@collection",
+            bind_vars={
+                "@collection": col.name,
+                "value": {"text": "zoo "},
+                "toInsert": {"_key": 2, "updatedAt": "DATE_NOW()"},
+                "toUpsert": {"_key": 2, "updatedAt": "December"},
+            },
+        )

@@ -346,5 +346,6 @@ def test_permission_exceptions(client):
         client.remove_attribute(apikey_id, "foo")
     assert err.value.http_code == 404
 
+    time.sleep(1)
     assert sys_fabric.delete_stream(stream_1) is True
     assert sys_fabric.delete_collection(col_name_1) is True

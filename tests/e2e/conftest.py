@@ -10,7 +10,6 @@ client = C8Client(
     protocol="https",
     host=os.environ.get("FEDERATION_URL"),
     port=443,
-    email=os.environ.get("TENANT_EMAIL"),
     apikey=os.environ.get("API_KEY"),
     geofabric=os.environ.get("FABRIC"),
 )
@@ -19,7 +18,6 @@ mm_client = C8Client(
     protocol="https",
     host=os.environ.get("FEDERATION_URL"),
     port=443,
-    email=os.environ.get("MM_TENANT_EMAIL"),
     apikey=os.environ.get("MM_API_KEY"),
     geofabric=os.environ.get("FABRIC"),
 )

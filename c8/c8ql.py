@@ -5,6 +5,7 @@ from json import dumps
 from c8.api import APIWrapper
 from c8.cursor import Cursor
 from c8.exceptions import (
+    C8QLGetAllBatchesError,
     C8QLQueryClearError,
     C8QLQueryExecuteError,
     C8QLQueryExplainError,
@@ -13,6 +14,7 @@ from c8.exceptions import (
     C8QLQueryValidateError,
 )
 from c8.request import Request
+from c8.utils import clean_doc
 
 __all__ = ["C8QL"]
 
@@ -346,3 +348,33 @@ class C8QL(APIWrapper):
             return resp.body
 
         return self._execute(request, response_handler)
+
+
+    def get_all_batches(self, query, bind_vars=None, batch_size=1000):
+        """Returns all batches for a query. It should only be used for Read operations. Query cannot contain
+         the following keywords: INSERT, UPDATE, REPLACE, REMOVE and UPSERT.
+
+         Note: Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled))
+         to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
+
+        :param query: Query to execute
+        :type query: str
+        :param bind_vars: Bind variables for the query.
+        :type bind_vars: dict
+        :param batch_size: Batch size is a configurable number. Results are retieved by continuously 
+            calling the next batch of cursor of size batch_size
+        :type batch_size: int
+        :returns: Documents, or None if not found.
+        :rtype: dict | None
+        :raise c8.exceptions.C8QLQueryExecuteError: If retrieval fails.
+        """
+        write_ops = ["INSERT", "UPDATE", "REPLACE", "REMOVE", "UPSERT"]
+        if (any(ele in query.upper() for ele in write_ops)):
+            raise C8QLGetAllBatchesError("Write operations provided in the query. Only read operations can be provided")
+
+        cursor = self.execute(query=query, bind_vars=bind_vars, batch_size=batch_size, stream=True)
+        while cursor.has_more():
+            cursor.fetch()
+
+        result = clean_doc(cursor.batch())
+        return result

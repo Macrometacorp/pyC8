@@ -10,6 +10,7 @@ from tests.helpers import assert_raises
 
 
 def test_streamapp_methods(client):
+    client._tenant.useFabric("_system")
     stream_app_definition = """
         @App:name('Sample-Cargo-App')
         @App:qlVersion("2")
@@ -124,7 +125,7 @@ def test_streamapp_methods(client):
     client.create_restql(insert_data_query)
     time.sleep(5)
 
-    for i in range(10):
+    for i in range(3):
         client.execute_restql("insertTestWeight", {"bindVars": {"weight": i}})
 
     time.sleep(2)
@@ -145,6 +146,7 @@ def test_streamapp_methods(client):
 
 
 def test_streamapp_http_source(client):
+    client._tenant.useFabric("_system")
     stream_app_definition = """
     @App:name('Sample-HTTP-Source')
     @App:description("This application how to receive POST requests via Stream Workers API.")
