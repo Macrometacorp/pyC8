@@ -19,7 +19,7 @@ client.create_collection(name='employees', sync=False, edge=False, local_collect
 # CRUD Operations for Document Store collection
 A [document collection](https://macrometa.com/docs/collections/documents/) is a NoSQL database that stores data in JSON format (JavaScript Object Notation). Unlike traditional Relational Database Management Systems, document databases do not require a schema or a pre-defined structure with fixed tables and attributes.
 
-[See the complete example for this section here](./examples/document_store_crud.py)
+[See the complete example for this section here](./examples/documents/document_store_crud.py)
 ## Insert Document
 Documents are stored in [collections](https://macrometa.com/docs/collections/). Documents with completely different structures can be stored in the same collection.
 
@@ -79,7 +79,7 @@ client.delete_collection(name="employees")
 Working with data can be complex. CRUD operations usually need more logic or conditions to reach the desired results. At Macrometa the [C8 query language (C8QL)](https://macrometa.com/docs/queryworkers/c8ql/) can be used to create, retrieve, modify and delete data that are stored in the Macrometa geo-distributed fast data platform.
 **Check out the [operators](https://macrometa.com/docs/queryworkers/c8ql/) and [examples](https://macrometa.com/docs/queryworkers/c8ql/examples/) in Macrometa**
 
-[See the complete example for this section here](./examples/working_with_c8ql.py)
+[See the complete example for this section here](./examples/query/working_with_queries.py)
 
 Let's [FILTER](https://macrometa.com/docs/queryworkers/c8ql/operations/filter) results by **role** and **age** and return a custom object using [ C8QL](https://macrometa.com/docs/queryworkers/c8ql/):
 ```python
@@ -123,13 +123,13 @@ docs = [doc for doc in cursor]
 
 ## Returning all data records inside the collection via batches
 The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes).
-The following method should be used to retrieve data from a collection in batches despite this default limit of 1,000 documents per query.
+The following method can be used to retrieve data from a collection in batches despite this default limit of 1,000 documents per query.
 
 :::note
 Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled)) to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
 :::
 
-[See the full example here](./examples/get_data_in_batches.py)
+[See the full example here](./examples/common_use_cases/get_data_in_batches.py)
 
 You need to specify the collection name in the `collection_name` parameter
 ```python
@@ -138,13 +138,14 @@ client.get_all_documents(collection_name="employees")
 
 ## Returning all data records returned by any query via batches
 The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes).
-The following method should be used to retrieve all the data from any query via batches despite this default limit of 1,000 documents per query.
+
+The following method can be used to retrieve all the data from any query via batches despite this default limit of 1,000 documents per query.
 
 :::note
 Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled)) to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
 :::
 
-[See the full example here](./examples/get_data_in_batches.py)
+[See the full example here](./examples/common_use_cases/get_data_in_batches.py)
 
 You need to specify your query in the `query` parameter
 ```python
@@ -156,7 +157,7 @@ A query worker is set of named, parameterized C8QL queries stored in GDN that yo
 
 ## Operations for query workers
 
-[See the full example here](./examples/query_workers.py)
+[See the full example here](./examples/query_workers/query_workers.py)
 
 ### Create a query worker
 In the following example a query worker named `insertRecord` is created which inserts documents into the **employees** collection.
@@ -261,7 +262,7 @@ Example to get real-time updates from **employees** collection:
 Enable the 'Stream' parameter within the collection to get real-time updates if not already enabled
 :::
 
-[See the complete example here](./examples/get_realtime_updates_from_collection.py)
+[See the complete example here](./examples/common_use_cases/get_realtime_updates_from_collection.py)
 ```python
 def callback_fn(event):
     print(event)
@@ -286,7 +287,7 @@ client.update_collection_properties(collection_name="employees", has_stream=True
 # Streams
 Streams are flows of data in GDN to capture data in motion. Messages are sent via streams by publishers to consumers who then do something with the message. Refer [Streams](https://macrometa.com/docs/streams/)
 
-[See the complete example here](./examples/streams.py)
+[See the complete example here](./examples/streams/streams.py)
 ## Basic operations for streams -
 
 ### Create a stream
@@ -362,7 +363,7 @@ Refer [Stream Workers](https://macrometa.com/docs/cep/) and [Stream Worker Query
 
 ## Basic operations for stream workers
 
-[See the complete example here](./examples/stream_workers.py)
+[See the complete example here](./examples/stream_workers/stream_workers.py)
 
 ### Validate a stream worker
 Validate the stream worker for syntax errors before saving.

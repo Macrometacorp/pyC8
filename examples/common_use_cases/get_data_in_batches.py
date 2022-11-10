@@ -1,5 +1,3 @@
-import math
-
 from c8 import C8Client
 
 # Creating client instance with API KEY
@@ -20,8 +18,8 @@ docs_collection = client.get_all_documents(collection_name=collection_name)
 
 # Return all documents returned by a query
 docs_query = client.get_all_batches(
-                query="FOR doc IN {} FILTER doc._key > 0 RETURN doc".format(collection_name)
-             )
+    query="FOR doc IN {} FILTER doc._key > 0 RETURN doc".format(collection_name)
+)
 
 # Delete collection
 client.delete_collection(collection_name)
