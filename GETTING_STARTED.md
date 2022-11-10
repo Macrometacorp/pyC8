@@ -1,6 +1,9 @@
 # Getting Started
 
-## Auth - Connect to GDN
+## 🆘 Macrometa Support
+If you have any trouble or need help while using SDK please contact [support@macrometa.com](mailto:support@macrometa.com).
+
+## 🔐 Auth - Connect to GDN
 The first step to start using GDN is establishing a connection to [gdn.paas.macrometa.io](https://gdn.paas.macrometa.io/). When this code executes, it initializes the server connection to your nearest region. You can access your Macrometa GDN account using several methods, such as [API keys](https://macrometa.com/docs/account-management/api-keys/), [User authentication](https://macrometa.com/docs/account-management/auth/user-auth), [Token-based authentication (JWT)](https://macrometa.com/docs/account-management/auth/jwts). For this example the method used is API key.
 
 ```python
@@ -135,6 +138,7 @@ client.get_all_documents(collection_name="employees")
 
 ## Returning all data records returned by any query via batches
 The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes).
+
 The following method can be used to retrieve all the data from any query via batches despite this default limit of 1,000 documents per query.
 
 :::note
