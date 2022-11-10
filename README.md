@@ -107,7 +107,7 @@ pip install --upgrade pyC8
 You can find code examples in our [getting started collection](https://github.com/Macrometacorp/pyC8/blob/master/GETTING_STARTED.md).
 
 ## ⚖️ License
-This library is distributed under the Apache License 2.0 license found in the [License](https://github.com/dlozina-macrometa/pyC8/blob/master/LICENSE).
+This library is distributed under the Apache License 2.0 license found in the [License](https://github.com/Macrometacorp/pyC8/blob/master/LICENSE).
 
 ## 📜 Code of Conduct
 
