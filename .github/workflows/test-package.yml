@@ -32,7 +32,7 @@ jobs:
         echo FEDERATION_URL=${{ secrets.FEDERATION_URL }} >> .env
         echo API_KEY=${{ secrets.API_KEY }} >> .env
         echo MM_API_KEY=${{ secrets.MM_API_KEY }} >> .env
-        echo FABRIC=$${{ secrets.FABRIC }} >> .env
+        echo FABRIC=${{ secrets.FABRIC }} >> .env
         cat .env
     - name: Test with tox
       run: tox
