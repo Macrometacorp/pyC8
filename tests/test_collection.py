@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import json
+import os
 
 from c8.collection import StandardCollection
 from c8.exceptions import (
@@ -158,13 +159,15 @@ def test_collection_management(tst_fabric, client, bad_fabric):
 
 
 def test_insert_from_file(client, tst_fabric_name, col):
-    file = open("files/data.json")
+    absolute_path = os.path.dirname(__file__)
+    json_path = os.path.join(absolute_path, "files/data.json")
+    csv_path = os.path.join(absolute_path, "files/data.csv")
+    invalid_file_path = os.path.join(absolute_path, "files/data")
+    file = open(json_path)
     documents = json.load(file)
 
     client._tenant.useFabric(tst_fabric_name)
-    client.insert_document_from_file(
-        collection_name=col.name, filepath="files/data.json"
-    )
+    client.insert_document_from_file(collection_name=col.name, filepath=json_path)
 
     data = client.collection(collection_name=col.name).export(limit=len(documents))
     entries = ("_id", "_key", "_rev")
@@ -176,9 +179,7 @@ def test_insert_from_file(client, tst_fabric_name, col):
     assert documents == data
     col.truncate()
 
-    client.insert_document_from_file(
-        collection_name=col.name, filepath="files/data.csv"
-    )
+    client.insert_document_from_file(collection_name=col.name, filepath=csv_path)
     data = client.collection(collection_name=col.name).export(limit=len(documents))
 
     assert len(data) == len(documents)
@@ -186,7 +187,7 @@ def test_insert_from_file(client, tst_fabric_name, col):
 
     with assert_raises(CollectionImportFromFileError) as err:
         client.insert_document_from_file(
-            collection_name=col.name, filepath="files/data"
+            collection_name=col.name, filepath=invalid_file_path
         )
     assert (
         str(err)
