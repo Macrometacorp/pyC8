@@ -8,6 +8,9 @@ dist/
 # Enviroment files
 .env
 
+# Tox files
+.tox
+
 # Mac OS temp
 .DS_Store
 
