@@ -20,8 +20,7 @@ def test_client_attributes():
         protocol="https",
         host=os.environ.get("FEDERATION_URL"),
         port=443,
-        email=os.environ.get("TENANT_EMAIL"),
-        password=os.environ.get("TENANT_PASSWORD"),
+        apikey=os.environ.get("API_KEY"),
         geofabric=os.environ.get("FABRIC"),
         http_client=session,
     )
@@ -32,8 +31,7 @@ def test_client_attributes():
     assert client.base_url == "https://api-{}:443".format(
         os.environ.get("FEDERATION_URL")
     )
-    assert client._email == os.environ.get("TENANT_EMAIL")
-    assert client._password == os.environ.get("TENANT_PASSWORD")
+    assert client._apikey == os.environ.get("API_KEY")
     assert client._fabric_name == os.environ.get("FABRIC")
     assert repr(client) == "<C8Client https://api-{}:443>".format(
         os.environ.get("FEDERATION_URL")
@@ -45,8 +43,7 @@ def test_client_bad_connection(username, password):
         protocol="https",
         host=os.environ.get("FEDERATION_URL"),
         port=443,
-        email=os.environ.get("TENANT_EMAIL"),
-        password=os.environ.get("TENANT_PASSWORD"),
+        apikey=os.environ.get("API_KEY"),
         geofabric=os.environ.get("FABRIC"),
     )
 
@@ -85,8 +82,7 @@ def test_client_custom_http_client():
         protocol="https",
         host=os.environ.get("FEDERATION_URL"),
         port=443,
-        email=os.environ.get("TENANT_EMAIL"),
-        password=os.environ.get("TENANT_PASSWORD"),
+        apikey=os.environ.get("API_KEY"),
         geofabric=os.environ.get("FABRIC"),
         http_client=http_client,
     )
@@ -128,11 +124,6 @@ def test_get_jwt(client):
 
     assert "jwt" in resp
     assert resp["username"] == user["username"]
-    assert resp["tenant"] == user["tenant"]
-
-    resp = client._tenant._conn._get_auth_token()
-    assert "jwt" in resp
-    assert resp["username"] == "root"
     assert resp["tenant"] == user["tenant"]
 
     with assert_raises(C8AuthenticationError):

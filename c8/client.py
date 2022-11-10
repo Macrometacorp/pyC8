@@ -323,7 +323,7 @@ class C8Client(object):
         return self._fabric.update_collection_properties(
             collection_name=collection_name,
             has_stream=has_stream,
-            wait_for_sync=wait_for_sync
+            wait_for_sync=wait_for_sync,
         )
 
     # client.list_collection_indexes

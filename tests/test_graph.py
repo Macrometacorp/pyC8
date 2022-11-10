@@ -311,7 +311,8 @@ def test_edge_definition_management(tst_fabric, graph, fvcol, tvcol, ecol, bad_g
     assert not graph.has_edge_collection(ecol_name)
 
 
-def test_create_graph_with_edge_definition(tst_fabric):
+def test_create_graph_with_edge_definition(client):
+    sys_fabric = client._tenant.useFabric("_system")
     new_graph_name = generate_graph_name()
     new_ecol_name = generate_col_name()
     fvcol_name = generate_col_name()
@@ -323,7 +324,7 @@ def test_create_graph_with_edge_definition(tst_fabric):
         "from_vertex_collections": [fvcol_name],
         "to_vertex_collections": [tvcol_name],
     }
-    new_graph = tst_fabric.create_graph(
+    new_graph = sys_fabric.create_graph(
         new_graph_name,
         edge_definitions=[edge_definition],
         orphan_collections=[ovcol_name],
