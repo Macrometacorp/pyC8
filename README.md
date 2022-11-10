@@ -11,6 +11,7 @@ Python SDK for the Macrometa Global Data Mesh.
 ---
 
 ## 🐍 Supported Python Versions
+
 This SDK supports the following Python implementations:
 
 * Python 3.4 - 3.10
@@ -25,6 +26,7 @@ pip install pyC8
 ```
 
 ## 🔐 Authentication
+
 Currently, pyC8 supports API Key, JWT token, username and password authentication.
 Preferred method needs to be passed during client creation. We highly recommend that you use API key or JWT token.
 
@@ -33,6 +35,7 @@ You can create you test Macrometa account with this [link](https://auth-play.mac
 After that you can check out our [getting started code examples](https://github.com/Macrometacorp/pyC8/blob/master/GETTING_STARTED.md).
 
 ## 🧰 Development environment
+
 To enable development environment position ourselves to project's root and run:
 
 ```bash
@@ -103,10 +106,14 @@ pip install --upgrade pyC8
 ```
 
 ## 📗 Examples
-
 You can find code examples in our [getting started collection](https://github.com/Macrometacorp/pyC8/blob/master/GETTING_STARTED.md).
 
+## 🆘 Macrometa Support
+
+If you have any trouble or need help while using SDK please contact [support@macrometa.com](mailto:support@macrometa.com).
+
 ## ⚖️ License
+
 This library is distributed under the Apache License 2.0 license found in the [License](https://github.com/Macrometacorp/pyC8/blob/master/LICENSE).
 
 ## 📜 Code of Conduct

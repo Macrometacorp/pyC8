@@ -33,3 +33,6 @@ jobs:
         MM_API_KEY: ${{ secrets.MM_API_KEY }}
         FABRIC: ${{ secrets.FABRIC }}
       run: tox
+    - name: Test markdown files links
+      run: |
+        python tests/url_tester.py
