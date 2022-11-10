@@ -673,7 +673,7 @@ class C8Client(object):
 
         :param collection_name: Collection Name
         :type collection_name: str
-        :param batch_size: Batch size is a configurable number. Results are retieved by continuously 
+        :param batch_size: Batch size is a configurable number. Results are retieved by continuously
             calling the next batch of cursor of size batch_size
         :type batch_size: int
         :returns: Documents, or None if not found.
@@ -698,7 +698,7 @@ class C8Client(object):
         :type query: str
         :param bind_vars: Bind variables for the query.
         :type bind_vars: dict
-        :param batch_size: Batch size is a configurable number. Results are retieved by continuously 
+        :param batch_size: Batch size is a configurable number. Results are retieved by continuously
             calling the next batch of cursor of size batch_size
         :type batch_size: int
         :returns: Documents, or None if not found.

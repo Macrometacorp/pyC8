@@ -19,9 +19,9 @@ def get_md_files():
 def find_md_links(md):
     """Return list of links in markdown"""
     regex_url = re.compile(
-        "((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)"
-        "(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\("
-        "([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+        r"((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)"
+        r"(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\("
+        r"([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
     )
     links = list(regex_url.findall(md))
 
@@ -42,12 +42,12 @@ for file in files:
             resp = urlopen(req)
         except HTTPError as e:
             is_broken = True
-            print("Page down: ", req.full_url, " ", e)
+            print("Page down: ", req.full_url, " ", e)  # noqa
         except URLError as e:
             is_broken = True
-            print("Page down: ", req.full_url, " ", e)
+            print("Page down: ", req.full_url, " ", e)  # noqa
 
 if is_broken is False:
-    print("All pages are up!")
+    print("All pages are up!")  # noqa
 else:
     raise RuntimeError("Above pages have broken links")
