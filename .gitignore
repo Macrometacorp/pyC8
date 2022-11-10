@@ -11,6 +11,9 @@ dist/
 # Tox files
 .tox
 
+# Test coverage file
+.coverage
+
 # Mac OS temp
 .DS_Store
 
