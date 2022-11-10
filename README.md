@@ -24,9 +24,15 @@ package manager for Python.
 pip install pyC8
 ```
 
-After that you can check out our [getting started code examples](GETTING_STARTED.md).
+## 🔐 Authentication
+Currently, pyC8 supports API Key, JWT token, username and password authentication.
+Preferred method needs to be passed during client creation. We highly recommend that you use API key or JWT token.
 
-## 🧶 Development environment
+You can create you test Macrometa account with this [link](https://auth-play.macrometa.io/sign-up).
+
+After that you can check out our [getting started code examples](https://github.com/Macrometacorp/pyC8/blob/master/GETTING_STARTED.md).
+
+## 🧰 Development environment
 To enable development environment position ourselves to project's root and run:
 
 ```bash
@@ -98,9 +104,9 @@ pip install --upgrade pyC8
 
 ## 📗 Examples
 
-You can find code examples in our [getting started collection](GETTING_STARTED.md).
+You can find code examples in our [getting started collection](https://github.com/Macrometacorp/pyC8/blob/master/GETTING_STARTED.md).
 
 ## 📜 Code of Conduct
 
-This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md).
-By participating, you are expected to uphold this code. Please report unacceptable behavior to [support@macrometa.com](mailto:support@macrometa.com).
+This project and everyone participating in it is governed by the [Code of Conduct](https://github.com/Macrometacorp/pyC8/blob/master/CODE_OF_CONDUCT.md).
+By participating, you are expected to uphold this code. Please report unacceptable behavior to [product@macrometa.com](mailto:product@macrometa.com).
