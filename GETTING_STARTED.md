@@ -136,7 +136,7 @@ client.get_all_documents(collection_name="employees")
 
 ## Returning all data records returned by any query via batches
 The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes).
- 
+
 The following method can be used to retrieve all the data from any query via batches despite this default limit of 1,000 documents per query.
 
 >**_Note:_** Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled)) to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
