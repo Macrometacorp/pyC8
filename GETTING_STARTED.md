@@ -125,9 +125,7 @@ docs = [doc for doc in cursor]
 The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes).
 The following method can be used to retrieve data from a collection in batches despite this default limit of 1,000 documents per query.
 
-:::note
-Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled)) to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
-:::
+>**_Note:_** Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled)) to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
 
 [See the full example here](./examples/common_use_cases/get_data_in_batches.py)
 
@@ -138,12 +136,11 @@ client.get_all_documents(collection_name="employees")
 
 ## Returning all data records returned by any query via batches
 The Macrometa GDN has a default limit on how many documents can be returned per query. Usually, the default limit is 1,000 documents per query (This default limit is subject to changes).
-
+ 
 The following method can be used to retrieve all the data from any query via batches despite this default limit of 1,000 documents per query.
 
-:::note
-Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled)) to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
-:::
+>**_Note:_** Please make sure there is more than enough memory available on your system (RAM + Swap(if swap is enabled)) to be able fetch total size of the documents to be returned. This will help avoid any Out-Of-Memory problems.
+
 
 [See the full example here](./examples/common_use_cases/get_data_in_batches.py)
 
@@ -258,9 +255,8 @@ client.delete_restql(name="insertRecord")
 
 ## Get real-time updates from a collection
 Example to get real-time updates from **employees** collection:
-:::note
-Enable the 'Stream' parameter within the collection to get real-time updates if not already enabled
-:::
+>**_Note:_** Enable the 'Stream' parameter within the collection to get real-time updates if not already enabled
+
 
 [See the complete example here](./examples/common_use_cases/get_realtime_updates_from_collection.py)
 ```python
@@ -333,11 +329,10 @@ A complete pub-sub example can be found [here](https://macrometa.com/docs/stream
 
 ### Delete a subscription from a particular stream
 In the following example, a [subscription](https://macrometa.com/docs/streams/subscriptions) named `topic_1` is removed from a `global` stream named `quickStart` (set local parameter as false if the stream is local).
-:::note
-In case the stream is a local stream:
+>**_Note:_** In case the stream is a local stream:
 Append `c8locals.` instead of `c8globals.` to the stream name.
 Set local parameter as true.
-:::
+
 ```python
 client.delete_stream_subscription(stream="c8globals.quickStart", subscription="topic_1", local=False)
 ```
@@ -350,9 +345,8 @@ client.unsubscribe(subscription="topic_1", local=False)
 
 ### Delete a stream
 In the following example a `global` stream named `quickStart` is deleted.
-:::note
-Append `c8locals.` instead of `c8globals.` to the stream name in case the stream is a local stream.
-:::
+>**_Note:_** Append `c8locals.` instead of `c8globals.` to the stream name in case the stream is a local stream.
+
 ```python
 client.delete_stream(stream="c8globals.quickStart")
 ```
