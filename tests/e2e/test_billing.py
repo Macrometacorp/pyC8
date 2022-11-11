@@ -78,28 +78,28 @@ def test_get_specific_invoice(get_client_instance):
     assert "Method Not Allowed" in str(err.value)
 
 
-# def test_get_usage(get_client_instance, get_dates):
-#     # Test get billing usage
-#     start_date, end_date = get_dates
-#     resp = get_client_instance.billing.get_usage(
-#         start_date=start_date, end_date=end_date
-#     )
-#     assert resp["data"][0]["tenant"] == get_client_instance._tenant.name
-#
-#     # Test get billing usage with invalid tenant
-#     with assert_raises(BillingServerError):
-#         get_client_instance.billing.get_usage("invalid")
+def test_get_usage(get_client_instance, get_dates):
+    # Test get billing usage
+    start_date, end_date = get_dates
+    resp = get_client_instance.billing.get_usage(
+        start_date=start_date, end_date=end_date
+    )
+    assert resp["data"][0]["tenant"] == get_client_instance._tenant.name
+
+    # Test get billing usage with invalid tenant
+    with assert_raises(BillingServerError):
+        get_client_instance.billing.get_usage("invalid")
 
 
-# def test_get_usage_region(get_client_instance, get_dates):
-#     # Test get billing usage
-#     start_date, end_date = get_dates
-#     region = get_client_instance.get_local_dc(False)
-#     resp = get_client_instance.billing.get_usage_region(
-#         region=region, start_date=start_date, end_date=end_date
-#     )
-#     assert resp["data"][0]["tenant"] == get_client_instance._tenant.name
-#
-#     # Test get billing usage with invalid tenant
-#     with assert_raises(BillingServerError):
-#         get_client_instance.billing.get_usage_region(region=region, tenant="invalid")
+def test_get_usage_region(get_client_instance, get_dates):
+    # Test get billing usage
+    start_date, end_date = get_dates
+    region = get_client_instance.get_local_dc(False)
+    resp = get_client_instance.billing.get_usage_region(
+        region=region, start_date=start_date, end_date=end_date
+    )
+    assert resp["data"][0]["tenant"] == get_client_instance._tenant.name
+
+    # Test get billing usage with invalid tenant
+    with assert_raises(BillingServerError):
+        get_client_instance.billing.get_usage_region(region=region, tenant="invalid")
