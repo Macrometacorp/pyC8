@@ -1,4 +1,4 @@
-name: tag-and-publish
+name: Tag-and-Publish
 on:
   workflow_dispatch:
     inputs:

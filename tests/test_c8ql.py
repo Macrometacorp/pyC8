@@ -84,12 +84,14 @@ def test_export_data_query(client, docs, tst_fabric_name, col):
     assert resp["error"] is False
     assert resp["result"] == docs
 
+
 def test_c8ql_attributes(client, tst_fabric_name):
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
     assert tst_fabric.context in ["default", "async", "batch", "transaction"]
     assert tst_fabric.tenant_name == client._tenant.name
     assert tst_fabric.fabric_name == tst_fabric.name
     assert repr(tst_fabric.c8ql) == "<C8QL in {}>".format(tst_fabric_name)
+
 
 def test_explain_query(client, tst_fabric_name, col):
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
@@ -310,32 +312,32 @@ def test_invalid_get_all_batches(client, col, tst_fabric_name):
     client._tenant.useFabric(tst_fabric_name)
 
     # Testing invalid operation REMOVE
-    with assert_raises(C8QLGetAllBatchesError) as err:
+    with assert_raises(C8QLGetAllBatchesError):
         client.get_all_batches(query='remove "1" in {}'.format(col.name))
 
     # Testing invalid operation UPDATE
-    with assert_raises(C8QLGetAllBatchesError) as err:
+    with assert_raises(C8QLGetAllBatchesError):
         client.get_all_batches(
             query="UPDATE @id WITH {alive: false} IN @@collection",
             bind_vars={"@collection": col.name, "id": 2},
         )
 
     # Testing invalid operation INSERT
-    with assert_raises(C8QLGetAllBatchesError) as err:
+    with assert_raises(C8QLGetAllBatchesError):
         client.get_all_batches(
             query="insert @value into @@collection",
             bind_vars={"@collection": col.name, "value": {"value": 10}},
         )
 
     # Testing invalid operation REPLACE
-    with assert_raises(C8QLGetAllBatchesError) as err:
+    with assert_raises(C8QLGetAllBatchesError):
         client.get_all_batches(
             query="FOR u IN @@collection REPLACE @value IN @@collection",
             bind_vars={"@collection": col.name, "value": {"value": 2, "text": "zoo "}},
         )
 
     # Testing invalid operation UPSERT
-    with assert_raises(C8QLGetAllBatchesError) as err:
+    with assert_raises(C8QLGetAllBatchesError):
         client.get_all_batches(
             query="UPSERT @value INSERT @toInsert UPDATE @toUpsert in @@collection",
             bind_vars={
