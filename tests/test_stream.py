@@ -11,14 +11,14 @@ from c8.exceptions import (
     StreamProducerError,
     StreamSubscriberError,
 )
-from tests.helpers import assert_raises, generate_stream_name
+from tests.helpers import assert_raises, generate_random_stream_name
 
 
 def test_stream_methods(client):
     # Test stream apis
     sys_fabric = client._tenant.useFabric("_system")
-    stream_name_1 = generate_stream_name()
-    stream_name_2 = generate_stream_name()
+    stream_name_1 = generate_random_stream_name()
+    stream_name_2 = generate_random_stream_name()
     sys_fabric.create_stream(stream_name_1)
     sys_fabric.create_stream(stream_name_2, True)
 
@@ -86,7 +86,7 @@ def test_stream_methods(client):
 
 def test_stream_exceptions(client, bad_fabric_name, tst_fabric, tst_fabric_name):
     # Test stream exceptions
-    stream_name_1 = generate_stream_name()
+    stream_name_1 = generate_random_stream_name()
     with assert_raises(StreamCreateError) as err:
         tst_fabric.create_stream(stream_name_1 + "%")
     assert err.value.http_code == 400

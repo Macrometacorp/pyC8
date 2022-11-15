@@ -32,9 +32,9 @@ from c8.exceptions import (
 from tests.helpers import (
     assert_raises,
     extract,
-    generate_col_name,
     generate_fabric_name,
-    generate_stream_name,
+    generate_random_collection_name,
+    generate_random_stream_name,
     generate_string,
     generate_username,
 )
@@ -285,7 +285,7 @@ def test_permission_exceptions(client, sys_fabric):
     assert client.has_user(username_2)
     user = client.tenant(email, password)
 
-    col_name_1 = generate_col_name()
+    col_name_1 = generate_random_collection_name()
     assert sys_fabric.create_collection(col_name_1) is not None
 
     # Test that missing users should not be able to access permissions (fabric level)
@@ -329,7 +329,7 @@ def test_permission_exceptions(client, sys_fabric):
         client.list_accessible_streams_user(username)
     assert err.value.http_code == 404
 
-    stream_name_1 = generate_stream_name()
+    stream_name_1 = generate_random_stream_name()
     sys_fabric.create_stream(stream_name_1)
 
     stream_1 = f"c8globals.{stream_name_1}"

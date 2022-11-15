@@ -13,7 +13,7 @@ from c8.exceptions import (
     CollectionListError,
     CollectionPropertiesError,
 )
-from tests.helpers import assert_raises, extract, generate_col_name
+from tests.helpers import assert_raises, extract, generate_random_collection_name
 
 
 def test_get_collection_information(client, col, tst_fabric_name):
@@ -24,7 +24,9 @@ def test_get_collection_information(client, col, tst_fabric_name):
     assert get_col_info["error"] is False
     assert get_col_info["name"] == collection.name
     with assert_raises(CollectionFindError):
-        tst_fabric.collection(generate_col_name()).get_collection_information()
+        tst_fabric.collection(
+            generate_random_collection_name()
+        ).get_collection_information()
 
 
 def test_collection_figures(client, col, tst_fabric_name):
@@ -35,7 +37,7 @@ def test_collection_figures(client, col, tst_fabric_name):
     assert get_col_properties["name"] == collection.name
     assert get_col_properties["isSystem"] is False
     with assert_raises(CollectionFindError):
-        tst_fabric.collection(generate_col_name()).collection_figures()
+        tst_fabric.collection(generate_random_collection_name()).collection_figures()
 
 
 def test_collection_attributes(client, col, tst_fabric):

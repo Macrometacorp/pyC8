@@ -1,8 +1,8 @@
-from tests.helpers import generate_col_name
+from tests.helpers import generate_random_collection_name
 
 
 def test_create_collection_endpoint(client, tst_fabric_name):
-    collection_name = generate_col_name()
+    collection_name = generate_random_collection_name()
     client._tenant.useFabric(tst_fabric_name)
     col = client.create_collection(collection_name)
     assert repr(col) == "<StandardCollection {}>".format(col.name)
@@ -38,7 +38,7 @@ def test_collection_export(col, docs):
 
 
 def test_collection_indexes(client, tst_fabric_name):
-    collection_name = generate_col_name()
+    collection_name = generate_random_collection_name()
     client._tenant.useFabric(tst_fabric_name)
     col = client.create_collection(collection_name)
     fields = ["lat", "lng"]
@@ -81,22 +81,22 @@ def test_collection_indexes(client, tst_fabric_name):
 
 
 def test_delete_collection_endpoint(client, tst_fabric_name):
-    collection_name = generate_col_name()
+    collection_name = generate_random_collection_name()
     client._tenant.useFabric(tst_fabric_name)
     client.create_collection(collection_name)
     assert client.delete_collection(collection_name) is True
 
 
 def test_has_collection_endpoint(client, tst_fabric_name):
-    collection_name = generate_col_name()
+    collection_name = generate_random_collection_name()
     client._tenant.useFabric(tst_fabric_name)
     client.create_collection(collection_name)
     assert True is client.has_collection(collection_name)
-    assert False is client.has_collection(generate_col_name())
+    assert False is client.has_collection(generate_random_collection_name())
 
 
 def test_collection_figures(client, tst_fabric_name):
-    collection_name = generate_col_name()
+    collection_name = generate_random_collection_name()
     fab = client._tenant.useFabric(tst_fabric_name)
     col = client.create_collection(collection_name, key_generator="autoincrement")
     get_col_properties = fab.collection(col.name).collection_figures()

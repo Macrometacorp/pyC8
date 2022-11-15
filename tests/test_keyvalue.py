@@ -12,12 +12,12 @@ from c8.exceptions import (
     ListCollections,
     RemoveKVError,
 )
-from tests.helpers import assert_raises, extract, generate_col_name
+from tests.helpers import assert_raises, extract, generate_random_collection_name
 
 
 def test_keyvalue_methods(client, tst_fabric_name):
     client._tenant.useFabric(tst_fabric_name)
-    col_name = generate_col_name()
+    col_name = generate_random_collection_name()
     key_values = [
         {"_key": "1", "value": "foo"},
         {"_key": "2", "value": "bar"},
@@ -61,8 +61,8 @@ def test_keyvalue_methods(client, tst_fabric_name):
 
 
 def test_keyvalue_exceptions(client, tst_fabric_name, bad_fabric_name):
-    bad_col_name = generate_col_name()
-    col_name = generate_col_name()
+    bad_col_name = generate_random_collection_name()
+    col_name = generate_random_collection_name()
     key_values = [{"_key": "1"}, {"_key": "2"}, {"_key": "3"}]
 
     # Tests with bad fabric (non existing)

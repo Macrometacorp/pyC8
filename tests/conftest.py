@@ -10,14 +10,22 @@ from c8 import C8Client
 from c8.fabric import StandardFabric
 from tests.executors import TestAsyncExecutor, TestBatchExecutor
 from tests.helpers import (
-    generate_col_name,
     generate_fabric_name,
     generate_graph_name,
+    generate_random_collection_name,
     generate_string,
     generate_username,
 )
 
 global_data = dict()
+
+
+def vcr_config():
+    return {
+        "filter_headers": ["Authorization"],
+        "ignore_localhost": True,
+        "record_mode": "once",
+    }
 
 
 def pytest_addoption(parser):
@@ -52,21 +60,21 @@ def pytest_configure(config):
     tst_fabric = tenant.useFabric(tst_fabric_name)
 
     # Create a standard collection for testing.
-    col_name = generate_col_name()
+    col_name = generate_random_collection_name()
     tst_col = tst_fabric.create_collection(col_name, edge=False)
     tst_col.add_skiplist_index(["val"])
     tst_col.add_fulltext_index(["text"])
     geo_index = tst_col.add_geo_index(["loc"])
 
     # Create a legacy edge collection for testing.
-    lecol_name = generate_col_name()
+    lecol_name = generate_random_collection_name()
     tst_fabric.create_collection(lecol_name, edge=True)
 
     # Create test vertex & edge collections and graph.
     graph_name = generate_graph_name()
-    ecol_name = generate_col_name()
-    fvcol_name = generate_col_name()
-    tvcol_name = generate_col_name()
+    ecol_name = generate_random_collection_name()
+    fvcol_name = generate_random_collection_name()
+    tvcol_name = generate_random_collection_name()
     tst_graph = tst_fabric.create_graph(graph_name)
     tst_graph.create_vertex_collection(fvcol_name)
     tst_graph.create_vertex_collection(tvcol_name)

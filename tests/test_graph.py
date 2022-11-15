@@ -24,9 +24,9 @@ from tests.helpers import (
     assert_raises,
     clean_doc,
     extract,
-    generate_col_name,
     generate_doc_key,
     generate_graph_name,
+    generate_random_collection_name,
 )
 
 
@@ -101,9 +101,9 @@ def test_graph_management(tst_fabric):
 
     # Create a graph with vertex and edge collections and delete the graph
     graph = tst_fabric.create_graph(graph_name)
-    ecol_name = generate_col_name()
-    fvcol_name = generate_col_name()
-    tvcol_name = generate_col_name()
+    ecol_name = generate_random_collection_name()
+    fvcol_name = generate_random_collection_name()
+    tvcol_name = generate_random_collection_name()
 
     graph.create_vertex_collection(fvcol_name)
     graph.create_vertex_collection(tvcol_name)
@@ -139,7 +139,7 @@ def test_graph_management(tst_fabric):
 
 def test_vertex_collection_management(tst_fabric, graph, bad_graph, client):
     # Test create valid "from" vertex collection
-    fvcol_name = generate_col_name()
+    fvcol_name = generate_random_collection_name()
     assert not graph.has_vertex_collection(fvcol_name)
     assert not tst_fabric.has_collection(fvcol_name)
 
@@ -160,7 +160,7 @@ def test_vertex_collection_management(tst_fabric, graph, bad_graph, client):
     assert fvcol_name in extract("name", tst_fabric.collections())
 
     # Test create valid "to" vertex collection
-    tvcol_name = generate_col_name()
+    tvcol_name = generate_random_collection_name()
     assert not graph.has_vertex_collection(tvcol_name)
     assert not tst_fabric.has_collection(tvcol_name)
 
@@ -181,7 +181,7 @@ def test_vertex_collection_management(tst_fabric, graph, bad_graph, client):
 
     # Test delete missing vertex collection
     with assert_raises(VertexCollectionDeleteError) as err:
-        graph.delete_vertex_collection(generate_col_name())
+        graph.delete_vertex_collection(generate_random_collection_name())
     assert err.value.error_code == 1928
 
     # Test delete "to" vertex collection with purge option
@@ -200,7 +200,7 @@ def test_vertex_collection_management(tst_fabric, graph, bad_graph, client):
 
 def test_edge_definition_management(tst_fabric, graph, fvcol, tvcol, ecol, bad_graph):
     # Check graph with random generated edge definitions
-    ecol_name = generate_col_name()
+    ecol_name = generate_random_collection_name()
     assert not graph.has_edge_definition(ecol_name)
     assert not graph.has_edge_collection(ecol_name)
     assert not tst_fabric.has_collection(ecol_name)
@@ -231,9 +231,9 @@ def test_edge_definition_management(tst_fabric, graph, fvcol, tvcol, ecol, bad_g
     assert err.value.error_code == 1920
 
     # Test create edge definition with existing vertex collection
-    fvcol_name = generate_col_name()
-    tvcol_name = generate_col_name()
-    ecol_name = generate_col_name()
+    fvcol_name = generate_random_collection_name()
+    tvcol_name = generate_random_collection_name()
+    ecol_name = generate_random_collection_name()
     edge_col = graph.create_edge_definition(
         edge_collection=ecol_name,
         from_vertex_collections=[fvcol_name],
@@ -252,8 +252,8 @@ def test_edge_definition_management(tst_fabric, graph, fvcol, tvcol, ecol, bad_g
     assert tvcol_name in vertex_collections
 
     # Test create edge definition with missing vertex collection
-    bad_vcol_name = generate_col_name()
-    ecol_name = generate_col_name()
+    bad_vcol_name = generate_random_collection_name()
+    ecol_name = generate_random_collection_name()
     ecol = graph.create_edge_definition(
         edge_collection=ecol_name,
         from_vertex_collections=[bad_vcol_name],
@@ -286,7 +286,7 @@ def test_edge_definition_management(tst_fabric, graph, fvcol, tvcol, ecol, bad_g
     } in graph.edge_definitions()
 
     # Test replace missing edge definition
-    bad_ecol_name = generate_col_name()
+    bad_ecol_name = generate_random_collection_name()
     with assert_raises(EdgeDefinitionReplaceError):
         graph.replace_edge_definition(
             edge_collection=bad_ecol_name,
@@ -314,10 +314,10 @@ def test_edge_definition_management(tst_fabric, graph, fvcol, tvcol, ecol, bad_g
 def test_create_graph_with_edge_definition(client):
     sys_fabric = client._tenant.useFabric("_system")
     new_graph_name = generate_graph_name()
-    new_ecol_name = generate_col_name()
-    fvcol_name = generate_col_name()
-    tvcol_name = generate_col_name()
-    ovcol_name = generate_col_name()
+    new_ecol_name = generate_random_collection_name()
+    fvcol_name = generate_random_collection_name()
+    tvcol_name = generate_random_collection_name()
+    ovcol_name = generate_random_collection_name()
 
     edge_definition = {
         "edge_collection": new_ecol_name,
@@ -348,7 +348,7 @@ def test_vertex_management(fvcol, bad_fvcol, fvdocs):
     fvcol.truncate()
 
     with assert_raises(DocumentParseError) as err:
-        fvcol.insert({"_id": generate_col_name() + "/" + "foo"})
+        fvcol.insert({"_id": generate_random_collection_name() + "/" + "foo"})
     assert "bad collection name" in err.value.message
 
     vertex = fvdocs[0]
@@ -612,7 +612,7 @@ def test_edge_management(ecol, bad_ecol, edocs, fvcol, fvdocs, tvcol, tvdocs):
     with assert_raises(DocumentParseError) as err:
         ecol.insert(
             {
-                "_id": generate_col_name() + "/" + "foo",
+                "_id": generate_random_collection_name() + "/" + "foo",
                 "_from": edge["_from"],
                 "_to": edge["_to"],
             }
@@ -858,8 +858,8 @@ def test_edge_management(ecol, bad_ecol, edocs, fvcol, fvdocs, tvcol, tvdocs):
 
 def test_vertex_edges(tst_fabric, graph):
     graph_name = generate_graph_name()
-    vcol_name = generate_col_name()
-    ecol_name = generate_col_name()
+    vcol_name = generate_random_collection_name()
+    ecol_name = generate_random_collection_name()
 
     # Prepare test documents
     anna = {"_id": "{}/anna".format(vcol_name)}

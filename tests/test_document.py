@@ -15,8 +15,8 @@ from tests.helpers import (
     assert_raises,
     clean_doc,
     extract,
-    generate_col_name,
     generate_doc_key,
+    generate_random_collection_name,
 )
 
 
@@ -36,7 +36,7 @@ def test_document_insert(col, docs):
     col.truncate()
 
     with assert_raises(DocumentParseError) as err:
-        col.insert({"_id": generate_col_name() + "/" + "foo"})
+        col.insert({"_id": generate_random_collection_name() + "/" + "foo"})
     assert "bad collection name" in err.value.message
 
     # Test insert with default options
@@ -1117,7 +1117,7 @@ def test_document_has(col, docs):
 
     # Test documents with IDs with wrong collection name
     expected_error_msg = "bad collection name"
-    bad_id = generate_col_name() + "/" + doc_key
+    bad_id = generate_random_collection_name() + "/" + doc_key
     for doc_input in [
         bad_id,
         {"_id": bad_id},
