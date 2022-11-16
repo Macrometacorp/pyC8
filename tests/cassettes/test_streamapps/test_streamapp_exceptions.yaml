@@ -1,0 +1,704 @@
+interactions:
+- request:
+    body: '{"definition": "\n        name(''Sample-Cargo-App'')\n        "}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '62'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/streamapps/validate
+  response:
+    body:
+      string: '{"error":true,"code":422,"errorMessage":"Error: Error between @ Line:
+        2. Position: 0 and @ Line: 2. Position: 8. Syntax error in application definition,
+        mismatched input ''name'' expecting {''@'', DEFINE, UNEXPECTED_CHAR}.","errorNum":422}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '235'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:09 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 527925a7-1f0e-4b34-b35d-37cc37f66047
+      x-gdn-responsetime:
+      - '12'
+    status:
+      code: 422
+      message: ''
+- request:
+    body: '{"definition": "\n        name(''Sample-Cargo-App'')\n        ", "regions":
+      []}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/streamapps
+  response:
+    body:
+      string: '{"error":true,"code":422,"errorMessage":"Error: Error between @ Line:
+        2. Position: 0 and @ Line: 2. Position: 8. Syntax error in application definition,
+        mismatched input ''name'' expecting {''@'', DEFINE, UNEXPECTED_CHAR}.","errorNum":422}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '235'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:09 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - c6d840db-35ae-4020-81b9-a239931f78e4
+      x-gdn-responsetime:
+      - '32'
+    status:
+      code: 422
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/test_fabric_2/_api/streamapps
+  response:
+    body:
+      string: '{"error":true,"code":404,"errorMessage":"Response: 404, Error: 1228
+        - database not found","errorNum":404}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '105'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:09 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - a025c326-16a5-4088-9864-098792510717
+      x-gdn-responsetime:
+      - '6'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/test_fabric_2/_api/streamapps/Sample-Cargo-App
+  response:
+    body:
+      string: '{"error":true,"code":404,"errorMessage":"Response: 404, Error: 1228
+        - database not found","errorNum":404}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '105'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:09 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - ef7ee622-854a-499a-baf0-2f237c3b7e1d
+      x-gdn-responsetime:
+      - '5'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PATCH
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/test_fabric_2/_api/streamapps/Sample-Cargo-App/active?active=true
+  response:
+    body:
+      string: '{"error":true,"code":404,"errorMessage":"Response: 404, Error: 1228
+        - database not found","errorNum":404}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '105'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:09 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - e0729938-81bc-4d78-9bcd-ea8ad0b997d9
+      x-gdn-responsetime:
+      - '6'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: '{"definition": "\n        name(''Sample-Cargo-App'')\n\n        ", "regions":
+      []}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/test_fabric_2/_api/streamapps/Sample-Cargo-App
+  response:
+    body:
+      string: '{"error":true,"code":404,"errorMessage":"Response: 404, Error: 1228
+        - database not found","errorNum":404}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '105'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:09 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 38c1fe01-ac42-4b86-9550-10e48c04958c
+      x-gdn-responsetime:
+      - '5'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PATCH
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/test_fabric_2/_api/streamapps/Sample-Cargo-App/active?active=true
+  response:
+    body:
+      string: '{"error":true,"code":404,"errorMessage":"Response: 404, Error: 1228
+        - database not found","errorNum":404}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '105'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:09 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 439b2c36-9add-42af-9e4d-92cef5f09fd6
+      x-gdn-responsetime:
+      - '6'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: '{"query": "select * from SampleCargoAppDestTable limit 3"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '58'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/test_fabric_2/_api/streamapps/query/Sample-Cargo-App
+  response:
+    body:
+      string: '{"error":true,"code":404,"errorMessage":"Response: 404, Error: 1228
+        - database not found","errorNum":404}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '105'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:09 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - a00b015e-0a15-432f-b7b2-76b278d5dc7b
+      x-gdn-responsetime:
+      - '7'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/test_fabric_2/_api/streamapps/Sample-Cargo-App
+  response:
+    body:
+      string: '{"error":true,"code":404,"errorMessage":"Response: 404, Error: 1228
+        - database not found","errorNum":404}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '105'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:09 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - bcd6b982-3be4-4dc4-bb90-81953a9c6980
+      x-gdn-responsetime:
+      - '5'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/test_fabric_2/_api/streamapps/samples
+  response:
+    body:
+      string: '{"error":true,"code":404,"errorMessage":"Response: 404, Error: 1228
+        - database not found","errorNum":404}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '105'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:09 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 55a81a9e-6e29-4ec0-95a4-c44ad6961351
+      x-gdn-responsetime:
+      - '5'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: '{"carId": "c1", "longitude": 18.4334, "latitude": 30.2123}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '58'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/test_fabric_2/_api/streamapps/http/Sample-HTTP-Source/SampleHTTPSource
+  response:
+    body:
+      string: '{"error":true,"code":404,"errorMessage":"Response: 404, Error: 1228
+        - database not found","errorNum":404}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '105'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:10 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - c09d9a82-b878-465b-88f7-29c5e9ec48ff
+      x-gdn-responsetime:
+      - '6'
+    status:
+      code: 404
+      message: Not Found
+version: 1

@@ -1,0 +1,135 @@
+interactions:
+- request:
+    body: '["ZADD", "zremrangebylex", 0, "aaaaa", 0, "b", 0, "c", 0, "d", 0, "e"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '70'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":5}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '23'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 6a019ef5-7a04-4a69-b6e1-874e2e3d0561
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '["ZADD", "zremrangebylex", 0, "foo", 0, "zap", 0, "zip", 0, "ALPHA", 0,
+      "alpha"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '80'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":5}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '23'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 12f152be-6a08-4834-95f0-a445bd877428
+      x-gdn-responsetime:
+      - '6'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '["ZREMRANGEBYLEX", "zremrangebylex", "[alpha", "[omega"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '56'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":6}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '23'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 5b35b301-50be-45a6-b207-d58e6d5426b7
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+version: 1

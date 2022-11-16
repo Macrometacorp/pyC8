@@ -1,0 +1,479 @@
+interactions:
+- request:
+    body: '{"definition": "\n    @App:name(''Sample-HTTP-Source'')\n    @App:description(\"This
+      application how to receive POST requests via Stream Workers API.\")\n    @App:qlVersion(''2'')\n\n    /**\n    Testing
+      the Stream Application:\n        1. Open Stream `SampleHTTPOutputStream` in
+      Console to monitor the output.\n\n        2. Go to Stream Workers API and try
+      `Publish message via HTTP-Source stream.` endpoint. Run it with\n        application
+      name set to `Sample-HTTP-Source`, stream name set to `SampleHTTPSource`, and
+      body with the next data:\n            {\"carId\":\"c1\",\"longitude\":18.4334,
+      \"latitude\":30.2123}\n\n        3. This application read the carId, longitude
+      and latitude from the `SampleHTTPSource` and sends it to\n        sink stream
+      `SampleHTTPOutputStream`\n    **/\n\n    -- Defines `SampleHTTPSource` stream
+      to process events having `carId`, `longitude`, and `latitude`.\n    CREATE SOURCE
+      SampleHTTPSource WITH (type = ''http'', map.type=''json'') (carId string, longitude
+      double, latitude double);\n\n    -- Defines `SampleHTTPOutputStream` to emit
+      the events after the data is processed by external service\n    CREATE SINK
+      STREAM SampleHTTPOutputStream (carId string, longitude double, latitude double);\n\n    --
+      Note: Consume data received from the external service\n    @info(name = ''ConsumeProcessedData'')\n    INSERT
+      INTO SampleHTTPOutputStream\n    SELECT carId, longitude, latitude\n    FROM
+      SampleHTTPSource;\n    "}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1446'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/streamapps/validate
+  response:
+    body:
+      string: '{"error":false,"code":200,"message":"Stream application definition
+        is valid."}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '78'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:11:59 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - d947fd22-ac1e-4663-aa24-f3074f05ed65
+      x-gdn-responsetime:
+      - '17'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"definition": "\n    @App:name(''Sample-HTTP-Source'')\n    @App:description(\"This
+      application how to receive POST requests via Stream Workers API.\")\n    @App:qlVersion(''2'')\n\n    /**\n    Testing
+      the Stream Application:\n        1. Open Stream `SampleHTTPOutputStream` in
+      Console to monitor the output.\n\n        2. Go to Stream Workers API and try
+      `Publish message via HTTP-Source stream.` endpoint. Run it with\n        application
+      name set to `Sample-HTTP-Source`, stream name set to `SampleHTTPSource`, and
+      body with the next data:\n            {\"carId\":\"c1\",\"longitude\":18.4334,
+      \"latitude\":30.2123}\n\n        3. This application read the carId, longitude
+      and latitude from the `SampleHTTPSource` and sends it to\n        sink stream
+      `SampleHTTPOutputStream`\n    **/\n\n    -- Defines `SampleHTTPSource` stream
+      to process events having `carId`, `longitude`, and `latitude`.\n    CREATE SOURCE
+      SampleHTTPSource WITH (type = ''http'', map.type=''json'') (carId string, longitude
+      double, latitude double);\n\n    -- Defines `SampleHTTPOutputStream` to emit
+      the events after the data is processed by external service\n    CREATE SINK
+      STREAM SampleHTTPOutputStream (carId string, longitude double, latitude double);\n\n    --
+      Note: Consume data received from the external service\n    @info(name = ''ConsumeProcessedData'')\n    INSERT
+      INTO SampleHTTPOutputStream\n    SELECT carId, longitude, latitude\n    FROM
+      SampleHTTPSource;\n    ", "regions": []}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1461'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/streamapps
+  response:
+    body:
+      string: '{"error":false,"code":201,"streamApps":[{"name":"Sample-HTTP-Source","definition":"\n    @App:name(''Sample-HTTP-Source'')\n    @App:description(\"This
+        application how to receive POST requests via Stream Workers API.\")\n    @App:qlVersion(''2'')\n\n    /**\n    Testing
+        the Stream Application:\n        1. Open Stream `SampleHTTPOutputStream` in
+        Console to monitor the output.\n\n        2. Go to Stream Workers API and
+        try `Publish message via HTTP-Source stream.` endpoint. Run it with\n        application
+        name set to `Sample-HTTP-Source`, stream name set to `SampleHTTPSource`, and
+        body with the next data:\n            {\"carId\":\"c1\",\"longitude\":18.4334,
+        \"latitude\":30.2123}\n\n        3. This application read the carId, longitude
+        and latitude from the `SampleHTTPSource` and sends it to\n        sink stream
+        `SampleHTTPOutputStream`\n    **/\n\n    -- Defines `SampleHTTPSource` stream
+        to process events having `carId`, `longitude`, and `latitude`.\n    CREATE
+        SOURCE SampleHTTPSource WITH (type = ''http'', map.type=''json'') (carId string,
+        longitude double, latitude double);\n\n    -- Defines `SampleHTTPOutputStream`
+        to emit the events after the data is processed by external service\n    CREATE
+        SINK STREAM SampleHTTPOutputStream (carId string, longitude double, latitude
+        double);\n\n    -- Note: Consume data received from the external service\n    @info(name
+        = ''ConsumeProcessedData'')\n    INSERT INTO SampleHTTPOutputStream\n    SELECT
+        carId, longitude, latitude\n    FROM SampleHTTPSource;\n    ","regions":["smoke1-ap-west"],"isActive":false}]}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1561'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:11:59 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 2a02a757-0b4b-4275-8f51-89f67462b62f
+      x-gdn-responsetime:
+      - '41'
+    status:
+      code: 201
+      message: Created
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PATCH
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/streamapps/Sample-HTTP-Source/active?active=true
+  response:
+    body:
+      string: '{"error":false,"code":200,"streamApps":[{"name":"Sample-HTTP-Source","definition":"\n    @App:name(''Sample-HTTP-Source'')\n    @App:description(\"This
+        application how to receive POST requests via Stream Workers API.\")\n    @App:qlVersion(''2'')\n\n    /**\n    Testing
+        the Stream Application:\n        1. Open Stream `SampleHTTPOutputStream` in
+        Console to monitor the output.\n\n        2. Go to Stream Workers API and
+        try `Publish message via HTTP-Source stream.` endpoint. Run it with\n        application
+        name set to `Sample-HTTP-Source`, stream name set to `SampleHTTPSource`, and
+        body with the next data:\n            {\"carId\":\"c1\",\"longitude\":18.4334,
+        \"latitude\":30.2123}\n\n        3. This application read the carId, longitude
+        and latitude from the `SampleHTTPSource` and sends it to\n        sink stream
+        `SampleHTTPOutputStream`\n    **/\n\n    -- Defines `SampleHTTPSource` stream
+        to process events having `carId`, `longitude`, and `latitude`.\n    CREATE
+        SOURCE SampleHTTPSource WITH (type = ''http'', map.type=''json'') (carId string,
+        longitude double, latitude double);\n\n    -- Defines `SampleHTTPOutputStream`
+        to emit the events after the data is processed by external service\n    CREATE
+        SINK STREAM SampleHTTPOutputStream (carId string, longitude double, latitude
+        double);\n\n    -- Note: Consume data received from the external service\n    @info(name
+        = ''ConsumeProcessedData'')\n    INSERT INTO SampleHTTPOutputStream\n    SELECT
+        carId, longitude, latitude\n    FROM SampleHTTPSource;\n    ","regions":["smoke1-ap-west"],"isActive":true}]}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1560'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:11:59 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 5574f598-783c-49fa-87e0-df8760c9b397
+      x-gdn-responsetime:
+      - '4036'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/datacenter/local
+  response:
+    body:
+      string: '{"_key":"smoke1-ap-west","host":"172.105.52.12","local":true,"name":"smoke1-ap-west","spot_region":false,"status":0,"tags":{"api":"api-smoke1-ap-west.eng.macrometa.io","url":"smoke1-ap-west.eng.macrometa.io"},"locationInfo":{"city":"Mumbai","countrycode":"IN","countryname":"India","latitude":"19.0748","longitude":"72.8856","url":"smoke1-ap-west.eng.macrometa.io"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '366'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 65ab155d-9505-4c5a-a46c-37fc3f9a6c5b
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"carId": "c1", "longitude": 18.4334, "latitude": 30.2123}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '58'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/streamapps/http/Sample-HTTP-Source/SampleHTTPSource
+  response:
+    body:
+      string: '{"error":false,"code":202,"message":"Successfully sent message."}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '65'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:05 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 0ea003ca-ee9c-4072-914f-30a4ee183def
+      x-gdn-responsetime:
+      - '20'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/streamapps/Sample-HTTP-Source
+  response:
+    body:
+      string: '{"error":false,"code":200,"message":"Stream worker `Sample-HTTP-Source`
+        deleted successfully."}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '95'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:06 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 0be55723-fc0f-4ca8-800b-a282f383603e
+      x-gdn-responsetime:
+      - '2015'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/streams/c8locals.SampleHTTPOutputStream
+  response:
+    body:
+      string: '{"code":200,"result":{"stream-id":"c8locals.SampleHTTPOutputStream"},"error":false}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '83'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 15:12:08 GMT
+      Server:
+      - APISIX
+      broker-address:
+      - c8streams-broker-0.c8streams-broker.c8.svc.cluster.local
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 1455ef58-6d2f-4eb4-8eb0-e93bdb531f77
+      x-gdn-responsetime:
+      - '662'
+    status:
+      code: 200
+      message: OK
+version: 1

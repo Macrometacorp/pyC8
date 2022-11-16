@@ -1,0 +1,134 @@
+interactions:
+- request:
+    body: '["ZADD", "zunionSet1", 1, "one", 2, "two"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '42'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":2}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '23'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - c1c9bb49-34ad-4dc5-bf82-e97384f7b9a4
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '["ZADD", "zunionSet2", 1, "one", 2, "two", 3, "three"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '54'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":3}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '23'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 29eafc5c-bf13-4360-8a1b-36ee3a5d1264
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '["ZUNION", 2, "zunionSet1", "zunionSet2"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '41'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":["one","three","two"]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '43'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 03a91f5e-953a-4e2b-aef7-ea1df285db5a
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+version: 1

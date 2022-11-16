@@ -1,0 +1,46 @@
+interactions:
+- request:
+    body: '["HSCAN", "games", 0, "MATCH", "*", "COUNT", 100]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '49'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":["cursor:driving",["driving","GT7"]]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '58'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 5f5f0be5-de63-478a-b2a4-63ed518ac0fc
+      x-gdn-responsetime:
+      - '6'
+    status:
+      code: 200
+      message: OK
+version: 1

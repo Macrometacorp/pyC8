@@ -1,0 +1,50 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/collection/testRedisCollection
+  response:
+    body:
+      string: '{"error":false,"code":200,"id":"329094398"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 14:47:39 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 97f1ef36-e716-4cfd-93e4-257f3b347934
+      x-gdn-responsetime:
+      - '40'
+    status:
+      code: 200
+      message: ''
+version: 1

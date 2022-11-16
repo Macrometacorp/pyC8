@@ -1,0 +1,266 @@
+interactions:
+- request:
+    body: '["ZADD", "testDiff1", 1, "one"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '31'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '23'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 1c7f84b3-da8e-4650-be5e-d0fa3cc152bb
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '["ZADD", "testDiff1", 2, "two"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '31'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '23'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 884e805e-26bc-4367-8b15-0f2f0ec75959
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '["ZADD", "testDiff1", 3, "three"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '33'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '23'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 730c387c-fe4d-4b79-be92-e79eee4f5d82
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '["ZADD", "testDiff2", 1, "one"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '31'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '23'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 48d36d5a-ea9c-4126-81a6-3382ab2837ae
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '["ZADD", "testDiff2", 2, "two"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '31'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '23'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 2ae64936-6db5-4856-86f8-4c58d1623010
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '["ZDIFF", 2, "testDiff1", "testDiff2"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '38'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":["three"]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '31'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - f4268ce7-be2b-4e2a-85f2-86b76c041eb6
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+version: 1

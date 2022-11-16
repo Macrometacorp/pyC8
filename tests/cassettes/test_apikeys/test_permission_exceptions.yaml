@@ -1,0 +1,1243 @@
+interactions:
+- request:
+    body: '{"name": "test_collection_apikey_1", "waitForSync": false, "keyOptions":
+      {"type": "traditional", "allowUserKeys": true}, "type": 2, "isSpot": false,
+      "isLocal": false, "isSystem": false, "stream": false}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '202'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/collection
+  response:
+    body:
+      string: '{"error":false,"code":200,"waitForSync":false,"statusString":"loaded","cacheEnabled":false,"collectionModel":"DOC","objectId":"328926917","globallyUniqueId":"hFF56ED8B5D8B/328926918","id":"328926918","hasStream":false,"searchEnabled":false,"type":2,"status":3,"isLocal":false,"isSpot":false,"isSystem":false,"keyOptions":{"allowUserKeys":true,"type":"traditional","lastValue":0},"name":"test_collection_apikey_1"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 14:41:38 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 4199d1f8-4142-4066-8b07-c58dc3426a6a
+      x-gdn-responsetime:
+      - '10'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/collection
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"id":"328926918","name":"test_collection_apikey_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hFF56ED8B5D8B/328926918","searchEnabled":false},{"id":"63136199","name":"ContentIncoming","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":true,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hFF56ED8B5D8B/63136199","searchEnabled":false},{"id":"62951341","name":"test2","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hFF56ED8B5D8B/62951341","searchEnabled":false},{"id":"62866349","name":"test1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hFF56ED8B5D8B/62866349","searchEnabled":false},{"id":"45994815","name":"keyvalue","status":3,"type":2,"collectionModel":"KV","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hFF56ED8B5D8B/45994815","searchEnabled":false},{"id":"30005285","name":"_alerts","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_alerts","searchEnabled":false},{"id":"29049673","name":"_graphs","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_graphs","searchEnabled":false},{"id":"29049676","name":"_analyzers","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_analyzers","searchEnabled":false},{"id":"68343406","name":"ContentProfileB","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hFF56ED8B5D8B/68343406","searchEnabled":false},{"id":"29049717","name":"_collections","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_collections","searchEnabled":false},{"id":"29049720","name":"_dynamo","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_dynamo","searchEnabled":false},{"id":"29049726","name":"_replicationTest","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_replicationTest","searchEnabled":false},{"id":"29049723","name":"_geoFabricsMetadata","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_geoFabricsMetadata","searchEnabled":false},{"id":"29298317","name":"_streamAppsCache","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_streamAppsCache","searchEnabled":false},{"id":"29049729","name":"_queryExecutions","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_queryExecutions","searchEnabled":false}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 14:41:38 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - edc0bc72-9518-4a63-a74e-8512a4e8b11e
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: '{"keyid": "apikey-test%"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '25'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_api/key
+  response:
+    body:
+      string: '{"code":400,"error":true,"errorMessage":"API key identifier must start
+        with a letter and can only contain alpha-numeric characters","errorNum":100020}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '150'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 6c78131a-4023-4954-a1b8-25df098ff454
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 400
+      message: Bad Request
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/apikey-test%25
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 7b8e0786-d2ed-4f93-94d5-63abe403236a
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/apikey-test%25
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 296c6dcc-d1f6-483e-9486-77ec7c4b1eee
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/database
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - a9f94bf6-4e83-4614-8a34-3e412e198e4e
+      x-gdn-responsetime:
+      - '0'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/database/_system
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 3f8d7d7f-68d3-499b-8cfc-a5f6c6d86782
+      x-gdn-responsetime:
+      - '0'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/database/_system
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 815aaac7-2688-45e0-b630-f3e83b66cb0f
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: '{"grant": "rw"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '15'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/database/_system
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - d9ff82b4-1266-4348-8446-07f74282a83a
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/database/_system/collection?full=False
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - aa58b229-cfc9-460d-9146-1d5f5fa6f1a0
+      x-gdn-responsetime:
+      - '0'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/database/_system/collection/test_collection_apikey_1
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 43ba0108-800b-4790-a7b9-3482bc563272
+      x-gdn-responsetime:
+      - '0'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: '{"grant": "rw"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '15'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/database/_system/collection/test_collection_apikey_1
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 44bacd9c-d5a0-4395-959b-bc5a5f552f8c
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/database/_system/collection/test_collection_apikey_1
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 6ea94539-6c14-484e-93b5-3c38dda773df
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/database/_system/stream?full=False
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - f329f783-feb5-4711-9896-38ffecdc2ded
+      x-gdn-responsetime:
+      - '0'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/streams/test_stream_apikey_1?global=True
+  response:
+    body:
+      string: '{"code":200,"result":{"stream-id":"c8globals.test_stream_apikey_1"},"error":false}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '82'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 14:41:38 GMT
+      Server:
+      - APISIX
+      broker-address:
+      - c8streams-broker-0.c8streams-broker.c8.svc.cluster.local
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - fb53a442-b0a5-495b-801e-355f774c2176
+      x-gdn-responsetime:
+      - '694'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/database/_system/stream/c8globals.test_stream_apikey_1?global=True
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 99851854-df24-41ea-9784-211bbad5a0a1
+      x-gdn-responsetime:
+      - '0'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: '{"grant": "rw"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '15'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/database/_system/stream/c8globals.test_stream_apikey_1?global=True
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - ab16c328-a299-4b52-a1f1-f6a7ef70e87a
+      x-gdn-responsetime:
+      - '0'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/database/_system/stream/c8globals.test_stream_apikey_1?global=True
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - ef272607-59f0-476f-b3d5-bb6783921b27
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/billing
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 2f30525b-dd51-4c3e-b217-d7a7b5b42e77
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: '{"grant": "rw"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '15'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/billing
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 3aca9112-b1a1-482b-bdfd-895ac5ec52c2
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/billing
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 26f99813-0f91-49d3-90e3-7ecc63edddcc
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/attributes
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - f1fa273b-46d7-4bcf-ae99-309457e08378
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: '{"foo": "bar"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '14'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/attributes
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 32930604-f8e8-4441-ad05-6d9aba3d9300
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/attributes/truncate
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - b2e966a4-dfc7-479e-8582-5f47e17ba8cb
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_2/attributes/foo
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"invalid api key id","errorNum":100015}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 44d37671-da42-4078-8018-3a481ee38091
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/streams/c8globals.test_stream_apikey_1
+  response:
+    body:
+      string: '{"code":200,"result":{"stream-id":"c8globals.test_stream_apikey_1"},"error":false}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '82'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 14:41:41 GMT
+      Server:
+      - APISIX
+      broker-address:
+      - c8streams-broker-0.c8streams-broker.c8.svc.cluster.local
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 316dcbe4-dc4a-41f0-8429-3675a7a52801
+      x-gdn-responsetime:
+      - '892'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/collection/test_collection_apikey_1
+  response:
+    body:
+      string: '{"error":false,"code":200,"id":"328926918"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 16 Nov 2022 14:41:42 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - a02fe069-d5f2-40ab-bae5-85fb196eb7d5
+      x-gdn-responsetime:
+      - '20'
+    status:
+      code: 200
+      message: ''
+version: 1

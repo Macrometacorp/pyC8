@@ -1,0 +1,583 @@
+interactions:
+- request:
+    body: '{"keyid": "test_apikey_id_1"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '29'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-smoke1.eng.macrometa.io/_api/key
+  response:
+    body:
+      string: '{"key":"koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7","keyid":"test_apikey_id_1","tenant":"koshy.thomas2_macrometa.com","user":"koshy.thomas2_macrometa.com.root","error":false,"code":201}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '258'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 1d86ab10-ba51-4ee4-b0e3-2a862d454269
+      x-gdn-responsetime:
+      - '9'
+    status:
+      code: 201
+      message: Created
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"keyid":"k1","user":"koshy.thomas2_macrometa.com.root","tenant":"koshy.thomas2_macrometa.com"},{"keyid":"test_apikey_id_1","user":"koshy.thomas2_macrometa.com.root","tenant":"koshy.thomas2_macrometa.com"}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '243'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 9bb35e11-a09d-4496-882a-73be94ac7c93
+      x-gdn-responsetime:
+      - '9'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_1
+  response:
+    body:
+      string: '{"user":"test_apikey_id_1","tenant":"koshy.thomas2_macrometa.com","email":"test_apikey_id_1@apikey","active":true,"apikey":{"hash":"91def2e0f01ee816aad8e10a423e94046b35cabf34ec38b6e45180f74b59fdbd","parent":"koshy.thomas2_macrometa.com.root"},"extra":{},"displayName":"test_apikey_id_1","error":false,"code":200}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '312'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 40d82853-3224-4a7a-89e7-83ebba98dc9c
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/user
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"tenant":"koshy.thomas2_macrometa.com","email":"koshy.thomas4@macrometa.com","active":true,"extra":{},"user":"U7khXH701S9GxE_5kBcKWcw","displayName":"ko
+        Doe"},{"tenant":"koshy.thomas2_macrometa.com","email":"koshy.thomas2@macrometa.com","active":true,"extra":{},"user":"root","displayName":"root"}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '336'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 7ea25b32-c05a-4a19-af1f-cf5f4fb04da2
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"foo": "bar", "boo": "baz", "soo": "kon"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '42'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_1/attributes
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":{"foo":"bar","boo":"baz","soo":"kon"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 2b1f06b6-bda1-4e55-9fd7-1430ab804504
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_1/attributes
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":{"boo":"baz","foo":"bar","soo":"kon"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - c8d42d25-7437-448c-9fa8-f5d623b54c79
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"foo": "baz", "boo": "bar"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '28'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_1/attributes
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":{"foo":"baz","boo":"bar"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '61'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - bf1e5296-1fb0-4015-86dc-6041111805f1
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_1/attributes
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":{"boo":"bar","foo":"baz","soo":"kon"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 6606bab7-b7ed-47d1-a5fe-73304ab76bcc
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_1/attributes/soo
+  response:
+    body:
+      string: '{"error":false,"code":202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '26'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 33f12e2f-76e6-4316-9f4e-732511cf928e
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 202
+      message: Accepted
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_1/attributes
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":{"boo":"bar","foo":"baz"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '61'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 1c1a01ee-f402-4acf-b6f7-40e8c418a3a2
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_1/attributes/truncate
+  response:
+    body:
+      string: '{"error":false,"code":202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '26'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - e9890425-5399-435c-bf4d-3d5698846758
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 202
+      message: Accepted
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_1/attributes
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":{}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '38'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 945896c4-c704-4a80-8d27-78b752fc448b
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_1
+  response:
+    body:
+      string: '{"error":false,"code":202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '26'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 2579e2e3-4dc4-4a36-b235-3c9053d37bdb
+      x-gdn-responsetime:
+      - '0'
+    status:
+      code: 202
+      message: Accepted
+version: 1
