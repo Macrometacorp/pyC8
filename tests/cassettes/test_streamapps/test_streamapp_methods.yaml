@@ -24,8 +24,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -63,7 +61,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:34 GMT
+      - Wed, 16 Nov 2022 15:34:06 GMT
       Server:
       - APISIX
       X-Content-Type-Options:
@@ -75,9 +73,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - f6c18bea-7c4e-4df7-be54-7de00493aa40
+      - 013938fa-6c79-4ea6-995c-a0c558109960
       x-gdn-responsetime:
-      - '53'
+      - '31'
     status:
       code: 200
       message: OK
@@ -107,8 +105,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -163,7 +159,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:34 GMT
+      - Wed, 16 Nov 2022 15:34:06 GMT
       Server:
       - APISIX
       X-Content-Type-Options:
@@ -175,9 +171,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 03737a35-f48b-4273-ba7b-5deb6963a971
+      - 1c97010a-ca47-4814-8205-feeb6c7702eb
       x-gdn-responsetime:
-      - '50'
+      - '53'
     status:
       code: 201
       message: Created
@@ -188,8 +184,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       User-Agent:
@@ -247,7 +241,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:34 GMT
+      - Wed, 16 Nov 2022 15:34:06 GMT
       Server:
       - APISIX
       X-Content-Type-Options:
@@ -259,7 +253,7 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 5e1b697e-9ae9-4a17-af7f-d77242b6b76f
+      - 5a13092f-4a1c-4cef-a089-75d8225112bb
       x-gdn-responsetime:
       - '8'
     status:
@@ -272,8 +266,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       User-Agent:
@@ -326,7 +318,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:34 GMT
+      - Wed, 16 Nov 2022 15:34:06 GMT
       Server:
       - APISIX
       X-Content-Type-Options:
@@ -338,7 +330,7 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 64d92853-674e-4f69-8157-a150b0e76f99
+      - d3f67c79-091e-41d0-a471-dc16182ab47e
       x-gdn-responsetime:
       - '10'
     status:
@@ -351,8 +343,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -407,7 +397,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:34 GMT
+      - Wed, 16 Nov 2022 15:34:06 GMT
       Server:
       - APISIX
       X-Content-Type-Options:
@@ -419,9 +409,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - bf7826a5-f6ba-48a1-90ca-823e06ff4611
+      - 18be631a-147a-4a6e-a3f2-7dab41893f24
       x-gdn-responsetime:
-      - '4034'
+      - '4035'
     status:
       code: 200
       message: OK
@@ -432,8 +422,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -488,7 +476,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:38 GMT
+      - Wed, 16 Nov 2022 15:34:10 GMT
       Server:
       - APISIX
       X-Content-Type-Options:
@@ -500,9 +488,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 46617495-870a-458c-89a7-291e5fd381c7
+      - 9004fde9-fc90-43d8-b6e3-623d664766d2
       x-gdn-responsetime:
-      - '2015'
+      - '2012'
     status:
       code: 200
       message: OK
@@ -535,8 +523,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -595,7 +581,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:40 GMT
+      - Wed, 16 Nov 2022 15:34:13 GMT
       Server:
       - APISIX
       X-Content-Type-Options:
@@ -607,9 +593,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - c0cf8370-8e44-49c2-b1fd-5b98758a7820
+      - 3861c505-78c9-465b-bb52-c7cee764dec5
       x-gdn-responsetime:
-      - '30'
+      - '28'
     status:
       code: 200
       message: OK
@@ -620,8 +606,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -680,7 +664,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:45 GMT
+      - Wed, 16 Nov 2022 15:34:18 GMT
       Server:
       - APISIX
       X-Content-Type-Options:
@@ -692,9 +676,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - b147736d-6f35-43d3-a202-e5c296cb62fb
+      - 76c975d5-9802-4e94-b4a5-b9abead0a1e0
       x-gdn-responsetime:
-      - '3037'
+      - '3034'
     status:
       code: 200
       message: OK
@@ -706,8 +690,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -740,9 +722,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - d2a2ba8b-6798-4d9f-8334-c05084e81c0a
+      - 358d3343-09a0-4256-aa01-88e666ffa97f
       x-gdn-responsetime:
-      - '2'
+      - '1'
     status:
       code: 200
       message: OK
@@ -753,8 +735,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -786,7 +766,7 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 353ebbba-41f4-4ffa-97ba-07dccacdc43d
+      - b3e6d954-b02e-4438-af59-1c0800b3206d
       x-gdn-responsetime:
       - '2'
     status:
@@ -799,8 +779,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -832,9 +810,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 76b2c5ba-749d-4d80-9dba-7e933236c8b2
+      - aa2dfc86-9735-4bf2-876e-73cb168fc14f
       x-gdn-responsetime:
-      - '3'
+      - '1'
     status:
       code: 201
       message: Created
@@ -845,8 +823,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -878,9 +854,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 75446b7e-53cd-4340-9678-bd858cfe5eb9
+      - 44081c07-8073-44f0-ab5a-8f5e9a0f2c00
       x-gdn-responsetime:
-      - '3'
+      - '1'
     status:
       code: 201
       message: Created
@@ -891,8 +867,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -929,7 +903,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:55 GMT
+      - Wed, 16 Nov 2022 15:34:28 GMT
       Server:
       - APISIX
       X-Content-Type-Options:
@@ -941,7 +915,7 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - a5495ab6-4602-4c68-93df-926ebe76ea8a
+      - f546ec02-244d-4614-acad-077a7b5c5163
       x-gdn-responsetime:
       - '20'
     status:
@@ -954,8 +928,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -993,7 +965,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:55 GMT
+      - Wed, 16 Nov 2022 15:34:28 GMT
       Server:
       - APISIX
       X-Content-Type-Options:
@@ -1005,9 +977,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - ba01828f-2ec8-4ac2-8d15-b71a7db0ea35
+      - 21414454-e9f2-47f6-b6fd-cecc66d1e1d4
       x-gdn-responsetime:
-      - '2014'
+      - '2017'
     status:
       code: 200
       message: OK
@@ -1018,8 +990,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       User-Agent:
@@ -2067,7 +2037,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:58 GMT
+      - Wed, 16 Nov 2022 15:34:30 GMT
       Server:
       - APISIX
       Transfer-Encoding:
@@ -2081,9 +2051,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 2f5c51b8-619a-45db-9cf6-7084393a50bc
+      - b4989435-dc6b-4f19-9be8-6b8394dca9e7
       x-gdn-responsetime:
-      - '12'
+      - '14'
     status:
       code: 200
       message: OK
@@ -2094,8 +2064,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -2110,7 +2078,7 @@ interactions:
     uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/collection/SampleCargoAppDestTable
   response:
     body:
-      string: '{"error":false,"code":200,"id":"329827606"}'
+      string: '{"error":false,"code":200,"id":"330498411"}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
@@ -2119,7 +2087,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:58 GMT
+      - Wed, 16 Nov 2022 15:34:30 GMT
       Server:
       - APISIX
       Transfer-Encoding:
@@ -2131,9 +2099,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 0d4d2f7c-defc-47ac-b9c8-f767f6176053
+      - c7aa2d7f-7b74-44b7-9fd7-8897eb751541
       x-gdn-responsetime:
-      - '32'
+      - '17'
     status:
       code: 200
       message: ''
@@ -2144,8 +2112,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -2160,7 +2126,7 @@ interactions:
     uri: https://api-smoke1.eng.macrometa.io/_fabric/_system/_api/collection/SampleCargoAppInputTable
   response:
     body:
-      string: '{"error":false,"code":200,"id":"329823442"}'
+      string: '{"error":false,"code":200,"id":"330495728"}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
@@ -2169,7 +2135,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:58 GMT
+      - Wed, 16 Nov 2022 15:34:30 GMT
       Server:
       - APISIX
       Transfer-Encoding:
@@ -2181,9 +2147,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 1ff2217c-ce7d-4051-8444-e186487ece16
+      - df352ffc-0cad-442c-905a-bc5892331d09
       x-gdn-responsetime:
-      - '69'
+      - '58'
     status:
       code: 200
       message: ''
@@ -2194,8 +2160,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -2221,7 +2185,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 16 Nov 2022 15:11:58 GMT
+      - Wed, 16 Nov 2022 15:34:30 GMT
       Server:
       - APISIX
       broker-address:
@@ -2229,9 +2193,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 7732d73a-dc66-4ed1-aa13-2402ea1c3c5e
+      - a686ba3f-6ffb-4174-b96a-0b17714c3493
       x-gdn-responsetime:
-      - '664'
+      - '668'
     status:
       code: 200
       message: OK
@@ -2242,8 +2206,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -2275,9 +2237,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 849fd7db-fab8-4c72-9a30-edbd179b3fb0
+      - 0580102c-5cc3-49f1-a37d-8915f7c08e27
       x-gdn-responsetime:
-      - '1'
+      - '3'
     status:
       code: 200
       message: OK

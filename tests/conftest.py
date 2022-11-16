@@ -13,6 +13,7 @@ from tests.executors import TestAsyncExecutor, TestBatchExecutor
 global_data = dict()
 
 
+@pytest.fixture(scope="module")
 def vcr_config():
     return {
         "filter_headers": ["Authorization"],

@@ -6,8 +6,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -22,7 +20,7 @@ interactions:
     uri: https://api-smoke1.eng.macrometa.io/_api/key
   response:
     body:
-      string: '{"key":"koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7","keyid":"test_apikey_id_1","tenant":"koshy.thomas2_macrometa.com","user":"koshy.thomas2_macrometa.com.root","error":false,"code":201}'
+      string: '{"key":"koshy.thomas2_macrometa.com.test_apikey_id_1.J0UBXA8HgFvOYWUTAEo3Jsps4FSa8jkaGGWvUs0cGGDbdGSmRljcbUihvoSeYetF33cb82","keyid":"test_apikey_id_1","tenant":"koshy.thomas2_macrometa.com","user":"koshy.thomas2_macrometa.com.root","error":false,"code":201}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
@@ -39,9 +37,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 1d86ab10-ba51-4ee4-b0e3-2a862d454269
+      - 2e47a387-4337-4607-b981-0d8a7e80429a
       x-gdn-responsetime:
-      - '9'
+      - '5'
     status:
       code: 201
       message: Created
@@ -52,8 +50,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       User-Agent:
@@ -83,9 +79,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 9bb35e11-a09d-4496-882a-73be94ac7c93
+      - 1cbd25d7-5d01-4109-bf49-22712e0a8c41
       x-gdn-responsetime:
-      - '9'
+      - '5'
     status:
       code: 200
       message: OK
@@ -96,8 +92,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       User-Agent:
@@ -110,7 +104,7 @@ interactions:
     uri: https://api-smoke1.eng.macrometa.io/_api/key/test_apikey_id_1
   response:
     body:
-      string: '{"user":"test_apikey_id_1","tenant":"koshy.thomas2_macrometa.com","email":"test_apikey_id_1@apikey","active":true,"apikey":{"hash":"91def2e0f01ee816aad8e10a423e94046b35cabf34ec38b6e45180f74b59fdbd","parent":"koshy.thomas2_macrometa.com.root"},"extra":{},"displayName":"test_apikey_id_1","error":false,"code":200}'
+      string: '{"user":"test_apikey_id_1","tenant":"koshy.thomas2_macrometa.com","email":"test_apikey_id_1@apikey","active":true,"apikey":{"hash":"1ad6247d5743a40fc7532f3cfcd3985dca5f130fa521317ceb5ef1a7d6d45f5b","parent":"koshy.thomas2_macrometa.com.root"},"extra":{},"displayName":"test_apikey_id_1","error":false,"code":200}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
@@ -127,9 +121,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 40d82853-3224-4a7a-89e7-83ebba98dc9c
+      - c5cfb740-3715-4773-bd30-f910213724cb
       x-gdn-responsetime:
-      - '2'
+      - '1'
     status:
       code: 200
       message: OK
@@ -140,8 +134,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
       Connection:
       - keep-alive
       User-Agent:
@@ -168,7 +160,7 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 7ea25b32-c05a-4a19-af1f-cf5f4fb04da2
+      - 162265c0-7143-4086-a09b-3574804b1698
       x-gdn-responsetime:
       - '4'
     status:
@@ -181,8 +173,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
       Connection:
       - keep-alive
       Content-Length:
@@ -214,7 +204,7 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 2b1f06b6-bda1-4e55-9fd7-1430ab804504
+      - 2e1e57f8-627b-451d-a2b4-8cc6a1dc5894
       x-gdn-responsetime:
       - '2'
     status:
@@ -227,8 +217,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
       Connection:
       - keep-alive
       User-Agent:
@@ -258,9 +246,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - c8d42d25-7437-448c-9fa8-f5d623b54c79
+      - ca17570f-8184-4454-982a-a74b096e53f9
       x-gdn-responsetime:
-      - '3'
+      - '1'
     status:
       code: 200
       message: OK
@@ -271,8 +259,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
       Connection:
       - keep-alive
       Content-Length:
@@ -304,9 +290,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - bf1e5296-1fb0-4015-86dc-6041111805f1
+      - a4209d1e-e571-4cee-b405-ec97b8ee69d0
       x-gdn-responsetime:
-      - '2'
+      - '3'
     status:
       code: 200
       message: OK
@@ -317,8 +303,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
       Connection:
       - keep-alive
       User-Agent:
@@ -348,9 +332,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 6606bab7-b7ed-47d1-a5fe-73304ab76bcc
+      - 06d5e6a8-33af-4233-90b2-847937f7d958
       x-gdn-responsetime:
-      - '2'
+      - '1'
     status:
       code: 200
       message: OK
@@ -361,8 +345,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
       Connection:
       - keep-alive
       Content-Length:
@@ -394,9 +376,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 33f12e2f-76e6-4316-9f4e-732511cf928e
+      - 9c25aeb8-9e15-48a4-a501-7ea9eb2aa397
       x-gdn-responsetime:
-      - '3'
+      - '1'
     status:
       code: 202
       message: Accepted
@@ -407,8 +389,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
       Connection:
       - keep-alive
       User-Agent:
@@ -438,7 +418,7 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 1c1a01ee-f402-4acf-b6f7-40e8c418a3a2
+      - 1f53db3d-23d5-4eb8-b50a-61d6a2dd50ad
       x-gdn-responsetime:
       - '1'
     status:
@@ -451,8 +431,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
       Connection:
       - keep-alive
       Content-Length:
@@ -484,7 +462,7 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - e9890425-5399-435c-bf4d-3d5698846758
+      - 51c1a84f-e0b3-431a-a2e5-d5f6bade06f0
       x-gdn-responsetime:
       - '1'
     status:
@@ -497,8 +475,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.test_apikey_id_1.D4JTkLjbvOYUR42ShVFreR2GGXtuI3LeNlAyi0FoNeJxI6yO3CfdV5tLXLmXHINM2c09b7
       Connection:
       - keep-alive
       User-Agent:
@@ -528,9 +504,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 945896c4-c704-4a80-8d27-78b752fc448b
+      - 6efcf397-0fbe-4205-b29c-94dd838082d6
       x-gdn-responsetime:
-      - '2'
+      - '1'
     status:
       code: 200
       message: OK
@@ -541,8 +517,6 @@ interactions:
       - '*/*'
       Accept-Encoding:
       - gzip, deflate
-      Authorization:
-      - apikey koshy.thomas2_macrometa.com.k1.t1CXGMGJIwP6FxfqjCsrc2GEqkZiQMsjb3jcpaPK6f9gmETStx0MW0iaiQPa1E0y1c5c4f
       Connection:
       - keep-alive
       Content-Length:
@@ -574,9 +548,9 @@ interactions:
       x-gdn-region:
       - smoke1-ap-west.eng.macrometa.io
       x-gdn-requestid:
-      - 2579e2e3-4dc4-4a36-b235-3c9053d37bdb
+      - 770beab0-294a-4705-8b34-6db04c77c326
       x-gdn-responsetime:
-      - '0'
+      - '2'
     status:
       code: 202
       message: Accepted
