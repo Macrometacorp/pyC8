@@ -2,9 +2,10 @@ from __future__ import absolute_import, unicode_literals
 
 import base64
 import json
-import pytest
 import threading
 import time
+
+import pytest
 
 from c8.exceptions import StreamAppChangeActiveStateError, StreamAppGetSampleError
 from tests.helpers import assert_raises

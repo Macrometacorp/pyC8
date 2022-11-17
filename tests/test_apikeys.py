@@ -33,10 +33,7 @@ from c8.exceptions import (
     StreamAccessLevel,
     UpdateAttributes,
 )
-from tests.helpers import (
-    assert_raises,
-    extract
-)
+from tests.helpers import assert_raises, extract
 
 # def test_apikey_management(client):
 #     # Create apikey
