@@ -1,0 +1,133 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/datacenter/local
+  response:
+    body:
+      string: '{"_key":"smoke1-ap-west","host":"172.105.52.12","local":true,"name":"smoke1-ap-west","spot_region":false,"status":0,"tags":{"api":"api-smoke1-ap-west.eng.macrometa.io","url":"smoke1-ap-west.eng.macrometa.io"},"locationInfo":{"city":"Mumbai","countrycode":"IN","countryname":"India","latitude":"19.0748","longitude":"72.8856","url":"smoke1-ap-west.eng.macrometa.io"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '366'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 8cf7eb59-9bf7-41cf-aa10-e739979711df
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/billing/region/smoke1-ap-west/usage?startDate=2022-10-18&endDate=2022-11-17
+  response:
+    body:
+      string: '{"code":200,"error":false,"data":[{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668038399,"streams-writes":0,"cep-cpu":0,"cep-memory":24,"collStreams-reads":111,"collStreams-storageSize":2842,"collStreams-writes":21566,"doc-deletes":66,"doc-diskStorage":139626,"doc-indexStorage":363845,"doc-queryExecutionTime":6077,"doc-reads":616,"doc-restqlExecutionTime":24,"doc-restqlUsage":31,"doc-writes":322,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":25,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":2964,"redis-reads":737,"redis-writes":1441,"region":"smoke1-ap-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668124799,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":0,"collStreams-storageSize":111,"collStreams-writes":0,"doc-deletes":10,"doc-diskStorage":67259,"doc-indexStorage":1204385,"doc-queryExecutionTime":145,"doc-reads":52,"doc-restqlExecutionTime":3,"doc-restqlUsage":3,"doc-writes":20,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":24,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":1,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":245,"redis-reads":67,"redis-writes":131,"region":"smoke1-ap-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668211199,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":5115,"collStreams-storageSize":936,"collStreams-writes":983,"doc-deletes":1,"doc-diskStorage":93517,"doc-indexStorage":1657203,"doc-queryExecutionTime":46,"doc-reads":78,"doc-restqlExecutionTime":0,"doc-restqlUsage":0,"doc-writes":40,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":0,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":0,"redis-reads":0,"redis-writes":0,"region":"smoke1-ap-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668297599,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":0,"collStreams-storageSize":1126,"collStreams-writes":0,"doc-deletes":0,"doc-diskStorage":77130,"doc-indexStorage":1626694,"doc-queryExecutionTime":0,"doc-reads":0,"doc-restqlExecutionTime":0,"doc-restqlUsage":0,"doc-writes":0,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":0,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":0,"redis-reads":0,"redis-writes":0,"region":"smoke1-ap-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668383999,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":0,"collStreams-storageSize":1126,"collStreams-writes":0,"doc-deletes":0,"doc-diskStorage":77284,"doc-indexStorage":1623664,"doc-queryExecutionTime":0,"doc-reads":0,"doc-restqlExecutionTime":0,"doc-restqlUsage":0,"doc-writes":0,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":0,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":0,"redis-reads":0,"redis-writes":0,"region":"smoke1-ap-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668470399,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":0,"collStreams-storageSize":1126,"collStreams-writes":0,"doc-deletes":0,"doc-diskStorage":56948,"doc-indexStorage":818700,"doc-queryExecutionTime":1,"doc-reads":6,"doc-restqlExecutionTime":0,"doc-restqlUsage":0,"doc-writes":0,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":0,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":0,"redis-reads":0,"redis-writes":0,"region":"smoke1-ap-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668556799,"streams-writes":0,"cep-cpu":0,"cep-memory":4,"collStreams-reads":0,"collStreams-storageSize":1126,"collStreams-writes":0,"doc-deletes":19,"doc-diskStorage":32678,"doc-indexStorage":19555,"doc-queryExecutionTime":512,"doc-reads":12,"doc-restqlExecutionTime":4,"doc-restqlUsage":6,"doc-writes":22,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":25,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":588,"redis-reads":134,"redis-writes":262,"region":"smoke1-ap-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668643199,"streams-writes":0,"cep-cpu":0,"cep-memory":8,"collStreams-reads":0,"collStreams-storageSize":1126,"collStreams-writes":0,"doc-deletes":15,"doc-diskStorage":38452,"doc-indexStorage":20806,"doc-queryExecutionTime":356,"doc-reads":24,"doc-restqlExecutionTime":5,"doc-restqlUsage":6,"doc-writes":27,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":8,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":236,"redis-reads":67,"redis-writes":131,"region":"smoke1-ap-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":104}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '7209'
+      Content-Type:
+      - application/json
+      Server:
+      - APISIX
+      User-Agent:
+      - C8Apid 0.1.41
+      X-Request-Id:
+      - ReverseProxy/751bb254-ed53-4380-8db3-3209a2b385d1/62
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - be743e8d-d78a-432d-89c8-ede36e469637
+      x-gdn-responsetime:
+      - '15'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+      tenant:
+      - invalid
+    method: GET
+    uri: https://api-smoke1.eng.macrometa.io/_api/billing/region/smoke1-ap-west/usage
+  response:
+    body:
+      string: '{"code":401,"error":true,"message":"Unauthorized","requestId":"751bb254-ed53-4380-8db3-3209a2b385d1/63","serverId":"C8Apid
+        0.1.41"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '131'
+      Content-Type:
+      - application/json
+      Server:
+      - APISIX
+      X-Request-Id:
+      - 751bb254-ed53-4380-8db3-3209a2b385d1/63
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 3ab84f0f-e07c-4d09-9246-fa7cf87d16d4
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 401
+      message: Unauthorized
+version: 1

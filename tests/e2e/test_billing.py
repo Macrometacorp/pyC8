@@ -13,6 +13,7 @@ def get_dates():
     return start_date, end_date
 
 
+@pytest.mark.vcr
 def test_get_account(get_client_instance):
     tenant_name = get_client_instance._tenant.name
     # Test get billing account details for valid tenant
@@ -26,6 +27,7 @@ def test_get_account(get_client_instance):
         get_client_instance.billing.get_account("invalid")
 
 
+@pytest.mark.vcr
 def test_update_contact(get_client_instance):
     contact = {
         "firstname": "John",
@@ -50,6 +52,7 @@ def test_update_contact(get_client_instance):
         get_client_instance.billing.update_contact("invalid")
 
 
+@pytest.mark.vcr
 def test_get_previous_payments(get_client_instance):
     # Test get billing account details for tenant having no stripe account
     with assert_raises(BillingServerError) as err:
@@ -57,6 +60,7 @@ def test_get_previous_payments(get_client_instance):
     assert "Method Not Allowed" in str(err.value)
 
 
+@pytest.mark.vcr
 def test_get_previous_invoices(get_client_instance):
     # Test get billing account details for tenant having no stripe account
     with assert_raises(BillingServerError) as err:
@@ -64,6 +68,7 @@ def test_get_previous_invoices(get_client_instance):
     assert "Method Not Allowed" in str(err.value)
 
 
+@pytest.mark.vcr
 def test_get_current_invoice(get_client_instance):
     # Test get billing account details for tenant having no stripe account
     with assert_raises(BillingServerError) as err:
@@ -71,6 +76,7 @@ def test_get_current_invoice(get_client_instance):
     assert "Method Not Allowed" in str(err.value)
 
 
+@pytest.mark.vcr
 def test_get_specific_invoice(get_client_instance):
     # Test get billing account details for tenant having no stripe account
     with assert_raises(BillingServerError) as err:
@@ -78,6 +84,7 @@ def test_get_specific_invoice(get_client_instance):
     assert "Method Not Allowed" in str(err.value)
 
 
+@pytest.mark.vcr
 def test_get_usage(get_client_instance, get_dates):
     # Test get billing usage
     start_date, end_date = get_dates
@@ -91,6 +98,7 @@ def test_get_usage(get_client_instance, get_dates):
         get_client_instance.billing.get_usage("invalid")
 
 
+@pytest.mark.vcr
 def test_get_usage_region(get_client_instance, get_dates):
     # Test get billing usage
     start_date, end_date = get_dates

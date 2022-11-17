@@ -1,0 +1,100 @@
+interactions:
+- request:
+    body: '{"firstname": "John", "lastname": "Doe", "email": "john@acme.com", "phone":
+      "404-555-8726", "line1": "1388 Villa Drive", "line2": "Suite 240C", "city":
+      "South Bend", "state": "IN", "country": "US", "zipcode": "46601"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '217'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+      tenant:
+      - koshy.thomas2_macrometa.com
+    method: PUT
+    uri: https://api-smoke1.eng.macrometa.io/_api/billing/contact
+  response:
+    body:
+      string: '{"code":200,"error":false,"data":{"line2":"Suite 240C","state":"IN","lastname":"Doe","country":"US","firstname":"John","phone":"404-555-8726","line1":"1388
+        Villa Drive","email":"john@acme.com","city":"South Bend","zipcode":"46601"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '232'
+      Content-Type:
+      - application/json
+      Server:
+      - APISIX
+      User-Agent:
+      - C8Apid 0.1.41
+      X-Request-Id:
+      - ReverseProxy/ee5843cf-2225-4b98-9b93-0d74284061ee/1
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 7ae634ab-88a5-4389-926a-0f91e3f721d2
+      x-gdn-responsetime:
+      - '8'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+      tenant:
+      - invalid
+    method: PUT
+    uri: https://api-smoke1.eng.macrometa.io/_api/billing/contact
+  response:
+    body:
+      string: '{"code":401,"error":true,"message":"Unauthorized","requestId":"ee5843cf-2225-4b98-9b93-0d74284061ee/2","serverId":"C8Apid
+        0.1.41"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '130'
+      Content-Type:
+      - application/json
+      Server:
+      - APISIX
+      X-Request-Id:
+      - ee5843cf-2225-4b98-9b93-0d74284061ee/2
+      x-gdn-region:
+      - smoke1-ap-west.eng.macrometa.io
+      x-gdn-requestid:
+      - 7c0b7b6d-c657-4ca3-a7cb-f93c329efa1e
+      x-gdn-responsetime:
+      - '0'
+    status:
+      code: 401
+      message: Unauthorized
+version: 1
