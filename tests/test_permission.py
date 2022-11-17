@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 
 import time
 
+import pytest
 import websocket
 
 from c8.exceptions import (
@@ -12,11 +13,7 @@ from c8.exceptions import (
     ClearDataBaseAccessLevel,
     ClearStreamAccessLevel,
     CollectionAccessLevel,
-    CollectionCreateError,
-    CollectionListError,
     DataBaseError,
-    DocumentGetError,
-    DocumentInsertError,
     GetAttributes,
     GetDataBaseAccessLevel,
     ListStreams,
@@ -29,15 +26,7 @@ from c8.exceptions import (
     StreamAccessLevel,
     UpdateAttributes,
 )
-from tests.helpers import (
-    assert_raises,
-    extract,
-    generate_fabric_name,
-    generate_random_collection_name,
-    generate_random_stream_name,
-    generate_string,
-    generate_username,
-)
+from tests.helpers import assert_raises, extract
 
 # def test_permission_management(client, sys_fabric):
 #     # Create user
@@ -225,11 +214,12 @@ from tests.helpers import (
 #     assert client.delete_user(username) is True
 
 
+@pytest.mark.vcr
 def test_attributes_user(client):
     # Create user
-    display_name = generate_username()
+    display_name = "test_user_permission_1"
     email = f"{display_name}@macrometa.com"
-    password = generate_string()
+    password = "Sdk@123456##"
     new_user = client.create_user(
         email=email,
         display_name=display_name,
@@ -267,12 +257,13 @@ def test_attributes_user(client):
     assert client.delete_user(username) is True
 
 
+@pytest.mark.vcr
 def test_permission_exceptions(client, sys_fabric):
     # Create user
-    username = generate_username()
-    display_name = generate_username()
+    username = "test_user_permission_2"
+    display_name = "test_user_permission_3"
     email = f"{display_name}@macrometa.com"
-    password = generate_string()
+    password = "Sdk@123456##"
     new_user = client.create_user(
         email=email,
         display_name=display_name,
@@ -285,7 +276,7 @@ def test_permission_exceptions(client, sys_fabric):
     assert client.has_user(username_2)
     user = client.tenant(email, password)
 
-    col_name_1 = generate_random_collection_name()
+    col_name_1 = "test_collection_permission_1"
     assert sys_fabric.create_collection(col_name_1) is not None
 
     # Test that missing users should not be able to access permissions (fabric level)
@@ -329,7 +320,7 @@ def test_permission_exceptions(client, sys_fabric):
         client.list_accessible_streams_user(username)
     assert err.value.http_code == 404
 
-    stream_name_1 = generate_random_stream_name()
+    stream_name_1 = "test_stream_permission_1"
     sys_fabric.create_stream(stream_name_1)
 
     stream_1 = f"c8globals.{stream_name_1}"

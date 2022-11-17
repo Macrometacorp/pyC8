@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+import pytest
 from six import string_types
 
 from c8.exceptions import (
@@ -11,15 +12,10 @@ from c8.exceptions import (
     DocumentRevisionError,
     DocumentUpdateError,
 )
-from tests.helpers import (
-    assert_raises,
-    clean_doc,
-    extract,
-    generate_doc_key,
-    generate_random_collection_name,
-)
+from tests.helpers import assert_raises, clean_doc, extract
 
 
+@pytest.mark.vcr
 def test_document_insert(col, docs):
     # Test insert document with no key
     result = col.insert({})
@@ -36,7 +32,7 @@ def test_document_insert(col, docs):
     col.truncate()
 
     with assert_raises(DocumentParseError) as err:
-        col.insert({"_id": generate_random_collection_name() + "/" + "foo"})
+        col.insert({"_id": "test_collection_document_1" + "/" + "foo"})
     assert "bad collection name" in err.value.message
 
     # Test insert with default options
@@ -102,6 +98,7 @@ def test_document_insert(col, docs):
     assert err.value.error_code == 1210
 
 
+@pytest.mark.vcr
 def test_document_insert_many(col, docs):
     # Test insert_many with default options
     results = col.insert_many(docs)
@@ -180,6 +177,7 @@ def test_document_insert_many(col, docs):
         isinstance(result, DocumentInsertError)
 
 
+@pytest.mark.vcr
 def test_document_update(col, docs):
     doc = docs[0]
     col.insert(doc)
@@ -311,6 +309,7 @@ def test_document_update(col, docs):
     assert col[doc["_key"]]["val"] == 8
 
 
+@pytest.mark.vcr
 def test_document_update_many(col, docs):
     # Insert docs on collection
     col.insert_many(docs)
@@ -491,6 +490,7 @@ def test_document_update_many(col, docs):
     assert str(err.value) == 'field "_key" or "_id" required'
 
 
+@pytest.mark.vcr
 def test_document_replace(col, docs):
     doc = docs[0]
     col.insert(doc)
@@ -587,6 +587,7 @@ def test_document_replace(col, docs):
     assert col[doc["_key"]]["val"] == 8
 
 
+@pytest.mark.vcr
 def test_document_replace_many(col, docs):
     col.insert_many(docs)
     old_revs = {}
@@ -734,6 +735,7 @@ def test_document_replace_many(col, docs):
     assert str(err.value) == 'field "_key" or "_id" required'
 
 
+@pytest.mark.vcr
 def test_document_delete(col, docs):
     # Set up test documents
     col.import_bulk(docs)
@@ -789,7 +791,7 @@ def test_document_delete(col, docs):
     assert len(col) == 2
 
     # Test delete missing document
-    bad_key = generate_doc_key()
+    bad_key = "8889991010"
     with assert_raises(DocumentDeleteError) as err:
         col.delete(bad_key, ignore_missing=False)
     assert err.value.error_code == 1202
@@ -804,6 +806,7 @@ def test_document_delete(col, docs):
     assert len(col) == 1
 
 
+@pytest.mark.vcr
 def test_document_delete_many(col, docs):
     # Set up test documents
     old_revs = {}
@@ -879,9 +882,9 @@ def test_document_delete_many(col, docs):
     col.truncate()
     results = col.delete_many(
         [
-            {"_key": generate_doc_key()},
-            {"_key": generate_doc_key()},
-            {"_key": generate_doc_key()},
+            {"_key": "111222"},
+            {"_key": "222333"},
+            {"_key": "333444"},
         ]
     )
     for result, doc in zip(results, docs):
@@ -894,6 +897,7 @@ def test_document_delete_many(col, docs):
     )
 
 
+@pytest.mark.vcr
 def test_document_count(col, docs):
     # Set up test documents
     col.import_bulk(docs)
@@ -901,6 +905,7 @@ def test_document_count(col, docs):
     assert col.count() == len(docs)
 
 
+@pytest.mark.vcr
 def test_document_find_near(col, docs):
     col.import_bulk(docs)
 
@@ -942,6 +947,7 @@ def test_document_find_near(col, docs):
     assert err.value.error_code == 1505
 
 
+@pytest.mark.vcr
 def test_document_find_in_range(col, docs):
     col.import_bulk(docs)
 
@@ -976,6 +982,7 @@ def test_document_find_in_range(col, docs):
     assert extract("_key", result) == ["3", "4"]
 
 
+@pytest.mark.vcr
 def test_document_find_in_radius(col):
     doc1 = {"_key": "1", "loc": [1, 1]}
     doc2 = {"_key": "2", "loc": [1, 4]}
@@ -1006,6 +1013,7 @@ def test_document_find_in_radius(col):
         assert clean_doc(result[0]) == {"_key": "1", "loc": [1, 1], "dist": 0}
 
 
+@pytest.mark.vcr
 def test_document_find_by_text(col, docs):
     col.import_bulk(docs)
 
@@ -1042,6 +1050,7 @@ def test_document_find_by_text(col, docs):
     assert err.value.error_code == 1571
 
 
+@pytest.mark.vcr
 def test_document_has(col, docs):
     # Set up test document
     result = col.insert(docs[0])
@@ -1117,7 +1126,7 @@ def test_document_has(col, docs):
 
     # Test documents with IDs with wrong collection name
     expected_error_msg = "bad collection name"
-    bad_id = generate_random_collection_name() + "/" + doc_key
+    bad_id = "test_collection_document_2" + "/" + doc_key
     for doc_input in [
         bad_id,
         {"_id": bad_id},
@@ -1168,6 +1177,7 @@ def test_document_has(col, docs):
         assert str(err.value) == expected_error_msg
 
 
+@pytest.mark.vcr
 def test_document_get(col, docs):
     # Set up test documents
     col.import_bulk(docs)
@@ -1192,7 +1202,7 @@ def test_document_get(col, docs):
     assert result["val"] == doc_val
 
     # Test get missing document
-    assert col.get(generate_doc_key()) is None
+    assert col.get("444555") is None
 
     # Test get with correct revision
     good_rev = col[doc_key]["_rev"]
@@ -1213,6 +1223,7 @@ def test_document_get(col, docs):
     assert result["val"] == doc_val
 
 
+@pytest.mark.vcr
 def test_document_import_bulk(col, docs):
     # Test import_bulk with default options
     results = col.import_bulk(docs)
@@ -1243,6 +1254,7 @@ def test_document_import_bulk(col, docs):
         assert col[doc_key]["loc"] == doc["loc"]
 
 
+@pytest.mark.vcr
 def test_document_export(col, docs):
     # Set up test documents
     cursor = col.export()
@@ -1280,6 +1292,7 @@ def test_document_export(col, docs):
         assert cursor[x] == docs[x]
 
 
+@pytest.mark.vcr
 def test_document_edge(lecol, docs, edocs):
     ecol = lecol  # legacy edge collection
 
@@ -1438,6 +1451,7 @@ def test_document_edge(lecol, docs, edocs):
         ] == "{}: edge attribute missing or invalid".format(x + 1)
 
 
+@pytest.mark.vcr
 def test_document_management_via_db(tst_fabric, col):
     doc1_id = col.name + "/foo"
     doc2_id = col.name + "/bar"

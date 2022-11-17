@@ -4,6 +4,8 @@ from __future__ import absolute_import, unicode_literals
 import json
 import os
 
+import pytest
+
 from c8.collection import StandardCollection
 from c8.exceptions import (
     CollectionCreateError,
@@ -16,6 +18,7 @@ from c8.exceptions import (
 from tests.helpers import assert_raises, extract, generate_random_collection_name
 
 
+@pytest.mark.vcr
 def test_get_collection_information(client, col, tst_fabric_name):
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
     collection = tst_fabric.collection(col.name)
@@ -25,22 +28,26 @@ def test_get_collection_information(client, col, tst_fabric_name):
     assert get_col_info["name"] == collection.name
     with assert_raises(CollectionFindError):
         tst_fabric.collection(
-            generate_random_collection_name()
+            "test_collection_collection_1"
         ).get_collection_information()
 
 
+@pytest.mark.vcr
 def test_collection_figures(client, col, tst_fabric_name):
     # Test get properties
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
+
     collection = tst_fabric.collection(col.name)
     get_col_properties = collection.collection_figures()
     assert get_col_properties["name"] == collection.name
     assert get_col_properties["isSystem"] is False
     with assert_raises(CollectionFindError):
-        tst_fabric.collection(generate_random_collection_name()).collection_figures()
+        tst_fabric.collection("test_collection_collection_2").collection_figures()
 
 
+@pytest.mark.vcr
 def test_collection_attributes(client, col, tst_fabric):
+
     assert col.context in ["default", "async", "batch", "transaction"]
     assert col.tenant_name == client._tenant.name
     assert col.fabric_name == tst_fabric.name
@@ -161,7 +168,8 @@ def test_collection_attributes(client, col, tst_fabric):
 #     assert tst_fabric.delete_collection(col_name, ignore_missing=True) is False
 
 
-def test_insert_from_file(client, tst_fabric_name, col):
+@pytest.mark.vcr
+def test_insert_from_file(client, col, tst_fabric_name):
     absolute_path = os.path.dirname(__file__)
     json_path = os.path.join(absolute_path, "files/data.json")
     csv_path = os.path.join(absolute_path, "files/data.csv")
@@ -170,6 +178,7 @@ def test_insert_from_file(client, tst_fabric_name, col):
     documents = json.load(file)
 
     client._tenant.useFabric(tst_fabric_name)
+
     client.insert_document_from_file(collection_name=col.name, filepath=json_path)
 
     data = client.collection(collection_name=col.name).export(limit=len(documents))
@@ -199,9 +208,11 @@ def test_insert_from_file(client, tst_fabric_name, col):
     file.close()
 
 
+@pytest.mark.vcr
 def test_all_documents(client, col, tst_fabric_name):
     document_count = 2003
     client._tenant.useFabric(tst_fabric_name)
+
     client.execute_query(
         query="FOR doc IN 1..{} INSERT {{value:doc}} INTO {}".format(
             document_count, col.name

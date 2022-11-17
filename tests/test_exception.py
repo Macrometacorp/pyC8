@@ -15,6 +15,7 @@ from c8.request import Request
 from c8.response import Response
 
 
+@pytest.mark.vcr
 def test_server_error(client, col, docs):
     document = docs[0]
     with pytest.raises(DocumentInsertError) as err:
@@ -64,7 +65,9 @@ def test_server_error(client, col, docs):
     assert req.endpoint.startswith("/document/" + col.name)
 
 
-def test_client_error(col):
+@pytest.mark.vcr
+def test_client_error(client, col):
+
     with pytest.raises(DocumentParseError) as err:
         col.get({"_id": "invalid"})  # malformed document
     exc = err.value

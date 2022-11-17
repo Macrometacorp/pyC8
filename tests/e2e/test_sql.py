@@ -1,3 +1,4 @@
+import pytest
 from conftest import test_data_document
 
 """
@@ -8,6 +9,7 @@ collection with test data data, run tests and check for the results.
 SQL_COLLECTION = "testsqlcollection"
 
 
+@pytest.mark.vcr
 def test_create_sql_collection(get_client_instance):
     create_collection_response = get_client_instance.create_collection(SQL_COLLECTION)
     insert_document_response = get_client_instance.insert_document(
@@ -18,6 +20,7 @@ def test_create_sql_collection(get_client_instance):
     assert SQL_COLLECTION == create_collection_response.name
 
 
+@pytest.mark.vcr
 def test_sql_endpoint(get_client_instance):
     cursor = get_client_instance.execute_query(
         "SELECT * FROM {}".format(SQL_COLLECTION), sql=True
@@ -33,6 +36,7 @@ def test_sql_endpoint(get_client_instance):
     assert test_data_document() == docs
 
 
+@pytest.mark.vcr
 def test_delete_sql_collection(get_client_instance):
     response = get_client_instance.delete_collection(SQL_COLLECTION)
     # Response from platform

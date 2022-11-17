@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+import pytest
 from six import string_types
 
 from c8.exceptions import (
@@ -10,14 +11,15 @@ from c8.exceptions import (
     UserGetError,
     UserUpdateError,
 )
-from tests.helpers import assert_raises, extract, generate_string, generate_username
+from tests.helpers import assert_raises, extract
 
 
+@pytest.mark.vcr
 def test_user_management(client):
     # Test create user
-    display_name = generate_username()
+    display_name = "test_user_user_1"
     email = f"{display_name}@macrometa.com"
-    password = generate_string()
+    password = "Sdk@123456##"
     new_user = client.create_user(
         email=email,
         display_name=display_name,
@@ -57,7 +59,7 @@ def test_user_management(client):
 
     # Test get missing user
     with assert_raises(UserGetError) as err:
-        client.get_user(generate_username())
+        client.get_user("test_user_user_2")
     assert err.value.error_code == 1703
 
     # Update existing user
@@ -74,7 +76,7 @@ def test_user_management(client):
 
     # Update missing user
     with assert_raises(UserUpdateError) as err:
-        client.update_user(username=generate_username(), password=generate_string())
+        client.update_user(username="test_user_user_3", password="Sdk@123456##")
     assert err.value.error_code == 1703
 
     # Delete an existing user
@@ -87,11 +89,12 @@ def test_user_management(client):
     assert client.delete_user(username, ignore_missing=True) is False
 
 
+@pytest.mark.vcr
 def test_user_change_password(client, sys_fabric):
-    display_name = generate_username()
+    display_name = "test_user_user_4"
     email = f"{display_name}@macrometa.com"
-    password1 = generate_string()
-    password2 = generate_string()
+    password1 = "Sdk@123456##"
+    password2 = "Sdk@123456##2"
 
     new_user = client.create_user(
         email=email,

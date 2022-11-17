@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 import os
 
+import pytest
 import requests
 from dotenv import load_dotenv
 
@@ -14,6 +15,7 @@ from tests.helpers import assert_raises, generate_string, generate_username
 load_dotenv()
 
 
+@pytest.mark.vcr
 def test_client_attributes():
     session = DefaultHTTPClient()
     client = C8Client(
@@ -38,6 +40,7 @@ def test_client_attributes():
     )
 
 
+@pytest.mark.vcr
 def test_client_bad_connection(username, password):
     client = C8Client(
         protocol="https",
@@ -47,8 +50,8 @@ def test_client_bad_connection(username, password):
         geofabric=os.environ.get("FABRIC"),
     )
 
-    bad_username = generate_username()
-    bad_password = generate_string()
+    bad_username = "test_user_bad_1"
+    bad_password = "Sdk@1234!"
 
     # Test connection with bad username password
     with assert_raises(C8AuthenticationError) as err:
@@ -94,10 +97,11 @@ def test_client_custom_http_client():
     assert http_client.counter == 1
 
 
+@pytest.mark.vcr
 def test_get_jwt(client):
     client._tenant.useFabric("_system")
     user = client.create_user(
-        email="{}@macrometa.io".format(generate_username()),
+        email="{}@macrometa.io".format("test_user_client_1"),
         password="121@Macrometa",
     )
 
