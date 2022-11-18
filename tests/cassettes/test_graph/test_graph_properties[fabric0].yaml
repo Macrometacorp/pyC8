@@ -1,0 +1,132 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/graph/test_graph_1
+  response:
+    body:
+      string: '{"error":false,"code":200,"graph":{"_key":"test_graph_1","numberOfShards":1,"replicationFactor":1,"minReplicationFactor":1,"isSmart":false,"edgeDefinitions":[{"collection":"test_collection_3","from":["test_collection_4"],"to":["test_collection_5"]}],"orphanCollections":[],"_rev":"_fGkoKqe--_","_id":"_graphs/test_graph_1","name":"test_graph_1"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '346'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 5155a376-322e-459b-a2ce-4b0ffaf8b6b3
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"name": "test_graph_graph_1"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '30'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/graph
+  response:
+    body:
+      string: '{"error":false,"code":202,"graph":{"_key":"test_graph_graph_1","numberOfShards":1,"replicationFactor":1,"minReplicationFactor":1,"isSmart":false,"edgeDefinitions":[],"orphanCollections":[],"_rev":"_fGkrnJa--_","_id":"_graphs/test_graph_graph_1","name":"test_graph_graph_1"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '274'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - _fGkrnJa--_
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 64eda8fe-1916-4d31-a8aa-c78dabec7a64
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 202
+      message: Accepted
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/graph/test_graph_graph_1
+  response:
+    body:
+      string: '{"error":false,"code":200,"graph":{"_key":"test_graph_graph_1","numberOfShards":1,"replicationFactor":1,"minReplicationFactor":1,"isSmart":false,"edgeDefinitions":[],"orphanCollections":[],"_rev":"_fGkrnJa--_","_id":"_graphs/test_graph_graph_1","name":"test_graph_graph_1"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '274'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 38d96b2d-e4a1-4c88-af75-7539214f3290
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+version: 1

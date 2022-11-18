@@ -15,21 +15,19 @@ interactions:
       content-type:
       - application/json
       tenant:
-      - koshy.thomas2_macrometa.com
+      - pythonsdk_macrometa.com
     method: GET
-    uri: https://api-smoke1.eng.macrometa.io/_api/billing/account
+    uri: https://api-dino-fra.eng.macrometa.io/_api/billing/account
   response:
     body:
-      string: '{"code":200,"error":false,"data":{"plan":{"attribution":"Macrometa","name":"ENTERPRISE","target":"stripe"},"tenant":"koshy.thomas2_macrometa.com","metadata":{},"contact":{"city":"South
-        Bend","country":"US","email":"john@acme.com","firstname":"John","lastname":"Doe","line1":"1388
-        Villa Drive","line2":"Suite 240C","phone":"404-555-8726","state":"IN","zipcode":"46601"},"created_at":1668009087,"last_report_date":"2022-11-09"}}'
+      string: '{"code":200,"error":false,"data":{"plan":{"attribution":"Macrometa","name":"ENTERPRISE","target":"stripe"},"tenant":"pythonsdk_macrometa.com","metadata":{},"contact":{"city":"","country":"","email":"pythonsdk@macrometa.com","firstname":"","lastname":"","line1":"","line2":"","phone":"","state":"","zipcode":""},"created_at":1668685665,"last_report_date":"2022-11-17"}}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
       Connection:
       - keep-alive
       Content-Length:
-      - '426'
+      - '368'
       Content-Type:
       - application/json
       Server:
@@ -37,13 +35,13 @@ interactions:
       User-Agent:
       - C8Apid 0.1.41
       X-Request-Id:
-      - ReverseProxy/a0a5507c-a908-4adf-9aed-42cda36850a2/1
+      - ReverseProxy/407eaa71-2986-4f1e-858e-5538bb2f2e3e/1
       x-gdn-region:
-      - smoke1-ap-west.eng.macrometa.io
+      - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 3e3a2df1-f6c4-4c13-919f-8bf6ec6f2a5e
+      - 0acec63c-e620-43d7-b939-f64fcc8fe409
       x-gdn-responsetime:
-      - '10'
+      - '12'
     status:
       code: 200
       message: OK
@@ -63,19 +61,17 @@ interactions:
       content-type:
       - application/json
     method: GET
-    uri: https://api-smoke1.eng.macrometa.io/_api/billing/account
+    uri: https://api-dino-fra.eng.macrometa.io/_api/billing/account
   response:
     body:
-      string: '{"code":200,"error":false,"data":{"plan":{"attribution":"Macrometa","name":"ENTERPRISE","target":"stripe"},"tenant":"koshy.thomas2_macrometa.com","metadata":{},"contact":{"city":"South
-        Bend","country":"US","email":"john@acme.com","firstname":"John","lastname":"Doe","line1":"1388
-        Villa Drive","line2":"Suite 240C","phone":"404-555-8726","state":"IN","zipcode":"46601"},"created_at":1668009087,"last_report_date":"2022-11-09"}}'
+      string: '{"code":200,"error":false,"data":{"plan":{"attribution":"Macrometa","name":"ENTERPRISE","target":"stripe"},"tenant":"pythonsdk_macrometa.com","metadata":{},"contact":{"city":"","country":"","email":"pythonsdk@macrometa.com","firstname":"","lastname":"","line1":"","line2":"","phone":"","state":"","zipcode":""},"created_at":1668685665,"last_report_date":"2022-11-17"}}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
       Connection:
       - keep-alive
       Content-Length:
-      - '426'
+      - '368'
       Content-Type:
       - application/json
       Server:
@@ -83,13 +79,13 @@ interactions:
       User-Agent:
       - C8Apid 0.1.41
       X-Request-Id:
-      - ReverseProxy/a0a5507c-a908-4adf-9aed-42cda36850a2/2
+      - ReverseProxy/407eaa71-2986-4f1e-858e-5538bb2f2e3e/2
       x-gdn-region:
-      - smoke1-ap-west.eng.macrometa.io
+      - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - cfca6c53-0e4e-4aca-a625-c15aec8f75d2
+      - a8216072-79f2-4e2f-927d-3630faaa34e6
       x-gdn-responsetime:
-      - '6'
+      - '7'
     status:
       code: 200
       message: OK
@@ -111,10 +107,10 @@ interactions:
       tenant:
       - invalid
     method: GET
-    uri: https://api-smoke1.eng.macrometa.io/_api/billing/account
+    uri: https://api-dino-fra.eng.macrometa.io/_api/billing/account
   response:
     body:
-      string: '{"code":401,"error":true,"message":"Unauthorized","requestId":"a0a5507c-a908-4adf-9aed-42cda36850a2/3","serverId":"C8Apid
+      string: '{"code":401,"error":true,"message":"Unauthorized","requestId":"407eaa71-2986-4f1e-858e-5538bb2f2e3e/3","serverId":"C8Apid
         0.1.41"}'
     headers:
       Access-Control-Expose-Headers:
@@ -128,11 +124,11 @@ interactions:
       Server:
       - APISIX
       X-Request-Id:
-      - a0a5507c-a908-4adf-9aed-42cda36850a2/3
+      - 407eaa71-2986-4f1e-858e-5538bb2f2e3e/3
       x-gdn-region:
-      - smoke1-ap-west.eng.macrometa.io
+      - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 3c748e33-5b1e-4edd-a381-d95a5ffb98bb
+      - a486a005-f331-4ecd-b3b9-f8daeb197405
       x-gdn-responsetime:
       - '2'
     status:

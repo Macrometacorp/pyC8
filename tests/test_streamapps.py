@@ -148,7 +148,6 @@ def test_streamapp_methods(client):
     assert client.delete_restql("insertTestWeight") is True
 
 
-@pytest.mark.vcr
 def test_streamapp_http_source(client):
     client._tenant.useFabric("_system")
     stream_app_definition = """

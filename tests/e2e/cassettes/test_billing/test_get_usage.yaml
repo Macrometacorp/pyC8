@@ -15,17 +15,17 @@ interactions:
       content-type:
       - application/json
     method: GET
-    uri: https://api-smoke1.eng.macrometa.io/_api/billing/usage?startDate=2022-10-18&endDate=2022-11-17
+    uri: https://api-dino-fra.eng.macrometa.io/_api/billing/usage?startDate=2022-10-19&endDate=2022-11-18
   response:
     body:
-      string: '{"code":200,"error":false,"data":[{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668038399,"streams-writes":0,"cep-cpu":0,"cep-memory":24,"collStreams-reads":111,"collStreams-storageSize":2940,"collStreams-writes":21669,"doc-deletes":66,"doc-diskStorage":262076,"doc-indexStorage":591542,"doc-queryExecutionTime":6077,"doc-reads":616,"doc-restqlExecutionTime":24,"doc-restqlUsage":31,"doc-writes":322,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":25,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":2964,"redis-reads":737,"redis-writes":1441,"region":"smoke1-eu-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668124799,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":0,"collStreams-storageSize":222,"collStreams-writes":0,"doc-deletes":10,"doc-diskStorage":186196,"doc-indexStorage":1473112,"doc-queryExecutionTime":166,"doc-reads":56,"doc-restqlExecutionTime":3,"doc-restqlUsage":3,"doc-writes":25,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":49,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":1,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":245,"redis-reads":67,"redis-writes":131,"region":"smoke1-eu-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668211199,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":6447,"collStreams-storageSize":1140,"collStreams-writes":1086,"doc-deletes":1,"doc-diskStorage":233129,"doc-indexStorage":1956342,"doc-queryExecutionTime":48,"doc-reads":90,"doc-restqlExecutionTime":0,"doc-restqlUsage":0,"doc-writes":40,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":0,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":0,"redis-reads":0,"redis-writes":0,"region":"smoke1-eu-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668297599,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":0,"collStreams-storageSize":1348,"collStreams-writes":0,"doc-deletes":0,"doc-diskStorage":160887,"doc-indexStorage":1661368,"doc-queryExecutionTime":0,"doc-reads":0,"doc-restqlExecutionTime":0,"doc-restqlUsage":0,"doc-writes":0,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":0,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":0,"redis-reads":0,"redis-writes":0,"region":"smoke1-eu-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668383999,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":0,"collStreams-storageSize":1348,"collStreams-writes":0,"doc-deletes":0,"doc-diskStorage":135870,"doc-indexStorage":1660124,"doc-queryExecutionTime":0,"doc-reads":0,"doc-restqlExecutionTime":0,"doc-restqlUsage":0,"doc-writes":0,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":0,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":0,"redis-reads":0,"redis-writes":0,"region":"smoke1-eu-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668470399,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":0,"collStreams-storageSize":1348,"collStreams-writes":0,"doc-deletes":0,"doc-diskStorage":188348,"doc-indexStorage":863977,"doc-queryExecutionTime":3,"doc-reads":14,"doc-restqlExecutionTime":0,"doc-restqlUsage":0,"doc-writes":0,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":0,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":0,"redis-reads":0,"redis-writes":0,"region":"smoke1-eu-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668556799,"streams-writes":0,"cep-cpu":0,"cep-memory":4,"collStreams-reads":0,"collStreams-storageSize":1348,"collStreams-writes":0,"doc-deletes":19,"doc-diskStorage":98253,"doc-indexStorage":56643,"doc-queryExecutionTime":513,"doc-reads":14,"doc-restqlExecutionTime":4,"doc-restqlUsage":6,"doc-writes":22,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":25,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":588,"redis-reads":134,"redis-writes":262,"region":"smoke1-eu-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"koshy.thomas2_macrometa.com","timestamp":1668643199,"streams-writes":0,"cep-cpu":0,"cep-memory":8,"collStreams-reads":0,"collStreams-storageSize":1348,"collStreams-writes":0,"doc-deletes":15,"doc-diskStorage":100537,"doc-indexStorage":56096,"doc-queryExecutionTime":356,"doc-reads":24,"doc-restqlExecutionTime":5,"doc-restqlUsage":6,"doc-writes":27,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":8,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":236,"redis-reads":67,"redis-writes":131,"region":"smoke1-eu-west","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":104}]}'
+      string: '{"code":200,"error":false,"data":[{"tenant":"pythonsdk_macrometa.com","timestamp":1668729599,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":0,"collStreams-storageSize":0,"collStreams-writes":0,"doc-deletes":0,"doc-diskStorage":3696,"doc-indexStorage":1057,"doc-queryExecutionTime":0,"doc-reads":0,"doc-restqlExecutionTime":0,"doc-restqlUsage":0,"doc-writes":0,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":0,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":0,"redis-reads":0,"redis-writes":0,"region":"dino-fra","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0}]}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
       Connection:
       - keep-alive
       Content-Length:
-      - '7218'
+      - '907'
       Content-Type:
       - application/json
       Server:
@@ -33,13 +33,13 @@ interactions:
       User-Agent:
       - C8Apid 0.1.41
       X-Request-Id:
-      - ReverseProxy/d23eb96e-ecde-4d43-ad85-3cc96ed409de/2
+      - ReverseProxy/4c64c4e1-ef74-441d-b1c8-58b69bfb57b1/1
       x-gdn-region:
-      - smoke1-ap-west.eng.macrometa.io
+      - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 186ba9b0-62d8-4284-ae04-e4ccbd9e4830
+      - 837c5b1f-e04d-4946-a1f5-bdfb479d9d81
       x-gdn-responsetime:
-      - '6'
+      - '10'
     status:
       code: 200
       message: OK
@@ -61,10 +61,10 @@ interactions:
       tenant:
       - invalid
     method: GET
-    uri: https://api-smoke1.eng.macrometa.io/_api/billing/usage
+    uri: https://api-dino-fra.eng.macrometa.io/_api/billing/usage
   response:
     body:
-      string: '{"code":401,"error":true,"message":"Unauthorized","requestId":"d23eb96e-ecde-4d43-ad85-3cc96ed409de/3","serverId":"C8Apid
+      string: '{"code":401,"error":true,"message":"Unauthorized","requestId":"4c64c4e1-ef74-441d-b1c8-58b69bfb57b1/2","serverId":"C8Apid
         0.1.41"}'
     headers:
       Access-Control-Expose-Headers:
@@ -78,13 +78,13 @@ interactions:
       Server:
       - APISIX
       X-Request-Id:
-      - d23eb96e-ecde-4d43-ad85-3cc96ed409de/3
+      - 4c64c4e1-ef74-441d-b1c8-58b69bfb57b1/2
       x-gdn-region:
-      - smoke1-ap-west.eng.macrometa.io
+      - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 13046a3c-4c56-4ae3-8170-b50e31e08028
+      - f51de69d-0bcc-4b39-ae4b-2c45764c45d1
       x-gdn-responsetime:
-      - '1'
+      - '3'
     status:
       code: 401
       message: Unauthorized

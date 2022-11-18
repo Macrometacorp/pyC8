@@ -15,18 +15,18 @@ interactions:
       content-type:
       - application/json
     method: GET
-    uri: https://api-smoke1.eng.macrometa.io/_api/billing/invoices?limit=1
+    uri: https://api-dino-fra.eng.macrometa.io/_api/billing/invoices?limit=1
   response:
     body:
       string: '{"code":405,"error":true,"message":"Stripe is not allowed for tenant
-        \"koshy.thomas2_macrometa.com\""}'
+        \"pythonsdk_macrometa.com\""}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
       Connection:
       - keep-alive
       Content-Length:
-      - '102'
+      - '98'
       Content-Type:
       - application/json
       Server:
@@ -34,13 +34,13 @@ interactions:
       User-Agent:
       - C8Apid 0.1.41
       X-Request-Id:
-      - ReverseProxy/d23eb96e-ecde-4d43-ad85-3cc96ed409de/1
+      - ReverseProxy/392c482d-3ebc-429c-91ba-fec98ce57fb3/2
       x-gdn-region:
-      - smoke1-ap-west.eng.macrometa.io
+      - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 9cdd6728-1d5d-424e-a3e6-0424dc81d8be
+      - 1cad801e-f27c-494a-97ba-744e67f54303
       x-gdn-responsetime:
-      - '10'
+      - '13'
     status:
       code: 405
       message: Method Not Allowed

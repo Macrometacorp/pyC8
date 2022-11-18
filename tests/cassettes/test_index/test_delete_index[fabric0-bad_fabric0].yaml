@@ -1,0 +1,796 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"id":"790537","name":"test_collection_graph_15","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/790537","searchEnabled":false},{"id":"790534","name":"test_collection_graph_14","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/790534","searchEnabled":false},{"id":"790509","name":"test_collection_graph_13","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/790509","searchEnabled":false},{"id":"790506","name":"test_collection_graph_11","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/790506","searchEnabled":false},{"id":"782006","name":"_dynamo","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_dynamo","searchEnabled":false},{"id":"790503","name":"test_collection_graph_12","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/790503","searchEnabled":false},{"id":"782003","name":"_collections","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_collections","searchEnabled":false},{"id":"782268","name":"test_collection_c8ql_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782268","searchEnabled":false},{"id":"791474","name":"test_collection_graph_26","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/791474","searchEnabled":false},{"id":"786934","name":"test_collection_cursor_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/786934","searchEnabled":false},{"id":"782343","name":"test_collection_c8ql_3","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782343","searchEnabled":false},{"id":"790405","name":"test_collection_graph_6","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/790405","searchEnabled":false},{"id":"791462","name":"test_collection_graph_25","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/791462","searchEnabled":false},{"id":"781963","name":"_analyzers","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_analyzers","searchEnabled":false},{"id":"781960","name":"_graphs","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_graphs","searchEnabled":false},{"id":"782047","name":"test_collection_2","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782047","searchEnabled":false},{"id":"782017","name":"test_collection_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782017","searchEnabled":false},{"id":"782080","name":"test_collection_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782080","searchEnabled":false},{"id":"782092","name":"test_collection_3","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782092","searchEnabled":false},{"id":"782382","name":"test_collection_c8ql_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782382","searchEnabled":false},{"id":"782287","name":"test_collection_c8ql_2","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782287","searchEnabled":false},{"id":"782009","name":"_replicationTest","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_replicationTest","searchEnabled":false},{"id":"782068","name":"test_collection_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782068","searchEnabled":false},{"id":"782363","name":"test_collection_c8ql_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782363","searchEnabled":false},{"id":"782492","name":"test_collection_c8ql_6","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782492","searchEnabled":false},{"id":"784580","name":"test_collection_c8ql_7","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/784580","searchEnabled":false}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:40:52 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - de031bda-6907-4501-9328-ff5fe92cd85e
+      x-gdn-responsetime:
+      - '10'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection/test_collection_1/truncate
+  response:
+    body:
+      string: '{"error":false,"code":200,"waitForSync":false,"name":"test_collection_1","isSystem":false,"isSpot":false,"isLocal":false,"status":3,"searchEnabled":false,"id":"782017","type":2,"hasStream":false,"globallyUniqueId":"hB1D42EC62724/782017","collectionModel":"DOC"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:40:52 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - b0705445-1d68-48a3-ab2c-7cab8f59c71a
+      x-gdn-responsetime:
+      - '9'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"id":"790537","name":"test_collection_graph_15","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/790537","searchEnabled":false},{"id":"790534","name":"test_collection_graph_14","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/790534","searchEnabled":false},{"id":"790509","name":"test_collection_graph_13","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/790509","searchEnabled":false},{"id":"790506","name":"test_collection_graph_11","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/790506","searchEnabled":false},{"id":"782006","name":"_dynamo","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_dynamo","searchEnabled":false},{"id":"790503","name":"test_collection_graph_12","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/790503","searchEnabled":false},{"id":"782003","name":"_collections","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_collections","searchEnabled":false},{"id":"782268","name":"test_collection_c8ql_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782268","searchEnabled":false},{"id":"791474","name":"test_collection_graph_26","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/791474","searchEnabled":false},{"id":"786934","name":"test_collection_cursor_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/786934","searchEnabled":false},{"id":"782343","name":"test_collection_c8ql_3","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782343","searchEnabled":false},{"id":"790405","name":"test_collection_graph_6","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/790405","searchEnabled":false},{"id":"791462","name":"test_collection_graph_25","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/791462","searchEnabled":false},{"id":"781963","name":"_analyzers","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_analyzers","searchEnabled":false},{"id":"781960","name":"_graphs","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_graphs","searchEnabled":false},{"id":"782047","name":"test_collection_2","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782047","searchEnabled":false},{"id":"782017","name":"test_collection_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782017","searchEnabled":false},{"id":"782080","name":"test_collection_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782080","searchEnabled":false},{"id":"782092","name":"test_collection_3","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782092","searchEnabled":false},{"id":"782382","name":"test_collection_c8ql_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782382","searchEnabled":false},{"id":"782287","name":"test_collection_c8ql_2","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782287","searchEnabled":false},{"id":"782009","name":"_replicationTest","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_replicationTest","searchEnabled":false},{"id":"782068","name":"test_collection_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782068","searchEnabled":false},{"id":"782363","name":"test_collection_c8ql_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782363","searchEnabled":false},{"id":"782492","name":"test_collection_c8ql_6","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782492","searchEnabled":false},{"id":"784580","name":"test_collection_c8ql_7","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/784580","searchEnabled":false}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:40:52 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 974669a3-1a10-41f3-b57d-95562f80ce05
+      x-gdn-responsetime:
+      - '11'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index?collection=test_collection_1
+  response:
+    body:
+      string: '{"error":false,"code":200,"indexes":[{"fields":["_key"],"id":"test_collection_1/0","name":"primary","selectivityEstimate":1,"sparse":false,"type":"primary","unique":true},{"deduplicate":true,"fields":["val"],"id":"test_collection_1/782030","name":"idx_1749818479143288832","selectivityEstimate":1,"sparse":false,"type":"skiplist","unique":false},{"fields":["text"],"id":"test_collection_1/782036","minLength":2,"name":"idx_1749818479318401024","sparse":true,"type":"fulltext","unique":false},{"bestIndexedLevel":17,"fields":["loc"],"geoJson":false,"id":"test_collection_1/782041","maxNumCoverCells":8,"name":"idx_1749818479507144704","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},{"deduplicate":true,"fields":["attr1"],"id":"test_collection_1/791787","name":"idx_1749818792568946688","selectivityEstimate":1,"sparse":true,"type":"skiplist","unique":false},{"deduplicate":true,"fields":["attr1"],"id":"test_collection_1/791795","name":"idx_1749818793121546240","selectivityEstimate":1,"sparse":true,"type":"hash","unique":false},{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791832","name":"idx_1749818796998131712","selectivityEstimate":1,"sparse":true,"type":"hash","unique":false},{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791899","name":"idx_1749818798280540160","selectivityEstimate":1,"sparse":true,"type":"skiplist","unique":false},{"bestIndexedLevel":17,"fields":["attr1"],"geoJson":false,"id":"test_collection_1/791910","maxNumCoverCells":8,"name":"idx_1749818799383642112","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},{"bestIndexedLevel":17,"fields":["attr1","attr2"],"geoJson":false,"id":"test_collection_1/791917","maxNumCoverCells":8,"name":"idx_1749818799742255104","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},{"fields":["attr1"],"id":"test_collection_1/791929","minLength":10,"name":"idx_1749818801057169408","sparse":true,"type":"fulltext","unique":false},{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791943","name":"idx_1749818802553487360","selectivityEstimate":1,"sparse":true,"type":"persistent","unique":false},{"expireAfter":1,"fields":["attr1"],"id":"test_collection_1/791954","name":"idx_1749818803686998016","selectivityEstimate":1,"sparse":true,"type":"ttl","unique":false}],"identifiers":{"test_collection_1/0":{"fields":["_key"],"id":"test_collection_1/0","name":"primary","selectivityEstimate":1,"sparse":false,"type":"primary","unique":true},"test_collection_1/782030":{"deduplicate":true,"fields":["val"],"id":"test_collection_1/782030","name":"idx_1749818479143288832","selectivityEstimate":1,"sparse":false,"type":"skiplist","unique":false},"test_collection_1/782036":{"fields":["text"],"id":"test_collection_1/782036","minLength":2,"name":"idx_1749818479318401024","sparse":true,"type":"fulltext","unique":false},"test_collection_1/782041":{"bestIndexedLevel":17,"fields":["loc"],"geoJson":false,"id":"test_collection_1/782041","maxNumCoverCells":8,"name":"idx_1749818479507144704","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},"test_collection_1/791787":{"deduplicate":true,"fields":["attr1"],"id":"test_collection_1/791787","name":"idx_1749818792568946688","selectivityEstimate":1,"sparse":true,"type":"skiplist","unique":false},"test_collection_1/791795":{"deduplicate":true,"fields":["attr1"],"id":"test_collection_1/791795","name":"idx_1749818793121546240","selectivityEstimate":1,"sparse":true,"type":"hash","unique":false},"test_collection_1/791832":{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791832","name":"idx_1749818796998131712","selectivityEstimate":1,"sparse":true,"type":"hash","unique":false},"test_collection_1/791899":{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791899","name":"idx_1749818798280540160","selectivityEstimate":1,"sparse":true,"type":"skiplist","unique":false},"test_collection_1/791910":{"bestIndexedLevel":17,"fields":["attr1"],"geoJson":false,"id":"test_collection_1/791910","maxNumCoverCells":8,"name":"idx_1749818799383642112","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},"test_collection_1/791917":{"bestIndexedLevel":17,"fields":["attr1","attr2"],"geoJson":false,"id":"test_collection_1/791917","maxNumCoverCells":8,"name":"idx_1749818799742255104","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},"test_collection_1/791929":{"fields":["attr1"],"id":"test_collection_1/791929","minLength":10,"name":"idx_1749818801057169408","sparse":true,"type":"fulltext","unique":false},"test_collection_1/791943":{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791943","name":"idx_1749818802553487360","selectivityEstimate":1,"sparse":true,"type":"persistent","unique":false},"test_collection_1/791954":{"expireAfter":1,"fields":["attr1"],"id":"test_collection_1/791954","name":"idx_1749818803686998016","selectivityEstimate":1,"sparse":true,"type":"ttl","unique":false}}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '5004'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 77162dc3-a236-4b3a-9719-a8230c10da83
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"type": "hash", "fields": ["attr3", "attr4"], "unique": false}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '63'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index?collection=test_collection_1
+  response:
+    body:
+      string: '{"deduplicate":true,"fields":["attr3","attr4"],"id":"test_collection_1/791970","isNewlyCreated":true,"name":"idx_1749818805356331008","selectivityEstimate":1,"sparse":false,"type":"hash","unique":false,"error":false,"code":201}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '227'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - c0979046-b9dc-4c96-b10d-989594455c78
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 201
+      message: Created
+- request:
+    body: '{"type": "skiplist", "fields": ["attr3", "attr4"], "unique": false}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '67'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index?collection=test_collection_1
+  response:
+    body:
+      string: '{"deduplicate":true,"fields":["attr3","attr4"],"id":"test_collection_1/791975","isNewlyCreated":true,"name":"idx_1749818805533540352","selectivityEstimate":1,"sparse":false,"type":"skiplist","unique":false,"error":false,"code":201}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '231'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 9b3205ce-09bb-461e-8796-17c41b552d47
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 201
+      message: Created
+- request:
+    body: '{"type": "fulltext", "fields": ["attr3"], "minLength": 10}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '58'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index?collection=test_collection_1
+  response:
+    body:
+      string: '{"fields":["attr3"],"id":"test_collection_1/791980","isNewlyCreated":true,"minLength":10,"name":"idx_1749818805718089728","sparse":true,"type":"fulltext","unique":false,"error":false,"code":201}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '194'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - d7da7214-bc16-483f-b1be-ee04fbecb911
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 201
+      message: Created
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index?collection=test_collection_1
+  response:
+    body:
+      string: '{"error":false,"code":200,"indexes":[{"fields":["_key"],"id":"test_collection_1/0","name":"primary","selectivityEstimate":1,"sparse":false,"type":"primary","unique":true},{"deduplicate":true,"fields":["val"],"id":"test_collection_1/782030","name":"idx_1749818479143288832","selectivityEstimate":1,"sparse":false,"type":"skiplist","unique":false},{"fields":["text"],"id":"test_collection_1/782036","minLength":2,"name":"idx_1749818479318401024","sparse":true,"type":"fulltext","unique":false},{"bestIndexedLevel":17,"fields":["loc"],"geoJson":false,"id":"test_collection_1/782041","maxNumCoverCells":8,"name":"idx_1749818479507144704","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},{"deduplicate":true,"fields":["attr1"],"id":"test_collection_1/791787","name":"idx_1749818792568946688","selectivityEstimate":1,"sparse":true,"type":"skiplist","unique":false},{"deduplicate":true,"fields":["attr1"],"id":"test_collection_1/791795","name":"idx_1749818793121546240","selectivityEstimate":1,"sparse":true,"type":"hash","unique":false},{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791832","name":"idx_1749818796998131712","selectivityEstimate":1,"sparse":true,"type":"hash","unique":false},{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791899","name":"idx_1749818798280540160","selectivityEstimate":1,"sparse":true,"type":"skiplist","unique":false},{"bestIndexedLevel":17,"fields":["attr1"],"geoJson":false,"id":"test_collection_1/791910","maxNumCoverCells":8,"name":"idx_1749818799383642112","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},{"bestIndexedLevel":17,"fields":["attr1","attr2"],"geoJson":false,"id":"test_collection_1/791917","maxNumCoverCells":8,"name":"idx_1749818799742255104","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},{"fields":["attr1"],"id":"test_collection_1/791929","minLength":10,"name":"idx_1749818801057169408","sparse":true,"type":"fulltext","unique":false},{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791943","name":"idx_1749818802553487360","selectivityEstimate":1,"sparse":true,"type":"persistent","unique":false},{"expireAfter":1,"fields":["attr1"],"id":"test_collection_1/791954","name":"idx_1749818803686998016","selectivityEstimate":1,"sparse":true,"type":"ttl","unique":false},{"deduplicate":true,"fields":["attr3","attr4"],"id":"test_collection_1/791970","name":"idx_1749818805356331008","selectivityEstimate":1,"sparse":false,"type":"hash","unique":false},{"deduplicate":true,"fields":["attr3","attr4"],"id":"test_collection_1/791975","name":"idx_1749818805533540352","selectivityEstimate":1,"sparse":false,"type":"skiplist","unique":false},{"fields":["attr3"],"id":"test_collection_1/791980","minLength":10,"name":"idx_1749818805718089728","sparse":true,"type":"fulltext","unique":false}],"identifiers":{"test_collection_1/0":{"fields":["_key"],"id":"test_collection_1/0","name":"primary","selectivityEstimate":1,"sparse":false,"type":"primary","unique":true},"test_collection_1/782030":{"deduplicate":true,"fields":["val"],"id":"test_collection_1/782030","name":"idx_1749818479143288832","selectivityEstimate":1,"sparse":false,"type":"skiplist","unique":false},"test_collection_1/782036":{"fields":["text"],"id":"test_collection_1/782036","minLength":2,"name":"idx_1749818479318401024","sparse":true,"type":"fulltext","unique":false},"test_collection_1/782041":{"bestIndexedLevel":17,"fields":["loc"],"geoJson":false,"id":"test_collection_1/782041","maxNumCoverCells":8,"name":"idx_1749818479507144704","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},"test_collection_1/791787":{"deduplicate":true,"fields":["attr1"],"id":"test_collection_1/791787","name":"idx_1749818792568946688","selectivityEstimate":1,"sparse":true,"type":"skiplist","unique":false},"test_collection_1/791795":{"deduplicate":true,"fields":["attr1"],"id":"test_collection_1/791795","name":"idx_1749818793121546240","selectivityEstimate":1,"sparse":true,"type":"hash","unique":false},"test_collection_1/791832":{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791832","name":"idx_1749818796998131712","selectivityEstimate":1,"sparse":true,"type":"hash","unique":false},"test_collection_1/791899":{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791899","name":"idx_1749818798280540160","selectivityEstimate":1,"sparse":true,"type":"skiplist","unique":false},"test_collection_1/791910":{"bestIndexedLevel":17,"fields":["attr1"],"geoJson":false,"id":"test_collection_1/791910","maxNumCoverCells":8,"name":"idx_1749818799383642112","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},"test_collection_1/791917":{"bestIndexedLevel":17,"fields":["attr1","attr2"],"geoJson":false,"id":"test_collection_1/791917","maxNumCoverCells":8,"name":"idx_1749818799742255104","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},"test_collection_1/791929":{"fields":["attr1"],"id":"test_collection_1/791929","minLength":10,"name":"idx_1749818801057169408","sparse":true,"type":"fulltext","unique":false},"test_collection_1/791943":{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791943","name":"idx_1749818802553487360","selectivityEstimate":1,"sparse":true,"type":"persistent","unique":false},"test_collection_1/791954":{"expireAfter":1,"fields":["attr1"],"id":"test_collection_1/791954","name":"idx_1749818803686998016","selectivityEstimate":1,"sparse":true,"type":"ttl","unique":false},"test_collection_1/791970":{"deduplicate":true,"fields":["attr3","attr4"],"id":"test_collection_1/791970","name":"idx_1749818805356331008","selectivityEstimate":1,"sparse":false,"type":"hash","unique":false},"test_collection_1/791975":{"deduplicate":true,"fields":["attr3","attr4"],"id":"test_collection_1/791975","name":"idx_1749818805533540352","selectivityEstimate":1,"sparse":false,"type":"skiplist","unique":false},"test_collection_1/791980":{"fields":["attr3"],"id":"test_collection_1/791980","minLength":10,"name":"idx_1749818805718089728","sparse":true,"type":"fulltext","unique":false}}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '6113'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 0152fc70-b83b-4fa7-aae2-45483bf61e1f
+      x-gdn-responsetime:
+      - '8'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index/test_collection_1/idx_1749818805356331008
+  response:
+    body:
+      string: '{"id":"test_collection_1/791970","error":false,"code":200}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '58'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 6172f2a4-f4f0-4348-818b-69fb8d9609d6
+      x-gdn-responsetime:
+      - '9'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index/test_collection_1/idx_1749818805533540352
+  response:
+    body:
+      string: '{"id":"test_collection_1/791975","error":false,"code":200}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '58'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 0452183a-6be1-48e2-86b2-fbe95f8531de
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index/test_collection_1/idx_1749818805718089728
+  response:
+    body:
+      string: '{"id":"test_collection_1/791980","error":false,"code":200}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '58'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 4a463729-1313-4624-8d93-c922b7ac8d5b
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index?collection=test_collection_1
+  response:
+    body:
+      string: '{"error":false,"code":200,"indexes":[{"fields":["_key"],"id":"test_collection_1/0","name":"primary","selectivityEstimate":1,"sparse":false,"type":"primary","unique":true},{"deduplicate":true,"fields":["val"],"id":"test_collection_1/782030","name":"idx_1749818479143288832","selectivityEstimate":1,"sparse":false,"type":"skiplist","unique":false},{"fields":["text"],"id":"test_collection_1/782036","minLength":2,"name":"idx_1749818479318401024","sparse":true,"type":"fulltext","unique":false},{"bestIndexedLevel":17,"fields":["loc"],"geoJson":false,"id":"test_collection_1/782041","maxNumCoverCells":8,"name":"idx_1749818479507144704","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},{"deduplicate":true,"fields":["attr1"],"id":"test_collection_1/791787","name":"idx_1749818792568946688","selectivityEstimate":1,"sparse":true,"type":"skiplist","unique":false},{"deduplicate":true,"fields":["attr1"],"id":"test_collection_1/791795","name":"idx_1749818793121546240","selectivityEstimate":1,"sparse":true,"type":"hash","unique":false},{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791832","name":"idx_1749818796998131712","selectivityEstimate":1,"sparse":true,"type":"hash","unique":false},{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791899","name":"idx_1749818798280540160","selectivityEstimate":1,"sparse":true,"type":"skiplist","unique":false},{"bestIndexedLevel":17,"fields":["attr1"],"geoJson":false,"id":"test_collection_1/791910","maxNumCoverCells":8,"name":"idx_1749818799383642112","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},{"bestIndexedLevel":17,"fields":["attr1","attr2"],"geoJson":false,"id":"test_collection_1/791917","maxNumCoverCells":8,"name":"idx_1749818799742255104","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},{"fields":["attr1"],"id":"test_collection_1/791929","minLength":10,"name":"idx_1749818801057169408","sparse":true,"type":"fulltext","unique":false},{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791943","name":"idx_1749818802553487360","selectivityEstimate":1,"sparse":true,"type":"persistent","unique":false},{"expireAfter":1,"fields":["attr1"],"id":"test_collection_1/791954","name":"idx_1749818803686998016","selectivityEstimate":1,"sparse":true,"type":"ttl","unique":false}],"identifiers":{"test_collection_1/0":{"fields":["_key"],"id":"test_collection_1/0","name":"primary","selectivityEstimate":1,"sparse":false,"type":"primary","unique":true},"test_collection_1/782030":{"deduplicate":true,"fields":["val"],"id":"test_collection_1/782030","name":"idx_1749818479143288832","selectivityEstimate":1,"sparse":false,"type":"skiplist","unique":false},"test_collection_1/782036":{"fields":["text"],"id":"test_collection_1/782036","minLength":2,"name":"idx_1749818479318401024","sparse":true,"type":"fulltext","unique":false},"test_collection_1/782041":{"bestIndexedLevel":17,"fields":["loc"],"geoJson":false,"id":"test_collection_1/782041","maxNumCoverCells":8,"name":"idx_1749818479507144704","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},"test_collection_1/791787":{"deduplicate":true,"fields":["attr1"],"id":"test_collection_1/791787","name":"idx_1749818792568946688","selectivityEstimate":1,"sparse":true,"type":"skiplist","unique":false},"test_collection_1/791795":{"deduplicate":true,"fields":["attr1"],"id":"test_collection_1/791795","name":"idx_1749818793121546240","selectivityEstimate":1,"sparse":true,"type":"hash","unique":false},"test_collection_1/791832":{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791832","name":"idx_1749818796998131712","selectivityEstimate":1,"sparse":true,"type":"hash","unique":false},"test_collection_1/791899":{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791899","name":"idx_1749818798280540160","selectivityEstimate":1,"sparse":true,"type":"skiplist","unique":false},"test_collection_1/791910":{"bestIndexedLevel":17,"fields":["attr1"],"geoJson":false,"id":"test_collection_1/791910","maxNumCoverCells":8,"name":"idx_1749818799383642112","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},"test_collection_1/791917":{"bestIndexedLevel":17,"fields":["attr1","attr2"],"geoJson":false,"id":"test_collection_1/791917","maxNumCoverCells":8,"name":"idx_1749818799742255104","sparse":true,"type":"geo","unique":false,"worstIndexedLevel":4},"test_collection_1/791929":{"fields":["attr1"],"id":"test_collection_1/791929","minLength":10,"name":"idx_1749818801057169408","sparse":true,"type":"fulltext","unique":false},"test_collection_1/791943":{"deduplicate":true,"fields":["attr1","attr2"],"id":"test_collection_1/791943","name":"idx_1749818802553487360","selectivityEstimate":1,"sparse":true,"type":"persistent","unique":false},"test_collection_1/791954":{"expireAfter":1,"fields":["attr1"],"id":"test_collection_1/791954","name":"idx_1749818803686998016","selectivityEstimate":1,"sparse":true,"type":"ttl","unique":false}}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '5004'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - b9b28bc3-6206-4ccd-aa16-2f0f997230e8
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index/test_collection_1/idx_1749818805356331008
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"index not found","errorNum":1212}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '74'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - a5be1114-b8e1-4547-a787-8b8d6dc75bfa
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index/test_collection_1/idx_1749818805533540352
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"index not found","errorNum":1212}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '74'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - f74b6c89-877f-4b8d-9cff-f6b786803fa3
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index/test_collection_1/idx_1749818805718089728
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"index not found","errorNum":1212}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '74'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 49ba228e-4030-4231-84c5-a96f2e6c82bc
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index/test_collection_1/idx_1749818805356331008
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"index not found","errorNum":1212}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '74'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - f0c8192f-c409-46e6-8e4e-d917d0988ca4
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index/test_collection_1/idx_1749818805533540352
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"index not found","errorNum":1212}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '74'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - f107e4dd-c072-4278-ba9f-72e1665bc11b
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/index/test_collection_1/idx_1749818805718089728
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"index not found","errorNum":1212}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '74'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 219e4b83-5254-4c8e-bed0-b6301c566032
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 404
+      message: Not Found
+version: 1
