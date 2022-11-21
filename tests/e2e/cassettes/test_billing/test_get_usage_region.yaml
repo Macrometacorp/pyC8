@@ -36,7 +36,7 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 8f26a2cf-8c9d-4990-a46a-6d90490f6502
+      - dcd191b5-7c6c-4f78-bfca-2eb9cebc81f4
       x-gdn-responsetime:
       - '4'
     status:
@@ -58,17 +58,17 @@ interactions:
       content-type:
       - application/json
     method: GET
-    uri: https://api-dino-fra.eng.macrometa.io/_api/billing/region/dino-fra/usage?startDate=2022-10-19&endDate=2022-11-18
+    uri: https://api-dino-fra.eng.macrometa.io/_api/billing/region/dino-fra/usage?startDate=2022-10-22&endDate=2022-11-21
   response:
     body:
-      string: '{"code":200,"error":false,"data":[{"tenant":"pythonsdk_macrometa.com","timestamp":1668729599,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":0,"collStreams-storageSize":0,"collStreams-writes":0,"doc-deletes":0,"doc-diskStorage":3696,"doc-indexStorage":1057,"doc-queryExecutionTime":0,"doc-reads":0,"doc-restqlExecutionTime":0,"doc-restqlUsage":0,"doc-writes":0,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":0,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":0,"redis-reads":0,"redis-writes":0,"region":"dino-fra","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0}]}'
+      string: '{"code":200,"error":false,"data":[{"tenant":"pythonsdk_macrometa.com","timestamp":1668729599,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":0,"collStreams-storageSize":0,"collStreams-writes":0,"doc-deletes":0,"doc-diskStorage":3696,"doc-indexStorage":1057,"doc-queryExecutionTime":0,"doc-reads":0,"doc-restqlExecutionTime":0,"doc-restqlUsage":0,"doc-writes":0,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":0,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":0,"redis-reads":0,"redis-writes":0,"region":"dino-fra","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"pythonsdk_macrometa.com","timestamp":1668815999,"streams-writes":0,"cep-cpu":0,"cep-memory":4,"collStreams-reads":0,"collStreams-storageSize":0,"collStreams-writes":0,"doc-deletes":13,"doc-diskStorage":34017,"doc-indexStorage":11260,"doc-queryExecutionTime":1085,"doc-reads":26,"doc-restqlExecutionTime":13,"doc-restqlUsage":9,"doc-writes":24,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":311,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":575,"redis-reads":67,"redis-writes":131,"region":"dino-fra","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"pythonsdk_macrometa.com","timestamp":1668902399,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":0,"collStreams-storageSize":0,"collStreams-writes":0,"doc-deletes":0,"doc-diskStorage":31082,"doc-indexStorage":13160,"doc-queryExecutionTime":0,"doc-reads":0,"doc-restqlExecutionTime":0,"doc-restqlUsage":0,"doc-writes":0,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":0,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":0,"redis-reads":0,"redis-writes":0,"region":"dino-fra","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0},{"tenant":"pythonsdk_macrometa.com","timestamp":1668988799,"streams-writes":0,"cep-cpu":0,"cep-memory":0,"collStreams-reads":0,"collStreams-storageSize":0,"collStreams-writes":0,"doc-deletes":0,"doc-diskStorage":36394,"doc-indexStorage":8427,"doc-queryExecutionTime":0,"doc-reads":0,"doc-restqlExecutionTime":0,"doc-restqlUsage":0,"doc-writes":0,"dynamo-deletes":0,"dynamo-diskStorage":0,"dynamo-indexStorage":0,"dynamo-queryExecutionTime":0,"dynamo-reads":0,"dynamo-writes":0,"frequency":"daily","graph-diskStorage":0,"graph-indexStorage":0,"graph-queryExecutionTime":0,"kv-deletes":0,"kv-diskStorage":0,"kv-reads":0,"kv-writes":0,"redis-diskStorage":0,"redis-indexStorage":0,"redis-queryExecutionTime":0,"redis-reads":0,"redis-writes":0,"region":"dino-fra","search-count":0,"search-indexStorage":0,"search-queryExecutionTime":0,"streams-reads":0,"streams-storageSize":0}]}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
       Connection:
       - keep-alive
       Content-Length:
-      - '907'
+      - '3542'
       Content-Type:
       - application/json
       Server:
@@ -76,13 +76,13 @@ interactions:
       User-Agent:
       - C8Apid 0.1.41
       X-Request-Id:
-      - ReverseProxy/4c64c4e1-ef74-441d-b1c8-58b69bfb57b1/3
+      - ReverseProxy/fac97533-7acf-4f8f-ab8b-bbabeeb53682/1
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 786706dd-ffac-4bb6-86cf-2befe126b253
+      - 45b894d0-877f-4b29-b3ce-849996edcbc3
       x-gdn-responsetime:
-      - '11'
+      - '20'
     status:
       code: 200
       message: OK
@@ -107,7 +107,7 @@ interactions:
     uri: https://api-dino-fra.eng.macrometa.io/_api/billing/region/dino-fra/usage
   response:
     body:
-      string: '{"code":401,"error":true,"message":"Unauthorized","requestId":"4c64c4e1-ef74-441d-b1c8-58b69bfb57b1/4","serverId":"C8Apid
+      string: '{"code":401,"error":true,"message":"Unauthorized","requestId":"fac97533-7acf-4f8f-ab8b-bbabeeb53682/2","serverId":"C8Apid
         0.1.41"}'
     headers:
       Access-Control-Expose-Headers:
@@ -121,13 +121,13 @@ interactions:
       Server:
       - APISIX
       X-Request-Id:
-      - 4c64c4e1-ef74-441d-b1c8-58b69bfb57b1/4
+      - fac97533-7acf-4f8f-ab8b-bbabeeb53682/2
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 38aff898-17a0-4932-826c-4d6fa2c6ec8b
+      - f1eb5e6b-2de3-481f-a83e-d5f1b647a5ea
       x-gdn-responsetime:
-      - '4'
+      - '2'
     status:
       code: 401
       message: Unauthorized
