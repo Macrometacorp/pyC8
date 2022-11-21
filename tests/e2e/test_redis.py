@@ -131,7 +131,6 @@ def test_redis_msetnx(get_client_instance):
     response = get_client_instance.redis.msetnx(
         {"test5": "value5", "test6": "value6"}, REDIS_COLLECTION
     )
-
     # Response from platform
     assert {"code": 200, "result": 1} == response
 
