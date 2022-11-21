@@ -26,9 +26,9 @@ class C8Client(object):
 
     def __init__(
         self,
-        protocol="http",
+        protocol="https",
         host="127.0.0.1",
-        port=80,
+        port=None,
         geofabric="_system",
         stream_port=constants.STREAM_PORT,
         email=None,
