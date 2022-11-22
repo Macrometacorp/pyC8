@@ -299,7 +299,7 @@ client.get_streams()
 ```
 
 ### Create a producer to send a message
-In the following example, a [producer](https://macrometa.com/docs/streams/producers) is created for `global` stream named `quickStart`.
+In the following example, a [producer](https://macrometa.com/docs/streams/stream-basics/producers) is created for `global` stream named `quickStart`.
 ```python
 # Create producer
 producer = client.create_stream_producer(stream="quickStart", local=False)
@@ -309,7 +309,7 @@ producer.send(msg)
 ```
 
 ### Create a subscriber to receive message
-In the following example, a [subscriber](https://macrometa.com/docs/streams/consumers) with [subscription](https://macrometa.com/docs/streams/subscriptions) name `topic_1` is created for `global` stream named `quickStart`.
+In the following example, a [subscriber](https://macrometa.com/docs/streams/stream-basics/consumers) with [subscription](https://macrometa.com/docs/streams/stream-basics/subscriptions) name `topic_1` is created for `global` stream named `quickStart`.
 ```python
 # Create subscriber
 subscriber = client.subscribe(
@@ -325,10 +325,10 @@ subscriber.send(
 )
 # To close subscriber connection use `subscriber.close()`
 ```
-A complete pub-sub example can be found [here](https://macrometa.com/docs/streams/pub-sub-streams)
+A complete pub-sub example can be found [here](https://macrometa.com/docs/streams/stream-examples/pub-sub-streams)
 
 ### Delete a subscription from a particular stream
-In the following example, a [subscription](https://macrometa.com/docs/streams/subscriptions) named `topic_1` is removed from a `global` stream named `quickStart` (set local parameter as false if the stream is local).
+In the following example, a [subscription](https://macrometa.com/docs/streams/stream-basics/subscriptions) named `topic_1` is removed from a `global` stream named `quickStart` (set local parameter as false if the stream is local).
 >**_Note:_** In case the stream is a local stream:
 Append `c8locals.` instead of `c8globals.` to the stream name.
 Set local parameter as true.
@@ -338,7 +338,7 @@ client.delete_stream_subscription(stream="c8globals.quickStart", subscription="t
 ```
 
 ### Delete a subscription from all streams
-In the following example, a [subscription](https://macrometa.com/docs/streams/subscriptions) named `topic_1` is removed from all `global` streams (set local parameter as true to remove subscription from all local streams).
+In the following example, a [subscription](https://macrometa.com/docs/streams/stream-basics/subscriptions) named `topic_1` is removed from all `global` streams (set local parameter as true to remove subscription from all local streams).
 ```python
 client.unsubscribe(subscription="topic_1", local=False)
 ```
