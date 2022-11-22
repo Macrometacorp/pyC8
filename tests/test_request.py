@@ -1,8 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
+import pytest
+
 from c8.request import Request
 
 
+@pytest.mark.vcr
 def test_request_no_data():
     request = Request(
         method="post",
@@ -32,6 +35,7 @@ def test_request_no_data():
     assert request.write is None
 
 
+@pytest.mark.vcr
 def test_request_string_data():
     request = Request(
         method="post",
@@ -63,6 +67,7 @@ def test_request_string_data():
     assert request.write is None
 
 
+@pytest.mark.vcr
 def test_request_json_data():
     request = Request(
         method="post",
@@ -94,6 +99,7 @@ def test_request_json_data():
     assert request.write is None
 
 
+@pytest.mark.vcr
 def test_request_transaction_data():
     request = Request(
         method="post",

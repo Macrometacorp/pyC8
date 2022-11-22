@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+import pytest
+
 from c8.exceptions import (
     FabricCreateError,
     FabricDeleteError,
@@ -9,9 +11,10 @@ from c8.exceptions import (
     FabricUpdateMetadataError,
     GetDcDetailError,
 )
-from tests.helpers import assert_raises, extract, generate_fabric_name
+from tests.helpers import assert_raises, extract
 
 
+@pytest.mark.vcr
 def test_fabric_attributes(fabric, client):
     assert fabric.context in ["default", "async", "batch", "transaction"]
     assert fabric.tenant_name == client._tenant.name
@@ -19,6 +22,7 @@ def test_fabric_attributes(fabric, client):
     assert repr(fabric) == "<StandardFabric {}>".format(fabric.name)
 
 
+@pytest.mark.vcr
 def test_fabric_misc_methods(fabric, client):
     # Test get properties
     properties = fabric.properties()
@@ -28,7 +32,7 @@ def test_fabric_misc_methods(fabric, client):
     assert properties["system"] is False
     # Test get properties with bad fabric
     with assert_raises(FabricPropertiesError):
-        client._tenant.useFabric(generate_fabric_name()).properties()
+        client._tenant.useFabric("test_fabric_fabric_1").properties()
 
     # Test fabric details method
     details = fabric.fabrics_detail()
@@ -45,6 +49,7 @@ def test_fabric_misc_methods(fabric, client):
     assert local_dc["_key"] in dc_list
 
 
+@pytest.mark.vcr
 def test_fabric_management(fabric, client):
     # Test list fabrics
     sys_fabric = client._tenant.useFabric("_system")
@@ -52,7 +57,7 @@ def test_fabric_management(fabric, client):
     assert "_system" in result
 
     # Test create fabric
-    fabric_name = generate_fabric_name()
+    fabric_name = "test_fabric_fabric_2"
 
     assert sys_fabric.has_fabric(fabric_name) is False
     assert sys_fabric.create_fabric(fabric_name) is True
@@ -83,6 +88,7 @@ def test_fabric_management(fabric, client):
     assert sys_fabric.delete_fabric(fabric_name, ignore_missing=True) is False
 
 
+@pytest.mark.vcr
 def test_metadata(client, tst_fabric_name):
     # Test get fabric metadata
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
@@ -100,6 +106,7 @@ def test_metadata(client, tst_fabric_name):
     assert resp["options"]["metadata"] == {"foo": "baz"}
 
 
+@pytest.mark.vcr
 def test_datacenter(sys_fabric):
     # Test datacenter methods
     dclist = sys_fabric.dclist(detail=False)
@@ -116,9 +123,10 @@ def test_datacenter(sys_fabric):
     assert err.value.http_code == 404
 
 
+@pytest.mark.vcr
 def test_bad_fabric(client, bad_fabric_name):
     bad_fabric = client._tenant.useFabric(bad_fabric_name)
-    fabric_name = generate_fabric_name()
+    fabric_name = "test_fabric_fabric_3"
 
     # Test create and delete functions on bad fabric
     with assert_raises(FabricCreateError) as err:

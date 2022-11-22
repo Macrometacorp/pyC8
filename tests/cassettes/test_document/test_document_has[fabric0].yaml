@@ -1,0 +1,5345 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"id":"784580","name":"test_collection_c8ql_7","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/784580","searchEnabled":false},{"id":"782492","name":"test_collection_c8ql_6","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782492","searchEnabled":false},{"id":"782363","name":"test_collection_c8ql_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782363","searchEnabled":false},{"id":"782287","name":"test_collection_c8ql_2","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782287","searchEnabled":false},{"id":"782382","name":"test_collection_c8ql_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782382","searchEnabled":false},{"id":"782092","name":"test_collection_3","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782092","searchEnabled":false},{"id":"782080","name":"test_collection_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782080","searchEnabled":false},{"id":"782017","name":"test_collection_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782017","searchEnabled":false},{"id":"782047","name":"test_collection_2","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782047","searchEnabled":false},{"id":"781960","name":"_graphs","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_graphs","searchEnabled":false},{"id":"781963","name":"_analyzers","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_analyzers","searchEnabled":false},{"id":"782343","name":"test_collection_c8ql_3","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782343","searchEnabled":false},{"id":"786934","name":"test_collection_cursor_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/786934","searchEnabled":false},{"id":"782268","name":"test_collection_c8ql_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782268","searchEnabled":false},{"id":"782068","name":"test_collection_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782068","searchEnabled":false},{"id":"782003","name":"_collections","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_collections","searchEnabled":false},{"id":"782006","name":"_dynamo","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_dynamo","searchEnabled":false},{"id":"782009","name":"_replicationTest","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_replicationTest","searchEnabled":false}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:38:16 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - d27fa7c5-43a8-470b-bf9e-07c7951f35c8
+      x-gdn-responsetime:
+      - '31'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection/test_collection_1/truncate
+  response:
+    body:
+      string: '{"error":false,"code":200,"waitForSync":false,"name":"test_collection_1","isSystem":false,"isSpot":false,"isLocal":false,"status":3,"searchEnabled":false,"id":"782017","type":2,"hasStream":false,"globallyUniqueId":"hB1D42EC62724/782017","collectionModel":"DOC"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:38:16 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 2ead3a6a-d56a-43db-aa10-cbe6feeb1362
+      x-gdn-responsetime:
+      - '14'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: '{"_key": "1", "val": 1, "text": "foo", "loc": [1, 1]}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '53'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1?returnNew=0&silent=0
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '61'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Location:
+      - /_tenant/pythonsdk_macrometa.com/_fabric/test_fabric_1/_api/document/test_collection_1/1
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 2a0bd06f-6f12-42b7-b9af-70fa0e098892
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 202
+      message: Accepted
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 1e73920f-da81-4b48-b278-1e59fe0706fb
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - b9a7f5de-0370-4264-9f6b-dd1391f1c04c
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - f5a31c4e-4c17-4fa7-94b1-e2a26ab14a1b
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - f040c34f-dd41-4bac-816a-88990804a2d2
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 3298600a-9294-4f93-b421-4dfbe3fb2d38
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 09f87ff9-2663-4e81-ad10-604ab31251d9
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 1252aef4-8237-4373-901b-7a9e0688723d
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - ba5c1ff8-0dc8-4c70-a2da-731be9299d2b
+      x-gdn-responsetime:
+      - '6'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 5e427a16-e9cb-4250-b38e-8ba3b8d9fb55
+      x-gdn-responsetime:
+      - '5'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 076097b1-09ca-4ca1-8d9a-b5d3212c8f06
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - de0056d5-9ac7-4693-88a3-69dd480ab03e
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - f337d452-df0f-4d1b-959b-5273802d7e58
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 465ddaa4-18e9-44a8-b65c-28cef841d2af
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 6f8d3cb0-8621-4fcb-9a7a-36cf2b0349f6
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - c8b5c1fe-219e-47ef-b697-c3cf48288c3d
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - b4d5a336-101d-4684-abea-87bf694f54ec
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 1abe0790-c910-4f11-8821-92ddff41c71a
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - ec63eb8b-7778-466c-a43f-bb149828310a
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - ada50410-ef57-4ef4-842a-b49eae3af65b
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 9dd59ebe-352e-4a0d-a442-bd98e12b1aca
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 0aeab66c-71d3-4d7d-8f53-392b5355b314
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 2a79d01b-ff14-41d4-b28a-547bb84cbe6d
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - b4d3df36-7c6d-4c84-999d-5278cc17f9e4
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - fdd244da-4b54-41d2-b0c0-da5c604202d2
+      x-gdn-responsetime:
+      - '5'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - ab25135a-0b3f-4250-9afb-8b75f8f31b35
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 2284c1af-b0bd-4770-8341-29aca8c52396
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - a9d512b4-7824-4981-be94-d435cff4b34b
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 01a04239-43f1-4eee-afe7-be6fc45de6dc
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 7bf396a2-140a-418c-8a93-a2509eb65514
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 94c542af-bdea-4b80-9d78-58869cb2fa0e
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - c056939c-3768-49a1-a9b6-1b9500672b3e
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 46a7a6ce-62e0-4f66-8ced-afadce74e380
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - fc3e742d-3597-4c64-aa01-34110fdf65aa
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - ec78d9b0-e3e9-4006-a88e-edee08a179a4
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 495a8049-01d2-4e3c-9c7e-c40f007d4522
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 476c5a37-5049-4756-be34-6305ee747f06
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 91fd379b-2ec2-4621-8acb-a99cc1300448
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 636e26e7-da68-4072-8ab5-f1dc65d6fee1
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 97d32622-2be6-4c38-931a-3eb1ccd1981b
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 7987a37d-6c20-4bbd-903c-5eef093e9f59
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - dad71677-7530-496d-bd9d-0ff6e46139c8
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 385aed40-ebfd-44bc-902b-89b38dc9d3c5
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 0a13101d-d5c9-4f64-b35e-1b855eb0d3ff
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 211785f3-1491-4cbf-924e-7341b391e108
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 96aac691-bc14-4751-8a99-86e132671e30
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 821c59fb-6e32-4d63-9438-c90b6d33ca43
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 29f47756-1042-4b7f-a79d-1c93d40b51bf
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 6832af73-6aef-46b4-a827-8dc8fa06f243
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - ff8f2174-3ba0-49cd-a5b8-aae3a1737d95
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 676b8c59-ef9d-4547-a026-aebf5fb280f1
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 608fb5d1-43e6-4a81-a466-248baeda745e
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - e69f3c95-31d9-4e49-b130-b872bced6c19
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 84a4a649-ed88-4ddb-9084-1b316b2fea60
+      x-gdn-responsetime:
+      - '8'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 313121d9-0b5d-4ff5-8c29-86c71a890a3b
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 2d748f76-3ec7-4bb0-8f20-280e5f32795b
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 8cb80585-664e-4d99-85b3-ca94dbaf356c
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 6302cc37-1cc7-452a-92ee-a07e9c113f31
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - dbee2d9e-5e02-4817-9b2d-751c65f7e0cf
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 14a8a128-d38e-44bc-830e-776e69f4c954
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - f1f65ac9-92fe-4fed-947f-8641981a1bc0
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 02e9001e-90c7-4db6-b938-f2615c75b8ea
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 7084d54f-37e4-4081-9045-4494b037f3ca
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - af11d10a-ec92-4f1f-bf60-2c1eb72af823
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - e5819d1f-e56b-4c17-b305-12030c7b95c8
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 3b3cd015-2136-4572-842e-8543e8d6bd3b
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 9484df03-b6a4-4a08-9e47-5d3f3eef22c5
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - ad6e1ed7-24fe-4b76-9f23-23e0b3c2e316
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 0de3a859-824d-4042-840a-7b652397fd88
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 808de2e5-3de1-454c-b13f-31b26e906e55
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 05bf6bbf-d67b-4b21-b9b4-703694e9e09d
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - e5581b38-d342-4eeb-81c4-6be9877e641a
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 66e1eb51-1aa1-42ce-83dd-3fd18783e4c7
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_0
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"error":true,"code":412,"errorNum":1200,"errorMessage":"precondition
+        failed","_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 0499772d-8538-4959-8f36-4274c6b67d5c
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 412
+      message: Precondition Failed
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - f328c1cc-14c8-4818-98c6-912ad25b1857
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - eb53be68-2cc0-4402-a5cd-8c712c6220c1
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - eeb6f093-ac17-4132-bb78-58c4d9661a6d
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/1
+  response:
+    body:
+      string: '{"_id":"test_collection_1/1","_key":"1","_rev":"_fGkqggW--_","loc":[1,1],"text":"foo","val":1}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '94'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - '"_fGkqggW--_"'
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - f8d64856-dceb-4273-8547-8838adfc9b70
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - d0732c49-a304-4519-8dec-0f735b67c983
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - c11e466c-f0b4-4c1f-9d02-81e5ed844cb7
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 5e844f77-c61d-4cd2-a290-0280e7db5f2c
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 49e42b46-2146-4c8d-ae90-7ec238298e6d
+      x-gdn-responsetime:
+      - '7'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - ef913356-b07e-48f7-ab22-8cf1054dad7a
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 5219a325-1331-4c67-b69a-15626f9b1da4
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 88403e93-3372-44be-9e49-9a178a719552
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 0d859823-ad47-4d63-904e-b1022ee55684
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - a23218db-5b3f-42b7-99c9-91f8521f78a6
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 0f6d2363-9d8c-451f-837e-53568205ed8d
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 0d91b4e7-086b-4c8c-8f0f-6d1955770c85
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 11ab4bd3-1e7b-4de9-9b63-6570edfa4440
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 463b8aa7-0b05-4b09-a182-cc4a5e42a3cb
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - d707876d-cdfb-4bdc-b443-bff118cf7747
+      x-gdn-responsetime:
+      - '14'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 9c71b007-3e86-4b26-8f9f-ecc9d8c677c4
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - b53f38d1-d3b3-4709-9a5a-928b98a61b79
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 092fb5a2-4348-44aa-8474-b581e37a7f06
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - b969fa03-4034-4d97-ac61-d268d2c5e3d0
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 79311731-6b1c-4e68-90e2-a6f9ab0052c2
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - close
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 90cb65d6-5cc1-43c9-a32a-094b95e289f3
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 512c6920-d8ea-4eb2-84d4-1efa26ff5609
+      x-gdn-responsetime:
+      - '16'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - b84449c5-1059-4120-a1e3-f391e31934fe
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - fd0695cd-108b-4822-9ba1-bbd1aa826814
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 5956563a-8db6-4ba6-816b-0c7b47745afb
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 8d630d66-bb53-4d9f-9b8a-33dd0e819beb
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - b92a3c4d-ab34-4e21-bb45-4b3072187ac7
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 4b6710df-1e86-4612-b976-821b9ff52671
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 552d2756-842e-4032-bcc3-ba6fb8130af1
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - ed2534e7-57e1-459a-98de-25888314768a
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - b1703e30-9f88-434c-bf1a-579d921cd3e1
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 2550cf9a-5c21-4b3d-ab88-5d2506674dd6
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - d089c42d-562f-4ce3-8ed4-8a4da8343f15
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 6428cfec-412a-4618-9dd6-acbadb2dc715
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 136b34a3-3f7d-4bf0-bba7-f2161171d2c4
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 1a7ca778-3403-4851-8d95-89909caf3185
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 88cc6e33-907d-40da-ad24-73dd332c4564
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 8ae13293-3e9f-4a1e-9e59-70018e2aaecb
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 3155368a-a504-46bd-887c-cbc325cd8202
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-Match:
+      - _fGkqggW--_
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 3d8fc737-6ccd-4166-9010-69d7be342200
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1/2
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"document not found","errorNum":1202}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '77'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - e49131ff-97cd-4039-a11f-fdb0cd658e03
+      x-gdn-responsetime:
+      - '1'
+    status:
+      code: 404
+      message: Not Found
+version: 1

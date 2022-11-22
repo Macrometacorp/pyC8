@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+import pytest
+
 from c8.exceptions import (
     CreateCollectionError,
     DeleteCollectionError,
@@ -12,12 +14,13 @@ from c8.exceptions import (
     ListCollections,
     RemoveKVError,
 )
-from tests.helpers import assert_raises, extract, generate_col_name
+from tests.helpers import assert_raises, extract
 
 
+@pytest.mark.vcr
 def test_keyvalue_methods(client, tst_fabric_name):
     client._tenant.useFabric(tst_fabric_name)
-    col_name = generate_col_name()
+    col_name = "test_collection_keyvalue_1"
     key_values = [
         {"_key": "1", "value": "foo"},
         {"_key": "2", "value": "bar"},
@@ -60,9 +63,10 @@ def test_keyvalue_methods(client, tst_fabric_name):
     assert client.has_collection_kv(col_name) is False
 
 
+@pytest.mark.vcr
 def test_keyvalue_exceptions(client, tst_fabric_name, bad_fabric_name):
-    bad_col_name = generate_col_name()
-    col_name = generate_col_name()
+    bad_col_name = "test_collection_keyvalue_2"
+    col_name = "test_collection_keyvalue_3"
     key_values = [{"_key": "1"}, {"_key": "2"}, {"_key": "3"}]
 
     # Tests with bad fabric (non existing)

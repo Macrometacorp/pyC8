@@ -2,6 +2,8 @@ from __future__ import absolute_import, unicode_literals
 
 import time
 
+import pytest
+
 from c8.exceptions import (
     RestqlCreateError,
     RestqlCursorError,
@@ -14,6 +16,7 @@ from c8.exceptions import (
 from tests.helpers import assert_raises
 
 
+@pytest.mark.vcr
 def test_restql_methods(client, tst_fabric_name, col):
     client._tenant.useFabric(tst_fabric_name)
 
@@ -116,6 +119,7 @@ def test_restql_methods(client, tst_fabric_name, col):
     assert col.truncate() is True
 
 
+@pytest.mark.vcr
 def test_restql_exceptions(client, tst_fabric_name, col, bad_fabric_name):
     client._tenant.useFabric(tst_fabric_name)
 

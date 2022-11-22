@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+import pytest
+
 from c8.exceptions import (
     AnalyzerGetDefinitionError,
     AnalyzerListError,
@@ -15,6 +17,7 @@ from c8.exceptions import (
 from tests.helpers import assert_raises, extract
 
 
+@pytest.mark.vcr
 def test_search_methods(client, tst_fabric_name, col, docs):
     client._tenant.useFabric(tst_fabric_name)
     col.insert_many(docs)
@@ -91,6 +94,7 @@ def test_search_methods(client, tst_fabric_name, col, docs):
     assert "view2" not in extract("name", client.list_all_views())
 
 
+@pytest.mark.vcr
 def test_search_exceptions(
     client, tst_fabric_name, col, docs, bad_fabric_name, bad_col
 ):

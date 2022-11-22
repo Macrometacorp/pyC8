@@ -1,10 +1,12 @@
 from __future__ import absolute_import, unicode_literals
 
+import pytest
 from requests.structures import CaseInsensitiveDict
 
 from c8.response import Response
 
 
+@pytest.mark.vcr
 def test_response():
     response = Response(
         method="get",

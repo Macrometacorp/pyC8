@@ -1,0 +1,712 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"id":"784580","name":"test_collection_c8ql_7","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/784580","searchEnabled":false},{"id":"782492","name":"test_collection_c8ql_6","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782492","searchEnabled":false},{"id":"782363","name":"test_collection_c8ql_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782363","searchEnabled":false},{"id":"782287","name":"test_collection_c8ql_2","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782287","searchEnabled":false},{"id":"782382","name":"test_collection_c8ql_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782382","searchEnabled":false},{"id":"782092","name":"test_collection_3","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782092","searchEnabled":false},{"id":"782080","name":"test_collection_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782080","searchEnabled":false},{"id":"782017","name":"test_collection_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782017","searchEnabled":false},{"id":"782047","name":"test_collection_2","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782047","searchEnabled":false},{"id":"781960","name":"_graphs","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_graphs","searchEnabled":false},{"id":"781963","name":"_analyzers","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_analyzers","searchEnabled":false},{"id":"782343","name":"test_collection_c8ql_3","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782343","searchEnabled":false},{"id":"782268","name":"test_collection_c8ql_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782268","searchEnabled":false},{"id":"782068","name":"test_collection_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782068","searchEnabled":false},{"id":"782003","name":"_collections","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_collections","searchEnabled":false},{"id":"782006","name":"_dynamo","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_dynamo","searchEnabled":false},{"id":"782009","name":"_replicationTest","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_replicationTest","searchEnabled":false}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:36:25 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 8b3603b4-b785-4fc4-ae7e-501f5f283eae
+      x-gdn-responsetime:
+      - '10'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection/test_collection_1/truncate
+  response:
+    body:
+      string: '{"error":false,"code":200,"waitForSync":false,"name":"test_collection_1","isSystem":false,"isSpot":false,"isLocal":false,"status":3,"searchEnabled":false,"id":"782017","type":2,"hasStream":false,"globallyUniqueId":"hB1D42EC62724/782017","collectionModel":"DOC"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:36:25 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 33ee9c66-2af8-4c8b-ad38-16f62cd0807f
+      x-gdn-responsetime:
+      - '21'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"id":"784580","name":"test_collection_c8ql_7","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/784580","searchEnabled":false},{"id":"782492","name":"test_collection_c8ql_6","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782492","searchEnabled":false},{"id":"782363","name":"test_collection_c8ql_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782363","searchEnabled":false},{"id":"782287","name":"test_collection_c8ql_2","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782287","searchEnabled":false},{"id":"782382","name":"test_collection_c8ql_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782382","searchEnabled":false},{"id":"782092","name":"test_collection_3","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782092","searchEnabled":false},{"id":"782080","name":"test_collection_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782080","searchEnabled":false},{"id":"782017","name":"test_collection_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782017","searchEnabled":false},{"id":"782047","name":"test_collection_2","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782047","searchEnabled":false},{"id":"781960","name":"_graphs","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_graphs","searchEnabled":false},{"id":"781963","name":"_analyzers","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_analyzers","searchEnabled":false},{"id":"782343","name":"test_collection_c8ql_3","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782343","searchEnabled":false},{"id":"782268","name":"test_collection_c8ql_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782268","searchEnabled":false},{"id":"782068","name":"test_collection_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782068","searchEnabled":false},{"id":"782003","name":"_collections","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_collections","searchEnabled":false},{"id":"782006","name":"_dynamo","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_dynamo","searchEnabled":false},{"id":"782009","name":"_replicationTest","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_replicationTest","searchEnabled":false}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:36:26 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 23f96af5-6324-4542-881c-f701e3fc36e6
+      x-gdn-responsetime:
+      - '13'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: '[{"name": "Robert", "surname": "Baratheon", "alive": false, "traits": ["A",
+      "H", "C"]}, {"name": "Jaime", "surname": "Lannister", "alive": true, "age":
+      36, "traits": ["A", "F", "B"]}, {"name": "Catelyn", "surname": "Stark", "alive":
+      false, "age": 40, "traits": ["D", "H", "C"]}, {"name": "Cersei", "surname":
+      "Lannister", "alive": true, "age": 36, "traits": ["H", "E", "F"]}, {"name":
+      "Daenerys", "surname": "Targaryen", "alive": true, "age": 16, "traits": ["D",
+      "H", "C"]}, {"name": "Jorah", "surname": "Mormont", "alive": false, "traits":
+      ["A", "B", "C", "F"]}, {"name": "Petyr", "surname": "Baelish", "alive": false,
+      "traits": ["E", "G", "F"]}, {"name": "Viserys", "surname": "Targaryen", "alive":
+      false, "traits": ["O", "L", "N"]}, {"name": "Jon", "surname": "Snow", "alive":
+      true, "age": 16, "traits": ["A", "B", "C", "F"]}, {"name": "Sansa", "surname":
+      "Stark", "alive": true, "age": 13, "traits": ["D", "I", "J"]}, {"name": "Arya",
+      "surname": "Stark", "alive": true, "age": 11, "traits": ["C", "K", "L"]}, {"name":
+      "Robb", "surname": "Stark", "alive": false, "traits": ["A", "B", "C", "K"]},
+      {"name": "Theon", "surname": "Greyjoy", "alive": true, "age": 16, "traits":
+      ["E", "R", "K"]}, {"name": "Bran", "surname": "Stark", "alive": true, "age":
+      10, "traits": ["L", "J"]}, {"name": "Joffrey", "surname": "Baratheon", "alive":
+      false, "age": 19, "traits": ["I", "L", "O"]}, {"name": "Sandor", "surname":
+      "Clegane", "alive": true, "traits": ["A", "P", "K", "F"]}, {"name": "Tyrion",
+      "surname": "Lannister", "alive": true, "age": 32, "traits": ["F", "K", "M",
+      "N"]}, {"name": "Khal", "surname": "Drogo", "alive": false, "traits": ["A",
+      "C", "O", "P"]}, {"name": "Tywin", "surname": "Lannister", "alive": false, "traits":
+      ["O", "M", "H", "F"]}, {"name": "Davos", "surname": "Seaworth", "alive": true,
+      "age": 49, "traits": ["C", "K", "P", "F"]}, {"name": "Samwell", "surname": "Tarly",
+      "alive": true, "age": 17, "traits": ["C", "L", "I"]}, {"name": "Stannis", "surname":
+      "Baratheon", "alive": false, "traits": ["H", "O", "P", "M"]}, {"name": "Melisandre",
+      "alive": true, "traits": ["G", "E", "H"]}, {"name": "Margaery", "surname": "Tyrell",
+      "alive": false, "traits": ["M", "D", "B"]}, {"name": "Jeor", "surname": "Mormont",
+      "alive": false, "traits": ["C", "H", "M", "P"]}, {"name": "Bronn", "alive":
+      true, "traits": ["K", "E", "C"]}, {"name": "Varys", "alive": true, "traits":
+      ["M", "F", "N", "E"]}, {"name": "Shae", "alive": false, "traits": ["M", "D",
+      "G"]}, {"name": "Talisa", "surname": "Maegyr", "alive": false, "traits": ["D",
+      "C", "B"]}, {"name": "Gendry", "alive": false, "traits": ["K", "C", "A"]}, {"name":
+      "Ygritte", "alive": false, "traits": ["A", "P", "K"]}, {"name": "Tormund", "surname":
+      "Giantsbane", "alive": true, "traits": ["C", "P", "A", "I"]}, {"name": "Gilly",
+      "alive": true, "traits": ["L", "J"]}, {"name": "Brienne", "surname": "Tarth",
+      "alive": true, "age": 32, "traits": ["P", "C", "A", "K"]}, {"name": "Ramsay",
+      "surname": "Bolton", "alive": true, "traits": ["E", "O", "G", "A"]}, {"name":
+      "Ellaria", "surname": "Sand", "alive": true, "traits": ["P", "O", "A", "E"]},
+      {"name": "Daario", "surname": "Naharis", "alive": true, "traits": ["K", "P",
+      "A"]}, {"name": "Missandei", "alive": true, "traits": ["D", "L", "C", "M"]},
+      {"name": "Tommen", "surname": "Baratheon", "alive": true, "traits": ["I", "L",
+      "B"]}, {"name": "Jaqen", "surname": "H''ghar", "alive": true, "traits": ["H",
+      "F", "K"]}, {"name": "Roose", "surname": "Bolton", "alive": true, "traits":
+      ["H", "E", "F", "A"]}, {"name": "The High Sparrow", "alive": true, "traits":
+      ["H", "M", "F", "O"]}]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '3580'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1?returnNew=0&silent=0
+  response:
+    body:
+      string: '[{"_id":"test_collection_1/784693","_key":"784693","_rev":"_fGko1Am--_"},{"_id":"test_collection_1/784694","_key":"784694","_rev":"_fGko1Am--C"},{"_id":"test_collection_1/784695","_key":"784695","_rev":"_fGko1Am--F"},{"_id":"test_collection_1/784696","_key":"784696","_rev":"_fGko1Aq--_"},{"_id":"test_collection_1/784697","_key":"784697","_rev":"_fGko1Aq--C"},{"_id":"test_collection_1/784698","_key":"784698","_rev":"_fGko1Aq--F"},{"_id":"test_collection_1/784699","_key":"784699","_rev":"_fGko1Aq--I"},{"_id":"test_collection_1/784700","_key":"784700","_rev":"_fGko1Au--A"},{"_id":"test_collection_1/784701","_key":"784701","_rev":"_fGko1Au--D"},{"_id":"test_collection_1/784702","_key":"784702","_rev":"_fGko1Au--G"},{"_id":"test_collection_1/784703","_key":"784703","_rev":"_fGko1Au--J"},{"_id":"test_collection_1/784704","_key":"784704","_rev":"_fGko1Ay--A"},{"_id":"test_collection_1/784705","_key":"784705","_rev":"_fGko1Ay--D"},{"_id":"test_collection_1/784706","_key":"784706","_rev":"_fGko1Ay--G"},{"_id":"test_collection_1/784707","_key":"784707","_rev":"_fGko1Ay--J"},{"_id":"test_collection_1/784708","_key":"784708","_rev":"_fGko1A2--A"},{"_id":"test_collection_1/784709","_key":"784709","_rev":"_fGko1A2--D"},{"_id":"test_collection_1/784710","_key":"784710","_rev":"_fGko1A2--G"},{"_id":"test_collection_1/784711","_key":"784711","_rev":"_fGko1A2--J"},{"_id":"test_collection_1/784712","_key":"784712","_rev":"_fGko1A6--A"},{"_id":"test_collection_1/784713","_key":"784713","_rev":"_fGko1A6--D"},{"_id":"test_collection_1/784714","_key":"784714","_rev":"_fGko1A6--G"},{"_id":"test_collection_1/784715","_key":"784715","_rev":"_fGko1A6--J"},{"_id":"test_collection_1/784716","_key":"784716","_rev":"_fGko1B---_"},{"_id":"test_collection_1/784717","_key":"784717","_rev":"_fGko1B---C"},{"_id":"test_collection_1/784718","_key":"784718","_rev":"_fGko1B---F"},{"_id":"test_collection_1/784719","_key":"784719","_rev":"_fGko1B---I"},{"_id":"test_collection_1/784720","_key":"784720","_rev":"_fGko1B---L"},{"_id":"test_collection_1/784721","_key":"784721","_rev":"_fGko1BC--_"},{"_id":"test_collection_1/784722","_key":"784722","_rev":"_fGko1BC--C"},{"_id":"test_collection_1/784723","_key":"784723","_rev":"_fGko1BC--F"},{"_id":"test_collection_1/784724","_key":"784724","_rev":"_fGko1BC--I"},{"_id":"test_collection_1/784725","_key":"784725","_rev":"_fGko1BC--L"},{"_id":"test_collection_1/784726","_key":"784726","_rev":"_fGko1BG--_"},{"_id":"test_collection_1/784727","_key":"784727","_rev":"_fGko1BG--C"},{"_id":"test_collection_1/784728","_key":"784728","_rev":"_fGko1BG--F"},{"_id":"test_collection_1/784729","_key":"784729","_rev":"_fGko1BG--I"},{"_id":"test_collection_1/784730","_key":"784730","_rev":"_fGko1BG--L"},{"_id":"test_collection_1/784731","_key":"784731","_rev":"_fGko1BK--A"},{"_id":"test_collection_1/784732","_key":"784732","_rev":"_fGko1BK--D"},{"_id":"test_collection_1/784733","_key":"784733","_rev":"_fGko1BK--G"},{"_id":"test_collection_1/784734","_key":"784734","_rev":"_fGko1BK--J"}]'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '3025'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 5add5052-a321-46d7-b760-fa354edd5a4d
+      x-gdn-responsetime:
+      - '16'
+    status:
+      code: 202
+      message: Accepted
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"id":"784580","name":"test_collection_c8ql_7","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/784580","searchEnabled":false},{"id":"782492","name":"test_collection_c8ql_6","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782492","searchEnabled":false},{"id":"782363","name":"test_collection_c8ql_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782363","searchEnabled":false},{"id":"782287","name":"test_collection_c8ql_2","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782287","searchEnabled":false},{"id":"782382","name":"test_collection_c8ql_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782382","searchEnabled":false},{"id":"782092","name":"test_collection_3","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782092","searchEnabled":false},{"id":"782080","name":"test_collection_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782080","searchEnabled":false},{"id":"782017","name":"test_collection_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782017","searchEnabled":false},{"id":"782047","name":"test_collection_2","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782047","searchEnabled":false},{"id":"781960","name":"_graphs","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_graphs","searchEnabled":false},{"id":"781963","name":"_analyzers","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_analyzers","searchEnabled":false},{"id":"782343","name":"test_collection_c8ql_3","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782343","searchEnabled":false},{"id":"782268","name":"test_collection_c8ql_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782268","searchEnabled":false},{"id":"782068","name":"test_collection_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782068","searchEnabled":false},{"id":"782003","name":"_collections","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_collections","searchEnabled":false},{"id":"782006","name":"_dynamo","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_dynamo","searchEnabled":false},{"id":"782009","name":"_replicationTest","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_replicationTest","searchEnabled":false}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:36:26 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 39044a04-8a3c-4c78-8d4e-2acbb069f442
+      x-gdn-responsetime:
+      - '13'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/export/test_collection_1?limit=42
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"_key":"784693","alive":false,"name":"Robert","surname":"Baratheon","traits":["A","H","C"]},{"_key":"784694","age":36,"alive":true,"name":"Jaime","surname":"Lannister","traits":["A","F","B"]},{"_key":"784695","age":40,"alive":false,"name":"Catelyn","surname":"Stark","traits":["D","H","C"]},{"_key":"784696","age":36,"alive":true,"name":"Cersei","surname":"Lannister","traits":["H","E","F"]},{"_key":"784697","age":16,"alive":true,"name":"Daenerys","surname":"Targaryen","traits":["D","H","C"]},{"_key":"784698","alive":false,"name":"Jorah","surname":"Mormont","traits":["A","B","C","F"]},{"_key":"784699","alive":false,"name":"Petyr","surname":"Baelish","traits":["E","G","F"]},{"_key":"784700","alive":false,"name":"Viserys","surname":"Targaryen","traits":["O","L","N"]},{"_key":"784701","age":16,"alive":true,"name":"Jon","surname":"Snow","traits":["A","B","C","F"]},{"_key":"784702","age":13,"alive":true,"name":"Sansa","surname":"Stark","traits":["D","I","J"]},{"_key":"784703","age":11,"alive":true,"name":"Arya","surname":"Stark","traits":["C","K","L"]},{"_key":"784704","alive":false,"name":"Robb","surname":"Stark","traits":["A","B","C","K"]},{"_key":"784705","age":16,"alive":true,"name":"Theon","surname":"Greyjoy","traits":["E","R","K"]},{"_key":"784706","age":10,"alive":true,"name":"Bran","surname":"Stark","traits":["L","J"]},{"_key":"784707","age":19,"alive":false,"name":"Joffrey","surname":"Baratheon","traits":["I","L","O"]},{"_key":"784708","alive":true,"name":"Sandor","surname":"Clegane","traits":["A","P","K","F"]},{"_key":"784709","age":32,"alive":true,"name":"Tyrion","surname":"Lannister","traits":["F","K","M","N"]},{"_key":"784710","alive":false,"name":"Khal","surname":"Drogo","traits":["A","C","O","P"]},{"_key":"784711","alive":false,"name":"Tywin","surname":"Lannister","traits":["O","M","H","F"]},{"_key":"784712","age":49,"alive":true,"name":"Davos","surname":"Seaworth","traits":["C","K","P","F"]},{"_key":"784713","age":17,"alive":true,"name":"Samwell","surname":"Tarly","traits":["C","L","I"]},{"_key":"784714","alive":false,"name":"Stannis","surname":"Baratheon","traits":["H","O","P","M"]},{"_key":"784715","alive":true,"name":"Melisandre","traits":["G","E","H"]},{"_key":"784716","alive":false,"name":"Margaery","surname":"Tyrell","traits":["M","D","B"]},{"_key":"784717","alive":false,"name":"Jeor","surname":"Mormont","traits":["C","H","M","P"]},{"_key":"784718","alive":true,"name":"Bronn","traits":["K","E","C"]},{"_key":"784719","alive":true,"name":"Varys","traits":["M","F","N","E"]},{"_key":"784720","alive":false,"name":"Shae","traits":["M","D","G"]},{"_key":"784721","alive":false,"name":"Talisa","surname":"Maegyr","traits":["D","C","B"]},{"_key":"784722","alive":false,"name":"Gendry","traits":["K","C","A"]},{"_key":"784723","alive":false,"name":"Ygritte","traits":["A","P","K"]},{"_key":"784724","alive":true,"name":"Tormund","surname":"Giantsbane","traits":["C","P","A","I"]},{"_key":"784725","alive":true,"name":"Gilly","traits":["L","J"]},{"_key":"784726","age":32,"alive":true,"name":"Brienne","surname":"Tarth","traits":["P","C","A","K"]},{"_key":"784727","alive":true,"name":"Ramsay","surname":"Bolton","traits":["E","O","G","A"]},{"_key":"784728","alive":true,"name":"Ellaria","surname":"Sand","traits":["P","O","A","E"]},{"_key":"784729","alive":true,"name":"Daario","surname":"Naharis","traits":["K","P","A"]},{"_key":"784730","alive":true,"name":"Missandei","traits":["D","L","C","M"]},{"_key":"784731","alive":true,"name":"Tommen","surname":"Baratheon","traits":["I","L","B"]},{"_key":"784732","alive":true,"name":"Jaqen","surname":"H''ghar","traits":["H","F","K"]},{"_key":"784733","alive":true,"name":"Roose","surname":"Bolton","traits":["H","E","F","A"]},{"_key":"784734","alive":true,"name":"The
+        High Sparrow","traits":["H","M","F","O"]}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '3843'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - d3d8b07b-5f96-496f-ad79-0359adffea78
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection/test_collection_1/truncate
+  response:
+    body:
+      string: '{"error":false,"code":200,"waitForSync":false,"name":"test_collection_1","isSystem":false,"isSpot":false,"isLocal":false,"status":3,"searchEnabled":false,"id":"782017","type":2,"hasStream":false,"globallyUniqueId":"hB1D42EC62724/782017","collectionModel":"DOC"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:36:26 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 12e1741e-eb37-4e1b-a8d4-ee622fa43d76
+      x-gdn-responsetime:
+      - '17'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"id":"784580","name":"test_collection_c8ql_7","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/784580","searchEnabled":false},{"id":"782492","name":"test_collection_c8ql_6","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782492","searchEnabled":false},{"id":"782363","name":"test_collection_c8ql_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782363","searchEnabled":false},{"id":"782287","name":"test_collection_c8ql_2","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782287","searchEnabled":false},{"id":"782382","name":"test_collection_c8ql_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782382","searchEnabled":false},{"id":"782092","name":"test_collection_3","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782092","searchEnabled":false},{"id":"782080","name":"test_collection_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782080","searchEnabled":false},{"id":"782017","name":"test_collection_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782017","searchEnabled":false},{"id":"782047","name":"test_collection_2","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782047","searchEnabled":false},{"id":"781960","name":"_graphs","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_graphs","searchEnabled":false},{"id":"781963","name":"_analyzers","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_analyzers","searchEnabled":false},{"id":"782343","name":"test_collection_c8ql_3","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782343","searchEnabled":false},{"id":"782268","name":"test_collection_c8ql_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782268","searchEnabled":false},{"id":"782068","name":"test_collection_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782068","searchEnabled":false},{"id":"782003","name":"_collections","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_collections","searchEnabled":false},{"id":"782006","name":"_dynamo","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_dynamo","searchEnabled":false},{"id":"782009","name":"_replicationTest","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_replicationTest","searchEnabled":false}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:36:26 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 753965db-3bfd-4dc1-89ff-b90d4211f0ba
+      x-gdn-responsetime:
+      - '9'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: '[{"name": "Robert", "surname": "Baratheon", "alive": "false", "traits/0":
+      "A", "traits/1": "H", "traits/2": "C", "age": "", "traits/3": ""}, {"name":
+      "Jaime", "surname": "Lannister", "alive": "true", "traits/0": "A", "traits/1":
+      "F", "traits/2": "B", "age": "36", "traits/3": ""}, {"name": "Catelyn", "surname":
+      "Stark", "alive": "false", "traits/0": "D", "traits/1": "H", "traits/2": "C",
+      "age": "40", "traits/3": ""}, {"name": "Cersei", "surname": "Lannister", "alive":
+      "true", "traits/0": "H", "traits/1": "E", "traits/2": "F", "age": "36", "traits/3":
+      ""}, {"name": "Daenerys", "surname": "Targaryen", "alive": "true", "traits/0":
+      "D", "traits/1": "H", "traits/2": "C", "age": "16", "traits/3": ""}, {"name":
+      "Jorah", "surname": "Mormont", "alive": "false", "traits/0": "A", "traits/1":
+      "B", "traits/2": "C", "age": "", "traits/3": "F"}, {"name": "Petyr", "surname":
+      "Baelish", "alive": "false", "traits/0": "E", "traits/1": "G", "traits/2": "F",
+      "age": "", "traits/3": ""}, {"name": "Viserys", "surname": "Targaryen", "alive":
+      "false", "traits/0": "O", "traits/1": "L", "traits/2": "N", "age": "", "traits/3":
+      ""}, {"name": "Jon", "surname": "Snow", "alive": "true", "traits/0": "A", "traits/1":
+      "B", "traits/2": "C", "age": "16", "traits/3": "F"}, {"name": "Sansa", "surname":
+      "Stark", "alive": "true", "traits/0": "D", "traits/1": "I", "traits/2": "J",
+      "age": "13", "traits/3": ""}, {"name": "Arya", "surname": "Stark", "alive":
+      "true", "traits/0": "C", "traits/1": "K", "traits/2": "L", "age": "11", "traits/3":
+      ""}, {"name": "Robb", "surname": "Stark", "alive": "false", "traits/0": "A",
+      "traits/1": "B", "traits/2": "C", "age": "", "traits/3": "K"}, {"name": "Theon",
+      "surname": "Greyjoy", "alive": "true", "traits/0": "E", "traits/1": "R", "traits/2":
+      "K", "age": "16", "traits/3": ""}, {"name": "Bran", "surname": "Stark", "alive":
+      "true", "traits/0": "L", "traits/1": "J", "traits/2": "", "age": "10", "traits/3":
+      ""}, {"name": "Joffrey", "surname": "Baratheon", "alive": "false", "traits/0":
+      "I", "traits/1": "L", "traits/2": "O", "age": "19", "traits/3": ""}, {"name":
+      "Sandor", "surname": "Clegane", "alive": "true", "traits/0": "A", "traits/1":
+      "P", "traits/2": "K", "age": "", "traits/3": "F"}, {"name": "Tyrion", "surname":
+      "Lannister", "alive": "true", "traits/0": "F", "traits/1": "K", "traits/2":
+      "M", "age": "32", "traits/3": "N"}, {"name": "Khal", "surname": "Drogo", "alive":
+      "false", "traits/0": "A", "traits/1": "C", "traits/2": "O", "age": "", "traits/3":
+      "P"}, {"name": "Tywin", "surname": "Lannister", "alive": "false", "traits/0":
+      "O", "traits/1": "M", "traits/2": "H", "age": "", "traits/3": "F"}, {"name":
+      "Davos", "surname": "Seaworth", "alive": "true", "traits/0": "C", "traits/1":
+      "K", "traits/2": "P", "age": "49", "traits/3": "F"}, {"name": "Samwell", "surname":
+      "Tarly", "alive": "true", "traits/0": "C", "traits/1": "L", "traits/2": "I",
+      "age": "17", "traits/3": ""}, {"name": "Stannis", "surname": "Baratheon", "alive":
+      "false", "traits/0": "H", "traits/1": "O", "traits/2": "P", "age": "", "traits/3":
+      "M"}, {"name": "Melisandre", "surname": "", "alive": "true", "traits/0": "G",
+      "traits/1": "E", "traits/2": "H", "age": "", "traits/3": ""}, {"name": "Margaery",
+      "surname": "Tyrell", "alive": "false", "traits/0": "M", "traits/1": "D", "traits/2":
+      "B", "age": "", "traits/3": ""}, {"name": "Jeor", "surname": "Mormont", "alive":
+      "false", "traits/0": "C", "traits/1": "H", "traits/2": "M", "age": "", "traits/3":
+      "P"}, {"name": "Bronn", "surname": "", "alive": "true", "traits/0": "K", "traits/1":
+      "E", "traits/2": "C", "age": "", "traits/3": ""}, {"name": "Varys", "surname":
+      "", "alive": "true", "traits/0": "M", "traits/1": "F", "traits/2": "N", "age":
+      "", "traits/3": "E"}, {"name": "Shae", "surname": "", "alive": "false", "traits/0":
+      "M", "traits/1": "D", "traits/2": "G", "age": "", "traits/3": ""}, {"name":
+      "Talisa", "surname": "Maegyr", "alive": "false", "traits/0": "D", "traits/1":
+      "C", "traits/2": "B", "age": "", "traits/3": ""}, {"name": "Gendry", "surname":
+      "", "alive": "false", "traits/0": "K", "traits/1": "C", "traits/2": "A", "age":
+      "", "traits/3": ""}, {"name": "Ygritte", "surname": "", "alive": "false", "traits/0":
+      "A", "traits/1": "P", "traits/2": "K", "age": "", "traits/3": ""}, {"name":
+      "Tormund", "surname": "Giantsbane", "alive": "true", "traits/0": "C", "traits/1":
+      "P", "traits/2": "A", "age": "", "traits/3": "I"}, {"name": "Gilly", "surname":
+      "", "alive": "true", "traits/0": "L", "traits/1": "J", "traits/2": "", "age":
+      "", "traits/3": ""}, {"name": "Brienne", "surname": "Tarth", "alive": "true",
+      "traits/0": "P", "traits/1": "C", "traits/2": "A", "age": "32", "traits/3":
+      "K"}, {"name": "Ramsay", "surname": "Bolton", "alive": "true", "traits/0": "E",
+      "traits/1": "O", "traits/2": "G", "age": "", "traits/3": "A"}, {"name": "Ellaria",
+      "surname": "Sand", "alive": "true", "traits/0": "P", "traits/1": "O", "traits/2":
+      "A", "age": "", "traits/3": "E"}, {"name": "Daario", "surname": "Naharis", "alive":
+      "true", "traits/0": "K", "traits/1": "P", "traits/2": "A", "age": "", "traits/3":
+      ""}, {"name": "Missandei", "surname": "", "alive": "true", "traits/0": "D",
+      "traits/1": "L", "traits/2": "C", "age": "", "traits/3": "M"}, {"name": "Tommen",
+      "surname": "Baratheon", "alive": "true", "traits/0": "I", "traits/1": "L", "traits/2":
+      "B", "age": "", "traits/3": ""}, {"name": "Jaqen", "surname": "H''ghar", "alive":
+      "true", "traits/0": "H", "traits/1": "F", "traits/2": "K", "age": "", "traits/3":
+      ""}, {"name": "Roose", "surname": "Bolton", "alive": "true", "traits/0": "H",
+      "traits/1": "E", "traits/2": "F", "age": "", "traits/3": "A"}, {"name": "The
+      High Sparrow", "surname": "", "alive": "true", "traits/0": "H", "traits/1":
+      "M", "traits/2": "F", "age": "", "traits/3": "O"}]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '5751'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/document/test_collection_1?returnNew=0&silent=0
+  response:
+    body:
+      string: '[{"_id":"test_collection_1/784854","_key":"784854","_rev":"_fGko15---_"},{"_id":"test_collection_1/784855","_key":"784855","_rev":"_fGko15---C"},{"_id":"test_collection_1/784856","_key":"784856","_rev":"_fGko15---F"},{"_id":"test_collection_1/784857","_key":"784857","_rev":"_fGko15C--A"},{"_id":"test_collection_1/784858","_key":"784858","_rev":"_fGko15C--D"},{"_id":"test_collection_1/784859","_key":"784859","_rev":"_fGko15C--G"},{"_id":"test_collection_1/784860","_key":"784860","_rev":"_fGko15C--J"},{"_id":"test_collection_1/784861","_key":"784861","_rev":"_fGko15C--M"},{"_id":"test_collection_1/784862","_key":"784862","_rev":"_fGko15C--P"},{"_id":"test_collection_1/784863","_key":"784863","_rev":"_fGko15C--S"},{"_id":"test_collection_1/784864","_key":"784864","_rev":"_fGko15C--V"},{"_id":"test_collection_1/784865","_key":"784865","_rev":"_fGko15G--A"},{"_id":"test_collection_1/784866","_key":"784866","_rev":"_fGko15G--D"},{"_id":"test_collection_1/784867","_key":"784867","_rev":"_fGko15G--G"},{"_id":"test_collection_1/784868","_key":"784868","_rev":"_fGko15G--J"},{"_id":"test_collection_1/784869","_key":"784869","_rev":"_fGko15G--M"},{"_id":"test_collection_1/784870","_key":"784870","_rev":"_fGko15G--P"},{"_id":"test_collection_1/784871","_key":"784871","_rev":"_fGko15G--S"},{"_id":"test_collection_1/784872","_key":"784872","_rev":"_fGko15K--_"},{"_id":"test_collection_1/784873","_key":"784873","_rev":"_fGko15K--C"},{"_id":"test_collection_1/784874","_key":"784874","_rev":"_fGko15K--F"},{"_id":"test_collection_1/784875","_key":"784875","_rev":"_fGko15K--I"},{"_id":"test_collection_1/784876","_key":"784876","_rev":"_fGko15K--L"},{"_id":"test_collection_1/784877","_key":"784877","_rev":"_fGko15K--O"},{"_id":"test_collection_1/784878","_key":"784878","_rev":"_fGko15K--R"},{"_id":"test_collection_1/784879","_key":"784879","_rev":"_fGko15O--_"},{"_id":"test_collection_1/784880","_key":"784880","_rev":"_fGko15O--C"},{"_id":"test_collection_1/784881","_key":"784881","_rev":"_fGko15O--F"},{"_id":"test_collection_1/784882","_key":"784882","_rev":"_fGko15O--I"},{"_id":"test_collection_1/784883","_key":"784883","_rev":"_fGko15O--L"},{"_id":"test_collection_1/784884","_key":"784884","_rev":"_fGko15O--O"},{"_id":"test_collection_1/784885","_key":"784885","_rev":"_fGko15O--R"},{"_id":"test_collection_1/784886","_key":"784886","_rev":"_fGko15S---"},{"_id":"test_collection_1/784887","_key":"784887","_rev":"_fGko15S--B"},{"_id":"test_collection_1/784888","_key":"784888","_rev":"_fGko15S--E"},{"_id":"test_collection_1/784889","_key":"784889","_rev":"_fGko15S--H"},{"_id":"test_collection_1/784890","_key":"784890","_rev":"_fGko15S--K"},{"_id":"test_collection_1/784891","_key":"784891","_rev":"_fGko15S--N"},{"_id":"test_collection_1/784892","_key":"784892","_rev":"_fGko15S--Q"},{"_id":"test_collection_1/784893","_key":"784893","_rev":"_fGko15S--T"},{"_id":"test_collection_1/784894","_key":"784894","_rev":"_fGko15W--A"},{"_id":"test_collection_1/784895","_key":"784895","_rev":"_fGko15W--D"}]'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '3025'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - add42378-681a-49db-bd52-99d0088593cd
+      x-gdn-responsetime:
+      - '10'
+    status:
+      code: 202
+      message: Accepted
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"id":"784580","name":"test_collection_c8ql_7","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/784580","searchEnabled":false},{"id":"782492","name":"test_collection_c8ql_6","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782492","searchEnabled":false},{"id":"782363","name":"test_collection_c8ql_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782363","searchEnabled":false},{"id":"782287","name":"test_collection_c8ql_2","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782287","searchEnabled":false},{"id":"782382","name":"test_collection_c8ql_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782382","searchEnabled":false},{"id":"782092","name":"test_collection_3","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782092","searchEnabled":false},{"id":"782080","name":"test_collection_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782080","searchEnabled":false},{"id":"782017","name":"test_collection_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782017","searchEnabled":false},{"id":"782047","name":"test_collection_2","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782047","searchEnabled":false},{"id":"781960","name":"_graphs","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_graphs","searchEnabled":false},{"id":"781963","name":"_analyzers","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_analyzers","searchEnabled":false},{"id":"782343","name":"test_collection_c8ql_3","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782343","searchEnabled":false},{"id":"782268","name":"test_collection_c8ql_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782268","searchEnabled":false},{"id":"782068","name":"test_collection_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782068","searchEnabled":false},{"id":"782003","name":"_collections","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_collections","searchEnabled":false},{"id":"782006","name":"_dynamo","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_dynamo","searchEnabled":false},{"id":"782009","name":"_replicationTest","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_replicationTest","searchEnabled":false}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:36:28 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 63156e85-f368-41b7-ba2d-9297f3b85e45
+      x-gdn-responsetime:
+      - '14'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/export/test_collection_1?limit=42
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"_key":"784854","age":"","alive":"false","name":"Robert","surname":"Baratheon","traits/0":"A","traits/1":"H","traits/2":"C","traits/3":""},{"_key":"784855","age":"36","alive":"true","name":"Jaime","surname":"Lannister","traits/0":"A","traits/1":"F","traits/2":"B","traits/3":""},{"_key":"784856","age":"40","alive":"false","name":"Catelyn","surname":"Stark","traits/0":"D","traits/1":"H","traits/2":"C","traits/3":""},{"_key":"784857","age":"36","alive":"true","name":"Cersei","surname":"Lannister","traits/0":"H","traits/1":"E","traits/2":"F","traits/3":""},{"_key":"784858","age":"16","alive":"true","name":"Daenerys","surname":"Targaryen","traits/0":"D","traits/1":"H","traits/2":"C","traits/3":""},{"_key":"784859","age":"","alive":"false","name":"Jorah","surname":"Mormont","traits/0":"A","traits/1":"B","traits/2":"C","traits/3":"F"},{"_key":"784860","age":"","alive":"false","name":"Petyr","surname":"Baelish","traits/0":"E","traits/1":"G","traits/2":"F","traits/3":""},{"_key":"784861","age":"","alive":"false","name":"Viserys","surname":"Targaryen","traits/0":"O","traits/1":"L","traits/2":"N","traits/3":""},{"_key":"784862","age":"16","alive":"true","name":"Jon","surname":"Snow","traits/0":"A","traits/1":"B","traits/2":"C","traits/3":"F"},{"_key":"784863","age":"13","alive":"true","name":"Sansa","surname":"Stark","traits/0":"D","traits/1":"I","traits/2":"J","traits/3":""},{"_key":"784864","age":"11","alive":"true","name":"Arya","surname":"Stark","traits/0":"C","traits/1":"K","traits/2":"L","traits/3":""},{"_key":"784865","age":"","alive":"false","name":"Robb","surname":"Stark","traits/0":"A","traits/1":"B","traits/2":"C","traits/3":"K"},{"_key":"784866","age":"16","alive":"true","name":"Theon","surname":"Greyjoy","traits/0":"E","traits/1":"R","traits/2":"K","traits/3":""},{"_key":"784867","age":"10","alive":"true","name":"Bran","surname":"Stark","traits/0":"L","traits/1":"J","traits/2":"","traits/3":""},{"_key":"784868","age":"19","alive":"false","name":"Joffrey","surname":"Baratheon","traits/0":"I","traits/1":"L","traits/2":"O","traits/3":""},{"_key":"784869","age":"","alive":"true","name":"Sandor","surname":"Clegane","traits/0":"A","traits/1":"P","traits/2":"K","traits/3":"F"},{"_key":"784870","age":"32","alive":"true","name":"Tyrion","surname":"Lannister","traits/0":"F","traits/1":"K","traits/2":"M","traits/3":"N"},{"_key":"784871","age":"","alive":"false","name":"Khal","surname":"Drogo","traits/0":"A","traits/1":"C","traits/2":"O","traits/3":"P"},{"_key":"784872","age":"","alive":"false","name":"Tywin","surname":"Lannister","traits/0":"O","traits/1":"M","traits/2":"H","traits/3":"F"},{"_key":"784873","age":"49","alive":"true","name":"Davos","surname":"Seaworth","traits/0":"C","traits/1":"K","traits/2":"P","traits/3":"F"},{"_key":"784874","age":"17","alive":"true","name":"Samwell","surname":"Tarly","traits/0":"C","traits/1":"L","traits/2":"I","traits/3":""},{"_key":"784875","age":"","alive":"false","name":"Stannis","surname":"Baratheon","traits/0":"H","traits/1":"O","traits/2":"P","traits/3":"M"},{"_key":"784876","age":"","alive":"true","name":"Melisandre","surname":"","traits/0":"G","traits/1":"E","traits/2":"H","traits/3":""},{"_key":"784877","age":"","alive":"false","name":"Margaery","surname":"Tyrell","traits/0":"M","traits/1":"D","traits/2":"B","traits/3":""},{"_key":"784878","age":"","alive":"false","name":"Jeor","surname":"Mormont","traits/0":"C","traits/1":"H","traits/2":"M","traits/3":"P"},{"_key":"784879","age":"","alive":"true","name":"Bronn","surname":"","traits/0":"K","traits/1":"E","traits/2":"C","traits/3":""},{"_key":"784880","age":"","alive":"true","name":"Varys","surname":"","traits/0":"M","traits/1":"F","traits/2":"N","traits/3":"E"},{"_key":"784881","age":"","alive":"false","name":"Shae","surname":"","traits/0":"M","traits/1":"D","traits/2":"G","traits/3":""},{"_key":"784882","age":"","alive":"false","name":"Talisa","surname":"Maegyr","traits/0":"D","traits/1":"C","traits/2":"B","traits/3":""},{"_key":"784883","age":"","alive":"false","name":"Gendry","surname":"","traits/0":"K","traits/1":"C","traits/2":"A","traits/3":""},{"_key":"784884","age":"","alive":"false","name":"Ygritte","surname":"","traits/0":"A","traits/1":"P","traits/2":"K","traits/3":""},{"_key":"784885","age":"","alive":"true","name":"Tormund","surname":"Giantsbane","traits/0":"C","traits/1":"P","traits/2":"A","traits/3":"I"},{"_key":"784886","age":"","alive":"true","name":"Gilly","surname":"","traits/0":"L","traits/1":"J","traits/2":"","traits/3":""},{"_key":"784887","age":"32","alive":"true","name":"Brienne","surname":"Tarth","traits/0":"P","traits/1":"C","traits/2":"A","traits/3":"K"},{"_key":"784888","age":"","alive":"true","name":"Ramsay","surname":"Bolton","traits/0":"E","traits/1":"O","traits/2":"G","traits/3":"A"},{"_key":"784889","age":"","alive":"true","name":"Ellaria","surname":"Sand","traits/0":"P","traits/1":"O","traits/2":"A","traits/3":"E"},{"_key":"784890","age":"","alive":"true","name":"Daario","surname":"Naharis","traits/0":"K","traits/1":"P","traits/2":"A","traits/3":""},{"_key":"784891","age":"","alive":"true","name":"Missandei","surname":"","traits/0":"D","traits/1":"L","traits/2":"C","traits/3":"M"},{"_key":"784892","age":"","alive":"true","name":"Tommen","surname":"Baratheon","traits/0":"I","traits/1":"L","traits/2":"B","traits/3":""},{"_key":"784893","age":"","alive":"true","name":"Jaqen","surname":"H''ghar","traits/0":"H","traits/1":"F","traits/2":"K","traits/3":""},{"_key":"784894","age":"","alive":"true","name":"Roose","surname":"Bolton","traits/0":"H","traits/1":"E","traits/2":"F","traits/3":"A"},{"_key":"784895","age":"","alive":"true","name":"The
+        High Sparrow","surname":"","traits/0":"H","traits/1":"M","traits/2":"F","traits/3":"O"}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '5788'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 6cebbfbd-afa0-4b83-96bc-f5b4180ca237
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection/test_collection_1/truncate
+  response:
+    body:
+      string: '{"error":false,"code":200,"waitForSync":false,"name":"test_collection_1","isSystem":false,"isSpot":false,"isLocal":false,"status":3,"searchEnabled":false,"id":"782017","type":2,"hasStream":false,"globallyUniqueId":"hB1D42EC62724/782017","collectionModel":"DOC"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:36:28 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 11af9b1d-b1d6-4635-982b-a19bebe170c2
+      x-gdn-responsetime:
+      - '10'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/collection
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"id":"784580","name":"test_collection_c8ql_7","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/784580","searchEnabled":false},{"id":"782492","name":"test_collection_c8ql_6","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782492","searchEnabled":false},{"id":"782363","name":"test_collection_c8ql_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782363","searchEnabled":false},{"id":"782287","name":"test_collection_c8ql_2","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782287","searchEnabled":false},{"id":"782382","name":"test_collection_c8ql_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782382","searchEnabled":false},{"id":"782092","name":"test_collection_3","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782092","searchEnabled":false},{"id":"782080","name":"test_collection_5","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782080","searchEnabled":false},{"id":"782017","name":"test_collection_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782017","searchEnabled":false},{"id":"782047","name":"test_collection_2","status":3,"type":3,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782047","searchEnabled":false},{"id":"781960","name":"_graphs","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_graphs","searchEnabled":false},{"id":"781963","name":"_analyzers","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_analyzers","searchEnabled":false},{"id":"782343","name":"test_collection_c8ql_3","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782343","searchEnabled":false},{"id":"782268","name":"test_collection_c8ql_1","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782268","searchEnabled":false},{"id":"782068","name":"test_collection_4","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":false,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/782068","searchEnabled":false},{"id":"782003","name":"_collections","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_collections","searchEnabled":false},{"id":"782006","name":"_dynamo","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_dynamo","searchEnabled":false},{"id":"782009","name":"_replicationTest","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_replicationTest","searchEnabled":false}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 07:36:28 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 2f45ab23-6d30-4de9-b992-739cbf08cc2b
+      x-gdn-responsetime:
+      - '17'
+    status:
+      code: 200
+      message: ''
+version: 1

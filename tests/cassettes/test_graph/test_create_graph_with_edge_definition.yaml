@@ -1,0 +1,136 @@
+interactions:
+- request:
+    body: '{"name": "test_collection_graph_17", "edgeDefinitions": [{"collection":
+      "test_collection_graph_18", "from": ["test_collection_graph_19"], "to": ["test_collection_graph_20"]}],
+      "orphanCollections": ["test_collection_graph_21"]}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '226'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/graph
+  response:
+    body:
+      string: '{"error":false,"code":202,"graph":{"_key":"test_collection_graph_17","numberOfShards":1,"replicationFactor":1,"minReplicationFactor":1,"isSmart":false,"edgeDefinitions":[{"collection":"test_collection_graph_18","from":["test_collection_graph_19"],"to":["test_collection_graph_20"]}],"orphanCollections":["test_collection_graph_21"],"_rev":"_fGkr4pi--_","_id":"_graphs/test_collection_graph_17","name":"test_collection_graph_17"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '429'
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - _fGkr4pi--_
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 8fd97447-ed56-42d8-9c99-6684f32baaf2
+      x-gdn-responsetime:
+      - '174'
+    status:
+      code: 202
+      message: Accepted
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/graph/test_collection_graph_17
+  response:
+    body:
+      string: '{"error":false,"code":200,"graph":{"_key":"test_collection_graph_17","numberOfShards":1,"replicationFactor":1,"minReplicationFactor":1,"isSmart":false,"edgeDefinitions":[{"collection":"test_collection_graph_18","from":["test_collection_graph_19"],"to":["test_collection_graph_20"]}],"orphanCollections":["test_collection_graph_21"],"_rev":"_fGkr4pi--_","_id":"_graphs/test_collection_graph_17","name":"test_collection_graph_17"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '429'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - c74c3a07-8845-447a-9f40-ce17d42c91a4
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/graph/test_collection_graph_17?dropCollections=1
+  response:
+    body:
+      string: '{"error":false,"code":202,"removed":true}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '41'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - be48b9d9-6753-4a60-b00f-c0021cd0ba58
+      x-gdn-responsetime:
+      - '138'
+    status:
+      code: 202
+      message: Accepted
+version: 1

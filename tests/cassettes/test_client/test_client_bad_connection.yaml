@@ -1,0 +1,80 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_api/user
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"tenant":"pythonsdk_macrometa.com","email":"pythonsdk@macrometa.com","active":true,"extra":{},"user":"root","displayName":"root"}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '168'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 5a7c27af-d8e2-4568-bbdf-7cacbf7fe12e
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"email": "test_user_bad_1", "password": "Sdk@1234!"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '53'
+      User-Agent:
+      - python-requests/2.25.1
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_open/auth
+  response:
+    body:
+      string: '{"code":401,"error":true,"errorMessage":"forbidden","errorNum":11}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '66'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 373be052-8b8f-4c17-a02d-e9ae3573b742
+      x-gdn-responsetime:
+      - '3'
+    status:
+      code: 401
+      message: Unauthorized
+version: 1

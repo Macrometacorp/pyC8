@@ -23,6 +23,11 @@ mm_client = C8Client(
 )
 
 
+@pytest.fixture(scope="module")
+def vcr_config():
+    return {"filter_headers": ["authorization"]}
+
+
 @pytest.fixture
 def get_client_instance():
     return client

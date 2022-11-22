@@ -1,0 +1,54 @@
+interactions:
+- request:
+    body: '{"query": "SELECT * FROM testsqlcollection", "count": false}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '60'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/cursor/sql
+  response:
+    body:
+      string: '{"result":[{"_id":"testsqlcollection/795679","_key":"795679","_rev":"_fGkwJ0m--_","age":25,"college":"Texas","height":"6-2","name":"Avery
+        Bradley","number":0,"position":"PG","salary":7730337,"team":"Boston Celtics","weight":180},{"_id":"testsqlcollection/795680","_key":"795680","_rev":"_fGkwJ0m--C","age":25,"college":"Marquette","height":"6-6","name":"Jae
+        Crowder","number":99,"position":"SF","salary":6796117,"team":"Boston Celtics","weight":235},{"_id":"testsqlcollection/795681","_key":"795681","_rev":"_fGkwJ0q--A","age":27,"college":"Boston
+        University","height":"6-5","name":"John Holland","number":30,"position":"SG","salary":7730337,"team":"Boston
+        Celtics","weight":205},{"_id":"testsqlcollection/795682","_key":"795682","_rev":"_fGkwJ0q--D","age":22,"college":"Georgia
+        State","height":"6-5","name":"R.J. Hunter","number":28,"position":"SG","salary":1148640,"team":"Boston
+        Celtics","weight":185},{"_id":"testsqlcollection/795683","_key":"795683","_rev":"_fGkwJ0q--G","age":29,"college":"Boston
+        Celtics","height":"6-10","name":"Jonas Jerebko","number":8,"position":"PF","salary":5000000,"team":"Boston
+        Celtics","weight":231}],"hasMore":false,"cached":false,"extra":{"stats":{"writesExecuted":0,"writesIgnored":0,"scannedFull":5,"scannedIndex":0,"filtered":0,"httpRequests":0,"executionTime":2.9778480529785156e-4,"peakMemoryUsage":23300},"warnings":[]},"error":false,"code":201}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1386'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 3ff43941-fb85-47de-ae19-99c0a4997cb1
+      x-gdn-responsetime:
+      - '5'
+    status:
+      code: 201
+      message: Created
+version: 1

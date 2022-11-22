@@ -1,6 +1,8 @@
+import pytest
 from conftest import test_data_billing_plan, test_data_update_plan
 
 
+@pytest.mark.vcr
 def test_list_billing_plans(get_mm_client_instance):
     billing_details = test_data_billing_plan()
     billing_plan_name = billing_details["name"]

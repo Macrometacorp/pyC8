@@ -5,10 +5,13 @@ import json
 import threading
 import time
 
+import pytest
+
 from c8.exceptions import StreamAppChangeActiveStateError, StreamAppGetSampleError
 from tests.helpers import assert_raises
 
 
+@pytest.mark.vcr
 def test_streamapp_methods(client):
     client._tenant.useFabric("_system")
     stream_app_definition = """
@@ -206,6 +209,7 @@ def test_streamapp_http_source(client):
     assert client.delete_stream("c8locals.SampleHTTPOutputStream") is True
 
 
+@pytest.mark.vcr
 def test_streamapp_exceptions(client, bad_fabric_name):
     # Test with bad definitions
     stream_app_definition = """

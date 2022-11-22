@@ -1,0 +1,2241 @@
+interactions:
+- request:
+    body: '{"definition": "\n        @App:name(''Sample-Cargo-App'')\n        @App:qlVersion(\"2\")\n        @App:description(''Basic
+      stream application to demonstrate reading data from input stream and store it
+      in the collection. The stream and collections are automatically created if they
+      do not already exist.'')\n        /**\n        Testing the Stream Application:\n            1.
+      Open Stream SampleCargoAppDestStream in Console. The output can be monitored
+      here.\n            2. Upload following data into SampleCargoAppInputTable C8DB
+      Collection\n                {\"weight\": 1}\n                {\"weight\": 2}\n                {\"weight\":
+      3}\n                {\"weight\": 4}\n                {\"weight\": 5}\n            3.
+      Following messages would be shown on the SampleCargoAppDestStream Stream Console\n                [2021-08-27T14:12:15.795Z]
+      {\"weight\":1}\n                [2021-08-27T14:12:15.799Z] {\"weight\":2}\n                [2021-08-27T14:12:15.805Z]
+      {\"weight\":3}\n                [2021-08-27T14:12:15.809Z] {\"weight\":4}\n                [2021-08-27T14:12:15.814Z]
+      {\"weight\":5}\n        */\n        -- Create Table SampleCargoAppInputTable
+      to process events.\n        CREATE SOURCE SampleCargoAppInputTable WITH (type
+      = ''database'', collection = \"SampleCargoAppInputTable\", collection.type=\"doc\",
+      replication.type=\"global\", map.type=''json'') (weight int);\n\n        --
+      Create Stream SampleCargoAppDestStream\n        CREATE SINK SampleCargoAppDestStream
+      WITH (type = ''stream'', stream = \"SampleCargoAppDestStream\", replication.type=\"local\")
+      (weight int);\n\n        -- Data Processing\n        @info(name=''Query'')\n        INSERT
+      INTO SampleCargoAppDestStream\n        SELECT weight\n        FROM SampleCargoAppInputTable;\n        "}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1760'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/streamapps/validate
+  response:
+    body:
+      string: '{"error":false,"code":200,"message":"Stream application definition
+        is valid."}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '78'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:25 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 5b7c58e7-32cb-4a61-b9dc-b07b76c7ef49
+      x-gdn-responsetime:
+      - '106'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"definition": "\n        @App:name(''Sample-Cargo-App'')\n        @App:qlVersion(\"2\")\n        @App:description(''Basic
+      stream application to demonstrate reading data from input stream and store it
+      in the collection. The stream and collections are automatically created if they
+      do not already exist.'')\n        /**\n        Testing the Stream Application:\n            1.
+      Open Stream SampleCargoAppDestStream in Console. The output can be monitored
+      here.\n            2. Upload following data into SampleCargoAppInputTable C8DB
+      Collection\n                {\"weight\": 1}\n                {\"weight\": 2}\n                {\"weight\":
+      3}\n                {\"weight\": 4}\n                {\"weight\": 5}\n            3.
+      Following messages would be shown on the SampleCargoAppDestStream Stream Console\n                [2021-08-27T14:12:15.795Z]
+      {\"weight\":1}\n                [2021-08-27T14:12:15.799Z] {\"weight\":2}\n                [2021-08-27T14:12:15.805Z]
+      {\"weight\":3}\n                [2021-08-27T14:12:15.809Z] {\"weight\":4}\n                [2021-08-27T14:12:15.814Z]
+      {\"weight\":5}\n        */\n        -- Create Table SampleCargoAppInputTable
+      to process events.\n        CREATE SOURCE SampleCargoAppInputTable WITH (type
+      = ''database'', collection = \"SampleCargoAppInputTable\", collection.type=\"doc\",
+      replication.type=\"global\", map.type=''json'') (weight int);\n\n        --
+      Create Stream SampleCargoAppDestStream\n        CREATE SINK SampleCargoAppDestStream
+      WITH (type = ''stream'', stream = \"SampleCargoAppDestStream\", replication.type=\"local\")
+      (weight int);\n\n        -- Data Processing\n        @info(name=''Query'')\n        INSERT
+      INTO SampleCargoAppDestStream\n        SELECT weight\n        FROM SampleCargoAppInputTable;\n        ",
+      "regions": []}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1775'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/streamapps
+  response:
+    body:
+      string: '{"error":false,"code":201,"streamApps":[{"name":"Sample-Cargo-App","definition":"\n        @App:name(''Sample-Cargo-App'')\n        @App:qlVersion(\"2\")\n        @App:description(''Basic
+        stream application to demonstrate reading data from input stream and store
+        it in the collection. The stream and collections are automatically created
+        if they do not already exist.'')\n        /**\n        Testing the Stream
+        Application:\n            1. Open Stream SampleCargoAppDestStream in Console.
+        The output can be monitored here.\n            2. Upload following data into
+        SampleCargoAppInputTable C8DB Collection\n                {\"weight\": 1}\n                {\"weight\":
+        2}\n                {\"weight\": 3}\n                {\"weight\": 4}\n                {\"weight\":
+        5}\n            3. Following messages would be shown on the SampleCargoAppDestStream
+        Stream Console\n                [2021-08-27T14:12:15.795Z] {\"weight\":1}\n                [2021-08-27T14:12:15.799Z]
+        {\"weight\":2}\n                [2021-08-27T14:12:15.805Z] {\"weight\":3}\n                [2021-08-27T14:12:15.809Z]
+        {\"weight\":4}\n                [2021-08-27T14:12:15.814Z] {\"weight\":5}\n        */\n        --
+        Create Table SampleCargoAppInputTable to process events.\n        CREATE SOURCE
+        SampleCargoAppInputTable WITH (type = ''database'', collection = \"SampleCargoAppInputTable\",
+        collection.type=\"doc\", replication.type=\"global\", map.type=''json'') (weight
+        int);\n\n        -- Create Stream SampleCargoAppDestStream\n        CREATE
+        SINK SampleCargoAppDestStream WITH (type = ''stream'', stream = \"SampleCargoAppDestStream\",
+        replication.type=\"local\") (weight int);\n\n        -- Data Processing\n        @info(name=''Query'')\n        INSERT
+        INTO SampleCargoAppDestStream\n        SELECT weight\n        FROM SampleCargoAppInputTable;\n        ","regions":["dino-fra"],"isActive":false}]}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1867'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:26 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - acb52529-e0d6-4c46-9bb4-0df632cddbc5
+      x-gdn-responsetime:
+      - '142'
+    status:
+      code: 201
+      message: Created
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/streamapps
+  response:
+    body:
+      string: '{"error":false,"code":200,"streamApps":[{"name":"Sample-Cargo-App","definition":"\n        @App:name(''Sample-Cargo-App'')\n        @App:qlVersion(\"2\")\n        @App:description(''Basic
+        stream application to demonstrate reading data from input stream and store
+        it in the collection. The stream and collections are automatically created
+        if they do not already exist.'')\n        /**\n        Testing the Stream
+        Application:\n            1. Open Stream SampleCargoAppDestStream in Console.
+        The output can be monitored here.\n            2. Upload following data into
+        SampleCargoAppInputTable C8DB Collection\n                {\"weight\": 1}\n                {\"weight\":
+        2}\n                {\"weight\": 3}\n                {\"weight\": 4}\n                {\"weight\":
+        5}\n            3. Following messages would be shown on the SampleCargoAppDestStream
+        Stream Console\n                [2021-08-27T14:12:15.795Z] {\"weight\":1}\n                [2021-08-27T14:12:15.799Z]
+        {\"weight\":2}\n                [2021-08-27T14:12:15.805Z] {\"weight\":3}\n                [2021-08-27T14:12:15.809Z]
+        {\"weight\":4}\n                [2021-08-27T14:12:15.814Z] {\"weight\":5}\n        */\n        --
+        Create Table SampleCargoAppInputTable to process events.\n        CREATE SOURCE
+        SampleCargoAppInputTable WITH (type = ''database'', collection = \"SampleCargoAppInputTable\",
+        collection.type=\"doc\", replication.type=\"global\", map.type=''json'') (weight
+        int);\n\n        -- Create Stream SampleCargoAppDestStream\n        CREATE
+        SINK SampleCargoAppDestStream WITH (type = ''stream'', stream = \"SampleCargoAppDestStream\",
+        replication.type=\"local\") (weight int);\n\n        -- Data Processing\n        @info(name=''Query'')\n        INSERT
+        INTO SampleCargoAppDestStream\n        SELECT weight\n        FROM SampleCargoAppInputTable;\n        ","regions":["dino-fra"],"isActive":false}]}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1867'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:26 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - e4414f9d-964e-40af-ab82-ff1728a17ad0
+      x-gdn-responsetime:
+      - '20'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/streamapps/Sample-Cargo-App
+  response:
+    body:
+      string: '{"error":false,"code":200,"streamApps":[{"name":"Sample-Cargo-App","definition":"\n        @App:name(''Sample-Cargo-App'')\n        @App:qlVersion(\"2\")\n        @App:description(''Basic
+        stream application to demonstrate reading data from input stream and store
+        it in the collection. The stream and collections are automatically created
+        if they do not already exist.'')\n        /**\n        Testing the Stream
+        Application:\n            1. Open Stream SampleCargoAppDestStream in Console.
+        The output can be monitored here.\n            2. Upload following data into
+        SampleCargoAppInputTable C8DB Collection\n                {\"weight\": 1}\n                {\"weight\":
+        2}\n                {\"weight\": 3}\n                {\"weight\": 4}\n                {\"weight\":
+        5}\n            3. Following messages would be shown on the SampleCargoAppDestStream
+        Stream Console\n                [2021-08-27T14:12:15.795Z] {\"weight\":1}\n                [2021-08-27T14:12:15.799Z]
+        {\"weight\":2}\n                [2021-08-27T14:12:15.805Z] {\"weight\":3}\n                [2021-08-27T14:12:15.809Z]
+        {\"weight\":4}\n                [2021-08-27T14:12:15.814Z] {\"weight\":5}\n        */\n        --
+        Create Table SampleCargoAppInputTable to process events.\n        CREATE SOURCE
+        SampleCargoAppInputTable WITH (type = ''database'', collection = \"SampleCargoAppInputTable\",
+        collection.type=\"doc\", replication.type=\"global\", map.type=''json'') (weight
+        int);\n\n        -- Create Stream SampleCargoAppDestStream\n        CREATE
+        SINK SampleCargoAppDestStream WITH (type = ''stream'', stream = \"SampleCargoAppDestStream\",
+        replication.type=\"local\") (weight int);\n\n        -- Data Processing\n        @info(name=''Query'')\n        INSERT
+        INTO SampleCargoAppDestStream\n        SELECT weight\n        FROM SampleCargoAppInputTable;\n        ","regions":["dino-fra"],"isActive":false}]}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1867'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:26 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 59321d5d-e47d-4943-9399-da2498770214
+      x-gdn-responsetime:
+      - '16'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PATCH
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/streamapps/Sample-Cargo-App/active?active=true
+  response:
+    body:
+      string: '{"error":false,"code":200,"streamApps":[{"name":"Sample-Cargo-App","definition":"\n        @App:name(''Sample-Cargo-App'')\n        @App:qlVersion(\"2\")\n        @App:description(''Basic
+        stream application to demonstrate reading data from input stream and store
+        it in the collection. The stream and collections are automatically created
+        if they do not already exist.'')\n        /**\n        Testing the Stream
+        Application:\n            1. Open Stream SampleCargoAppDestStream in Console.
+        The output can be monitored here.\n            2. Upload following data into
+        SampleCargoAppInputTable C8DB Collection\n                {\"weight\": 1}\n                {\"weight\":
+        2}\n                {\"weight\": 3}\n                {\"weight\": 4}\n                {\"weight\":
+        5}\n            3. Following messages would be shown on the SampleCargoAppDestStream
+        Stream Console\n                [2021-08-27T14:12:15.795Z] {\"weight\":1}\n                [2021-08-27T14:12:15.799Z]
+        {\"weight\":2}\n                [2021-08-27T14:12:15.805Z] {\"weight\":3}\n                [2021-08-27T14:12:15.809Z]
+        {\"weight\":4}\n                [2021-08-27T14:12:15.814Z] {\"weight\":5}\n        */\n        --
+        Create Table SampleCargoAppInputTable to process events.\n        CREATE SOURCE
+        SampleCargoAppInputTable WITH (type = ''database'', collection = \"SampleCargoAppInputTable\",
+        collection.type=\"doc\", replication.type=\"global\", map.type=''json'') (weight
+        int);\n\n        -- Create Stream SampleCargoAppDestStream\n        CREATE
+        SINK SampleCargoAppDestStream WITH (type = ''stream'', stream = \"SampleCargoAppDestStream\",
+        replication.type=\"local\") (weight int);\n\n        -- Data Processing\n        @info(name=''Query'')\n        INSERT
+        INTO SampleCargoAppDestStream\n        SELECT weight\n        FROM SampleCargoAppInputTable;\n        ","regions":["dino-fra"],"isActive":true}]}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1866'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:26 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - dde81cdc-640c-4833-988b-4884c139a4f3
+      x-gdn-responsetime:
+      - '3092'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PATCH
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/streamapps/Sample-Cargo-App/active?active=false
+  response:
+    body:
+      string: '{"error":false,"code":200,"streamApps":[{"name":"Sample-Cargo-App","definition":"\n        @App:name(''Sample-Cargo-App'')\n        @App:qlVersion(\"2\")\n        @App:description(''Basic
+        stream application to demonstrate reading data from input stream and store
+        it in the collection. The stream and collections are automatically created
+        if they do not already exist.'')\n        /**\n        Testing the Stream
+        Application:\n            1. Open Stream SampleCargoAppDestStream in Console.
+        The output can be monitored here.\n            2. Upload following data into
+        SampleCargoAppInputTable C8DB Collection\n                {\"weight\": 1}\n                {\"weight\":
+        2}\n                {\"weight\": 3}\n                {\"weight\": 4}\n                {\"weight\":
+        5}\n            3. Following messages would be shown on the SampleCargoAppDestStream
+        Stream Console\n                [2021-08-27T14:12:15.795Z] {\"weight\":1}\n                [2021-08-27T14:12:15.799Z]
+        {\"weight\":2}\n                [2021-08-27T14:12:15.805Z] {\"weight\":3}\n                [2021-08-27T14:12:15.809Z]
+        {\"weight\":4}\n                [2021-08-27T14:12:15.814Z] {\"weight\":5}\n        */\n        --
+        Create Table SampleCargoAppInputTable to process events.\n        CREATE SOURCE
+        SampleCargoAppInputTable WITH (type = ''database'', collection = \"SampleCargoAppInputTable\",
+        collection.type=\"doc\", replication.type=\"global\", map.type=''json'') (weight
+        int);\n\n        -- Create Stream SampleCargoAppDestStream\n        CREATE
+        SINK SampleCargoAppDestStream WITH (type = ''stream'', stream = \"SampleCargoAppDestStream\",
+        replication.type=\"local\") (weight int);\n\n        -- Data Processing\n        @info(name=''Query'')\n        INSERT
+        INTO SampleCargoAppDestStream\n        SELECT weight\n        FROM SampleCargoAppInputTable;\n        ","regions":["dino-fra"],"isActive":false}]}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1867'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:30 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 957e29a2-4ecf-4fdd-bca1-ae97ad05b1f8
+      x-gdn-responsetime:
+      - '2030'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"definition": "\n    @App:name(''Sample-Cargo-App'')\n    @App:qlVersion(\"2\")\n    @App:description(''Basic
+      stream application to demonstrate reading data from input stream and store it
+      in the collection. The stream and collections are automatically created if they
+      do not already exist.'')\n    /**\n        Testing the Stream Application:\n        1.
+      Open Stream SampleCargoAppDestStream in Console. The output can be monitored
+      here.\n        2. Upload following data into SampleCargoAppInputTable C8DB Collection\n            {\"weight\":
+      1}\n            {\"weight\": 2}\n            {\"weight\": 3}\n            {\"weight\":
+      4}\n            {\"weight\": 5}\n        3. Following messages would be shown
+      on the `SampleCargoAppDestStream` Stream Console.\n            [2021-08-27T14:12:15.795Z]
+      {\"weight\":1}\n            [2021-08-27T14:12:15.799Z] {\"weight\":2}\n            [2021-08-27T14:12:15.805Z]
+      {\"weight\":3}\n            [2021-08-27T14:12:15.809Z] {\"weight\":4}\n            [2021-08-27T14:12:15.814Z]
+      {\"weight\":5}\n        4. Following messages would be stored into SampleCargoAppDestTable\n            {\"weight\":1}\n            {\"weight\":2}\n            {\"weight\":3}\n            {\"weight\":4}\n            {\"weight\":5}\n    */\n\n    --
+      Defines Table SampleCargoAppInputTable\n    CREATE SOURCE SampleCargoAppInputTable
+      WITH (type = ''database'', collection = \"SampleCargoAppInputTable\", collection.type=\"doc\",
+      replication.type=\"global\", map.type=''json'') (weight int);\n\n    -- Define
+      Stream SampleCargoAppDestStream\n    CREATE SINK SampleCargoAppDestStream WITH
+      (type = ''stream'', stream = \"SampleCargoAppDestStream\", replication.type=\"local\")
+      (weight int);\n\n    -- Defining a Destination table to dump the data from the
+      stream\n    CREATE STORE SampleCargoAppDestTable WITH (type = ''database'',
+      stream = \"SampleCargoAppDestTable\") (weight int);\n\n    -- Data Processing\n    @info(name=''Query'')\n    INSERT
+      INTO SampleCargoAppDestStream\n    SELECT weight\n    FROM SampleCargoAppInputTable;\n\n    --
+      Data Processing\n    @info(name=''Dump'')\n    INSERT INTO SampleCargoAppDestTable\n    SELECT
+      weight\n    FROM SampleCargoAppInputTable;\n    ", "regions": []}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2203'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PUT
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/streamapps/Sample-Cargo-App
+  response:
+    body:
+      string: '{"error":false,"code":200,"streamApps":[{"name":"Sample-Cargo-App","definition":"\n    @App:name(''Sample-Cargo-App'')\n    @App:qlVersion(\"2\")\n    @App:description(''Basic
+        stream application to demonstrate reading data from input stream and store
+        it in the collection. The stream and collections are automatically created
+        if they do not already exist.'')\n    /**\n        Testing the Stream Application:\n        1.
+        Open Stream SampleCargoAppDestStream in Console. The output can be monitored
+        here.\n        2. Upload following data into SampleCargoAppInputTable C8DB
+        Collection\n            {\"weight\": 1}\n            {\"weight\": 2}\n            {\"weight\":
+        3}\n            {\"weight\": 4}\n            {\"weight\": 5}\n        3. Following
+        messages would be shown on the `SampleCargoAppDestStream` Stream Console.\n            [2021-08-27T14:12:15.795Z]
+        {\"weight\":1}\n            [2021-08-27T14:12:15.799Z] {\"weight\":2}\n            [2021-08-27T14:12:15.805Z]
+        {\"weight\":3}\n            [2021-08-27T14:12:15.809Z] {\"weight\":4}\n            [2021-08-27T14:12:15.814Z]
+        {\"weight\":5}\n        4. Following messages would be stored into SampleCargoAppDestTable\n            {\"weight\":1}\n            {\"weight\":2}\n            {\"weight\":3}\n            {\"weight\":4}\n            {\"weight\":5}\n    */\n\n    --
+        Defines Table SampleCargoAppInputTable\n    CREATE SOURCE SampleCargoAppInputTable
+        WITH (type = ''database'', collection = \"SampleCargoAppInputTable\", collection.type=\"doc\",
+        replication.type=\"global\", map.type=''json'') (weight int);\n\n    -- Define
+        Stream SampleCargoAppDestStream\n    CREATE SINK SampleCargoAppDestStream
+        WITH (type = ''stream'', stream = \"SampleCargoAppDestStream\", replication.type=\"local\")
+        (weight int);\n\n    -- Defining a Destination table to dump the data from
+        the stream\n    CREATE STORE SampleCargoAppDestTable WITH (type = ''database'',
+        stream = \"SampleCargoAppDestTable\") (weight int);\n\n    -- Data Processing\n    @info(name=''Query'')\n    INSERT
+        INTO SampleCargoAppDestStream\n    SELECT weight\n    FROM SampleCargoAppInputTable;\n\n    --
+        Data Processing\n    @info(name=''Dump'')\n    INSERT INTO SampleCargoAppDestTable\n    SELECT
+        weight\n    FROM SampleCargoAppInputTable;\n    ","regions":["dino-fra"],"isActive":false}]}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2295'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:32 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - f5a08b0d-3c2c-42fa-8691-5050fcf835a7
+      x-gdn-responsetime:
+      - '85'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: PATCH
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/streamapps/Sample-Cargo-App/active?active=true
+  response:
+    body:
+      string: '{"error":false,"code":200,"streamApps":[{"name":"Sample-Cargo-App","definition":"\n    @App:name(''Sample-Cargo-App'')\n    @App:qlVersion(\"2\")\n    @App:description(''Basic
+        stream application to demonstrate reading data from input stream and store
+        it in the collection. The stream and collections are automatically created
+        if they do not already exist.'')\n    /**\n        Testing the Stream Application:\n        1.
+        Open Stream SampleCargoAppDestStream in Console. The output can be monitored
+        here.\n        2. Upload following data into SampleCargoAppInputTable C8DB
+        Collection\n            {\"weight\": 1}\n            {\"weight\": 2}\n            {\"weight\":
+        3}\n            {\"weight\": 4}\n            {\"weight\": 5}\n        3. Following
+        messages would be shown on the `SampleCargoAppDestStream` Stream Console.\n            [2021-08-27T14:12:15.795Z]
+        {\"weight\":1}\n            [2021-08-27T14:12:15.799Z] {\"weight\":2}\n            [2021-08-27T14:12:15.805Z]
+        {\"weight\":3}\n            [2021-08-27T14:12:15.809Z] {\"weight\":4}\n            [2021-08-27T14:12:15.814Z]
+        {\"weight\":5}\n        4. Following messages would be stored into SampleCargoAppDestTable\n            {\"weight\":1}\n            {\"weight\":2}\n            {\"weight\":3}\n            {\"weight\":4}\n            {\"weight\":5}\n    */\n\n    --
+        Defines Table SampleCargoAppInputTable\n    CREATE SOURCE SampleCargoAppInputTable
+        WITH (type = ''database'', collection = \"SampleCargoAppInputTable\", collection.type=\"doc\",
+        replication.type=\"global\", map.type=''json'') (weight int);\n\n    -- Define
+        Stream SampleCargoAppDestStream\n    CREATE SINK SampleCargoAppDestStream
+        WITH (type = ''stream'', stream = \"SampleCargoAppDestStream\", replication.type=\"local\")
+        (weight int);\n\n    -- Defining a Destination table to dump the data from
+        the stream\n    CREATE STORE SampleCargoAppDestTable WITH (type = ''database'',
+        stream = \"SampleCargoAppDestTable\") (weight int);\n\n    -- Data Processing\n    @info(name=''Query'')\n    INSERT
+        INTO SampleCargoAppDestStream\n    SELECT weight\n    FROM SampleCargoAppInputTable;\n\n    --
+        Data Processing\n    @info(name=''Dump'')\n    INSERT INTO SampleCargoAppDestTable\n    SELECT
+        weight\n    FROM SampleCargoAppInputTable;\n    ","regions":["dino-fra"],"isActive":true}]}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2294'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:37 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 604f2db0-3621-439e-b985-1b27640d981e
+      x-gdn-responsetime:
+      - '3105'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"query": {"name": "insertTestWeight", "value": "INSERT { \"weight\": @weight
+      } IN SampleCargoAppInputTable"}}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '110'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/restql
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":{"_key":"pythonsdk_macrometa.com.root.pythonsdk_macrometa.com._system.insertTestWeight","userid":"pythonsdk_macrometa.com.root","tenant":"pythonsdk_macrometa.com","fabric":"pythonsdk_macrometa.com._system","name":"insertTestWeight","value":"INSERT
+        { \"weight\": @weight } IN SampleCargoAppInputTable","type":"c8ql"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '351'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 788ffbe5-dd50-4274-8d0f-7aaa029ddceb
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"bindVars": {"weight": 0}}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '27'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/restql/execute/insertTestWeight
+  response:
+    body:
+      string: '{"result":[]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '13'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 6e9e085d-222f-4015-8c9b-4dae2b1580c4
+      x-gdn-responsetime:
+      - '5'
+    status:
+      code: 201
+      message: Created
+- request:
+    body: '{"bindVars": {"weight": 1}}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '27'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/restql/execute/insertTestWeight
+  response:
+    body:
+      string: '{"result":[]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '13'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - a35b9972-a418-48bd-bc41-c59b4edcc8d5
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 201
+      message: Created
+- request:
+    body: '{"bindVars": {"weight": 2}}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '27'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/restql/execute/insertTestWeight
+  response:
+    body:
+      string: '{"result":[]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '13'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - f63da34e-7f27-4592-b95f-a582c33af4f2
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 201
+      message: Created
+- request:
+    body: '{"query": "select * from SampleCargoAppDestTable limit 3"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '58'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/streamapps/query/Sample-Cargo-App
+  response:
+    body:
+      string: '{"error":false,"code":200,"records":[[0],[1],[2]]}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '50'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:48 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 29edb48b-67be-4c3d-9d29-b4885415a43d
+      x-gdn-responsetime:
+      - '60'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/streamapps/Sample-Cargo-App
+  response:
+    body:
+      string: '{"error":false,"code":200,"message":"Stream worker `Sample-Cargo-App`
+        deleted successfully."}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '93'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:49 GMT
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 1c507a3e-f3b7-46ce-9c6c-2b43e9375f1f
+      x-gdn-responsetime:
+      - '2028'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/streamapps/samples
+  response:
+    body:
+      string: '{"error":false,"code":200,"streamAppSample":[{"name":"Sample-Adhoc-Query","definition":"@App:name(''Sample-Adhoc-Query'')\n@App:description(\"This
+        application demonstrates how to send adhoc queries and fetch data from Stores
+        and named windows.\")\n@App:qlVersion(''2'')\n\n/**\nTesting the Stream Application:\n    1.
+        Upload following data into `SampleAdhocQueryInputTable` C8DB Collection\n        {\"sensorId\":\"sensor
+        A1234\",\"temperature\":18}\n        {\"sensorId\":\"sensor A1234\",\"temperature\":-32.2}\n        {\"sensorId\":\"sensor
+        FR45\",\"temperature\":20.9}\n        {\"sensorId\":\"sensor meter1\",\"temperature\":49.6}\n\n    2.
+        This application accumulates all the data for one minute in the named window
+        `SampleAdhocQueryInputTableOneMinTimeWindow`\n        Named window allows
+        other application to query data in realtime.\n\n    3. Run the adhoc query
+        on the `SampleAdhocQueryInputTableOneMinTimeWindow` (Refer [1] for running
+        adhoc queries.)\n        Query:\n            select * from SampleAdhocQueryInputTableOneMinTimeWindow\n\n        Output:\n            [\n                [\"sensor
+        A1234\",18],\n                [\"sensor A1234\",-32.2],\n                [\"sensor
+        FR45\",20.9],\n                [\"sensor meter1\",49.6]\n            ]\n\n    4.
+        Similar to Named Windows one can run adhoc queries on the stores as well.
+        Running adhoc query on \n        `SampleAdhocQuerySensorA1234DestTable` C8DB
+        Collection should produce below result\n\n        Query: Store the result
+        if sensorId is equal to \"sensor A1234\"\n            SELECT * FROM SampleAdhocQuerySensorA1234DestTable\n\n        Output:\n            [\n                [\"sensor
+        A1234\",18],\n                [\"sensor A1234\",-32.2]\n            ]\n\n    [1]
+        https://macrometa.dev/cep/quickstart/#run-an-adhoc-query\n*/\n\n-- Defines
+        `SampleAdhocQueryInputTable` collection to process events having `sensorId`
+        and `temperature`(F).\nCREATE SOURCE SampleAdhocQueryInputTable WITH(type
+        = ''database'', collection = \"SampleAdhocQueryInputTable\", collection.type=\"doc\"
+        , replication.type=\"global\", map.type=''json'') (sensorId string, temperature
+        double);\n\n-- Named Window\nCREATE WINDOW SampleAdhocQueryInputTableOneMinTimeWindow
+        (sensorId string, temperature double) SLIDING_TIME(1 min);\n\n-- Table\nCREATE
+        TABLE SampleAdhocQuerySensorA1234DestTable(sensorId string, temperature double);\n\n@info(name
+        = ''Insert-to-window'')\nINSERT INTO SampleAdhocQueryInputTableOneMinTimeWindow\nSELECT
+        *\nFROM SampleAdhocQueryInputTable;\n\n@info(name = ''EqualsFilter'')\n--
+        Note: Filter out events with `sensorId` equalling `sensor A1234`\nINSERT INTO
+        SampleAdhocQuerySensorA1234DestTable\nSELECT *\nFROM SampleAdhocQueryInputTable\nWHERE
+        sensorId == ''sensor A1234'';\n","description":"This application demonstrates
+        how to send adhoc queries and fetch data from Stores and named windows.","labels":["Adhoc
+        Query","On-Demand Query"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Aggregation-App","definition":"@App:name(\"Sample-Aggregation-App\")\n@App:description(\"Basic
+        Stream Worker to demonstrate aggregation capabilities.\")\n@App:qlVersion(''2'')\n\n/**\nRunning
+        the Stream Worker:\n    1. Save and publish the stream worker.\n    2. TradeStream
+        will appear in the Streams section with randomly generated trade data.\n    3.
+        Since we are incrementally aggregating `EVERY sec ... year`, it will create
+        the following 6 collections and they will store aggregation data.\n        -
+        TradeAggregation_SECONDS,\n        - TradeAggregation_MINUTES\n        - TradeAggregation_HOURS\n        -
+        TradeAggregation_DAYS\n        - TradeAggregation_MONTHS\n        - TradeAggregation_YEARS\n    4.
+        Since we have enabled the purging, old data will get removed on specified
+        tables after the specified time period.\n\nQuerying the aggregation:\n    1.
+        Run the following ad-hoc query against this Stream Worker, using `/_fabric/_system/_api/streamapps/query/`
+        API.\n        {\n          \"query\": \"select symbol, total, avgPrice from
+        TradeAggregation on symbol == ''TSLA'' within ''2022-01-26 **:**:** +05:30''
+        per ''MINUTES''\"\n        }\n\n    2. It should result in;\n        {\n          \"error\":
+        false,\n          \"code\": 200,\n          \"records\": [\n            [\n              \"TSLA\",\n              18.6029847734441,\n              0.4133996616320911\n            ]\n          ]\n        }\n*/\n\n--
+        Trigger to generate data.\nCREATE TRIGGER MyTrigger WITH ( interval = 1 sec
+        );\n\n-- Sink stream to publish trade data.\nCREATE SINK STREAM TradeStream
+        (symbol string, price double, volume long, timestamp long);\n\n-- Trade average,
+        sum incremental aggregation query.\nCREATE AGGREGATION TradeAggregation \n  WITH(store.type=''database'',
+        purge.enable=''true'', purge.interval=''10 sec'', purge.retentionPeriod.sec=''120
+        sec'', purge.retentionPeriod.min=''24 hours'')\n  SELECT symbol, avg(price)
+        AS avgPrice, sum(price) AS total\n  FROM TradeStream\n    GROUP BY symbol\n    AGGREGATE
+        BY timestamp EVERY sec ... year;\n\n-- Random data generation query.\nINSERT
+        INTO TradeStream\nSELECT \"TSLA\" AS symbol, math:rand() as price, math:round(math:rand())
+        as volume, eventTimestamp() as timestamp\nFROM MyTrigger;\n","description":"Basic
+        Stream Worker to demonstrate aggregation capabilities","labels":["Aggregation","Adhoc
+        Query","On-Demand Query"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Anonymizer-App","definition":"@App:name(\"Sample-Anonymizer-App\")\n@App:description(''Basic
+        Stream application to demonstrate anonymizing data read from an input stream
+        and store it in the collection. The stream and collections will be created
+        automatically if they do not already exist.'')\n@App:qlVersion(''2'')\n\n/**\nThe
+        pii extension provides a function for anonymizing the following data types:\n\n    //
+        Address\n    ADDRESS_BUILDINGNUMBER\n    ADDRESS_CITY\n    ADDRESS_COUNTRY\n    ADDRESS_COUNTRYCODE\n    ADDRESS_FULLADDRESS\n    ADDRESS_LATITUDE\n    ADDRESS_LONGITUDE\n    ADDRESS_STATE\n    ADDRESS_STATEABBR\n    ADDRESS_STREETADDRESS\n    ADDRESS_STREETADDRESSNUMBER\n    ADDRESS_STREETNAME\n    ADDRESS_TIMEZONE\n    ADDRESS_ZIPCODE\n    ADDRESS_ZIPCODEBYSTATE\n\n    //
+        Name\n    NAME_FULLNAME\n    NAME_FIRSTNAME\n    NAME_LASTNAME\n    NAME_TITLE\n    NAME_USERNAME\n\n    //Id\n    ID_SSN\n\n    //
+        CreditCard\n    CREDITCARD_CREDITCARDTYPE\n    CREDITCARD_CREDITCARDNUMBER\n    CREDITCARD_CREDITCARDEXPIRY\n\n    //
+        Company\n    COMPANY_DEPARTMENT\n    COMPANY_PRODUCTNAME\n    COMPANY_PRICE\n    COMPANY_PROMOTIONCODE\n    COMPANY_NAME\n    COMPANY_INDUSTRY\n    COMPANY_URL\n    COMPANY_BIC\n    COMPANY_IBAN\n\n    //
+        Demographic\n    DEMOGRAPHIC_RACE\n    DEMOGRAPHIC_SEX\n    DEMOGRAPHIC_MARITALSTATUS\n    DEMOGRAPHIC_DEMONYM\n\n    //
+        Education\n    EDUCATOR_CAMPUS\n    EDUCATOR_COURSE\n    EDUCATOR_SECONDARYSCHOOLS\n    EDUCATOR_UNIVERSITY\n\n    //
+        Internet\n    INTERNET_DOMAINNAME\n    INTERNET_DOMAINSUFFIX\n    INTERNET_DOMAINWORD\n    INTERNET_EMAILADDRESS\n    INTERNET_IPV4ADDRESS\n    INTERNET_IPV4CIDR\n    INTERNET_IPV6ADDRESS\n    INTERNET_IPV6CIDR\n    INTERNET_MACADDRESS\n    INTERNET_PASSWORD\n    INTERNET_SLUG\n    INTERNET_URL\n    INTERNET_UUID\n\n    //
+        Job\n    JOB_FIELD\n    JOB_POSITION\n    JOB_SENIORITY\n    JOB_TITLE\n\n    //
+        Medical\n    MEDICAL_DISEASENAME\n    MEDICAL_HOSPITALNAME\n    MEDICAL_MEDICINENAME\n    MEDICAL_SYMPTOMS\n\n    //
+        PhoneNumber\n    PHONENUMBER_CELLPHONE\n    PHONENUMBER_PHONENUMBER\n\n    //
+        Text\n    TEXT_CHARACTER\n    TEXT_FIXEDSTRING\n    TEXT_PARAGRAPH\n    TEXT_SENTENCE\n    TEXT_WORD\n    \nUsage:\n   pii:fake(<orignal
+        data>, <DATA_TYPE>, <invalidation flag>)\n   \n   <invalidation flag> - true,
+        a different fake data will be generated at each call; \n                         false,
+        once generated the fake data is cached is used for the next calls\n   \nTesting
+        the Stream Application:\n\n    1. Insert following data into `patient_local`
+        C8DB Collection\n        {\"full_name\": \"John Doe\", \"ssn\": \"123-123-123\",
+        \"email\": \"John.Doe@macrometa.com\", \"phone\": \"123-123-12345\"}\n\n    2.
+        Following document would be shown on the `patient_public` collection\n        {\"full_name\":
+        \"fake name\", \"ssn\": \"fake ssn\", \"email\": \"fake email\", \"phone\":
+        \"fake phone number\"}\n\n*/\n\n-- Event stores\nCREATE SOURCE patient_local
+        WITH (type=''database'', collection=''patient_local'', replication.type=\"local\",
+        map.type=''json'') (full_name string, ssn string, email string, phone string);\n\nCREATE
+        TABLE GLOBAL patient_public(full_name string, ssn string, email string, phone
+        string);\n\nINSERT INTO patient_public\nSELECT pii:fake(full_name, \"NAME_FULLNAME\",
+        false)       as full_name,\n       pii:fake(ssn, \"ID_SSN\", false)                    as
+        ssn,\n       pii:fake(email, \"INTERNET_EMAILADDRESS\", false)   as email,\n       pii:fake(phone,
+        \"PHONENUMBER_PHONENUMBER\", false) as phone\nFROM patient_local;\n","description":"Basic
+        Stream application to demonstrate anonymizing data read from an input stream
+        and store it in the collection. The stream and collections will be created
+        automatically if they do not already exist.","labels":["Basic","Anonymizer"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Cache-App","definition":"@App:name(\"Sample-Cache-App\")\n@App:description(''Basic
+        Stream application to demonstrate persistent cache.'')\n@App:qlVersion(''2'')\n\n/**\nThe
+        `cache` extension provides a persistent cache per tenant.\n\nThe following
+        functions are allowed:\n\ncache:get(<key>)          - gets a value per given
+        <key>;\ncache:put(<key>, <value>) - puts <key>, <value>;\ncache:count()             -
+        counts the size of the cache;\ncache:delete(<key>)       - deletes a cache
+        for a given <key>;\ncache:purge()             - invalidates/purges the current
+        cache.\n\nTesting the Stream Application:\n\n    1. Run the app;\n\n    2.
+        Following document set every second in `put_in_cache`.\n        {\"value_is_put\":
+        \"true\"}\n        \n    3. Following document set 5 seconsd in `get_from_cache`.    \n    \n        {\"value\":
+        \"my value\"}\n\n*/\n\n-- Event triggers\nCREATE TRIGGER EventsPutTrigger
+        WITH (interval=1 sec);\n\nCREATE TRIGGER EventsGetTrigger WITH (interval=5
+        sec);\n\n-- Event stores\nCREATE TABLE put_in_cache(value_is_put string);\n\nCREATE
+        TABLE get_from_cache(value string);\n\nINSERT INTO put_in_cache\nSELECT cache:put(\"my
+        key\", \"my value\") as value_is_put\nFROM EventsPutTrigger;\n\nINSERT INTO
+        get_from_cache\nSELECT cache:get(\"my key\") as value\nFROM EventsGetTrigger;\n","description":"Basic
+        Stream application to demonstrate persistent cache.","labels":["Basic","Cache"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Cargo-App","definition":"@App:name(''Sample-Cargo-App'')\n@App:description(''Basic
+        Stream application to demonstrate reading data from input stream and store
+        it in the collection. The stream & collection will be created automatically
+        if they do not already exist.'')\n@App:qlVersion(''2'')\n\n/**\nTesting the
+        Stream Application:\n    1. Open Stream `SampleCargoAppDestStream` in Console.
+        The output can be monitored here.\n\n    2. Upload following data into `SampleCargoAppInputTable`
+        C8DB Collection.\n        {\"weight\": 1}\n        {\"weight\": 2}\n        {\"weight\":
+        3}\n        {\"weight\": 4}\n        {\"weight\": 5}\n\n    3. Following messages
+        would be shown on the `SampleCargoAppDestStream` Stream Console.\n        [2021-08-27T14:12:15.795Z]
+        {\"weight\":1}\n        [2021-08-27T14:12:15.799Z] {\"weight\":2}\n        [2021-08-27T14:12:15.805Z]
+        {\"weight\":3}\n        [2021-08-27T14:12:15.809Z] {\"weight\":4}\n        [2021-08-27T14:12:15.814Z]
+        {\"weight\":5}\n*/\n\n-- Defines `SampleCargoAppInputTable` Source.\nCREATE
+        SOURCE SampleCargoAppInputTable WITH (type = ''database'', collection = \"SampleCargoAppInputTable\",
+        collection.type=\"doc\" , replication.type=\"global\", map.type=''json'')
+        (weight int);\n\n-- Define `SampleCargoAppDestStream` Stream.\nCREATE SINK
+        STREAM SampleCargoAppDestStream (weight int);\n\n-- Data Processing\n@info(name=''Query'')\nINSERT
+        INTO SampleCargoAppDestStream\nSELECT weight\nFROM SampleCargoAppInputTable;","description":"Basic
+        Stream application to demonstrate reading data from input stream and store
+        it in the collection. The stream and collections will be created automatically
+        if they do not already exist.","labels":["Basic","SampleApp"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Consumer-Simulator-App","definition":"@App:name(\"Sample-Consumer-Simulator-App\")\n@App:description(\"Simulation
+        events consumer\")\n@App:qlVersion(''2'')\n\n/*\nThis is a consumer of the
+        published simulation events by publisher-simulator app. \nThe app reads the
+        stream PublishedEvents and stores the info into the DB.\nThe stored info is
+        as follow:\n\n    full_name,\n    first_name,\n    last_name,\n    city,  (random
+        city in US)\n    state, (random statecode in US)\n    address,\n    calling_nbr,
+        (random ph number. format: xxx-xx-xxxx)\n    called_nbr, (random ph number.
+        format: xxx-xx-xxxx)\n    call_date, (random date. format: MM-DD-YYYY)\n    call_time,
+        (random time. format: HH-mm-ss)\n    call_duration, (random int between 0-60)\n    cell_site
+        (random 6 digit code)\n*/\n\n/**\nTesting the Stream Application:\n    1.
+        Start/publish publisher-simulator app\n    \n    1. Open collection ConsumedEvents
+        \n       \n    2. After every 2 seconds you will be able to see an event in
+        the Console\n    \n    3. The event seen in the Console will be like\n      {\n          \"address\":
+        \"2 Sloan Avenue\",\n          \"call_date\": \"22-6-2020\",\n          \"call_duration\":
+        \"59.0\",\n          \"call_time\": \"7:48\",\n          \"called_nbr\": \"563-593-955\",\n          \"calling_nbr\":
+        \"119-306-722\",\n          \"cell_site\": \"566081.0\",\n          \"city\":
+        \"Little Rock\",\n          \"first_name\": \"Xenia\",\n          \"full_name\":
+        \"Xenia Figliovanni\",\n          \"last_name\": \"Figliovanni\",\n          \"state\":
+        \"AR\"\n        }\n*/\n\n-- Source\nCREATE SOURCE PublishedEvents WITH (type
+        = ''stream'', stream.list = \"PubEvents\", map.type=''json'', map.enclosing.element=\"$.event\")
+        \n\t(full_name string, first_name string, last_name string, city string, state
+        string,\n\taddress string, calling_nbr string, called_nbr string, call_date
+        string,\n\tcall_time string, call_duration string, cell_site string);\n\n--
+        Store\nCREATE TABLE ConsumedEvents(full_name string, first_name string, last_name
+        string, city string, state string,\n                            address string,
+        calling_nbr string, called_nbr string, call_date string,\n                            call_time
+        string, call_duration string, cell_site string);\n\n@info(''Read and store
+        the incomming Data'')\nINSERT INTO ConsumedEvents\nSELECT full_name, first_name,
+        last_name, city, state,\n       address, calling_nbr, called_nbr, call_date,\n       call_time,
+        call_duration, cell_site\nFROM PublishedEvents;\n","description":"This application
+        demonstrates how to consume simulated events.","labels":["Simulator"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Create-Indexes","definition":"@App:name(\"Sample-Create-Indexes\")\n@App:description(\"This
+        application creates different types of indexes on a given table.\")\n@App:qlVersion(''2'')\n\n/**\nTesting
+        the Stream Application:\n    1. Save and Publish the application.\n    \n    2.
+        Goto collections, and open SampleGDNTable. \n       \n    3. Click on `Indexes`
+        tab on the top left.\n    \n    4. You should be able to see the created indexes.\n    \n*/\n\nCREATE
+        TABLE SampleGDNTable (sensorId string, temperature double);\n\n-- Creates
+        a persistent index named `SamplePersistentIndex` on `SampleGDNTable` with
+        following properties {unique=true, sparse=true, deduplicate=true}.\nCREATE
+        UNIQUE INDEX SamplePersistentIndex ON TABLE SampleGDNTable WITH(type=\"persistent\",
+        sparse=\"true\", deduplicate=\"true\") (sensorId);\n\n-- Creates a hash index
+        named `SampleHashIndex` on `SampleGDNTable` with following properties {unique=true,
+        sparse=true, deduplicate=true}.\nCREATE UNIQUE INDEX SampleHashIndex ON TABLE
+        SampleGDNTable WITH(type=\"hash\", sparse=\"true\", deduplicate=\"true\")
+        (sensorId);\n\n-- Creates a skiplist index named `SampleSkiplistIndex` on
+        `SampleGDNTable` with following properties {unique=true, sparse=true, deduplicate=true}.\nCREATE
+        UNIQUE INDEX SampleSkiplistIndex ON TABLE SampleGDNTable WITH(type=\"skiplist\",
+        sparse=\"true\", deduplicate=\"true\") (sensorId);\n\n-- Creates a fulltext
+        index named `SampleFullTextIndex` on `SampleGDNTable` with following properties
+        {minLength=3}.\nCREATE INDEX SampleFullTextIndex ON TABLE SampleGDNTable WITH(type=\"fulltext\",
+        minLength=\"3\") (sensorId);\n\n-- Creates a geo index named `SampleGeoIndex`
+        on `SampleGDNTable` with following properties {geoJson=false}.\nCREATE INDEX
+        SampleGeoIndex ON TABLE SampleGDNTable WITH(type=\"geo\", geoJson=\"false\")
+        (sensorId);\n\n-- Creates a ttl index named `SampleTTLIndex` on `SampleGDNTable`
+        with following properties {expireAfter=3600}.\nCREATE INDEX SampleTTLIndex
+        ON TABLE SampleGDNTable WITH(type=\"ttl\", expireAfter=\"3600\") (sensorId);\n","description":"This
+        application creates different types of indexes on a given table.","labels":["Create
+        Indexes","Advanced"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Cron-Trigger","definition":"@App:name(\"Sample-Cron-Trigger\")\n@App:description(\"This
+        app will produce an event after every 5 seconds\")\n@App:qlVersion(''2'')\n\n/*\nTrigger
+        produces events periodically based on a given internal with a predefined schema.\nMore
+        Info: http://www.quartz-scheduler.org/documentation/quartz-2.1.7/tutorials/tutorial-lesson-06.html\n\nSyntax:\nCREATE
+        TRIGGER <trigger name> WITH ( interval = <time interval> );\nCREATE TRIGGER
+        <trigger name> WITH ( expression = ''start'' or ''<cron expression>'' ); \n\nExamples:\n--
+        A trigger to generate events every 5 seconds.\n1. CREATE TRIGGER FiveSecTrigger
+        WITH ( interval = 5 sec );\n\n-- A trigger to generate events at 10.15 AM
+        on every weekdays.\n2. CREATE TRIGGER WorkStartTrigger WITH ( expression =
+        ''0 15 10 ? * MON-FRI'' );\n\n-- A trigger to generate an event at App startup.\n3.
+        CREATE TRIGGER InitTrigger WITH ( expression = ''start'' );\n*/\n\n\n/**\nTesting
+        the Stream Application:\n    1. Open Stream `SampleStream` in Console to monitor
+        the output. \n       \n    2. After every 5 seconds you will be able to see
+        an event in the Console\n    \n    3. The event seen in the Console will be
+        like\n        2020-05-19T10:50:38.004Z\n        {\"startTime\":1589885438003}\n*/\n\nCREATE
+        TRIGGER MyTrigger WITH ( interval = 5 sec );\n\n-- Defines `SampleStream`
+        stream to process events received from ''MyTrigger'' after every 5 seconds\nCREATE
+        SINK STREAM SampleStream (startTime long);\n\n-- ''eventTimestamp()'' returns
+        the timestamp of the processed/passed event.\nINSERT INTO SampleStream\nSELECT
+        eventTimestamp() as startTime\nFROM MyTrigger;\n","description":"Generate
+        events based on any cron job defined","labels":["Cron"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-CrossRegion-Processing","definition":"@App:name(\"Sample-CrossRegion-Processing\")\n@App:description(''The
+        Stream application subscribes to collection in another region.'')\n@App:qlVersion(''2'')\n\n/**\nThe
+        source of this stream app listenes the changes on collection in another region.\nThe
+        main difference from casual use is the parameter `stream.url` pointing to
+        the \napi url of the other region.\n\nTesting the Stream Application:\n\n    1.
+        Create the collection `other_region_collection` in one region and the stream
+        app in another region;\n\n    2. Run the stream app;\n    \n    3. Insert
+        some data into the collection `other_region_collection`, for example by the
+        following insert statement:\n    insert {\"value\" : \"test\"}\n\n    4. Check
+        the `local_region_collection` into the federation where the stream app runs.
+        The data should be available there.\n        \n*/\n\n-- Event stores\nCREATE
+        SOURCE other_region_collection WITH(type=''database'', collection=''other_region_collection'',
+        stream.url=\"pulsar://api-smoke1-ap-west.eng.macrometa.io:6650\", map.type=''json'')
+        (value string);\n\nCREATE TABLE local_region_collection(value string);\n\nINSERT
+        INTO local_region_collection\nSELECT value\nFROM other_region_collection;\n","description":"The
+        Stream application subscribes to collection in another region.","labels":["Advanced","Subscriber","Streams"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Crypto-Trading-App","definition":"@App:name(\"Sample-Crypto-Trading-App\")\n@App:description(\"Crypto
+        Trading demo\")\n@App:qlVersion(''2'')\n\n-- The trigger\nCREATE TRIGGER CryptoTraderEventsTrigger
+        WITH ( interval = 5 sec );\n\n/*\nThis app reads every 5 seconds the close
+        prices FROM Coinbase, Bitstamp and Bitflyer exchanges APIs.\nThen it calculates
+        the average prices within 10 events window and creates a \"BUY/SELL\" trading
+        strategy.\nThe close and average prices are stored in CryptoTraderQuotesAvgXXX
+        streams \nwhereas the strategy is kept in trades collection.\n*/\n\n/**\nTesting
+        the Stream Application:\n    1. Publish the app\n       \n    2. Start the
+        GUI against the same federation\n*/\n\n-- Streams for the http call requests\n-------------------------------------------------------------------------------------------------------------------------------------\n\nCREATE
+        SINK UsdCryptoTraderRequestStream WITH (type=''http-call'', publisher.url=''https://api.pro.coinbase.com/products/btc-usd/ticker'',
+        method=''GET'', headers=\"''User-Agent:c8cep''\", sink.id=''coinbase-ticker'',
+        map.type=''json'') (triggered_time string);\n\nCREATE SINK EurCryptoTraderRequestStream
+        WITH (type=''http-call'', publisher.url=''https://www.bitstamp.net/api/v2/ticker/btceur'',
+        method=''GET'', sink.id=''bitstamp-ticker'', map.type=''json'') (triggered_time
+        string);\n\nCREATE SINK JpyCryptoTraderRequestStream WITH (type=''http-call'',
+        publisher.url=''https://api.bitflyer.com/v1/ticker'', method=''GET'', sink.id=''bitflyer-ticker'',
+        map.type=''json'') (triggered_time string);\n\n-- Streams for the http call
+        responses\n-------------------------------------------------------------------------------------------------------------------------------------\n\nCREATE
+        SOURCE UsdCryptoTraderTickerResponseStream WITH (type=''http-call-response'',
+        sink.id=''coinbase-ticker'', http.status.code=''200'', map.type=''json'',
+        map.enclosing.element=''$.*'') (time string, price string);\n\nCREATE SOURCE
+        EurCryptoTraderTickerResponseStream WITH (type=''http-call-response'', sink.id=''bitstamp-ticker'',
+        http.status.code=''200'', map.type=''json'') (timestamp string, last string);\n\nCREATE
+        SOURCE JpyCryptoTraderTickerResponseStream WITH (type=''http-call-response'',
+        sink.id=''bitflyer-ticker'', http.status.code=''200'', map.type=''json'')
+        (timestamp string, ltp double);\n\n-- Streams for the close and average prices\n-------------------------------------------------------------------------------------------------------------------------------------\nCREATE
+        SINK STREAM GLOBAL CryptoTraderQuotesAvgUSD(exchange string, quote_region
+        string, symbol string, ma double, close double, timestamp long);\n\nCREATE
+        SINK STREAM GLOBAL CryptoTraderQuotesAvgEUR(exchange string, quote_region
+        string, symbol string, ma double, close double, timestamp long);\n\nCREATE
+        SINK STREAM GLOBAL CryptoTraderQuotesAvgJPY(exchange string, quote_region
+        string, symbol string, ma double, close double, timestamp long);\n\nCREATE
+        SINK TradesBuy WITH (type=\"logger\", prefix=''BUY'') (exchange string, quote_region
+        string, symbol string, timestamp long, trade_location string,\n                          trade_price
+        double, trade_strategy string, trade_type string);\n\nCREATE SINK TradesSell
+        WITH (type=\"logger\", prefix=''SELL'') (exchange string, quote_region string,
+        symbol string, timestamp long, trade_location string,\n                          trade_price
+        double, trade_strategy string, trade_type string);                      \n\n--
+        Common trades store\nCREATE TABLE GLOBAL trades(exchange string, quote_region
+        string, symbol string, timestamp long, trade_location string,\n                          trade_price
+        double, trade_strategy string, trade_type string);\n                          \n--
+        Common trades store inserts\n-------------------------------------------------------------------------------\nINSERT
+        INTO trades\nSELECT exchange, quote_region, symbol, timestamp, trade_location,\n          trade_price,
+        trade_strategy, trade_type\nFROM TradesBuy;\n\nINSERT INTO trades\nSELECT
+        exchange, quote_region, symbol, timestamp, trade_location,\n          trade_price,
+        trade_strategy, trade_type\nFROM TradesSell;\n                          \n--
+        Fire Coinbase Pro BTC/USD requests initiated by a trigger\n-------------------------------------------------------------------------------\nINSERT
+        INTO UsdCryptoTraderRequestStream\nSELECT time:currentTimestamp() as triggered_time
+        \nFROM CryptoTraderEventsTrigger;\n\n-- Fire Bitstamp BTC/EUR requests initiated
+        by a trigger\n-------------------------------------------------------------------------------\nINSERT
+        INTO EurCryptoTraderRequestStream\nSELECT time:currentTimestamp() as triggered_time
+        \nFROM CryptoTraderEventsTrigger;\n\n-- Fire Bitflyer BTC/JPY requests initiated
+        by a trigger\n-------------------------------------------------------------------------------\nINSERT
+        INTO JpyCryptoTraderRequestStream\nSELECT time:currentTimestamp() as triggered_time
+        \nFROM CryptoTraderEventsTrigger;\n\n-- Coinbase Pro BTC/USD strategy generation\n-------------------------------------------------------------------------------------------------\n@info(name=''Query
+        for BTC/USD close and average prices within moving 10 events windows'')\nINSERT
+        INTO CryptoTraderQuotesAvgUSD\nSELECT \"Coinbase Pro\" as exchange, \"USA\"
+        as quote_region,\n        \"BTC/USD\" as symbol, avg(convert(price, ''double''))
+        as ma, convert(price, ''double'') as close, \n        time:timestampInMilliseconds()/1000
+        as timestamp\nFROM  UsdCryptoTraderTickerResponseStream WINDOW SLIDING_LENGTH(10);\n\n@info(name=''Query
+        for BTC/USD trading strategy BUY'')\nINSERT INTO TradesBuy\nSELECT e2.exchange,
+        e2.quote_region, e2.symbol, e2.timestamp,\n       context:getVar(''region'')
+        as trade_location,\n       e2.close as trade_price, \"MA Trading\" as trade_strategy,\n          ''BUY''
+        as trade_type\nFROM every e1=CryptoTraderQuotesAvgUSD[e1.close < e1.ma], e2=CryptoTraderQuotesAvgUSD[e2.close
+        > e2.ma];\n\n@info(name=''Query for BTC/USD trading strategy SELL'')\nINSERT
+        INTO TradesSell\nSELECT e2.exchange, e2.quote_region, e2.symbol, e2.timestamp,\n       context:getVar(''region'')
+        as trade_location,\n       e2.close as trade_price, \"MA Trading\" as trade_strategy,\n          ''SELL''
+        as trade_type\nFROM every e1=CryptoTraderQuotesAvgUSD[e1.close > e1.ma], e2=CryptoTraderQuotesAvgUSD[e2.close
+        < e2.ma];\n\nDELETE trades for expired events \n       ON trades.trade_location
+        == trade_location and trades.symbol == symbol and trades.timestamp < timestamp
+        \nSELECT context:getVar(''region'') as trade_location, symbol, timestamp\nFROM
+        CryptoTraderQuotesAvgUSD WINDOW SLIDING_LENGTH(10);\n\n-- Bitstamp BTC/EUR
+        trading strategy generation\n-----------------------------------------------------------------------------------------\n@info(name=''Query
+        for BTC/EUR close and average prices within moving 10 events windows'')\nINSERT
+        INTO CryptoTraderQuotesAvgEUR\nSELECT \"Bitstamp\" as exchange, \"Europe\"
+        as quote_region,\n        \"BTC/EUR\" as symbol, avg(convert(last, ''double''))
+        as ma, convert(last, ''double'') as close, \n        time:timestampInMilliseconds()/1000
+        as timestamp\nFROM EurCryptoTraderTickerResponseStream WINDOW SLIDING_LENGTH(10);\n\n@info(name=''Query
+        for BTC/EUR trading strategy BUY'')\nINSERT INTO TradesBuy\nSELECT e2.exchange,
+        e2.quote_region, e2.symbol, e2.timestamp,\n       context:getVar(''region'')
+        as trade_location,\n       e2.close as trade_price, \"MA Trading\" as trade_strategy,\n          ''BUY''
+        as trade_type\nFROM every e1=CryptoTraderQuotesAvgEUR[e1.close < e1.ma], e2=CryptoTraderQuotesAvgEUR[e2.close
+        > e2.ma];\n\n@info(name=''Query for BTC/EUR trading strategy SELL'')\nINSERT
+        INTO TradesSell\nSELECT e2.exchange, e2.quote_region, e2.symbol, e2.timestamp,\n       context:getVar(''region'')
+        as trade_location,\n       e2.close as trade_price, \"MA Trading\" as trade_strategy,\n          ''SELL''
+        as trade_type\nFROM every e1=CryptoTraderQuotesAvgEUR[e1.close > e1.ma], e2=CryptoTraderQuotesAvgEUR[e2.close
+        < e2.ma];\n\nDELETE trades for expired events \n       ON trades.trade_location
+        == trade_location and trades.symbol == symbol and trades.timestamp < timestamp
+        \nSELECT context:getVar(''region'') as trade_location, symbol, timestamp\nFROM
+        CryptoTraderQuotesAvgEUR WINDOW SLIDING_LENGTH(10);\n\n-- Bitflyer BTC/JPY
+        strategy generation\n----------------------------------------------------------------------------------------------\n@info(name=''Query
+        for BTC/JPY close and average prices within moving 10 events windows'')\nINSERT
+        INTO CryptoTraderQuotesAvgJPY\nSELECT \"Bitflyer\" as exchange, \"Asia-Pacific\"
+        as quote_region,\n        \"BTC/JPY\" as symbol, avg(ltp) as ma, ltp as close,
+        \n        time:timestampInMilliseconds()/1000 as timestamp\nFROM JpyCryptoTraderTickerResponseStream
+        WINDOW SLIDING_LENGTH(10);\n\n@info(name=''Query for BTC/JPY trading strategy
+        BUY'')\nINSERT INTO TradesBuy\nSELECT e2.exchange, e2.quote_region, e2.symbol,
+        e2.timestamp,\n       context:getVar(''region'') as trade_location,\n       e2.close
+        as trade_price, \"MA Trading\" as trade_strategy,\n          ''BUY'' as trade_type\nFROM
+        every e1=CryptoTraderQuotesAvgJPY[e1.close < e1.ma], e2=CryptoTraderQuotesAvgJPY[e2.close
+        > e2.ma];\n\n@info(name=''Query for BTC/JPY trading strategy SELL'')\nINSERT
+        INTO TradesSell\nSELECT e2.exchange, e2.quote_region, e2.symbol, e2.timestamp,\n       context:getVar(''region'')
+        as trade_location,\n       e2.close as trade_price, \"MA Trading\" as trade_strategy,\n          ''SELL''
+        as trade_type\nFROM every e1=CryptoTraderQuotesAvgJPY[e1.close > e1.ma], e2=CryptoTraderQuotesAvgJPY[e2.close
+        < e2.ma];\n \nDELETE trades for expired events \n       ON trades.trade_location
+        == trade_location and trades.symbol == symbol and trades.timestamp < timestamp
+        \nSELECT context:getVar(''region'') as trade_location, symbol, timestamp\nFROM
+        CryptoTraderQuotesAvgJPY WINDOW SLIDING_LENGTH(10);\n\n","description":"This
+        application demonstrates the crypto currencies trading.","labels":["Advanced","SampleApp"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Enrich-By-If-then-Else","definition":"@App:name(''Sample-Enrich-By-If-then-Else'')\n@App:description(\"This
+        application demonstrates how to filter and enrich events based on a if-then-else
+        conditions.\")\n@App:qlVersion(''2'')\n\n/**\nTesting the Stream Application:\n    1.
+        Open Stream `SampleEnrichByIfthenElseValidOutputStream` and `SampleEnrichByIfthenElseProcessedOutputStream`
+        in \n        Console. The output can be monitored here.\n\n    2. Upload following
+        data into `SampleEnrichByIfthenElseInputTable` C8DB Collection\n        {\"sensorId\":\"sensor
+        A1234\",\"temperature\":18}\n        {\"sensorId\":\"sensor A1234\",\"temperature\":-32.2}\n        {\"sensorId\":\"sensor
+        FR45\",\"temperature\":20.9}\n        {\"sensorId\":\"sensor meter1\",\"temperature\":49.6}\n\n    3.
+        Following messages would be shown as a output on the respective sinks\n\n        1.
+        `SampleEnrichByIfthenElseValidOutputStream` will have the output with flag
+        `isValid` indicating if the \n            temperature is within specific range
+        or not\n            \n            [sensor A1234, 18.0, Valid]\n            [sensor
+        A1234, -32.2, InValid]\n            [sensor FR45, 20.9, Valid]\n            [sensor
+        meter1, 49.6, Valid]\n\n        2. `SampleEnrichByIfthenElseProcessedOutputStream`
+        will have output with additional flag which indicates if the\n            input
+        temperature is `high`, `normal` or `invalid` based on specified range.\n            \n            [sensor
+        A1234, 18.0, Normal]\n            [sensor A1234, -32.2, InValid]\n            [sensor
+        FR45, 20.9, Normal]\n            [sensor meter1, 49.6, High]\n*/\n\n-- Defines
+        Table `SampleEnrichByIfthenElseInputTable` to process events having `sensorId`
+        and `temperature`(F).\nCREATE SOURCE SampleEnrichByIfthenElseInputTable WITH(type
+        = ''database'', collection = \"SampleEnrichByIfthenElseInputTable\", collection.type=\"doc\"
+        , replication.type=\"global\", map.type=''json'') (sensorId string, temperature
+        double);\n\n-- Define Stream `SampleEnrichByIfthenElseValidOutputStream`\nCREATE
+        SINK STREAM SampleEnrichByIfthenElseValidOutputStream(sensorId string, temperature
+        double, isValid string);\n\n-- Define Stream `SampleEnrichByIfthenElseProcessedOutputStream`\nCREATE
+        SINK STREAM SampleEnrichByIfthenElseProcessedOutputStream(sensorId string,
+        temperature double, tempStatus string);\n\n@info(name = ''SimpleIfElseQuery'')\n--
+        Note: if `temperature` > -2, `isValid` will be `true` else `false`\nINSERT
+        INTO SampleEnrichByIfthenElseValidOutputStream\nSELECT sensorId, temperature,
+        ifThenElse(temperature > -2, ''Valid'', ''InValid'') as isValid\nFROM SampleEnrichByIfthenElseInputTable;\n\n@info(name
+        = ''ComplexIfElseQuery'')\n-- Note: If the `temperature` > 40 the status is
+        set to `High`, between -2 and 40 as `Normal` & less than -2 as `InValid`\nINSERT
+        INTO SampleEnrichByIfthenElseProcessedOutputStream\nSELECT sensorId, temperature,
+        ifThenElse(temperature > -2,  ifThenElse(temperature > 40, ''High'', ''Normal''),
+        ''InValid'') as tempStatus\nFROM SampleEnrichByIfthenElseInputTable;\n","description":"This
+        application demonstrates how to filter and enrich events based on a if-then-else
+        conditions.","labels":["Basic","Enrich"],"sampleInput":[{"name":"SampleEnrichByIfthenElseInputTable","content":"{\"sensorId\":\"sensor
+        A1234\",\"temperature\":18}\r\n{\"sensorId\":\"sensor A1234\",\"temperature\":-32.2}\r\n{\"sensorId\":\"sensor
+        FR45\",\"temperature\":20.9}\r\n{\"sensorId\":\"sensor meter1\",\"temperature\":49.6}"}],"sampleOutput":null},{"name":"Sample-Filtering-By-Regex","definition":"@App:name(''Sample-Filtering-By-Regex'')\n@App:description(\"This
+        application demonstrates event filtering using regex\")\n@App:qlVersion(''2'')\n\n/**\nTesting
+        the Stream Application:\n    1. Upload following data into `SampleFilteringByRegexInputTable`
+        C8DB Collection\n        \n        {\"sensorId\":\"sensor A1234\",\"temperature\":18}\n        {\"sensorId\":\"sensor
+        A1234\",\"temperature\":-32.2}\n        {\"sensorId\":\"sensor FR45\",\"temperature\":20.9}\n        {\"sensorId\":\"sensor
+        meter1\",\"temperature\":35.6}\n\n    2. Following messages would be stored
+        in the C8DB Collection `SampleFilteringByRegexDestTable`. The query checks
+        if\n        the sensorId is in valid format and extracts the sensorType from
+        it.\n        \n        {\"isSensor\":true,\"sensorId\":\"sensor A1234\",\"sensorType\":\"A1234\"}\n        {\"isSensor\":true,\"sensorId\":\"sensor
+        A1234\",\"sensorType\":\"A1234\"}\n        {\"isSensor\":true,\"sensorId\":\"sensor
+        FR45\",\"sensorType\":\"FR45\"}\n        {\"isSensor\":true,\"sensorId\":\"sensor
+        meter1\",\"sensorType\":\"meter1\"}\n*/\n\n-- Defines `SampleFilteringByRegexInputTable`
+        stream to process events having `sensorId` and `temperature`(F).\nCREATE SOURCE
+        SampleFilteringByRegexInputTable WITH (type = ''database'', collection = \"SampleFilteringByRegexInputTable\",
+        collection.type=\"doc\" , replication.type=\"global\", map.type=''json'')
+        (sensorId string, temperature double);\n\n-- Define `SampleFilteringByRegexDestTable`\nCREATE
+        TABLE SampleFilteringByRegexDestTable (sensorId string, isSensor bool, sensorType
+        string);\n\n@info(name=''RegexFilter'')\n-- Note: Matches if `sensorId` begins
+        with the word ''sensor''\n-- Note: Captures the `type` of the sensor\nINSERT
+        INTO SampleFilteringByRegexDestTable\nSELECT sensorId,\n   regex:matches(''sensor(.*)'',
+        sensorId) as isSensor,\n   regex:group(''.*\\s(.*)'', sensorId, 1) as sensorType\nFROM
+        SampleFilteringByRegexInputTable\nWHERE isSensor AND not(sensorId is null);\n","description":"This
+        application demonstrates event filtering using regex","labels":["Basic","Filter"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Filtering-By-Value","definition":"@App:name(''Sample-Filtering-By-Value'')\n@App:description(\"This
+        application demonstrates filter out events based on simple conditions such
+        as number value, range or null type.\")\n@App:qlVersion(''2'')\n\n/**\nTesting
+        the Stream Application:\n    1. Open Stream `SampleFilteringByValueDestA1234Stream`
+        and `SampleFilteringByValueDestAbnormalTempStream` in Console. \n       \n    2.
+        Upload following data into `SampleFilteringByValueInputTable` C8DB Collection\n        {\"sensorId\":\"sensor
+        A1234\",\"temperature\":18}\n        {\"sensorId\":\"sensor A1234\",\"temperature\":-32.2}\n        {\"sensorId\":\"sensor
+        FR45\",\"temperature\":20.9}\n        {\"sensorId\":\"sensor meter1\",\"temperature\":35.6}\n        {\"temperature\":14}\n\n    3.
+        Following messages would be shown as a output on the respective sinks\n\n        1.
+        `SampleFilteringByValueDestA1234Stream` will show all the events coming from
+        `sensor A1234`\n            {\"event\":{\"sensorId\":\"sensor A1234\",\"temperature\":18.0}}\n            {\"event\":{\"sensorId\":\"sensor
+        A1234\",\"temperature\":-32.2}}\n\n        2. `SampleFilteringByValueDestAbnormalTempStream`
+        will show all the events not having temperature within specified range\n            {\"event\":{\"sensorId\":\"sensor
+        A1234\",\"temperature\":-32.2}}\n            {\"event\":{\"sensorId\":\"sensor
+        meter1\",\"temperature\":49.0}}\n\n        3. `SampleFilteringByValueDestInvalidDataTable`
+        collection will invalid data where sensorId is missing\n            {\"temperature\":
+        14}\n*/\n\n-- Defines `SampleFilteringByValueInputTable` stream to process
+        events having `sensorId` and `temperature`(F).\nCREATE SOURCE SampleFilteringByValueInputTable
+        WITH(type = ''database'', collection = \"SampleFilteringByValueInputTable\",
+        collection.type=\"doc\" , replication.type=\"global\", map.type=''json'')
+        (sensorId string, temperature double);\n\n-- Define `SampleFilteringByValueDestA1234Stream`\nCREATE
+        SINK STREAM SampleFilteringByValueDestA1234Stream(sensorId string, temperature
+        double);\n\n-- Define `SampleFilteringByValueDestAbnormalTempStream`\nCREATE
+        SINK STREAM SampleFilteringByValueDestAbnormalTempStream(sensorId string,
+        temperature double);\n\n-- Define `SampleFilteringByValueDestInvalidDataTable`\nCREATE
+        TABLE SampleFilteringByValueDestInvalidDataTable(sensorId string, temperature
+        double);\n\n@info(name = ''EqualsFilter'')\n-- Note: Filter out events with
+        `sensorId` equalling `sensor A1234`\nINSERT INTO SampleFilteringByValueDestA1234Stream\nSELECT
+        *\nFROM SampleFilteringByValueInputTable\nWHERE sensorId == ''sensor A1234'';\n\n@info(name
+        = ''RangeFilter'') \n-- Note: Filter out events where temperature is not withing
+        the range -2 - 40\nINSERT INTO SampleFilteringByValueDestAbnormalTempStream\nSELECT
+        *\nFROM SampleFilteringByValueInputTable\nWHERE (temperature < -2) or (temperature
+        > 40);\n\n@info(name = ''NullFilter'') \n-- Note: Filter out events with `SensorId`
+        being `null`\nINSERT INTO SampleFilteringByValueDestInvalidDataTable\nSELECT
+        *\nFROM SampleFilteringByValueInputTable\nWHERE sensorId is null;\n","description":"This
+        application demonstrates filter out events based on simple conditions such
+        as number value, range or null type.","labels":["Basic","Filter"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Function-Worker","definition":"@App:name(\"fx-1\")\n@App:description(\"This
+        app will execute a function every 5 seconds\")\n@App:qlVersion(''2'')\n\n/*\nTrigger
+        executes function periodically based on a given internal with a predefined
+        schema.\n\nSyntax: \nfx ( name = <function name>, arguments... );\n\nExamples:\n--
+        Executes parameterless function ''func-name-1'' :\n1. fx(''func-name-1'')\n\n--
+        Executes function ''func-name-2'' with parameters set via JSON :\n2. fx(''func-name-2'',
+        \"{name : ''John'', age : 23}\"))\n\n-- Executes function ''func-name-3''
+        with parameters set via object :\n3. fx(''func-name-3'', json:getObject(\"{name
+        : ''John'', age : 23}\",''$'')))\n\n-- Executes function ''func-name-4'' with
+        parameters set as pairs of arguments :\n4. fx(''func-name-4'', ''name'', ''John'',
+        ''age'', 23)\n\nIt returns a result as an object. If the result contains one
+        item then it returns itself. Otherwise, it returns an object with multiple
+        items in a property `items`.\n*/\n\n\n/**\nTesting the Stream Application:\n    1.
+        Create function with name `find-email` with an argument `email` \n    \n    2.
+        Open Stream `FxSampleStream` in Console to monitor the output. \n       \n    2.
+        After every 5 seconds you will be able to see an event in the Console\n    \n    3.
+        The event seen in the Console will be like\n        2020-05-19T10:50:38.004Z\n        {startTime:
+        <timestamp>, \"result\":<result from the function>}\n*/\n\nCREATE TRIGGER
+        MyTrigger WITH ( interval = 5 sec );\n\n-- Defines `SampleStream` stream to
+        process events received from ''MyTrigger'' after every 5 seconds\nCREATE SINK
+        STREAM FxSampleStream (startTime long, result object);\n\n-- ''fx(...)'' returns
+        the result of executed function.\nINSERT INTO FxSampleStream\nSELECT eventTimestamp()
+        as startTime,\nfx(''find-email'', ''email'', ''<email>'') as result\n\nFROM
+        MyTrigger;\n","description":"Execute function based on defined cron job.","labels":["Function,
+        Cron"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-GeoSpatial-App","definition":"@App:name(\"Sample-GeoSpatial-App\")\n@App:description(\"This
+        stream demostrates the usage of geo-spatial functions\")\n@App:qlVersion(''2'')\n\n\nCREATE
+        TRIGGER GeoSpatialTrigger WITH ( interval = 5 sec );\n\n/* This stream app
+        will explain the usage of geo:distance. This method gives the distance between
+        two geo locations in meters and it takes the latitude and longitude of 2 locations
+        as input parameters.\n - Inorder to test this function we are genrating random
+        locations and inserting them in a stream named GeoDistanceStream.\n - From
+        that GeoDistanceStream we are reading those locations and calling the geo:distance
+        to calculate the distance between these locations.\n - All of these are persisted
+        in a collection named GeoDistanceCollection, which can be referred for testing
+        the results or getting the geo distance later on.\n\n*/\n\n/* GEO DISTANCE
+        STARTS */\nCREATE SINK STREAM GeoDistanceStream (location1latitude double,
+        location1longitude double, location2latitude double, location2longitude double);\n\n--
+        GeoDistanceCollection\nCREATE TABLE GLOBAL GeoDistanceCollection (location1latitude
+        double, location1longitude double, location2latitude double, location2longitude
+        double, geodistance double);\n\n/* GEO INTERSECTS STARTS */\nCREATE SINK STREAM
+        GeoIntersectsStream (longitude double, latitude double, geometryfence string);\n\nCREATE
+        SINK STREAM GeoIntersectsStream1 (geometryjson string, geometryfence string);\n\n--
+        GeoIntersectsCollection\nCREATE TABLE GLOBAL GeoIntersectsCollection(longitude
+        double, latitude double,  geometryfence string, geointersects bool);\n\n--
+        GeoIntersectsCollection1\nCREATE TABLE GLOBAL GeoIntersectsCollection1(geometryjson
+        string,  geometryfence string, geointersects bool);\n\nINSERT INTO GeoDistanceStream\nSELECT
+        math:rand() * 100 as location1latitude, math:rand() * 100 as location1longitude,
+        math:rand() * 100 as location2latitude, math:rand() * 100 as location2longitude
+        \nFROM GeoSpatialTrigger;\n\n--select  eventTimestamp() as startTime, geo:distance(1.00,
+        2.00, 1.00, 24.00) as geodistance\nINSERT INTO GeoDistanceCollection\nSELECT
+        location1latitude, location1longitude, location2latitude, location2longitude,
+        geo:distance(location1latitude, location1longitude, location2latitude, location2longitude)
+        as geodistance\nFROM GeoDistanceStream;\n\n/*GEO DISTANCE ENDS  */\n\n\n/*
+        This stream app will explain the usage of geo:intersects. This method can
+        be called with 2 set of parameters.This function can be called using two sets
+        of parameters. \n   First method will return true if the incoming event geo.json.geometry
+        intersects the given geo.json.geometryFence else false.\n    Second method
+        will return true if the location pointed by longitude and latitude intersects
+        the given geo.json.geometryFence else false \n - Inorder to test this function
+        we are genrating random locations and inserting them in a stream named GeoIntersectsStream.\n
+        - From that GeoIntersectsStream we are reading those locations and calling
+        the geo:intersects to check if these 2 geometries intersects or not.\n - All
+        of these are persisted in a collection named GeoIntersectsCollection and GeoIntersectsCollection1,
+        which can be referred for testing the results or getting the geo intersects
+        later on.\n\n*/\n\nINSERT INTO GeoIntersectsStream\nSELECT math:rand() * 100
+        as  longitude, math:rand() * 100 as latitude, \"{''type'':''Polygon'',''coordinates'':[[[0.5,
+        0.5],[0.5, 1.5],[1.5, 1.5],[1.5, 0.5],[0.5, 0.5]]]} \" as geometryfence\nFROM
+        GeoSpatialTrigger;\n\nINSERT INTO GeoIntersectsCollection\nSELECT longitude
+        , latitude, geometryfence, geo:intersects(longitude, latitude, geometryfence)
+        as geointersects\nFROM GeoIntersectsStream;\n\nINSERT INTO GeoIntersectsStream1\nSELECT
+        \"{''type'':''Polygon'',''coordinates'':[[[0.5, 0.5],[0.5, 1.5],[1.5, 1.5],[1.5,
+        0.5],[0.5, 0.5]]]} \" as geometryjson, \"{''type'':''Polygon'',''coordinates'':[[[0.5,
+        0.5],[0.5, 1.5],[1.5, 1.5],[1.5, 0.5],[0.5, 0.5]]]} \" as geometryfence\nFROM
+        GeoSpatialTrigger;\n\nINSERT INTO GeoIntersectsCollection1\nSELECT geometryjson,
+        geometryfence, geo:intersects(geometryjson, geometryfence) as geointersects\nFROM
+        GeoIntersectsStream1;\n\n/* GEO INTERSECTS ENDS */\n","description":"Basic
+        Stream application to demonstrate geo-spatial functions","labels":["Basic","Geo-Spatial"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Graph-Processing","definition":"@App:name(''Sample-Graph-Processing'')\n@App:description(''Basic
+        Stream application to demonstrate reading data from input stream and store
+        it in the collection. The stream and collections will be created automatically
+        if they do not already exist.'')\n@App:qlVersion(''2'')\n\n/**\nTesting the
+        Stream Application:\n    1. Upload following data into `SampleGraphDataProcessingInputTable`
+        C8DB Collection. The data depicts the social media users\n        and the
+        relation between them. On running this application we would be able to see
+        how the Graph can be\n        created using the relationship between the people.\n\n        \"user1\"
+        and \"user2\" are the two users on the social media. The \"relation\" field
+        indicates the relationship \n        between the users. \n        {\"user1\":
+        \"RaleighMcGilvra\", \"user2\":  \"MartyMueller\", \"relation\":  \"friend\",
+        \"since\":  \"2017-12-12\"}\n        {\"user1\": \"RaleighMcGilvra\", \"user2\":  \"KelbyMattholie\",
+        \"relation\":  \"friend\", \"since\":  \"2018-11-13\"}\n        {\"user1\":
+        \"KelbyMattholie\", \"user2\":  \"VictorLimeburn\", \"relation\":  \"family\",
+        \"since\":  \"2016-09-07\"}\n        {\"user1\": \"KelbyMattholie\", \"user2\":  \"EvangeliaCouldwell\",
+        \"relation\":  \"relative\", \"since\": \"2019-08-15\"}\n        {\"user1\":
+        \"EvangeliaCouldwell\", \"user2\":  \"RaleighMcGilvra\", \"relation\":  \"relative\",
+        \"since\":  \"2019-08-12\"}\n\n    2. The Stream App will create the SampleGraphDataProcessingOutputEdgeTable
+        automatically to store the Graph Edges. The app will\n        also create
+        the SampleGraphDataProcessingOutputEdgeTable-Vertex collection to store the
+        vertices of the graph.\n\n    3. After uploading the input data into `SampleGraphDataProcessingInputTable`
+        you can observe following data in the output \n        collections\n        SampleGraphDataProcessingOutputEdgeTable:\n        {\"_from\":\"SampleGraphDataProcessingOutputEdgeTable-Vertex/RaleighMcGilvra\",\"_to\":\"SampleGraphDataProcessingOutputEdgeTable-Vertex/MartyMueller\",\"relation\":\"friend\",\"since\":\"2017-12-12\"}\n        {\"_from\":\"SampleGraphDataProcessingOutputEdgeTable-Vertex/RaleighMcGilvra\",\"_to\":\"SampleGraphDataProcessingOutputEdgeTable-Vertex/KelbyMattholie\",\"relation\":\"friend\",\"since\":\"2018-11-13\"}\n        {\"_from\":\"SampleGraphDataProcessingOutputEdgeTable-Vertex/KelbyMattholie\",\"_to\":\"SampleGraphDataProcessingOutputEdgeTable-Vertex/VictorLimeburn\",\"relation\":\"family\",\"since\":\"2016-09-07\"}\n        {\"_from\":\"SampleGraphDataProcessingOutputEdgeTable-Vertex/KelbyMattholie\",\"_to\":\"SampleGraphDataProcessingOutputEdgeTable-Vertex/EvangeliaCouldwell\",\"relation\":\"relative\",\"since\":\"2019-08-15\"}\n        {\"_from\":\"SampleGraphDataProcessingOutputEdgeTable-Vertex/EvangeliaCouldwell\",\"_to\":\"SampleGraphDataProcessingOutputEdgeTable-Vertex/RaleighMcGilvra\",\"relation\":\"relative\",\"since\":\"2019-08-12\"}\n\n        SampleGraphDataProcessingOutputEdgeTable-Vertex:\n        The
+        nodes (_from and _to) in edges in the SampleGraphDataProcessingOutputEdgeTable
+        points to the keys in the \n        SampleGraphDataProcessingOutputEdgeTable-Vertex  \n*/\n\n--
+        Defines Table `SampleGraphDataProcessingInputTable` to process events having
+        `sensorId` and `temperature`(F).\nCREATE SOURCE SampleGraphDataProcessingInputTable
+        WITH (type = ''database'', collection = \"SampleGraphDataProcessingInputTable\",
+        map.type=''json'') (user1 string, user2 string, relation string, since string);\n\n--
+        Define Table `SampleGraphDataProcessingOutputEdgeTable`\n-- Specify the field
+        names of the graph nodes as \"from\" and \"to\". In the below example \"user1\"
+        and \"user2\" fields will\n-- be used as source and destination nodes of the
+        graph edge. However, other attributes relation and since will be\n-- stored
+        as edge attributes\nCREATE STORE SampleGraphDataProcessingOutputEdgeTable
+        WITH (type = ''database'', replication.type=\"global\", collection.type=\"edge\",
+        from=\"user1\", to=\"user2\") (user1 string, user2 string, relation string,
+        since string);\n\n-- Data Processing\n@info(name=''Query'')\nINSERT INTO SampleGraphDataProcessingOutputEdgeTable\nSELECT
+        user1, user2, relation, since \nFROM SampleGraphDataProcessingInputTable;","description":"Basic
+        Stream application to demonstrate reading data from input stream and store
+        it in the collection. The stream and collections will be created automatically
+        if they do not already exist.","labels":["Graph"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-HTTP-IO","definition":"@App:name(''Sample-HTTP-IO'')\n@App:description(\"This
+        application how to send receive data from the external web service.\")\n@App:qlVersion(''2'')\n\n/**\nTesting
+        the Stream Application:\n    1. Open Stream `SampleHTTPIOOutputStream` in
+        Console to monitor the output. \n       \n    2. Upload following data into
+        `SampleHTTPIOInputTable` C8DB Collection\n        {\"sensorId\":\"sensor A1234\",\"temperature\":18}\n        {\"sensorId\":\"sensor
+        A1234\",\"temperature\":-32.2}\n        {\"sensorId\":\"sensor FR45\",\"temperature\":20.9}\n        {\"sensorId\":\"sensor
+        meter1\",\"temperature\":49.6}\n\n    3. This application read the sensorId
+        and temeperature from the `SampleHTTPIOInputTable`\n\n    4. The sink `http-call`
+        sends data to external HTTP Endpoint. http://postman-echo.com/post is a echo\n        webservice
+        responds with the same data which is sent via request body\n\n    5. On successful
+        execution of the `http-call` data is inserted into `http-call-response`. The
+        response body received\n        from the webservice will be in the format.
+        \n        {\n            \"args\": {},\n            \"data\": { ...The data
+        send in the request body... }\n            },\n            \"files\": {},\n            \"form\":
+        {},\n            \"headers\": { ... },\n            \"url\": \"https://postman-echo.com/post\"\n        }\n\n    6.
+        Send the received data over the stream for other applications to consume.
+        You can monitor the final data on stream\n        `SampleHTTPIOOutputStream`\n\n        [{\"sensorId\":\"sensor
+        FR45\",\"temperature\":20.9}]\n        [{\"sensorId\":\"sensor A1234\",\"temperature\":18}]\n        [{\"sensorId\":\"sensor
+        A1234\",\"temperature\":-32.2}]\n        [{\"sensorId\":\"sensor meter1\",\"temperature\":49.6}]\n*/\n\n--
+        Defines `SampleHTTPIOInputTable` stream to process events having `sensorId`
+        and `temperature`(F).\nCREATE SOURCE SampleHTTPIOInputTable WITH (type = ''database'',
+        collection = \"SampleHTTPIOInputTable\", collection.type=\"doc\" , replication.type=\"global\",
+        map.type=''json'') (sensorId string, temperature double);\n\nCREATE SINK ExternalServiceCallSink
+        WITH (type=''http-call'', sink.id=''echo-service'', publisher.url=''http://postman-echo.com/post'',
+        map.type=''json'', map.payload = ''{{payloadBody}}'') (payloadBody string);\n\nCREATE
+        SOURCE ExternalServiceResponseSink WITH (type=''http-call-response'', sink.id=''echo-service'',
+        map.type=''json'') (url string, headers string, data string);\n\n-- Defines
+        `SampleHTTPIOOutputStream` to emit the events after the data is processed
+        by external service\nCREATE SINK STREAM SampleHTTPIOOutputStream(data string);\n\n--
+        Send the input message to external service over HTTP POST API call in the
+        form of `application/json` in request body\nINSERT INTO ExternalServiceCallSink\nSELECT
+        str:fillTemplate(\"\"\"{&quot;sensorId&quot;: &quot;{{1}}&quot;, &quot;temperature&quot;:
+        {{2}}}\"\"\", sensorId, temperature) as payloadBody\nFROM SampleHTTPIOInputTable;\n\n--
+        Note: Consume data received from the external service\n@info(name = ''ConsumeProcessedData'')\nINSERT
+        INTO SampleHTTPIOOutputStream\nSELECT data\nFROM ExternalServiceResponseSink;\n","description":"This
+        application how to send receive data from the external web service.","labels":["HTTP"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-HTTP-Source","definition":"@App:name(''Sample-HTTP-Source'')\n@App:description(\"This
+        application how to receive POST requests via Stream Workers API.\")\n@App:qlVersion(''2'')\n\n/**\nTesting
+        the Stream Application:\n    1. Open Stream `SampleHTTPOutputStream` in Console
+        to monitor the output.\n\n    2. Go to Stream Workers API and try `Publish
+        message via HTTP-Source stream.` endpoint. Run it with\n    application name
+        set to `Sample-HTTP-Source`, stream name set to `SampleHTTPSource`, and body
+        with the next data:\n        {\"carId\":\"c1\",\"longitude\":18.4334, \"latitude\":30.2123}\n\n    3.
+        This application read the carId, longitude and latitude from the `SampleHTTPSource`
+        and sends it to\n    sink stream `SampleHTTPOutputStream`\n**/\n\n-- Defines
+        `SampleHTTPSource` stream to process events having `carId`, `longitude`, and
+        `latitude`.\nCREATE SOURCE SampleHTTPSource WITH (type = ''http'', map.type=''json'')
+        (carId string, longitude double, latitude double);\n\n-- Defines `SampleHTTPOutputStream`
+        to emit the events after the data is processed by external service\nCREATE
+        SINK STREAM SampleHTTPOutputStream (carId string, longitude double, latitude
+        double);\n\n-- Note: Consume data received from the external service\n@info(name
+        = ''ConsumeProcessedData'')\nINSERT INTO SampleHTTPOutputStream\nSELECT carId,
+        longitude, latitude\nFROM SampleHTTPSource;\n","description":"This application
+        how to receive POST requests via Stream Workers API.","labels":["HTTP"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Join-App","definition":"@App:name(''Sample-Join-App'')\n@App:description(''Basic
+        stream application to demonstrate enriching events using stream/table joins.'')\n@App:qlVersion(''2'')\n\n/**\nTesting
+        the Stream Application:\n    1. Open Stream `SampleRoomTempHumidStream` in
+        Console. The output can be monitored here.\n\n    2. Upload following data
+        into `SampleTemperatureTable` C8DB Collection.\n        {\"roomNo\": 1, \"temperature\":
+        71}\n        {\"roomNo\": 2, \"temperature\": 72}\n        {\"roomNo\": 3,
+        \"temperature\": 73}\n        {\"roomNo\": 4, \"temperature\": 74}\n        {\"roomNo\":
+        5, \"temperature\": 75}\n        \n    3. Upload following data into `SampleHumidityTable`
+        C8DB Collection.\n        {\"roomNo\": 1, \"humidity\": 61}\n        {\"roomNo\":
+        2, \"humidity\": 62}\n        {\"roomNo\": 3, \"humidity\": 63}\n        {\"roomNo\":
+        4, \"humidity\": 64}\n        {\"roomNo\": 5, \"humidity\": 65}\n        \n    3.
+        Upload following data into `SampleRoomNoTable` C8DB Collection.\n        {\"roomNo\":
+        1}\n        {\"roomNo\": 2}\n        {\"roomNo\": 3}\n        {\"roomNo\":
+        4}\n        {\"roomNo\": 5}\n\n    3. Following messages would be shown on
+        the `SampleRoomTempHumidStream` Stream Console.\n        [2022-01-06T07:18:52.229Z]
+        {\"roomNo\":1,\"temperatureUnit\":\"Farenheit\",\"temperature\":71.0,\"humidityUnit\":\"Relative
+        %\",\"humidity\":61.0}\n        [2022-01-06T07:19:05.006Z] {\"roomNo\":2,\"temperatureUnit\":\"Farenheit\",\"temperature\":72.0,\"humidityUnit\":\"Relative
+        %\",\"humidity\":62.0}\n        [2022-01-06T07:19:15.143Z] {\"roomNo\":3,\"temperatureUnit\":\"Farenheit\",\"temperature\":73.0,\"humidityUnit\":\"Relative
+        %\",\"humidity\":63.0}\n        [2022-01-06T07:19:22.71Z] {\"roomNo\":4,\"temperatureUnit\":\"Farenheit\",\"temperature\":74.0,\"humidityUnit\":\"Relative
+        %\",\"humidity\":64.0}\n        [2022-01-06T07:19:29.097Z] {\"roomNo\":5,\"temperatureUnit\":\"Farenheit\",\"temperature\":75.0,\"humidityUnit\":\"Relative
+        %\",\"humidity\":65.0}\n*/\n\n\n-- Defines `SampleTemperatureTable` Source.\nCREATE
+        SOURCE SampleTemperatureTable WITH (type = ''database'', collection = \"SampleTemperatureTable\",
+        collection.type=\"doc\" , replication.type=\"global\", map.type=''json'')
+        (roomNo int, temperature double);\n\n-- Defines `SampleHumidityTable` Source.\nCREATE
+        SOURCE SampleHumidityTable WITH (type = ''database'', collection = \"SampleHumidityTable\",
+        collection.type=\"doc\" , replication.type=\"global\", map.type=''json'')
+        (roomNo int, humidity double);\n\n-- Defines `SampleRoomNoTable` Source.\nCREATE
+        SOURCE SampleRoomNoTable WITH (type = ''database'', collection = \"SampleRoomNoTable\",
+        collection.type=\"doc\" , replication.type=\"global\", map.type=''json'')
+        (roomNo int);\n\n-- Define `SampleRoomTempHumidStream` Stream.\nCREATE SINK
+        STREAM SampleRoomTempHumidStream (roomNo int, temperature double, temperatureUnit
+        string, humidity double, humidityUnit string);\n\n-- Data Processing\nINSERT
+        INTO SampleRoomTempStream\nSELECT R.roomNo, T.temperature, \"Farenheit\" as
+        temperatureUnit\nFROM SampleRoomNoTable as R \n    JOIN SampleTemperatureTable
+        WINDOW SLIDING_TIME(5 min) as T\n    ON R.roomNo == T.roomNo;\n\nINSERT INTO
+        SampleRoomTempHumidStream\nSELECT RT.roomNo, RT.temperature, RT.temperatureUnit,
+        H.humidity, \"Relative %\" as humidityUnit\nFROM SampleRoomTempStream as RT
+        \n    JOIN SampleHumidityTable WINDOW SLIDING_TIME(5 min) as H\n    ON RT.roomNo
+        == H.roomNo;\n\n","description":"Basic stream application to demonstrate enriching
+        events using stream/table joins.","labels":["Basic","Enrich","Join"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Kafka-App","definition":"@App:name(\"Sample-Kafka-App\")\n@App:description(''Consume
+        events from a Kafka Topic and publish to a different Kafka Topic'')\n@App:qlVersion(''2'')\n\n/*\n/**\nThis
+        demo app demostrates the Pub/Sub support for Kafka Cluster\n\nPrerequisites:\n   1.
+        Running Kafka Cluster\n   2. Kafka Producer/Consumer\n\nUsage:\n   1. Setup
+        the Kafka Cluster bootstrap servers into Kafka @source/@sink below\n   2.
+        Publsh the stream app\n   3. Run the Kafka client consumer on topic ''kafka-result-topic''\n   4.
+        Send the following data on topic ''kafka-topic'' using a Kafka client producer:\n   \n   [{\"name\":
+        \"chocolate\", \"amount\": 5},\n    {\"name\": \"toffee\", \"amount\": 6},\n    {\"name\":
+        \"cake\", \"amount\": 7},\n    {\"name\": \"marshmallow\", \"amount\": 2},\n    {\"name\":
+        \"toffee\", \"amount\": 2},\n    {\"name\": \"chocolate\", \"amount\": 3}]\n   \n   5.
+        The processed data will be received on the customer''s console\n*/\n\n/*\ntype=''kafka'',\ntopic.list=''kafka-topic''
+        -- This specifies the list of topics to which the source must listen. This
+        list contains set of comma-separated values.e.g., `topic_one,topic_two`\npartition.no.list=''0'',   --
+        The partition number list for the given topic. This is provided as a list
+        of comma-separated values. e.g., `0,1,2,`.\nthreading.option=''single.thread'',
+        -- This specifies whether the Kafka source is to be run on a single thread,
+        or in multiple threads based on a condition. \n                                     Possible
+        values are as follows: `single.thread`: To run the Kafka source on a single
+        thread. `topic.wise`: \n                                     To use a separate
+        thread per topic. `partition.wise`: To use a separate thread per partition.\ngroup.id=\"group\",                 --
+        This is an ID to identify the Kafka source group. The group ID ensures that
+        sources with the same topic and partition that are in the same group do not
+        receive the same event.   \nbootstrap.servers=''dummy-kafka-server.com:9092'',
+        -- A comma separated list of Kafka servers\noptional.configuration=\"\n   security.protocol:SASL_SSL,\n   sasl.kerberos.service.name:kafka,\n   sasl.jaas.config:org.apache.kafka.common.security.plain.PlainLoginModule
+        required username=''<your-username>'' password=''<your-password>'';,\n   ssl.truststore.location:base64:<your-truststore-in-base64>,\n   ssl.truststore.location:<or-path-to-your-jks-file>,\n   ssl.truststore.password:<your-password>,\n   ssl.keystore.location:base64:<your-truststore-in-base64>,\n   ssl.keystore.location:<or-path-to-your-jks-file>,\n    ssl.keystore.password:<your-password>,\n    ssl.key.password:<your-password>\"
+        - This is an example for additional configuration including the SSL\n*/\nCREATE
+        SOURCE SweetProductionStream WITH (type=''kafka'',\n        topic.list=''kafka-topic'',\n        partition.no.list=''0'',\n        threading.option=''single.thread'',\n        group.id=\"group\",\n        bootstrap.servers=''dummy-kafka-server.com:9092'',\n        map.type=''json'')
+        (name string, amount double);\n\n/*\nSuppose that the factory packs sweets
+        by taking last 3 sweet productions disregarding their individual amount.\nTotalStream
+        will have total of the last 3 events in SweetProductionStream. This is calcuklated
+        as follows; the sum of\n1st, 2nd, and 3rd events of SweetProductionStream
+        will be the 1st event of TotalStream and the sum of 4th, 5th, and\n6th events
+        of SweetProductionStream will be the 2nd event of TotalStream\n*/\nCREATE
+        SINK STREAM TotalStream (total double);\n\n\n/*\nThis stream counts the event
+        number of TotalStream and sends that count along with total. This will help
+        us find out\nthe batch which has a low total weight by using the count as
+        batch number as we will see in the LowProductionAlertStream\n*/\nCREATE SINK
+        STREAM TotalStreamWithBatch(batchNumber long, total double);\n\n/*\nThis stream
+        will send an alert into kafka_result_topic if any batch has a total weight
+        less than 10. Batch number of\nthe low weight batch and the actual weight
+        will be sent out.\n*/\nCREATE SINK LowProductionAlertStream WITH(type=''kafka'',\n      topic=''kafka-result-topic'',\n      bootstrap.servers=''dummy-kafka-server.com:9092'',\n      partition.no=''0'',\n      map.type=''json'')
+        (batchNumber long, lowTotal double);\n\n\n--summing events in SweetProductionStream
+        in batches of 3 and sending to TotalStream\n@info(name=''query1'')\nINSERT
+        INTO TotalStream\nSELECT sum(amount) as total\nFROM SweetProductionStream
+        WINDOW TUMBLING_LENGTH(3);\n\n--count is included to indicate batch number\nINSERT
+        INTO TotalStreamWithBatch\nSELECT count() as batchNumber, total\nFROM TotalStream;\n\n--filtering
+        out events with total less than 10 to create alert\nINSERT INTO LowProductionAlertStream\nSELECT
+        batchNumber, total as lowTotal\nFROM TotalStreamWithBatch[total < 100];\n","description":"Basic
+        Stream application demonstrating the way to be accessed a Kafka cluster","labels":["Basic","Kafka"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Log-Json-App","definition":"@App:name(\"Sample-Log-Json-App\")\n@App:description(\"This
+        stream app demostrates the usage of log-json function for getting json out
+        of the passed data using different predefined patterns\")\n@App:qlVersion(''2'')\n\n/*
+        This stream app will explain the usage of log-json source mapper.\nThis will
+        have source on which we will get the messages from Kafka. Those messages are
+        in some predefined format for Apache Http Logs. We have used the log-json
+        mapper, which will read the logs put on the Kafka and then apply the pattern,
+        which is passed as part of input attribute in the log-json mapper and then
+        create the json out of it and return back that json.*/ \n\nCREATE SOURCE kafkaLogStream
+        WITH(type=''kafka'', topic.list=''gdnLogs'', threading.option=''single.thread'',
+        group.id=\"group\", bootstrap.servers=''icedata-us-west.eng.macrometa.io:9092'',
+        partition.no.list=''0'', regex.groupid=''group1'', fail.on.missing.attribute
+        = ''false'', map.type=''log-json'', map.input=''%{QS} %{NUMBER:response} -
+        %{NUMBER:responseFlags} %{NUMBER:bytesReceived} %{NUMBER:bytesSent} %{NUMBER:duration}
+        %{QS:IPAddress} %{QS:UserAgent} %{QS:SessionID} %{QS:Host} %{QS:upstreamHost}'')
+        (log string);\n\nCREATE SINK STREAM JsonLogStream (log string);\n\nINSERT
+        INTO JsonLogStream\nSELECT *\nFROM kafkaLogStream;\n","description":"Basic
+        Stream application to demonstrate the usage of log-json function to get the
+        json from the passed data in string format.","labels":["log-json","Basic","json"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-LogConsumer-App","definition":"@App:name(\"Sample-LogConsumer-App\")\n@App:description(\"This
+        app consumes the generated log message and send them to Amazon S3.\")\n@App:qlVersion(''2'')\n\n/**\nTesting
+        the Stream Application:\n    1. Setup the correct Amazon S3 settings\n    2.
+        Publish the app\n    3. Publish another app producing log messages, e.g. Sample-LogProducer-App\n    4.
+        Check the upload messages in Amazon\n*/\n\n-- The sources pointed to the logging
+        stream\n-------------------------------------------------------------------------------------------------------------------------------------\nCREATE
+        SOURCE STREAM streamworkerslog(region string, appName string, priority string,
+        prefix string, event object);\n\n/*\nAmazon S3 sink\nParameter:\nbucket.name
+        - The name of the bucket\nobject.path - The path where the messages will be
+        uploaded\naws.region  - The related Amazon S region\naws.access.key - The
+        used access key\naws.secret.key - The used secret key\nflush.size     - The
+        number of messages sent together\n*/\nCREATE SINK aws_streamworkerslog WITH
+        (type=''s3'', bucket.name=''mm-ikea-demo'', object.path=''streamworkerslog'',
+        aws.region=''us-west-1'',\n      credential.provider=''software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider'',
+        \n      aws.access.key=''XXXXXXXX'', aws.secret.key=''xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'',\n      flush.size=''50'',
+        map.type=''json'') (region string, appName string, priority string, prefix
+        string, event object);\n\nINSERT INTO aws_streamworkerslog\nSELECT region,
+        appName, priority, prefix, event\nFROM streamworkerslog;\n","description":"This
+        app consumes the generated log message and send them to Amazon S3.","labels":["Logger","AWS"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-LogProducer-App","definition":"@App:name(\"Sample-LogProducer-App\")\n@App:description(\"Log
+        Producer Demo\")\n@App:qlVersion(''2'')\n\n/*\nThis stream app has 2 log sinks
+        (INFO, WARN) and reads BTC-USD price (like in cryptotrading).\n\n  * If current
+        price > last price then log as INFO..\n  * If current price < last price then
+        log as WARN.\n*/\n\n-- The trigger\nCREATE TRIGGER CryptoTraderEventsTrigger
+        WITH (interval = 3 sec);\n\n-- Streams for the http call requests\n-------------------------------------------------------------------------------------------------------------------------------------\n\nCREATE
+        SINK UsdCryptoTraderRequestStream WITH (type=''http-call'', publisher.url=''https://api.pro.coinbase.com/products/btc-usd/ticker'',\n       method=''GET'',
+        headers=\"''User-Agent:c8cep''\", sink.id=''coinbase-ticker2'', map.type=''json'')
+        (triggered_time string);\n\n-- Streams for the http call responses\n-------------------------------------------------------------------------------------------------------------------------------------\nCREATE
+        SOURCE UsdCryptoTraderTickerResponseStream WITH (type=''http-call-response'',
+        sink.id=''coinbase-ticker2'', \n       http.status.code=''200'', map.type=''json'',
+        map.enclosing.element=\"$.*\") (time string, price string);\n\n\n-- Loggers\n-------------------------------------------------------------------------------------------------------------------------------------\nCREATE
+        SINK InfoStream WITH (type=\"logger\", priority=''INFO'') (prev_price double,
+        curr_price double);\n\nCREATE SINK WarnStream WITH (type=\"logger\", priority=''WARN'')
+        (prev_price double, curr_price double);\n\nCREATE SINK STREAM PricesUSD(exchange
+        string, quote_region string, symbol string, ma double, close double, timestamp
+        long);\n\n-- Fire Coinbase Pro BTC/USD requests initiated by a trigger\n-------------------------------------------------------------------------------\nINSERT
+        INTO UsdCryptoTraderRequestStream\nSELECT time:currentTimestamp() as triggered_time
+        \nFROM CryptoTraderEventsTrigger;\n\n-- Coinbase Pro BTC/USD strategy generation\n-------------------------------------------------------------------------------------------------\n@info(name=''Query
+        for BTC/USD close and average prices within moving 10 events windows'')\nINSERT
+        INTO PricesUSD\nSELECT \"Coinbase Pro\" as exchange, \"USA\" as quote_region,\n        \"BTC/USD\"
+        as symbol, avg(convert(price, ''double'')) as ma, convert(price, ''double'')
+        as close, \n        time:timestampInMilliseconds()/1000 as timestamp\nFROM
+        UsdCryptoTraderTickerResponseStream WINDOW SLIDING_LENGTH(2);\n\n@info(name=''Query
+        for BTC/USD prices analyses reported as INFO'')\nINSERT INTO InfoStream\nSELECT
+        e2.close as prev_price, e1.close as curr_price\nFROM EVERY (e1=PricesUSD[not(e1.close
+        is null)]) ->  e2=PricesUSD[e1.close >= e2.close];\n\n@info(name=''Query for
+        BTC/USD prices analyses reported as WARN'')\nINSERT INTO WarnStream\nSELECT
+        e2.close as prev_price, e1.close as curr_price\nFROM EVERY (e1=PricesUSD[not(e1.close
+        is null)]) ->  e2=PricesUSD[e1.close < e2.close];\n","description":"This application
+        demonstrates the logging.","labels":["Trading","Logger","Crypto currencies"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-MQTT-Sink","definition":"@App:name(\"Sample-MQTT-Sink\")\n@App:description(\"Publishing
+        messages to a MQTT broker\")\n@App:qlVersion(''2'')\n\n/**\nTesting the Stream
+        Application:\n    1. Prerequisites: A MQTT CLI to publish and subscribe to
+        MQTT topics (i.e mosquitto_pub and mosquitto_sub command-line tools provided
+        by mosquitto).\n    2. Save and publish the stream application.\n    3. Subscribe
+        to the topic `demoSink` using the MQTT CLI (`mosquitto_sub -h test.mosquitto.org
+        -p 1883 -t demoSink`).\n    4. Once the stream application is running, you
+        should be able to see the following output in the MQTT CLI.\n        Output:\n            {\"event\":{\"startTime\":1641385431137}}\n            {\"event\":{\"startTime\":1641385432137}}\n            {\"event\":{\"startTime\":1641385433137}}\n            {\"event\":{\"startTime\":1641385434137}}\n*/\n\nCREATE
+        TRIGGER mytrigger WITH (interval = 1 sec);\n\nCREATE SINK SinkStream WITH
+        (type=\"mqtt\", url=\"tcp://test.mosquitto.org:1883\", topic=\"demoSink\",
+        map.type=\"json\") (startTime long);\n\nINSERT INTO SinkStream\nSELECT eventTimestamp()
+        as startTime \nFROM mytrigger;\n","description":"This application demonstrates
+        how to publish message to a MQTT broker using a MQTT sink","labels":["MQTT"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-MQTT-Source","definition":"@App:name(\"Sample-MQTT-Source\")\n@App:description(\"Receiving
+        messages from MQTT broker\")\n@App:qlVersion(''2'')\n\n/**\nTesting the Stream
+        Application:\n    1. Prerequisites: A MQTT CLI to publish and subscribe to
+        MQTT topics (i.e mosquitto_pub and mosquitto_sub command-line tools provided
+        by mosquitto).\n    2. Save and publish the stream application.\n    3. Open
+        `TotalStream` in the streams console.\n    4. Publish `{\"message\":\"Hi there\"}`
+        event to the topic `demoSource` using the MQTT CLI (`mosquitto_pub -h test.mosquitto.org
+        -p 1883 -t demoSource -m \"{\\\"message\\\": \\\"Hi there\\\"}\"`).\n    5.
+        Once the message is published to the topic, you should be able to see the
+        following output in the `TotalStream`.\n        Output:\n            [2022-01-05T12:18:35.551Z]
+        {\"message\":\"Hi there\"}\n*/\n\nCREATE SOURCE BarStream WITH (type=''mqtt'',
+        url= ''tcp://test.mosquitto.org:1883'',  topic=''demoSource'', map.type=''json'')
+        (message string);\n\nCREATE SINK STREAM TotalStream (message string);\n\nINSERT
+        INTO TotalStream\nSELECT message\nFROM BarStream;\n","description":"This application
+        demonstrates how to receive message from a MQTT broker using a MQTT source","labels":["MQTT"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-News-Sentiment-App","definition":"@App:name(\"Sample-News-Sentiment-App\")\n@App:description(\"This
+        stream demonstrates the usage of sentiment functions for real-time news data\")\n@App:qlVersion(''2'')\n\n/*\n
+        1. First create an API key on https://gnews.io, so you can use that API_KEY
+        to get the latest news in JSON format.\n 2. Refer to https://gnews.io/docs/v4#introduction
+        to learn more about the gnews endpoint.\n 3. Pick a news endpoint and set
+        it as the `publisher.url` of the `NewsRequestStream` sink.\n        examples:\n        -
+        https://gnews.io/api/v4/search?q=bitcoin&token=API_KEY&lang=en\n        -
+        https://gnews.io/api/v4/search?q=tesla&token=API_KEY&lang=en\n 4. Save and
+        publish the stream worker.\n 5. Open NewsSentimentStream in the streams console,
+        and every 10 seconds, you''ll get the overall sentiment analysis rate for
+        each news article.\n 6. Upload following data into `NewsSentimentInputTable`
+        C8DB Collection.\n        {\"triggered_time\": \"1653296672\"}\n*/\n\nCREATE
+        SOURCE NewsSentimentInputTable WITH (type = ''database'', collection = ''NewsSentimentInputTable'',
+        collection.type=''doc'' , replication.type=''global'', map.type=''json'')
+        (triggered_time string);\n\nCREATE SINK NewsRequestStream WITH (type=''http-call'',
+        publisher.url=''https://gnews.io/api/v4/search?q=example&token=b18e3dbdbc23fb7ec604064b9de7b0ee&lang=en'',
+        \n       method=''GET'', headers=\"''User-Agent:c8cep''\", sink.id=''news-ticker'',
+        map.type=''json'') (triggered_time string);\n\n -- Streams for the http call
+        responses \nCREATE SOURCE NewsResponseStream WITH (type=''http-call-response'',
+        sink.id=''news-ticker'', http.status.code=''200'', map.type=''json'') (status
+        string, articles string); \n\nCREATE SINK STREAM NewsSentimentStream (title
+        string, description string, titlesentimentrate int,  descriptionsentimentrate
+        int);\n\nINSERT INTO NewsRequestStream\nSELECT time:currentTimestamp() as
+        triggered_time \nFROM NewsSentimentInputTable;\n\n-- Tokenize and turn articles
+        array into seperate single article events.\nINSERT INTO TokenizeNewsStream\nSELECT
+        json:getString(jsonElement, ''title'') as title, json:getString(jsonElement,
+        ''description'') as description\nFROM NewsResponseStream#json:tokenize(articles,
+        ''$.*'');\n\n-- Calculate sentiment for each article\nINSERT INTO NewsSentimentStream\nSELECT
+        title, description, sentiment:getRate(title) as titlesentimentrate, sentiment:getRate(description)
+        as descriptionsentimentrate \nFROM TokenizeNewsStream;\n","description":"Stream
+        application to demonstrate sentiment functions using real time news data","labels":["Basic","Tokenize","Sentiment"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Publisher-Simulator-App","definition":"@App:name(\"Sample-Publisher-Simulator-App\")\n@App:description(\"Simulation
+        events publisher\")\n@App:qlVersion(''2'')\n\n/*\nThis is a publisher of simulation
+        events. \nEach event contains: \n\n    full_name,\n    first_name,\n    last_name,\n    city,  (random
+        city in US)\n    state, (random statecode in US)\n    address,\n    calling_nbr,
+        (random ph number. format: xxx-xx-xxxx)\n    called_nbr, (random ph number.
+        format: xxx-xx-xxxx)\n    call_date, (random date. format: MM-DD-YYYY)\n    call_time,
+        (random time. format: HH-mm-ss)\n    call_duration, (random int between 0-60)\n    cell_site
+        (random 6 digit code)\n\nThe sensitive data is predefined in arrays within
+        a javascript function and could be further extended.\nThe rest of the data
+        is generated randomly.\nThe publishing is fired by a trigger every 2 seconds.\n*/\n\n/**\nTesting
+        the Stream Application:\n    1. Open Stream `PubEvents` in Console to monitor
+        the output. \n       \n    2. After every 2 seconds you will be able to see
+        an event in the Console\n    \n    3. The event seen in the Console will be
+        like\n       {\"event\":{\"full_name\":\"Lindsy Nutter\",\"first_name\":\"Lindsy\",\"last_name\":\"Nutter\",\"city\":\"Arlington\",\"state\":\"TX\",\"address\":\"3721
+        Everett Hil\",\"calling_nbr\":\"922-055-379\",\"called_nbr\":\"617-722-522\",\"call_date\":\"22-6-2020\",\"call_time\":\"8:41\",\"call_duration\":37.0,\"cell_site\":171508.0}}\n*/\n\n--
+        The trigger\nCREATE TRIGGER PubEventsTrigger WITH (interval=2 sec);\n\n--
+        Sink stream\nCREATE SINK STREAM PubEvents(event object);\n\n-- User Defined
+        Functions in JavaScript\nCREATE FUNCTION createEvent[javascript] return object
+        {\n\n\tfunction getRandomInt(min, max) {\n\t\treturn Math.floor(Math.random()
+        * (max - min)) + min;\n\t}\n\t\n\tfunction getRandomPhoneNumber() {\n\t\tvar
+        val = getRandomInt(1111111111, 9999999999).toString();\n\t\treturn val.substr(1,
+        3) + ''-'' + val.substr(4, 3) + ''-'' + val.substr(7);\t\n\t}\n\n\tfunction
+        getDateTime() {\n\t\tvar date = new Date();\n\t\treturn {\n\t\t\t date: date.getDate()
+        + ''-'' + date.getMonth() + ''-'' + date.getFullYear(),\n             time:
+        date.getHours() + '':'' + date.getMinutes()\n\t\t}\n\t}\n\n\t\n    var firstNames
+        = [\"Burgess\", \"Xenia\", \"Claire\", \"Shirleen\", \"Ole\", \"Lindsy\",
+        \"Fritz\"];\n\tvar lastNames = [\"Figliovanni\", \"Gatland\", \"Edgcumbe\",
+        \"Nutter\", \"Myall\", \"Scrase\", \"Egiloff\"];\n\tvar cities = [ {city:
+        \"Seattle\", state: \"WA\"}, \n\t               {city: \"Little Rock\", state:
+        \"AR\"}, \n\t\t\t\t   {city: \"Houston\", state: \"TX\"}, \n\t\t\t\t   {city:
+        \"Dallas\", state: \"TX\"}, \n\t\t\t\t   {city: \"Charlotte\", state: \"NC\"},
+        \n\t\t\t\t   {city: \"Atlanta\", state: \"GA\"}, \n\t\t\t\t   {city: \"Arlington\",
+        state: \"TX\"}];\n\tvar addresses = [\"13 Hoffman Trail\", \"12 Starling Parkway\",
+        \n\t                 \"26800 Hallows Plaza\", \"28529 Algoma Road\", \n\t\t\t\t\t
+        \"8 Grim Drive\", \n\t\t\t\t\t \"3721 Everett Hil\", \n\t\t\t\t\t \"2 Sloan
+        Avenue\"];\n    \n\tvar firstName = firstNames[getRandomInt(0, firstNames.length)];\n\tvar
+        lastName = lastNames[getRandomInt(0, lastNames.length)];\n\tvar city = cities[getRandomInt(0,
+        cities.length)];\n\tvar address = addresses[getRandomInt(0, addresses.length)];\n\t\n\tvar
+        callDateTime = getDateTime();\n\t\n    var response = {\n        full_name:
+        firstName + '' '' + lastName,\n        first_name: firstName,\n        last_name:
+        lastName,\n        city: city.city,\n        state: city.state,\n        address:
+        address,\n        calling_nbr: getRandomPhoneNumber(),\n        called_nbr:
+        getRandomPhoneNumber(),\n        call_date: callDateTime.date,\n        call_time:callDateTime.time,\n        call_duration:
+        getRandomInt(0, 60),\n        cell_site: getRandomInt(111111, 999999)\n    };\n\n    return
+        response;\n};\n\n@info(''Parse Input Data'')\nINSERT INTO PubEvents\nSELECT
+        createEvent() as event\nFROM PubEventsTrigger;\n","description":"This application
+        demonstrates how to send simulated events.","labels":["Simulation events","Events
+        publisher"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Query-Worker-Call","definition":"@App:name(\"Sample-Query-Worker-Call\")\n@App:description(\"This
+        application executes a query worker at every minute\")\n@App:qlVersion(''2'')\n\n/*
+        \nNote: The query worker and the collection that the query worker uses( if
+        any ) should exist beforehand\n\n''queryWorkerSample'':\nFOR i IN 1..3\n  INSERT
+        { value: i, time: @startTime } INTO numbers\n  \n  \nTesting the Stream Application:\n    1.
+        Start the stream app. \n       \n    2. Wait for a few minutes\n\n    3. After
+        each minute the sink `query-worker` calls the query worker named `queryWorkerSample`\n\n    4.
+        On successful execution of the `query-worker` data is inserted into the collection
+        `numbers` as specified in the query worker.\n    \n    5. The data in the
+        collection `numbers` will look like the following:\n        [\n          {\n            \"_id\":
+        \"numbers/10483952\",\n            \"_key\": \"10483952\",\n            \"_rev\":
+        \"_agx-B0u--_\",\n            \"time\": \"2020/05/19 11:44:43\",\n            \"value\":
+        1\n          },\n          {\n            \"_id\": \"numbers/10483953\",\n            \"_key\":
+        \"10483953\",\n            \"_rev\": \"_agx-B0u--C\",\n            \"time\":
+        \"2020/05/19 11:44:43\",\n            \"value\": 2\n          },\n          {\n            \"_id\":
+        \"numbers/10483954\",\n            \"_key\": \"10483954\",\n            \"_rev\":
+        \"_agx-B0u--F\",\n            \"time\": \"2020/05/19 11:44:43\",\n            \"value\":
+        3\n          }\n        ]\n\n*/\n\n-- query.worker.name is the name of the
+        query worker already existing in the federation\nCREATE SINK queryWorkerStream
+        WITH (type=''query-worker'', query.worker.name=\"queryWorkerSample\") (startTime
+        string);\n\nCREATE TRIGGER InitTrigger WITH (interval=1 minute);\n\nINSERT
+        INTO queryWorkerStream\nSELECT time:dateFormat(eventTimestamp(), ''yyyy/MM/dd
+        HH:mm:ss'') as startTime\nFROM InitTrigger;\n","description":"This application
+        executes a query-worker after every 1 minute","labels":["Basic","Query Worker"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Query-Worker-Create","definition":"@App:name(\"Sample-Query-Worker-Create\")\n@App:description(\"This
+        application executes the created query worker every 10 sec\")\n@App:qlVersion(''2'')\n\n/**\nTesting
+        the Stream Application:\n    1. Save and Publish the application.\n    \n    2.
+        Open Stream `QWResponseStream` in Console to monitor the output. \n       \n    2.
+        After every 10 seconds you will be able to see an event in the Console\n    \n    3.
+        The event seen in the Console will be like\n        [2021-09-13T07:42:55.012Z]
+        {\"time\":\"2021/09/13 07:42:55\",\"value\":1}\n        [2021-09-13T07:42:55.017Z]
+        {\"time\":\"2021/09/13 07:42:55\",\"value\":2}\n        [2021-09-13T07:42:55.023Z]
+        {\"time\":\"2021/09/13 07:42:55\",\"value\":3}\n        [2021-09-13T07:42:55.025Z]
+        {\"time\":\"2021/09/13 07:42:55\",\"value\":4}\n        [2021-09-13T07:42:55.028Z]
+        {\"time\":\"2021/09/13 07:42:55\",\"value\":5}\n        [2021-09-13T07:42:55.030Z]
+        {\"time\":\"2021/09/13 07:42:55\",\"value\":6}\n*/\n\n-- Creates the `queryWorker`
+        query-worker sink with the given query.\nCREATE QUERY-WORKER queryWorker WITH
+        (query=''FOR i IN 1..3 return { value: i, time: @startTime } '') (startTime
+        string);\n\n-- Sources to listen to query-worker responses.\nCREATE SOURCE
+        queryWorkerResponse WITH (type=''query-worker'', `sink.id`=\"queryWorker\",
+        map.type=\"json\") (value long, time string);\nCREATE SOURCE queryWorkerAsSelectResponse
+        WITH (type=''query-worker'', `sink.id`=\"queryWorkerReturnAsSelect\", map.type=\"json\")
+        (value long, time string);\n\n-- Define output stream\nCREATE SINK STREAM
+        QWResponseStream(value long, time string);\n\n-- Define 10sec event trigger\nCREATE
+        TRIGGER InitTrigger WITH (interval=10 sec);\n\n-- Create query-worker as select
+        creates the `queryWorkerReturnAsSelect` query-worker and executes it every
+        time when an event receives by the InitTrigger.\nCREATE QUERY-WORKER queryWorkerReturnAsSelect
+        WITH (query=''FOR i IN 4..6 return { value: i, time: @startTime } '') (startTime
+        string)\nAS SELECT time:dateFormat(eventTimestamp(), ''yyyy/MM/dd HH:mm:ss'')
+        as startTime\nFROM InitTrigger;\n\n-- Executes `queryWorker` when an event
+        receives by the InitTrigger.\nINSERT INTO queryWorker\nSELECT time:dateFormat(eventTimestamp(),
+        ''yyyy/MM/dd HH:mm:ss'') as startTime\nFROM InitTrigger;\n\n-- Emits events
+        received by queryWorkerResponse & queryWorkerAsSelectResponse sources into
+        the QWResponseStream.\nINSERT INTO QWResponseStream\nSELECT *\nFROM queryWorkerResponse;\n\nINSERT
+        INTO QWResponseStream\nSELECT *\nFROM queryWorkerAsSelectResponse;\n\n","description":"This
+        application executes the created query worker every 10 sec","labels":["Basic","Create
+        Query Worker As Select","Create Query Worker"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Query-Worker-Response","definition":"@App:name(\"Sample-Query-Worker-Response\")\n@App:description(\"This
+        application shows how to send and receive data from a query worker\")\n@App:qlVersion(''2'')\n\n/*\nNote:
+        the query worker and any collection it uses( if any ) should already be present\n`testql`:
+        for x in testqlColl filter x.value <= @value return x\n\n`sink.id`: Identifier
+        to correlate the `query-worker` source with its corresponding `query-worker`
+        sink that published the messages.\n\n\nTesting the Stream Application:\n    1.
+        Open Stream `TestStream` in Console to monitor the output. \n       \n    2.
+        After every 1 minute the query worker `testql` will get executed and will
+        return the documents will `value` less than the passed timestamp\n\n    3.
+        The query worker call will be made by the `query-worker` sink\n\n    4. The
+        sink `query-worker` sends data to external HTTP Endpoint for executing query
+        worker.\n\n    5. On successful execution of the sink `query-worker` data
+        is inserted into source `query-worker`.\n\n    6. Send the received data over
+        the stream for other applications to consume. You can monitor the final data
+        on stream\n        `TestTream` Console\n\n           2020-05-19T15:25:09.851Z\n           {\"id\":\"testqlColl/8218434\",\"message\":1589289590234}\n        \n*/\n\n\nCREATE
+        TRIGGER Trigger1 WITH (interval = 10 seconds);\n\n-- always passthrough\nCREATE
+        SINK queryWorkerStream WITH (type=''query-worker'', query.worker.name=\"testql\",
+        `sink.id`=\"test\") (value long);\n\n-- json or passthrough\nCREATE SOURCE
+        queryWorkerStreamResponse WITH (type=''query-worker'', `sink.id`=\"test\",
+        map.type=\"json\") (_id string, value long);\n\nCREATE SINK STREAM TestStream(id
+        string, message long);\n\nINSERT INTO queryWorkerStream\nSELECT eventTimestamp()
+        as value\nFROM Trigger1;\n\nINSERT INTO TestStream\nSELECT _id as id, value
+        as message\nFROM queryWorkerStreamResponse;\n","description":"This application
+        shows how to call RestQL and process the response of the RestQL within Stream
+        App","labels":["Basic","Query Worker Response"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-RBDMS-Cdc-App","definition":"@App:name(\"Sample-RBDMS-Cdc-App\")\n@App:description(\"This
+        stream demonstrates the usage of rdbms cdc extension using MySQL database\")\n@App:qlVersion(''2'')\n\n/*\nThis
+        stream app will explain the usage of cdc extension. This extension will capture
+        the data changes happening on table. The change can be insertion of new row
+        or updation on the existing row.\nYou can have multiple source statements
+        in a single Stream app.\n*/\n\nCREATE SOURCE inputDBStream WITH (type = ''cdc'',
+        mode=''polling'', polling.column = ''timestamp'', jdbc.driver.name = ''com.mysql.jdbc.Driver'',
+        url = ''jdbc:mysql://dummy-mysql-server.com:3306/MySQLDB?useSSL=false'', username
+        = ''my-username'', password = ''my-password'', table.name = ''StockTable'',
+        operation = ''insert,update'', map.type=''keyvalue'', attributes.id = ''id'',
+        attributes.symbol = ''symbol'', attributes.price=''price'', attributes.timestamp
+        = ''timestamp'') (id int, symbol String, price float, timestamp long);\n\nCREATE
+        SINK STREAM GLOBAL outputDBstream (id int, symbol String, price float, timestamp
+        long);\n\nINSERT INTO outputDBstream\nSELECT id, symbol, price, timestamp
+        \nFROM inputDBStream;\n","description":"Stream application to demonstrate
+        usage of rdbms cdc extension using MySQL database ","labels":["Basic","CDC","RDBMS"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-RBDMS-Cud-App","definition":"@App:name(\"Sample-RBDMS-Cud-App\")\n@App:description(\"This
+        stream app will explain the usage of rdbms cud extension using MySQL database\")\n@App:qlVersion(''2'')\n\nCREATE
+        TRIGGER ceprdbmscudTrigger WITH (interval=5 sec);\n\n/*This app uses mysqlds
+        as datasource which is already configured in the application*/\n\nCREATE SINK
+        STREAM GLOBAL dataInRDBMSCUDStream (timestamp long);\n\nCREATE SINK STREAM
+        GLOBAL dataOutForRDBMSCUDStream (timestamp long, numRecords  int);\n\nINSERT
+        INTO dataInRDBMSCUDStream\nSELECT eventTimestamp() as timestamp\nFROM ceprdbmscudTrigger;\n\n@info(name
+        = ''query'')\nINSERT INTO dataOutForRDBMSCUDStream\nSELECT timestamp as timestamp,
+        numRecords  as numRecords \nFROM dataInRDBMSCUDStream#rdbms:cud(\"jdbc:mysql://dummy-mysql-server.com:3306/MySQLDB?useSSL=false\",
+        \"username\", \"password\", \"com.mysql.jdbc.Driver\", \"UPDATE StockTable
+        SET symbol=33, timestamp=UNIX_TIMESTAMP()*1000 where id=3\");\n","description":"Stream
+        application to demonstrate usage of rdbms cud extension","labels":["Basic","CUD","RDBMS"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-RBDMS-Store-App","definition":"@App:name(\"Sample-RBDMS-Store-App\")\n@App:description(\"This
+        stream app will explain the usage of rdbms store extension using MySQL database\")\n@App:qlVersion(''2'')\n\nCREATE
+        TRIGGER ceprdbmsTrigger WITH (interval=5 sec);\n\n/*\n This will create new
+        table in database and then insert data in those tables.\nYou can have multiple
+        source statements in a single Stream app.\n*/\n\nCREATE STORE StockTable WITH
+        (type=\"rdbms\", jdbc.url=\"jdbc:mysql://dummy-mysql-server.com:3306/MySQLDB?useSSL=false\",
+        \n\tusername=\"my-username\", password=\"my-password\", jdbc.driver.name=\"com.mysql.jdbc.Driver\",field.length=\"symbol:100\",
+        \n\ttable.check.query=\"SELECT 1 FROM StockTable LIMIT\", PrimaryKey=''id'',
+        PrimaryKey=''symbol'', Index=''volume'') \n\t(id long, symbol string, price
+        float, timestamp long);\n\nINSERT INTO StockTable\nSELECT count() as id, convert(count(),
+        ''string'') as symbol, 23.33f as price, eventTimestamp() as timestamp \nFROM
+        ceprdbmsTrigger;\n","description":"Stream application to demonstrate usage
+        of rdbms store extension","labels":["Basic","RDBMS","STORE"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Script-App","definition":"@App:name(''Sample-Script-App'')\n@App:description(''This
+        application demonstrates how to use user defined function in the stream app'')\n@App:qlVersion(''2'')\n\n/**\nTesting
+        the Stream Application:\n    1. Send the events on the `SampleScriptAppInputStream`
+        stream. You can use PyC8 or jsC8 to emit the events on the \n        stream.\n\n        {\"deviceID\":\"AD11\",\"roomNo\":200,\"temperature\":18}\n        {\"deviceID\":\"AD11\",\"roomNo\":201,\"temperature\":47}\n        {\"deviceID\":\"FR45\",\"roomNo\":500,\"temperature\":22}\n        {\"deviceID\":\"AD11\",\"roomNo\":200,\"temperature\":18}\n        {\"deviceID\":\"FR45\",\"roomNo\":501,\"temperature\":-13}\n\n    2.
+        This application uses a javascript function to concatenate deviceId and roomNo.\n\n    3.
+        The application will store the following data in the collection `SampleScriptAppOutputTable`\n        {\"id\":\"200-AD11\",\"temperature\":18}\n        {\"id\":\"201-AD11\",\"temperature\":47}\n        {\"id\":\"500-FR45\",\"temperature\":22}\n        {\"id\":\"200-AD11\",\"temperature\":18}\n        {\"id\":\"501-FR45\",\"temperature\":-13}\n*/\n\n\nCREATE
+        FUNCTION concatFn[javascript] return string {\n    var str1 = data[0];\n    var
+        str2 = data[1];\n    var str3 = data[2];\n    var response = str1 + str2 +
+        str3;\n    return response;\n};\n\n-- Stream\nCREATE SOURCE STREAM SampleScriptAppInputStream
+        (deviceID string, roomNo int, temperature double);\n\n-- Table\nCREATE TABLE
+        SampleScriptAppOutputTable (id string, temperature double);\n\n@info(name=''Query'')\nINSERT
+        INTO SampleScriptAppOutputTable\nSELECT concatFn(roomNo,''-'',deviceID) as
+        id, temperature\nFROM SampleScriptAppInputStream;\n","description":"This application
+        demonstrates how to use user defined function in the stream app","labels":["JavaScript"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Sentiment-App","definition":"@App:name(\"Sample-Sentiment-App\")\n@App:description(\"This
+        stream demostrates the usage of sentiment functions\")\n@App:qlVersion(''2'')\n\nCREATE
+        TRIGGER SentimentTrigger WITH (interval = 5 sec);\n\nCREATE SINK STREAM SentimentStream
+        (startTime long, rate int);\n\nINSERT INTO SentimentStream\nSELECT eventTimestamp()
+        as startTime, sentiment:getRate(\"George is a good person\") as rate\nFROM
+        SentimentTrigger;\n","description":"Basic Stream application to demonstrate
+        sentiment functions","labels":["Basic","Sentiment"],"sampleInput":null,"sampleOutput":null},{"name":"Sample-Transform-By-Math-Operations","definition":"@App:name(''Sample-Transform-By-Math-Operations'')\n@App:description(\"This
+        application demonstrates math or logical operations on events.\")\n@App:qlVersion(''2'')\n\n/**\nTesting
+        the Stream Application:\n    1. Open Stream `SampleTransformByMathOperationOutputFahrenheitStream`
+        and `SampleTransformByMathOperationOutputOverallStream`\n        in Console
+        to monitor the output. \n       \n    2. Upload following data into `SampleTransformByMathOperationInputTable`
+        C8DB Collection\n        \n        {\"sensorId\":\"sensor A1234\",\"temperature\":18}\n        {\"sensorId\":\"sensor
+        A1234\",\"temperature\":-32.2}\n        {\"sensorId\":\"sensor FR45\",\"temperature\":20.9}\n        {\"sensorId\":\"sensor
+        meter1\",\"temperature\":49.6}\n\n    3. Following messages would be shown
+        as a output on the respective sinks\n\n        1. `SampleTransformByMathOperationOutputFahrenheitStream`
+        will show the temperature value covted into Fahrenheit\n            performing
+        math operations\n\n            {\"temperature\":64.4,\"sensorId\":\"sensor
+        A1234\"}\n            {\"temperature\":-25.96,\"sensorId\":\"sensor A1234\"}\n            {\"temperature\":69.62,\"sensorId\":\"sensor
+        FR45\"}\n            {\"temperature\":121.28,\"sensorId\":\"sensor meter1\"}\n\n        2.
+        `SampleTransformByMathOperationOutputOverallStream` will show the temperature
+        value approximated to first digit\n\n            {\"approximateTemp\":64.0,\"sensorId\":\"sensor
+        A1234\"}\n            {\"approximateTemp\":-26.0,\"sensorId\":\"sensor A1234\"}\n            {\"approximateTemp\":69.0,\"sensorId\":\"sensor
+        FR45\"}\n            {\"approximateTemp\":121.0,\"sensorId\":\"sensor meter1\"}\n*/\n\n--
+        Defines `SampleTransformByMathOperationInputTable` source to process events
+        having `sensorId` and `temperature`(F).\nCREATE SOURCE SampleTransformByMathOperationInputTable
+        WITH (type = ''database'', collection = \"SampleTransformByMathOperationInputTable\",
+        collection.type=\"doc\" , replication.type=\"global\", map.type=''json'')
+        (sensorId string, temperature double);\n\n-- Defines `SampleTransformByMathOperationOutputFahrenheitStream`
+        to emit the events after temperature is converted to Fahrenheit\nCREATE SINK
+        STREAM SampleTransformByMathOperationOutputFahrenheitStream(sensorId string,
+        temperature double);\n\n-- Defines `SampleTransformByMathOperationOutputOverallStream`
+        to emit the events after temperature is converted to Fahrenheit\nCREATE SINK
+        STREAM SampleTransformByMathOperationOutputOverallStream(sensorId string,
+        approximateTemp double);\n\n@infor(name = ''celciusTemperature'')\n-- Note:
+        Converts Celsius value into Fahrenheit.\nINSERT INTO SampleTransformByMathOperationOutputFahrenheitStream\nSELECT
+        sensorId, (temperature * 9 / 5) + 32 as temperature\nFROM SampleTransformByMathOperationInputTable;\n\n@info(name
+        = ''Overall-analysis'')\n-- Note: Calculate approximated temperature to the
+        first digit \nINSERT INTO SampleTransformByMathOperationOutputOverallStream\nSELECT
+        sensorId, math:floor(temperature) as approximateTemp \nFROM SampleTransformByMathOperationOutputFahrenheitStream;\n","description":"This
+        application demonstrates math or logical operations on events.","labels":["Transformation","Logical
+        Operations","Math"],"sampleInput":null,"sampleOutput":null}]}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization, x-applicationurl, x-requested-with,
+        x-c8-frontend, x-c8-version
+      Access-Control-Allow-Methods:
+      - GET,POST,PUT,DELETE,HEAD,PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - authorization, x-auth-token, Content-Disposition, etag, content-encoding,
+        content-length, location, server, x-c8-errors, x-c8-async-id
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:51 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-XSS-Protection:
+      - 1; mode=block
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - e380a5ca-9e61-4536-8b7d-14cf5d9b5c9d
+      x-gdn-responsetime:
+      - '29'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/collection/SampleCargoAppDestTable
+  response:
+    body:
+      string: '{"error":false,"code":200,"id":"873353"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:52 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 85dfed45-87b0-4084-93cc-947977aa9d19
+      x-gdn-responsetime:
+      - '53'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/collection/SampleCargoAppInputTable
+  response:
+    body:
+      string: '{"error":false,"code":200,"id":"873219"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:52 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 798924a2-f4be-49c2-b5d8-d582656fc944
+      x-gdn-responsetime:
+      - '148'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/streams/c8locals.SampleCargoAppDestStream
+  response:
+    body:
+      string: '{"code":202,"error":false}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '26'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 18 Nov 2022 10:00:53 GMT
+      Server:
+      - APISIX
+      broker-address:
+      - c8streams-broker-0.c8streams-broker.c8.svc.cluster.local
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 00c6d04f-f730-42b6-800d-2c4a40048269
+      x-gdn-responsetime:
+      - '50'
+    status:
+      code: 202
+      message: Accepted
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/restql/insertTestWeight
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '38'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - cd98b3e9-1521-47ad-a104-c757d353c6ca
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -9,15 +9,17 @@ from dotenv import load_dotenv
 from c8 import C8Client
 from c8.fabric import StandardFabric
 from tests.executors import TestAsyncExecutor, TestBatchExecutor
-from tests.helpers import (
-    generate_col_name,
-    generate_fabric_name,
-    generate_graph_name,
-    generate_string,
-    generate_username,
-)
 
 global_data = dict()
+
+
+@pytest.fixture(scope="module")
+def vcr_config():
+    return {
+        "filter_headers": ["Authorization"],
+        "ignore_localhost": True,
+        "record_mode": "once",
+    }
 
 
 def pytest_addoption(parser):
@@ -43,30 +45,30 @@ def pytest_configure(config):
     sys_fabric = tenant.useFabric("_system")
 
     # Create a user and non-system fabric for testing.
-    username = generate_username()
-    password = generate_string()
-    tst_fabric_name = generate_fabric_name()
-    bad_fabric_name = generate_fabric_name()
+    username = "test_user_1"
+    password = "Sdk@1234!"
+    tst_fabric_name = "test_fabric_1"
+    bad_fabric_name = "test_fabric_2"
     sys_fabric.create_fabric(name=tst_fabric_name, users=["root"])
     bad_fabric = tenant.useFabric(bad_fabric_name)
     tst_fabric = tenant.useFabric(tst_fabric_name)
 
     # Create a standard collection for testing.
-    col_name = generate_col_name()
+    col_name = "test_collection_1"
     tst_col = tst_fabric.create_collection(col_name, edge=False)
     tst_col.add_skiplist_index(["val"])
     tst_col.add_fulltext_index(["text"])
     geo_index = tst_col.add_geo_index(["loc"])
 
     # Create a legacy edge collection for testing.
-    lecol_name = generate_col_name()
+    lecol_name = "test_collection_2"
     tst_fabric.create_collection(lecol_name, edge=True)
 
     # Create test vertex & edge collections and graph.
-    graph_name = generate_graph_name()
-    ecol_name = generate_col_name()
-    fvcol_name = generate_col_name()
-    tvcol_name = generate_col_name()
+    graph_name = "test_graph_1"
+    ecol_name = "test_collection_3"
+    fvcol_name = "test_collection_4"
+    tvcol_name = "test_collection_5"
     tst_graph = tst_fabric.create_graph(graph_name)
     tst_graph.create_vertex_collection(fvcol_name)
     tst_graph.create_vertex_collection(tvcol_name)

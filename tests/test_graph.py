@@ -1,7 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
-import random
-
+import pytest
 from six import string_types
 
 from c8.collection import EdgeCollection
@@ -20,16 +19,10 @@ from c8.exceptions import (
     VertexCollectionDeleteError,
     VertexCollectionListError,
 )
-from tests.helpers import (
-    assert_raises,
-    clean_doc,
-    extract,
-    generate_col_name,
-    generate_doc_key,
-    generate_graph_name,
-)
+from tests.helpers import assert_raises, clean_doc, extract
 
 
+@pytest.mark.vcr
 def test_graph_properties(graph, tst_fabric):
     assert repr(graph) == "<Graph {}>".format(graph.name)
     properties = graph.properties()
@@ -41,7 +34,7 @@ def test_graph_properties(graph, tst_fabric):
     assert "shard_count" in properties
     assert isinstance(properties["revision"], string_types)
 
-    new_graph_name = generate_graph_name()
+    new_graph_name = "test_graph_graph_1"
     new_graph = tst_fabric.create_graph(
         new_graph_name,
         # TODO only possible with enterprise edition
@@ -61,9 +54,10 @@ def test_graph_properties(graph, tst_fabric):
     # assert properties['shard_count'] == 2
 
 
+@pytest.mark.vcr
 def test_graph_management(tst_fabric):
     # Test create graph
-    graph_name = generate_graph_name()
+    graph_name = "test_graph_graph_2"
     assert tst_fabric.has_graph(graph_name) is False
 
     graph = tst_fabric.create_graph(graph_name)
@@ -101,9 +95,9 @@ def test_graph_management(tst_fabric):
 
     # Create a graph with vertex and edge collections and delete the graph
     graph = tst_fabric.create_graph(graph_name)
-    ecol_name = generate_col_name()
-    fvcol_name = generate_col_name()
-    tvcol_name = generate_col_name()
+    ecol_name = "test_collection_graph_3"
+    fvcol_name = "test_collection_graph_4"
+    tvcol_name = "test_collection_graph_5"
 
     graph.create_vertex_collection(fvcol_name)
     graph.create_vertex_collection(tvcol_name)
@@ -137,9 +131,10 @@ def test_graph_management(tst_fabric):
     assert ecol_name not in collections
 
 
+@pytest.mark.vcr
 def test_vertex_collection_management(tst_fabric, graph, bad_graph, client):
     # Test create valid "from" vertex collection
-    fvcol_name = generate_col_name()
+    fvcol_name = "test_collection_graph_6"
     assert not graph.has_vertex_collection(fvcol_name)
     assert not tst_fabric.has_collection(fvcol_name)
 
@@ -160,7 +155,7 @@ def test_vertex_collection_management(tst_fabric, graph, bad_graph, client):
     assert fvcol_name in extract("name", tst_fabric.collections())
 
     # Test create valid "to" vertex collection
-    tvcol_name = generate_col_name()
+    tvcol_name = "test_collection_graph_7"
     assert not graph.has_vertex_collection(tvcol_name)
     assert not tst_fabric.has_collection(tvcol_name)
 
@@ -175,13 +170,13 @@ def test_vertex_collection_management(tst_fabric, graph, bad_graph, client):
 
     # Test list vertex collection via bad fabric
     with assert_raises(VertexCollectionListError):
-        client._tenant.useFabric(generate_graph_name()).graph(
+        client._tenant.useFabric("test_collection_graph_8").graph(
             bad_graph.name
         ).vertex_collections()
 
     # Test delete missing vertex collection
     with assert_raises(VertexCollectionDeleteError) as err:
-        graph.delete_vertex_collection(generate_col_name())
+        graph.delete_vertex_collection("test_collection_graph_9")
     assert err.value.error_code == 1928
 
     # Test delete "to" vertex collection with purge option
@@ -198,9 +193,10 @@ def test_vertex_collection_management(tst_fabric, graph, bad_graph, client):
     assert not graph.has_vertex_collection(fvcol_name)
 
 
+@pytest.mark.vcr
 def test_edge_definition_management(tst_fabric, graph, fvcol, tvcol, ecol, bad_graph):
     # Check graph with random generated edge definitions
-    ecol_name = generate_col_name()
+    ecol_name = "test_collection_graph_10"
     assert not graph.has_edge_definition(ecol_name)
     assert not graph.has_edge_collection(ecol_name)
     assert not tst_fabric.has_collection(ecol_name)
@@ -231,9 +227,9 @@ def test_edge_definition_management(tst_fabric, graph, fvcol, tvcol, ecol, bad_g
     assert err.value.error_code == 1920
 
     # Test create edge definition with existing vertex collection
-    fvcol_name = generate_col_name()
-    tvcol_name = generate_col_name()
-    ecol_name = generate_col_name()
+    fvcol_name = "test_collection_graph_11"
+    tvcol_name = "test_collection_graph_12"
+    ecol_name = "test_collection_graph_13"
     edge_col = graph.create_edge_definition(
         edge_collection=ecol_name,
         from_vertex_collections=[fvcol_name],
@@ -252,8 +248,8 @@ def test_edge_definition_management(tst_fabric, graph, fvcol, tvcol, ecol, bad_g
     assert tvcol_name in vertex_collections
 
     # Test create edge definition with missing vertex collection
-    bad_vcol_name = generate_col_name()
-    ecol_name = generate_col_name()
+    bad_vcol_name = "test_collection_graph_14"
+    ecol_name = "test_collection_graph_15"
     ecol = graph.create_edge_definition(
         edge_collection=ecol_name,
         from_vertex_collections=[bad_vcol_name],
@@ -286,7 +282,7 @@ def test_edge_definition_management(tst_fabric, graph, fvcol, tvcol, ecol, bad_g
     } in graph.edge_definitions()
 
     # Test replace missing edge definition
-    bad_ecol_name = generate_col_name()
+    bad_ecol_name = "test_collection_graph_16"
     with assert_raises(EdgeDefinitionReplaceError):
         graph.replace_edge_definition(
             edge_collection=bad_ecol_name,
@@ -311,13 +307,14 @@ def test_edge_definition_management(tst_fabric, graph, fvcol, tvcol, ecol, bad_g
     assert not graph.has_edge_collection(ecol_name)
 
 
+@pytest.mark.vcr
 def test_create_graph_with_edge_definition(client):
     sys_fabric = client._tenant.useFabric("_system")
-    new_graph_name = generate_graph_name()
-    new_ecol_name = generate_col_name()
-    fvcol_name = generate_col_name()
-    tvcol_name = generate_col_name()
-    ovcol_name = generate_col_name()
+    new_graph_name = "test_collection_graph_17"
+    new_ecol_name = "test_collection_graph_18"
+    fvcol_name = "test_collection_graph_19"
+    tvcol_name = "test_collection_graph_20"
+    ovcol_name = "test_collection_graph_21"
 
     edge_definition = {
         "edge_collection": new_ecol_name,
@@ -330,8 +327,10 @@ def test_create_graph_with_edge_definition(client):
         orphan_collections=[ovcol_name],
     )
     assert edge_definition in new_graph.edge_definitions()
+    sys_fabric.delete_graph(name="test_collection_graph_17", drop_collections=True)
 
 
+@pytest.mark.vcr
 def test_vertex_management(fvcol, bad_fvcol, fvdocs):
     # Test insert vertex with no key
     result = fvcol.insert({})
@@ -348,7 +347,7 @@ def test_vertex_management(fvcol, bad_fvcol, fvdocs):
     fvcol.truncate()
 
     with assert_raises(DocumentParseError) as err:
-        fvcol.insert({"_id": generate_col_name() + "/" + "foo"})
+        fvcol.insert({"_id": "test_collection_graph_22" + "/" + "foo"})
     assert "bad collection name" in err.value.message
 
     vertex = fvdocs[0]
@@ -388,7 +387,7 @@ def test_vertex_management(fvcol, bad_fvcol, fvdocs):
 
     # Test get missing vertex
     if fvcol.context != "transaction":
-        assert fvcol.get(generate_doc_key()) is None
+        assert fvcol.get("test_document_999") is None
 
     # Test get existing edge by body with "_key" field
     result = fvcol.get({"_key": key})
@@ -543,7 +542,7 @@ def test_vertex_management(fvcol, bad_fvcol, fvdocs):
         assert vertex in fvcol
 
     # Test delete missing vertex
-    bad_key = generate_doc_key()
+    bad_key = "test_document_888"
     with assert_raises(DocumentDeleteError) as err:
         fvcol.delete(bad_key, ignore_missing=False)
     assert err.value.error_code == 1202
@@ -559,6 +558,7 @@ def test_vertex_management(fvcol, bad_fvcol, fvdocs):
     fvcol.truncate()
 
 
+@pytest.mark.vcr
 def test_vertex_management_via_graph(graph, fvcol):
     # Test insert vertex via graph object
     result = graph.insert_vertex(fvcol.name, {})
@@ -586,6 +586,7 @@ def test_vertex_management_via_graph(graph, fvcol):
     assert len(fvcol) == 0
 
 
+@pytest.mark.vcr
 def test_edge_management(ecol, bad_ecol, edocs, fvcol, fvdocs, tvcol, tvdocs):
     for vertex in fvdocs:
         fvcol.insert(vertex)
@@ -612,7 +613,7 @@ def test_edge_management(ecol, bad_ecol, edocs, fvcol, fvdocs, tvcol, tvdocs):
     with assert_raises(DocumentParseError) as err:
         ecol.insert(
             {
-                "_id": generate_col_name() + "/" + "foo",
+                "_id": "test_collection_graph_23" + "/" + "foo",
                 "_from": edge["_from"],
                 "_to": edge["_to"],
             }
@@ -672,7 +673,7 @@ def test_edge_management(ecol, bad_ecol, edocs, fvcol, fvdocs, tvcol, tvdocs):
     assert err.value.message == 'field "_id" required'
 
     # Test get missing vertex
-    bad_document_key = generate_doc_key()
+    bad_document_key = "test_document_777"
     if ecol.context != "transaction":
         assert ecol.get(bad_document_key) is None
 
@@ -856,10 +857,11 @@ def test_edge_management(ecol, bad_ecol, edocs, fvcol, fvdocs, tvcol, tvdocs):
     ecol.truncate()
 
 
+@pytest.mark.vcr
 def test_vertex_edges(tst_fabric, graph):
-    graph_name = generate_graph_name()
-    vcol_name = generate_col_name()
-    ecol_name = generate_col_name()
+    graph_name = "test_collection_graph_24"
+    vcol_name = "test_collection_graph_25"
+    ecol_name = "test_collection_graph_26"
 
     # Prepare test documents
     anna = {"_id": "{}/anna".format(vcol_name)}
@@ -916,6 +918,7 @@ def test_vertex_edges(tst_fabric, graph):
     assert len(result["edges"]) == 1
 
 
+@pytest.mark.vcr
 def test_edge_management_via_graph(graph, ecol, fvcol, fvdocs, tvcol, tvdocs):
     for vertex in fvdocs:
         fvcol.insert(vertex)
@@ -924,11 +927,11 @@ def test_edge_management_via_graph(graph, ecol, fvcol, fvdocs, tvcol, tvdocs):
     ecol.truncate()
 
     # Get a random "from" vertex
-    from_vertex = fvcol.get({"_key": str(random.randint(1, 3))})
+    from_vertex = fvcol.get({"_key": "2"})
     assert graph.has_vertex(from_vertex)
 
     # Get a random "to" vertex
-    to_vertex = tvcol.get({"_key": str(random.randint(4, 6))})
+    to_vertex = tvcol.get({"_key": "5"})
     assert graph.has_vertex(to_vertex)
 
     # Test insert edge via graph object

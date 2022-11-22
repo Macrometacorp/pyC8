@@ -1,0 +1,47 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_api/billing/invoice/current
+  response:
+    body:
+      string: '{"code":405,"error":true,"message":"Stripe is not allowed for tenant
+        \"pythonsdk_macrometa.com\""}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '98'
+      Content-Type:
+      - application/json
+      Server:
+      - APISIX
+      User-Agent:
+      - C8Apid 0.1.41
+      X-Request-Id:
+      - ReverseProxy/432bdd2a-5ce9-4a6c-8883-3bae46a090e5/1
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 82ea861a-5fc8-44b6-9b9f-7539da7f46d7
+      x-gdn-responsetime:
+      - '18'
+    status:
+      code: 405
+      message: Method Not Allowed
+version: 1

@@ -11,14 +11,24 @@ from c8.exceptions import (
 from tests.helpers import clean_doc
 
 
+@pytest.fixture(autouse=False)
+def cursor_collection(tst_fabric):
+    if tst_fabric.has_collection("test_collection_cursor_1"):
+        return tst_fabric.collection("test_collection_cursor_1")
+    else:
+        return tst_fabric.create_collection("test_collection_cursor_1")
+
+
 @pytest.fixture(autouse=True)
-def setup_collection(col, docs):
-    col.import_bulk(docs)
+def setup_collection(cursor_collection, docs):
+    cursor_collection.import_bulk(docs)
 
 
-def test_cursor_from_execute_query(tst_fabric, col, docs):
+@pytest.mark.vcr
+def test_cursor_from_execute_query(tst_fabric, docs, cursor_collection):
+
     cursor = tst_fabric.c8ql.execute(
-        "FOR d IN {} SORT d._key RETURN d".format(col.name),
+        "FOR d IN {} SORT d._key RETURN d".format(cursor_collection.name),
         count=True,
         batch_size=2,
         ttl=30,
@@ -81,14 +91,15 @@ def test_cursor_from_execute_query(tst_fabric, col, docs):
     assert cursor.close(ignore_missing=True) is False
 
 
-def test_cursor_write_query(tst_fabric, col, docs):
+@pytest.mark.vcr
+def test_cursor_write_query(tst_fabric, docs, cursor_collection):
     cursor = tst_fabric.c8ql.execute(
         """
         FOR d IN {col} FILTER d._key == @first OR d._key == @second
         UPDATE {{_key: d._key, _val: @val }} IN {col}
         RETURN NEW
         """.format(
-            col=col.name
+            col=cursor_collection.name
         ),
         bind_vars={"first": "1", "second": "2", "val": 42},
         count=True,
@@ -135,9 +146,11 @@ def test_cursor_write_query(tst_fabric, col, docs):
     assert cursor.close(ignore_missing=True) is False
 
 
-def test_cursor_invalid_id(tst_fabric, col):
+@pytest.mark.vcr
+def test_cursor_invalid_id(tst_fabric, cursor_collection):
+
     cursor = tst_fabric.c8ql.execute(
-        "FOR d IN {} SORT d._key RETURN d".format(col.name),
+        "FOR d IN {} SORT d._key RETURN d".format(cursor_collection.name),
         count=True,
         batch_size=2,
         ttl=30,
@@ -170,9 +183,10 @@ def test_cursor_invalid_id(tst_fabric, col):
     assert cursor.close() is None
 
 
-def test_cursor_premature_close(tst_fabric, col, docs):
+@pytest.mark.vcr
+def test_cursor_premature_close(tst_fabric, docs, cursor_collection):
     cursor = tst_fabric.c8ql.execute(
-        "FOR d IN {} SORT d._key RETURN d".format(col.name),
+        "FOR d IN {} SORT d._key RETURN d".format(cursor_collection.name),
         count=True,
         batch_size=2,
         ttl=30,
@@ -187,9 +201,11 @@ def test_cursor_premature_close(tst_fabric, col, docs):
     assert cursor.close(ignore_missing=True) is False
 
 
-def test_cursor_context_manager(tst_fabric, col, docs):
+@pytest.mark.vcr
+def test_cursor_context_manager(tst_fabric, docs, cursor_collection):
+
     with tst_fabric.c8ql.execute(
-        "FOR d IN {} SORT d._key RETURN d".format(col.name),
+        "FOR d IN {} SORT d._key RETURN d".format(cursor_collection.name),
         count=True,
         batch_size=2,
         ttl=30,
@@ -204,9 +220,10 @@ def test_cursor_context_manager(tst_fabric, col, docs):
     assert cursor.close(ignore_missing=True) is False
 
 
-def test_cursor_manual_fetch_and_pop(tst_fabric, col, docs):
+@pytest.mark.vcr
+def test_cursor_manual_fetch_and_pop(tst_fabric, docs, cursor_collection):
     cursor = tst_fabric.c8ql.execute(
-        "FOR d IN {} SORT d._key RETURN d".format(col.name),
+        "FOR d IN {} SORT d._key RETURN d".format(cursor_collection.name),
         count=True,
         batch_size=1,
         ttl=30,
@@ -239,9 +256,11 @@ def test_cursor_manual_fetch_and_pop(tst_fabric, col, docs):
     assert err.value.message == "current batch is empty"
 
 
-def test_cursor_no_count(tst_fabric, col):
+@pytest.mark.vcr
+def test_cursor_no_count(tst_fabric, cursor_collection):
+
     cursor = tst_fabric.c8ql.execute(
-        "FOR d IN {} SORT d._key RETURN d".format(col.name),
+        "FOR d IN {} SORT d._key RETURN d".format(cursor_collection.name),
         count=False,
         batch_size=2,
         ttl=30,

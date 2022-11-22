@@ -1,0 +1,137 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+      tenant:
+      - pythonsdk_macrometa.com
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_api/billing/account
+  response:
+    body:
+      string: '{"code":200,"error":false,"data":{"plan":{"attribution":"Macrometa","name":"ENTERPRISE","target":"stripe"},"tenant":"pythonsdk_macrometa.com","metadata":{},"contact":{"city":"","country":"","email":"pythonsdk@macrometa.com","firstname":"","lastname":"","line1":"","line2":"","phone":"","state":"","zipcode":""},"created_at":1668685665,"last_report_date":"2022-11-17"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '368'
+      Content-Type:
+      - application/json
+      Server:
+      - APISIX
+      User-Agent:
+      - C8Apid 0.1.41
+      X-Request-Id:
+      - ReverseProxy/407eaa71-2986-4f1e-858e-5538bb2f2e3e/1
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 0acec63c-e620-43d7-b939-f64fcc8fe409
+      x-gdn-responsetime:
+      - '12'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_api/billing/account
+  response:
+    body:
+      string: '{"code":200,"error":false,"data":{"plan":{"attribution":"Macrometa","name":"ENTERPRISE","target":"stripe"},"tenant":"pythonsdk_macrometa.com","metadata":{},"contact":{"city":"","country":"","email":"pythonsdk@macrometa.com","firstname":"","lastname":"","line1":"","line2":"","phone":"","state":"","zipcode":""},"created_at":1668685665,"last_report_date":"2022-11-17"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '368'
+      Content-Type:
+      - application/json
+      Server:
+      - APISIX
+      User-Agent:
+      - C8Apid 0.1.41
+      X-Request-Id:
+      - ReverseProxy/407eaa71-2986-4f1e-858e-5538bb2f2e3e/2
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - a8216072-79f2-4e2f-927d-3630faaa34e6
+      x-gdn-responsetime:
+      - '7'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+      tenant:
+      - invalid
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_api/billing/account
+  response:
+    body:
+      string: '{"code":401,"error":true,"message":"Unauthorized","requestId":"407eaa71-2986-4f1e-858e-5538bb2f2e3e/3","serverId":"C8Apid
+        0.1.41"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '130'
+      Content-Type:
+      - application/json
+      Server:
+      - APISIX
+      X-Request-Id:
+      - 407eaa71-2986-4f1e-858e-5538bb2f2e3e/3
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - a486a005-f331-4ecd-b3b9-f8daeb197405
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 401
+      message: Unauthorized
+version: 1

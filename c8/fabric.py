@@ -1029,7 +1029,7 @@ class Fabric(APIWrapper):
             operation_timeout_seconds,
         )
 
-    def streams(self, local=False):
+    def streams(self, local=None):
         """Get list of all streams under given fabric
 
         :returns: List of streams under given fabric.
@@ -1041,6 +1041,9 @@ class Fabric(APIWrapper):
 
         elif local is True:
             url_endpoint = "/streams?global=false"
+
+        elif local is None:
+            url_endpoint = "/streams"
 
         request = Request(method="get", endpoint=url_endpoint)
 

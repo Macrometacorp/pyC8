@@ -1,9 +1,12 @@
 from __future__ import absolute_import, unicode_literals
 
+import pytest
+
 from c8.exceptions import IndexCreateError, IndexDeleteError
 from tests.helpers import assert_raises, extract
 
 
+@pytest.mark.vcr
 def test_add_index(col):
     fields = ["attr1"]
     # Test create skiplist index
@@ -94,6 +97,7 @@ def test_add_index(col):
     assert err.value.error_code == 10
 
 
+@pytest.mark.vcr
 def test_get_index(col):
     index = col.get_index("primary")
     expected_index = {
@@ -111,6 +115,7 @@ def test_get_index(col):
     assert expected_index["name"] == index["name"]
 
 
+@pytest.mark.vcr
 def test_list_indexes(col):
     # Test default primary index
     expected_index = {
@@ -127,6 +132,7 @@ def test_list_indexes(col):
     assert expected_index in indexes
 
 
+@pytest.mark.vcr
 def test_add_hash_index(col):
     fields = ["attr1", "attr2"]
     # Test if unique set to true in global collection
@@ -154,6 +160,7 @@ def test_add_hash_index(col):
     assert result in col.indexes()
 
 
+@pytest.mark.vcr
 def test_add_skiplist_index(col):
     fields = ["attr1", "attr2"]
     # Test if unique set to true in global collection
@@ -182,6 +189,7 @@ def test_add_skiplist_index(col):
     assert result in col.indexes()
 
 
+@pytest.mark.vcr
 def test_add_geo_index(col):
     # Test add geo index with one attribute
     result = col.add_geo_index(fields=["attr1"], ordered=False)
@@ -223,6 +231,7 @@ def test_add_geo_index(col):
     assert err.value.error_code == 10
 
 
+@pytest.mark.vcr
 def test_add_fulltext_index(col):
     # Test add fulltext index with one attributes
     result = col.add_fulltext_index(
@@ -248,6 +257,7 @@ def test_add_fulltext_index(col):
     assert err.value.error_code == 10
 
 
+@pytest.mark.vcr
 def test_add_persistent_index(col):
     fields = ["attr1", "attr2"]
     # Test if unique set to true in global collection
@@ -274,6 +284,7 @@ def test_add_persistent_index(col):
     assert result in col.indexes()
 
 
+@pytest.mark.vcr
 def test_add_ttl_index(col):
     fields = ["attr1"]
     # Test add_ttl_index
@@ -299,6 +310,7 @@ def test_add_ttl_index(col):
     assert err.value.error_code == 10
 
 
+@pytest.mark.vcr
 def test_delete_index(col, bad_col):
     old_indexes = set(extract("name", col.indexes()))
     col.add_hash_index(["attr3", "attr4"], unique=False)

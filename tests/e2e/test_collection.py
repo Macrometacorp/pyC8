@@ -1,8 +1,9 @@
-from tests.helpers import generate_col_name
+import pytest
 
 
+@pytest.mark.vcr
 def test_create_collection_endpoint(client, tst_fabric_name):
-    collection_name = generate_col_name()
+    collection_name = "test_collection_e2e_collection_1"
     client._tenant.useFabric(tst_fabric_name)
     col = client.create_collection(collection_name)
     assert repr(col) == "<StandardCollection {}>".format(col.name)
@@ -10,21 +11,25 @@ def test_create_collection_endpoint(client, tst_fabric_name):
     assert col.name.startswith("test_collection") is True
 
 
+@pytest.mark.vcr
 def test_collection_truncate(sys_fabric, col):
     assert sys_fabric.collection(col.name).truncate() is True
 
 
+@pytest.mark.vcr
 def test_collection_doc_count(col, docs):
     col.insert_many(docs)
     assert col.count() == len(docs)
 
 
+@pytest.mark.vcr
 def test_collection_has_doc(sys_fabric, col, docs):
     doc_id = col.name + "/" + "foo"
     col.insert({"_id": doc_id})
     assert sys_fabric.collection(col.name).has(doc_id) is True
 
 
+@pytest.mark.vcr
 def test_collection_export(col, docs):
     col.insert_many(docs)
     cursor = col.export()
@@ -37,8 +42,9 @@ def test_collection_export(col, docs):
     assert len(cursor) == 2
 
 
+@pytest.mark.vcr
 def test_collection_indexes(client, tst_fabric_name):
-    collection_name = generate_col_name()
+    collection_name = "test_collection_e2e_collection_2"
     client._tenant.useFabric(tst_fabric_name)
     col = client.create_collection(collection_name)
     fields = ["lat", "lng"]
@@ -80,23 +86,26 @@ def test_collection_indexes(client, tst_fabric_name):
     assert col.delete_index(ttl_index["name"]) is True
 
 
+@pytest.mark.vcr
 def test_delete_collection_endpoint(client, tst_fabric_name):
-    collection_name = generate_col_name()
+    collection_name = "test_collection_e2e_collection_3"
     client._tenant.useFabric(tst_fabric_name)
     client.create_collection(collection_name)
     assert client.delete_collection(collection_name) is True
 
 
+@pytest.mark.vcr
 def test_has_collection_endpoint(client, tst_fabric_name):
-    collection_name = generate_col_name()
+    collection_name = collection_name = "test_collection_e2e_collection_4"
     client._tenant.useFabric(tst_fabric_name)
     client.create_collection(collection_name)
     assert True is client.has_collection(collection_name)
-    assert False is client.has_collection(generate_col_name())
+    assert False is client.has_collection("test_collection_e2e_collection_5")
 
 
+@pytest.mark.vcr
 def test_collection_figures(client, tst_fabric_name):
-    collection_name = generate_col_name()
+    collection_name = "test_collection_e2e_collection_6"
     fab = client._tenant.useFabric(tst_fabric_name)
     col = client.create_collection(collection_name, key_generator="autoincrement")
     get_col_properties = fab.collection(col.name).collection_figures()

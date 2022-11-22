@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 
 import time
 
+import pytest
 import websocket
 
 from c8.exceptions import (
@@ -32,14 +33,7 @@ from c8.exceptions import (
     StreamAccessLevel,
     UpdateAttributes,
 )
-from tests.helpers import (
-    assert_raises,
-    extract,
-    generate_apikey_id,
-    generate_col_name,
-    generate_fabric_name,
-    generate_stream_name,
-)
+from tests.helpers import assert_raises, extract
 
 # def test_apikey_management(client):
 #     # Create apikey
@@ -57,7 +51,7 @@ from tests.helpers import (
 #     sys_fabric = user.useFabric("_system")
 #     apiKeys = sys_fabric.api_keys(apikey_id)
 #
-#     tst_fabric_name = generate_fabric_name()
+#     tst_fabric_name = "test_fabric_apikey_1"
 #     col_name_1 = generate_col_name()
 #     col_name_2 = generate_col_name()
 #
@@ -197,9 +191,10 @@ from tests.helpers import (
 #     assert client.remove_api_key(apikey_id) is True
 
 
+@pytest.mark.vcr
 def test_attributes(client):
     # Create apikey
-    apikey_id = generate_apikey_id()
+    apikey_id = "test_apikey_id_1"
     resp = client.create_api_key(apikey_id)
     assert resp["error"] is False
     apikey = resp["key"]
@@ -237,9 +232,10 @@ def test_attributes(client):
     assert client.remove_api_key(apikey_id) is True
 
 
+@pytest.mark.vcr
 def test_permission_exceptions(client):
-    apikey_id = generate_apikey_id()
-    col_name_1 = generate_col_name()
+    apikey_id = "test_apikey_id_2"
+    col_name_1 = "test_collection_apikey_1"
     sys_fabric = client._tenant.useFabric("_system")
 
     assert client.create_collection(col_name_1) is not None
@@ -298,7 +294,7 @@ def test_permission_exceptions(client):
         client.list_accessible_streams(apikey_id)
     assert err.value.http_code == 404
 
-    stream_name_1 = generate_stream_name()
+    stream_name_1 = "test_stream_apikey_1"
     sys_fabric.create_stream(stream_name_1)
 
     stream_1 = f"c8globals.{stream_name_1}"

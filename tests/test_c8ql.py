@@ -3,6 +3,8 @@ from __future__ import absolute_import, unicode_literals
 import threading
 import time
 
+import pytest
+
 from c8.exceptions import (
     C8QLGetAllBatchesError,
     C8QLQueryClearError,
@@ -15,8 +17,10 @@ from c8.exceptions import (
 from tests.helpers import assert_raises, extract
 
 
-def test_export_data_query_invalid_operations(client, col, tst_fabric_name):
+@pytest.mark.vcr
+def test_export_data_query_invalid_operations(client, tst_fabric_name):
     client._tenant.useFabric(tst_fabric_name)
+    col = client.create_collection(name="test_collection_c8ql_1")
     # Testing invalid operation REMOVE
     with assert_raises(C8QLQueryExecuteError) as err:
         client.export_data_query(query='REMOVE "1" IN {}'.format(col.name))
@@ -60,8 +64,10 @@ def test_export_data_query_invalid_operations(client, col, tst_fabric_name):
     assert err.value.error_code == 10
 
 
-def test_export_data_query(client, docs, tst_fabric_name, col):
+@pytest.mark.vcr
+def test_export_data_query(client, docs, tst_fabric_name):
     client._tenant.useFabric(tst_fabric_name)
+    col = client.create_collection(name="test_collection_c8ql_2")
     client.insert_document(collection_name=col.name, document=docs)
 
     # Test export data query
@@ -85,6 +91,7 @@ def test_export_data_query(client, docs, tst_fabric_name, col):
     assert resp["result"] == docs
 
 
+@pytest.mark.vcr
 def test_c8ql_attributes(client, tst_fabric_name):
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
     assert tst_fabric.context in ["default", "async", "batch", "transaction"]
@@ -93,8 +100,10 @@ def test_c8ql_attributes(client, tst_fabric_name):
     assert repr(tst_fabric.c8ql) == "<C8QL in {}>".format(tst_fabric_name)
 
 
-def test_explain_query(client, tst_fabric_name, col):
+@pytest.mark.vcr
+def test_explain_query(client, tst_fabric_name):
     tst_fabric = client._tenant.useFabric(tst_fabric_name)
+    col = client.create_collection(name="test_collection_c8ql_3")
     plan_fields = [
         "estimatedNrItems",
         "estimatedCost",
@@ -127,8 +136,10 @@ def test_explain_query(client, tst_fabric_name, col):
     assert len(plans) < 10
 
 
-def test_validate_query(tst_fabric, col):
+@pytest.mark.vcr
+def test_validate_query(tst_fabric):
     # Test validate invalid query
+    col = tst_fabric.create_collection(name="test_collection_c8ql_4")
     with assert_raises(C8QLQueryValidateError) as err:
         tst_fabric.c8ql.validate("INVALID QUERY")
     assert err.value.error_code == 1501
@@ -141,8 +152,10 @@ def test_validate_query(tst_fabric, col):
     assert "parsed" in result
 
 
+@pytest.mark.vcr
 def test_execute_query(tst_fabric, col, docs):
     # Test execute invalid C8QL query
+    col = tst_fabric.create_collection(name="test_collection_c8ql_5")
     with assert_raises(C8QLQueryExecuteError) as err:
         tst_fabric.c8ql.execute("INVALID QUERY")
     assert err.value.error_code == 1501
@@ -206,6 +219,7 @@ def test_execute_query(tst_fabric, col, docs):
         assert cursor.close(ignore_missing=True) is False
 
 
+@pytest.mark.vcr
 def test_kill_query(tst_fabric):
     # Kick off some long lasting queries in the background
     def query():
@@ -256,6 +270,7 @@ def test_kill_query(tst_fabric):
     run_queries()
 
 
+@pytest.mark.vcr
 def test_slow_queries(client, tst_fabric, bad_fabric_name):
     # Test list slow queries
     assert tst_fabric.c8ql.slow_queries() == []
@@ -277,9 +292,12 @@ def test_slow_queries(client, tst_fabric, bad_fabric_name):
         bad_fabric.c8ql.clear_slow_queries()
 
 
-def test_get_all_batches(client, col, tst_fabric_name):
+@pytest.mark.vcr
+def test_get_all_batches(client, tst_fabric_name):
     document_count = 2003
     client._tenant.useFabric(tst_fabric_name)
+    col = client.create_collection("test_collection_c8ql_6")
+
     client.execute_query(
         query="FOR doc IN 1..{} INSERT {{value:doc}} INTO {}".format(
             document_count, col.name
@@ -308,8 +326,10 @@ def test_get_all_batches(client, col, tst_fabric_name):
     col.truncate()
 
 
-def test_invalid_get_all_batches(client, col, tst_fabric_name):
+@pytest.mark.vcr
+def test_invalid_get_all_batches(client, tst_fabric_name):
     client._tenant.useFabric(tst_fabric_name)
+    col = client.create_collection("test_collection_c8ql_7")
 
     # Testing invalid operation REMOVE
     with assert_raises(C8QLGetAllBatchesError):

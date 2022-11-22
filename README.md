@@ -63,6 +63,13 @@ is active and run:
 python -m pytest
 ```
 
+Since we have end-to-end test we use VCR package to record our response so tests can be faster in next iteration.
+Example:
+```bash
+pytest --record-mode=once test_redis.py
+```
+Cassettes folder will be created with '.yaml'. Each test will have its own file.
+
 ## 📐 Enable pre-commit hooks
 
 You will need to install pre-commit hooks

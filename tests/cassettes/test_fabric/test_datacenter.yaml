@@ -1,0 +1,215 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/test_fabric_1/_api/database/current
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":{"name":"test_fabric_1","options":{"associated_regions":["dino-fra"],"clusters":["dino-fra"],"dcList":"dino-fra","dynamo_local_tables":false,"metadata":{"foo":"baz"},"name":"pythonsdk_macrometa.com.test_fabric_1","realTime":true,"spotDc":"","status":"available","tenant":"pythonsdk_macrometa.com"},"isSystem":false}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '351'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 851a4d8c-b6e1-4740-8a6d-6b2d9aae878c
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/datacenter/local
+  response:
+    body:
+      string: '{"_key":"dino-fra","host":"151.139.87.30","local":true,"name":"dino-fra","spot_region":false,"status":0,"tags":{"api":"api-dino-fra.eng.macrometa.io","url":"dino-fra.eng.macrometa.io"},"locationInfo":{"city":"","countrycode":"US","countryname":"United
+        States","latitude":"37.751","longitude":"-97.822","url":"dino-fra.eng.macrometa.io"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '337'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 9e981153-6baf-4532-8ca1-1de2362ef501
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/datacenter/dino-fra
+  response:
+    body:
+      string: '{"name":"dino-fra","local":true,"status":0,"tags":{"api":"api-dino-fra.eng.macrometa.io","url":"dino-fra.eng.macrometa.io"},"locationInfo":{"city":"","countrycode":"US","countryname":"United
+        States","latitude":"37.751","longitude":"-97.822","url":"dino-fra.eng.macrometa.io"}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '276'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 9785d5bd-31cd-4c8e-9a2e-bd5cdb6604e1
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/datacenter/all
+  response:
+    body:
+      string: '[{"_key":"dino-fra","host":"151.139.87.30","local":true,"name":"dino-fra","spot_region":false,"status":0,"tags":{"api":"api-dino-fra.eng.macrometa.io","url":"dino-fra.eng.macrometa.io"},"locationInfo":{"city":"","countrycode":"US","countryname":"United
+        States","latitude":"37.751","longitude":"-97.822","url":"dino-fra.eng.macrometa.io"}}]'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '339'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 0ed7fe6d-08f8-4dac-9186-368c4977cab4
+      x-gdn-responsetime:
+      - '4'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/datacenter/invalid
+  response:
+    body:
+      string: '{"code":404,"error":true,"errorMessage":"Datacenter does not exist","errorNum":102024}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '86'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - f56633c5-e220-4afd-852e-9fa151e4aea7
+      x-gdn-responsetime:
+      - '2'
+    status:
+      code: 404
+      message: Not Found
+version: 1

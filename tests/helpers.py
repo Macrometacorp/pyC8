@@ -18,7 +18,7 @@ def generate_fabric_name():
     return "test_fabric_{}".format(str(uuid4().hex)[:10])
 
 
-def generate_col_name():
+def generate_random_collection_name():
     """Generate and return a random collection name.
 
     :return: Random collection name.
@@ -27,7 +27,16 @@ def generate_col_name():
     return "test_collection_{}".format(uuid4().hex)
 
 
-def generate_stream_name():
+def generate_constant_collection_name():
+    """Generate and return a random collection name.
+
+    :return: Random collection name.
+    :rtype: str | unicode
+    """
+    return "test_collection_0c4a7434e65846de9335b2e66acfe37c"
+
+
+def generate_random_stream_name():
     """Generate and return a random stream name.
 
     :return: Random stream name.
@@ -36,13 +45,31 @@ def generate_stream_name():
     return "test_stream_{}".format(uuid4().hex)
 
 
-def generate_apikey_id():
+def generate_constant_stream_name():
+    """Generate and return a random stream name.
+
+    :return: Random stream name.
+    :rtype: str | unicode
+    """
+    return "test_stream_6fca7e746b6f4add9d63ecf59078f338"
+
+
+def generate_random_apikey_id():
     """Generate and return a random apikey id.
 
     :return: Random apikey id
     :rtype: str | unicode
     """
     return "test_apikey_id_{}".format(str(uuid4().hex)[:10])
+
+
+def generate_constant_apikey_id():
+    """Generate and return a random apikey id.
+
+    :return: Random apikey id
+    :rtype: str | unicode
+    """
+    return "test_apikey_id_fd3c016e4c"
 
 
 def generate_graph_name():
