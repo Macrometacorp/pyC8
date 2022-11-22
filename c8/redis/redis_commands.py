@@ -1728,7 +1728,7 @@ class RedisCommands(object):
         :param key: Key of the data
         :type key: str
         :param minimum: Minimum score
-        :type minimum: int
+        :type minimum: str
         :param maximum: Maximum score
         :type maximum: str
         :param collection: Name of the collection that we set values to
@@ -1758,13 +1758,13 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "ZDIFF"
 
         if with_scores is True:
             with_scores_command = "WITHSCORES"
         else:
             with_scores_command = None
 
-        command = "ZDIFF"
         return RedisInterface(self._conn, self._executor).command_parser(
             command, collection, num_keys, *keys, with_scores_command
         )
@@ -1842,6 +1842,7 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "ZINTER"
 
         options_command = []
         if options is not None:
@@ -1850,7 +1851,6 @@ class RedisCommands(object):
         if with_scores is True:
             options_command.append("WITHSCORES")
 
-        command = "ZINTER"
         return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
@@ -1996,12 +1996,13 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "ZRANDMEMBER"
+
         if with_scores is True:
             with_scores_command = "WITHSCORES"
         else:
             with_scores_command = None
 
-        command = "ZRANDMEMBER"
         return RedisInterface(self._conn, self._executor).command_parser(
             command, collection, key, count, with_scores_command
         )
@@ -2016,9 +2017,9 @@ class RedisCommands(object):
         :param key: Key of the sorted set
         :type key: str
         :param start: Start of the data
-        :type start: int
+        :type start: str
         :param stop: Stop of the data
-        :type stop: int
+        :type stop: str
         :param collection: Name of the collection that we set values to
         :type collection: str
         :param options: Additional ZRANGE options ex. [BYSCORE | BYLEX] [REV] etc.
@@ -2103,6 +2104,8 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "ZRANGEBYSCORE"
+
         if with_scores is True:
             with_scores_command = "WITHSCORES"
         else:
@@ -2114,7 +2117,6 @@ class RedisCommands(object):
             limit_list.append(offset)
             limit_list.append(count)
 
-        command = "ZRANGEBYSCORE"
         return RedisInterface(self._conn, self._executor).command_parser(
             command, collection, key, minimum, maximum, with_scores_command, *limit_list
         )
@@ -2122,7 +2124,7 @@ class RedisCommands(object):
     def zrangestore(self, dst, key, minimum, maximum, collection, options=None):
         """
         This command is like ZRANGE, but stores the result in the <dst> destination key.
-        More on https://redis.io/commands/zrange/
+        More on https://redis.io/commands/zrangestore/
 
         :param dst: Key of the destination location
         :type dst: string
@@ -2298,12 +2300,13 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "ZREVRANGE"
+
         if with_scores is True:
             with_scores_command = "WITHSCORES"
         else:
             with_scores_command = None
 
-        command = "ZREVRANGE"
         return RedisInterface(self._conn, self._executor).command_parser(
             command, collection, key, start, stop, with_scores_command
         )
@@ -2334,13 +2337,14 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "ZREVRANGEBYLEX"
+
         limit_list = []
         if offset and count is not None:
             limit_list.append("LIMIT")
             limit_list.append(offset)
             limit_list.append(count)
 
-        command = "ZREVRANGEBYLEX"
         return RedisInterface(self._conn, self._executor).command_parser(
             command, collection, key, minimum, maximum, *limit_list
         )
@@ -2381,6 +2385,8 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "ZREVRANGEBYSCORE"
+
         if with_scores is True:
             with_scores_command = "WITHSCORES"
         else:
@@ -2392,7 +2398,6 @@ class RedisCommands(object):
             limit_list.append(offset)
             limit_list.append(count)
 
-        command = "ZREVRANGEBYSCORE"
         return RedisInterface(self._conn, self._executor).command_parser(
             command, collection, key, minimum, maximum, with_scores_command, *limit_list
         )
@@ -2535,6 +2540,8 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "ZUNIONSTORE"
+
         options_command = []
         if options is not None:
             options_command = list(options)
@@ -2542,7 +2549,6 @@ class RedisCommands(object):
         if with_scores is True:
             options_command.append("WITHSCORES")
 
-        command = "ZUNIONSTORE"
         return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,

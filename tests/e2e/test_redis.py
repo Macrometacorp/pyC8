@@ -790,7 +790,7 @@ def test_redis_zadd_2(get_client_instance):
 
 @pytest.mark.vcr
 def test_redis_zrange(get_client_instance):
-    response = get_client_instance.redis.zrange("testZadd", 0, 1, REDIS_COLLECTION)
+    response = get_client_instance.redis.zrange("testZadd", "0", "1", REDIS_COLLECTION)
     # Response from platform
     assert {"code": 200, "result": ["test"]} == response
 
@@ -813,7 +813,7 @@ def test_redis_zcard(get_client_instance):
 
 @pytest.mark.vcr
 def test_redis_zcount(get_client_instance):
-    response = get_client_instance.redis.zcount("testZadd", 0, 2, REDIS_COLLECTION)
+    response = get_client_instance.redis.zcount("testZadd", "0", "2", REDIS_COLLECTION)
     # Response from platform
     assert {"code": 200, "result": 1} == response
 

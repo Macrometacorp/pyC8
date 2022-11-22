@@ -84,7 +84,6 @@ def test_get_specific_invoice(get_client_instance):
     assert "Method Not Allowed" in str(err.value)
 
 
-@pytest.mark.vcr
 def test_get_usage(get_client_instance, get_dates):
     # Test get billing usage
     start_date, end_date = get_dates
@@ -98,7 +97,6 @@ def test_get_usage(get_client_instance, get_dates):
         get_client_instance.billing.get_usage("invalid")
 
 
-@pytest.mark.vcr
 def test_get_usage_region(get_client_instance, get_dates):
     # Test get billing usage
     start_date, end_date = get_dates
