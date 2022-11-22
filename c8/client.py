@@ -26,9 +26,9 @@ class C8Client(object):
 
     def __init__(
         self,
-        protocol="http",
+        protocol="https",
         host="127.0.0.1",
-        port=80,
+        port=None,
         geofabric="_system",
         stream_port=constants.STREAM_PORT,
         email=None,
@@ -37,6 +37,14 @@ class C8Client(object):
         token=None,
         apikey=None,
     ):
+        if port is None: # only force the port to default if user didn't supply an explicit port
+            if protocol == 'http':
+                port = 80
+            elif protocol == 'https':
+                port = 443
+            else:
+                raise NotImplementedError(f'Cannot determine default port for unsupported protocol: {protocol}')
+
         self._protocol = protocol.strip("/")
         self._host = host.strip("/")
         self._port = int(port)
