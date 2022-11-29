@@ -967,6 +967,18 @@ def test_redis_zrangebyscore(get_client_instance):
 
 
 @pytest.mark.vcr
+def test_redis_zrangestore(get_client_instance):
+    get_client_instance.redis.zadd(
+        "zrangeStore1", [1, "one", 2, "two", 3, "three", 4, "four"], REDIS_COLLECTION
+    )
+    response = get_client_instance.redis.zrangestore(
+        "zrangeStoreDst1", "zrangeStore1", "2", "-1", REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": 2} == response
+
+
+@pytest.mark.vcr
 def test_redis_zrank(get_client_instance):
     response = get_client_instance.redis.zrank(
         "zrangeByScoreSet1", "three", REDIS_COLLECTION
@@ -1007,7 +1019,7 @@ def test_redis_zremrangebyrank(get_client_instance):
         "zremrangebyrank", [1, "one", 2, "two", 3, "three"], REDIS_COLLECTION
     )
     response = get_client_instance.redis.zremrangebyrank(
-        "zremrangebyrank", 0, 1, REDIS_COLLECTION
+        "zremrangebyrank", "0", "1", REDIS_COLLECTION
     )
     # Response from platform
     assert {"code": 200, "result": 2} == response
@@ -1210,7 +1222,7 @@ def test_redis_pexpire_2(get_client_instance):
 @pytest.mark.vcr
 def test_redis_pexpireat(get_client_instance):
     get_client_instance.redis.set("pexpireat", "test", REDIS_COLLECTION)
-    response = get_client_instance.redis.pexpire("pexpireat", 8000, REDIS_COLLECTION)
+    response = get_client_instance.redis.pexpireat("pexpireat", 8000, REDIS_COLLECTION)
     # Response from platform
     assert {"code": 200, "result": 1} == response
 
@@ -1218,7 +1230,7 @@ def test_redis_pexpireat(get_client_instance):
 @pytest.mark.vcr
 def test_redis_pexpireat_2(get_client_instance):
     get_client_instance.redis.set("pexpireat2", "test", REDIS_COLLECTION)
-    response = get_client_instance.redis.pexpire(
+    response = get_client_instance.redis.pexpireat(
         "pexpireat2", 8000, REDIS_COLLECTION, "NX"
     )
     # Response from platform
