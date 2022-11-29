@@ -2116,7 +2116,7 @@ class RedisCommands(object):
             command, collection, key, minimum, maximum, with_scores_command, *limit_list
         )
 
-    def zrangestore(self, dst, key, minimum, maximum, collection, options=None):
+    def zrangestore(self, dst, key, minimum, maximum, collection, options=[]):
         """
         This command is like ZRANGE, but stores the result in the <dst> destination key.
         More on https://redis.io/commands/zrangestore/

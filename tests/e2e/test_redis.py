@@ -104,14 +104,8 @@ def test_redis_incrbyfloat(get_client_instance):
 
 
 @pytest.mark.vcr
-def test_redis_set_2(get_client_instance):
-    response = get_client_instance.redis.set("test2", "22", REDIS_COLLECTION)
-    # Response from platform
-    assert {"code": 200, "result": "OK"} == response
-
-
-@pytest.mark.vcr
 def test_redis_mget(get_client_instance):
+    get_client_instance.redis.set("test2", "22", REDIS_COLLECTION)
     response = get_client_instance.redis.mget(["test", "test2"], REDIS_COLLECTION)
     # Response from platform
     assert {"code": 200, "result": ["11.5", "22"]} == response
@@ -1258,6 +1252,16 @@ def test_redis_rename(get_client_instance):
     response = get_client_instance.redis.rename("rename", "newName", REDIS_COLLECTION)
     # Response from platform
     assert {"code": 200, "result": "OK"} == response
+
+
+@pytest.mark.vcr
+def test_redis_renamenx(get_client_instance):
+    get_client_instance.redis.set("renamenx", "test", REDIS_COLLECTION)
+    response = get_client_instance.redis.renamenx(
+        "renamenx", "newNamenx", REDIS_COLLECTION
+    )
+    # Response from platform
+    assert {"code": 200, "result": 1} == response
 
 
 @pytest.mark.vcr
