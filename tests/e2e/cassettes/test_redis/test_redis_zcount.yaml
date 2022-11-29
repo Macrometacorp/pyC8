@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: '["ZCOUNT", "testZadd", 0, 2]'
+    body: '["ZCOUNT", "testZadd", "0", "2"]'
     headers:
       Accept:
       - '*/*'
@@ -9,7 +9,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '28'
+      - '32'
       User-Agent:
       - python-requests/2.25.1
       charset:
@@ -37,9 +37,9 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - e513fdf0-7079-4e43-87d8-d3f9862486e8
+      - 2fa4811c-e353-441c-89e4-6cade8ab7a64
       x-gdn-responsetime:
-      - '5'
+      - '6'
     status:
       code: 200
       message: OK

@@ -37,14 +37,14 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - ebb74ae2-7479-4d5b-a37a-481ece5a8c47
+      - c61e6225-bd8c-42b0-9a00-6540f7eb0880
       x-gdn-responsetime:
       - '7'
     status:
       code: 200
       message: OK
 - request:
-    body: '["PEXPIRE", "pexpireat", 8000]'
+    body: '["PEXPIREAT", "pexpireat", 8000]'
     headers:
       Accept:
       - '*/*'
@@ -53,7 +53,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '30'
+      - '32'
       User-Agent:
       - python-requests/2.25.1
       charset:
@@ -81,9 +81,9 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 5c967a51-4c9c-4d96-b8a6-98ee60f900d3
+      - 84389627-d21b-4944-81dc-81f74465fa31
       x-gdn-responsetime:
-      - '6'
+      - '5'
     status:
       code: 200
       message: OK

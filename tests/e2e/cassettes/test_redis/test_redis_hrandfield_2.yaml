@@ -20,14 +20,14 @@ interactions:
     uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
   response:
     body:
-      string: '{"code":200,"result":["heads","obverse","tails","reverse","edge","null","edge","null","heads","obverse"]}'
+      string: '{"code":200,"result":["heads","obverse","tails","reverse","heads","obverse","edge","null","tails","reverse"]}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
       Connection:
       - keep-alive
       Content-Length:
-      - '105'
+      - '109'
       Content-Type:
       - application/json; charset=utf-8
       Server:
@@ -37,7 +37,7 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 8fc1b24a-95e7-4d09-acaa-10e78b4d9d0e
+      - b894e17d-84e9-4bed-9d47-897ecfa671a4
       x-gdn-responsetime:
       - '6'
     status:

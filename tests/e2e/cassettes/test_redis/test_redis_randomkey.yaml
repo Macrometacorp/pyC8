@@ -20,14 +20,14 @@ interactions:
     uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
   response:
     body:
-      string: '{"code":200,"result":"zpop"}'
+      string: '{"code":200,"result":"zrevrangebyscore"}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
       Connection:
       - keep-alive
       Content-Length:
-      - '28'
+      - '40'
       Content-Type:
       - application/json; charset=utf-8
       Server:
@@ -37,7 +37,7 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 9f212cdc-c433-4513-9d28-23a1a89975c7
+      - d0bf542a-f6c7-496c-9a76-31725ba43fa9
       x-gdn-responsetime:
       - '4'
     status:

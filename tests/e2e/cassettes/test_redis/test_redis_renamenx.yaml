@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: '["SET", "expire", "test"]'
+    body: '["SET", "renamenx", "test"]'
     headers:
       Accept:
       - '*/*'
@@ -9,7 +9,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '25'
+      - '27'
       User-Agent:
       - python-requests/2.25.1
       charset:
@@ -37,14 +37,14 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 97904bfe-9b01-4280-aded-b8f0a446473f
+      - 6867c61c-95b1-4fa5-a4ab-ab22230765bb
       x-gdn-responsetime:
-      - '7'
+      - '5'
     status:
       code: 200
       message: OK
 - request:
-    body: '["EXPIRE", "expire", 30]'
+    body: '["RENAMENX", "renamenx", "newNamenx"]'
     headers:
       Accept:
       - '*/*'
@@ -53,7 +53,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '24'
+      - '37'
       User-Agent:
       - python-requests/2.25.1
       charset:
@@ -81,9 +81,9 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - adb3112c-de5c-48bc-a985-30008e4376ab
+      - ea1dd09d-0ce6-410f-b931-2ed763e339c1
       x-gdn-responsetime:
-      - '5'
+      - '6'
     status:
       code: 200
       message: OK

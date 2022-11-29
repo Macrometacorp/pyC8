@@ -20,7 +20,7 @@ interactions:
     uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
   response:
     body:
-      string: '{"code":200,"result":[1668757465,180028]}'
+      string: '{"code":200,"result":[1669718739,163301]}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
@@ -37,7 +37,7 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - fc87e501-0685-4b0d-b604-9768e7647362
+      - 405ff8ce-14e7-4dd4-9193-7db168940aef
       x-gdn-responsetime:
       - '4'
     status:

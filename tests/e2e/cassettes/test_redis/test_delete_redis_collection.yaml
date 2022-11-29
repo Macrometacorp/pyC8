@@ -20,7 +20,7 @@ interactions:
     uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/collection/testRedisCollection
   response:
     body:
-      string: '{"error":false,"code":200,"id":"793972"}'
+      string: '{"error":false,"code":200,"id":"9608500"}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
@@ -29,7 +29,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 18 Nov 2022 07:44:25 GMT
+      - Tue, 29 Nov 2022 10:45:39 GMT
       Server:
       - APISIX
       Transfer-Encoding:
@@ -41,9 +41,9 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 64963d28-f3e2-4b03-be8a-a5a2fc7386b5
+      - fb7f1f55-9b2b-4758-9de1-396192b01ae6
       x-gdn-responsetime:
-      - '163'
+      - '152'
     status:
       code: 200
       message: ''

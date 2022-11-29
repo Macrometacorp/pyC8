@@ -301,12 +301,12 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "MSET"
         data_list = []
         for key, value in data.items():
             data_list.append(key)
             data_list.append(value)
 
-        command = "MSET"
         return RedisInterface(self._conn, self._executor).command_parser(
             command, collection, *data_list
         )
@@ -368,12 +368,12 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "MSETNX"
         data_list = []
         for key, value in data.items():
             data_list.append(key)
             data_list.append(value)
 
-        command = "MSETNX"
         return RedisInterface(self._conn, self._executor).command_parser(
             command, collection, *data_list
         )
@@ -993,12 +993,12 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "HSET"
         data_list = []
         for dict_key, dict_value in data.items():
             data_list.append(dict_key)
             data_list.append(dict_value)
 
-        command = "HSET"
         return RedisInterface(self._conn, self._executor).command_parser(
             command, collection, key, *data_list
         )
@@ -1208,12 +1208,12 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "HMSET"
         data_list = []
         for dict_key, dict_value in data.items():
             data_list.append(dict_key)
             data_list.append(dict_value)
 
-        command = "HMSET"
         return RedisInterface(self._conn, self._executor).command_parser(
             command, collection, key, *data_list
         )
@@ -1759,7 +1759,6 @@ class RedisCommands(object):
         :rtype: dict
         """
         command = "ZDIFF"
-
         if with_scores is True:
             with_scores_command = "WITHSCORES"
         else:
@@ -1787,7 +1786,6 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
-
         command = "ZDIFFSTORE"
         return RedisInterface(self._conn, self._executor).command_parser(
             command,
@@ -1843,7 +1841,6 @@ class RedisCommands(object):
         :rtype: dict
         """
         command = "ZINTER"
-
         options_command = []
         if options is not None:
             options_command = list(options)
@@ -1997,7 +1994,6 @@ class RedisCommands(object):
         :rtype: dict
         """
         command = "ZRANDMEMBER"
-
         if with_scores is True:
             with_scores_command = "WITHSCORES"
         else:
@@ -2105,7 +2101,6 @@ class RedisCommands(object):
         :rtype: dict
         """
         command = "ZRANGEBYSCORE"
-
         if with_scores is True:
             with_scores_command = "WITHSCORES"
         else:
@@ -2121,7 +2116,7 @@ class RedisCommands(object):
             command, collection, key, minimum, maximum, with_scores_command, *limit_list
         )
 
-    def zrangestore(self, dst, key, minimum, maximum, collection, options=None):
+    def zrangestore(self, dst, key, minimum, maximum, collection, options=[]):
         """
         This command is like ZRANGE, but stores the result in the <dst> destination key.
         More on https://redis.io/commands/zrangestore/
@@ -2338,7 +2333,6 @@ class RedisCommands(object):
         :rtype: dict
         """
         command = "ZREVRANGEBYLEX"
-
         limit_list = []
         if offset and count is not None:
             limit_list.append("LIMIT")
@@ -2386,7 +2380,6 @@ class RedisCommands(object):
         :rtype: dict
         """
         command = "ZREVRANGEBYSCORE"
-
         if with_scores is True:
             with_scores_command = "WITHSCORES"
         else:
@@ -2497,6 +2490,7 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "ZUNION"
         options_command = []
         if options is not None:
             options_command = list(options)
@@ -2504,7 +2498,6 @@ class RedisCommands(object):
         if with_scores is True:
             options_command.append("WITHSCORES")
 
-        command = "ZUNION"
         return RedisInterface(self._conn, self._executor).command_parser(
             command,
             collection,
@@ -2541,7 +2534,6 @@ class RedisCommands(object):
         :rtype: dict
         """
         command = "ZUNIONSTORE"
-
         options_command = []
         if options is not None:
             options_command = list(options)
@@ -2581,6 +2573,7 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "COPY"
         options_command = []
         if destination_database is not None:
             options_command.append("DB")
@@ -2589,7 +2582,6 @@ class RedisCommands(object):
         if replace is True:
             options_command.append("WITHSCORES")
 
-        command = "COPY"
         return RedisInterface(self._conn, self._executor).command_parser(
             command, collection, source, destination, *options_command
         )
@@ -2882,6 +2874,7 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "SCAN"
         pattern_list = []
         if pattern is not None:
             pattern_list.append("MATCH")
@@ -2897,7 +2890,6 @@ class RedisCommands(object):
             type_list.append("TYPE")
             type_list.append(data_type)
 
-        command = "SCAN"
         return RedisInterface(self._conn, self._executor).command_parser(
             command, collection, cursor, *pattern_list, *count_list, *type_list
         )
@@ -3062,12 +3054,12 @@ class RedisCommands(object):
         :returns: Returns response from server in format {"code": xx, "result": xx}
         :rtype: dict
         """
+        command = "FLUSHDB"
         if async_flush is True:
             async_flush_command = "ASYNC"
         else:
             async_flush_command = None
 
-        command = "FLUSHDB"
         return RedisInterface(self._conn, self._executor).command_parser(
             command, collection, async_flush_command
         )

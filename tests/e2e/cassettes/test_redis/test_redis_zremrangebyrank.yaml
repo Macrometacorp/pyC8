@@ -37,14 +37,14 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - a37f9b11-85d3-4d6b-9f2d-7dbb5c79a3f1
+      - 4abb3f2e-9011-4c8a-932c-af02830e3237
       x-gdn-responsetime:
-      - '7'
+      - '8'
     status:
       code: 200
       message: OK
 - request:
-    body: '["ZREMRANGEBYRANK", "zremrangebyrank", 0, 1]'
+    body: '["ZREMRANGEBYRANK", "zremrangebyrank", "0", "1"]'
     headers:
       Accept:
       - '*/*'
@@ -53,7 +53,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '44'
+      - '48'
       User-Agent:
       - python-requests/2.25.1
       charset:
@@ -81,9 +81,9 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 4faad7eb-d552-469f-9fe2-675e6349582e
+      - c8adeb30-fd36-4ea8-9054-645d079cc352
       x-gdn-responsetime:
-      - '9'
+      - '7'
     status:
       code: 200
       message: OK

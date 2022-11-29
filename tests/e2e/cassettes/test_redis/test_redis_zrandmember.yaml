@@ -37,9 +37,9 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - a3eb5986-c21f-4369-b350-be4a97e257a9
+      - bfba9646-d1e5-4f0e-afab-6f49a89b18c0
       x-gdn-responsetime:
-      - '7'
+      - '6'
     status:
       code: 200
       message: OK

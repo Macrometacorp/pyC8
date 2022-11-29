@@ -20,7 +20,7 @@ interactions:
     uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
   response:
     body:
-      string: '{"code":200,"result":"heads"}'
+      string: '{"code":200,"result":"tails"}'
     headers:
       Access-Control-Expose-Headers:
       - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
@@ -37,9 +37,9 @@ interactions:
       x-gdn-region:
       - dino-fra.eng.macrometa.io
       x-gdn-requestid:
-      - 983b4b5e-a321-4c8d-b174-8d5d81ef4d45
+      - 6273e9c4-66b2-4c0d-8c0e-a11f2148fab3
       x-gdn-responsetime:
-      - '6'
+      - '4'
     status:
       code: 200
       message: OK
