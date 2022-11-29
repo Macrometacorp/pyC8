@@ -1,0 +1,46 @@
+interactions:
+- request:
+    body: '["SMISMEMBER", "key11", "a", "b", "z"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '38'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":[1,1,0]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '29'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - a8ae0544-5d94-41a4-9d96-3a0635c6e9ef
+      x-gdn-responsetime:
+      - '7'
+    status:
+      code: 200
+      message: OK
+version: 1

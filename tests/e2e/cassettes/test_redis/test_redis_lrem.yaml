@@ -1,0 +1,46 @@
+interactions:
+- request:
+    body: '["LREM", "testListLrem", -2, "hello"]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '37'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":2}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '23'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - a220a87f-8887-4b1e-99fa-b0aa68da5965
+      x-gdn-responsetime:
+      - '7'
+    status:
+      code: 200
+      message: OK
+version: 1

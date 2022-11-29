@@ -1,0 +1,46 @@
+interactions:
+- request:
+    body: '["SCAN", 0, "MATCH", "*", "COUNT", 100]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '39'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/redis/testRedisCollection
+  response:
+    body:
+      string: '{"code":200,"result":["cursor:zunionStoreSet2",["bitKey","coin","dest","destinationInter","destinationKeysdiffstore","destinationUnionStore","destinationZdiff","expire","expire2","expireat","expireat2","games","key1","key11","key111","key1sdiff","key2","key22","key222","key2sdiff","key3sdiff","keyScan","list","myhash","myhashfloat","mykey","mykey2","myKeyString","myOtherPushList","myPushList","newgames","newName","newNamenx","pexpire","pexpire2","pexpireat","pexpireat2","pttl","test","test2","test3","test4","test5","test6","testDiff1","testDiff2","testList1","testList2","testListLrem","testListPos","testListRpushx","testSetNx","testString","testZadd","testZadd2","ttlKeyMs","ttlKeySec","world","zinterStore","zlexSet1","zpop","zrangeByLexSet1","zrangeByScoreSet1","zrangeStore1","zrangeStoreDst1","zremrangebylex","zremrangebyrank","zremrangebyscore2","zrevrange","zrevrangebylex","zrevrangebyscore","zset1","zset2","zunionDestination","zunionSet1","zunionSet2","zunionStoreSet1","zunionStoreSet2"]]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1008'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - APISIX
+      X-Content-Type-Options:
+      - nosniff
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - f455a566-eb96-48bc-9ea9-20159818f02e
+      x-gdn-responsetime:
+      - '5'
+    status:
+      code: 200
+      message: OK
+version: 1

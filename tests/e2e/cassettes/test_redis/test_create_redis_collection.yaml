@@ -1,0 +1,98 @@
+interactions:
+- request:
+    body: '{"name": "testRedisCollection", "waitForSync": false, "keyOptions": {"type":
+      "traditional", "allowUserKeys": true}, "type": 2, "isSpot": false, "isLocal":
+      false, "isSystem": false, "stream": true}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '196'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: POST
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/collection
+  response:
+    body:
+      string: '{"error":false,"code":200,"waitForSync":false,"statusString":"loaded","cacheEnabled":false,"collectionModel":"DOC","objectId":"9608499","globallyUniqueId":"hB1D42EC62724/9608500","id":"9608500","hasStream":true,"searchEnabled":false,"type":2,"status":3,"isLocal":false,"isSpot":false,"isSystem":false,"keyOptions":{"allowUserKeys":true,"type":"traditional","lastValue":0},"name":"testRedisCollection"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 29 Nov 2022 10:45:04 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 7d974391-1a39-495f-8853-23a779cd37fb
+      x-gdn-responsetime:
+      - '143'
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: GET
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/collection
+  response:
+    body:
+      string: '{"error":false,"code":200,"result":[{"id":"9608500","name":"testRedisCollection","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":false,"globallyUniqueId":"hB1D42EC62724/9608500","searchEnabled":false},{"id":"781647","name":"_alerts","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_alerts","searchEnabled":false},{"id":"781635","name":"_computeFn","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_computeFn","searchEnabled":false},{"id":"274017","name":"_queryExecutions","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_queryExecutions","searchEnabled":false},{"id":"274014","name":"_replicationTest","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_replicationTest","searchEnabled":false},{"id":"273960","name":"_graphs","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_graphs","searchEnabled":false},{"id":"273963","name":"_analyzers","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_analyzers","searchEnabled":false},{"id":"274005","name":"_collections","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_collections","searchEnabled":false},{"id":"274008","name":"_dynamo","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_dynamo","searchEnabled":false},{"id":"792927","name":"_streamAppsCache","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":true,"hasStream":false,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_streamAppsCache","searchEnabled":false},{"id":"274011","name":"_geoFabricsMetadata","status":3,"type":2,"collectionModel":"DOC","isSpot":false,"isLocal":false,"hasStream":true,"waitForSync":false,"isSystem":true,"globallyUniqueId":"_geoFabricsMetadata","searchEnabled":false}]}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 29 Nov 2022 10:45:04 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - 195098f8-9a53-45e4-8d8a-ce1e384977b7
+      x-gdn-responsetime:
+      - '8'
+    status:
+      code: 200
+      message: ''
+version: 1

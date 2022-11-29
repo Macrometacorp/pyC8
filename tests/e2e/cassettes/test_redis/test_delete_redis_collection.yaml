@@ -1,0 +1,50 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.25.1
+      charset:
+      - utf-8
+      content-type:
+      - application/json
+    method: DELETE
+    uri: https://api-dino-fra.eng.macrometa.io/_fabric/_system/_api/collection/testRedisCollection
+  response:
+    body:
+      string: '{"error":false,"code":200,"id":"9608500"}'
+    headers:
+      Access-Control-Expose-Headers:
+      - x-gdn-region, x-gdn-requestid, x-gdn-responsetime
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 29 Nov 2022 10:45:39 GMT
+      Server:
+      - APISIX
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+      x-gdn-region:
+      - dino-fra.eng.macrometa.io
+      x-gdn-requestid:
+      - fb7f1f55-9b2b-4758-9de1-396192b01ae6
+      x-gdn-responsetime:
+      - '152'
+    status:
+      code: 200
+      message: ''
+version: 1
