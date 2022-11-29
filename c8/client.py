@@ -14,11 +14,11 @@ __all__ = ["C8Client"]
 class C8Client(object):
     """C8Db client.
 
-    :param protocol: Internet transfer protocol (default: "http").
+    :param protocol: Internet transfer protocol (default: "https").
     :type protocol: str | unicode
-    :param host: C8Db host (default: "127.0.0.1").
+    :param host: C8Db host (default: "play.macrometa.io").
     :type host: str | unicode
-    :param port: C8Db port (default: 8529).
+    :param port: C8Db port (default: None).
     :type port: int
     :param http_client: User-defined HTTP client.
     :type http_client: c8.http.HTTPClient
@@ -27,7 +27,7 @@ class C8Client(object):
     def __init__(
         self,
         protocol="https",
-        host="127.0.0.1",
+        host="play.macrometa.io",
         port=None,
         geofabric="_system",
         stream_port=constants.STREAM_PORT,
@@ -37,13 +37,6 @@ class C8Client(object):
         token=None,
         apikey=None,
     ):
-        if port is None: # only force the port to default if user didn't supply an explicit port
-            if protocol == 'http':
-                port = 80
-            elif protocol == 'https':
-                port = 443
-            else:
-                raise NotImplementedError(f'Cannot determine default port for unsupported protocol: {protocol}')
 
         self._protocol = protocol.strip("/")
         self._host = host.strip("/")
@@ -69,8 +62,15 @@ class C8Client(object):
             self._url = "{}://api-{}:{}".format(self._protocol, self.host, self.port)
 
     def set_port(self):
-        if self._protocol == "https":
+        # Only port 443 for https and 80 for http are allowed
+        if self._protocol == "http":
+            self._port = 80
+        elif self._protocol == "https":
             self._port = 443
+        else:
+            raise NotImplementedError(
+                f"Cannot determine port for unsupported protocol: {self._protocol}"
+            )
 
     def get_tenant(self):
         if self._email and self._password:
