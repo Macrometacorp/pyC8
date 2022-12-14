@@ -76,8 +76,9 @@ class Request(object):
         self.headers = headers or {}
 
         # Insert default headers.
-        self.headers["content-type"] = "application/json"
-        self.headers["charset"] = "utf-8"
+        if headers is None:
+            self.headers["content-type"] = "application/json"
+            self.headers["charset"] = "utf-8"
         if auth_tok:
             self.headers["Authorization"] = "bearer " + auth_tok
 

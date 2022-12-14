@@ -19,7 +19,7 @@ class BillingInterface(APIWrapper):
         )
 
     def __repr__(self):
-        return "<BillingInterface> for {}"()
+        return "<BillingInterface> for {}".format(self._conn.fabric_name)
 
     def execute(self, request):
         def response_handler(response):
