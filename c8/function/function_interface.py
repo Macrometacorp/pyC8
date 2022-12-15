@@ -207,7 +207,7 @@ class FunctionInterface(APIWrapper):
         request = Request(
             method="delete",
             endpoint="/function/{}".format(function_name),
-            headers={"charset": "utf-8"},
+            headers={"content-type": "text/plain"},
         )
 
         return self.execute(request, FunctionServerError)
@@ -260,6 +260,23 @@ class FunctionInterface(APIWrapper):
         """
         Modify the edge worker metadata.
 
+        :param worker_type: Key of the data
+        :type worker_type: str
+        :param access_token: Akamai platform access token
+        :type access_token: str
+        :param base_uri: Akamai endpoint URL, format akab-***.luna.akamaiapis.net
+        :type base_uri: str
+        :param client_secret: Akamai client secret
+        :type client_secret: str
+        :param client_token: Akamai client token
+        :type client_token: str
+        :param resource_tier_id: Akamai resource tier id
+        :type resource_tier_id: str
+        :param group_id: Akamai group id
+        :type group_id: str
+        :param host_name: Akamai property host name
+        :type host_name: str
+
         :returns: Returns response in format {"code": xx, "error": xx "result": xx}
         :rtype: dict
         """
@@ -277,7 +294,7 @@ class FunctionInterface(APIWrapper):
 
         return self.execute(request, FunctionServerError)
 
-    def delete_edge_woker_metadata(self):
+    def delete_edge_worker_metadata(self):
         """
         Remove metadata for an edge worker.
 
@@ -285,7 +302,9 @@ class FunctionInterface(APIWrapper):
         :rtype: dict
         """
         request = Request(
-            method="delete", endpoint="/function/metadata", headers={"charset": "utf-8"}
+            method="delete",
+            endpoint="/function/metadata",
+            headers={"content-type": "text/plain"},
         )
 
         return self.execute(request, FunctionServerError)
@@ -303,6 +322,23 @@ class FunctionInterface(APIWrapper):
     ):
         """
         Create the edge worker metadata.
+
+        :param worker_type: Key of the data
+        :type worker_type: str
+        :param access_token: Akamai platform access token
+        :type access_token: str
+        :param base_uri: Akamai endpoint URL, format akab-***.luna.akamaiapis.net
+        :type base_uri: str
+        :param client_secret: Akamai client secret
+        :type client_secret: str
+        :param client_token: Akamai client token
+        :type client_token: str
+        :param resource_tier_id: Akamai resource tier id
+        :type resource_tier_id: str
+        :param group_id: Akamai group id
+        :type group_id: str
+        :param host_name: Akamai property host name
+        :type host_name: str
 
         :returns: Returns response in format {"code": xx, "error": xx "result": xx}
         :rtype: dict

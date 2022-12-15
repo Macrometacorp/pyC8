@@ -41,19 +41,11 @@ def test_deploy_stream_adhoc_query_to_edge_worker(get_client_instance):
 
 def test_get_function_worker_info(get_client_instance):
     response = get_client_instance.function.get_function_worker_info(
-        "test_edge_worker_query_worker"
+        "test_edge_worker_query_worker2"
     )
     # Response from platform
-    assert 202 == response["code"]
+    assert 200 == response["code"]
     assert response["error"] is False
-
-
-def test_remove_function_worker(get_client_instance):
-    response = get_client_instance.function.remove_function_worker(
-        "test_edge_worker_query_worker"
-    )
-    # Response from platform
-    assert "" == response
 
 
 def test_invoke_function_worker(get_client_instance):
@@ -62,6 +54,33 @@ def test_invoke_function_worker(get_client_instance):
     )
     # Response from platform
     assert "" == response
+
+
+def test_remove_function_worker_1(get_client_instance):
+    response = get_client_instance.function.remove_function_worker(
+        "test_edge_worker_query_worker2"
+    )
+    # Response from platform
+    assert 202 == response["code"]
+    assert response["error"] is False
+
+
+def test_remove_function_worker_2(get_client_instance):
+    response = get_client_instance.function.remove_function_worker(
+        "test_edge_worker_stream_publisher"
+    )
+    # Response from platform
+    assert 202 == response["code"]
+    assert response["error"] is False
+
+
+def test_remove_function_worker_3(get_client_instance):
+    response = get_client_instance.function.remove_function_worker(
+        "test_edge_worker_adhoc_query"
+    )
+    # Response from platform
+    assert 202 == response["code"]
+    assert response["error"] is False
 
 
 def test_get_edge_worker_metadata(get_client_instance):
@@ -103,6 +122,6 @@ def test_modify_edge_worker_metadata(get_client_instance):
 
 
 def test_delete_edge_worker_metadata(get_client_instance):
-    response = get_client_instance.function.delete_edge_woker_metadata()
+    response = get_client_instance.function.delete_edge_worker_metadata()
     # Response from platform
     assert "" == response
