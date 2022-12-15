@@ -51,9 +51,6 @@ In `.env` file add variables:
 * `FEDERATION_URL="<your federation url>"`
 * `FABRIC="<selected fabric>"`
 * `API_KEY="<your api key>"`
-* `MM_API_KEY="<Macrometa apy key>"`
-
-**Note: MM_API_KEY is an apikey of the super user**
 
 `.env` file is in `.gitignore`.
 
