@@ -4,7 +4,6 @@ from c8 import constants
 from c8.billing.billing_interface import BillingInterface
 from c8.connection import TenantConnection
 from c8.function.function_interface import FunctionInterface
-from c8.plan.plan_interface import PlanInterface
 from c8.redis.redis_commands import RedisCommands
 from c8.tenant import Tenant
 from c8.version import __version__
@@ -170,16 +169,6 @@ class C8Client(object):
         :rtype: str | unicode
         """
         return self._url
-
-    @property
-    def plan(self):
-        """Return Plan API wrapper
-
-        :returns: Plan API wrapper
-        :rtype: c8.plan.plan_interface.PlanInterface
-        """
-
-        return PlanInterface(self._tenant._conn)
 
     def tenant(self, email="", password="", token=None, apikey=None):
         """Connect to a fabric and return the fabric API wrapper.
