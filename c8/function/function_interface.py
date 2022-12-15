@@ -53,12 +53,12 @@ class FunctionInterface(APIWrapper):
         activation is delayed while the environment is set up. Use the get function
         worker information API to get the activation status of the edge worker.
 
-        :param worker_type: Key of the data
-        :type worker_type: str
         :param name: Name of the edge worker
         :type name: str
         :param query_worker_name: Name of the Macrometa query worker
         :type query_worker_name: str
+        :param worker_type: Key of the data
+        :type worker_type: str
         :param environment: The environment in which the edge worker is activated.
         STAGING | PRODUCTION
         :type environment: str
@@ -101,14 +101,14 @@ class FunctionInterface(APIWrapper):
         Use the get edge function information API to get the activation status of
         the edge worker.
 
-        :param worker_type: Key of the data
-        :type worker_type: str
         :param name: Name of the edge worker
         :type name: str
         :param stream_worker_name: Name of the Macrometa stream worker
         :type stream_worker_name: str
         :param stream_name: Name of the Macrometa stream
         :type stream_name: str
+        :param worker_type: Key of the data
+        :type worker_type: str
         :param environment: The environment in which the edge worker is activated.
         STAGING | PRODUCTION
         :type environment: str
@@ -146,12 +146,12 @@ class FunctionInterface(APIWrapper):
         activation is delayed while the environment is set up. Use the get function
         worker information API to get the activation status of the edge worker.
 
-        :param worker_type: Key of the data
-        :type worker_type: str
         :param name: Name of the edge worker
         :type name: str
         :param stream_worker_name: Name of the Macrometa stream worker
         :type stream_worker_name: str
+        :param worker_type: Key of the data
+        :type worker_type: str
         :param environment: The environment in which the edge worker is activated.
         STAGING | PRODUCTION
         :type environment: str
