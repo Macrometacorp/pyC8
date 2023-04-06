@@ -1,53 +1,35 @@
-name: Tag-and-Publish
+name: Publish Package
+
 on:
   workflow_dispatch:
     inputs:
-      part:
-        description: 'Part to bump (0-based, right to left)'
-        default: 0
-      label:
-        description: 'Optional label (beta, rc1, etc.)'
-        required: false
+      version:
+        description: 'Package version to publish'
+        required: true
+
 jobs:
-  tag-and-publish:
+  build-and-publish:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          # so git-describe can get the latest tag:
-          fetch-depth: 0
-          token: ${{ secrets.GH_PAT }}
-      - name: push-git-tag
+          python-version: 3.9
+
+      - name: Install Dependencies
         run: |
-          set ${{ github.event.inputs.part }} ${{ github.event.inputs.label }}
-          latest_tag () { git describe --abbrev=0; }
-          bump_semver () { awk -F. -v OFS=. -v p="${1:-0}" -v l="$2" \
-            '{if (p>=NF || p<0) exit 64
-              v=sub(/^v/,""); f=NF-p; n=match($f, /[^0-9]/)
-              if (!n) $f=$f+1
-              for (i=f+1; i<=NF; ++i) $i=0
-              if (l && !n) $NF=$NF "-" l
-              if (v) sub(/^/,"v")} 1'; }
-          TAG=$(latest_tag | bump_semver "${1:-0}" "$2")
-          VER=${TAG#v}
-          sed -i "s/__version__.*/__version__ = '${VER}'/" c8/version.py
-          sed -i "s/version=.*/version='${VER}',/" setup.py
-          git add -u
-          git config user.email github-actions@github.com
-          git config user.name "GitHub Action"
-          git commit -m ${VER}
-          git tag -a ${TAG} -m "Tag ${TAG} from $(git branch --show-current) branch"
-          git push --follow-tags
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-      - name: publish-on-pypi
+          python -m pip install --upgrade pip
+          pip install setuptools wheel twine
+
+      - name: Build Distribution Package
+        run: python setup.py sdist bdist_wheel
+
+      - name: Publish to PyPI
         env:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: |
-          python3 -m venv ${ENVDIR:=$(mktemp -d)}
-          source ${ENVDIR}/bin/activate
-          python3 -m pip install --upgrade pip setuptools wheel twine
-          python3 setup.py sdist bdist_wheel
-          python3 -m twine upload dist/*
+          python -m twine upload --repository pypi dist/*${{ github.event.inputs.version }}*
