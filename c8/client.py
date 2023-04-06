@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+from enum import Enum
+
 from c8 import constants
 from c8.billing.billing_interface import BillingInterface
 from c8.connection import TenantConnection
@@ -9,6 +11,26 @@ from c8.tenant import Tenant
 from c8.version import __version__
 
 __all__ = ["C8Client"]
+
+
+class CompressionType(Enum):
+    NONE = None
+    LZ4 = "LZ4"
+    ZLIB = "ZLIB"
+    ZSTD = "ZSTD"
+    SNAPPY = "SNAPPY"
+
+
+class RoutingMode(Enum):
+    SINGLE_PARTITION = "SinglePartition"
+    ROUND_ROBIN_PARTITION = "RoundRobinPartition"
+    CUSTOM_PARTITION = "CustomPartition"
+
+
+class ConsumerTypes(Enum):
+    EXCLUSIVE = "Exclusive"
+    SHARED = "Shared"
+    FAILOVER = "Failover"
 
 
 class C8Client(object):
@@ -1443,17 +1465,6 @@ class C8Client(object):
 
     # client.create_stream_producer
 
-    def enum(**enums):
-        return type("Enum", (), enums)
-
-    COMPRESSION_TYPES = enum(LZ4="LZ4", ZLIB="ZLib", NONE=None)
-
-    ROUTING_MODE = enum(
-        SINGLE_PARTITION="SinglePartition",
-        ROUND_ROBIN_PARTITION="RoundRobinPartition",  # noqa
-        CUSTOM_PARTITION="CustomPartition",
-    )
-
     def create_stream_producer(
         self,
         stream,
@@ -1462,12 +1473,12 @@ class C8Client(object):
         producer_name=None,
         initial_sequence_id=None,
         send_timeout_millis=30000,
-        compression_type=COMPRESSION_TYPES.NONE,
+        compression_type=CompressionType.NONE.value,
         max_pending_messages=1000,
         batching_enabled=False,
         batching_max_messages=1000,
         batching_max_publish_delay_ms=10,
-        message_routing_mode=ROUTING_MODE.ROUND_ROBIN_PARTITION,
+        message_routing_mode=RoutingMode.ROUND_ROBIN_PARTITION.value,
     ):
         """Create a new producer on a given stream.
 
@@ -1530,7 +1541,6 @@ class C8Client(object):
         )
 
     # client.subscribe
-    CONSUMER_TYPES = enum(EXCLUSIVE="Exclusive", SHARED="Shared", FAILOVER="Failover")
 
     def subscribe(
         self,
@@ -1538,7 +1548,7 @@ class C8Client(object):
         isCollectionStream=False,
         local=False,
         subscription_name=None,
-        consumer_type=CONSUMER_TYPES.EXCLUSIVE,
+        consumer_type=ConsumerTypes.EXCLUSIVE.value,
         message_listener=None,
         receiver_queue_size=1000,
         consumer_name=None,
