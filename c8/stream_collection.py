@@ -43,7 +43,9 @@ class StreamCollection(APIWrapper):
 
     CONSUMER_TYPES = enum(EXCLUSIVE="Exclusive", SHARED="Shared", FAILOVER="Failover")
 
-    COMPRESSION_TYPES = enum(LZ4="LZ4", ZLIB="ZLib", NONE=None)
+    COMPRESSION_TYPES = enum(
+        LZ4="LZ4", ZLIB="ZLIB", ZSTD="ZSTD", SNAPPY="SNAPPY", NONE=None
+    )
 
     ROUTING_MODE = enum(
         SINGLE_PARTITION="SinglePartition",
