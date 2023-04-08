@@ -1,11 +1,7 @@
 name: Publish Package
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Package version to publish'
-        required: true
+  [workflow_dispatch]
 
 jobs:
   build-and-publish:
@@ -32,4 +28,4 @@ jobs:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: |
-          python -m twine upload --repository pypi dist/*${{ github.event.inputs.version }}*
+          python -m twine upload --repository pypi dist/*
