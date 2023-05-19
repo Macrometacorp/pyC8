@@ -33,7 +33,7 @@ class Connection(object):
     :type is_fabric: bool
     """
 
-    def __init__(self, url, email, password, token, apikey, http_client):
+    def __init__(self, url, email, password, token, apikey, http_client, skip_tenant=False):
         self.url = url
         self._tenant_name = ""
         self._fabric_name = constants.FABRIC_DEFAULT
@@ -60,20 +60,22 @@ class Connection(object):
             headers = {"Authorization": "Bearer " + self._auth_token}
             self._header = headers
 
-            tenurl = self.url + "/_api/user"
-            response = requests.get(url=tenurl, headers=headers)
-            if response.status_code == 200:
-                body = json.loads(response.text)
-                self._tenant_name = body["result"][0]["tenant"]
+            if not skip_tenant:
+                tenurl = self.url + "/_api/user"
+                response = requests.get(url=tenurl, headers=headers)
+                if response.status_code == 200:
+                    body = json.loads(response.text)
+                    self._tenant_name = body["result"][0]["tenant"]
 
         if self._tenant_name == "" and self._apikey is not None:
             headers = {"Authorization": "apikey " + self._auth_token}
             self._header = headers
-            tenurl = self.url + "/_api/user"
-            response = requests.get(url=tenurl, headers=headers)
-            if response.status_code == 200:
-                body = json.loads(response.text)
-                self._tenant_name = body["result"][0]["tenant"]
+            if not skip_tenant:
+                tenurl = self.url + "/_api/user"
+                response = requests.get(url=tenurl, headers=headers)
+                if response.status_code == 200:
+                    body = json.loads(response.text)
+                    self._tenant_name = body["result"][0]["tenant"]
 
         self._url_prefix = "{}/_fabric/{}/_api".format(url, self._fabric_name)
 
@@ -224,7 +226,7 @@ class TenantConnection(Connection):
     :type connection: c8.connection.Connection
     """
 
-    def __init__(self, url, email, password, token, apikey, http_client):
+    def __init__(self, url, email, password, token, apikey, http_client, skip_tenant=False):
         super(TenantConnection, self).__init__(
             url=url,
             email=email,
@@ -232,6 +234,7 @@ class TenantConnection(Connection):
             token=token,
             apikey=apikey,
             http_client=http_client,
+            skip_tenant=skip_tenant,
         )
         self._fqfabric_name = self._tenant_name + "." + self._fabric_name
 
