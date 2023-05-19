@@ -58,6 +58,7 @@ class C8Client(object):
         http_client=None,
         token=None,
         apikey=None,
+        skip_tenant=False,
     ):
 
         self._protocol = protocol.strip("/")
@@ -72,7 +73,7 @@ class C8Client(object):
         self.set_port()
         self.set_url()
         self._http_client = http_client
-        self.get_tenant()
+        self.get_tenant(skip_tenant)
         # Domains
         self._redis = None
         self._billing = None
@@ -95,15 +96,15 @@ class C8Client(object):
                 f"Cannot determine port for unsupported protocol: {self._protocol}"
             )
 
-    def get_tenant(self):
+    def get_tenant(self, skip_tenant=False):
         if self._email and self._password:
             self._tenant = self.tenant(email=self._email, password=self._password)
             self._fabric = self._tenant.useFabric(self._fabric_name)
         if self._token:
-            self._tenant = self.tenant(token=self._token)
+            self._tenant = self.tenant(token=self._token, skip_tenant=skip_tenant)
             self._fabric = self._tenant.useFabric(self._fabric_name)
         if self._apikey:
-            self._tenant = self.tenant(apikey=self._apikey)
+            self._tenant = self.tenant(apikey=self._apikey, skip_tenant=skip_tenant)
             self._fabric = self._tenant.useFabric(self._fabric_name)
         if self._fabric:
             self._search = self._fabric.search()
@@ -192,7 +193,7 @@ class C8Client(object):
         """
         return self._url
 
-    def tenant(self, email="", password="", token=None, apikey=None):
+    def tenant(self, email="", password="", token=None, apikey=None, skip_tenant=False):
         """Connect to a fabric and return the fabric API wrapper.
 
         :param email: Email for basic authentication
@@ -203,6 +204,8 @@ class C8Client(object):
         :type token: str
         :param apikey: Api Key for authentication.
         :type apikey: str
+        :param skip_tenant: Whether to fetch tenant name or not.
+        :type skip_tenant: boolean
 
         :returns: Standard fabric API wrapper.
         :type: c8.fabric.StandardFabric
@@ -214,6 +217,7 @@ class C8Client(object):
             token=token,
             apikey=apikey,
             http_client=self._http_client,
+            skip_tenant=skip_tenant,
         )
         tenant = Tenant(connection)
 
