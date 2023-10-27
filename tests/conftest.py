@@ -49,6 +49,7 @@ def pytest_configure(config):
     password = "Sdk@1234!"
     tst_fabric_name = "test_fabric_1"
     bad_fabric_name = "test_fabric_2"
+    sys_fabric.delete_fabric(name=tst_fabric_name, ignore_missing=True)
     sys_fabric.create_fabric(name=tst_fabric_name, users=["root"])
     bad_fabric = tenant.useFabric(bad_fabric_name)
     tst_fabric = tenant.useFabric(tst_fabric_name)
