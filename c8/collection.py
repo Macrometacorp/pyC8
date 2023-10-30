@@ -276,7 +276,7 @@ class Collection(APIWrapper):
         """Fetch the information about collection.
 
         :returns: information about collection as  searchEnabled, globallyUniqueId,
-        isSystem, waitForSync, hasStream, isLocal, isSpot,collectionModel, type, id.
+        isSystem, waitForSync, hasStream, isLocal, strongConsistency, collectionModel, type, id.
         :rtype: dict
         """
         request = Request(

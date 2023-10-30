@@ -4,6 +4,7 @@ import base64
 import json
 import random
 
+import warnings
 import websocket
 
 from c8 import constants
@@ -605,18 +606,24 @@ class Fabric(APIWrapper):
                 ]
             else:
                 docs = [col for col in map(dict, resp.body["result"])]
-            return [
-                {
+            collections = []
+            
+            for col in docs:
+                c = {
                     "id": col["id"],
                     "name": col["name"],
                     "system": col["isSystem"],
-                    "isSpot": col["isSpot"],
                     "type": StandardCollection.types[col["type"]],
                     "status": StandardCollection.statuses[col["status"]],
                     "collectionModel": col["collectionModel"],
                 }
-                for col in docs
-            ]
+                if "isSpot" in col.keys():
+                    c["isSpot"] = col["isSpot"] 
+                else:
+                    c["strongConsistency"] = col.get("strongConsistency", False)
+                collections.append(c)
+            return collections
+            
 
         return self._execute(request, response_handler)
 
@@ -633,10 +640,12 @@ class Fabric(APIWrapper):
         index_bucket_count=None,
         sync_replication=None,
         enforce_replication_factor=None,
-        spot_collection=False,
+        strong_consistency=None,
         local_collection=False,
         is_system=False,
         stream=False,
+        *,
+        spot_collection=None,
     ):
         """Create a new collection.
 
@@ -678,16 +687,33 @@ class Fabric(APIWrapper):
         :param enforce_replication_factor: Check if there are enough replicas
             available at creation time, or halt the operation.
         :type enforce_replication_factor: bool
-        :param spot_collection: If True, it is a spot collection
-        :type spot_collection: bool
+        :param strong_consistency: If True, strong consistency is enabled
+        :type strong_consistency: bool
         :param is_system: If True, able to create system collections
         :type is_system: bool
         :param stream: If True, create a local stream for collection.
         :type stream: bool
+        :param spot_collection: If True, it is a spot collection.
+            Deprecated. Use If strong_consistency instead.
+        :type spot_collection: bool
         :returns: Standard collection API wrapper.
         :rtype: c8.collection.StandardCollection
         :raise c8.exceptions.CollectionCreateError: If create fails.
         """
+        # Newer versions of GDN has renamed the isSpot property to strongConsistency.
+        # We are using a keyword only argument to keep the backward compatibility of the SDK
+        if spot_collection is not None and strong_consistency is not None:
+            raise TypeError("create_collection recieved both spot_collection and strong_consistency")
+        elif spot_collection is not None:
+            warnings.simplefilter("once", DeprecationWarning)
+            warnings.warn("spot_collection is deprecated. Use strong_consistency instead.", DeprecationWarning, 2)
+            warnings.simplefilter("default", DeprecationWarning)
+            isSpot = spot_collection
+        elif strong_consistency is not None:
+            isSpot = strong_consistency
+        else:
+            isSpot = False
+
         key_options = {"type": key_generator, "allowUserKeys": user_keys}
         if key_increment is not None:
             key_options["increment"] = key_increment
@@ -696,12 +722,15 @@ class Fabric(APIWrapper):
         if spot_collection and local_collection:
             return "Collection can either be spot or local"
         else:
+            # Both strong_consistency and isSpot is added to the request body.
+            # Correct value will be picked by the GDN depending on the supported property.
             data = {
                 "name": name,
                 "waitForSync": sync,
                 "keyOptions": key_options,
                 "type": 3 if edge else 2,
-                "isSpot": spot_collection,
+                "isSpot": isSpot,
+                "strongConsistency": isSpot,
                 "isLocal": local_collection,
                 "isSystem": is_system,
                 "stream": stream,
