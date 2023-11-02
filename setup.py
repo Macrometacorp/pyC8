@@ -5,7 +5,7 @@ with open("./README.md") as fp:
 
 setup(
     name="pyC8",
-    version="1.0.1",
+    version="1.1.1",
     description="Python SDK for Macrometa Global Data Mesh",
     long_description=description,
     long_description_content_type="text/markdown",
