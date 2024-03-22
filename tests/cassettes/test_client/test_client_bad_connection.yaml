@@ -9,7 +9,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
     method: GET
     uri: https://api-dino-fra.eng.macrometa.io/_api/user
   response:
@@ -49,7 +49,7 @@ interactions:
       Content-Length:
       - '53'
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
     method: POST
     uri: https://api-dino-fra.eng.macrometa.io/_open/auth
   response:

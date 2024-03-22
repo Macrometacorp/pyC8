@@ -11,7 +11,7 @@ interactions:
       Content-Length:
       - '29'
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -53,7 +53,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -95,7 +95,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -137,7 +137,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
     method: GET
     uri: https://api-dino-fra.eng.macrometa.io/_api/user
   response:
@@ -177,7 +177,7 @@ interactions:
       Content-Length:
       - '42'
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -219,7 +219,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -263,7 +263,7 @@ interactions:
       Content-Length:
       - '28'
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -305,7 +305,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -349,7 +349,7 @@ interactions:
       Content-Length:
       - '0'
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -391,7 +391,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -435,7 +435,7 @@ interactions:
       Content-Length:
       - '0'
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -477,7 +477,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -521,7 +521,7 @@ interactions:
       Content-Length:
       - '0'
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:

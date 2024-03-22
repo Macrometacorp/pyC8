@@ -13,7 +13,7 @@ interactions:
       Content-Length:
       - '210'
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -59,7 +59,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -105,7 +105,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
@@ -151,7 +151,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.31.0
       charset:
       - utf-8
       content-type:
