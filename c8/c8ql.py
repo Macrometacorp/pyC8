@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+import re
 from json import dumps
 
 from c8.api import APIWrapper
@@ -367,8 +368,8 @@ class C8QL(APIWrapper):
         :rtype: dict | None
         :raise c8.exceptions.C8QLQueryExecuteError: If retrieval fails.
         """
-        write_ops = ["INSERT", "UPDATE", "REPLACE", "REMOVE", "UPSERT"]
-        if any(ele in query.upper() for ele in write_ops):
+        write_ops_pattern = re.compile(r'\b(INSERT|UPDATE|REPLACE|REMOVE|UPSERT)\b', re.IGNORECASE)
+        if write_ops_pattern.search(query):
             raise C8QLGetAllBatchesError(
                 "Write operations provided in the query. Only read operations can be provided"
             )
